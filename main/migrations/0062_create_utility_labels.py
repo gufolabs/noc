@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         bulk = []
         if "noc::is_linked::=" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::is_linked::=",
@@ -33,9 +33,9 @@ class Migration(BaseMigration):
                         "expose_alarm": True,
                     }
                 )
-            ]
+            )
         if "noc::is_fatal::=" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::is_fatal::=",
@@ -49,6 +49,6 @@ class Migration(BaseMigration):
                         "enable_alarm": True,
                     }
                 )
-            ]
+            )
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

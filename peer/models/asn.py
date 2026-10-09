@@ -122,13 +122,13 @@ class AS(NOCModel):
     def get_rpsl(self):
         sep = f"remarks: {'-' * 72}"
         s = []
-        s += [f"aut-num: AS{self.asn}"]
+        s.append(f"aut-num: AS{self.asn}")
         if self.as_name:
-            s += [f"as-name: {self.as_name}"]
+            s.append(f"as-name: {self.as_name}")
         if self.description:
             s += [f"descr: {x}" for x in self.description.split("\n")]
         if self.organisation:
-            s += [f"org: {self.organisation.organisation}"]
+            s.append(f"org: {self.organisation.organisation}")
         # Add header remarks
         if self.header_remarks:
             s += [f"remarks: {x}" for x in self.header_remarks.split("\n")]
@@ -157,7 +157,7 @@ class AS(NOCModel):
                     to_skip = True
                     break
             if not to_skip:
-                pg[peer.peer_group][peer.remote_asn][peer.peering_point] += [
+                pg[peer.peer_group][peer.remote_asn][peer.peering_point].append(
                     (
                         peer.import_filter,
                         peer.export_filter,
@@ -166,13 +166,13 @@ class AS(NOCModel):
                         e_export_med,
                         peer.rpsl_remark,
                     )
-                ]
+                )
         # Build RPSL
         inverse_pref = config.peer.rpsl_inverse_pref_style
         for peer_group in pg:
-            s += [sep]
+            s.append(sep)
             s += [f"remarks: -- {x}" for x in peer_group.description.split("\n")]
-            s += [sep]
+            s.append(sep)
             for asn in sorted(pg[peer_group]):
                 add_at = len(pg[peer_group][asn]) != 1
                 for pp in pg[peer_group][asn]:
@@ -180,7 +180,7 @@ class AS(NOCModel):
                         import_filter, export_filter, localpref, import_med, export_med, remark = R
                         # Prepend import and export with remark when given
                         if remark:
-                            s += [f"remarks: # {remark}"]
+                            s.append(f"remarks: # {remark}")
                         # Build import statement
                         i_s = f"import: from AS{int(asn)}"
                         if add_at:
@@ -188,13 +188,13 @@ class AS(NOCModel):
                         actions = []
                         if localpref:
                             pref = (65535 - localpref) if inverse_pref else localpref
-                            actions += [f"pref={int(pref)};"]
+                            actions.append(f"pref={int(pref)};")
                         if import_med:
-                            actions += [f"med={int(import_med)};"]
+                            actions.append(f"med={int(import_med)};")
                         if actions:
                             i_s += " action " + " ".join(actions)
                         i_s += f" accept {import_filter}"
-                        s += [i_s]
+                        s.append(i_s)
                         # Build export statement
                         e_s = f"export: to AS{int(asn)}"
                         if add_at:
@@ -202,17 +202,17 @@ class AS(NOCModel):
                         if export_med:
                             e_s += f" action med={int(export_med)};"
                         e_s += f" announce {export_filter}"
-                        s += [e_s]
+                        s.append(e_s)
         # Add contacts
         for c in self.administrative_contacts.order_by("nic_hdl"):
-            s += [f"admin-c: {c.nic_hdl}"]
+            s.append(f"admin-c: {c.nic_hdl}")
         for c in self.tech_contacts.order_by("nic_hdl"):
-            s += [f"tech-c: {c.nic_hdl}"]
+            s.append(f"tech-c: {c.nic_hdl}")
         # Add maintainers
         for m in self.maintainers.all():
-            s += [f"mnt-by: {m.maintainer}"]
+            s.append(f"mnt-by: {m.maintainer}")
         for m in self.routes_maintainers.all():
-            s += [f"mnt-routes: {m.maintainer}"]
+            s.append(f"mnt-routes: {m.maintainer}")
         # Add footer remarks
         if self.footer_remarks:
             s += [f"remarks: {x}" for x in self.footer_remarks.split("\n")]
@@ -251,16 +251,16 @@ class AS(NOCModel):
             ("peers", list(peers.values())),
             ("downlinks", list(downlinks.values())),
         ]:
-            s += [f"subgraph {subgraph} {{"]
+            s.append(f"subgraph {subgraph} {{")
             for p in peers:
                 attrs = [f'taillabel=" {p.import_filter}"', f'headlabel=" {p.export_filter}"']
                 if p.import_filter == "ANY":
-                    attrs += ["arrowtail=open"]
+                    attrs.append("arrowtail=open")
                 if p.export_filter == "ANY":
-                    attrs += ["arrothead=open"]
-                s += [f"    {asn} -- AS{int(p.remote_asn)} [{','.join(attrs)}];"]
-            s += ["}"]
-        s += ["}"]
+                    attrs.append("arrothead=open")
+                s.append(f"    {asn} -- AS{int(p.remote_asn)} [{','.join(attrs)}];")
+            s.append("}")
+        s.append("}")
         return "\n".join(s)
 
     def update_rir_db(self):

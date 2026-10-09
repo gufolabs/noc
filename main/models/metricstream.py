@@ -51,7 +51,7 @@ class MetricStream(Document):
         r = ["def q_mx(input):"]
         if not self.fields:
             # No path
-            r += ["    return {}"]
+            r.append("    return {}")
             return "\n".join(r)
         r += [
             "    if not input:",
@@ -76,10 +76,10 @@ class MetricStream(Document):
                 r += [f'    if not input.get("{f.metric_type.field_name}"):', "        return None"]
             if not f.expose_mx:
                 continue
-            r += [
+            r.append(
                 f'    v["{f.external_alias or f.metric_type.field_name}"] = input.get("{f.metric_type.field_name}")'
-            ]
-        r += ["    return v"]
+            )
+        r.append("    return v")
         return "\n".join(r)
 
     def _get_transform(self) -> Callable[[dict[str, Any]], dict[str, Any]]:

@@ -43,16 +43,16 @@ class Person(NOCModel):
     def get_rpsl(self):
         s = []
         if self.type == "R":
-            s += [f"role: {self.person}"]
+            s.append(f"role: {self.person}")
         else:
-            s += [f"person: {self.person}"]
-        s += [f"nic-hdl: {self.nic_hdl}"]
+            s.append(f"person: {self.person}")
+        s.append(f"nic-hdl: {self.nic_hdl}")
         s += rpsl_multiple("address", self.address)
         s += rpsl_multiple("phone", self.phone)
         s += rpsl_multiple("fax-no", self.fax_no)
         s += rpsl_multiple("email", self.email)
         if self.extra:
-            s += [self.extra]
+            s.append(self.extra)
         return rpsl_format("\n".join(s))
 
     def touch_rpsl(self):

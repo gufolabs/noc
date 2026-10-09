@@ -269,7 +269,7 @@ class CustomField(NOCModel):
                 for cf in CustomField.objects.filter(is_active=True):
                     if cf.table not in cls._table_fields:
                         cls._table_fields[cf.table] = []
-                    cls._table_fields[cf.table] += [cf]
+                    cls._table_fields[cf.table].append(cf)
             return cls._table_fields.get(table, [])
 
     @classmethod
@@ -286,7 +286,7 @@ class CustomField(NOCModel):
                     mongoengine.signals.pre_init.connect(cls.on_new_document)
                 cls._cfields[f.table] = [f]
             else:
-                cls._cfields[f.table] += [f]
+                cls._cfields[f.table].append(f)
         # Initialize already installed models
         for t in cls._cfields:
             t0 = cls._cfields[t][0]
@@ -422,10 +422,10 @@ class CustomField(NOCModel):
         q = []
         for f in CustomField.objects.filter(is_active=True, table=table, is_searchable=True):
             if f.type == "str":
-                q += [{f"{f.name}__icontains": query}]
+                q.append({f"{f.name}__icontains": query})
             elif f.type == "int":
                 if is_int(query):
-                    q += [{f.name: int(query)}]
+                    q.append({f.name: int(query)})
         if q:
             return reduce(lambda x, y: x | models.Q(**y), q, models.Q(**q[0]))
         return None

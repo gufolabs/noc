@@ -367,7 +367,7 @@ class Report(Document):
                 cf["title"] = (
                     self.get_localization(f"columns.{cf_name}", lang=pref_lang) or cf["title"]
                 )
-                columns += [cf]
+                columns.append(cf)
             b_format_cfg[bf.name] = BandFormatCfg(
                 **{"title_template": bf.title_template, "columns": columns}
             )

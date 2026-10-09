@@ -280,10 +280,10 @@ class Crossing(EmbeddedDocument):
     def __str__(self) -> str:
         r = [self.input]
         if self.input_discriminator:
-            r += [f": {self.input_discriminator}"]
+            r.append(f": {self.input_discriminator}")
         r += [" -> ", self.output]
         if self.output_discriminator:
-            r += [f": {self.output_discriminator}"]
+            r.append(f": {self.output_discriminator}")
         if self.modes:
             r += f" ({', '.join(m for m in self.modes)})"
         return "".join(r)
@@ -1001,7 +1001,7 @@ class ModelConnectionsCache(Document):
         nc = []
         for m in ObjectModel.objects.all():
             for c in m.connections:
-                nc += [{"type": c.type.id, "gender": c.gender, "model": m.id, "name": c.name}]
+                nc.append({"type": c.type.id, "gender": c.gender, "model": m.id, "name": c.name})
         collection = ModelConnectionsCache._get_collection()
         collection.drop()
         if nc:
@@ -1024,11 +1024,11 @@ class ModelConnectionsCache(Document):
             if k in cache:
                 del cache[k]
                 continue
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {"type": c.type.id, "gender": c.gender, "model": model.id, "name": c.name}
                 )
-            ]
+            )
         if cache:
             bulk += [DeleteOne({"_id": x}) for x in cache.values()]
         if bulk:

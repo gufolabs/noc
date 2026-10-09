@@ -895,7 +895,7 @@ class NotificationGroupUserSettings(NOCModel):
             if self.method and c.method != self.method:
                 continue
             if self.title_tag:
-                contacts += [
+                contacts.append(
                     NotificationContact(
                         contact=c.contact,
                         method=c.method,
@@ -903,9 +903,9 @@ class NotificationGroupUserSettings(NOCModel):
                         time_pattern=c.time_pattern,
                         title_tag=self.title_tag,
                     )
-                ]
+                )
             else:
-                contacts += [c]
+                contacts.append(c)
         return contacts
 
 

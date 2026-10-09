@@ -22,7 +22,7 @@ class Migration(BaseMigration):
         ]
         user_bookmarks = self.db.execute("SELECT user_id, kb_entry_id FROM kb_kbuserbookmark")
         for user, kb_entry in user_bookmarks:
-            favs[user] += [kb_entry]
+            favs[user].append(kb_entry)
         if favs:
             for u, fav in favs.items():
                 fav_coll.insert_one(

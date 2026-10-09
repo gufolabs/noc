@@ -519,7 +519,7 @@ class Label(Document):
         if "noc::*" in wildcards:
             wildcards.remove("noc::*")
         if include_current:
-            wildcards += [label]
+            wildcards.append(label)
         coll = cls._get_collection()
         match = {"$match": {"name": {"$in": wildcards}, "propagate": True}}
         # if include_current:
@@ -718,7 +718,7 @@ class Label(Document):
             if ri.scope not in REGEX_LABEL_SCOPES:
                 # Unknown scope
                 continue
-            r[REGEX_LABEL_SCOPES[ri.scope]] += [ri.regexp]
+            r[REGEX_LABEL_SCOPES[ri.scope]].append(ri.regexp)
         return r
 
     def _refresh_prefixfilter_labels(self):
@@ -776,7 +776,7 @@ class Label(Document):
             if model_id not in self.allow_models:
                 continue
             model = get_model(model_id)
-            regxs[model] += [(field, r[(model_id, field)])]
+            regxs[model].append((field, r[(model_id, field)]))
 
         for model in regxs:
             if is_document(model):
@@ -1023,31 +1023,31 @@ class Label(Document):
         params, conditions, query_set = [], [], ""
         if add_labels and not remove_labels:
             # SET effective_labels=ARRAY (SELECT DISTINCT e FROM unnest(effective_labels || %s::varchar[]) AS a(e))
-            params += [add_labels]
+            params.append(add_labels)
             query_set = "(SELECT DISTINCT e FROM unnest(effective_labels || %s::varchar[]) AS a(e))"
         elif remove_labels and not add_labels:
             # SET effective_labels=ARRAY (SELECT unnest(effective_labels) EXCEPT SELECT unnest(%s::varchar[])
             params += [remove_labels, remove_labels]
             query_set = "(SELECT unnest(effective_labels) EXCEPT SELECT unnest(%s::varchar[]))"
-            conditions += [" effective_labels && %s::varchar[] "]
+            conditions.append(" effective_labels && %s::varchar[] ")
         elif remove_labels and add_labels:
             params += [add_labels, remove_labels]
             query_set = "(SELECT DISTINCT e FROM unnest(effective_labels || %s::varchar[]) AS a(e) EXCEPT SELECT unnest(%s::varchar[]))"
             if not instance_filters:
-                conditions += [" effective_labels && %s::varchar[] "]
+                conditions.append(" effective_labels && %s::varchar[] ")
         # Construct condition
         # Where str,int - WHERE {field} ~ %s
         # Where List[str] - id = ANY (%s::varchar[])
         # Where List[int] - id = ANY (%s::numeric[])
         for field, ids in instance_filters or []:
             if isinstance(ids, list) and isinstance(ids[0], int):
-                conditions += [f" {field} = ANY (%s::numeric[])"]
+                conditions.append(f" {field} = ANY (%s::numeric[])")
             elif isinstance(ids, list):
-                conditions += [f" {field} = ANY (%s::text[])"]
+                conditions.append(f" {field} = ANY (%s::text[])")
                 ids = [str(x) for x in ids]
             else:
-                conditions += [f" {field} = %s"]
-            params += [ids]
+                conditions.append(f" {field} = %s")
+            params.append(ids)
         # Construct query
         sql = f"""
         UPDATE {model._meta.db_table}
@@ -1354,7 +1354,7 @@ class Label(Document):
         labels = []
         for rx, label in cls.get_regex_labels(scope):
             if rx.match(value):
-                labels += [label]
+                labels.append(label)
         return labels
 
     @classmethod
@@ -1412,7 +1412,7 @@ class Label(Document):
                     rx = cls._get_re(rx)
                     if not rx:
                         continue
-                    rxs += [(rx, ll.name)]
+                    rxs.append((rx, ll.name))
         return tuple(rxs)
 
     @classmethod
@@ -1439,12 +1439,12 @@ class Label(Document):
         where, params = [], []
         for field, ids in query_filter or []:
             if isinstance(ids, list) and isinstance(ids[0], int):
-                where += [f"{field} = ANY (%s::numeric[])"]
+                where.append(f"{field} = ANY (%s::numeric[])")
             elif isinstance(ids, list):
-                where += [f"{field} = ANY (%s::text[])"]
+                where.append(f"{field} = ANY (%s::text[])")
             else:
-                where += [f"{field} = %s"]
-            params += [ids]
+                where.append(f"{field} = %s")
+            params.append(ids)
         where = ("WHERE " + " AND ".join(where)) if where else ""
         if not is_document(profile):
             profile_field = f"{profile_field}_id"
@@ -1462,7 +1462,9 @@ class Label(Document):
             for rule in mrs:
                 if not rule["dynamic_order"]:
                     continue
-                r += [{"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}]
+                r.append(
+                    {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
+                )
         params = [orjson.dumps(r).decode("utf-8"), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
@@ -1490,12 +1492,12 @@ class Label(Document):
         where, params = [], []
         for field, ids in query_filter or []:
             if isinstance(ids, list) and isinstance(ids[0], int):
-                where += [f"{field} = ANY (%s::numeric[])"]
+                where.append(f"{field} = ANY (%s::numeric[])")
             elif isinstance(ids, list):
-                where += [f"{field} = ANY (%s::text[])"]
+                where.append(f"{field} = ANY (%s::text[])")
             else:
-                where += [f"{field} = %s"]
-            params += [ids]
+                where.append(f"{field} = %s")
+            params.append(ids)
         where = ("WHERE " + " AND ".join(where)) if where else ""
         # Build query
         SQL = f"""
@@ -1509,7 +1511,9 @@ class Label(Document):
             for rule in mrs:
                 if not rule["dynamic_order"]:
                     continue
-                r += [{"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}]
+                r.append(
+                    {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
+                )
         params = [orjson.dumps(r).decode("utf-8"), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
@@ -1539,7 +1543,7 @@ class Label(Document):
             else:
                 match[field] = ids
         if match:
-            pipeline += [{"$match": match}]
+            pipeline.append({"$match": match})
         profile_model = get_model(model_profile_id)
         profile_coll = profile_model._get_collection_name()
         pipeline += [

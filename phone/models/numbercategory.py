@@ -61,5 +61,5 @@ class NumberCategory(Document):
             for rule in nc.rules:
                 if not rule.is_active:
                     continue
-                r += [(rule.dialplan, re.compile(rule.mask), nc)]
+                r.append((rule.dialplan, re.compile(rule.mask), nc))
         return r

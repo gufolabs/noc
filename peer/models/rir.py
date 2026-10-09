@@ -61,11 +61,11 @@ class RIR(NOCModel):
         """
         data = [x for x in data.split("\n") if x]  # Strip empty lines
         if maintainer.password:
-            data += [f"password: {maintainer.password}"]
+            data.append(f"password: {maintainer.password}")
         admin = maintainer.admins.all()[0]
         T = time.gmtime()
-        data += [f"changed: {admin.email} {int(T[0]):04}{int(T[1]):02}{int(T[2]):02}"]
-        data += ["source: RIPE"]
+        data.append(f"changed: {admin.email} {int(T[0]):04}{int(T[1]):02}{int(T[2]):02}")
+        data.append("source: RIPE")
         data = "\n".join(data)
         try:
             f = urlopen(url=RIPE_SYNCUPDATES_URL, data=urlencode({"DATA": data}))

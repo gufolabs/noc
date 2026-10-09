@@ -43,9 +43,9 @@ class PrefixAccess(NOCModel):
     def __str__(self):
         perms = []
         if self.can_view:
-            perms += ["View"]
+            perms.append("View")
         if self.can_change:
-            perms += ["Change"]
+            perms.append("Change")
         return (
             f"{self.user.username}: {self.vrf.name}({self.afi}): {self.prefix}: {', '.join(perms)}"
         )
@@ -125,11 +125,11 @@ class PrefixAccess(NOCModel):
         stmt = []
         for vrf, afi in vaccess:
             for p in vaccess[vrf, afi]:
-                stmt += [
+                stmt.append(
                     f"({f'{table}.vrf_id' if table else 'vrf_id'} = {vrf} AND "
                     f"{f'{table}.afi' if table else 'afi'} = '{afi}' AND "
                     f"{f'{table}.{field}' if table else field} <<= '{p}')"
-                ]
+                )
         return SQL(reduce(lambda x, y: f"{x} OR {y}", stmt))
 
 

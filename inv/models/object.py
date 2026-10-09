@@ -486,14 +486,16 @@ class Object(Document):
             k = (item.interface, item.attr, item.scope or "")
             if k in seen:
                 continue
-            r += [item]
+            r.append(item)
             seen.add(k)
         # Model attributes
         for item in self.model.data:
             k = (item.interface, item.attr, "")
             if k in seen:
                 continue
-            r += [ObjectAttr(interface=item.interface, attr=item.attr, scope="", value=item.value)]
+            r.append(
+                ObjectAttr(interface=item.interface, attr=item.attr, scope="", value=item.value)
+            )
             seen.add(k)
         # Sort according to interface
         sorting_keys: dict[str, str] = {}
@@ -523,9 +525,9 @@ class Object(Document):
                     break
         else:
             # Insert new item
-            self.data += [
+            self.data.append(
                 ObjectAttr(interface=interface, attr=attr.name, value=value, scope=scope or "")
-            ]
+            )
 
     def reset_data(self, interface: str, key: str | Iterable, scope: str | None = None) -> None:
         if isinstance(key, str):
@@ -591,14 +593,14 @@ class Object(Document):
                     break
         else:
             # Insert new item
-            self.cfg_data += [
+            self.cfg_data.append(
                 ObjectConfigurationData(
                     param=param,
                     value=value,
                     is_dirty=is_dirty,
                     contexts=ObjectConfigurationScope.from_code(scope),
                 )
-            ]
+            )
 
     def reset_cfg_data(
         self, param: Union["ConfigurationParam", list["ConfigurationParam"]], scope: str | None
@@ -648,14 +650,14 @@ class Object(Document):
                 schema = pr.param.get_schema(self)
                 if pr.choices:
                     schema.choices = pr.choices
-                r += [
+                r.append(
                     ParamData(
                         code=pr.param.code,
                         scopes=[],
                         schema=schema,
                         value=param_data.pop((pr.param.code, ""), None),
                     )
-                ]
+                )
                 continue
             for scope in self.iter_configuration_scopes(pr.param):
                 if (pr.param.code, scope.code) in seen:
@@ -672,26 +674,26 @@ class Object(Document):
                 # Getting param from connection model (for transceiver)
                 if pr.choices:
                     schema.choices = pr.choices
-                r += [
+                r.append(
                     ParamData(
                         code=pr.param.code,
                         scopes=[scope],
                         schema=schema,
                         value=param_data.pop((pr.param.name, scope.code), None),
                     )
-                ]
+                )
                 seen.add((pr.param.code, scope.code))
         for key, value in param_data.items():
             param, *scopes = key
             param = ConfigurationParam.get_by_code(param)
-            r += [
+            r.append(
                 ParamData(
                     code=param.code,
                     scopes=[ScopeVariant.from_code(s) for s in scopes if s],
                     schema=param.get_schema(self),
                     value=value,
                 )
-            ]
+            )
         # Add from data
         return r
 
@@ -864,7 +866,7 @@ class Object(Document):
         ):
             for x in c.connection:
                 if x.object.id != self.id:
-                    r += [[c, x.object, x.name]]
+                    r.append([c, x.object, x.name])
         return r
 
     def get_container(self) -> Optional["Object"]:
@@ -1411,7 +1413,7 @@ class Object(Document):
                 cdata.interface_name = if_name
                 return
         # New item
-        self.connections += [ObjectConnectionData(name=name, interface_name=if_name)]
+        self.connections.append(ObjectConnectionData(name=name, interface_name=if_name))
 
     def reset_connection_interface(self, name):
         self.connections = [c for c in self.connections if c.name != name]
@@ -1555,7 +1557,7 @@ class Object(Document):
             c.update_params(**data)
             break
         else:
-            self.cross += [
+            self.cross.append(
                 Crossing(
                     **{
                         "input": input.name,
@@ -1565,7 +1567,7 @@ class Object(Document):
                         "gain_db": data.get("gain_db"),
                     }
                 )
-            ]
+            )
 
     def disconnect_internal(self, name: str, remote_name: str | None = None):
         """

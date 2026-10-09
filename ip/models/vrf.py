@@ -234,7 +234,7 @@ class VRF(NOCModel):
         content = [self.name, str(self.rd)]
         card = f"VRF {self.name}. RD {self.rd}"
         if self.description:
-            content += [self.description]
+            content.append(self.description)
             card += f" ({self.description})"
         r = {
             "id": f"ip.vrf:{self.id}",

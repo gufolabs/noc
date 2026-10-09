@@ -259,13 +259,13 @@ class Address(NOCModel):
         content = [self.address, self.name]
         card = f"Address {self.address}, Name {self.name}"
         if self.fqdn:
-            content += [self.fqdn]
+            content.append(self.fqdn)
             card += f", FQDN {self.fqdn}"
         if self.mac:
-            content += [self.mac]
+            content.append(self.mac)
             card += f", MAC {self.mac}"
         if self.description:
-            content += [self.description]
+            content.append(self.description)
             card += f" ({self.description})"
         r = {
             "id": f"ip.address:{self.id}",

@@ -119,7 +119,7 @@ class AuditTrail(Document):
                     od = smart_text(od)
                 nd = cls.get_field(instance, f)
                 if nd != od:
-                    changes += [{"field": f.name, "old": od, "new": nd}]
+                    changes.append({"field": f.name, "old": od, "new": nd})
 
         cls.log(sender, instance, op, changes)
 

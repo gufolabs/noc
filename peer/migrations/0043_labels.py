@@ -78,12 +78,12 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         for label in labels:
             if label in current_labels:
-                bulk += [
+                bulk.append(
                     UpdateOne(
                         {"_id": current_labels[label]},
                         {"$set": dict.fromkeys(labels[label], True)},
                     )
-                ]
+                )
             else:
                 doc = {
                     # "_id": bson.ObjectId(),
@@ -128,6 +128,6 @@ class Migration(BaseMigration):
                 }
                 for setting in labels[label]:
                     doc[setting] = True
-                bulk += [InsertOne(doc)]
+                bulk.append(InsertOne(doc))
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

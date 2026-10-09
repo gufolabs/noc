@@ -196,5 +196,5 @@ class MessageRoute(Document):
         if self.transmute_handler:
             r["transmute_handler"] = str(self.transmute_handler.id)
         for match in self.match:
-            r["match"] += [match.get_matcher()]
+            r["match"].append(match.get_matcher())
         return r
