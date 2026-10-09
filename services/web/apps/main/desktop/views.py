@@ -202,11 +202,11 @@ class DesktopApplication(ExtApplication):
                         continue
                     n["leaf"] = False
                     n["children"] = cld
-                    c += [n]
+                    c.append(n)
                 elif r["access"](user):
                     n["leaf"] = True
                     n["launch_info"] = r["app"].get_launch_info(request)
-                    c += [n]
+                    c.append(n)
             return c
 
         # Return empty list for unauthenticated user

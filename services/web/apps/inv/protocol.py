@@ -37,7 +37,7 @@ class ProtocolApplication(ExtDocApplication):
         discriminators = defaultdict(list)
         for item in o.discriminators:
             for d in item.data:
-                discriminators[(d.interface, d.attr)] += [{"code": item.code, "value": d.value}]
+                discriminators[(d.interface, d.attr)].append({"code": item.code, "value": d.value})
         if not discriminators:
             return r
         (r["discriminator_interface"], r["discriminator_attr"]), r["discriminators"] = (
@@ -61,12 +61,12 @@ class ProtocolApplication(ExtDocApplication):
         data["discriminators"] = []
         for d in discriminators:
             value = attr._clean(d["value"])
-            data["discriminators"] += [
+            data["discriminators"].append(
                 {
                     "data": [{"interface": mi.name, "attr": attr.name, "value": value}],
                     "code": d["code"],
                 }
-            ]
+            )
         # Clean other
         return super().clean(data)
 
@@ -102,7 +102,7 @@ class ProtocolApplication(ExtDocApplication):
         leafs = defaultdict(list)
         for t, i1 in r.items():
             for p, i2 in i1.items():
-                leafs[t] += [{"name": p, "leaf": False, "is_protected": False, "children": i2}]
+                leafs[t].append({"name": p, "leaf": False, "is_protected": False, "children": i2})
         return self.render_json(
             {
                 "name": "root",

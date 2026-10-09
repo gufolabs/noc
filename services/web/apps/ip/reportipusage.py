@@ -30,7 +30,7 @@ class ReportIPUsageApplication(SimpleReport):
         c.execute(self.QUERY)
         for vrf, rd, afi, prefix, description, used in c:
             if last_vrf != vrf:
-                data += [SectionRow(f"{vrf} ({rd})")]
+                data.append(SectionRow(f"{vrf} ({rd})"))
                 last_vrf = vrf
             p = IP.prefix(prefix)
             if afi == "4":
@@ -49,7 +49,7 @@ class ReportIPUsageApplication(SimpleReport):
                     total = "-"
                     free = "-"
                     percent = "-"
-            data += [[prefix, description, used, free, total, percent]]
+            data.append([prefix, description, used, free, total, percent])
         return self.from_dataset(
             title=self.title,
             columns=[

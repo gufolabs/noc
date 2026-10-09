@@ -21,7 +21,7 @@ class ReportDiscoveryApplication(SimpleReport):
     def get_data(self, **kwargs):
         data = []
         # Managed objects summary
-        data += [SectionRow("Managed Objects")]
+        data.append(SectionRow("Managed Objects"))
         d = []
         j_box = 0
         j_box_sec = 0.0
@@ -29,7 +29,7 @@ class ReportDiscoveryApplication(SimpleReport):
         j_periodic_sec = 0.0
         for p in ManagedObjectProfile.objects.all():
             o_count = ManagedObject.objects.filter(is_managed=True, object_profile=p).count()
-            d += [[p.name, o_count]]
+            d.append([p.name, o_count])
             if p.enable_box_discovery:
                 j_box += o_count
                 j_box_sec += float(o_count) / p.box_discovery_interval
@@ -39,16 +39,16 @@ class ReportDiscoveryApplication(SimpleReport):
         data += sorted(d, key=lambda x: -x[1])
         # Interface summary
         d = []
-        data += [SectionRow("Interfaces")]
+        data.append(SectionRow("Interfaces"))
         d_count = Interface.objects.count()
         for p in InterfaceProfile.objects.all():
             n = Interface.objects.filter(profile=p).count()
-            d += [[p.name, n]]
+            d.append([p.name, n])
             d_count -= n
         data += sorted(d, key=lambda x: -x[1])
-        data += [["-", d_count]]
+        data.append(["-", d_count])
         # Links summary
-        data += [SectionRow("Links")]
+        data.append(SectionRow("Links"))
         r = Link._get_collection().aggregate(
             [
                 {"$group": {"_id": "$discovery_method", "count": {"$sum": 1}}},
@@ -58,12 +58,12 @@ class ReportDiscoveryApplication(SimpleReport):
         d = [(x["_id"], x["count"]) for x in r]
         data += sorted(d, key=lambda x: -x[1])
         # Discovery jobs
-        data += [SectionRow("Discovery jobs summary")]
-        data += [["Box", j_box]]
-        data += [["Periodic", j_periodic]]
-        data += [SectionRow("Jobs per second")]
-        data += [["Box", j_box_sec]]
-        data += [["Periodic", j_periodic_sec]]
+        data.append(SectionRow("Discovery jobs summary"))
+        data.append(["Box", j_box])
+        data.append(["Periodic", j_periodic])
+        data.append(SectionRow("Jobs per second"))
+        data.append(["Box", j_box_sec])
+        data.append(["Periodic", j_periodic_sec])
         return self.from_dataset(
             title=self.title,
             columns=[

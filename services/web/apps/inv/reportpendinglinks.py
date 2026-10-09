@@ -225,7 +225,7 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
         for mo_id in problems:
             mo = mos_id.get(mo_id, ManagedObject.get_by_id(mo_id))
             for iface in problems[mo_id]:
-                data += [
+                data.append(
                     (
                         mo.name,
                         mo.address,
@@ -240,21 +240,21 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                         problems[mo_id][iface].get("remote_description"),
                         problems[mo_id][iface].get("remote_chassis"),
                     )
-                ]
+                )
                 if problems[mo_id][iface]["problem"] == "Remote object is not found":
                     match = rn.findall(problems[mo_id][iface]["remote_id"])
                     if match:
                         not_found[match[0]] += 1
                 elif problems[mo_id][iface]["problem"] == "Not found iface on remote":
                     local_on_remote[(mo.name, mo.address)] += 1
-        data += [SectionRow(name="Summary information on u_object")]
+        data.append(SectionRow(name="Summary information on u_object"))
         for c in not_found:
             if not_found[c] > 4:
-                data += [c]
-        data += [SectionRow(name="Summary information on agg")]
+                data.append(c)
+        data.append(SectionRow(name="Summary information on agg"))
         for c in local_on_remote:
             if local_on_remote[c] > 4:
-                data += [c]
+                data.append(c)
         return self.from_dataset(
             title=self.title,
             columns=[

@@ -167,9 +167,9 @@ class MapApplication(ExtApplication):
         }
         o = defaultdict(list)
         for i in link.interfaces:
-            o[i.managed_object] += [i]
+            o[i.managed_object].append(i)
         for mo in sorted(o, key=lambda x: x.name):
-            r["objects"] += [
+            r["objects"].append(
                 {
                     "id": mo.id,
                     "name": mo.name,
@@ -178,7 +178,7 @@ class MapApplication(ExtApplication):
                         for i in sorted(o[mo], key=lambda x: alnum_key(x.name))
                     ],
                 }
-            ]
+            )
         # Get link bandwidth
         mo_in = defaultdict(float)
         mo_out = defaultdict(float)
@@ -218,9 +218,9 @@ class MapApplication(ExtApplication):
         }
         o = defaultdict(list)
         for i in link.interfaces:
-            o[i.managed_object] += [i]
+            o[i.managed_object].append(i)
         for mo in sorted(o, key=lambda x: x.name):
-            r["objects"] += [
+            r["objects"].append(
                 {
                     "id": mo.id,
                     "name": mo.name,
@@ -229,7 +229,7 @@ class MapApplication(ExtApplication):
                         for i in sorted(o[mo], key=lambda x: alnum_key(x.name))
                     ],
                 }
-            ]
+            )
         return r
 
     def inspector_cpe(self, request: HttpRequest, id, cpe_id):

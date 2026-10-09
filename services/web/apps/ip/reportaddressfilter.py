@@ -53,7 +53,7 @@ class ReportFilterApplication(SimpleReport):
             ]
             for f in cf:
                 v = getattr(a, f.name)
-                r += [v if v is not None else ""]
+                r.append(v if v is not None else "")
             r += [a.description, a]
             return r
 
@@ -79,9 +79,9 @@ class ReportFilterApplication(SimpleReport):
         cf = CustomField.table_fields("ip_address")
         for f in cf:
             if f.type == "bool":
-                columns += [TableColumn(f.label, format="bool")]
+                columns.append(TableColumn(f.label, format="bool"))
             else:
-                columns += [f.label]
+                columns.append(f.label)
         columns += ["Description", TableColumn(_("Tags"), format="tags")]
 
         data = [

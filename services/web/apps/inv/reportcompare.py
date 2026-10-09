@@ -35,7 +35,7 @@ class ReportCompareApplication(SimpleReport):
                         weight += "+"
                 else:
                     weight = ""
-                vd += [
+                vd.append(
                     (
                         m.name,
                         m.get_data("dimensions", "width") or "",
@@ -44,9 +44,9 @@ class ReportCompareApplication(SimpleReport):
                         ru,
                         weight,
                     )
-                ]
+                )
             if vd:
-                data += [SectionRow(name=v.name)]
+                data.append(SectionRow(name=v.name))
                 data += vd
 
         return self.from_dataset(

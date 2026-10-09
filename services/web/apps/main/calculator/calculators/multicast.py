@@ -47,9 +47,9 @@ class Calculator(BaseCalculator):
             r = []
             for m in g(mac):
                 if r:
-                    r += [("", m)]
+                    r.append(("", m))
                 else:
-                    r += [("MAC IPs", m)]
+                    r.append(("MAC IPs", m))
             return r
 
         r = []

@@ -52,8 +52,8 @@ class ContainerDashboard(JinjaDashboard):
             if not s.state.is_productive:
                 s_type = "missed"
             if s.munits.enum and s.state.is_productive:
-                sensor_enum += [{"bi_id": s.bi_id, "local_id": s.local_id, "units": s.munits}]
-            sensor_types[s_type] += [
+                sensor_enum.append({"bi_id": s.bi_id, "local_id": s.local_id, "units": s.munits})
+            sensor_types[s_type].append(
                 {
                     "label": s.dashboard_label or s.label,
                     "units": s.munits,
@@ -62,7 +62,7 @@ class ContainerDashboard(JinjaDashboard):
                     "profile": s.profile,
                     "id": int(str(s.bi_id)[-10:]),
                 }
-            ]
+            )
         self.object_data["sensor_enum"] = sensor_enum
         self.object_data["sensor_types"] = sensor_types
         if not self.object:

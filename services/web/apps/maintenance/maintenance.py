@@ -73,13 +73,13 @@ class MaintenanceApplication(ExtDocApplication):
                 ).first():
                     continue
                 if mai not in o.direct_objects:
-                    o.direct_objects += [mai]
+                    o.direct_objects.append(mai)
             o.save()
         if body["mode"] == "Segment":
             for seg in body["elements"]:
                 mas = MaintenanceSegment(object=seg.get("segment"))
                 if mas not in o.direct_segments:
-                    o.direct_segments += [mas]
+                    o.direct_segments.append(mas)
             o.save()
         return self.response({"result": "Add object"}, status=self.OK)
 
@@ -91,7 +91,7 @@ class MaintenanceApplication(ExtDocApplication):
             .values("id", "name", "is_managed", "profile", "address", "description", "labels")
             .distinct()
         ):
-            r += [
+            r.append(
                 {
                     "id": mo["id"],
                     "name": mo["name"],
@@ -115,7 +115,7 @@ class MaintenanceApplication(ExtDocApplication):
                         for ll in Label.objects.filter(name__in=mo["labels"])
                     ],
                 }
-            ]
+            )
 
         out = {"total": len(r), "success": True, "data": r}
         return self.response(out, status=self.OK)

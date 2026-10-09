@@ -31,9 +31,9 @@ class ReportVPNStatusApplication(SimpleReport):
                 ]
                 si = sorted(si)
                 if si:
-                    d += [[fi.managed_object.name, ", ".join(si)]]
+                    d.append([fi.managed_object.name, ", ".join(si)])
             if d:
-                data += [SectionRow(name=f"VRF {vrf.name}, RD: {vrf.rd} [{vrf.state.name}]")]
+                data.append(SectionRow(name=f"VRF {vrf.name}, RD: {vrf.rd} [{vrf.state.name}]"))
                 data += d
         return self.from_dataset(
             title=self.title, columns=[_("Managed Object"), _("Interfaces")], data=data

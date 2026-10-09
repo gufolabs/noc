@@ -200,18 +200,18 @@ class ReportMetricsDetailApplication(ExtApplication):
         fields = ["managed_object"]
         group = ["managed_object"]
         if reporttype == "load_interfaces":
-            fields += ["iface_name"]
-            group += ["iface_name"]
+            fields.append("iface_name")
+            group.append("iface_name")
 
         header = []
         for c in columns:
-            fields += [c]
+            fields.append(c)
             for ff in report.FIELDS:
                 if ff.name == c:
-                    header += [ff.label]
+                    header.append(ff.label)
                     break
             else:
-                header += [c]
+                header.append(c)
         r = [header]
         columns_filter = set(fields)
         filters = []
@@ -225,7 +225,7 @@ class ReportMetricsDetailApplication(ExtApplication):
             }
         if reporttype == "load_interfaces" and interface_profile:
             interface_profile = InterfaceProfile.objects.filter(id=interface_profile).first()
-            filters += [{"name": "interface_profile", "value": [interface_profile.name]}]
+            filters.append({"name": "interface_profile", "value": [interface_profile.name]})
         if reporttype == "load_interfaces" and not use_aggregated_source and exclude_zero:
             # Op - operand (function) - default IN
             filters += [

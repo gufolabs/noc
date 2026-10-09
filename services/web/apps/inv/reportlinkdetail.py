@@ -214,7 +214,7 @@ class ReportLinkDetailApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:
@@ -275,7 +275,7 @@ class ReportLinkDetailApplication(ExtApplication):
             plat1, plat2 = None, None
             if "object1_platform" in columns.split(",") or "object2_platform" in columns.split(","):
                 plat1, plat2 = mo_resolv[s1["mo"][0]][4], mo_resolv[s2["mo"][0]][4]
-            r += [
+            r.append(
                 translate_row(
                     row(
                         [
@@ -303,7 +303,7 @@ class ReportLinkDetailApplication(ExtApplication):
                     ),
                     cmap,
                 )
-            ]
+            )
         filename = f"links_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")

@@ -237,7 +237,7 @@ class IPAMApplication(ExtApplication):
                     c = [None if cc is None else cc.id for cc in cr[2]]
                     if rrs:
                         cr = rrs.pop(0)
-                spot += [(None if a is None else a.address, c)]
+                spot.append((None if a is None else a.address, c))
             # spot += [(None if a is None else a.address, c, a in special_addr)]
             # spot = ujson.dumps(spot)
             # spot = JSONEncoder(ensure_ascii=False).encode(spot)
@@ -364,37 +364,37 @@ class IPAMApplication(ExtApplication):
                 ("Usage", prefix.usage_percent),
             ]
         if addresses:
-            prefix_info += [("Used addresses", len(addresses))]
+            prefix_info.append(("Used addresses", len(addresses)))
             if afi == "4":
                 free = prefix.size - len(addresses)
-                prefix_info += [("Free addresses", free - 2 if free >= 2 else free)]
+                prefix_info.append(("Free addresses", free - 2 if free >= 2 else free))
         # Prefix discovery
         dmap = {"E": "Enabled", "D": "Disabled"}
         if prefix.prefix_discovery_policy == "P":
             t = f"Profile ({dmap[prefix.profile.prefix_discovery_policy]})"
         else:
             t = dmap[prefix.prefix_discovery_policy]
-        prefix_info += [("Prefix Discovery", t)]
+        prefix_info.append(("Prefix Discovery", t))
         # Address discovery
         if prefix.address_discovery_policy == "P":
             t = f"Profile ({dmap[prefix.profile.address_discovery_policy]})"
         else:
             t = dmap[prefix.address_discovery_policy]
-        prefix_info += [("Address Discovery", t)]
+        prefix_info.append(("Address Discovery", t))
         # Source
-        prefix_info += [
+        prefix_info.append(
             (
                 "Source",
                 {"M": "Manual", "i": "Interface", "w": "Whois Route", "n": "Neighbor"}.get(
                     prefix.source, "-"
                 ),
             )
-        ]
+        )
         #
         # Add custom fields
         for f in CustomField.table_fields("ip_prefix"):
             if f.is_hidden:
                 continue
             v = getattr(prefix, f.name)
-            prefix_info += [(f.label, v if v is not None else "")]
+            prefix_info.append((f.label, v if v is not None else ""))
         return prefix_info

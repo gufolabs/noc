@@ -58,7 +58,7 @@ class ReportLOC(SimpleReport):
         # Build result
         for peer_id in peers:
             p = peers[peer_id]
-            r += [
+            r.append(
                 (
                     p.description,
                     f"AS{int(p.remote_asn)}",
@@ -66,7 +66,7 @@ class ReportLOC(SimpleReport):
                     cone_powers.get(peer_id, 0),
                     uniq_powers.get(peer_id, 0),
                 )
-            ]
+            )
         r = sorted(r, key=lambda x: -x[4])
         return self.from_dataset(
             title=self.title,

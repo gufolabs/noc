@@ -18,9 +18,9 @@ class ReportPartnumbersApplication(SimpleReport):
     def get_data(self, **kwargs):
         data = []
         for v in Vendor.objects.order_by("name"):
-            data += [SectionRow(name=v.name)]
+            data.append(SectionRow(name=v.name))
             for m in ObjectModel.objects.filter(vendor=v.id):
-                data += [
+                data.append(
                     [
                         m.get_data("asset", "part_no0"),
                         m.get_data("asset", "part_no1"),
@@ -33,7 +33,7 @@ class ReportPartnumbersApplication(SimpleReport):
                         m.name,
                         m.description,
                     ]
-                ]
+                )
 
         return self.from_dataset(
             title=self.title,

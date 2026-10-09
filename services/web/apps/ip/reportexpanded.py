@@ -53,7 +53,7 @@ class ExpandedReport(SimpleReport):
             r = [s + p.prefix, p.state.name, smart_text(vlan) if vlan else ""]
             for f in cf:
                 v = getattr(p, f.name)
-                r += [v if v is not None else ""]
+                r.append(v if v is not None else "")
             r += [p.description, p]
             return r
 
@@ -67,7 +67,7 @@ class ExpandedReport(SimpleReport):
         # Prepare columns
         columns = ["Prefix", "State", "VLAN"]
         for f in cf:
-            columns += [f.label]
+            columns.append(f.label)
         columns += ["Description", TableColumn(_("Tags"), format="tags")]
         data = get_info(prefix)
         return self.from_dataset(

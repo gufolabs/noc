@@ -33,7 +33,7 @@ class SearchApplication(ExtApplication):
             if not model:
                 continue  # Invalid model
             url = model.get_search_result_url(qr["object"])
-            r += [
+            r.append(
                 {
                     "title": str(qr["title"]),
                     "card": str(qr["card"]),
@@ -41,5 +41,5 @@ class SearchApplication(ExtApplication):
                     "url": url,
                     "score": qr["score"],
                 }
-            ]
+            )
         return r

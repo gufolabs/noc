@@ -52,7 +52,7 @@ class ReportLOC(SimpleReport):
         for m in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
             m = m[4:]
             module_name = importlib.import_module(f"noc.{m}").MODULE_NAME
-            data += [SectionRow(module_name)]
+            data.append(SectionRow(module_name))
             # Scan models
             models_path = os.path.join(m, "models.py")
             if os.path.exists(models_path):
@@ -68,18 +68,18 @@ class ReportLOC(SimpleReport):
                         py_loc += lines(os.path.join(models_path, f))
                 mn = "models/"
             _, _, tests_loc = dir_loc(os.path.join(m, "tests"))
-            data += [["Model", mn, py_loc, 0, tests_loc]]
+            data.append(["Model", mn, py_loc, 0, tests_loc])
             # Scan Migrations
             py_loc, _, _ = dir_loc(os.path.join(m, "migrations"))
-            data += [["Migrations", "", py_loc, 0, 0]]
+            data.append(["Migrations", "", py_loc, 0, 0])
             # Scan Management
             for dirpath, dirnames, filenames in os.walk(os.path.join(m, "management", "commands")):
                 for f in [f for f in filenames if f.endswith(".py") and f != "__init__.py"]:
                     py_loc = lines(os.path.join(dirpath, f))
-                    data += [["Management", f[:-3], py_loc, 0, 0]]
+                    data.append(["Management", f[:-3], py_loc, 0, 0])
             # Scan Templates
             py_loc, html_loc, _ = dir_loc(os.path.join(m, "templates"))
-            data += [["Templates", "", py_loc, html_loc, 0]]
+            data.append(["Templates", "", py_loc, html_loc, 0])
             # Scan applications
             for app in [d for d in os.listdir(os.path.join(m, "apps")) if not d.startswith(".")]:
                 app_path = os.path.join(m, "apps", app)
@@ -97,7 +97,7 @@ class ReportLOC(SimpleReport):
                             py_loc += lines(os.path.join(dirpath, f))
                         for f in [f for f in filenames if f.endswith(".html")]:
                             html_loc += lines(os.path.join(dirpath, f))
-                data += [["Application", f"{m}.{app}", py_loc, html_loc, tests_loc]]
+                data.append(["Application", f"{m}.{app}", py_loc, html_loc, tests_loc])
                 # Scan Profiles
             if m == "sa":
                 for d in glob.glob("sa/profiles/*/*"):
@@ -106,7 +106,7 @@ class ReportLOC(SimpleReport):
                     pp = d.split(os.sep)
                     profile = ".".join(pp[-2:])
                     py_loc, html_loc, tests_loc = dir_loc(d)
-                    data += [["Profile", profile, py_loc, html_loc, tests_loc]]
+                    data.append(["Profile", profile, py_loc, html_loc, tests_loc])
                 # Scan other
             py_loc = 0
             for dirpath, dirnames, filenames in os.walk(m):
@@ -120,7 +120,7 @@ class ReportLOC(SimpleReport):
                     continue
                 for f in [f for f in filenames if f.endswith(".py") if f != "models.py"]:
                     py_loc += lines(os.path.join(dirpath, f))
-            data += [["Other", "", py_loc, 0, 0]]
+            data.append(["Other", "", py_loc, 0, 0])
         return self.from_dataset(
             title=self.title,
             columns=[
