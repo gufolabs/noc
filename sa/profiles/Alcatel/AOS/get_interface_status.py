@@ -29,16 +29,16 @@ class Script(BaseScript):
                 r = []
                 # IF-MIB::ifName, IF-MIB::ifOperStatus
                 for i, n, s in self.snmp.join([mib["IF-MIB::ifName"], mib["IF-MIB::ifOperStatus"]]):
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
         r = []
         for match in self.rx_line.finditer(self.cli("show interfaces port")):
-            r += [
+            r.append(
                 {
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() == "up",
                 }
-            ]
+            )
         return r

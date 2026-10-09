@@ -29,22 +29,22 @@ class Script(BaseScript):
                     for l in v.splitlines()
                     if ":" in l
                 }
-                bundle += [
+                bundle.append(
                     {
                         "interface": port,
                         "local_port_id": int(d["Actor Port"].strip(",")) + 1024,
                         "remote_system_id": d["Partner Oper System Id"].strip(",[]"),
                         "remote_port_id": d["Partner Oper Port"].strip(","),
                     }
-                ]
+                )
             if not lag["members"]:
                 return []
-            r += [
+            r.append(
                 {
                     "lag_id": lag["interface"],
                     "interface": "Ag " + lag["interface"],
                     "system_id": d["Actor System Id"].strip(",[]"),
                     "bundle": bundle,
                 }
-            ]
+            )
         return r

@@ -31,9 +31,9 @@ class Script(BaseScript):
         match = self.rx_id.search(v)
         basemac = match.group("basemac")
         sysmac = match.group("sysmac")
-        r += [{"first_chassis_mac": basemac, "last_chassis_mac": basemac}]
+        r.append({"first_chassis_mac": basemac, "last_chassis_mac": basemac})
         if basemac != sysmac:
-            r += [{"first_chassis_mac": sysmac, "last_chassis_mac": sysmac}]
+            r.append({"first_chassis_mac": sysmac, "last_chassis_mac": sysmac})
 
         return r
 

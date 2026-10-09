@@ -24,7 +24,7 @@ def ranges_to_list_str(s):
         p = p.strip()
         try:
             int(p)
-            r += [p]
+            r.append(p)
             continue
         except ValueError:
             pass
@@ -35,7 +35,7 @@ def ranges_to_list_str(s):
         if f >= t:
             raise SyntaxError
         for i in range(f, t + 1):
-            r += [str(i)]
+            r.append(str(i))
         #    return sorted(r)
     return r
 
@@ -112,7 +112,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_bgp.finditer(c_if):
-                bgp += [match.group("ipif")]
+                bgp.append(match.group("ipif"))
 
         ospf = []
         ospf_enable = self.rx_ospf_gs.search(c) is not None
@@ -122,7 +122,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_ospf.finditer(c_if):
-                ospf += [match.group("ipif")]
+                ospf.append(match.group("ipif"))
 
         ospf3 = []
         ospf3_enable = self.rx_ospf3_gs.search(c) is not None
@@ -132,7 +132,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_ospf3.finditer(c_if):
-                ospf3 += [match.group("ipif")]
+                ospf3.append(match.group("ipif"))
 
         rip = []
         rip_enable = self.rx_rip_gs.search(c) is not None
@@ -142,7 +142,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_rip.finditer(c_if):
-                rip += [match.group("ipif")]
+                rip.append(match.group("ipif"))
 
         ripng = []
         ripng_enable = self.rx_ripng_gs.search(c) is not None
@@ -152,7 +152,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_ripng.finditer(c_if):
-                ripng += [match.group("ipif")]
+                ripng.append(match.group("ipif"))
 
         dvmrp = []
         dvmrp_enable = self.rx_dvmrp_gs.search(c) is not None
@@ -162,7 +162,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_dvmrp.finditer(c_if):
-                dvmrp += [match.group("ipif")]
+                dvmrp.append(match.group("ipif"))
 
         pim = []
         pim_enable = self.rx_pim_gs.search(c) is not None
@@ -172,7 +172,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_pim.finditer(c_if):
-                pim += [match.group("ipif")]
+                pim.append(match.group("ipif"))
 
         isis = []
         isis_enable = self.rx_isis_gs.search(c) is not None
@@ -182,7 +182,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 c_if = ""
             for match in self.rx_isis.finditer(c_if):
-                isis += [match.group("ipif")]
+                isis.append(match.group("ipif"))
 
         lldp = []
         try:
@@ -201,7 +201,7 @@ class Script(BaseScript):
                 except self.CLISyntaxError:
                     c = ""
                 for match in self.rx_lldp.finditer(c):
-                    lldp += [match.group("port")]
+                    lldp.append(match.group("port"))
 
         udld = []
         try:
@@ -220,7 +220,7 @@ class Script(BaseScript):
                 except self.CLISyntaxError:
                     c = ""
                 for match in self.rx_udld.finditer(c):
-                    udld += [match.group("port")]
+                    udld.append(match.group("port"))
 
         r = []
         try:
@@ -262,7 +262,7 @@ class Script(BaseScript):
             if switchports[iface][0]:
                 n["subinterfaces"][0]["untagged_vlan"] = switchports[iface][0]
             n["type"] = "aggregated"
-            r += [n]
+            r.append(n)
         v = "\n" + v
 
         for s in self.rx_line.split(v)[1:]:
@@ -302,12 +302,12 @@ class Script(BaseScript):
                 if switchports[iface][0]:
                     n["subinterfaces"][0]["untagged_vlan"] = switchports[iface][0]
                 if lldp_enable and iface in lldp:
-                    enabled_protocols += ["LLDP"]
+                    enabled_protocols.append("LLDP")
                 if udld_enable and iface in udld:
-                    enabled_protocols += ["UDLD"]
+                    enabled_protocols.append("UDLD")
                 n["enabled_protocols"] = enabled_protocols
                 n["type"] = "physical"
-                r += [n]
+                r.append(n)
             if iface in portchannel_members:
                 ai, _is_lacp = portchannel_members[iface]
                 ai = f"Ag {ai}"
@@ -335,7 +335,7 @@ class Script(BaseScript):
                     }
                 ]
                 n["type"] = "physical"
-                r += [n]
+                r.append(n)
         ip_int = self.cli("show ip interface")
         for match in self.rx_sh_svi.finditer(ip_int):
             ifname = match.group("name")
@@ -344,30 +344,30 @@ class Script(BaseScript):
             enabled_protocols = []
             if ":" in ip:
                 ip_interfaces = "ipv6_addresses"
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
                 ip = IPv6(ip, netmask=match.group("mask")).prefix
                 ip_list = [ip]
             else:
                 ip_interfaces = "ipv4_addresses"
-                enabled_afi += ["IPv4"]
+                enabled_afi.append("IPv4")
                 ip = IPv4(ip, netmask=match.group("mask")).prefix
                 ip_list = [ip]
             vlan = match.group("vlan")
             # a_stat = "UP"
             if ospf_enable and ifname in ospf:
-                enabled_protocols += ["OSPF"]
+                enabled_protocols.append("OSPF")
             if ospf3_enable and ifname in ospf3:
-                enabled_protocols += ["OSPF3"]
+                enabled_protocols.append("OSPF3")
             if pim_enable and ifname in pim:
-                enabled_protocols += ["PIM"]
+                enabled_protocols.append("PIM")
             if ripng_enable and ifname in ripng:
-                enabled_protocols += ["RIPng"]
+                enabled_protocols.append("RIPng")
             if dvmrp_enable and ifname in dvmrp:
-                enabled_protocols += ["DVMRP"]
+                enabled_protocols.append("DVMRP")
             if isis_enable and ifname in isis:
-                enabled_protocols += ["ISIS"]
+                enabled_protocols.append("ISIS")
             if bgp_enable and ifname in bgp:
-                enabled_protocols += ["BGP"]
+                enabled_protocols.append("BGP")
             iface = {
                 "name": ifname,
                 "type": "SVI",
@@ -387,7 +387,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            r += [iface]
+            r.append(iface)
         if not r:
             raise self.UnexpectedResultError("Has not interfaces in output")
         return [{"interfaces": r}]

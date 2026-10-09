@@ -68,5 +68,5 @@ class Script(BaseScript):
             match = self.rx_portdescr.search(s)
             if match:
                 neighbor["remote_port_description"] = match.group("descr").strip()
-            r += [{"local_interface": i[0], "neighbors": [neighbor]}]
+            r.append({"local_interface": i[0], "neighbors": [neighbor]})
         return r

@@ -36,12 +36,12 @@ class Script(BaseScript):
             vid = int(match.group("vlan_id"))
             if vlan is None or vid == vlan:
                 interface = f"{match.group('unit')}:{match.group('port')}"
-                r += [
+                r.append(
                     {
                         "vlan_id": vid,
                         "mac": match.group("mac"),
                         "interfaces": [interface],
                         "type": {"no": "D", "yes": "S"}[match.group("type").lower()],
                     }
-                ]
+                )
         return r

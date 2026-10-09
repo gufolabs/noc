@@ -35,18 +35,18 @@ class Script(BaseScript):
         r = []
 
         for line in parse_table(va):
-            r += [{"interface": line[0], "untagged": line[3], "tagged": [], "members": []}]
+            r.append({"interface": line[0], "untagged": line[3], "tagged": [], "members": []})
         for match in self.rx_vlan.finditer(vl):
             up = 0
             if match.group("vstatus") == "enabled":
                 for i in match.group("uplinkmask"):
                     up += 1
                     if i == "T":
-                        tagged[up] += [match.group("vid")]
+                        tagged[up].append(match.group("vid"))
                     # if i == "U":
                     # untagged[up]+=[match.group("vid")]
         for i in range(up):
-            r += [
+            r.append(
                 {
                     "interface": "enet" + str(i + 1),
                     "802.1Q Enabled": True,
@@ -54,5 +54,5 @@ class Script(BaseScript):
                     "tagged": tagged[i + 1],
                     "members": [],
                 }
-            ]
+            )
         return r

@@ -123,13 +123,13 @@ class Script(BaseScript):
                 continue
             local_interface_id = str(lldp_match.group("local_interface_id"))
             pri = self.get_port_info(port)
-            r += [
+            r.append(
                 {
                     "local_interface": port,
                     "local_interface_id": local_interface_id,
                     "neighbors": [pri],
                 }
-            ]
+            )
         return r
 
     # get lldp snmp
@@ -228,12 +228,12 @@ class Script(BaseScript):
                     neigh["remote_port_description"] = neigh["remote_port_description"].rstrip(
                         "\x00"
                     )
-                r += [
+                r.append(
                     {
                         "local_interface": local_ports[v[0].split(".")[1]]["local_interface"],
                         # @todo if local interface subtype != 5
                         # "local_interface_id": 5,
                         "neighbors": [neigh],
                     }
-                ]
+                )
         return r

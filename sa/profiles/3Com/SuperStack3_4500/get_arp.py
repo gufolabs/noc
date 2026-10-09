@@ -29,5 +29,5 @@ class Script(BaseScript):
             if mac.lower() == "incomplete":
                 r.append({"ip": match.group("ip"), "mac": None, "interface": None})
             else:
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

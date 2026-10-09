@@ -79,7 +79,7 @@ class Script(BaseScript):
         }
         match = self.rx_descr.search(v)
         p["description"] = match.group("type").strip()
-        r += [p]
+        r.append(p)
         v = self.cli("show card state")
         for l in v.split("\n"):
             p = {}
@@ -99,7 +99,7 @@ class Script(BaseScript):
                     p["part_no"] = match1.group("part_no")
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
-                r += [p]
+                r.append(p)
             match = self.rx_imm.search(l)
             if match:
                 number = match.group("number")
@@ -116,7 +116,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
             match = self.rx_mda.search(l)
             if match:
                 number = match.group("number")
@@ -133,7 +133,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
             match = self.rx_cfm.search(l)
             if match:
                 number = match.group("number")
@@ -150,7 +150,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
                 for match1 in self.rx_flash.finditer(c):
                     if "ALU" in match1.group("part_no"):
                         vendor = "ALU"
@@ -164,7 +164,7 @@ class Script(BaseScript):
                         "serial": match1.group("serial"),
                         "revision": match1.group("revision"),
                     }
-                    r += [p]
+                    r.append(p)
             match = self.rx_cpm.search(l)
             if match:
                 number = match.group("number")
@@ -181,7 +181,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
                 for match1 in self.rx_flash.finditer(c):
                     if "ALU" in match1.group("part_no"):
                         vendor = "ALU"
@@ -195,5 +195,5 @@ class Script(BaseScript):
                         "serial": match1.group("serial"),
                         "revision": match1.group("revision"),
                     }
-                    r += [p]
+                    r.append(p)
         return r

@@ -117,7 +117,7 @@ class Script(BaseScript):
                 _, port_id, vpi, vci = ifname.split(":")
             else:
                 port_id, vpi, vci = ifname.split(":")
-            sub[port_id] += [
+            sub[port_id].append(
                 {
                     "name": f"{port_id}:{vpi}:{vci}",
                     "vci": vci,
@@ -126,7 +126,7 @@ class Script(BaseScript):
                     "enabled_afi": ["ATM", "BRIDGE"],
                     "untagged_vlan": match.group("pvid"),
                 }
-            ]
+            )
 
         if not sub:
             v = self.cli("info configure bridge port")
@@ -138,7 +138,7 @@ class Script(BaseScript):
                     _, port_id, vpi, vci = ifname.split(":")
                 else:
                     port_id, vpi, vci = ifname.split(":")
-                sub[port_id] += [
+                sub[port_id].append(
                     {
                         "name": f"{port_id}:{vpi}:{vci}",
                         "vci": vci,
@@ -147,7 +147,7 @@ class Script(BaseScript):
                         "enabled_afi": ["ATM", "BRIDGE"],
                         "untagged_vlan": match.group("pvid"),
                     }
-                ]
+                )
         return sub
 
     def execute_cli(self, **kwargs):
@@ -177,7 +177,7 @@ class Script(BaseScript):
             if ifname == "network:7":
                 ifname = "ethernet:7"
             if ifname in tagged_vlans:
-                tagged_vlans[ifname] += [match.group("vlan_id")]
+                tagged_vlans[ifname].append(match.group("vlan_id"))
             else:
                 tagged_vlans[ifname] = [match.group("vlan_id")]
         boards_status = self.get_boards_status_cli()
@@ -231,7 +231,7 @@ class Script(BaseScript):
                 }
                 if tagged_vlans.get(port_id):
                     sub["tagged_vlans"] = tagged_vlans[port_id]
-                interfaces[port_id]["subinterfaces"] += [sub]
+                interfaces[port_id]["subinterfaces"].append(sub)
             match = self.rx_mac.search(p)
             if match:
                 interfaces[port_id]["mac"] = match.group("mac")
@@ -250,7 +250,7 @@ class Script(BaseScript):
                     continue
                 ifname = match.group("ifname")
                 if ifname in tagged_vlans:
-                    tagged_vlans[ifname] += [match.group("vlan_id")]
+                    tagged_vlans[ifname].append(match.group("vlan_id"))
                 else:
                     tagged_vlans[ifname] = [match.group("vlan_id")]
 
@@ -274,7 +274,7 @@ class Script(BaseScript):
                 }
                 if tagged_vlans.get(port_id):
                     sub["tagged_vlans"] = tagged_vlans[port_id]
-                interfaces[port_id]["subinterfaces"] += [sub]
+                interfaces[port_id]["subinterfaces"].append(sub)
 
         v = self.cli("show ip shub vrf")
         for match in self.rx_ip.finditer(v):
@@ -331,7 +331,7 @@ class Script(BaseScript):
                 if match.group("vlan_id"):
                     sub["vlan_ids"] = int(match.group("vlan_id"))
                     sub["name"] = "mgmt" + match.group("vlan_id")
-                mgmt["subinterfaces"] += [sub]
+                mgmt["subinterfaces"].append(sub)
             interfaces["mgmt"] = mgmt
 
         return [{"interfaces": list(interfaces.values())}]
@@ -377,11 +377,11 @@ class Script(BaseScript):
             vci_ifindex_map[ifindex] = vciifindex
             if vciifindex in switchports:
                 sub.update(switchports[vciifindex])
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
             if vciifindex in ips:
                 sub.update(ips[vciifindex])
-                sub["enabled_afi"] += ["IPv4"]
-            subifaces[port_id] += [sub]
+                sub["enabled_afi"].append("IPv4")
+            subifaces[port_id].append(sub)
 
         # Interface loop
         for oid, iftype in self.snmp.getnext(
@@ -425,36 +425,36 @@ class Script(BaseScript):
 
         # Fill interface info
         iter_tables = []
-        iter_tables += [
+        iter_tables.append(
             self.iter_iftable(
                 "admin_status",
                 self.SNMP_ADMIN_STATUS_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_status,
             )
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable(
                 "oper_status",
                 self.SNMP_OPER_STATUS_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_status,
             )
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable(
                 "description",
                 self.SNMP_IF_DESCR_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_ifdescription,
             )
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable(
                 "mac", "IF-MIB::ifPhysAddress", ifindexes=ethernet, clean=self.clean_mac
             )
-        ]
-        iter_tables += [self.iter_iftable("mtu", "IF-MIB::ifMtu", ifindexes=ethernet)]
+        )
+        iter_tables.append(self.iter_iftable("mtu", "IF-MIB::ifMtu", ifindexes=ethernet))
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
         if not ifaces:
@@ -477,20 +477,20 @@ class Script(BaseScript):
             if port_id in subifaces:
                 iface["subinterfaces"] += subifaces[port_id]
             if ifindex in ips:
-                iface["subinterfaces"] += [
+                iface["subinterfaces"].append(
                     {
                         "name": iface["name"],
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [IPv4(*i) for i in ips[ifindex]],
                     }
-                ]
+                )
             if ifindex in switchports:
                 sub = {
                     "name": iface["name"],
                     "enabled_afi": ["BRIDGE"],
                 }
                 sub.update(switchports[ifindex])
-                iface["subinterfaces"] += [sub]
+                iface["subinterfaces"].append(sub)
             if ifindex in portchannels:
                 iface["aggregated_interface"] = ifaces[portchannels[ifindex]]["name"]
                 iface["enabled_protocols"] = ["LACP"]

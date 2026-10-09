@@ -30,13 +30,13 @@ class Script(BaseScript):
             v = self.cli("display device manuinfo", cached=True)
             match = self.rx_mac.search(v)
             if match:
-                macs += [match.group("mac")]
+                macs.append(match.group("mac"))
         except self.CLISyntaxError:
             pass
         v = self.cli("display interface", cached=True)
         for match in self.rx_mac.finditer(v):
             if match.group("mac") not in macs:
-                macs += [match.group("mac")]
+                macs.append(match.group("mac"))
         macs.sort()
         return [
             {"first_chassis_mac": f, "last_chassis_mac": t} for f, t in self.macs_to_ranges(macs)

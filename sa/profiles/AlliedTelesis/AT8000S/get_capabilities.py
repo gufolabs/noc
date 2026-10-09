@@ -35,7 +35,7 @@ class Script(BaseScript):
             s = []
             v = self.cli("show stack", cached=True)
             for i in parse_table(v, footer="Topology is "):
-                s += [i[0]]
+                s.append(i[0])
             if s:
                 caps["Stack | Members"] = len(s) if len(s) != 1 else 0
                 caps["Stack | Member Ids"] = " | ".join(s)

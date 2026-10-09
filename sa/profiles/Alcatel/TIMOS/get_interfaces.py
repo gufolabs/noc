@@ -207,15 +207,15 @@ class Script(BaseScript):
         if "None" in protocols:
             return []
         if "OSPFv2" in protocols:
-            proto += ["OSPF"]
+            proto.append("OSPF")
         if "OSPFv3" in protocols:
-            proto += ["OSPFv3"]
+            proto.append("OSPFv3")
         if "PIM" in protocols:
-            proto += ["PIM"]
+            proto.append("PIM")
         if "IGMP" in protocols:
-            proto += ["IGMP"]
+            proto.append("IGMP")
         if "RSVP" in protocols:
-            proto += ["RSVP"]
+            proto.append("RSVP")
         return proto
 
     @staticmethod
@@ -234,13 +234,13 @@ class Script(BaseScript):
                 afi = match_obj.group(1)
                 ip = match_obj.group(2)
                 if afi == "IP Addr/mask" and "Not" not in ip:
-                    result["ipv4_addresses"] += [ip]
+                    result["ipv4_addresses"].append(ip)
                 elif afi == "IPv6 Addr" and is_ipv6(ip):
-                    result["ipv6_addresses"] += [ip]
+                    result["ipv6_addresses"].append(ip)
         if result["ipv4_addresses"]:
-            result["enabled_afi"] += ["IPv4"]
+            result["enabled_afi"].append("IPv4")
         if result["ipv6_addresses"]:
-            result["enabled_afi"] += ["IPv6"]
+            result["enabled_afi"].append("IPv6")
         return result
 
     def parse_interfaces(self, data, vrf):
@@ -319,9 +319,9 @@ class Script(BaseScript):
                                 if "." in vlans and "*" not in vlans:
                                     up_tag, down_tag = vlans.split(".")
                                     if is_vlan(up_tag):
-                                        my_dict["vlan_ids"] += [int(up_tag)]
+                                        my_dict["vlan_ids"].append(int(up_tag))
                                     if is_vlan(down_tag):
-                                        my_dict["vlan_ids"] += [int(down_tag)]
+                                        my_dict["vlan_ids"].append(int(down_tag))
                         my_dict["subinterfaces"] = [{"name": my_dict["name"]}]
             else:
                 continue
@@ -330,7 +330,7 @@ class Script(BaseScript):
             proto = my_dict["protocols"]
             my_dict["protocols"] = self.fix_protocols(my_dict["protocols"])
             if "srrp" in my_dict:
-                my_dict["protocols"] += ["SRRP"]
+                my_dict["protocols"].append("SRRP")
                 my_dict.pop("srrp")
             my_dict["oper_status"] = self.fix_status(my_dict["oper_status"])
             my_dict["admin_status"] = self.fix_status(my_dict["admin_status"])
@@ -361,7 +361,7 @@ class Script(BaseScript):
                         my_dict.pop("vlan_ids")
                     if "MPLS" in proto:
                         if "enabled_afi" in my_sub:
-                            my_sub["enabled_afi"] += ["MPLS"]
+                            my_sub["enabled_afi"].append("MPLS")
                         else:
                             my_sub["enabled_afi"] = ["MPLS"]
                     if my_dict.get("mac"):
@@ -375,14 +375,14 @@ class Script(BaseScript):
                         for i in vrf:
                             if i["name"] == parent_iface:
                                 my_sub["name"] = my_dict["name"]
-                                i["subinterfaces"] += [my_sub]
+                                i["subinterfaces"].append(my_sub)
                                 found = True
                                 break
                         if found:
                             continue
             if "type" not in my_dict:
                 my_dict["type"] = "unknown"
-            result += [my_dict]
+            result.append(my_dict)
         return result
 
     @staticmethod
@@ -421,14 +421,14 @@ class Script(BaseScript):
                     ],
                 }
                 if is_vlan(raw_sap["downtag"]):
-                    sap["subinterfaces"][0]["vlan_ids"] += [int(raw_sap["downtag"])]
+                    sap["subinterfaces"][0]["vlan_ids"].append(int(raw_sap["downtag"]))
                 if "*" in sap["subinterfaces"][0]["name"]:
                     sap["subinterfaces"][0].pop("vlan_ids")
                 if "lag" in sap["name"]:
                     sap["type"] = "aggregated"
                 else:
                     sap["type"] = "physical"
-                result["interfaces"] += [sap]
+                result["interfaces"].append(sap)
         return result
 
     def get_vpls(self, vpls_id):
@@ -577,11 +577,11 @@ class Script(BaseScript):
 
         fi = self.get_forwarding_instance()
         for forw_instance in fi:
-            result += [forw_instance]
+            result.append(forw_instance)
         fi = self.get_managment_router()
-        result += [fi]
+        result.append(fi)
 
         fi = self.get_base_router()
-        result += [fi]
+        result.append(fi)
 
         return result

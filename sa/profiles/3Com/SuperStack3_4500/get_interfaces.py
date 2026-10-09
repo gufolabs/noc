@@ -89,6 +89,6 @@ class Script(BaseScript):
                     vlan_id = ifname[14:]
                     sub["vlan_ids"] = vlan_id
                 iface["subinterfaces"] = [sub]
-                interfaces += [iface]
+                interfaces.append(iface)
 
         return [{"interfaces": interfaces}]
