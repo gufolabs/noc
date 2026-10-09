@@ -122,7 +122,7 @@ class Script(BaseScript):
             if not match:
                 continue
             if match.group("local_if") not in lldp_interfaces:
-                lldp_interfaces += [match.group("local_if")]
+                lldp_interfaces.append(match.group("local_if"))
         for local_if in lldp_interfaces:
             v = self.cli(f"show lldp neighbors interface {local_if}")
             for neighbor in v.split("Neighbour Information:"):
@@ -179,14 +179,14 @@ class Script(BaseScript):
                 iface_found = False
                 for i in r:
                     if i["local_interface"] == local_if:
-                        i["neighbors"] += [n]
+                        i["neighbors"].append(n)
                         iface_found = True
                         break
                 if not iface_found:
                     i = {"local_interface": local_if, "neighbors": [n]}
                     if local_if in local_port_ids:
                         i["local_interface_id"] = local_port_ids[local_if]
-                    r += [i]
+                    r.append(i)
         for q in r:
             if q["local_interface"].endswith(".0"):
                 q["local_interface"] = q["local_interface"][:-2]

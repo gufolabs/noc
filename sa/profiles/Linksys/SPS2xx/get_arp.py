@@ -45,13 +45,13 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli("show arp", cached=True)):
             mac = match.group("mac")
             if mac.lower() == "incomplete":
-                r += [{"ip": match.group("ip"), "mac": None, "interface": None}]
+                r.append({"ip": match.group("ip"), "mac": None, "interface": None})
             else:
-                r += [
+                r.append(
                     {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": match.group("interface"),
                     }
-                ]
+                )
         return r

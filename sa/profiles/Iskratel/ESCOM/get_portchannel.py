@@ -26,11 +26,11 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             return []
         for group, po, ports in parse_table(v):
-            r += [
+            r.append(
                 {
                     "interface": po.split("(")[0].strip(),
                     "members": [ll.split("(", 1)[0].strip() for ll in ports.split(",")],
                     "type": "L",
                 }
-            ]
+            )
         return r

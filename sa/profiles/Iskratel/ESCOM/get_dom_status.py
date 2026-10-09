@@ -58,5 +58,5 @@ class Script(BaseScript):
                 and (i["optical_tx_dbm"] is None)
             ):
                 continue
-            r += [i]
+            r.append(i)
         return r

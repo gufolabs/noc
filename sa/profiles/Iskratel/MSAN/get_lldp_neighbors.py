@@ -76,5 +76,5 @@ class Script(BaseScript):
                         break
                     caps |= {"repeater": 2, "bridge": 4, "router": 16}[c]
                 n["remote_capabilities"] = caps
-                r += [{"local_interface": interface, "neighbors": [n]}]
+                r.append({"local_interface": interface, "neighbors": [n]})
         return r

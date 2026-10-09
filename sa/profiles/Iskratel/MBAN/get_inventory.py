@@ -47,15 +47,15 @@ class Script(BaseScript):
         }
         if match.group("serial") != "N/A":
             lc["serial"] = match.group("serial")
-        r += [lc]
+        r.append(lc)
         match = self.rx_cpu.search(c)
         if match:
-            r += [
+            r.append(
                 {
                     "type": "CPU",
                     "number": match.group("number"),
                     "vendor": "ISKRATEL",
                     "part_no": match.group("part_no"),
                 }
-            ]
+            )
         return r

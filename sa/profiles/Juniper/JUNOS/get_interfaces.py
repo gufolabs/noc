@@ -176,7 +176,7 @@ class Script(BaseScript):
                     if is_vlan(match.group("vlan")):
                         vlan_ids = [int(match.group("vlan"))]
                     if match.group("vlan2") and is_vlan(match.group("vlan2")):
-                        vlan_ids += [int(match.group("vlan2"))]
+                        vlan_ids.append(int(match.group("vlan2")))
                 # `irb` and `vlan` interfaces display other,
                 # then `eth-switch` protocol
                 if l3_ids.get(sname):
@@ -188,30 +188,30 @@ class Script(BaseScript):
                     local_addresses = self.rx_log_address.findall(p)
                     if proto == "iso":
                         # Protocol ISO
-                        si["enabled_afi"] += ["ISO"]
+                        si["enabled_afi"].append("ISO")
                         if local_addresses:
                             si["iso_addresses"] = local_addresses
                     elif proto == "mpls":
                         # MPLS protocol
-                        si["enabled_afi"] += ["MPLS"]
+                        si["enabled_afi"].append("MPLS")
                     elif proto == "inet":
                         # Protocol IPv4
-                        si["enabled_afi"] += ["IPv4"]
+                        si["enabled_afi"].append("IPv4")
                         si["ipv4_addresses"] = [f"{a}/32" for a in local_addresses]
                         # Find connected networks
                         for match in self.rx_log_netaddress.finditer(p):
                             net, addr = match.groups()
                             _n, m = net.split("/")
-                            si["ipv4_addresses"] += [f"{addr}/{m}"]
+                            si["ipv4_addresses"].append(f"{addr}/{m}")
                     elif proto == "inet6":
                         # Protocol IPv6
-                        si["enabled_afi"] += ["IPv6"]
+                        si["enabled_afi"].append("IPv6")
                         si["ipv6_addresses"] = [f"{a}/128" for a in local_addresses]
                         # Find connected networks
                         for match in self.rx_log_netaddress6.finditer(p):
                             net, addr = match.groups()
                             _n, m = net.split("/")
-                            si["ipv6_addresses"] += [f"{addr}/{m}"]
+                            si["ipv6_addresses"].append(f"{addr}/{m}")
                     elif proto == "aenet":
                         # Aggregated
                         match = self.rx_log_ae.search(p)
@@ -220,7 +220,7 @@ class Script(BaseScript):
                             iface["aggregated_interface"] = bundle
                     elif proto.lower() == "eth-switch" or proto.lower() == "multiservice":
                         if proto.lower() == "eth-switch":
-                            si["enabled_afi"] += ["BRIDGE"]
+                            si["enabled_afi"].append("BRIDGE")
                         if not vlans_requested:
                             if self.is_switch and (
                                 self.profile.command_exist(self, "vlans")
@@ -276,9 +276,9 @@ class Script(BaseScript):
                     else:
                         raise self.NotSupportedError("Unknown tunnel type")
                 # Append to subinterfaces list
-                subs += [si]
+                subs.append(si)
             if not subs:
-                subs += [def_si]
+                subs.append(def_si)
             # Append to collected interfaces
             iface["subinterfaces"] = subs
             interfaces[name] = iface
@@ -291,21 +291,21 @@ class Script(BaseScript):
             interfaces[i]["subinterfaces"] = []
             if i in vrf_if_map:
                 iface_vrf = vrf_if_map[i]
-                vrfs[vrf_if_map[i]]["interfaces"] += [interfaces[i]]
+                vrfs[vrf_if_map[i]]["interfaces"].append(interfaces[i])
             else:
-                vrfs["default"]["interfaces"] += [interfaces[i]]
+                vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"] += [
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append(
                         {
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
                         }
-                    ]
+                    )
                 else:
-                    interfaces[i]["subinterfaces"] += [s]
+                    interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())
 
     rx_vlan_sep = re.compile(r"^VLAN:", re.MULTILINE)
@@ -366,7 +366,7 @@ class Script(BaseScript):
                     for i in match.group(1).split(","):
                         i = clean_interface(i)
                         try:
-                            tagged[i] += [tag]
+                            tagged[i].append(tag)
                         except KeyError:
                             tagged[i] = [tag]
                     vdata = vdata[: match.start()]
@@ -396,7 +396,7 @@ class Script(BaseScript):
                     i = clean_interface(i)
                     if match.group("type") == "tagged":
                         try:
-                            tagged[i] += [tag]
+                            tagged[i].append(tag)
                         except KeyError:
                             tagged[i] = [tag]
                     else:

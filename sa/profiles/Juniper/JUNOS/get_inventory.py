@@ -501,7 +501,7 @@ class Script(BaseScript):
                     "builtin": False,
                 }
 
-                transceivers += [{"num_in_inv": place_in_inv, "obj": obj}]
+                transceivers.append({"num_in_inv": place_in_inv, "obj": obj})
         return transceivers
 
     def execute_snmp(self):

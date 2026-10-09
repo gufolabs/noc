@@ -32,17 +32,17 @@ class Script(BaseScript):
         slots = []
         v = self.cli("show hardware | begin Adapters")
         for match in self.rx_slot.finditer(v):
-            slots += [match.groupdict()]
+            slots.append(match.groupdict())
         for match in self.rx_mac.finditer(v):
             slot = match.group("slot")
             for s in slots:
                 if s["slot"] == slot:
                     base = match.group("mac")
-                    macs += [
+                    macs.append(
                         {
                             "first_chassis_mac": base,
                             "last_chassis_mac": MAC(base).shift(int(s["count"]) - 1),
                         }
-                    ]
+                    )
                     break
         return macs

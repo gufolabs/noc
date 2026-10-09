@@ -87,11 +87,11 @@ class Script(BaseScript):
             if match:
                 if match.group("port") == "Port":
                     continue
-                descr += [match.groupdict()]
+                descr.append(match.groupdict())
         for l in self.cli("show interfaces configuration").split("\n"):
             match = self.rx_port1.match(l.strip())
             if match:
-                adm_status += [match.groupdict()]
+                adm_status.append(match.groupdict())
         for match in self.rx_port.finditer(self.cli("show interfaces status")):
             ifname = match.group("port")
             if ifname.startswith("ch"):
@@ -111,9 +111,9 @@ class Script(BaseScript):
                 "subinterfaces": [],
             }
             if ifname in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
             """
             if ifname in ctp:
                 iface["enabled_protocols"] += ["CTP"]
@@ -143,9 +143,9 @@ class Script(BaseScript):
                 if match1.group("type") == "Untagged":
                     sub["untagged_vlan"] = int(vlan_id)
                 else:
-                    sub["tagged_vlans"] += [int(vlan_id)]
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+                    sub["tagged_vlans"].append(int(vlan_id))
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         match = self.re_search(self.rx_mac, self.cli("show system"))
         mac = match.group("mac")
         for l in self.cli("show ip interface").split("\n"):
@@ -170,7 +170,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
         # Not implemented
         """
         for l in self.cli("show ipv6 interface").split("\n"):

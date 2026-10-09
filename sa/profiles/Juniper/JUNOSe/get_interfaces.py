@@ -111,22 +111,22 @@ class Script(BaseScript):
                         ip_address = match1.group("ip")
                         ip_subnet = match1.group("mask")
                         ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-                        sub["ipv4_addresses"] += [ip_address]
+                        sub["ipv4_addresses"].append(ip_address)
                 if ", " in match.group("n_proto"):
                     # Need more examples
                     n_proto = match.group("n_proto").split(", ")
                     if "ISIS" in n_proto:
-                        sub["enabled_protocols"] += ["ISIS"]
+                        sub["enabled_protocols"].append("ISIS")
                     if "OSPF" in n_proto:
-                        sub["enabled_protocols"] += ["OSPF"]
+                        sub["enabled_protocols"].append("OSPF")
                     if "RSVP" in n_proto:
-                        sub["enabled_protocols"] += ["RSVP"]
+                        sub["enabled_protocols"].append("RSVP")
                     if "PIM" in n_proto:
-                        sub["enabled_protocols"] += ["PIM"]
+                        sub["enabled_protocols"].append("PIM")
                     if "IGMP" in n_proto:
-                        sub["enabled_protocols"] += ["IGMP"]
+                        sub["enabled_protocols"].append("IGMP")
                     if "DVMRP" in n_proto:
-                        sub["enabled_protocols"] += ["DVMRP"]
+                        sub["enabled_protocols"].append("DVMRP")
                 if ifname.startswith("gre:"):
                     sub["tunnel"] = {}
                     sub["tunnel"]["type"] = "GRE"
@@ -143,7 +143,7 @@ class Script(BaseScript):
                 for i in ifaces:
                     if i["name"] == parent_iface:
                         if i["subinterfaces"][0]["name"] != sub["name"]:
-                            i["subinterfaces"] += [sub]
+                            i["subinterfaces"].append(sub)
                         else:
                             sub["enabled_afi"] += i["subinterfaces"][0]["enabled_afi"]
                             sub["enabled_protocols"] += i["subinterfaces"][0]["enabled_protocols"]
@@ -154,7 +154,7 @@ class Script(BaseScript):
                 if found:
                     continue
                 iface["subinterfaces"] = [sub]
-                ifaces += [iface]
+                ifaces.append(iface)
                 changed = True
             elif "." in l_iface:
                 v = self.cli(f"show interface {l_iface}")
@@ -171,7 +171,7 @@ class Script(BaseScript):
                     for i in ifaces:
                         if i["name"] == parent_iface:
                             if i["subinterfaces"][0]["name"] != sub["name"]:
-                                i["subinterfaces"] += [sub]
+                                i["subinterfaces"].append(sub)
                             else:
                                 sub["enabled_afi"] += i["subinterfaces"][0]["enabled_afi"]
                                 sub["enabled_protocols"] += i["subinterfaces"][0][
@@ -193,7 +193,7 @@ class Script(BaseScript):
             if match:
                 iface = match.group("iftype") + " " + match.group("ifname")
                 if iface not in self.logical_interfaces:
-                    self.logical_interfaces += [iface]
+                    self.logical_interfaces.append(iface)
         for v in self.profile.get_interfaces_list(self):
             cmd = f"show interface {v}"
             c = self.cli(cmd)
@@ -221,7 +221,7 @@ class Script(BaseScript):
                 descr = match.group("descr").strip()
                 iface["description"] = descr
                 iface["subinterfaces"][0]["description"] = descr
-            self.phys_interfaces += [iface]
+            self.phys_interfaces.append(iface)
 
         r = [
             {
@@ -231,12 +231,12 @@ class Script(BaseScript):
             }
         ]
         for match in self.rx_vrfs.finditer(self.cli("show ip vrf")):
-            r += [
+            r.append(
                 {
                     "forwarding_instance": match.group("vrf"),
                     "type": "ip",
                     "rd": match.group("rd"),
                     "interfaces": self.get_ifaces(match.group("vrf")),
                 }
-            ]
+            )
         return r

@@ -40,7 +40,7 @@ class Script(BaseScript):
             if match.group("iface") == "0":
                 # self mac
                 continue
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
@@ -49,5 +49,5 @@ class Script(BaseScript):
                         match.group("type").lower()
                     ],
                 }
-            ]
+            )
         return r

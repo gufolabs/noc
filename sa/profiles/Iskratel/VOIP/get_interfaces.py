@@ -64,5 +64,5 @@ class Script(BaseScript):
                 ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 i["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
-            interfaces += [i]
+            interfaces.append(i)
         return [{"interfaces": interfaces}]

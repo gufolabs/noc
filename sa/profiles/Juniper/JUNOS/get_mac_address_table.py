@@ -53,7 +53,7 @@ class Script(BaseScript):
                 ifname = match.group("interfaces")
                 if ifname.endswith(".0"):
                     ifname = ifname[:-2]
-                r += [
+                r.append(
                     {
                         "vlan_id": vlan_id,
                         "mac": match.group("mac"),
@@ -72,5 +72,5 @@ class Script(BaseScript):
                             # "o": "s"  # ovsdb MAC
                         }[match.group("type").lower()],
                     }
-                ]
+                )
         return r

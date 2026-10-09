@@ -74,7 +74,7 @@ class Script(BaseScript):
                 if match.group("type") == "Untagged":
                     result[ifname]["untagged_vlan"] = v["vlan_id"]
                 if match.group("type") == "Tagged":
-                    result[ifname]["tagged_vlans"] += [v["vlan_id"]]
+                    result[ifname]["tagged_vlans"].append(v["vlan_id"])
         return result
 
     def execute_cli(self, **kwargs):
@@ -86,25 +86,25 @@ class Script(BaseScript):
                 c = self.cli("show interface all pvc")
                 for match in self.rx_if_pvc.finditer(c):
                     for match1 in self.rx_pvc.finditer(match.group("pvcs")):
-                        pvc += [
+                        pvc.append(
                             {
                                 "port": match.group("port"),
                                 "vpi": int(match1.group("vpi")),
                                 "vci": int(match1.group("vci")),
                                 "vlan": int(match1.group("vlan")),
                             }
-                        ]
+                        )
             except self.CLISyntaxError:
                 _ = self.cli("\x08" * 22)
                 c = self.cli("show pvc all")
                 for match in self.rx_pvc1.finditer(c):
-                    pvc += [
+                    pvc.append(
                         {
                             "port": match.group("port"),
                             "vpi": int(match.group("vpi")),
                             "vci": int(match.group("vci")),
                         }
-                    ]
+                    )
                 c = self.cli("show vlan port all")
                 for match in self.rx_vlan.finditer(c):
                     ifname = match.group("port")
@@ -175,8 +175,8 @@ class Script(BaseScript):
                     }
                     if "vlan" in p:
                         s["vlan_ids"] = p["vlan"]
-                    i["subinterfaces"] += [s]
-            interfaces += [i]
+                    i["subinterfaces"].append(s)
+            interfaces.append(i)
         match = self.rx_svi.search(self.cli("show network"))
         if match:
             i = {
@@ -200,5 +200,5 @@ class Script(BaseScript):
             mask = match.group("mask")
             ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-            interfaces += [i]
+            interfaces.append(i)
         return [{"interfaces": interfaces}]
