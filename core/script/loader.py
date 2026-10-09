@@ -56,12 +56,7 @@ class ScriptLoader(BaseLoader):
                     if os.path.exists(
                         os.path.join(p, "sa", "profiles", vendor, system, f"{sn}.py")
                     ):
-                        if p:
-                            # Custom script
-                            base_name = os.path.basename(os.path.dirname(p))
-                        else:
-                            # Common script
-                            base_name = "noc"
+                        base_name = "noc.custom" if p else "noc"
                         module_name = f"{base_name}.sa.profiles.{name}"
                         break
                 else:
