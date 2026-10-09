@@ -29,5 +29,5 @@ class Script(BaseScript):
                     found = True
                     break
             if not found:
-                r += [{"vlan_id": vlan_id}]
+                r.append({"vlan_id": vlan_id})
         return r

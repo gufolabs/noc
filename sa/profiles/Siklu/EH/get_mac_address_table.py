@@ -22,5 +22,5 @@ class Script(BaseScript):
             if parts and parts[0] == "s1" and (parts[-1] == "learned" or parts[-2] == "learned"):
                 # for 6.8.0 parts[-2]:
                 # component-id  fdb-id  mac-addr bridge-port  status  quota
-                r += [{"vlan_id": 1, "mac": parts[2], "interfaces": [parts[3]], "type": "D"}]
+                r.append({"vlan_id": 1, "mac": parts[2], "interfaces": [parts[3]], "type": "D"})
         return r

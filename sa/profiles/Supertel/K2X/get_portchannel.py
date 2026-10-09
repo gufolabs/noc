@@ -81,16 +81,16 @@ class Script(BaseScript):
                             if "-" in iface:
                                 R = iface.split("-")
                                 for i in range(int(R[0]), int(R[1]) + 1):
-                                    memb += ["g" + str(i)]
+                                    memb.append("g" + str(i))
                             else:
-                                memb += ["g" + iface]
+                                memb.append("g" + iface)
                     else:
-                        memb += [members]
+                        memb.append(members)
             lacp = self.cli(f"show lacp port-channel {port[2:]}")
             match_ = self.rx_lacp.search(lacp)
             if match_:
                 l_type = "L"
             else:
                 l_type = "S"
-            r += [{"interface": port, "type": l_type, "members": memb}]
+            r.append({"interface": port, "type": l_type, "members": memb})
         return r

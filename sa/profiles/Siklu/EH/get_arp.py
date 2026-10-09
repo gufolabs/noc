@@ -20,5 +20,5 @@ class Script(BaseScript):
         for l in v.splitlines():
             parts = l.split()
             if len(parts) == 3 and parts[2] == "dynamic":
-                r += [{"ip": parts[0], "mac": parts[1]}]
+                r.append({"ip": parts[0], "mac": parts[1]})
         return r

@@ -113,7 +113,7 @@ class Script(BaseScript):
             match_r = self.rx_pvst_root.search(I)
             match_b = self.rx_pvst_bridge.search(I)
             if match_b:
-                r["instances"] += [
+                r["instances"].append(
                     {
                         "id": instance_id,
                         "vlans": "",
@@ -122,9 +122,9 @@ class Script(BaseScript):
                         "bridge_id": match_b.group("bridge_id"),
                         "bridge_priority": match_b.group("bridge_priority"),
                     }
-                ]
+                )
             elif match_r:
-                r["instances"] += [
+                r["instances"].append(
                     {
                         "id": instance_id,
                         "vlans": "",
@@ -133,13 +133,13 @@ class Script(BaseScript):
                         "bridge_id": match_r.group("root_id"),
                         "bridge_priority": match_r.group("root_priority"),
                     }
-                ]
+                )
 
             match = self.rx_pvst_interfaces.search(I)
             if match:
                 interface = match.group("interface")
                 port_attrs = ports[instance_id][interface]
-                interfaces[instance_id] += [
+                interfaces[instance_id].append(
                     {
                         "interface": interface,
                         "port_id": match.group("port_id"),
@@ -152,7 +152,7 @@ class Script(BaseScript):
                         "point_to_point": port_attrs["point_to_point"],
                         "edge": port_attrs["status"],
                     }
-                ]
+                )
             for I in r["instances"]:
                 I["interfaces"] = interfaces[I["id"]]
         return r
@@ -221,7 +221,7 @@ class Script(BaseScript):
                 match_r = self.rx_mstp_root.search(I)
                 match_b = self.rx_mstp_bridge.search(I)
                 if match_b:
-                    r["instances"] += [
+                    r["instances"].append(
                         {
                             "id": instance_id,
                             "vlans": vlans,
@@ -230,9 +230,9 @@ class Script(BaseScript):
                             "bridge_id": match_b.group("bridge_id"),
                             "bridge_priority": match_b.group("bridge_priority"),
                         }
-                    ]
+                    )
                 elif match_r:
-                    r["instances"] += [
+                    r["instances"].append(
                         {
                             "id": instance_id,
                             "vlans": vlans,
@@ -241,13 +241,13 @@ class Script(BaseScript):
                             "bridge_id": match_r.group("root_id"),
                             "bridge_priority": match_r.group("root_priority"),
                         }
-                    ]
+                    )
 
                 match = self.rx_mstp_interfaces.search(I)
                 if match:
                     interface = match.group("interface")
                     port_attrs = ports[instance_id][interface]
-                    interfaces[instance_id] += [
+                    interfaces[instance_id].append(
                         {
                             "interface": interface,
                             "port_id": match.group("port_id"),
@@ -262,7 +262,7 @@ class Script(BaseScript):
                             "point_to_point": port_attrs["point_to_point"],
                             "edge": port_attrs["status"],
                         }
-                    ]
+                    )
         for I in r["instances"]:
             I["interfaces"] = interfaces[I["id"]]
         return r

@@ -43,7 +43,7 @@ Static  35   ff:ff:ff:ff:ff:ff  GigabitEthernet 1/1-8 2.5GigabitEthernet 1/1-2 1
         if vlan is not None:
             cmd += f" vlan {vlan}"
         for match in self.rx_line.finditer(self.cli(cmd)):
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
@@ -52,5 +52,5 @@ Static  35   ff:ff:ff:ff:ff:ff  GigabitEthernet 1/1-8 2.5GigabitEthernet 1/1-2 1
                         match.group("type").lower()
                     ],
                 }
-            ]
+            )
         return r

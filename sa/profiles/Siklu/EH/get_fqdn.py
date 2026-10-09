@@ -25,5 +25,5 @@ class Script(BaseScript):
         fqdn = []
         match = self.rx_hostname.search(v)
         if match:
-            fqdn += [match.group("hostname")]
+            fqdn.append(match.group("hostname"))
         return ".".join(fqdn)

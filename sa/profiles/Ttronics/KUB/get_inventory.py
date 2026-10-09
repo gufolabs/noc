@@ -90,7 +90,7 @@ class Script(BaseScript):
                 # kubTok =-32760-obryv datchika
                 # kubTok =-32767-ne nasntroena formula
                 # Current (tok) sensor connected
-                r += [
+                r.append(
                     {
                         "name": f"{self.nano_input_config_map[num]['type']}{num}",
                         "status": True,
@@ -102,10 +102,10 @@ class Script(BaseScript):
                         ],
                         "snmp_oid": "1.3.6.1.4.1.51315.1.19.0",
                     }
-                ]
+                )
                 continue
             oid = self.get_oid(self.nano_input_config_map[num]["type"], num)
-            r += [
+            r.append(
                 {
                     "name": f"{self.nano_input_config_map[num]['type']}{num}",
                     "status": True,
@@ -114,7 +114,7 @@ class Script(BaseScript):
                     "labels": self.nano_input_config_map[num]["labels"],
                     "snmp_oid": oid,
                 }
-            ]
+            )
             # ElMeter
             v = self.snmp.get("1.3.6.1.4.1.51315.1.26.0")
             if v:
@@ -182,7 +182,7 @@ class Script(BaseScript):
                 ]
             # UPS Link
             v = self.snmp.get("1.3.6.1.4.1.51315.1.29.0")
-            r += [
+            r.append(
                 {
                     "name": "ups_rs232",
                     "status": v != 0,
@@ -190,8 +190,8 @@ class Script(BaseScript):
                     "measurement": "StatusEnum",
                     "labels": ["noc::sensor::placement::internal", "noc::sensor::mode::flag"],
                     "snmp_oid": "1.3.6.1.4.1.51315.1.29.0",
-                },
-            ]
+                }
+            )
             if v != 0:
                 r += [
                     {
@@ -388,7 +388,7 @@ class Script(BaseScript):
                 self.logger.warning("Unknown type of port")
                 continue
             oid = f"1.3.6.1.3.55.1.3.1.4.{num - 1}"
-            r += [
+            r.append(
                 {
                     "name": f"{self.femto_input_config_map[in_config]['type']}{num}",
                     "status": True,
@@ -397,7 +397,7 @@ class Script(BaseScript):
                     "labels": self.femto_input_config_map[in_config]["labels"],
                     "snmp_oid": oid,
                 }
-            ]
+            )
         return r
 
     def get_chassis_sensors(self):

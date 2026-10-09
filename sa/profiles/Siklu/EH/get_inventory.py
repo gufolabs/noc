@@ -59,5 +59,5 @@ class Script(BaseScript):
                 p["builtin"] = True
             if match.group("serial"):
                 p["serial"] = match.group("serial")
-            r += [p]
+            r.append(p)
         return r

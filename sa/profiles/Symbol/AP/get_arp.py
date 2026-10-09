@@ -26,5 +26,5 @@ class Script(BaseScript):
         r = []
         c = self.cli("show ip arp")
         for match in self.rx_line.finditer(c):
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

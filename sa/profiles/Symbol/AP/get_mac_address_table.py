@@ -25,12 +25,12 @@ class Script(BaseScript):
         r = []
         c = self.cli("show mac-address-table")
         for match in self.rx_mac.finditer(c):
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interface")],
                     "type": "D",
                 }
-            ]
+            )
         return r

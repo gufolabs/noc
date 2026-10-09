@@ -39,7 +39,7 @@ class Script(BaseScript):
                     m_ostatus = False
             except self.snmp.SNMPError:
                 m_ostatus = False
-            interfaces += [
+            interfaces.append(
                 {
                     "type": "physical",
                     "name": f"{channel}/{mname}",
@@ -49,11 +49,11 @@ class Script(BaseScript):
                     "description": "",
                     "subinterfaces": [],
                 }
-            ]
+            )
         for coid, cindex in self.snmp.getnext("1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.8"):
             cstatus = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.17.1.1.{cindex}")
             freq = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.4.1.1.{cindex}")
-            interfaces += [
+            interfaces.append(
                 {
                     "type": "physical",
                     "name": f"1/1.{cindex}",
@@ -63,7 +63,7 @@ class Script(BaseScript):
                     "description": "",
                     "subinterfaces": [{"name": freq, "description": f"1/1.{cindex}"}],
                 }
-            ]
+            )
 
         for oid, ifindex in self.snmp.getnext("1.3.6.1.4.1.32285.2.2.10.3008.4.2.1.3"):
             ifname = v[f"1.11.1.1.{ifindex}"]
@@ -73,7 +73,7 @@ class Script(BaseScript):
             ip_address = v[f"1.4.1.1.{ifindex}"]
             ip_subnet = v[f"1.5.1.1.{ifindex}"]
             ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-            interfaces += [
+            interfaces.append(
                 {
                     "type": "physical",
                     "name": ifname,
@@ -94,6 +94,6 @@ class Script(BaseScript):
                         }
                     ],
                 }
-            ]
+            )
 
         return [{"interfaces": interfaces}]

@@ -98,6 +98,6 @@ class Script(BaseScript):
             }
             if untag:
                 i["subinterfaces"][0]["untagged_vlan"] = untag
-            ifaces += [i]
+            ifaces.append(i)
         # @todo: show vlan
         return [{"interfaces": ifaces}]

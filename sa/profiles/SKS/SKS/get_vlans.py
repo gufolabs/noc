@@ -27,8 +27,8 @@ class Script(BaseScript):
         if bool(self.rx_status.search(c)):
             t = parse_table(c, allow_wrap=True)
             for i in t:
-                r += [{"vlan_id": i[0], "name": i[2]}]
+                r.append({"vlan_id": i[0], "name": i[2]})
         else:
             for match in self.rx_vlan.finditer(c):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

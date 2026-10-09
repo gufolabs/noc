@@ -48,12 +48,12 @@ class Script(BaseScript):
             m_type = {"dynamic": "D", "static": "S"}.get(match.group("type").lower())
             if not m_type:
                 continue
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interfaces")],
                     "type": m_type,
                 }
-            ]
+            )
         return r

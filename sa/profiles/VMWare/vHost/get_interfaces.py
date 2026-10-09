@@ -72,14 +72,14 @@ class Script(VIMScript):
                 }
                 for u in lag.uplinkPort:
                     uplinks[u.key]["lag"] = lag.lagKey
-                    interfaces[lag.lagName]["subinterfaces"] += [
+                    interfaces[lag.lagName]["subinterfaces"].append(
                         {
                             "name": uplinks[u.key]["name"],
                             "admin_status": True,
                             "oper_status": True,
                             "enabled_afi": [],
                         }
-                    ]
+                    )
                 for nic in fi.pnic:
                     interfaces[nic.split("-")[-1]]["aggregated_interface"] = lag.lagName
             if fi.hostLag:
@@ -90,14 +90,14 @@ class Script(VIMScript):
                     continue
                 fis_nic[s.pnicDevice]["uplink_key"] = s.uplinkPortKey
                 fis_nic[s.pnicDevice]["uplink_portgroup_key"] = s.uplinkPortgroupKey
-                interfaces[s.pnicDevice]["subinterfaces"] += [
+                interfaces[s.pnicDevice]["subinterfaces"].append(
                     {
                         "name": uplinks[s.uplinkPortKey]["name"],
                         "admin_status": True,
                         "oper_status": True,
                         "enabled_afi": [],
                     }
-                ]
+                )
                 if s.uplinkPortgroupKey not in networks:
                     continue
                 interfaces[s.pnicDevice]["hints"] = [
@@ -111,7 +111,7 @@ class Script(VIMScript):
                     interfaces[s.pnicDevice]["subinterfaces"][-1]["untagged_vlan"] = networks[
                         s.uplinkPortgroupKey
                     ]["untagged_vlan"]
-                interfaces[s.pnicDevice]["subinterfaces"][-1]["enabled_afi"] += ["BRIDGE"]
+                interfaces[s.pnicDevice]["subinterfaces"][-1]["enabled_afi"].append("BRIDGE")
         for vnic in h.config.network.vnic:
             interfaces[vnic.device] = {
                 "name": vnic.device,
@@ -126,7 +126,7 @@ class Script(VIMScript):
                 fis_nic[vnic.device] = {"fi": vnic.spec.distributedVirtualPort.switchUuid}
             if vnic.spec.ip:
                 ip = IPv4(vnic.spec.ip.ipAddress, vnic.spec.ip.subnetMask)
-                interfaces[vnic.device]["subinterfaces"] += [
+                interfaces[vnic.device]["subinterfaces"].append(
                     {
                         "name": vnic.device,
                         "admin_status": True,
@@ -134,7 +134,7 @@ class Script(VIMScript):
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [str(ip)],
                     }
-                ]
+                )
         for vm in h.vm:
             self.logger.info("Processed VM: %s", vm.name)
             for d in vm.config.hardware.device:
@@ -153,7 +153,7 @@ class Script(VIMScript):
                         interfaces[name]["hints"] = [
                             f"noc::interface::port_group::{d.backing.port.portgroupKey}"
                         ]
-                        interfaces[name]["subinterfaces"] += [
+                        interfaces[name]["subinterfaces"].append(
                             {
                                 "name": name,
                                 "admin_status": True,
@@ -166,13 +166,13 @@ class Script(VIMScript):
                                     "tagged_vlans"
                                 ),
                             }
-                        ]
+                        )
         for i, ii in interfaces.items():
             if i in fis_nic:
                 f = fis_nic[i]["fi"]
             else:
                 f = "default"
-            fis[f]["interfaces"] += [ii]
+            fis[f]["interfaces"].append(ii)
         return list(fis.values())
 
     def execute(self, **kwargs):

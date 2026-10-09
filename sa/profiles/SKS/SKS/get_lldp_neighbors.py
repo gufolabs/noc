@@ -97,7 +97,7 @@ class Script(BaseScript):
             }
             if i[3]:
                 neighbor["remote_system_name"] = i[3]
-            r += [{"local_interface": i[0], "neighbors": [neighbor]}]
+            r.append({"local_interface": i[0], "neighbors": [neighbor]})
         if not t:
             # Fix for SKS-16E1-IP-ES-L, Reduce 'show lldp neighbors interface XXX' command
             # because multiple run causes stuck cli on device.
@@ -160,7 +160,7 @@ class Script(BaseScript):
                         neighbor["remote_system_name"] = system_name
                     if bool(system_descr):
                         neighbor["remote_system_description"] = system_descr
-                    neighbors += [neighbor]
+                    neighbors.append(neighbor)
                 if neighbors:
-                    r += [{"local_interface": iface, "neighbors": neighbors}]
+                    r.append({"local_interface": iface, "neighbors": neighbors})
         return r

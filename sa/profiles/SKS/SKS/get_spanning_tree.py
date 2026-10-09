@@ -128,8 +128,8 @@ class Script(BaseScript):
                             iface["point_to_point"] = "Type: P2P" in port
                             iface["priority"] = match.group("port_id").split(".")[0]
                             iface["edge"] = False
-                            inst["interfaces"] += [iface]
-                    stp["instances"] += [inst]
+                            inst["interfaces"].append(iface)
+                    stp["instances"].append(inst)
         else:
             match = self.rx_inst.search(v)
             if match:
@@ -181,7 +181,7 @@ class Script(BaseScript):
                     iface["point_to_point"] = "Type: P2P" in port
                     iface["priority"] = match.group("port_id").split(".")[0]
                     iface["edge"] = False
-                    inst["interfaces"] += [iface]
+                    inst["interfaces"].append(iface)
                 else:
                     match = self.rx_port2.search(port)
                     if not port.strip().startswith("Port"):
@@ -193,6 +193,6 @@ class Script(BaseScript):
                     iface["edge"] = "Edge port(TRUE)" in port
                     iface["role"] = self.PORT_ROLE[iface["role"]]
                     iface["state"] = self.PORT_STATE[iface["state"]]
-                    inst["interfaces"] += [iface]
+                    inst["interfaces"].append(iface)
             stp["instances"] = [inst]
         return stp
