@@ -47,7 +47,7 @@ class Script(BaseScript):
             r[-1]["revision"] = revision
         c = self.cli("show interfaces ethernet transceiver")
         for match in self.rx_trans.finditer(c):
-            r += [
+            r.append(
                 {
                     "type": "XCVR",
                     "number": match.group("number"),
@@ -56,5 +56,5 @@ class Script(BaseScript):
                     "serial": match.group("serial"),
                     "revision": match.group("revision"),
                 }
-            ]
+            )
         return r

@@ -21,5 +21,5 @@ class Script(BaseScript):
         v = self.cli("net show bridge vlan", cached=True)
         for i in parse_table(v):
             if is_vlan(i[1]) and not int(i[1]) in a:
-                a += [int(i[1])]
+                a.append(int(i[1]))
         return [{"vlan_id": int(i)} for i in a]

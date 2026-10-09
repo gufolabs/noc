@@ -85,14 +85,14 @@ class Script(BaseScript):
                         i: bool(int(vlan["prt"][i], 16) & BITS[i]) for i in range(len(vlan["prt"]))
                     }
                 if ports[port - 1]:
-                    tagged_vlans += [vid]
+                    tagged_vlans.append(vid)
             untagged = int(fwds["dvid"][port - 1], 16)
             if int(fwds["vlni"][port - 1], 16) != 1:  # only tagged
                 sub["untagged_vlan"] = untagged
             if int(fwds["vlni"][port - 1], 16) != 2:  # only untagged
                 sub["tagged_vlans"] = tagged_vlans
             iface["subinterfaces"] = [sub]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         ip = self.profile.swap32(int(sys_info["ip"], 16))
         vlan_id = int(sys_info["avln"], 16)
@@ -114,6 +114,6 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

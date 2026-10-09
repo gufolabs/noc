@@ -55,7 +55,7 @@ class Script(BaseScript):
                     {"name": match.group("name"), "enabled_afi": ["BRIDGE"], "tagged_vlans": []}
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         for v in self.scripts.get_vlans():
             vlan_id = v["vlan_id"]
             c = self.cli(f"vlan {vlan_id} -s")
@@ -64,7 +64,7 @@ class Script(BaseScript):
                 for port in match.group("ports").split(","):
                     for i in interfaces:
                         if port == i["name"]:
-                            i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                            i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                             break
             else:
                 match = self.rx_vlan2.search(c)
@@ -75,7 +75,7 @@ class Script(BaseScript):
                 for tports in match.group("tports").split(","):
                     for i in interfaces:
                         if tports == i["name"]:
-                            i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                            i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                             break
         v = self.cli("ipconfig")
         match = self.rx_ip.search(v)
@@ -101,5 +101,5 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

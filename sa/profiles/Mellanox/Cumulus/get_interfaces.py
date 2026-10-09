@@ -63,13 +63,13 @@ class Script(BaseScript):
         ]
         v = self.cli("net show vrf")
         for match in self.rx_vrf.finditer(v):
-            vrfs += [
+            vrfs.append(
                 {
                     "forwarding_instance": match.group("vrf"),
                     "type": "VRF",
                     "interfaces": [],
                 }
-            ]
+            )
         bridge_name = "bridge"  # default value
         v = self.cli("net show interface all")
         for line in parse_table(v):
@@ -111,20 +111,20 @@ class Script(BaseScript):
                 ip = match1.group("ip")
                 if is_ipv4_prefix(ip):
                     if "enabled_afi" in sub:
-                        sub["enabled_afi"] += ["IPv4"]
+                        sub["enabled_afi"].append("IPv4")
                     else:
                         sub["enabled_afi"] = ["IPv4"]
                     if "ipv4_addesses" in sub:
-                        sub["ipv4_addesses"] += [ip]
+                        sub["ipv4_addesses"].append(ip)
                     else:
                         sub["ipv4_addesses"] = [ip]
                 if is_ipv6_prefix(ip):
                     if "enabled_afi" in sub:
-                        sub["enabled_afi"] += ["IPv6"]
+                        sub["enabled_afi"].append("IPv6")
                     else:
                         sub["enabled_afi"] = ["IPv6"]
                     if "ipv6_addesses" in sub:
-                        sub["ipv6_addesses"] += [ip]
+                        sub["ipv6_addesses"].append(ip)
                     else:
                         sub["ipv6_addesses"] = [ip]
             match1 = self.rx_vlans.search(c)
@@ -145,7 +145,7 @@ class Script(BaseScript):
                         "VRF",
                         "table",
                     ):
-                        vrf["interfaces"] += [iface]
+                        vrf["interfaces"].append(iface)
                         bridge_name = iface["name"]
                         break
                 continue
@@ -153,16 +153,16 @@ class Script(BaseScript):
                 for vrf in vrfs:
                     for i in vrf["interfaces"]:
                         if i["name"] == bridge_name:
-                            i["subinterfaces"] += [sub]
+                            i["subinterfaces"].append(sub)
                             break
                 continue
-            iface["subinterfaces"] += [sub]
+            iface["subinterfaces"].append(sub)
             for vrf in vrfs:
                 if vrf["forwarding_instance"] == match.group("vrf") and vrf["type"] in (
                     "VRF",
                     "table",
                 ):
-                    vrf["interfaces"] += [iface]
+                    vrf["interfaces"].append(iface)
                     break
 
         return vrfs

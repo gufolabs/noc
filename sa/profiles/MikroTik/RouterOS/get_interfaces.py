@@ -135,7 +135,7 @@ class Script(BaseScript):
                         self.get_tunnel("EOIP", "R", "IPv4", ifaces)
                     if r["type"].startswith("gre-"):
                         self.get_tunnel("GRE", "R", "IPv4", ifaces)
-                    ifaces[r["name"]]["subinterfaces"] += [self.si]
+                    ifaces[r["name"]]["subinterfaces"].append(self.si)
             elif r["type"] == "vlan" and n in n_ifindex:
                 # 6XXXX
                 v_ifindex[r["name"]] = n_ifindex[n]
@@ -162,7 +162,7 @@ class Script(BaseScript):
                     self.si["mtu"] = self.get_mtu(r)
                 if r["name"] in v_ifindex:
                     self.si["snmp_ifindex"] = v_ifindex[r["name"]]
-                i["subinterfaces"] += [self.si]
+                i["subinterfaces"].append(self.si)
         # process internal `switch` ports and vlans
         vlan_tags = {}
         # "RB532", "x86", CCR1009 not support internal switch port
@@ -213,7 +213,7 @@ class Script(BaseScript):
                         self.si["mtu"] = self.get_mtu(i)
                     if p in vlan_tags:
                         if vlan_tags[p]:
-                            self.si["tagged_vlans"] += [vlan_id]
+                            self.si["tagged_vlans"].append(vlan_id)
                         else:
                             self.si["untagged_vlan"] = vlan_id if vlan_id > 0 else 1
                     # Try to find in already created subinterfaces
@@ -222,12 +222,12 @@ class Script(BaseScript):
                         if sub["name"] == p:
                             if p in vlan_tags:
                                 if vlan_tags[p]:
-                                    sub["tagged_vlans"] += [vlan_id]
+                                    sub["tagged_vlans"].append(vlan_id)
                                 else:
                                     sub["utagged_vlan"] = vlan_id
                                 found = True
                     if not found:
-                        i["subinterfaces"] += [self.si]
+                        i["subinterfaces"].append(self.si)
         except self.CLISyntaxError:
             pass
         # Vlans on bridge
@@ -260,7 +260,7 @@ class Script(BaseScript):
                                 sub["utagged_vlan"] = vlan_id
                                 break
                         else:
-                            i["subinterfaces"] += [self.si]
+                            i["subinterfaces"].append(self.si)
                     tagged = d["tagged"].split(",")
                     for p in tagged:
                         if p not in ifaces:
@@ -281,12 +281,12 @@ class Script(BaseScript):
                         for sub in i["subinterfaces"]:
                             if sub["name"] == p:
                                 if "tagged_vlans" in sub and vlan_id not in sub["tagged_vlans"]:
-                                    sub["tagged_vlans"] += [vlan_id]
+                                    sub["tagged_vlans"].append(vlan_id)
                                 else:
                                     sub["tagged_vlans"] = [vlan_id]
                                 break
                         else:
-                            i["subinterfaces"] += [self.si]
+                            i["subinterfaces"].append(self.si)
         except self.CLISyntaxError:
             pass
         # Refine ip addresses
@@ -308,7 +308,7 @@ class Script(BaseScript):
                     }
                     if "mac" in i:
                         self.si["mac"] = i["mac"]
-                    i["subinterfaces"] += [self.si]
+                    i["subinterfaces"].append(self.si)
                 else:
                     for sub in i["subinterfaces"]:
                         if sub["name"] == r["interface"]:
@@ -327,7 +327,7 @@ class Script(BaseScript):
                         }
                         if "mac" in i:
                             self.si["mac"] = i["mac"]
-                        i["subinterfaces"] += [self.si]
+                        i["subinterfaces"].append(self.si)
             else:
                 for i in ifaces:
                     iface = ifaces[i]
@@ -344,14 +344,14 @@ class Script(BaseScript):
 
             afi = "IPv6" if ":" in r["address"] else "IPv4"
             if afi not in self.si["enabled_afi"]:
-                self.si["enabled_afi"] += [afi]
+                self.si["enabled_afi"].append(afi)
             if afi == "IPv4":
                 a = self.si.get("ipv4_addresses", [])
-                a += [r["address"]]
+                a.append(r["address"])
                 self.si["ipv4_addresses"] = a
             else:
                 a = self.si.get("ipv6_addresses", [])
-                a += [r["address"]]
+                a.append(r["address"])
                 self.si["ipv6_addresses"] = a
             # Tunnel types
             # XXX /ip address print detail do not print tunnels !!!
@@ -397,11 +397,11 @@ class Script(BaseScript):
                     }
                     if self.get_mtu(i) is not None:
                         self.si["mtu"] = self.get_mtu(i)
-                    i["subinterfaces"] += [self.si]
+                    i["subinterfaces"].append(self.si)
                 else:
-                    i["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                    i["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
                 if r["protocol-mode"] in ["stp", "rstp"]:
-                    i["enabled_protocols"] += ["STP"]
+                    i["enabled_protocols"].append("STP")
         # bonding
         for n, f, r in self.cli_detail("/interface bonding print detail without-paging"):
             self.si = {}
@@ -419,9 +419,9 @@ class Script(BaseScript):
                     }
                     if self.get_mtu(i) is not None:
                         self.si["mtu"] = self.get_mtu(i)
-                    i["subinterfaces"] += [self.si]
+                    i["subinterfaces"].append(self.si)
                 if r["mode"] in ["802.3ad"]:
-                    i["enabled_protocols"] += ["LACP"]
+                    i["enabled_protocols"].append("LACP")
                 if r["slaves"]:
                     slaves = r["slaves"].split(",")
                     for s in slaves:
@@ -445,9 +445,9 @@ class Script(BaseScript):
                             "oper_status": i["oper_status"],
                             "enabled_protocols": ["OSPF"],
                         }
-                        i["subinterfaces"] += [self.si]
+                        i["subinterfaces"].append(self.si)
                     else:
-                        i["subinterfaces"][0]["enabled_protocols"] += ["OSPF"]
+                        i["subinterfaces"][0]["enabled_protocols"].append("OSPF")
         except self.CLISyntaxError:
             pass
         # PIM IGMP
@@ -467,15 +467,15 @@ class Script(BaseScript):
                             "oper_status": i["oper_status"],
                             "enabled_protocols": [proto],
                         }
-                        i["subinterfaces"] += [self.si]
+                        i["subinterfaces"].append(self.si)
                     else:
-                        i["subinterfaces"][0]["enabled_protocols"] += [proto]
+                        i["subinterfaces"][0]["enabled_protocols"].append(proto)
                 for i in ifaces:
                     for si in ifaces[i].get("subinterfaces", []):
                         if si["name"] == r["interface"]:
                             for p in proto:
                                 if p not in si["enabled_protocols"]:
-                                    si["enabled_protocols"] += [p]
+                                    si["enabled_protocols"].append(p)
                             break
         except self.CLISyntaxError:
             pass
@@ -490,12 +490,12 @@ class Script(BaseScript):
                         if "IPv4" in si["enabled_afi"]:
                             for addr in si["ipv4_addresses"]:
                                 if router_id == IP(addr).address:
-                                    si["enabled_protocols"] += ["BGP"]
+                                    si["enabled_protocols"].append("BGP")
                                     break
                         if "IPv6" in si["enabled_afi"]:
                             for addr in si["ipv6_addresses"]:
                                 if router_id == IP(addr).address:
-                                    si["enabled_protocols"] += ["BGP"]
+                                    si["enabled_protocols"].append("BGP")
                                     break
         has_lldp = self.has_capability("Network | LLDP")
         has_cdp = self.has_capability("Network | CDP")
@@ -511,15 +511,15 @@ class Script(BaseScript):
                         if r["interface"] in ifaces:
                             i = ifaces[r["interface"]]
                             if has_lldp:
-                                i["enabled_protocols"] += ["LLDP"]
+                                i["enabled_protocols"].append("LLDP")
                             if has_cdp:
-                                i["enabled_protocols"] += ["CDP"]
+                                i["enabled_protocols"].append("CDP")
             else:
                 for i in ifaces:
                     if has_lldp:
-                        ifaces[i]["enabled_protocols"] += ["LLDP"]
+                        ifaces[i]["enabled_protocols"].append("LLDP")
                     if has_cdp:
-                        ifaces[i]["enabled_protocols"] += ["CDP"]
+                        ifaces[i]["enabled_protocols"].append("CDP")
 
         return [{"interfaces": list(ifaces.values())}]
 

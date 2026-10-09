@@ -82,5 +82,5 @@ class Script(BaseScript):
                     }
                 ],
             }
-            r += [i]
+            r.append(i)
         return r

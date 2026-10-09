@@ -125,7 +125,7 @@ class Script(BaseScript):
             # Switchport
             if ifname in switchports:
                 # Bridge
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 u, t = switchports[ifname]["untagged"], switchports[ifname].get("tagged")
                 if u:
                     sub["untagged_vlan"] = u

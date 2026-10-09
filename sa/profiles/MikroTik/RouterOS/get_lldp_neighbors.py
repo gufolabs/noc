@@ -40,7 +40,7 @@ class Script(BaseScript):
         res = []
         interfaces = []
         for n, f, r in self.cli_detail('/interface print detail without-paging where type="ether"'):
-            interfaces += [r["name"]]
+            interfaces.append(r["name"])
         self.logger.debug("Collected interfaces: %s", interfaces)
         for n, f, r in self.cli_detail("/ip neighbor print detail without-paging"):
             # For LACP based link
@@ -99,5 +99,5 @@ class Script(BaseScript):
                 interface["neighbors"][0]["remote_system_description"] = r[
                     "system-description"
                 ].strip(" \x00")
-            res += [interface]
+            res.append(interface)
         return res

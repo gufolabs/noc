@@ -39,6 +39,6 @@ class Script(BaseScript):
         vlans = self.cli("ip -details link show")
 
         for match in self.rx_iface.finditer(vlans):
-            r += [{"vlan_id": match.group("vlan_number")}]
+            r.append({"vlan_id": match.group("vlan_number")})
 
         return r

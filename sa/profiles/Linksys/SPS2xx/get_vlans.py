@@ -27,12 +27,12 @@ class Script(BaseScript):
                 for vlan, name in self.snmp.join_tables(
                     "1.3.6.1.2.1.17.7.1.4.2.1.3", "1.3.6.1.2.1.17.7.1.4.3.1.1"
                 ):
-                    r += [{"vlan_id": vlan, "name": name}]
+                    r.append({"vlan_id": vlan, "name": name})
                 return r
             except self.snmp.TimeOutError:
                 pass
 
         # Fallback to CLI
         for match in self.rx_vlan.finditer(self.cli("show vlan")):
-            r += [{"vlan_id": int(match.group("vlan")), "name": match.group("name")}]
+            r.append({"vlan_id": int(match.group("vlan")), "name": match.group("name")})
         return r

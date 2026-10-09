@@ -32,7 +32,7 @@ class Script(BaseScript):
         if vlan is not None:
             cmd += f" vlan {vlan}"
         for match in self.rx_line.finditer(self.cli(cmd)):
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
@@ -41,5 +41,5 @@ class Script(BaseScript):
                         match.group("type").lower()
                     ],
                 }
-            ]
+            )
         return r

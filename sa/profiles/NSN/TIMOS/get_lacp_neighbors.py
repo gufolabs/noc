@@ -50,20 +50,20 @@ class Script(BaseScript):
                     is_table_body = False
                 if is_table_body:
                     row = l.split()
-                    bundle += [
+                    bundle.append(
                         {
                             "interface": row[0],
                             "local_port_id": row[1],
                             "remote_system_id": m["Partner system ID"].strip(),
                             "remote_port_id": row[2],
                         }
-                    ]
-            r += [
+                    )
+            r.append(
                 {
                     "lag_id": lag["interface"].split("-")[1],
                     "interface": lag["interface"],
                     "system_id": v_s,
                     "bundle": bundle,
                 }
-            ]
+            )
         return r

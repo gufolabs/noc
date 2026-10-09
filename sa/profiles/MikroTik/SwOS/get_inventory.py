@@ -21,14 +21,14 @@ class Script(BaseScript):
         r = []
         v = self.scripts.get_version()
         serial = self.capabilities.get("Chassis | Serial Number")
-        r += [
+        r.append(
             {
                 "type": "CHASSIS",
                 "vendor": "MikroTik",
                 "part_no": [v["platform"]],
                 "serial": serial,
             }
-        ]
+        )
         sfps = self.profile.parseBrokenJson(self.http.get("/sfp.b", cached=True, eof_mark=b"}"))
         if sfps.get("vnd"):
             sfp_count = len(sfps["vnd"])
@@ -44,7 +44,7 @@ class Script(BaseScript):
                 mfd = "-".join(parts)
 
                 descr = codecs.decode(sfps["typ"][i], "hex").strip()
-                r += [
+                r.append(
                     {
                         "type": "XCVR",
                         "vendor": vendor,
@@ -55,7 +55,7 @@ class Script(BaseScript):
                         "description": descr,
                         "mfg_date": mfd,
                     }
-                ]
+                )
         elif sfps.get("vndr"):
             vendor = codecs.decode(sfps["vndr"], "hex").decode().strip()
             part_no = codecs.decode(sfps["ptnr"], "hex").decode().strip()
@@ -66,7 +66,7 @@ class Script(BaseScript):
             year = "20" + dt[0]
             parts = [year, dt[1], dt[2]]
             mfd = "-".join(parts)
-            r += [
+            r.append(
                 {
                     "type": "XCVR",
                     "vendor": vendor,
@@ -76,5 +76,5 @@ class Script(BaseScript):
                     "revision": revision,
                     "mfg_date": mfd,
                 }
-            ]
+            )
         return r
