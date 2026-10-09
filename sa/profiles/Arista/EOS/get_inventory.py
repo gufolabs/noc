@@ -46,7 +46,7 @@ class Script(BaseScript):
         _, ctable = parts[0].split("\n", 1)
         n = 0
         for part_no, description in parse_table(ctable):
-            objects += [
+            objects.append(
                 {
                     "type": "CHASSIS",
                     "number": str(n),
@@ -57,7 +57,7 @@ class Script(BaseScript):
                     "revision": None,
                     "builtin": False,
                 }
-            ]
+            )
             n += 1
         # Serial/revision section
         n = 0
@@ -71,7 +71,7 @@ class Script(BaseScript):
     def parse_psu(cls, data):
         objects = []
         for slot, part_no, serial in parse_table(data.strip()):
-            objects += [
+            objects.append(
                 {
                     "type": "PWR",
                     "number": slot,
@@ -80,14 +80,14 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "builtin": False,
                 }
-            ]
+            )
         return objects
 
     @classmethod
     def parse_fan(cls, data):
         objects = []
         for slot, nfans, part_no, serial in parse_table(data.strip()):
-            objects += [
+            objects.append(
                 {
                     "type": "FAN",
                     "number": slot,
@@ -96,7 +96,7 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "builtin": False,
                 }
-            ]
+            )
         return objects
 
     @classmethod
@@ -108,7 +108,7 @@ class Script(BaseScript):
                 continue
             if vendor == "ARISTA NETWORKS":
                 vendor = "ARISTA"
-            objects += [
+            objects.append(
                 {
                     "type": "XCVR",
                     "number": port,
@@ -117,5 +117,5 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "builtin": False,
                 }
-            ]
+            )
         return objects

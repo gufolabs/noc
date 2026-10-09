@@ -27,10 +27,10 @@ class Script(BaseScript):
         for line in v.splitlines():
             match = self.rx_interface_status.match(line)
             if match:
-                r += [
+                r.append(
                     {
                         "interface": match.group("interface"),
                         "status": match.group("status") == "connected",
                     }
-                ]
+                )
         return r

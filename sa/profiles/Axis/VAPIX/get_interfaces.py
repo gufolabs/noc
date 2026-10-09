@@ -42,13 +42,13 @@ class Script(BaseScript):
                 if ip and ip != "0.0.0.0" and mask and mask != "0.0.0.0":
                     ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                     sub["ipv4_addresses"] = [ip_address]
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                 ipv6 = c.get(f"root.Network.eth{int(i)}.IPv6.IPAddresses")
                 if ipv6:
                     sub["ipv6_addresses"] = [ipv6]
-                    sub["enabled_afi"] += ["IPv6"]
+                    sub["enabled_afi"].append("IPv6")
                 iface["subinterfaces"] = [sub]
-                interfaces += [iface]
+                interfaces.append(iface)
 
         """
         root.Input.NbrOfInputs=1
@@ -71,7 +71,7 @@ class Script(BaseScript):
                     iface["enabled_protocols"] = ["DRY_NO"]
                 else:
                     iface["enabled_protocols"] = ["DRY_NC"]
-                interfaces += [iface]
+                interfaces.append(iface)
         """
         root.Output.NbrOfOutputs=1
         root.Output.O0.Name=Output 1
@@ -95,6 +95,6 @@ class Script(BaseScript):
                     iface["enabled_protocols"] = ["DRY_NO"]
                 else:
                     iface["enabled_protocols"] = ["DRY_NC"]
-                interfaces += [iface]
+                interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

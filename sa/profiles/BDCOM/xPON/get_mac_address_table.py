@@ -29,5 +29,5 @@ class Script(BaseScript):
         for i in parse_table(self.cli(cmd), expand_columns=True, max_width=60):
             if i[0] == "All" or i[3] == "CPU":
                 continue
-            r += [{"vlan_id": i[0], "mac": i[1], "interfaces": [i[3]], "type": "D"}]
+            r.append({"vlan_id": i[0], "mac": i[1], "interfaces": [i[3]], "type": "D"})
         return r

@@ -29,5 +29,5 @@ class Script(BaseScript):
         for match in self.rx_portchannel.finditer(v):
             members = match.group("members").strip().split()
             members = [m for m in members if not m.startswith("Peer")]
-            r += [{"interface": match.group("portchannel"), "type": "L", "members": members}]
+            r.append({"interface": match.group("portchannel"), "type": "L", "members": members})
         return r

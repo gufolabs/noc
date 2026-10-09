@@ -24,7 +24,7 @@ class Script(BaseScript):
             try:
                 r = []
                 for n, s in self.snmp.join_tables("1.3.6.1.2.1.31.1.1.1.1", "1.3.6.1.2.1.2.2.1.8"):
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
 
                 return r
             except self.snmp.TimeOutError:
@@ -43,10 +43,10 @@ class Script(BaseScript):
             line = line.replace("DisabN", " Disabled N")
             match = self.rx_interface_status.match(line)
             if match:
-                r += [
+                r.append(
                     {
                         "interface": match.group("interface"),
                         "status": match.group("status").lower() == "up",
                     }
-                ]
+                )
         return r

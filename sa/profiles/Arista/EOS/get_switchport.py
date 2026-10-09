@@ -47,5 +47,5 @@ class Script(BaseScript):
                 tagged = match.group("tagged")
                 if tagged != "-":
                     p["tagged"] = self.expand_rangelist(tagged)
-                r += [p]
+                r.append(p)
         return r

@@ -45,12 +45,12 @@ class Script(BaseScript):
                             self.logger.debug(
                                 "\n   ADDING PORT:" + port.split()[0].split("/")[0] + "/" + repr(n)
                             )
-                            portlist += [port.split()[0].split("/")[0] + "/" + repr(n)]
+                            portlist.append(port.split()[0].split("/")[0] + "/" + repr(n))
 
                     else:
                         self.logger.debug("\n   ADDING PORT:" + port)
-                        portlist += [port]
+                        portlist.append(port)
 
-            r += [{"interface": trunk[0], "members": portlist, "type": trunk[1]}]
+            r.append({"interface": trunk[0], "members": portlist, "type": trunk[1]})
 
         return r
