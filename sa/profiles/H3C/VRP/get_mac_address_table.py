@@ -40,7 +40,7 @@ class Script(BaseScript):
                     continue
                 if interface is not None and match.group("interfaces") != interface:
                     continue
-                r += [
+                r.append(
                     {
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
@@ -52,5 +52,5 @@ class Script(BaseScript):
                             "Config static": "S",
                         }[match.group("type").lower()],
                     }
-                ]
+                )
         return r

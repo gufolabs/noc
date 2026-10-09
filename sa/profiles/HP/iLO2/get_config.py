@@ -33,9 +33,9 @@ class Script(BaseScript):
             if not line:
                 continue
             if state == "Targets":
-                targets += [line]
+                targets.append(line)
             elif state == "Properties":
-                properties += [line]
+                properties.append(line)
         result = [(dir, [p.split("=", 1) for p in properties if "=" in p])]
         for t in targets:
             path = f"{dir}/{t}"
@@ -49,6 +49,6 @@ class Script(BaseScript):
         for dir, args in self.walk("/map1"):
             if not args:
                 continue
-            r += [f"set {dir} {' '.join([f'{k}={v}' for k, v in args])}"]
+            r.append(f"set {dir} {' '.join([f'{k}={v}' for k, v in args])}")
         config = "\n".join(sorted(r))
         return self.cleaned_config(config)

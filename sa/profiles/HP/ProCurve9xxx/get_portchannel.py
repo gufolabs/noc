@@ -27,5 +27,5 @@ class Script(BaseScript):
         # Get trunks
         st = self.cli("show trunk")
         for trunk in self.rx_trunk.findall(st):
-            r += [{"interface": trunk[0], "members": trunk[2].split(), "type": trunk[1]}]
+            r.append({"interface": trunk[0], "members": trunk[2].split(), "type": trunk[1]})
         return r

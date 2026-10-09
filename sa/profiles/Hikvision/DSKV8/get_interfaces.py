@@ -63,24 +63,24 @@ class Script(BaseScript):
             afi = ip.find("{{{}}}ipVersion".format(ns["ns"])).text
             if afi == "v4":
                 if "IPv4" not in sub["enabled_afi"]:
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                 ip_address = "{}/{}".format(
                     ip.find("{{{}}}ipAddress".format(ns["ns"])).text,
                     IPv4.netmask_to_len(ip.find("{{{}}}subnetMask".format(ns["ns"])).text),
                 )
                 if "ipv4_addresses" in sub:
-                    sub["ipv4_addresses"] += [ip_address]
+                    sub["ipv4_addresses"].append(ip_address)
                 else:
                     sub["ipv4_addresses"] = [ip_address]
             if afi == "v6":
                 if "IPv6" not in sub["enabled_afi"]:
-                    sub["enabled_afi"] += ["IPv6"]
+                    sub["enabled_afi"].append("IPv6")
                 ip_address = IPv6(
                     ip.find("{{{}}}ipAddress".format(ns["ns"])).text,
                     netmask=ip.find("ns:subnetMask", ns).text,
                 ).prefix
 
             iface["subinterfaces"] = [sub]
-            r += [iface]
+            r.append(iface)
 
         return [{"interfaces": r}]

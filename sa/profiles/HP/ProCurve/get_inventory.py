@@ -45,18 +45,18 @@ class Script(BaseScript):
         ]
         match = self.rx_mng.search(v)
         if match:
-            r += [
+            r.append(
                 {
                     "type": "MODULE",
                     "vendor": "HP",
                     "part_no": match.group("part_no"),
                     "serial": match.group("serial"),
                 }
-            ]
+            )
         t = parse_table(v, allow_wrap=True)
         for i in t:
             match = self.rx_linecard.search(i[1])
-            r += [
+            r.append(
                 {
                     "type": "LINECARD",
                     "number": i[0],
@@ -66,11 +66,11 @@ class Script(BaseScript):
                     "revision": i[5],
                     "description": i[1],
                 }
-            ]
+            )
         v = self.cli("show system power-supply")
         t = parse_table(v, allow_wrap=True)
         for i in t:
-            r += [
+            r.append(
                 {
                     "type": "PSU",
                     "number": i[0],
@@ -78,5 +78,5 @@ class Script(BaseScript):
                     "part_no": i[1],
                     "description": f"{i[3]} / {i[4]} Watt",
                 }
-            ]
+            )
         return r

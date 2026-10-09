@@ -129,5 +129,5 @@ class Script(BaseScript):
                     [x.strip() for x in r["remote_capabilities"].split(",")],
                     {LLDP_CAP_NAMES[x1]: x1 for x1 in LLDP_CAP_NAMES},
                 )
-            result += [{"local_interface": match.group("interface"), "neighbors": [n]}]
+            result.append({"local_interface": match.group("interface"), "neighbors": [n]})
         return result

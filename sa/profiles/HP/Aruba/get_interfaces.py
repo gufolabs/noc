@@ -106,10 +106,10 @@ class Script(BaseScript):
                 iface["mtu"] = r["mtu"]
             if r.get("vlan_mode") == "access" and "access_vlan" in r:
                 subiface["untagged_vlan"] = r["access_vlan"]
-                subiface["enabled_afi"] += ["BRIDGE"]
+                subiface["enabled_afi"].append("BRIDGE")
             elif "native_vlan" in r:
                 subiface["untagged_vlan"] = r["native_vlan"]
-                subiface["enabled_afi"] += ["BRIDGE"]
+                subiface["enabled_afi"].append("BRIDGE")
                 if "allowed_vlan" in r:
                     subiface["tagged_vlans"] = (
                         all_vlans
@@ -117,7 +117,7 @@ class Script(BaseScript):
                         else ranges_to_list(r["allowed_vlan"])
                     )
             if "ip_address" in r:
-                subiface["enabled_afi"] += ["IPv4"]
+                subiface["enabled_afi"].append("IPv4")
                 subiface["ipv4_addresses"] = [r["ip_address"]]
                 if ifname.startswith("vlan"):
                     subiface["vlan_ids"] = [int(ifname[4:])]
@@ -126,7 +126,7 @@ class Script(BaseScript):
                 iface["aggregated_interface"] = ai
                 iface["subinterfaces"] = []
                 if is_lacp:
-                    iface["enabled_protocols"] += ["LACP"]
-            iface["subinterfaces"] += [subiface]
+                    iface["enabled_protocols"].append("LACP")
+            iface["subinterfaces"].append(subiface)
             ifaces[ifname] = iface
         return [{"interfaces": list(ifaces.values())}]

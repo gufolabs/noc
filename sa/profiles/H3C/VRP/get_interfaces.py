@@ -70,7 +70,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_ospf.search(s)
             if match:
-                ospfs += [match.group("name")]
+                ospfs.append(match.group("name"))
         return ospfs
 
     def execute(self):
@@ -105,7 +105,7 @@ class Script(BaseScript):
                 if not match:
                     continue
                 ip = match.group("ip")
-                ipv4_interfaces[c_iface] += [ip]
+                ipv4_interfaces[c_iface].append(ip)
         except self.CLISyntaxError:
             pass
         interfaces = []
@@ -134,7 +134,7 @@ class Script(BaseScript):
             }
             if ifname in switchports and ifname not in portchannel_members:
                 # Bridge
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 u, t = switchports[ifname]
                 if u:
                     sub["untagged_vlan"] = u
@@ -146,7 +146,7 @@ class Script(BaseScript):
                 sub["ipv4_addresses"] = ipv4_interfaces[ifname]
             if ifname in ospfs:
                 # OSPF
-                sub["enabled_protocols"] += ["OSPF"]
+                sub["enabled_protocols"].append("OSPF")
             if ifname.lower().startswith("vlanif"):
                 # SVI
                 sub["vlan_ids"] = [int(ifname[6:].strip())]
@@ -204,10 +204,10 @@ class Script(BaseScript):
                     iface["aggregated_interface"] = ai
                     iface["subinterfaces"] = []
                     if is_lacp:
-                        iface["enabled_protocols"] += ["LACP"]
-                interfaces += [iface]
+                        iface["enabled_protocols"].append("LACP")
+                interfaces.append(iface)
             else:
-                interfaces[-1]["subinterfaces"] += [sub]
+                interfaces[-1]["subinterfaces"].append(sub)
         # Process VRFs
         vrfs = {"default": {"forwarding_instance": "default", "type": "ip", "interfaces": []}}
         imap = {}  # interface -> VRF
@@ -219,7 +219,7 @@ class Script(BaseScript):
                     c["subinterfaces"] = [
                         si for si in subs if imap.get(si["name"], "default") == vrf
                     ]
-                    vrfs[vrf]["interfaces"] += [c]
+                    vrfs[vrf]["interfaces"].append(c)
             elif i.get("aggregated_interface"):
-                vrfs["default"]["interfaces"] += [i]
+                vrfs["default"]["interfaces"].append(i)
         return list(vrfs.values())

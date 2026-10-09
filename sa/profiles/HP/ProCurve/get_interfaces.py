@@ -61,7 +61,7 @@ class Script(BaseScript):
                     continue
                 param = p1.strip()
                 params[param] = [p2[0].strip()]
-            vlans += [params]
+            vlans.append(params)
         r = {}
         vlan_address = {}
         for vlan in vlans:
@@ -83,7 +83,7 @@ class Script(BaseScript):
                         r[iface] = {"untagged_vlan": None, "tagged_vlans": []}
                     try:
                         if p2 == "tagged_vlans":
-                            r[iface][p2] += [int(vlan["VLAN ID"][0])]
+                            r[iface][p2].append(int(vlan["VLAN ID"][0]))
                         else:
                             r[iface][p2] = int(vlan["VLAN ID"][0])
                     except ValueError:
@@ -120,7 +120,7 @@ class Script(BaseScript):
             if aggregate:
                 iface["aggregated_interface"] = aggregate[0]
                 if aggregate[0] in portchannels:
-                    iface["enabled_protocols"] += ["LACP"]
+                    iface["enabled_protocols"].append("LACP")
             if ifname in switchports:
                 si = {
                     "name": ifname,

@@ -78,5 +78,5 @@ class Script(BaseScript):
                 if vlan_num == result[p]["untagged"]:
                     # Perhaps port is switchport @todo getting port type
                     continue
-                result[p]["tagged"] += [vlan_num]
+                result[p]["tagged"].append(vlan_num)
         return list(result.values())

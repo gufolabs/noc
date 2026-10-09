@@ -36,13 +36,13 @@ class Script(BaseScript):
                 prev = match
                 continue
             ll = parse_kv(self.parse_kv_map, v[prev.start() : match.end()])
-            r += [
+            r.append(
                 {
                     "interface": prev.group("lag"),
                     "members": ll["port"].split(),
                     "type": "L" if ll["mode"] == "active" else "S",
                 }
-            ]
+            )
             prev = match
 
         return r

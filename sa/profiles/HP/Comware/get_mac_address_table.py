@@ -44,12 +44,12 @@ class Script(BaseScript):
                 if_type = "D"
             else:
                 if_type = "S"
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interface")],
                     "type": if_type,
                 }
-            ]
+            )
         return r

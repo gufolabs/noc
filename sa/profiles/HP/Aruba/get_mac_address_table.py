@@ -25,12 +25,12 @@ class Script(BaseScript):
         r = []
         v = self.cli("show mac-address-table")
         for mac, vlan, m_type, port in self.rx_mac_table.findall(v):
-            r += [
+            r.append(
                 {
                     "vlan_id": vlan,
                     "mac": mac,
                     "interfaces": [port],
                     "type": m_type[0].upper(),
                 }
-            ]
+            )
         return r

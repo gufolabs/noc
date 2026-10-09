@@ -46,7 +46,7 @@ class Script(BaseScript):
                 else:
                     descr = ""
                     part_no = n
-                objects += [
+                objects.append(
                     {
                         "type": type,
                         "number": match.group("slot"),
@@ -57,7 +57,7 @@ class Script(BaseScript):
                         "mfg_date": match.group("mdate"),
                         "description": descr,
                     }
-                ]
+                )
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         return objects

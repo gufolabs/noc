@@ -52,7 +52,7 @@ class Script(BaseScript):
                     #                        dpi = dpi_rx.search(di).group('dpi')
                     #                    else:
                     #                        dpi = 0
-                    interfaces += [
+                    interfaces.append(
                         {
                             "interface": interface,
                             "port_id": 0,
@@ -67,9 +67,9 @@ class Script(BaseScript):
                             "edge": 0,
                             "role": "unknown",
                         }
-                    ]
+                    )
 
-            r["instances"] += [
+            r["instances"].append(
                 {
                     "id": vlan,
                     "vlans": vlan,
@@ -79,7 +79,7 @@ class Script(BaseScript):
                     "bridge_priority": match.group("priority"),
                     "interfaces": interfaces,
                 }
-            ]
+            )
 
         return r
 

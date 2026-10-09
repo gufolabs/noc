@@ -38,7 +38,7 @@ class Script(BaseScript):
                     # ifOperStatus up(1)
                     if interface and interface == self.profile.convert_interface_name(n):
                         return [{"interface": n, "status": int(s) == 1}]
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -60,12 +60,12 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r += [
+                        r.append(
                             {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
                             }
-                        ]
+                        )
         #
         # Other (VRP5 style)
         #
@@ -84,10 +84,10 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r += [
+                        r.append(
                             {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
                             }
-                        ]
+                        )
         return r

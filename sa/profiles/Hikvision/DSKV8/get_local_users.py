@@ -40,7 +40,7 @@ class Script(BaseScript):
         users = v["UserList"]["User"]
 
         for i in users:
-            r += [
+            r.append(
                 {
                     "username": i["userName"][0]["_text"],
                     "class": {
@@ -50,5 +50,5 @@ class Script(BaseScript):
                     }[i["userLevel"][0]["_text"]],
                     "is_active": True,
                 }
-            ]
+            )
         return r

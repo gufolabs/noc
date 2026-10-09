@@ -33,7 +33,7 @@ class Script(BaseScript):
         ):
             if att_pc and att_pc != int(ifindex):
                 if sel_pc > 0 and int(att_pc) in names:
-                    r[names[int(att_pc)]] += [names[int(ifindex)]]
+                    r[names[int(att_pc)]].append(names[int(ifindex)])
                 elif int(att_pc) not in names:
                     self.logger.warning("Unknown ifindex '%s' for aggregated interface", att_pc)
         return [{"interface": pc, "type": "L", "members": r[pc]} for pc in r]
