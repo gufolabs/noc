@@ -25,5 +25,5 @@ class Script(BaseScript):
         t = parse_table(v)
         for i in t:
             if i[2] != "":
-                r += [{"ip": i[0], "mac": i[2], "interface": i[1]}]
+                r.append({"ip": i[0], "mac": i[2], "interface": i[1]})
         return r

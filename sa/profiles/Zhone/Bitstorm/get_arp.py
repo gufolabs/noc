@@ -30,7 +30,7 @@ class Script(BaseScript):
                 iface = match.group("interface")
                 if interface and interface != iface:
                     continue
-                r += [{"interface": iface, "ip": match.group("ip"), "mac": match.group("mac")}]
+                r.append({"interface": iface, "ip": match.group("ip"), "mac": match.group("mac")})
         except self.CLISyntaxError:
             pass
         return r

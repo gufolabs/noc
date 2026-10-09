@@ -124,7 +124,7 @@ class Script(BaseScript):
                         "measurement": "Celsius",
                         "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.2.1.3.{key}",
                     }
-                    r += [metrics]
+                    r.append(metrics)
         # zxAnEpmEnvCurrentHumidity
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.3902.1015.320.2.3.6.1.2", bulk=False):
             if v == 2:  # INTEGER {unused(1),used(2)}
@@ -136,7 +136,7 @@ class Script(BaseScript):
                     "measurement": "Percent",
                     "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.6.1.3.{key}",
                 }
-                r += [metrics]
+                r.append(metrics)
         # zxAnEpmEnvCurrentGuard #INTEGER {normal(1),abnormal(2)}
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.3902.1015.320.2.3.11.1.2", bulk=False):
             i = 1
@@ -150,7 +150,7 @@ class Script(BaseScript):
                     "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.11.1.3.{key}",
                 }
                 i += 1
-                r += [metrics]
+                r.append(metrics)
         return r
 
     def execute_cli(self):
@@ -178,7 +178,7 @@ class Script(BaseScript):
             match = self.rx_detail.search(v)
             if match and match.group("hardware") != "N/A":
                 i["revision"] = match.group("hardware")
-            r += [i]
+            r.append(i)
             if int(p["port"]) < 1 or p["realtype"] == "":
                 continue
             prefix = self.if_type[p["realtype"]]
@@ -219,7 +219,7 @@ class Script(BaseScript):
                     else:
                         mfd = "20" + date[:2] + "-" + date[2:4] + "-" + date[4:]
                     x["mfg_date"] = mfd
-                r += [x]
+                r.append(x)
         sensors = self.get_chassis_sensors()
         if sensors:
             r[0]["sensors"] = sensors

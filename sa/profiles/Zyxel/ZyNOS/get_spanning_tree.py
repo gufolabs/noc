@@ -70,7 +70,7 @@ class Script(BaseScript):
             config["MSTP"]["revision"] = match.group("revision")
         # get instances and their vlans
         for match in self.rx_inst_vlans.finditer(cmd):
-            instances += [{"id": match.group("id"), "vlans": match.group("vlans").rstrip(",")}]
+            instances.append({"id": match.group("id"), "vlans": match.group("vlans").rstrip(",")})
         # get instances' config and status
         for i in instances:
             cmd = self.cli(f"show mstp instance {i['id']}")
@@ -108,7 +108,7 @@ class Script(BaseScript):
                     role = "alternate"
                 else:
                     role = "unknown"
-                ifaces += [
+                ifaces.append(
                     {
                         "interface": int(match.group("iface")),
                         "port_id": port_id,
@@ -119,7 +119,7 @@ class Script(BaseScript):
                         "designated_bridge_priority": int(ds_port_id.split(".")[0]),
                         "designated_port_id": ds_port_id,
                     }
-                ]
+                )
             # Edge and p2p properties from instance 0
             for ifc in ifaces:
                 ifc["edge"] = edge
@@ -166,7 +166,7 @@ class Script(BaseScript):
                 role = "alternate"
             else:
                 role = "unknown"
-            ifaces += [
+            ifaces.append(
                 {
                     "interface": int(match.group("iface")),
                     "port_id": port_id,
@@ -179,7 +179,7 @@ class Script(BaseScript):
                     "edge": match.group("edge"),
                     "point_to_point": match.group("p2p"),
                 }
-            ]
+            )
 
         return {
             "mode": "RSTP",

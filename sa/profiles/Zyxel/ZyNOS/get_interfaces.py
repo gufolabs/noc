@@ -110,7 +110,7 @@ class Script(BaseScript):
             }
             if portchannel_members[m][1]:
                 iface["enabled_protocols"] = ["LACP"]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         # Get loopguard
         ctp = []
@@ -118,7 +118,7 @@ class Script(BaseScript):
             cmd = self.cli("show loopguard")
             if "LoopGuard Status: Enable" in cmd:
                 for match in self.rx_ctp.finditer(cmd):
-                    ctp += [match.group("interface")]
+                    ctp.append(match.group("interface"))
         except self.CLISyntaxError:
             pass
 
@@ -127,14 +127,14 @@ class Script(BaseScript):
         cmd = self.cli("show vlan1q gvrp")
         if "gvrpEnable = YES" in cmd:
             for match in self.rx_gvrp.finditer(cmd):
-                gvrp += [match.group("interface")]
+                gvrp.append(match.group("interface"))
         # Get lldp
         lldp = []
         if self.has_capability("Network | LLDP"):
             try:
                 cmd = self.cli("show lldp config interface port-channel *")
                 for match in self.rx_lldp.finditer(cmd):
-                    lldp += [match.group("interface")]
+                    lldp.append(match.group("interface"))
             except self.CLISyntaxError:
                 pass
 
@@ -179,12 +179,12 @@ class Script(BaseScript):
                 iface["description"] = swp["description"]
                 iface["subinterfaces"][0]["description"] = swp["description"]
             if name in ctp:
-                iface["enabled_protocols"] += ["CTP"]
+                iface["enabled_protocols"].append("CTP")
             if name in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             if name in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
-            interfaces += [iface]
+                iface["enabled_protocols"].append("LLDP")
+            interfaces.append(iface)
 
         # Get SVIs
         ipifarr = {}
@@ -224,8 +224,8 @@ class Script(BaseScript):
                 iface["subinterfaces"][0]["vlan_ids"] = [v]
             for i in ipifarr[v]:
                 if i in rip_addresses:
-                    iface["subinterfaces"][0]["enabled_protocols"] += ["RIP"]
+                    iface["subinterfaces"][0]["enabled_protocols"].append("RIP")
                 if i in ospf_addresses:
-                    iface["subinterfaces"][0]["enabled_protocols"] += ["OSPF"]
-            interfaces += [iface]
+                    iface["subinterfaces"][0]["enabled_protocols"].append("OSPF")
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

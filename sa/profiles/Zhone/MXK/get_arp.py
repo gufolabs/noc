@@ -26,5 +26,5 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli("ip arpshow")):
             if match.group("mac") == "<incomplete>" or match.group("interface") == "coreEnd":
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

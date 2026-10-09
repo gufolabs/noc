@@ -39,7 +39,7 @@ class Script(BaseScript):
         r = []
         s = self.cli(f"cable-diagnostics {interface}")
         for match in self.rx_link.finditer(s):
-            r += [
+            r.append(
                 {
                     "interface": interface,
                     "pairs": [
@@ -69,6 +69,6 @@ class Script(BaseScript):
                         },
                     ],
                 }
-            ]
+            )
 
         return r

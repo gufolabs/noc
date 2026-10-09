@@ -47,10 +47,10 @@ class Profile(BaseProfile):
         for line in v.splitlines():
             match = self.rx_card.search(line)
             if match:
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         if not r:
             for line in v.splitlines():
                 match = self.rx_card2.search(line)
                 if match:
-                    r += [match.groupdict()]
+                    r.append(match.groupdict())
         return r

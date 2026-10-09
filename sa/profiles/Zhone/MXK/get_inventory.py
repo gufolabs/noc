@@ -34,7 +34,7 @@ class Script(BaseScript):
         for i in ["SHELFME", "BACKPLANE", "FANTRAY"]:
             v = self.cli(f"eeshow {i} 0")
             match = self.rx_card.search(v)
-            r += [
+            r.append(
                 {
                     "type": i,
                     "vendor": "ZHONE",
@@ -43,14 +43,14 @@ class Script(BaseScript):
                     "revision": match.group("revision"),
                     "builtin": True,
                 }
-            ]
+            )
         v = self.cli("slots", cached=True)
         for match in self.rx_slot.finditer(v):
             slot_no = match.group("slot_no")
             descr = match.group("descr")
             c = self.cli(f"eeshow card {slot_no}", cached=True)
             match1 = self.rx_card.search(c)
-            r += [
+            r.append(
                 {
                     "type": "LINECARD",
                     "vendor": "ZHONE",
@@ -60,5 +60,5 @@ class Script(BaseScript):
                     "revision": match1.group("revision"),
                     "description": descr,
                 }
-            ]
+            )
         return r

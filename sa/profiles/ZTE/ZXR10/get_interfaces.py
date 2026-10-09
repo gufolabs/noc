@@ -44,7 +44,7 @@ class Script(BaseScript):
             match = self.rx_int.search(line)
             if match:
                 last_if = match.group("name")
-                if_list += [last_if]  # preserve order
+                if_list.append(last_if)  # preserve order
                 ifaces[last_if] = {
                     "name": last_if,
                     "ipv4_addresses": [],
@@ -75,7 +75,7 @@ class Script(BaseScript):
             match = self.rx_inet.search(line)
             if match:
                 if match.group("inet") != "unassigned":
-                    ifaces[last_if]["ipv4_addresses"] += [match.group("inet")]
+                    ifaces[last_if]["ipv4_addresses"].append(match.group("inet"))
                 continue
             # Mac-address
             match = self.rx_mac.search(line)
@@ -104,14 +104,14 @@ class Script(BaseScript):
             subif["oper_status"] = ifaces[iface]["oper_status"]
             for vlan in vlan_set:
                 if iface in vlan.get("tag_ports"):
-                    subif["tagged_vlans"] += [vlan.get("id")]
+                    subif["tagged_vlans"].append(vlan.get("id"))
                 if iface in vlan.get("untag_ports") or iface in vlan.get("pvid_ports"):
                     subif["untagged_vlan"] = vlan.get("id")
             if subif["name"] != "" or subif["untagged_vlan"] != "":
                 if subif["name"].startswith("vlan"):
-                    subif["enabled_afi"] += ["IPv4"]
+                    subif["enabled_afi"].append("IPv4")
                 else:
-                    subif["enabled_afi"] += ["BRIDGE"]
+                    subif["enabled_afi"].append("BRIDGE")
             if subif["tagged_vlans"] == []:
                 del subif["tagged_vlans"]
             if subif["untagged_vlan"] == "":
@@ -123,7 +123,7 @@ class Script(BaseScript):
                 del ifaces[iface]["ipv4_addresses"]
             if "mtu" in ifaces[iface]:
                 subif["mtu"] = ifaces[iface]["mtu"]
-            ifaces[iface]["subinterfaces"] += [subif]
+            ifaces[iface]["subinterfaces"].append(subif)
         # Process LACP aggregated links
         for line in self.cli("show lacp internal").splitlines():
             match = self.rx_lag.search(line)
@@ -131,14 +131,14 @@ class Script(BaseScript):
                 last_lag = match.group("lag")
             match = self.rx_lag_member.search(line)
             if match:
-                ifaces[match.group("lag_member")]["enabled_protocols"] += ["LACP"]
+                ifaces[match.group("lag_member")]["enabled_protocols"].append("LACP")
                 ifaces[match.group("lag_member")]["aggregated_interface"] = "smartgroup" + last_lag
         return [{"interfaces": list(ifaces.values())}]
 
     def get_si(self, si):
         if si["ipv4_addresses"]:
             si["ipv4_addresses"] = list(si["ipv4_addresses"])
-            si["enabled_afi"] += ["IPv4"]
+            si["enabled_afi"].append("IPv4")
         else:
             del si["ipv4_addresses"]
         return si

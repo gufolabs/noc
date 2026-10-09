@@ -31,9 +31,9 @@ class Script(BaseScript):
                     continue
                 name = match.group("name")
                 if name != "":
-                    r += [{"vlan_id": vid, "name": name}]
+                    r.append({"vlan_id": vid, "name": name})
                 else:
-                    r += [{"vlan_id": vid}]
+                    r.append({"vlan_id": vid})
         except self.CLISyntaxError:
             try:
                 v = self.cli("switch vlan show *")
@@ -45,7 +45,7 @@ class Script(BaseScript):
                     continue
                 name = match.group("name")
                 if not name.startswith("-"):
-                    r += [{"vlan_id": vid, "name": name}]
+                    r.append({"vlan_id": vid, "name": name})
                 else:
-                    r += [{"vlan_id": vid}]
+                    r.append({"vlan_id": vid})
         return r

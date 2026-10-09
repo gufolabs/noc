@@ -35,12 +35,12 @@ class Script(BaseScript):
             rx_line = self.rx_line
         r = []
         for match in rx_line.finditer(v):
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac").replace(" ", ""),
                     "interfaces": [match.group("interface")],
                     "type": "D",
                 }
-            ]
+            )
         return r

@@ -55,7 +55,7 @@ class Script(BaseScript):
                         "measurement": "Celsius",
                         "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.2.1.3.{key}",
                     }
-                    r += [metrics]
+                    r.append(metrics)
         # zxAnEpmEnvCurrentHumidity
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.3902.1015.320.2.3.6.1.2", bulk=False):
             if v == 2:  # INTEGER {unused(1),used(2)}
@@ -67,7 +67,7 @@ class Script(BaseScript):
                     "measurement": "Percent",
                     "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.6.1.3.{key}",
                 }
-                r += [metrics]
+                r.append(metrics)
         # zxAnEpmEnvCurrentGuard #INTEGER {normal(1),abnormal(2)}
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.3902.1015.320.2.3.11.1.2", bulk=False):
             i = 1
@@ -81,7 +81,7 @@ class Script(BaseScript):
                     "snmp_oid": f"1.3.6.1.4.1.3902.1015.320.2.3.11.1.3.{key}",
                 }
                 i += 1
-                r += [metrics]
+                r.append(metrics)
         return r
 
     def execute_snmp(self):
@@ -97,7 +97,7 @@ class Script(BaseScript):
         for line in v.splitlines():
             match = self.rx_card.search(line)
             if match:
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r
 
     def execute_cli(self):
@@ -112,7 +112,7 @@ class Script(BaseScript):
                 "revision": p["hardver"],
                 "serial": p["serial"],
             }
-            r += [i]
+            r.append(i)
             if "SCC" in p["cfgtype"]:
                 subs = self.cli("show sub-card")
                 for line in subs.splitlines():
@@ -125,7 +125,7 @@ class Script(BaseScript):
                             "part_no": match.group("cfgtype"),
                             "revision": match.group("hardver"),
                         }
-                        r += [sub]
+                        r.append(sub)
 
         sensors = self.get_chassis_sensors()
         if sensors:

@@ -38,7 +38,7 @@ class Script(BaseScript):
         for oid, slot_module_type in self.snmp.getnext("1.3.6.1.4.1.890.1.5.13.1.1.3.1.7"):
             if slot_module_type == 2:  # empty(1), up(2), down(3), testing(4), standby(5)
                 stack_num = oid.split(".")[-1]
-                r += [str(stack_num)]
+                r.append(str(stack_num))
         return r
 
     def execute_platform_snmp(self, caps):

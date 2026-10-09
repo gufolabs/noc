@@ -103,7 +103,7 @@ class Script(BaseScript):
                 "edge": match.group("edge") == "true",
                 "point_to_point": match.group("p2p") == "true",
             }
-            inst["interfaces"] += [iface]
+            inst["interfaces"].append(iface)
         return inst
 
     def process_rstp(self):
@@ -139,5 +139,5 @@ class Script(BaseScript):
                 "instances": [],
             }
             for match1 in self.rx_mstid.finditer(v):
-                r["instances"] += [self.process_mstp(match1.group("id"), match1.group("vlans"))]
+                r["instances"].append(self.process_mstp(match1.group("id"), match1.group("vlans")))
         return r

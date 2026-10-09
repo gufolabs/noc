@@ -28,9 +28,9 @@ class Script(BaseScript):
                     ["1.3.6.1.2.1.17.7.1.4.2.1.3", "1.3.6.1.2.1.17.7.1.4.3.1.1"]
                 ):
                     if name is not None:
-                        r += [{"vlan_id": vid, "name": name}]
+                        r.append({"vlan_id": vid, "name": name})
                     else:
-                        r += [{"vlan_id": vid}]
+                        r.append({"vlan_id": vid})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -43,7 +43,7 @@ class Script(BaseScript):
             match_name = self.re_search(self.rx_vlan_name, vn)
             name = match_name.group("name")
             if name != "":
-                r += [{"vlan_id": vid, "name": name}]
+                r.append({"vlan_id": vid, "name": name})
             else:
-                r += [{"vlan_id": vid}]
+                r.append({"vlan_id": vid})
         return r

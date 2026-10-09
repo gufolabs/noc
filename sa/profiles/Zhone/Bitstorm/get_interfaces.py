@@ -90,7 +90,7 @@ class Script(BaseScript):
             sub["enabled_afi"] = ["BRIDGE", "ATM"]
             if sub["vlan_ids"]:
                 sub["vlan_ids"] = [int(x) for x in sub["vlan_ids"].split(", ") if int(x) > 0]
-            iface["subinterfaces"] += [sub]
+            iface["subinterfaces"].append(sub)
         return iface
 
     def execute_cli(self):
@@ -107,14 +107,14 @@ class Script(BaseScript):
             if "admin_status" in match.groupdict():
                 iface["admin_status"] = match.group("admin_status") == "up"
                 iface["subinterfaces"][0]["admin_status"] = match.group("admin_status") == "up"
-            interfaces += [iface]
+            interfaces.append(iface)
 
         v = self.cli("show interface dsl all configuration")
         if "You need to enter a valid DSL port ID." not in v:
             for p in v.split("\n DSL Port "):
                 iface = self.get_dsl(p)
                 if iface:
-                    interfaces += [iface]
+                    interfaces.append(iface)
         else:
             v = self.cli("show system status", cached=True)
             v = parse_table(v)
@@ -127,7 +127,7 @@ class Script(BaseScript):
                         if "You need to enter a valid DSL port ID." not in c:
                             iface = self.get_dsl(c)
                             if iface:
-                                interfaces += [iface]
+                                interfaces.append(iface)
                         else:
                             break  # End of list
 
@@ -154,7 +154,7 @@ class Script(BaseScript):
                 iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
             if match.group("vlan_id") != "0":
                 iface["subinterfaces"][0]["vlan_ids"] = [match.group("vlan_id")]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         match = self.rx_inband2.search(v)
         if match:
@@ -170,7 +170,7 @@ class Script(BaseScript):
                 ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                 iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         v = self.cli("show management out-of-band")
         match = self.rx_outband.search(v)
@@ -189,7 +189,7 @@ class Script(BaseScript):
             ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
-        interfaces += [iface]
+        interfaces.append(iface)
 
         v = self.cli("show vlan configuration all")
         for match in self.rx_vlan.finditer(v):
@@ -204,7 +204,7 @@ class Script(BaseScript):
                     if sub["name"] not in tagged:
                         continue
                     if "tagged_vlans" in sub:
-                        sub["tagged_vlans"] += [vlan_id]
+                        sub["tagged_vlans"].append(vlan_id)
                     else:
                         sub["tagged_vlans"] = [vlan_id]
             untagged = match.group("untagged").strip()

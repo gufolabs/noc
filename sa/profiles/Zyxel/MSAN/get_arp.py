@@ -37,8 +37,8 @@ class Script(BaseScript):
         for match in self.rx_arp1.finditer(v):
             if match.group("interface") == "-":
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         if not r:
             for match in self.rx_arp2.finditer(v):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

@@ -57,7 +57,7 @@ class Script(BaseScript):
             match = self.rx_s_line.match(line)
             if not match:
                 continue
-            lldp_interfaces += [match.group("local_if")]
+            lldp_interfaces.append(match.group("local_if"))
 
         # Get lldp neighbors
         for local_if in lldp_interfaces:
@@ -142,6 +142,6 @@ class Script(BaseScript):
             match = self.rx_system_desc.search(v)
             if match:
                 n["remote_system_description"] = match.group("desc")
-            i["neighbors"] += [n]
-            r += [i]
+            i["neighbors"].append(n)
+            r.append(i)
         return r

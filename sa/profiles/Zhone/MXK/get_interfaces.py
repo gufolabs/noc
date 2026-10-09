@@ -96,7 +96,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         v = self.cli("interface show")
         for match in self.rx_ip.finditer(v):
             ifname = self.rx_ifbase1.search(match.group("name")).group(1)
@@ -114,7 +114,7 @@ class Script(BaseScript):
                     match1 = self.rx_vlan_ipobridge.search(match.group("alias"))
                     if match1:
                         sub["vlan_ids"] = int(match1.group("vlan_id"))
-                    i["subinterfaces"] += [sub]
+                    i["subinterfaces"].append(sub)
                     break
         v = self.cli("slots", cached=True)
         for match in self.rx_slot.finditer(v):
@@ -146,6 +146,6 @@ class Script(BaseScript):
                                 }
                             ],
                         }
-                        interfaces += [iface]
+                        interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

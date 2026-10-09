@@ -37,7 +37,7 @@ class Script(BaseScript):
         serial = self.capabilities.get("Chassis | Serial Number")
         if serial:
             p["serial"] = serial
-        objects += [p]
+        objects.append(p)
         objects += self.get_transceivers()
         return objects
 
@@ -132,5 +132,5 @@ class Script(BaseScript):
             )
             if serial_no:
                 o["serial"] = serial_no
-            objects += [o]
+            objects.append(o)
         return objects

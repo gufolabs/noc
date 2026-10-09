@@ -102,7 +102,7 @@ class Script(BaseScript):
             t = pc["type"] == "L"
             for m in pc["members"]:
                 portchannel_members[m] = (i, t)
-            interfaces += [
+            interfaces.append(
                 {
                     "name": pc["interface"],
                     "type": "aggregated",
@@ -117,7 +117,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-            ]
+            )
         for p in ports:
             if int(p["port"]) < 1 or p["realtype"] == "":
                 continue
@@ -167,7 +167,7 @@ class Script(BaseScript):
                         sub["untagged_vlan"] = match.group("untagged")
                     if match.group("tagged") and match.group("tagged") != "1":
                         sub["tagged_vlans"] = self.expand_rangelist(match.group("tagged"))
-                    iface["subinterfaces"] += [sub]
+                    iface["subinterfaces"].append(sub)
                     if ifname in portchannel_members:
                         ai, _is_lacp = portchannel_members[ifname]
                         iface["aggregated_interface"] = ai
@@ -194,7 +194,7 @@ class Script(BaseScript):
                                 sub["untagged_vlan"] = match3.group("untagged")
                             if match3.group("tagged"):
                                 sub["tagged_vlans"] = self.expand_rangelist(match3.group("tagged"))
-                            iface["subinterfaces"] += [sub]
+                            iface["subinterfaces"].append(sub)
                 if prefix == "vdsl_":
                     for match in self.rx_pvc.finditer(v):
                         sub = {
@@ -205,8 +205,8 @@ class Script(BaseScript):
                             "vpi": match.group("vpi"),
                             "vci": match.group("vci"),
                         }
-                        iface["subinterfaces"] += [sub]
-                interfaces += [iface]
+                        iface["subinterfaces"].append(sub)
+                interfaces.append(iface)
 
         v = self.cli("show ip interface")
         for match in self.rx_ip.finditer(v):
@@ -241,10 +241,10 @@ class Script(BaseScript):
                     iface["subinterfaces"][0]["mac"] = match1.group("mac")
                     match1 = self.rx_ipv6.search(c)
                     if match1:
-                        iface["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                        iface["subinterfaces"][0]["enabled_afi"].append("IPv6")
                         iface["subinterfaces"][0]["ipv6_addresses"] = []
                         for match2 in self.rx_ipv6.finditer(c):
-                            iface["subinterfaces"][0]["ipv6_addresses"] += [match2.group("ipv6")]
+                            iface["subinterfaces"][0]["ipv6_addresses"].append(match2.group("ipv6"))
                 except self.CLISyntaxError:
                     pass
             if ifname.startswith("vlan"):
@@ -254,6 +254,6 @@ class Script(BaseScript):
                 iface["type"] = "management"
             else:
                 raise self.NotSupportedError()
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

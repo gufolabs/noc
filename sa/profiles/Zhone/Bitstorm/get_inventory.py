@@ -76,7 +76,7 @@ class Script(BaseScript):
                 r["revision"] = match.group("revision")
             if match.group("serial"):
                 r["serial"] = match.group("serial")
-            res += [r]
+            res.append(r)
         if "Paradyne DSLAM" in v or "Zhone DSLAM" in v:
             v = self.cli("show slot-information", cached=True)
             for card in v.split("\n\n"):
@@ -89,7 +89,7 @@ class Script(BaseScript):
                     "serial": match.group("serial"),
                     "description": match.group("descr"),
                 }
-                res += [r]
+                res.append(r)
                 match = self.rx_child_card.search(card)
                 if match:
                     r = {
@@ -98,5 +98,5 @@ class Script(BaseScript):
                         "part_no": [match.group("part_no")],
                         "serial": match.group("serial"),
                     }
-                    res += [r]
+                    res.append(r)
         return res

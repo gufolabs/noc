@@ -80,5 +80,5 @@ class Script(BaseScript):
                 neighbor["remote_port_description"] = r["remote_description"]
             if "sysname" in r:
                 neighbor["remote_system_name"] = r["sysname"]
-            result += [{"local_interface": r["port"], "neighbors": [neighbor]}]
+            result.append({"local_interface": r["port"], "neighbors": [neighbor]})
         return result
