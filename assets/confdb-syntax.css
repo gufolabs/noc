@@ -1,0 +1,72 @@
+/* ConfDB Syntax Reference — Tree Styles */
+
+#confdb-syntax {
+    --confdb-indent: calc(16px * 1);
+    font-family: var(--md-code-font-family-monospace), monospace;
+}
+
+#confdb-syntax div.n {
+    margin-left: 16px;
+}
+
+/* Token (bold) */
+#confdb-syntax span.t {
+    font-weight: bold;
+}
+
+/* Name parameter (<name> italic) */
+#confdb-syntax span.i::before {
+    content: "<";
+}
+
+#confdb-syntax span.i::after {
+    content: ">";
+}
+
+#confdb-syntax span.i {
+    font-style: italic;
+}
+
+/* Multi node (*) */
+#confdb-syntax .m::before {
+    content: "*";
+    margin-right: 0.2em;
+}
+
+#confdb-syntax div.n.x>.n {
+    display: none
+}
+
+#confdb-syntax .n.c.x>span:first-child::before {
+    content: '\276F';
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+#confdb-syntax .n.c:not(.x)>span:first-child::before {
+    content: '\276F';
+    display: inline-block;
+    transform: rotate(90deg);
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+#confdb-syntax div.n.c>span:hover {
+    color: var(--md-accent-fg-color);
+    cursor: pointer;
+}
+
+#confdb-syntax i.d {
+    display: inline-block;
+    margin-left: 0.4em;
+}
+
+#confdb-syntax i.d::before {
+    content: "\2754";
+}
+
+#confdb-syntax i.d:hover {
+    color: var(--md-accent-fg-color);
+    cursor: pointer;
+}
