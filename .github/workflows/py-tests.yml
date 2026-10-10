@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ env.TEST_PYTHON_VERSION }}
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v10
+        uses: astral-sh/setup-uv@v10.3.0
 
       - name: Install Dependencies
         run: uv pip install --system -e .[lint]
@@ -121,7 +121,7 @@ jobs:
           python-version: "${{ env.TEST_PYTHON_VERSION }}"
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v10
+        uses: astral-sh/setup-uv@v10.3.0
 
       - name: Install Dependencies
         run: uv pip install --system -e .[test,testing]
