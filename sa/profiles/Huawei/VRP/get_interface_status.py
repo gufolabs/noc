@@ -37,7 +37,7 @@ class Script(BaseScript):
             # ifOperStatus up(1)
             if interface and interface == iface:
                 return [{"interface": iface, "status": int(s) == 1}]
-            r += [{"interface": iface, "status": int(s) == 1}]
+            r.append({"interface": iface, "status": int(s) == 1})
         return r
 
     def execute_cli(self, interface=None):
@@ -61,12 +61,12 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r += [
+                        r.append(
                             {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
                             }
-                        ]
+                        )
         #
         # Other (VRP5 style)
         #
@@ -85,10 +85,10 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r += [
+                        r.append(
                             {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
                             }
-                        ]
+                        )
         return r

@@ -28,19 +28,19 @@ class Script(BaseScript):
             for match in self.rx_vlan1.finditer(c):
                 if int(match.group("vlanid")) == 1:
                     continue
-                r += [{"vlan_id": int(match.group("vlanid"))}]
+                r.append({"vlan_id": int(match.group("vlanid"))})
         except self.CLISyntaxError:
             c = self.cli("show vlan 0")
             for match in self.rx_vlan2.finditer(c):
                 if int(match.group("vlanid")) == 1:
                     continue
-                r += [{"vlan_id": int(match.group("vlanid"))}]
+                r.append({"vlan_id": int(match.group("vlanid"))})
             try:
                 with self.configure():
                     c = self.cli("show nms")
                     match = self.rx_vlan3.search(c)
                     if match:
-                        r += [{"vlan_id": int(match.group("vlanid"))}]
+                        r.append({"vlan_id": int(match.group("vlanid"))})
             except Exception:
                 pass
         return r

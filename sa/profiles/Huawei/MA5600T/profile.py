@@ -116,7 +116,7 @@ class Profile(BaseProfile):
             if board:
                 name, status = board.split(None, 2)[:2]
                 board_type = self.get_board_type(name)
-                r += [{"num": int(num), "name": name, "status": status, "type": board_type}]
+                r.append({"num": int(num), "name": name, "status": status, "type": board_type})
             slots += 1
         return slots, r
 
@@ -151,7 +151,7 @@ class Profile(BaseProfile):
         r = []
         i = 0
         while i <= n:
-            r += [self.get_ports_n(script, i)]
+            r.append(self.get_ports_n(script, i))
             i += 1
         return r
 
@@ -210,7 +210,7 @@ class Profile(BaseProfile):
             if not field[header[min(header)]]:
                 self.update_dict(r[-1], field)
             else:
-                r += [field]
+                r.append(field)
         return r
 
     # SmartAX MA5600T&MA5603T Multi-Service Access Module

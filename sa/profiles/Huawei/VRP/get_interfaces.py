@@ -145,7 +145,7 @@ class Script(BaseScript):
                 if not match:
                     continue
                 for iface in match.group("tagged_ports").split():
-                    result[iface]["tagged"] += [match.group("vlan_id")]
+                    result[iface]["tagged"].append(match.group("vlan_id"))
                 for iface in match.group("untagged_ports").split():
                     result[iface]["untagged"] = match.group("vlan_id")
             return result
@@ -184,7 +184,7 @@ class Script(BaseScript):
                     if key == "untagged":
                         result[ifname][key] = vid
                     else:
-                        result[ifname][key] += [vid]
+                        result[ifname][key].append(vid)
         if not result and self.is_quidway_S5xxx:
             self.logger.debug("Empty result. Use display port vlan")
             for iface, vlans in self.parse_displ_port_vlan():
@@ -250,7 +250,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_ospf.search(s)
             if match:
-                ospfs += [match.group("name")]
+                ospfs.append(match.group("name"))
         return ospfs
 
     def get_ndpint(self):
@@ -262,7 +262,7 @@ class Script(BaseScript):
             return []
         ndp = []
         for match in self.rx_ndp.finditer(v):
-            ndp += [match.group("name")]
+            ndp.append(match.group("name"))
         return ndp
 
     def get_ifindex(self):
@@ -286,7 +286,7 @@ class Script(BaseScript):
         for line in v.splitlines():
             if not line:
                 continue
-            stp += [line.split()[1]]
+            stp.append(line.split()[1])
         if stp:
             stp.pop(0)
         return stp
@@ -298,7 +298,7 @@ class Script(BaseScript):
             return {}
         lldp = []
         for match in self.rx_lldp.finditer(v):
-            lldp += [match.group("name")]
+            lldp.append(match.group("name"))
         return lldp
 
     def get_mpls_vpn(self):
@@ -344,7 +344,7 @@ class Script(BaseScript):
         for match in rx_vrrp.finditer(v):
             ifname = self.profile.convert_interface_name(match.group("ifname"))
             if ifname in vrrps:
-                vrrps[ifname] += [match.group("virtual_ip") + "/32"]
+                vrrps[ifname].append(match.group("virtual_ip") + "/32")
             else:
                 vrrps[ifname] = [match.group("virtual_ip") + "/32"]
         return vrrps
@@ -372,7 +372,7 @@ class Script(BaseScript):
             if not match:
                 continue
             ip = match.group("ip")
-            ipv4_interfaces[c_iface] += [ip]
+            ipv4_interfaces[c_iface].append(ip)
         interfaces = {}
         # Get OSPF interfaces
         ospfs = self.get_ospfint()
@@ -405,7 +405,7 @@ class Script(BaseScript):
             }
             if ifname in switchports and ifname not in portchannel_members:
                 # Bridge
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 u, t = switchports[ifname]["untagged"], switchports[ifname].get("tagged")
                 if u:
                     sub["untagged_vlan"] = u
@@ -417,7 +417,7 @@ class Script(BaseScript):
                 sub["ipv4_addresses"] = ipv4_interfaces[ifname]
             if ifname in ospfs:
                 # OSPF
-                sub["enabled_protocols"] += ["OSPF"]
+                sub["enabled_protocols"].append("OSPF")
             if ifname.lower().startswith("vlanif"):
                 # SVI
                 sub["vlan_ids"] = [int(ifname[6:].strip())]
@@ -460,7 +460,7 @@ class Script(BaseScript):
                 if match and "untagged_vlan" not in sub:
                     sub["untagged_vlan"] = int(match.group("pvid"))
                     if "BRIDGE" not in sub["enabled_afi"]:
-                        sub["enabled_afi"] += ["BRIDGE"]
+                        sub["enabled_afi"].append("BRIDGE")
                     continue
                 # Static vlans
                 if line.startswith("Encapsulation "):
@@ -505,16 +505,16 @@ class Script(BaseScript):
                     iface["description"] = sub["description"]
                 if ifname in ndps:
                     # NDP
-                    iface["enabled_protocols"] += ["NDP"]
+                    iface["enabled_protocols"].append("NDP")
                 if ifname in stps:
                     # STP
-                    iface["enabled_protocols"] += ["STP"]
+                    iface["enabled_protocols"].append("STP")
                 if ifname in lldps:
                     # LLDP
-                    iface["enabled_protocols"] += ["LLDP"]
+                    iface["enabled_protocols"].append("LLDP")
                 if ifname in vrrps.keys():
                     # VRRP
-                    sub["enabled_protocols"] += ["VRRP"]
+                    sub["enabled_protocols"].append("VRRP")
                     sub["ipv4_addresses"] += vrrps[ifname]
                 # Portchannel member
                 if ifname in portchannel_members:
@@ -522,7 +522,7 @@ class Script(BaseScript):
                     iface["aggregated_interface"] = ai
                     iface["subinterfaces"] = []
                     if is_lacp:
-                        iface["enabled_protocols"] += ["LACP"]
+                        iface["enabled_protocols"].append("LACP")
                 interfaces[ifname] = iface
             else:
                 if ifindex:
@@ -530,7 +530,7 @@ class Script(BaseScript):
                 ifname, vlan_id = ifname.split(".")
                 if is_vlan(vlan_id):
                     sub["vlan_ids"] = [vlan_id]
-                interfaces[ifname]["subinterfaces"] += [sub]
+                interfaces[ifname]["subinterfaces"].append(sub)
         # VRF and forwarding_instance proccessed
         vrfs, vrf_if_map = self.get_mpls_vpn_mappings()
         for i in interfaces.keys():
@@ -539,19 +539,19 @@ class Script(BaseScript):
             interfaces[i]["subinterfaces"] = []
             if i in vrf_if_map:
                 iface_vrf = vrf_if_map[i]
-                vrfs[vrf_if_map[i]]["interfaces"] += [interfaces[i]]
+                vrfs[vrf_if_map[i]]["interfaces"].append(interfaces[i])
             else:
-                vrfs["default"]["interfaces"] += [interfaces[i]]
+                vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"] += [
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append(
                         {
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
                         }
-                    ]
+                    )
                 else:
-                    interfaces[i]["subinterfaces"] += [s]
+                    interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())

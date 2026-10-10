@@ -61,7 +61,7 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         for match in self.rx_neigh.finditer(s):
-            r += [
+            r.append(
                 {
                     "remote_address": match.group("remote_address").strip(),
                     "local_interface": match.group("local_interface").strip(),
@@ -79,5 +79,5 @@ class Script(BaseScript):
                     # Convert microsecond
                     "detect_time": int(match.group("detect_time")) * 1000,
                 }
-            ]
+            )
         return r

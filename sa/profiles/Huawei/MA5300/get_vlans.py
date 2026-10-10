@@ -28,5 +28,5 @@ class Script(BaseScript):
         match = self.rx_vlan.search(self.cli("show vlan\n\n", cached=True))
         vlans = match.group("vlans").strip().replace("(default)", "")
         for vlan_id in self.expand_rangelist(vlans):
-            r += [{"vlan_id": vlan_id}]
+            r.append({"vlan_id": vlan_id})
         return r

@@ -228,7 +228,7 @@ class Script(BaseScript):
             if match.group("vlan") != "*":
                 sub["vlan_ids"] = int(match.group("vlan"))
             if ifname in interfaces:
-                interfaces[ifname]["subinterfaces"] += [sub]
+                interfaces[ifname]["subinterfaces"].append(sub)
 
     def get_svc(self, interfaces, slot_n):
         """
@@ -257,7 +257,7 @@ class Script(BaseScript):
             if match.group("vlan") != "*":
                 sub["vlan_ids"] = int(match.group("vlan"))
             if ifname in interfaces:
-                interfaces[ifname]["subinterfaces"] += [sub]
+                interfaces[ifname]["subinterfaces"].append(sub)
 
     def get_l3_interfaces(self, interfaces):
         """
@@ -291,11 +291,11 @@ class Script(BaseScript):
                 sub["vlan_ids"] = int(match.group("ifnum"))
             if "ifparent" in match.groupdict() and match.group("ifparent"):
                 if match.group("ifparent") in interfaces:
-                    interfaces[match.group("ifparent")]["subinterfaces"] += [sub]
+                    interfaces[match.group("ifparent")]["subinterfaces"].append(sub)
                 else:
                     self.logger.info("Not find ifparen sub")
             else:
-                interfaces[ifname]["subinterfaces"] += [sub]
+                interfaces[ifname]["subinterfaces"].append(sub)
 
     def get_port_vlans(self, ifname):
         untagged, tagged = 0, []
@@ -306,7 +306,7 @@ class Script(BaseScript):
                 untagged = int(m.group("untagged"))
             for t in self.rx_tagged.finditer(m.group("tagged")):
                 if int(t.group("tagged")) != untagged:
-                    tagged += [int(t.group("tagged"))]
+                    tagged.append(int(t.group("tagged")))
         return untagged, tagged
 
     def execute_cli(self, **kwargs):
@@ -387,24 +387,24 @@ class Script(BaseScript):
                     if untagged:
                         interfaces[ifname]["subinterfaces"][0]["untagged_vlan"] = untagged
                     if ifname in stp_ports:
-                        interfaces[ifname]["enabled_protocols"] += ["STP"]
+                        interfaces[ifname]["enabled_protocols"].append("STP")
                     if ifname in portchannel_members:
                         ai, _is_lacp = portchannel_members[ifname]
                         interfaces[ifname]["aggregated_interface"] = ai
-                        interfaces[ifname]["enabled_protocols"] += ["LACP"]
+                        interfaces[ifname]["enabled_protocols"].append("LACP")
 
             if b_type in {"ADSL", "VDSL", "SHDSL"}:
                 for p_name, p in ports.items():
                     hints = []
                     if p["type"] == "VDSL":
                         ifindex = self.snmp_index("VDSL2", 0, slot, int(p["num"]))
-                        hints += ["technology::dsl::vdsl"]
+                        hints.append("technology::dsl::vdsl")
                     elif p["type"] == "SHDSL":
-                        hints += ["technology::dsl::shdsl"]
+                        hints.append("technology::dsl::shdsl")
                         ifindex = self.snmp_index(p["type"], 0, slot, int(p["num"]))
                     else:
                         ifindex = self.snmp_index(p["type"], 0, slot, int(p["num"]))
-                        hints += ["technology::dsl::adsl"]
+                        hints.append("technology::dsl::adsl")
                     interfaces[p_name] = {
                         "name": p_name,
                         "type": "physical",

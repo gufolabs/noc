@@ -46,5 +46,5 @@ class Script(BaseScript):
                     mac = MACAddressParameter().clean(mac)
                 except Exception:
                     continue
-                r += [{"interface": iface, "remote_mac": mac, "caps": ["L"]}]
+                r.append({"interface": iface, "remote_mac": mac, "caps": ["L"]})
         return r

@@ -60,5 +60,5 @@ class Script(BaseScript):
                     "remote_system_name": rn,
                 }
                 i = {"local_interface": local_port, "neighbors": [n]}
-                r += [i]
+                r.append(i)
         return r

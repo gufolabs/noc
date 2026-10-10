@@ -48,14 +48,14 @@ class Script(BaseScript):
             if int(vlan_id) == 0:
                 self.logger.warning("[%s|%s] VLAN ids is 0", interface_mappings[port], mac)
                 continue
-            r += [
+            r.append(
                 {
                     "vlan_id": vlan_id,
                     "mac": mac,
                     "interfaces": [interface_mappings[port]],
                     "type": "D",
                 }
-            ]
+            )
         return r
 
     def execute_cli(self, interface=None, vlan=None, mac=None, **kwargs):
@@ -84,7 +84,7 @@ class Script(BaseScript):
                     continue
                 if interface is not None and match.group("interfaces") != interface:
                     continue
-                r += [
+                r.append(
                     {
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
@@ -100,5 +100,5 @@ class Script(BaseScript):
                             "sec-config": "S",
                         }[match.group("type").lower()],
                     }
-                ]
+                )
         return r

@@ -92,7 +92,7 @@ class VRPNormalizer(BaseNormalizer):
                 r += list(range(int(left), int(vlan) + 1))
                 left = None
                 continue
-            r += [vlan]
+            r.append(vlan)
         for v in r:
             yield self.make_vlan_id(vlan_id=v)
 

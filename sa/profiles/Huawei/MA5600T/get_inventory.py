@@ -99,7 +99,7 @@ class Script(BaseScript):
             measure = self.snmp.get(mib["HUAWEI-ENVIRONMENT-MIB::hwAnaMeasureType", key])
             value = self.snmp.get(mib["HUAWEI-ENVIRONMENT-MIB::hwAnaCurrentValue", key])
             if value and value != self.SNMP_UNKNOWN_VALUE and measure:
-                r += [
+                r.append(
                     {
                         "name": v,
                         "status": True,
@@ -107,7 +107,7 @@ class Script(BaseScript):
                         "measurement": self.MEASURE_TYPES[measure],
                         "snmp_oid": mib["HUAWEI-ENVIRONMENT-MIB::hwAnaCurrentValue", key],
                     }
-                ]
+                )
         # hwDigChannelTable
         for oid, v in self.snmp.getnext(
             mib["HUAWEI-ENVIRONMENT-MIB::hwDigChannelName"], bulk=False
@@ -117,7 +117,7 @@ class Script(BaseScript):
             if "door" in v or "heater" in v:
                 value = self.snmp.get(mib["HUAWEI-ENVIRONMENT-MIB::hwDigChannelState", key1, key2])
                 if value and value != self.SNMP_INVALID_VALUE:
-                    r += [
+                    r.append(
                         {
                             "name": v,
                             "status": True,
@@ -127,13 +127,13 @@ class Script(BaseScript):
                                 "HUAWEI-ENVIRONMENT-MIB::hwDigChannelState", key1, key2
                             ],
                         }
-                    ]
+                    )
         # hwFanTable
         for oid, v in self.snmp.getnext(mib["HUAWEI-ENVIRONMENT-MIB::hwFanName"], bulk=False):
             _, key = oid.rsplit(".", 1)
             value = self.snmp.get(mib["HUAWEI-ENVIRONMENT-MIB::hwCurrentTemp", key])
             if value and value != self.SNMP_UNKNOWN_VALUE:
-                r += [
+                r.append(
                     {
                         "name": "fan_temp",
                         "status": True,
@@ -141,10 +141,10 @@ class Script(BaseScript):
                         "measurement": "Celsius",
                         "snmp_oid": mib["HUAWEI-ENVIRONMENT-MIB::hwCurrentTemp", key],
                     }
-                ]
+                )
             value = self.snmp.get(mib["HUAWEI-ENVIRONMENT-MIB::hwFanSpeed", key])
             if value and value != self.SNMP_INVALID_VALUE:
-                r += [
+                r.append(
                     {
                         "name": "fan_speed",
                         "status": True,
@@ -152,12 +152,12 @@ class Script(BaseScript):
                         "measurement": "Percent",
                         "snmp_oid": mib["HUAWEI-ENVIRONMENT-MIB::hwFanSpeed", key],
                     }
-                ]
+                )
         # hwACInputEntry
         for oid, v in self.snmp.getnext(mib["HUAWEI-POWER-MIB::hwACPowerState"], bulk=False):
             _, key = oid.rsplit(".", 1)
             if v:
-                r += [
+                r.append(
                     {
                         "name": "ac_state",
                         "status": True,
@@ -165,10 +165,10 @@ class Script(BaseScript):
                         "measurement": "Scalar",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwACPowerState", key],
                     }
-                ]
+                )
             value = self.snmp.get(mib["HUAWEI-POWER-MIB::hwACVoltA", key])
             if value and value != self.SNMP_INVALID_VALUE:
-                r += [
+                r.append(
                     {
                         "name": "ac_volt",
                         "status": True,
@@ -176,12 +176,12 @@ class Script(BaseScript):
                         "measurement": "Volt AC",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwACVoltA", key],
                     }
-                ]
+                )
         # hwDCOutEntry
         for oid, v in self.snmp.getnext(mib["HUAWEI-POWER-MIB::hwDCVoltageOut"], bulk=False):
             _, key = oid.rsplit(".", 1)
             if v:
-                r += [
+                r.append(
                     {
                         "name": "dc_volt",
                         "status": True,
@@ -189,10 +189,10 @@ class Script(BaseScript):
                         "measurement": "Volt DC",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwDCVoltageOut", key],
                     }
-                ]
+                )
             value = self.snmp.get(mib["HUAWEI-POWER-MIB::hwDCCurrentOut", key])
             if value and value != self.SNMP_INVALID_VALUE:
-                r += [
+                r.append(
                     {
                         "name": "dc_current",
                         "status": True,
@@ -200,10 +200,10 @@ class Script(BaseScript):
                         "measurement": "Ampere",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwDCCurrentOut", key],
                     }
-                ]
+                )
             value = self.snmp.get(mib["HUAWEI-POWER-MIB::hwDCVoltageOutState", key])
             if value:
-                r += [
+                r.append(
                     {
                         "name": "dc_state",
                         "status": True,
@@ -211,7 +211,7 @@ class Script(BaseScript):
                         "measurement": "Scalar",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwDCVoltageOutState", key],
                     }
-                ]
+                )
         # hwBatteryTable
         for oid, v in self.snmp.getnext(mib["HUAWEI-POWER-MIB::hwBatteryCapacity"], bulk=False):
             _, key = oid.rsplit(".", 1)
@@ -221,7 +221,7 @@ class Script(BaseScript):
             current = self.snmp.get(mib["HUAWEI-POWER-MIB::hwBatteryCurrent", key])
             temp = self.snmp.get(mib["HUAWEI-POWER-MIB::hwBatteryTemperature", key])
             if temp != self.SNMP_UNKNOWN_VALUE and volt != self.SNMP_INVALID_VALUE:
-                r += [
+                r.append(
                     {
                         "name": "battery_volt",
                         "status": True,
@@ -229,9 +229,9 @@ class Script(BaseScript):
                         "measurement": "Volt DC",
                         "snmp_oid": mib["HUAWEI-POWER-MIB::hwBatteryVoltage", key],
                     }
-                ]
+                )
                 if current != self.SNMP_INVALID_VALUE:
-                    r += [
+                    r.append(
                         {
                             "name": "battery_current",
                             "status": True,
@@ -239,7 +239,7 @@ class Script(BaseScript):
                             "measurement": "Ampere",
                             "snmp_oid": mib["HUAWEI-POWER-MIB::hwBatteryCurrent", key],
                         }
-                    ]
+                    )
                 r += [
                     {
                         "name": "battery_temp",
@@ -286,7 +286,7 @@ class Script(BaseScript):
             elif not p.get("vendor"):
                 self.logger.debug("[%s] Empty Vendor Properties. Skipping...", match["sec_name"])
                 continue
-            r += [
+            r.append(
                 self.inventory_item(
                     **{
                         "name": match["sec_name"],
@@ -299,7 +299,7 @@ class Script(BaseScript):
                         "mnf_date": p.get("mnf_date"),
                     }
                 )
-            ]
+            )
         return r
 
     tc_type_map = {"767": "BOARD", "146021": "BOARD"}
@@ -321,7 +321,7 @@ class Script(BaseScript):
             if board_num == "65535":
                 continue
             part_no = slot_descr[:-1]
-            subboard[int(slot_num)] += [
+            subboard[int(slot_num)].append(
                 {
                     "type": "SUBBOARD",
                     "number": board_num,
@@ -329,7 +329,7 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "description": slot_descr[:-1],
                 }
-            ]
+            )
         return subboard
 
     def execute_snmp(self, **kwargs):
@@ -340,7 +340,7 @@ class Script(BaseScript):
         r = []
         # Chassis
         for oid, frame_descr in self.snmp.getnext(mib["HUAWEI-DEVICE-MIB::hwFrameDesc"]):
-            r += [
+            r.append(
                 {
                     "type": "CHASSIS",
                     "number": 0,
@@ -350,7 +350,7 @@ class Script(BaseScript):
                     "description": "",
                     "mnf_date": None,
                 }
-            ]
+            )
         subboard = self.get_ma5600_subboard()
         # Slots
         for (
@@ -370,7 +370,7 @@ class Script(BaseScript):
         ):
             _, slot_num = slot_index.rsplit(".", 1)
             part_no, _, _ = slot_descr.split("_")
-            r += [
+            r.append(
                 {
                     "type": self.tc_type_map.get(slot_type, "BOARD"),
                     "number": slot_num,
@@ -379,7 +379,7 @@ class Script(BaseScript):
                     "serial": slot_phys_serial,
                     "description": slot_descr,
                 }
-            ]
+            )
             if int(slot_num) in subboard:
                 r += subboard[slot_num]
         sensors = self.get_chassis_sensors()
@@ -401,7 +401,7 @@ class Script(BaseScript):
             serial[int(slot_num)] = phys_num
         _max_slot, boards = self.profile.get_board(self)
         for board in boards:
-            r += [
+            r.append(
                 self.inventory_item(
                     **{
                         "name": "main_board",
@@ -414,7 +414,7 @@ class Script(BaseScript):
                         "mnf_date": None,
                     }
                 )
-            ]
+            )
         return r
 
     def execute_cli(self, **kwargs):
@@ -430,7 +430,7 @@ class Script(BaseScript):
             if slots == 7:
                 part_no = "MA5603"
                 descr = "MA5603 subrack"
-            r += [
+            r.append(
                 {
                     "type": "CHASSIS",
                     "number": 0,
@@ -439,7 +439,7 @@ class Script(BaseScript):
                     "serial": None,
                     "description": descr,
                 }
-            ]
+            )
             subboards = self.get_ma5600_subboard()
         with self.profile.diagnose(self):
             try:
@@ -494,7 +494,7 @@ class Script(BaseScript):
                     data["mfg_date"] = mfg_date.strftime("%Y-%m-%d")
                 except ValueError:
                     pass
-            r += [data]
+            r.append(data)
             if subboards and data["number"] in subboards:
                 r += subboards[data["number"]]
         sensors = self.get_chassis_sensors()

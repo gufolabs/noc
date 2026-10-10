@@ -69,7 +69,7 @@ class Script(BaseScript):
         for oid, value in self.snmp.getnext("1.3.6.1.4.1.2011.6.3.3.2.1.13"):
             if value == self.SNMP_NONE_VALUE:
                 continue
-            r += [oid.split(".")[-1]]
+            r.append(oid.split(".")[-1])
         return r
 
     def get_mac_table_cli(self):

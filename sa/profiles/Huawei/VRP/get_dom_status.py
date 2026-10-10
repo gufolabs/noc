@@ -77,7 +77,7 @@ class Script(BaseScript):
             if len(iface) == 1:
                 # No metrics
                 continue
-            r += [iface]
+            r.append(iface)
         return r
 
     def execute_ar(self, interface=None):
@@ -150,7 +150,7 @@ class Script(BaseScript):
                 # No metrics
                 self.logger.info("No metrics for iface %s", iface)
                 continue
-            r += [iface]
+            r.append(iface)
 
         return r
 
@@ -185,5 +185,5 @@ class Script(BaseScript):
                     if i[0] == "Voltage(V)":
                         iface["voltage_v"] = i[1]
                 if t:
-                    r += [iface]
+                    r.append(iface)
         return r

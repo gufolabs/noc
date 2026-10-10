@@ -160,7 +160,7 @@ class Script(GetMetricsScript):
         for probe in metrics:
             hints = probe.get_hints()
             frame, slot, port, ont_id = hints["local_id"].split("/")
-            ont_ifaces[(frame, slot)] += [(probe, frame, slot, port, ont_id)]
+            ont_ifaces[(frame, slot)].append((probe, frame, slot, port, ont_id))
         if not ont_ifaces:
             return
         self.cli("config")

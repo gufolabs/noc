@@ -165,9 +165,9 @@ class Script(BaseScript):
                         iface["point_to_point"] = match.group("p2p") == "true"
                     else:
                         iface["point_to_point"] = False
-                    instance["interfaces"] += [iface]
+                    instance["interfaces"].append(iface)
 
-                r["instances"] += [instance]
+                r["instances"].append(instance)
         elif "IEEE Rapid Spanning Tree protocol" in v:
             r["mode"] = "RSTP"
             instance = {"id": 0, "vlans": "1-4095", "interfaces": []}
@@ -200,8 +200,8 @@ class Script(BaseScript):
                     iface["point_to_point"] = True
                 else:
                     iface["point_to_point"] = False
-                instance["interfaces"] += [iface]
+                instance["interfaces"].append(iface)
 
-            r["instances"] += [instance]
+            r["instances"].append(instance)
 
         return r

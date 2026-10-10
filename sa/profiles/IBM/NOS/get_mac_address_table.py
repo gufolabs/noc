@@ -33,12 +33,12 @@ class Script(BaseScript):
         r = []
         for match in self.rx_mac.finditer(v):
             if match:
-                r += [
+                r.append(
                     {
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [match.group("port")],
                         "type": "D",
                     }
-                ]
+                )
         return r

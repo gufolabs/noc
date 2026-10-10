@@ -52,7 +52,7 @@ class Script(BaseScript):
         # VLANs
         cli = self.cli("get bridge vlanport")
         for match in self.rx_vlanport.finditer(cli):
-            port_vlan[match.group("port")] += [match.group("vid")]
+            port_vlan[match.group("port")].append(match.group("vid"))
         cli = self.cli("get bridge l2port")
         for match in self.rx_bridgeport.finditer(cli):
             if "Untagged" in match.group("frame_type"):
@@ -81,7 +81,7 @@ class Script(BaseScript):
             }
             if match.group("ifname") in port_pvid:
                 ifc["subinterfaces"][0]["untagged_vlan"] = port_pvid[match.group("ifname")]
-            ifaces += [ifc]
+            ifaces.append(ifc)
         # @todo: LAG ports
         # Modem port
         cli = self.cli("get modem remoteinfo")
@@ -103,14 +103,14 @@ class Script(BaseScript):
         }
         if "modem" in port_pvid:
             ifc["subinterfaces"][0]["untagged_vlan"] = port_pvid["modem"]
-        ifaces += [ifc]
+        ifaces.append(ifc)
         # Management
         cli = self.cli("get system info")
         match = self.rx_ipaddr.search(cli)
         ipaddr = match.group("ipaddr")
         mask = match.group("mask")
         ip = IPv4(ipaddr, mask)
-        ifaces += [
+        ifaces.append(
             {
                 "name": "Inband Mng",
                 "admin_status": True,
@@ -129,6 +129,6 @@ class Script(BaseScript):
                     }
                 ],
             }
-        ]
+        )
 
         return [{"interfaces": ifaces}]

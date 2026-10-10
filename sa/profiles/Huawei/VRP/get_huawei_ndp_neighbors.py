@@ -37,5 +37,5 @@ class Script(BaseScript):
             match = self.neigh.match(b)
             if match:
                 n = match.groups()
-                data += [{"local_interface": n[0], "neighbors": [dict(zip(column, n[1:]))]}]
+                data.append({"local_interface": n[0], "neighbors": [dict(zip(column, n[1:]))]})
         return data

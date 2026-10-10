@@ -38,13 +38,13 @@ class Script(BaseScript):
                 if not match:
                     continue
                 lacp["system_id"] = match.group("system_id")
-                lacp["bundle"] += [
+                lacp["bundle"].append(
                     {
                         "interface": port,
                         "local_port_id": match.group("local_port_id"),
                         "remote_system_id": match.group("remote_system_id"),
                         "remote_port_id": match.group("remote_port_id"),
                     }
-                ]
-            r += [lacp]
+                )
+            r.append(lacp)
         return r

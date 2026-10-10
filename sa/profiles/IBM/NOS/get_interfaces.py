@@ -38,7 +38,7 @@ class Script(BaseScript):
             return []
         r = []
         for match in self.rx_o_stat.finditer(v):
-            r += [match.group("port")]
+            r.append(match.group("port"))
         return r
 
     def execute_cli(self):
@@ -96,5 +96,5 @@ class Script(BaseScript):
                     "snmp_ifindex": ifindex,
                     "subinterfaces": [sub],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

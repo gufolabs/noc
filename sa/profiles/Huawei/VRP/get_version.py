@@ -129,7 +129,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
                     if not x:
                         continue
-                    r += [x.strip(" \x00")]
+                    r.append(x.strip(" \x00"))
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -145,7 +145,7 @@ class Script(BaseScript):
             v = v[0].groupdict()
             v = dict(x.split("=", 1) for x in v["part_body"].splitlines())
             if "BarCode" in v:
-                r += [v["BarCode"].strip()]
+                r.append(v["BarCode"].strip())
         return r
 
     def parse_patch(self):
@@ -157,7 +157,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["HUAWEI-SYS-MAN-MIB::hwPatchVersion", 0]):
                     if not x:
                         continue
-                    r += [x.strip(" \x00")]
+                    r.append(x.strip(" \x00"))
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -170,7 +170,7 @@ class Script(BaseScript):
             return []
         v = self.rx_patch.search(v)
         if v and v.group("patch_version"):
-            r += [v.group("patch_version")]
+            r.append(v.group("patch_version"))
         return r
 
     def parse_version(self, v):
@@ -240,7 +240,7 @@ class Script(BaseScript):
         for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
             if not x:
                 continue
-            serial += [smart_text(x, errors="replace").strip(" \x00")]
+            serial.append(smart_text(x, errors="replace").strip(" \x00"))
         if platform in self.hw_series:
             # series name, fix
             platform = self.fix_platform_name(platform)
