@@ -91,7 +91,7 @@ class Script(BaseScript):
         v_ifindex = {}
         time.sleep(1)
         # Fill interfaces
-        a = self.cli_detail("/interface print detail without-paging terse")
+        a = self.cli_detail("/interface print detail without-paging")
         for n, f, r in a:
             if r["type"] in self.ignored_types or r["type"] not in self.type_map:
                 continue
@@ -144,7 +144,7 @@ class Script(BaseScript):
                 v_ifindex[r["name"]] = r["id"]
         time.sleep(1)
         # Attach `vlan` subinterfaces to parent
-        for n, f, r in self.cli_detail("/interface vlan print detail without-paging terse"):
+        for n, f, r in self.cli_detail("/interface vlan print detail without-paging"):
             if r["interface"] in ifaces:
                 i = ifaces[r["interface"]]
                 self.si = {
