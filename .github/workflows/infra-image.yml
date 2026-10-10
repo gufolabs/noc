@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v7
       - name: Filter Items
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -54,7 +54,7 @@ jobs:
         if: matrix.changed == 'true'
 
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         if: matrix.changed == 'true'
         with:
           registry: ghcr.io
