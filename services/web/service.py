@@ -7,15 +7,18 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from importlib.resources import files
 import os
 
 # Third-party modules
 from django.core.wsgi import get_wsgi_application
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 # NOC modules
 from noc.config import config
-from noc.services.web.urls import set_url_patterns
 from noc.core.service.base import BaseService
+from noc.services.web.urls import set_url_patterns
 from noc.main.models.customfield import CustomField
 from noc.services.web.base.site import site
 
@@ -52,3 +55,29 @@ class WebService(BaseService):
 
     def get_backend_limit(self):
         return config.web.max_threads
+
+    def get_granian_options(self) -> dict[str, object]:
+        ui_path = files("noc") / "ui"
+        index_path = ui_path / f"index.{config.web.theme}.{config.web.language}.html"
+        return {
+            # Granian checks mounts in order, so the exact index route goes first.
+            "static_path_route": ["/ui/index.html", "/index.html", "/ui"],
+            "static_path_mount": [
+                index_path,
+                index_path,
+                ui_path,
+            ],
+            "static_path_expires": 604800,
+        }
+
+    def configure_api_routes(self, app: FastAPI) -> None:
+        for path in ("/", "/main/desktop/"):
+            app.add_api_route(
+                path,
+                self.redirect_to_index,
+                methods=["GET", "HEAD"],
+                include_in_schema=False,
+            )
+
+    async def redirect_to_index(self) -> RedirectResponse:
+        return RedirectResponse("/index.html", status_code=301)
