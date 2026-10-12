@@ -491,6 +491,10 @@ class BaseService:
         )
         if server_task in done and not startup_complete.is_set():
             startup_task.cancel()
+            try:
+                await startup_task
+            except asyncio.CancelledError:
+                pass
             await server_task
             raise RuntimeError("Granian stopped before API startup completed")
         await startup_task
