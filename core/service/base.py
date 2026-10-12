@@ -29,6 +29,7 @@ import socket
 # Third-party modules
 import setproctitle
 from granian.constants import Interfaces
+from granian.net import SocketSpec
 from granian.server.embed import Server
 from granian.utils.proxies import wrap_asgi_with_proxy_headers
 from starlette.responses import Response, JSONResponse
@@ -72,6 +73,16 @@ from ..router.datastream import RouteDataStreamClient
 T = TypeVar("T")
 DCS_SLOTS_CACHE = {}  # PROCESS -> object cache
 dcs_slot_lock = threading.Lock()
+
+
+class NOCGranianServer(Server):
+    """Embedded Granian server that shares one bound listener with its worker."""
+
+    def _init_shared_socket(self) -> None:
+        self._ssp = SocketSpec(self.bind_addr, self.bind_port, self.backlog)
+        self._shd = self._ssp.build()
+        self._sfd = self._shd.get_fd()
+        self._ssp = None
 
 
 class BaseService:
@@ -147,7 +158,7 @@ class BaseService:
         self.wsgi_app = None
         # Collect 'api_requests' metric for API calls
         self.collect_req_api_metric = False
-        self.server: Server | None = None
+        self.server: NOCGranianServer | None = None
         self.server_task: asyncio.Task | None = None
         self.is_active = False
         # Can be initialized in subclasses
@@ -467,17 +478,18 @@ class BaseService:
 
         async def app_with_startup_signal(scope, receive, send):
             async def send_with_startup_signal(message):
+                await send(message)
                 if message["type"] == "lifespan.startup.complete":
                     startup_complete.set()
-                await send(message)
 
             await asgi_app(scope, receive, send_with_startup_signal)
 
-        server = Server(
+        server = NOCGranianServer(
             app_with_startup_signal,
             address=addr,
             port=port,
             interface=Interfaces.ASGI,
+            backlog=2048,
             log_access=False,
             log_enabled=False,
         )
@@ -516,19 +528,13 @@ class BaseService:
 
     def get_effective_address(self) -> tuple[str, int]:
         assert self.server is not None
-        if self.server._shd is not None:
-            family = socket.AF_INET6 if ":" in self.server.bind_addr else socket.AF_INET
-            with socket.fromfd(self.server._shd.get_fd(), family, socket.SOCK_STREAM) as listener:
-                address, port = listener.getsockname()[:2]
-                return address, port
-        # Granian keeps the bound socket specification on Linux.
-        socket_spec = self.server._ssp
-        if socket_spec is None:
+        socket_holder = self.server._shd
+        if socket_holder is None:
             raise RuntimeError("No listening socket found")
-        address = getattr(
-            socket_spec, "address", getattr(socket_spec, "addr", self.server.bind_addr)
-        )
-        return address, socket_spec.port
+        family = socket.AF_INET6 if ":" in self.server.bind_addr else socket.AF_INET
+        with socket.fromfd(socket_holder.get_fd(), family, socket.SOCK_STREAM) as listener:
+            address, port = listener.getsockname()[:2]
+            return address, port
 
     async def activate(self) -> None:
         """Initialize services before run"""
