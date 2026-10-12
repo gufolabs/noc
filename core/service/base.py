@@ -28,8 +28,9 @@ import socket
 
 # Third-party modules
 import setproctitle
-import uvicorn
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+from granian.constants import Interfaces
+from granian.server.embed import Server
+from granian.utils.proxies import wrap_asgi_with_proxy_headers
 from starlette.responses import Response, JSONResponse
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError, HTTPException
@@ -146,7 +147,8 @@ class BaseService:
         self.wsgi_app = None
         # Collect 'api_requests' metric for API calls
         self.collect_req_api_metric = False
-        self.server: uvicorn.Server | None = None
+        self.server: Server | None = None
+        self.server_task: asyncio.Task | None = None
         self.is_active = False
         # Can be initialized in subclasses
         self.scheduler = None
@@ -437,7 +439,6 @@ class BaseService:
             },
         )
         self.app = app
-        app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
         app.add_middleware(
             LoggingMiddleware,
             logger=PrefixLoggerAdapter(self.logger, "api"),
@@ -460,36 +461,70 @@ class BaseService:
         if self.wsgi_app:
             app.mount("/", WSGIMiddleware(self.wsgi_app))
         addr, port = self.get_service_address()
-        uvi_config = uvicorn.Config(
-            self.app, host=addr, port=port, lifespan="on", access_log=False, loop="none"
+        # Apply proxy headers with Granian's ASGI wrapper.
+        asgi_app = wrap_asgi_with_proxy_headers(app, trusted_hosts="*")
+        startup_complete = asyncio.Event()
+
+        async def app_with_startup_signal(scope, receive, send):
+            async def send_with_startup_signal(message):
+                if message["type"] == "lifespan.startup.complete":
+                    startup_complete.set()
+                await send(message)
+
+            await asgi_app(scope, receive, send_with_startup_signal)
+
+        server = Server(
+            app_with_startup_signal,
+            address=addr,
+            port=port,
+            interface=Interfaces.ASGI,
+            log_access=False,
+            log_enabled=False,
         )
-        server = uvicorn.Server(config=uvi_config)
         self.server = server
-        uvi_config.get_loop_factory()
-        uvi_config.load()
-        server.lifespan = uvi_config.lifespan_class(uvi_config)
-        await server.startup()
+        assert self.loop is not None
+        server_task = self.loop.create_task(server.serve())
+        self.server_task = server_task
+        startup_task = self.loop.create_task(startup_complete.wait())
+        done, _ = await asyncio.wait(
+            (startup_task, server_task), return_when=asyncio.FIRST_COMPLETED
+        )
+        if server_task in done and not startup_complete.is_set():
+            startup_task.cancel()
+            await server_task
+            raise RuntimeError("Granian stopped before API startup completed")
+        await startup_task
+        if server_task.done():
+            await server_task
         self.address, self.port = self.get_effective_address()
         self.logger.info("Running HTTP APIs at http://%s:%s/", self.address, self.port)
         self.logger.info(
             "Running HTTP APIs Docs at http://%s:%s/api/%s/docs", self.address, self.port, self.name
         )
-        self.loop.create_task(server.main_loop())
 
     async def shutdown_api(self) -> None:
         """Stop the API server."""
         self.logger.info("Shutdown FAST API")
         assert self.server is not None
-        if self.watchdog_waiter:
-            self.server.force_exit = True
-        await self.server.shutdown()
+        self.server.stop()
+        assert self.server_task is not None
+        await self.server_task
 
     def get_effective_address(self) -> tuple[str, int]:
         assert self.server is not None
-        for srv in self.server.servers:
-            for sock in srv.sockets:
-                return sock.getsockname()
-        raise RuntimeError("No listening socket found")
+        if self.server._shd is not None:
+            family = socket.AF_INET6 if ":" in self.server.bind_addr else socket.AF_INET
+            with socket.fromfd(self.server._shd.get_fd(), family, socket.SOCK_STREAM) as listener:
+                address, port = listener.getsockname()[:2]
+                return address, port
+        # Granian keeps the bound socket specification on Linux.
+        socket_spec = self.server._ssp
+        if socket_spec is None:
+            raise RuntimeError("No listening socket found")
+        address = getattr(
+            socket_spec, "address", getattr(socket_spec, "addr", self.server.bind_addr)
+        )
+        return address, socket_spec.port
 
     async def activate(self) -> None:
         """Initialize services before run"""
