@@ -52,4 +52,4 @@ class Script(BaseScript):
         """
         Check box has lldp enabled
         """
-        return bool("disable-ipv6: no" in self.cli("/ipv6/settings/print  without-paging"))
+        return "disable-ipv6: no" in self.cli("/ipv6/settings/print  without-paging")
