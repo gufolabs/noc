@@ -1214,9 +1214,7 @@ class Config(BaseConfig):
         os.environ["TZ"] = self.timezone.key
         time.tzset()
 
-    def get_customized_paths(
-        self, *args: str, prefer_custom: bool = False
-    ) -> list[str]:
+    def get_customized_paths(self, *args: str, prefer_custom: bool = False) -> list[str]:
         """
         Get repository and customized paths for a repository-relative path.
 
