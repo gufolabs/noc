@@ -99,9 +99,7 @@ class ScriptLoader(BaseLoader):
         ns = set()
         # Load generic scripts
         generics = {}  # Name -> dependencies
-        generic_path = os.path.join(
-            str(files("noc")), "sa", "profiles", "Generic", "*.py"
-        )
+        generic_path = os.path.join(str(files("noc")), "sa", "profiles", "Generic", "*.py")
         for path in glob.glob(generic_path):
             gn = path.rsplit(os.sep)[-1][:-3]
             if gn in self.protected_names:
@@ -116,9 +114,7 @@ class ScriptLoader(BaseLoader):
         # Load custom scripts, Load common scripts
         profiles = set()
         for base in config.get_customized_paths(prefer_custom=True):
-            gx = os.path.join(
-                base or str(files("noc")), "sa", "profiles", "*", "*", "*.py"
-            )
+            gx = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "*.py")
             for path in glob.glob(gx):
                 vendor, system, name = path.split(os.sep)[-3:]
                 name = name[:-3]

@@ -102,9 +102,7 @@ class BaseLoader:
         """
         if base:
             return os.path.join(base, *cast(tuple[str, ...], self.base_path), f"{name}.py")
-        return os.path.join(
-            str(files("noc")), *cast(tuple[str, ...], self.base_path), f"{name}.py"
-        )
+        return os.path.join(str(files("noc")), *cast(tuple[str, ...], self.base_path), f"{name}.py")
 
     def get_module_name(self, base: str, name: str) -> str:
         """Build the fully qualified module name for an object.

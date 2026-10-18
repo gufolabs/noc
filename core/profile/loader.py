@@ -45,9 +45,7 @@ class ProfileLoader(BaseLoader):
                     self.logger.error("Invalid profile name")
                     return None
                 for p in config.get_customized_paths(prefer_custom=True):
-                    path = os.path.join(
-                        p or str(files("noc")), "sa", "profiles", *name.split(".")
-                    )
+                    path = os.path.join(p or str(files("noc")), "sa", "profiles", *name.split("."))
                     if not os.path.exists(os.path.join(path, "profile.py")):
                         continue
                     if p:
@@ -85,9 +83,7 @@ class ProfileLoader(BaseLoader):
         """
         ns = {GENERIC_PROFILE}
         for base in config.get_customized_paths(prefer_custom=True):
-            px = os.path.join(
-                base or str(files("noc")), "sa", "profiles", "*", "*", "__init__.py"
-            )
+            px = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "__init__.py")
             for path in glob.glob(px):
                 vendor, system = path.split(os.sep)[-3:-1]
                 ns.add(f"{vendor}.{system}")
