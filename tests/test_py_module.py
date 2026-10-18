@@ -7,7 +7,6 @@
 
 # Python modules
 import importlib
-import os
 import ast
 from importlib.resources import files as package_files
 from collections.abc import Iterable
@@ -42,13 +41,12 @@ def _allow_xfail(module: str) -> bool:
 @cachetools.cached(cache={})
 def get_files() -> list[Path]:
     """Get list of all Python files in the NOC package."""
-    r: list[Path] = []
-    package_root = Path(str(package_files("noc")))
-    for root, _, files in os.walk(package_root, followlinks=True):
-        for f in files:
-            if not f.startswith(".") and f.endswith(".py"):
-                r.append(Path(root) / f)
-    return r
+    package_root = package_files("noc")
+    return [
+        path
+        for path in package_root.rglob("*.py", recurse_symlinks=True)
+        if not path.name.startswith(".")
+    ]
 
 
 INIT_PY = "__init__.py"
