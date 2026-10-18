@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # <describe module here>
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import importlib
-import os
 from importlib.resources import files
 
 # Third-party modules
