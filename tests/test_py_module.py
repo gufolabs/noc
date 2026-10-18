@@ -9,6 +9,7 @@
 import importlib
 import os
 import ast
+from importlib.resources import files as package_files
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -40,9 +41,10 @@ def _allow_xfail(module: str) -> bool:
 
 @cachetools.cached(cache={})
 def get_files() -> list[Path]:
-    """Get list of all python files in src/noc."""
+    """Get list of all Python files in the NOC package."""
     r: list[Path] = []
-    for root, _, files in os.walk(Path("src", "noc"), followlinks=True):
+    package_root = Path(str(package_files("noc")))
+    for root, _, files in os.walk(package_root, followlinks=True):
         for f in files:
             if not f.startswith(".") and f.endswith(".py"):
                 r.append(Path(root) / f)
@@ -54,7 +56,7 @@ INIT_PY = "__init__.py"
 
 def iter_py_modules() -> Iterable[str]:
     """Iterate over module names."""
-    root = Path("src")
+    root = Path(str(package_files("noc"))).parent
     for path in get_files():
         rel = path.relative_to(root)
         if path.name == INIT_PY:

@@ -7,6 +7,7 @@
 
 # Python modules
 import os
+from importlib.resources import files as package_files
 
 # Third-party modules
 import pytest
@@ -20,7 +21,8 @@ def get_json_paths():
     """
     r = []
     metrics_dirs = []
-    for root, dirs, files in os.walk(os.path.join("src", "noc", "sa", "profiles")):
+    profiles_root = package_files("noc") / "sa" / "profiles"
+    for root, dirs, files in os.walk(str(profiles_root)):
         if "snmp_metrics" in dirs:
             metrics_dirs += [os.path.join(root, "snmp_metrics")]
     for root in metrics_dirs:

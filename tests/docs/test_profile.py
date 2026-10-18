@@ -6,12 +6,12 @@
 # ----------------------------------------------------------------------
 
 from pathlib import Path
+from importlib.resources import files as package_files
 
 import cachetools
 import pytest
 
-SRC = Path("src", "noc")
-PROFILES_ROOT = SRC / "sa" / "profiles"
+PROFILES_ROOT = Path(str(package_files("noc"))) / "sa" / "profiles"
 PROFILE_DOCS_BASE = Path("docs", "profiles-reference")
 XFAIL_VENDORS = {"OS"}
 
