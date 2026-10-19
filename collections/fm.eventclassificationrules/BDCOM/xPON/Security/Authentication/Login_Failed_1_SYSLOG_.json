@@ -1,5 +1,5 @@
 {
-    "name": "BDCOM | xPON | Security | Authentication | Login Failed (SYSLOG)",
+    "name": "BDCOM | xPON | Security | Authentication | Login Failed #1 (SYSLOG)",
     "$collection": "fm.eventclassificationrules",
     "uuid": "53bdbd2a-f452-43b5-a0bb-095013dc6f98",
     "description": "%SYS-5-AUTH: User asd Authorization failed(from 10.118.0.2)",

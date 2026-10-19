@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Security | Authentication | Login Failed #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "20d09654-b0bb-4b8c-93a1-d724a05831ed",
+    "description": "SSH-4-AUTH: auth fail for 1 times (connect from 10.111.0.18).",
+    "event_class__name": "Security | Authentication | Login Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "auth fail for \\d+ times \\(connect from (?P<ip>\\S+)\\)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "SSH-4-AUTH: auth fail for 1 times (connect from 10.111.0.18).",
+            "raw_vars": []
+        }
+    ]
+}
