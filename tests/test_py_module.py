@@ -16,11 +16,11 @@ from importlib.resources import files
 import pytest
 import cachetools
 
-import noc
-import sys
-
-print(noc.__file__, noc.__path__, sys.path)
 NOC_SRC = files("noc")
+ALT_SRC = NOC_SRC / "src" / "noc"
+if ALT_SRC.exists():
+    NOC_SRC = ALT_SRC
+
 assert NOC_SRC.parts[-2:] == ("src", "noc"), f"Invalid {NOC_SRC}"
 
 _ALLOW_XFAIL = {
