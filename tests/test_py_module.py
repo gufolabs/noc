@@ -8,14 +8,16 @@
 # Python modules
 import importlib
 import ast
-from importlib.resources import files as package_files
 from collections.abc import Iterable
 from pathlib import Path
+from importlib.resources import files
 
 # Third-party modules
 import pytest
 import cachetools
 
+NOC_SRC = files("noc")
+assert NOC_SRC.parts[-2:] == ("src", "noc"), f"Invalid {NOC_SRC}"
 
 _ALLOW_XFAIL = {
     "noc.services.login.backends.pam",
@@ -41,10 +43,9 @@ def _allow_xfail(module: str) -> bool:
 @cachetools.cached(cache={})
 def get_files() -> list[Path]:
     """Get list of all Python files in the NOC package."""
-    package_root = package_files("noc")
     return [
         path
-        for path in package_root.rglob("*.py", recurse_symlinks=True)
+        for path in NOC_SRC.rglob("*.py", recurse_symlinks=True)
         if not path.name.startswith(".")
     ]
 
@@ -54,7 +55,7 @@ INIT_PY = "__init__.py"
 
 def iter_py_modules() -> Iterable[str]:
     """Iterate over module names."""
-    root = Path(str(package_files("noc"))).parent
+    root = NOC_SRC.parent
     for path in get_files():
         rel = path.relative_to(root)
         if path.name == INIT_PY:
