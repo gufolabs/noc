@@ -45,7 +45,7 @@ export function startExtApplication(){
       }
     },
     openApplication: function(){
-      Ext.setGlyphFontFamily("FontAwesome");
+      Ext.setGlyphFontFamily("GufoFont");
       console.log("Initializing navigation");
       // Navigation API migration (Phase 1, hash-based URLs). This replaces the
       // former Ext.History facade; see ui/docs/navigation-api-migration.md
