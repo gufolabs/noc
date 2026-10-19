@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | Trunk | Enable",
+    "$collection": "pm.metrictypes",
+    "uuid": "592e5c74-0026-418e-89ef-830eb542800d",
+    "scope__name": "Object",
+    "field_name": "trunk_enable",
+    "field_type": "Int32",
+    "description": "Status E1 line, only entry type for CAS, PRI, SS7, E1-channels, SS7-lines: 0 - disable, 1 - enable",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}
