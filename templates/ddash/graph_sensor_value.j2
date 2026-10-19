@@ -1,4 +1,4 @@
-{% macro sensors(sensor, lindex) -%}
+{% macro sensors(sensor, lindex, span=4, legend={"show": "true", "alignAsTable": "true"}) -%}
 {
   "title": "{{ sensor.dashboard_label or sensor.label}}",
   "aliasColors": {},
@@ -13,12 +13,12 @@
   },
   "id": {{sensor.id + lindex + 31300}},
   "legend": {
-    "alignAsTable": true,
+    "alignAsTable": {{ legend.alignAsTable }},
     "avg": false,
     "current": true,
     "max": true,
     "min": true,
-    "show": true,
+    "show": {{ legend.show }},
     "sortDesc": true,
     "total": false,
     "values": true
@@ -48,7 +48,7 @@
     }
   ],
  {% endif %}
-  "span": 4,
+  "span": {{ span }},
   "stack": false,
   "steppedLine": false,
   "targets": [
@@ -74,6 +74,7 @@
     "sort": 0,
     "value_type": "cumulative"
   },
+  {% if sensor.units.dashboard_label != "null" %}
   "type": "graph",
   "xaxis": {
     "show": true,
@@ -85,7 +86,7 @@
   "y-axis": true,
   "yaxes": [
     {
-      "format": "{{sensor.units.dashboard_label}}",
+      "format": {% if sensor.units.dashboard_label == "null" %} "" {% else %} "{{sensor.units.dashboard_label}}" {% endif %},
       "label": "",
       "logBase": 1,
       "max": null,
@@ -102,5 +103,8 @@
       "label": null
     }
   ]
+  {% else %}
+  "type": "stat"
+  {% endif %}
 }
 {%- endmacro %}

@@ -1,0 +1,59 @@
+{
+    "name": "Generic | UPS",
+    "$collection": "inv.objectmodels",
+    "uuid": "23e41477-e882-4c54-beff-8e82df7c7f17",
+    "vendor__code": "GENERIC",
+    "description": "Generic UPS for SNMP cards without UPS-MIB::upsIdentManufacturer",
+    "connection_rule__name": "APC | SmartUPS",
+    "container_type": "chassis",
+    "cr_context": "CHASSIS",
+    "connections": [
+        {
+            "name": "in",
+            "description": "APC Smart Slot",
+            "direction": "o",
+            "gender": "m",
+            "type__name": "APC | UPS | SS"
+        },
+        {
+            "name": "eth",
+            "description": "Outband Management",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "10BASET"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "100BASETX"
+                }
+            ],
+            "type__name": "Electrical | RJ45"
+        },
+        {
+            "name": "console",
+            "description": "Management Console",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [{
+                "direction": ">",
+                "protocol__code": "RS232"
+            }],
+            "type__name": "Electrical | 2.5mm-jack"
+        }
+    ],
+    "data": [
+        {
+            "attr": "part_no",
+            "interface": "asset",
+            "value": ["NOCUPS"]
+        },
+        {
+            "attr": "managed",
+            "interface": "management",
+            "value": true
+        }
+    ]
+}

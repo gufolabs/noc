@@ -1,0 +1,256 @@
+{
+  "id": 1811561422823611,
+  "title": "{{device}}",
+  "tags": ["{{pool}}"],
+  "style": "dark",
+  "timezone": "browser",
+  "refresh": "15m",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": false,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [ "5m","10m","15m"],
+    "time_options": ["1h","3h","6h","12h","24h","2d","7d"]
+  },
+  "templating": {
+    "list": [
+    {% if extra_template != "dom" %}
+      {% if port_types %}
+        {% set comma = joiner(",") -%}
+        {% for port_type in port_types -%}
+          {% from 'template_port.j2' import ports -%}
+          {{ comma() }}{{ ports(port_type, selected_types) }}
+        {% endfor -%},
+      {% endif %}
+
+      {% if radio_types %}
+        {% set comma = joiner(",") -%}
+        {% for port_type in radio_types -%}
+          {% from 'template_radio.j2' import radio -%}
+          {{ comma() }}{{ radio(port_type) }}
+        {% endfor -%},
+      {% endif %}
+
+      {% if subifaces %}
+        {% from "template_subiface.j2" import subiface -%}
+          {{ subiface(subifaces) }},
+      {% endif %}
+    {% endif %}
+      {% include "template_device.j2" with context -%},
+      {% include "template_vendor.j2" with context -%},
+      {% include "template_platform.j2" with context -%},
+      {% include "template_device_id.j2" with context -%},
+      {% include "template_ip_info.j2" with context -%},
+      {% include "template_segment.j2" with context -%},
+      {% include "template_firmware_version.j2" with context -%},
+      {% include "template_discovery_interval.j2" with context -%},
+      {% include "template_bi_id.j2" with context -%},
+      {% include "template_ping_interval.j2" with context -%}
+    ]
+  },
+
+  "annotations": {
+    "list": [
+      {
+        "datasource": "NocDS",
+        "enable": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "Alarm",
+        "query": "{{device_id}}"
+      }
+    ]
+  },
+  "schemaVersion": 12,
+  "version": 33,
+  "links": [
+    {
+      "icon": "doc",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": true,
+      "type": "link",
+      "title": "png",
+      "tooltip": "png",
+      "url": "/ui/grafana/render/dashboard/script/noc.js?width=1800&dashboard=mo&id={{device_id}}"
+    },
+    {
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "{{pool}}"
+      ],
+      "targetBlank": true,
+      "type": "dashboards"
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "tags": [
+        "SYSTEM"
+      ],
+      "targetBlank": true,
+      "type": "dashboards"
+    }
+  ],
+  "gnetId": null,
+  "rows": [
+    {
+      "collapse": true,
+      "editable": false,
+      "height": "250px",
+      "showTitle": true,
+      "internal_comment": "info_row",
+      "title": "$device $ip $vendor $platform",
+      "panels": [
+      {% include "panel_device.j2" with context -%}
+      {%if port_types %}
+          ,
+          {% include "panel_errors.j2" with context -%}
+      {% endif %}
+        {% set rtt_index = object_metrics.index("rtt") -%}
+        {% set graph=object_metrics.pop(rtt_index) -%}
+            {% set template = 'graph_' + graph | lower() |replace(" ","") | replace("|","_") + '.j2' %}
+            ,
+            {% include [template, "graph_default.j2"] ignore missing with context %}
+      ]
+    }
+
+    ,
+    {
+      "collapse": false,
+      "editable": false,
+      "height": "250px",
+      "showTitle": false,
+      "title": "UPS Status",
+      "internal_comment": "status_row",
+      "panels": [
+         {% set status_span = 2 %}
+         {% include "graph_sensor_enum_map.j2" with context -%}
+         ,
+         {% from "graph_sensor_value_combo.j2" import sensors -%}
+         {% set _dummy=graphs.pop('upsOutputPercentLoad') -%}
+            {{ sensors(_dummy, 1001, span=4, legend_show="false") }},
+         {% set _dummy=graphs.pop('upsEstimatedChargeRemaining') -%}
+            {{ sensors(_dummy, 1002, span=3, legend_show="false", graph_type="gauge", thresholds={"th1": 20, "th2": 60}) }},
+         {% set _dummy=graphs.pop('upsEstimatedMinutesRemaining') -%}
+            {{ sensors(_dummy, 1003, span=3, legend_show="false", graph_type="stat", thresholds={"th1": 20, "th2": 60}) }},
+        ]
+    }
+    {%if graphs %}
+    ,
+        {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "Power",
+              "internal_comment": "sensor_row",
+              "panels": [
+                 {% from "graph_sensor_value_combo.j2" import sensors -%}
+                 {% set _dummy=graphs.pop('upsBypassVoltage') -%}
+                    {{ sensors(_dummy, 1101) }},
+                 {% set _dummy=graphs.pop('upsInputVoltage') -%}
+                    {{ sensors(_dummy, 1102) }},
+                 {% set _dummy=graphs.pop('upsOutputVoltage') -%}
+                    {{ sensors(_dummy, 1103) }},
+                 {% set _dummy=graphs.pop('upsBypassCurrent') -%}
+                    {{ sensors(_dummy, 1111) }},
+                 {% set _dummy=graphs.pop('upsInputCurrent') -%}
+                    {{ sensors(_dummy, 1112) }},
+                 {% set _dummy=graphs.pop('upsOutputCurrent') -%}
+                    {{ sensors(_dummy, 1113) }},
+                 {% set _dummy=graphs.pop('upsBypassPower') -%}
+                    {{ sensors(_dummy, 1121) }},
+                 {% set _dummy=graphs.pop('upsInputTruePower') -%}
+                    {{ sensors(_dummy, 1122) }},
+                 {% set _dummy=graphs.pop('upsOutputPower') -%}
+                    {{ sensors(_dummy, 1123) }},
+              ]
+        },
+        {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "Battery",
+              "internal_comment": "battery_row",
+              "panels": [
+                 {% from "graph_sensor_value_combo.j2" import sensors -%}
+                 {% set _dummy=graphs.pop('upsBatteryVoltage') -%}
+                    {{ sensors(_dummy, 1201, span=3, legend_show="false") }},
+                 {% set _dummy=graphs.pop('upsBatteryCurrent') -%}
+                    {{ sensors(_dummy, 1202, span=3, legend_show="false") }},
+                 {% set _dummy=graphs.pop('upsBatteryTemperature') -%}
+                    {{ sensors(_dummy, 1203, span=3, legend_show="false") }},
+                 {% set _dummy=graphs.pop('upsSecondsOnBattery') -%}
+                    {{ sensors(_dummy, 1204, span=3, legend_show="false") }}
+              ]
+        },
+        {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "Frequency",
+              "internal_comment": "frequency_row",
+              "panels": [
+                 {% from "graph_sensor_value_combo.j2" import sensors -%}
+                 {% set _dummy=graphs.pop('upsInputFrequency') -%}
+                    {{ sensors(_dummy, 1301, span=6, legend_show="false") }},
+                 {% set _dummy=graphs.pop('upsOutputFrequency') -%}
+                    {{ sensors(_dummy, 1302, span=6, legend_show="false") }}
+              ]
+        },
+
+        {% set comma = joiner(",") -%}
+        {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "Other",
+              "internal_comment": "other_row",
+              "panels": [
+                 {% from "graph_sensor_value_combo.j2" import sensors -%}
+                     {% for graph in graphs -%}
+                     {{ comma() }}
+                        {{sensors(graphs[graph], loop.index)}}
+                    {%- endfor %}
+              ]
+        }
+
+        {% if object_metrics %}
+            ,
+            {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "internal_comment": "object_metrics",
+              "title": "Objects metrics",
+              "panels": [
+                {% set comma = joiner(",") -%}
+                {% for graph in object_metrics -%}
+                  {% if "Subscribers | Summary" in graph %}
+                    {{ comma() }}{% include "graph_subscribers_summary_total.j2" with context -%},
+                    {% include "graph_subscribers_summary_slot.j2" with context -%},
+                    {% include "graph_subscribers_summary_port.j2" with context -%}
+                  {% else %}
+                    {% set template = 'graph_' + graph | lower() |replace(" ","") | replace("|","_") + '.j2' %}
+                    {{ comma() }}{% include [template, "graph_default.j2"] ignore missing with context %}
+                  {% endif %}
+                {%- endfor %}
+              ]
+
+            }
+        {% endif %}
+    {% endif %}
+  ]
+}

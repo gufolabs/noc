@@ -1,0 +1,8 @@
+{
+    "name": "EAST",
+    "uuid": "3f26d1d2-76d1-4729-ac76-3fcf8abfa88c",
+    "full_name": "EAST",
+    "code": ["EAST"],
+    "site": null,
+    "$collection": "inv.vendors"
+}

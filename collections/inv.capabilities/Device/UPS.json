@@ -1,0 +1,10 @@
+{
+    "name": "Device | UPS",
+    "$collection": "inv.capabilities",
+    "uuid": "834318d0-97e2-498f-a197-a3de1950ab6d",
+    "description": null,
+    "type": "bool",
+    "card_template": null,
+    "allow_manual": false,
+    "multi": false
+}
