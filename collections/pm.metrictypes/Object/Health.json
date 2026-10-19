@@ -1,0 +1,12 @@
+{
+    "name": "Object | Health",
+    "$collection": "pm.metrictypes",
+    "uuid": "42adf471-d899-454a-a419-b091f69e1146",
+    "scope__name": "Object",
+    "field_name": "health",
+    "field_type": "Int32",
+    "description": "OmegaTelecom omSysHealthScore",
+    "measure": null,
+    "units__code": "%",
+    "scale__code": "1"
+}

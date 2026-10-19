@@ -1,0 +1,7 @@
+{
+    "$metric": "Telephony | Voice | GlobalCPS",
+    "$type": "oid",
+    "labels": ["noc::telephony::Voice::GlobalCPS"],
+    "oid": "1.2.643.2.124.1.3.2.1.1.6.0",
+    "units": "1"
+}
