@@ -16,6 +16,10 @@ from importlib.resources import files
 import pytest
 import cachetools
 
+import noc
+import sys
+
+print(noc.__file__, noc.__path__, sys.path)
 NOC_SRC = files("noc")
 assert NOC_SRC.parts[-2:] == ("src", "noc"), f"Invalid {NOC_SRC}"
 
