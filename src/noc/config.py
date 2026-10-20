@@ -17,6 +17,7 @@ from urllib.parse import quote as urllib_quote
 from pathlib import Path
 from collections.abc import Iterable
 from types import ModuleType
+from importlib.resources import files
 import importlib
 
 # Third-party modules
@@ -1214,28 +1215,34 @@ class Config(BaseConfig):
         os.environ["TZ"] = self.timezone.key
         time.tzset()
 
-    def get_customized_paths(self, *args, **kwargs):
+    def get_customized_paths(self, *args: str, prefer_custom: bool = False) -> list[str]:
         """
-        Check for customized path for given repo path.
+        Get repository and customized paths for a repository-relative path.
 
-        Repo path may be given in os.path.join-style components.
-        Returns list of possible paths. One of elements is always repo path,
-        while other may be custom counterpart, if exists.
+        The repository-relative path can be supplied as one path or as multiple
+        components, which are joined using :func:`os.path.join`. The returned
+        paths always include the repository path. If the corresponding path
+        exists in the custom directory, it is included as well.
 
         !!! warning
 
             This method is not package-safe and must be revised.
 
         Args:
-            prefer_custom:
-                True: customized path first.
-                False: repo path first.
-            args: Path or path components in os.path.join-style
+            *args: Zero or more string path components, in the order expected
+                by :func:`os.path.join`. These form the path relative to the
+                repository root and, when configured, the custom root. When
+                omitted, the repository root is used.
+            prefer_custom: If ``True``, return an existing custom path before
+                the repository path. If ``False``, return the repository path
+                first. The custom path is only included when it exists.
 
         Returns:
-            List of possible paths.
+            A list of paths as strings. The repository path is always present;
+            an existing customized counterpart is included as the other item.
         """
-        prefer_custom = kwargs.get("prefer_custom", False)
+        # An empty component preserves the historical repository-root behavior.
+        args = args or ("",)
         rpath = os.path.join(*args)
         if not self.path.custom_path:
             return [rpath]
@@ -1345,6 +1352,25 @@ class Config(BaseConfig):
 
         dcs = get_dcs()
         return run_sync(partial(dcs.get_slot_limit, slot_name))
+
+    @cached_property
+    def noc_base(self) -> Path:
+        """Get the NOC package base directory.
+
+        Returns:
+            Path: Path to the NOC package root, resolving the transitional
+                src/noc layout when present.
+        """
+        base = files("noc")
+        # Transition only!
+        # As long as __init__.py remains in repo root
+        # pytest alters sys.path overriding proper PYTHONPATH for test.
+        # Detect this situation and return to proper path.
+        # Should be removed after step 8 of NEP-0101.
+        alt_base = base / "src" / "noc"
+        if alt_base.is_dir():
+            return alt_base
+        return base
 
 
 config = Config(
