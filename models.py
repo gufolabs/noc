@@ -70,7 +70,7 @@ def get_model(model_id: str) -> DB_MODEL_TYPE:
     return m
 
 
-def get_object(model_id: str, object_id: int | str | ObjectId) -> DB_MODEL_INSTANCE | None:
+def get_object(model_id: str, object_id: int | str | ObjectId) -> DB_MODEL_INSTANCE:
     """
     Return an object instance or None
     """
