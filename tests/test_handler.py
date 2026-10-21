@@ -57,4 +57,4 @@ def test_invalid_module():
 def test_invalid_attribute():
     # Invalid attribute
     with pytest.raises(ImportError):
-        get_handler("tests.test_handler.invalid_handler")
+        get_handler(f"{__name__}.invalid_handler")
