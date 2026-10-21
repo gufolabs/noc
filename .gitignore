@@ -12,6 +12,7 @@ include/*
 lib/
 lib64
 .*
+!/.frg.yml
 !/.github/
 !/.devcontainer/
 !/.docker/*
