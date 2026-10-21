@@ -120,7 +120,6 @@ class Site:
         self.views = ProxyNode()  # Named views proxy
         self.log_api_calls = config.logging.log_api_calls
         self.log_sql_statements = config.logging.log_sql_statements
-        self.app_contributors = defaultdict(set)
         self.app_count = 0
         self.pending_applications = []
         self.service: BaseService | None = None
@@ -433,9 +432,6 @@ class Site:
         # Initialize application
         app = app_class(self)
         self.apps[app_id] = app
-        # Register contributors
-        for c in self.app_contributors[app.__class__]:
-            c.set_app(app)
         # Register application-level menu
         if hasattr(app, "launch_access") and hasattr(app, "menu") and app.menu:
             self.register_app_menu(app)
@@ -565,9 +561,6 @@ class Site:
 
     def get_menu_id(self, path):
         return hashlib.sha1(smart_bytes(" | ".join(smart_str(p) for p in path))).hexdigest()
-
-    def add_contributor(self, cls, contributor):
-        self.app_contributors[cls].add(contributor)
 
     def iter_predefined_reports(self):
         self.autodiscover()
