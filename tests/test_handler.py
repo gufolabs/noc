@@ -25,13 +25,13 @@ def my_cached_handler():
 
 
 def test_simple_handler():
-    h = get_handler("noc.tests.test_handler.my_simple_handler")
+    h = get_handler("tests.test_handler.my_simple_handler")
     assert h
     assert h() == 1
 
 
 def test_add_handler():
-    h = get_handler("noc.tests.test_handler.my_add_handler")
+    h = get_handler("tests.test_handler.my_add_handler")
     assert h
     assert h(1, 2) == 3
 
@@ -57,4 +57,4 @@ def test_invalid_module():
 def test_invalid_attribute():
     # Invalid attribute
     with pytest.raises(ImportError):
-        get_handler("noc.tests.test_handler.invalid_handler")
+        get_handler("tests.test_handler.invalid_handler")
