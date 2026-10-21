@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from importlib.resources import files
 from functools import cached_property
 from pathlib import Path
 
