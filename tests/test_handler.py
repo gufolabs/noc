@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # noc.core.handler unittests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,13 +25,13 @@ def my_cached_handler():
 
 
 def test_simple_handler():
-    h = get_handler("tests.test_handler.my_simple_handler")
+    h = get_handler(f"{__name__}.my_simple_handler")
     assert h
     assert h() == 1
 
 
 def test_add_handler():
-    h = get_handler("tests.test_handler.my_add_handler")
+    h = get_handler(f"{__name__}.my_add_handler")
     assert h
     assert h(1, 2) == 3
 
