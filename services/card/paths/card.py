@@ -35,10 +35,7 @@ MIN_SEARCH = 2
 def get_card_class(name: str) -> type[BaseCard] | None:
     if name not in card_loader:
         return None
-    card_class = card_loader[name]
-    if not issubclass(card_class, BaseCard):
-        return None
-    return card_class
+    return card_loader[name]
 
 
 class HandlerStub:
@@ -119,8 +116,6 @@ class CardAPI(BaseAPI):
         r = [route_card, route_search]
         actions = {}
         for card_name, card_class in card_loader.items():
-            if not issubclass(card_class, BaseCard):
-                continue
             if card_class.name != card_name:
                 raise ValueError(
                     f"Card module name '{card_name}' does not match card name '{card_class.name}'"

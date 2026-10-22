@@ -266,7 +266,7 @@ class BaseCard:
                 s[k] = d[k]
 
 
-card_loader = Loader[type](
+card_loader = Loader[type[BaseCard]](
     bases=config.iter_customized_bases("noc.services.card.cards"),
     exclude=("base",),
 )
