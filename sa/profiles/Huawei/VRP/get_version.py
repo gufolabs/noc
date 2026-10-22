@@ -28,9 +28,9 @@ class Script(BaseScript):
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
     )
     rx_ver_snmp = re.compile(
-        r"Versatile Routing Platform Software.*?"
+        r"(?:Versatile Routing Platform Software|Huawei YunShan OS).*?"
         r"Version (?P<version>[^ ,]+),?\s*(\(\S+\s+(?P<image>\S+)\))?.*?\n"
-        r"\s*(?:Quidway|Huawei|Huarong) (?P<platform>(?:NetEngine\s+)?"
+        r"\s*(?:Quidway|Huawei|Huarong) (?P<platform>CloudEngine \S+|(?:NetEngine\s+)?"
         r"[^ \t\n\r\f\v\-]+)[^\n]+",
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
     )
