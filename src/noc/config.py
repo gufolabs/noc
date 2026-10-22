@@ -554,7 +554,6 @@ class Config(BaseConfig):
         collection_fm_mibs = StringParameter(default="collections/fm.mibs/")
         supervisor_cfg = StringParameter(default="etc/noc_services.conf")
         npkg_root = StringParameter(default="/var/lib/noc/var/pkg")
-        card_template_path = StringParameter(default="services/card/templates/card.html.j2")
         pm_templates = StringParameter(default="templates/ddash/")
         custom_path = StringParameter()
         mib_path = StringParameter(default="/var/lib/noc/mibs/")
@@ -1361,7 +1360,16 @@ class Config(BaseConfig):
             Path: Path to the NOC package root, resolving the transitional
                 src/noc layout when present.
         """
-        return files("noc")
+        base = files("noc")
+        # Transition only!
+        # As long as __init__.py remains in repo root
+        # pytest alters sys.path overriding proper PYTHONPATH for test.
+        # Detect this situation and return to proper path.
+        # Should be removed after step 8 of NEP-0101.
+        alt_base = base / "src" / "noc"
+        if alt_base.is_dir():
+            return alt_base
+        return base
 
 
 config = Config(
