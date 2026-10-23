@@ -58,12 +58,12 @@ class Address(NOCModel):
         unique_together = [("vrf", "afi", "address")]
 
     prefix = models.ForeignKey("ip.Prefix", verbose_name=_("Prefix"), on_delete=models.CASCADE)
-    vrf: "VRF" = models.ForeignKey(
+    vrf: VRF = models.ForeignKey(
         VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
     )
     afi: str = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
     address: str = INETField(_("Address"))
-    profile: "AddressProfile" = DocumentReferenceField(AddressProfile, null=False, blank=False)
+    profile: AddressProfile = DocumentReferenceField(AddressProfile, null=False, blank=False)
     name: str = models.CharField(_("Name"), max_length=255, null=False, blank=False)
     fqdn: str = models.CharField(
         _("FQDN"),
@@ -196,7 +196,7 @@ class Address(NOCModel):
         return "6" if ":" in address else "4"
 
     @classmethod
-    def get_collision(cls, vrf: "VRF", address: str) -> Address | None:
+    def get_collision(cls, vrf: VRF, address: str) -> Address | None:
         """
         Check VRFGroup restrictions
         :return: VRF already containing address or None
@@ -401,7 +401,7 @@ class Address(NOCModel):
         address: str,
         prefix,
         name: str | None = None,
-    ) -> "Address":
+    ) -> Address:
         """Create Address from Template"""
         addr = Address(
             address=address,

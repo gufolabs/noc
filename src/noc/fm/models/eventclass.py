@@ -411,7 +411,7 @@ class EventClass(Document):
         return safe_json_path(self.name)
 
     @classmethod
-    def get_event_config(cls, event_class: "EventClass"):
+    def get_event_config(cls, event_class: EventClass):
         """Build Category Rules"""
         r = {
             "id": str(event_class.id),

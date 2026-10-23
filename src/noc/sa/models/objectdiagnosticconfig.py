@@ -183,7 +183,7 @@ class ObjectDiagnosticConfig(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_active_diagnostic_cache"), lock=lambda _: id_lock
     )
-    def get_active_diagnostics(cls) -> list["ObjectDiagnosticConfig"]:
+    def get_active_diagnostics(cls) -> list[ObjectDiagnosticConfig]:
         return list(ObjectDiagnosticConfig.objects.filter())
 
     def is_allowed(self, labels: list[str]) -> bool:
@@ -232,7 +232,7 @@ class ObjectDiagnosticConfig(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_config(self, o: Any) -> "DiagnosticConfig":
+    def get_config(self, o: Any) -> DiagnosticConfig:
         checks, d_ctx = [], []
         for c in self.checks:
             c_args = {}

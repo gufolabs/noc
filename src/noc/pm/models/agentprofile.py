@@ -32,7 +32,7 @@ class AgentProfile(Document):
     name = StringField(unique=True)
     description = StringField()
     zk_check_interval = IntField(default=60)
-    workflow: "Workflow" = PlainReferenceField(
+    workflow: Workflow = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "pm.AgentProfile")
     )
     update_addresses = BooleanField(default=True)
@@ -53,7 +53,7 @@ class AgentProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "AgentProfile":
+    def get_default_profile(cls) -> AgentProfile:
         sp = AgentProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
             sp = AgentProfile(

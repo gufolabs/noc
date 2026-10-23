@@ -283,7 +283,7 @@ class CorrelatorService(BaseService):
             n += 1
         self.logger.info("%d Alam Rules have been loaded", n)
 
-    def mark_as_failed(self, event: "Event"):
+    def mark_as_failed(self, event: Event):
         """
         Write error log and mark event as failed
         """
@@ -841,7 +841,7 @@ class CorrelatorService(BaseService):
 
     async def clear_alarm_from_rule(
         self,
-        rule: "EventAlarmRule",
+        rule: EventAlarmRule,
         managed_object: ManagedObject,
         r_vars: dict[str, Any],
         timestamp: datetime.datetime | None = None,
@@ -872,7 +872,7 @@ class CorrelatorService(BaseService):
         )
 
     def get_delayed_event(
-        self, rule: "EventAlarmRule", event: Event, managed_object: ManagedObject
+        self, rule: EventAlarmRule, event: Event, managed_object: ManagedObject
     ) -> Event | None:
         """
         Check wherever all delayed conditions are met

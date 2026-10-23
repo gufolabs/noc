@@ -35,7 +35,7 @@ class DNSZoneRecord(NOCModel):
         db_table = "dns_dnszonerecord"
         app_label = "dns"
 
-    zone: "DNSZone" = models.ForeignKey(DNSZone, verbose_name="Zone", on_delete=models.CASCADE)
+    zone: DNSZone = models.ForeignKey(DNSZone, verbose_name="Zone", on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=64, blank=True, null=True)
     ttl = models.IntegerField(_("TTL"), null=True, blank=True)
     type = models.CharField(_("Type"), max_length=16)

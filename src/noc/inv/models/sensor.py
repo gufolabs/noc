@@ -96,19 +96,19 @@ class Sensor(Document):
         ],
     }
 
-    profile: "SensorProfile" = PlainReferenceField(
+    profile: SensorProfile = PlainReferenceField(
         SensorProfile, default=SensorProfile.get_default_profile
     )
-    object: "Object" = PlainReferenceField(Object)
-    managed_object: "ManagedObject" = ForeignKeyField(ManagedObject, required=False)
-    agent: "Agent" = PlainReferenceField(Agent)
+    object: Object = PlainReferenceField(Object)
+    managed_object: ManagedObject = ForeignKeyField(ManagedObject, required=False)
+    agent: Agent = PlainReferenceField(Agent)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("P", "Profile"), ("R", "By Rule"), ("D", "Disable")],
         default="P",
     )
     local_id = StringField()
-    state: "State" = PlainReferenceField(State)
+    state: State = PlainReferenceField(State)
     units: MeasurementUnits = PlainReferenceField(
         MeasurementUnits, default=MeasurementUnits.get_default_measurement_units
     )
@@ -257,7 +257,7 @@ class Sensor(Document):
         return Label.get_effective_setting(label, setting="enable_sensor")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Sensor") -> Iterable[list[str]]:
+    def iter_effective_labels(cls, instance: Sensor) -> Iterable[list[str]]:
         yield list(instance.labels or [])
         if instance.profile.labels:
             yield list(instance.profile.labels)
@@ -274,7 +274,7 @@ class Sensor(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
+        cls, mo: ManagedObject, run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected by box or periodic
@@ -382,7 +382,7 @@ class Sensor(Document):
             )
 
     @classmethod
-    def get_metric_config(cls, sensor: "Sensor") -> dict[str, Any]:
+    def get_metric_config(cls, sensor: Sensor) -> dict[str, Any]:
         """Return MetricConfig for Metrics service"""
         if not sensor.state.is_productive or not sensor.profile.enable_collect:
             return {}
@@ -496,7 +496,7 @@ class Sensor(Document):
         return self.profile.get_css_class() if self.profile else None
 
 
-def sync_object(obj: "Object") -> None:
+def sync_object(obj: Object) -> None:
     """Synchronize sensors with object model"""
     # Get existing sensors
     obj_sensors: dict[str, Sensor] = {s.local_id: s for s in Sensor.objects.filter(object=obj.id)}

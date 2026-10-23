@@ -71,7 +71,7 @@ class SLAProfile(Document):
     meta = {"collection": "noc.sla_profiles", "strict": False, "auto_create_index": False}
     name = StringField(unique=True)
     description = StringField()
-    workflow: "Workflow" = PlainReferenceField(
+    workflow: Workflow = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "sla.SLAProfile")
     )
     style = ForeignKeyField(Style, required=False)
@@ -128,7 +128,7 @@ class SLAProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "SLAProfile":
+    def get_default_profile(cls) -> SLAProfile:
         sp = SLAProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
             sp = SLAProfile(
@@ -144,8 +144,8 @@ class SLAProfile(Document):
 
     @staticmethod
     def config_from_settings(
-        m: "SLAProfileMetrics", profile_interval: int | None = None
-    ) -> "MetricConfig":
+        m: SLAProfileMetrics, profile_interval: int | None = None
+    ) -> MetricConfig:
         """
         Returns MetricConfig from .metrics field
         :return:
@@ -156,7 +156,7 @@ class SLAProfile(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_slaprofile_metrics"), lock=lambda _: metrics_lock
     )
-    def get_slaprofile_metrics(cls, p_id: "ObjectId") -> dict[str, MetricConfig]:
+    def get_slaprofile_metrics(cls, p_id: ObjectId) -> dict[str, MetricConfig]:
         r = {}
         spr = SLAProfile.get_by_id(p_id)
         if not spr:

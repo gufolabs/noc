@@ -148,7 +148,7 @@ class Action(EmbeddedDocument):
             r.append(f"OA::{self.object_action}")
         return f"{self.when}: {';'.join(r)}"
 
-    def get_config(self) -> list["ActionConfig"]:
+    def get_config(self) -> list[ActionConfig]:
         """Get AlarmAction Config"""
         r = []
         when = {"raise": "on_start", "clear": "on_end", "update": "any"}[self.when]
@@ -281,7 +281,7 @@ class AlarmRule(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_by_alarm(cls, alarm) -> list["AlarmRule"]:
+    def get_by_alarm(cls, alarm) -> list[AlarmRule]:
         r = []
         for ar in AlarmRule.objects.filter(is_active=True):
             if ar.is_match(alarm):
@@ -289,7 +289,7 @@ class AlarmRule(Document):
         return r
 
     @classmethod
-    def get_config(cls, rule: "AlarmRule"):
+    def get_config(cls, rule: AlarmRule):
         """Generate Rule config"""
         r: dict[str, Any] = {
             "id": str(rule.id),

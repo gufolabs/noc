@@ -272,7 +272,7 @@ class ArchivedAlarm(Document):
                 seen.add(a.managed_object)
                 yield a.managed_object
 
-    def iter_grouped(self) -> Iterable["ArchivedAlarm"]:
+    def iter_grouped(self) -> Iterable[ArchivedAlarm]:
         """
         Generator yielding all alarm in group
         """

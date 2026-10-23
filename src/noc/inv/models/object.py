@@ -99,7 +99,7 @@ class ObjectAttr(EmbeddedDocument):
 
 class ObjectConfigurationScope(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
-    scope: "ConfigurationScope" = PlainReferenceField(ConfigurationScope, required=True)
+    scope: ConfigurationScope = PlainReferenceField(ConfigurationScope, required=True)
     value: str = StringField(required=False)
 
     def __str__(self):
@@ -122,7 +122,7 @@ class ObjectConfigurationScope(EmbeddedDocument):
         return self.value == other.value
 
     @classmethod
-    def from_code(cls, code: str) -> list["ObjectConfigurationScope"]:
+    def from_code(cls, code: str) -> list[ObjectConfigurationScope]:
         """
         Getting ObjectConfigurationScope from code.
         :param code: Format @code1@code2...
@@ -136,7 +136,7 @@ class ObjectConfigurationScope(EmbeddedDocument):
 
 class ObjectConfigurationData(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
-    param: "ConfigurationParam" = PlainReferenceField(ConfigurationParam, required=True)
+    param: ConfigurationParam = PlainReferenceField(ConfigurationParam, required=True)
     value = DynamicField()
     is_dirty = BooleanField(default=False)
     is_conflicted = BooleanField(default=False)
@@ -205,7 +205,7 @@ class Object(Document):
     }
 
     name = StringField()
-    model: "ObjectModel" = PlainReferenceField(ObjectModel)
+    model: ObjectModel = PlainReferenceField(ObjectModel)
     data = EmbeddedDocumentListField(ObjectAttr)
     parent: Object | None = PlainReferenceField("self", required=False)
     parent_connection = StringField(required=False)
@@ -552,7 +552,7 @@ class Object(Document):
         """
         return True
 
-    def get_cfg_data(self, param: "ConfigurationParam", scope: str | None = None) -> Any:
+    def get_cfg_data(self, param: ConfigurationParam, scope: str | None = None) -> Any:
         """
         Getting Configuration Param Data. Scope - scope string
         """
@@ -568,7 +568,7 @@ class Object(Document):
 
     def set_cfg_data(
         self,
-        param: "ConfigurationParam",
+        param: ConfigurationParam,
         value: Any,
         scope: str | None = None,
         is_conflicted: bool = False,
@@ -604,7 +604,7 @@ class Object(Document):
             )
 
     def reset_cfg_data(
-        self, param: "ConfigurationParam" | list["ConfigurationParam"], scope: str | None
+        self, param: ConfigurationParam | list[ConfigurationParam], scope: str | None
     ):
         """
         Remove Configuration Data for param from scope
@@ -628,7 +628,7 @@ class Object(Document):
         """
         self.cfg_data = [cd for cd in self.cfg_data if cd.scope not in scopes]
 
-    def get_effective_cfg_params(self) -> list["ParamData"]:
+    def get_effective_cfg_params(self) -> list[ParamData]:
         """
         Get all objects param with schema
         """
@@ -698,7 +698,7 @@ class Object(Document):
         # Add from data
         return r
 
-    def iter_configuration_scopes(self, param: "ConfigurationParam") -> Iterable["ScopeVariant"]:
+    def iter_configuration_scopes(self, param: ConfigurationParam) -> Iterable[ScopeVariant]:
         for c in self.model.connections:
             scope = self.model.configuration_rule.get_scope(param, c)
             if not scope or not param.has_scope(scope.name) or scope.is_common:
@@ -778,7 +778,7 @@ class Object(Document):
     def iter_connection_proposals(
         self,
         name: str,
-        ro: "ObjectModel",
+        ro: ObjectModel,
         remote_name: str | None = None,
         use_cable: bool = False,
     ) -> Iterable[tuple[ObjectModel | None, str]]:
@@ -855,7 +855,7 @@ class Object(Document):
         # Strange things happen
         return None, None, None
 
-    def get_genderless_connections(self, name: str) -> list[tuple[Any, "Object", str]]:
+    def get_genderless_connections(self, name: str) -> list[tuple[Any, Object, str]]:
         """
         Get genderless connections
         """
@@ -881,7 +881,7 @@ class Object(Document):
             c = c.parent
         return None
 
-    def get_box(self) -> "Object":
+    def get_box(self) -> Object:
         """
         Get chassis.
         """
@@ -930,7 +930,7 @@ class Object(Document):
     def connect_p2p(
         self,
         name: str,
-        remote_object: "Object",
+        remote_object: Object,
         remote_name: str,
         data: dict[str, Any] | None = None,
         reconnect: bool = False,
@@ -992,7 +992,7 @@ class Object(Document):
     def connect_genderless(
         self,
         name: str,
-        remote_object: "Object",
+        remote_object: Object,
         remote_name: str,
         data: dict[str, Any] | None = None,
         type: str | None = None,
@@ -1036,7 +1036,7 @@ class Object(Document):
         ).save()
         self.log(f"{self}:{name} -> {remote_object}:{remote_name}", system="CORE", op="CONNECT")
 
-    def put_into(self, container: "Object") -> None:
+    def put_into(self, container: Object) -> None:
         """
         Put object into container
         """
@@ -1069,7 +1069,7 @@ class Object(Document):
                         yield c
                         seen.add(c)
 
-    def attach(self, parent: "Object", parent_connection: str) -> None:
+    def attach(self, parent: Object, parent_connection: str) -> None:
         """
         Attach object to parent slot.
 
@@ -1128,7 +1128,7 @@ class Object(Document):
         self.additional_connections = additional
         self.save()
 
-    def iter_children(self) -> Iterable["Object"]:
+    def iter_children(self) -> Iterable[Object]:
         """
         Iterate through all children
         """
@@ -1198,7 +1198,7 @@ class Object(Document):
             else:
                 o.put_into(target)
 
-    def iter_connections(self) -> Iterable[tuple[str, "Object", str]]:
+    def iter_connections(self) -> Iterable[tuple[str, Object, str]]:
         """
         Iterate horizontal connections.
 
@@ -1266,7 +1266,7 @@ class Object(Document):
         return None, None, None
 
     @classmethod
-    def get_managed(cls, mo) -> list["Object"]:
+    def get_managed(cls, mo) -> list[Object]:
         """
         Get Object managed by managed object
         :param mo: Managed Object instance or id
@@ -1380,7 +1380,7 @@ class Object(Document):
                 serials += oo.get_object_serials(chassis_only=False)
         return serials
 
-    def iter_technology(self, technologies: list["Technology"]) -> Iterable[PortItem]:
+    def iter_technology(self, technologies: list[Technology]) -> Iterable[PortItem]:
         """
         Iter object ports for technologies
         :param technologies: List for connection technologies
@@ -1431,7 +1431,7 @@ class Object(Document):
     @classmethod
     def iter_by_address_id(
         cls, address: str | list[str], scope: str | None = None
-    ) -> Iterable["Object"]:
+    ) -> Iterable[Object]:
         """
         Get objects
         :return:
@@ -1489,7 +1489,7 @@ class Object(Document):
             agent = Agent.get_by_id(agent)
         return agent
 
-    def get_topology_node(self) -> "TopologyNode":
+    def get_topology_node(self) -> TopologyNode:
         return TopologyNode(
             id=str(self.id),
             type=TopologyNodeType.CONTAINER,
@@ -1647,7 +1647,7 @@ class Object(Document):
         return 1
 
     @classmethod
-    def from_resource(cls, resource: str) -> "tuple[Object | None, str | None]":
+    def from_resource(cls, resource: str) -> tuple[Object | None, str | None]:
         """
         Dereference from resource.
 

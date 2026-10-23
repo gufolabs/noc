@@ -47,7 +47,7 @@ class MACRange(EmbeddedDocument):
         return f"{self.first_mac} - {self.last_mac}"
 
     @classmethod
-    def from_str(cls, first: str, last: str) -> "MACRange":
+    def from_str(cls, first: str, last: str) -> MACRange:
         """
         Create MACRange from two macs.
 

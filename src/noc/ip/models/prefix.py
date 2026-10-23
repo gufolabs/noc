@@ -89,14 +89,14 @@ class Prefix(NOCModel):
         blank=True,
         on_delete=models.CASCADE,
     )
-    vrf: "VRF" = CachedForeignKey(
+    vrf: VRF = CachedForeignKey(
         VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
     )
     afi: str = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
     prefix: str = CIDRField(_("Prefix"))
     name: str = models.CharField(_("Name"), max_length=255, null=True, blank=True)
-    profile: "PrefixProfile" = DocumentReferenceField(PrefixProfile, null=False, blank=False)
-    asn: "AS" = CachedForeignKey(
+    profile: PrefixProfile = DocumentReferenceField(PrefixProfile, null=False, blank=False)
+    asn: AS = CachedForeignKey(
         AS,
         verbose_name=_("AS"),
         help_text=_("Autonomous system granted with prefix"),
@@ -104,7 +104,7 @@ class Prefix(NOCModel):
         blank=True,
         on_delete=models.CASCADE,
     )
-    project: "Project" = CachedForeignKey(
+    project: Project = CachedForeignKey(
         Project,
         verbose_name="Project",
         on_delete=models.SET_NULL,
@@ -113,7 +113,7 @@ class Prefix(NOCModel):
         related_name="prefix_set",
     )
     # VLAN bound to prefix
-    vlan: "VLAN" = DocumentReferenceField(VLAN, null=True, blank=True)
+    vlan: VLAN = DocumentReferenceField(VLAN, null=True, blank=True)
     description: str = models.TextField(_("Description"), blank=True, null=True)
     # Pools
     pools: list[PoolItem] | None = PydanticField(
@@ -129,7 +129,7 @@ class Prefix(NOCModel):
         models.CharField(max_length=250), blank=True, null=True, default=list
     )
     tt: int = models.IntegerField("TT", blank=True, null=True, help_text=_("Ticket #"))
-    state: "State" = DocumentReferenceField(State, null=True, blank=True)
+    state: State = DocumentReferenceField(State, null=True, blank=True)
     allocated_till = models.DateField(
         _("Allocated till"),
         null=True,
@@ -204,7 +204,7 @@ class Prefix(NOCModel):
         return Prefix.objects.filter(id=oid).first()
 
     @classmethod
-    def get_by_resource_pool(cls, pool: ResourcePool) -> list["Prefix"]:
+    def get_by_resource_pool(cls, pool: ResourcePool) -> list[Prefix]:
         """Getting Prefixes for resource pool"""
         # Include VRF
         q = Q(pools__contains=[{"pool": str(pool.id)}])
@@ -523,7 +523,7 @@ class Prefix(NOCModel):
         )
 
     @property
-    def address_ranges(self) -> list["AddressRange"]:
+    def address_ranges(self) -> list[AddressRange]:
         """
         All prefix-related address ranges
         :return:
@@ -804,7 +804,7 @@ class Prefix(NOCModel):
     def get_resource_pool_usage(
         cls,
         pools: list[ResourcePool],
-        domains: list["Prefix"] | None = None,
+        domains: list[Prefix] | None = None,
     ):
         """"""
         return 0.0

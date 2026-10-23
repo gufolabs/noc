@@ -81,7 +81,7 @@ class ParamSchema(BaseModel):
                 raise ValueError(f"Value is not match pattern: {value}")
         return value
 
-    def merge(self, schema: "ParamSchema") -> NoReturn: ...
+    def merge(self, schema: ParamSchema) -> NoReturn: ...
 
     @property
     def json_schema(self):
@@ -111,7 +111,7 @@ class ParamSchema(BaseModel):
 
 @dataclass
 class ScopeVariant:
-    scope: "ConfigurationScope"
+    scope: ConfigurationScope
     value: str | None = None
 
     def __str__(self):
@@ -134,7 +134,7 @@ class ScopeVariant:
         return self.value == other.value
 
     @classmethod
-    def from_code(cls, code: str) -> "ScopeVariant":
+    def from_code(cls, code: str) -> ScopeVariant:
         scope, *v = code.split("::")
         s = ConfigurationScope.get_by_name(scope.strip("@"))
         if not s:
@@ -166,13 +166,13 @@ class ParamData:
         return "".join(f"@{s.code}" for s in self.scopes)
 
     @property
-    def param(self) -> "ConfigurationParam":
+    def param(self) -> ConfigurationParam:
         return ConfigurationParam.get_by_code(self.code)
 
 
 class ScopeItem(EmbeddedDocument):
     meta = {"strict": False}
-    scope: "ConfigurationScope" = PlainReferenceField(ConfigurationScope, required=True)
+    scope: ConfigurationScope = PlainReferenceField(ConfigurationScope, required=True)
     is_required = BooleanField(default=True)
 
     def __str__(self):
@@ -322,7 +322,7 @@ class ConfigurationParam(Document):
         return ParamSchema(**r)
 
     @classmethod
-    def clean_scope(cls, param: "ConfigurationParam", scope: str) -> str:
+    def clean_scope(cls, param: ConfigurationParam, scope: str) -> str:
         """
         Clean parameter scopes from string
         """

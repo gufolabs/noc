@@ -112,7 +112,7 @@ class ResourcePool(Document):
         return model.get_by_resource_pool(self)
 
     @classmethod
-    def acquire(cls, pools: list["ResourcePool"], owner: str | None = None):
+    def acquire(cls, pools: list[ResourcePool], owner: str | None = None):
         """
         # Set Lock
         with ResourcePool.acquire([pool1, ..., poolN]):
@@ -145,7 +145,7 @@ class ResourcePool(Document):
         return self.allocate
 
     @classmethod
-    def get_metrics(cls, pools: list["ResourcePool"]):
+    def get_metrics(cls, pools: list[ResourcePool]):
         """
         Getting metrics for pools: total, used (by count)
         1. Group by type

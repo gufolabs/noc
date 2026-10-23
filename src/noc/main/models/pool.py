@@ -75,7 +75,7 @@ class Pool(Document):
         return Pool.objects.filter(name=name).first()
 
     @classmethod
-    def get_default_fm_pool(cls) -> "Pool":
+    def get_default_fm_pool(cls) -> Pool:
         p = Pool.get_by_name("default")
         if p:
             return p
@@ -98,5 +98,5 @@ class Pool(Document):
         return delta
 
     @classmethod
-    def iter_lazy_labels(cls, pool: "Pool"):
+    def iter_lazy_labels(cls, pool: Pool):
         yield f"noc::pool::{pool.name}::="

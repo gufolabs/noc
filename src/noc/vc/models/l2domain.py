@@ -84,7 +84,7 @@ class L2Domain(Document):
     }
 
     name = StringField(unique=True)
-    profile: "L2DomainProfile" = PlainReferenceField(
+    profile: L2DomainProfile = PlainReferenceField(
         L2DomainProfile, default=L2DomainProfile.get_default_profile
     )
     description = StringField()
@@ -92,7 +92,7 @@ class L2Domain(Document):
     state: State = PlainReferenceField(State)
     pools = EmbeddedDocumentListField(PoolItem)
     vlan_template = ReferenceField(VLANTemplate)
-    default_vlan_profile: "VLANProfile" = ReferenceField(VLANProfile, required=False)
+    default_vlan_profile: VLANProfile = ReferenceField(VLANProfile, required=False)
     # Discovery settings
     vlan_discovery_policy = StringField(
         choices=[
@@ -141,7 +141,7 @@ class L2Domain(Document):
         return Label.get_effective_setting(label, "enable_l2domain")
 
     @classmethod
-    def get_by_resource_pool(cls, pool: ResourcePool) -> list["L2Domain"]:
+    def get_by_resource_pool(cls, pool: ResourcePool) -> list[L2Domain]:
         """Getting L2Domains for resource pool"""
         q = Q(pools__pool=pool)
         profiles = list(L2DomainProfile.objects.filter(pools__pool=pool))
@@ -199,7 +199,7 @@ class L2Domain(Document):
             for mo_id in self.get_l2_domain_object_ids(str(self.id)):
                 ManagedObject._reset_caches(mo_id)
 
-    def get_effective_pools(self, pool: "ResourcePool" = None) -> list["PoolItem"]:
+    def get_effective_pools(self, pool: ResourcePool = None) -> list[PoolItem]:
         """"""
         return list(
             itertools.filterfalse(
@@ -241,7 +241,7 @@ class L2Domain(Document):
     def get_effective_vlan_id(
         self,
         vlan_filter: VLANFilter | None = None,
-        pool: "ResourcePool" = None,
+        pool: ResourcePool = None,
         policy_order: bool = False,
     ) -> list[int]:
         """
@@ -292,7 +292,7 @@ class L2Domain(Document):
         return ManagedObject.objects.filter(q)
 
     @classmethod
-    def calculate_stats(cls, l2_domains: list["L2Domain"]) -> list[dict[str, str | int]]:
+    def calculate_stats(cls, l2_domains: list[L2Domain]) -> list[dict[str, str | int]]:
         """Calculate statistics Pool usage"""
         # l2
         return []
@@ -307,7 +307,7 @@ class L2Domain(Document):
     def get_resource_pool_usage(
         cls,
         pools: list[ResourcePool],
-        domains: list["L2Domain"] | None = None,
+        domains: list[L2Domain] | None = None,
     ):
         """"""
         return 0.0

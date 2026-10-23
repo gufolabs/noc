@@ -82,7 +82,7 @@ class Peer(NOCModel):
         help_text="Set if address belongs to the Managed Object's interface",
     )
     # Workflow
-    state: "State" = DocumentReferenceField(State, null=True, blank=True)
+    state: State = DocumentReferenceField(State, null=True, blank=True)
     # Last state change
     state_changed = DateTimeField("State Changed", null=True, blank=True)
     # Timestamp expired
@@ -107,7 +107,7 @@ class Peer(NOCModel):
     peering_point: PeeringPoint | None = ForeignKey(
         PeeringPoint, verbose_name="Peering Point", on_delete=CASCADE, null=True, blank=True
     )
-    local_asn: "AS" = ForeignKey(AS, verbose_name="Local AS", on_delete=CASCADE)
+    local_asn: AS = ForeignKey(AS, verbose_name="Local AS", on_delete=CASCADE)
     local_ip = INETField("Local IP", null=True, blank=True)
     local_backup_ip = INETField("Local Backup IP", null=True, blank=True)
     remote_asn = BigIntegerField("Remote AS", null=True, blank=True)

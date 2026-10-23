@@ -119,8 +119,8 @@ class ThresholdConfig(EmbeddedDocument):
 
 class MetricActionItem(EmbeddedDocument):
     is_active = BooleanField(default=True)
-    metric_type: "MetricType" = PlainReferenceField(MetricType)
-    metric_action: "MetricAction" = PlainReferenceField(MetricAction)
+    metric_type: MetricType = PlainReferenceField(MetricType)
+    metric_action: MetricAction = PlainReferenceField(MetricAction)
     metric_action_params: dict[str, Any] = DictField()
     thresholds = EmbeddedDocumentListField(ThresholdConfig)
 
@@ -149,7 +149,7 @@ class MetricActionItem(EmbeddedDocument):
             ma_params[param.name] = param.clean_value(self.metric_action_params[param.name])
         self.metric_action_params = ma_params
 
-    def get_config(self, rule_id: str) -> "GraphConfig":
+    def get_config(self, rule_id: str) -> GraphConfig:
         return GraphConfig(
             nodes=[
                 NodeItem(
@@ -214,7 +214,7 @@ class MetricRule(Document):
                 )
         return tuple((x, r[x][0], r[x][1]) for x in r)
 
-    def iter_conditions(self) -> Iterable["Match"]:
+    def iter_conditions(self) -> Iterable[Match]:
         """"""
         for match in self.match or []:
             if not match.labels and not match.exclude_labels:
@@ -306,7 +306,7 @@ class MetricRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_rules(cls) -> dict[set[str], list["MetricActionItem"]]:
+    def get_rules(cls) -> dict[set[str], list[MetricActionItem]]:
         r = defaultdict(list)
         for rid, match, actions in MetricRule.objects.filter(is_active=True).scalar(
             "id", "match", "actions"
@@ -333,7 +333,7 @@ class MetricRule(Document):
                     yield str(rid), str(a.metric_type.id)
 
     @classmethod
-    def get_config(cls, rule: "MetricRule") -> dict[str, Any]:
+    def get_config(cls, rule: MetricRule) -> dict[str, Any]:
         """Datastream rule config"""
         actions = []
         for num, action in enumerate(rule.actions):

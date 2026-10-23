@@ -69,7 +69,7 @@ class DiagnosticSettings(EmbeddedDocument):
     show_in_display = BooleanField(default=True)
     state_policy = StringField(choices=["ALL", "ANY"], default="ANY")
     # check_handler
-    handler: "Handler" = ReferenceField(Handler, required=False)
+    handler: Handler = ReferenceField(Handler, required=False)
     instance_checks = BooleanField(default=False)
     ctx: str = ListField(StringField(required=True))
     alarm_class: AlarmClass | None = ReferenceField(AlarmClass, required=False)
@@ -158,7 +158,7 @@ class InstanceSettings(EmbeddedDocument):
             return f"{self.instance_type} ({self.refs_caps.name}): {self.name}"
         return f"{self.instance_type}: {self.name}"
 
-    def get_config(self) -> "ServiceInstanceTypeConfig":
+    def get_config(self) -> ServiceInstanceTypeConfig:
         return ServiceInstanceTypeConfig(
             allow_manual=self.allow_manual,
             only_one_instance=self.only_one_instance,
@@ -169,7 +169,7 @@ class InstanceSettings(EmbeddedDocument):
             refs_caps=self.refs_caps,
         )
 
-    def get_instance_type(self) -> type["ServiceInstanceConfig"]:
+    def get_instance_type(self) -> type[ServiceInstanceConfig]:
         return ServiceInstanceConfig.get_type(self.instance_type)
 
 
@@ -367,7 +367,7 @@ class ServiceProfile(Document):
         Workflow, default=partial(Workflow.get_default_workflow, "sa.ServiceProfile")
     )
     # Auto-assign interface profile when service binds to interface
-    interface_profile: "InterfaceProfile" = ReferenceField(InterfaceProfile)
+    interface_profile: InterfaceProfile = ReferenceField(InterfaceProfile)
     # Alarm weight
     weight: int = IntField(default=0)
     # Status Policies
@@ -501,7 +501,7 @@ class ServiceProfile(Document):
         return Label.get_effective_setting(label, "enable_serviceprofile")
 
     @classmethod
-    def iter_lazy_labels(cls, service_profile: "ServiceProfile"):
+    def iter_lazy_labels(cls, service_profile: ServiceProfile):
         yield f"noc::serviceprofile::{service_profile.name}::="
 
     @classmethod
@@ -649,7 +649,7 @@ class ServiceProfile(Document):
         except KeyError:
             pass
 
-    def iter_configured_instances(self) -> Iterable["ServiceInstanceConfig"]:
+    def iter_configured_instances(self) -> Iterable[ServiceInstanceConfig]:
         """Get configuration"""
         for settings in self.instance_settings:
             yield settings.get_instance_type()

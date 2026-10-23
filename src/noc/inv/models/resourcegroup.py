@@ -43,7 +43,7 @@ rx_labels_lock = threading.Lock()
 _path_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
 
-def check_rg_parent(parent: "ResourceGroup"):
+def check_rg_parent(parent: ResourceGroup):
     if not parent.technology.allow_children:
         raise ValidationError(f"[{parent}] Parent technology is not allowed children")
 
@@ -501,7 +501,7 @@ class ResourceGroup(Document):
         return labels
 
     @classmethod
-    def iter_lazy_labels(cls, resource_group: "ResourceGroup"):
+    def iter_lazy_labels(cls, resource_group: ResourceGroup):
         for rg in ResourceGroup.objects.filter(id__in=resource_group.get_path()):
             if rg == resource_group:
                 # Optimize for less MatchLabels count

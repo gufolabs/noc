@@ -39,7 +39,7 @@ class Group:
     window: int = 0
 
     @classmethod
-    def from_config(cls, cfg) -> "Group":
+    def from_config(cls, cfg) -> Group:
         return Group(
             reference_template=Template(cfg["reference_template"]),
             alarm_class=AlarmClass.get_by_id(cfg["alarm_class"]) if cfg["alarm_class"] else None,
@@ -104,7 +104,7 @@ class AlarmRule:
         return severity
 
     @classmethod
-    def from_config(cls, config: dict[str, Any]) -> "AlarmRule":
+    def from_config(cls, config: dict[str, Any]) -> AlarmRule:
         """Generate rule from config"""
         rule = AlarmRule(name=config["name"], rid=config["id"])
         if config["match_expr"]:

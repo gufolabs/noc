@@ -64,7 +64,7 @@ class CfgItem:
     preference: int
 
     @classmethod
-    def from_data(cls, rid, table, field, data) -> "CfgItem":
+    def from_data(cls, rid, table, field, data) -> CfgItem:
         return CfgItem(
             id=rid,
             ch_table=table,

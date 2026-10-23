@@ -121,7 +121,7 @@ class PrefixCheck(DiscoveryCheck):
             return False
         return self.is_enabled_for_object(self.object)
 
-    def get_interface_prefixes(self) -> list["DiscoveredPrefix"]:
+    def get_interface_prefixes(self) -> list[DiscoveredPrefix]:
         """
         Get prefixes from interface discovery artifact
         :return:

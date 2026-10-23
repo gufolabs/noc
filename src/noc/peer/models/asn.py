@@ -50,7 +50,7 @@ class AS(NOCModel):
     asn = models.BigIntegerField("ASN", unique=True)
     # as-name RPSL Field
     as_name = models.CharField("AS Name", max_length=64, null=True, blank=True)
-    profile: "ASProfile" = DocumentReferenceField(
+    profile: ASProfile = DocumentReferenceField(
         ASProfile, null=False, blank=False, default=ASProfile.get_default_profile
     )
     project: Project | None = models.ForeignKey(

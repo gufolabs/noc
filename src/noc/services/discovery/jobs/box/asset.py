@@ -795,7 +795,7 @@ class AssetCheck(DiscoveryCheck):
                 )
 
     def register_unknown_part_no(
-        self, vendor: "Vendor", part_no: list[str] | str, descripton: str | None
+        self, vendor: Vendor, part_no: list[str] | str, descripton: str | None
     ):
         """
         Register missed part number
@@ -852,7 +852,7 @@ class AssetCheck(DiscoveryCheck):
         self.vendors[v] = o
         return o
 
-    def set_rule(self, rule: "ConnectionRule"):
+    def set_rule(self, rule: ConnectionRule):
         self.logger.debug("Setting connection rule '%s'", rule.name)
         # Compile context mappings
         self.rule_context = {}
@@ -1111,7 +1111,7 @@ class AssetCheck(DiscoveryCheck):
             # Move o2 to lost&found
             o2.put_into(self.lost_and_found)
 
-    def clean_serial(self, model: "ObjectModel", number: str | None, serial: str | None):
+    def clean_serial(self, model: ObjectModel, number: str | None, serial: str | None):
         # Empty value
         if not serial or serial == "None":
             new_serial = self.generate_serial(model, number)

@@ -109,14 +109,14 @@ class Job:
     def has_children(self) -> bool:
         return bool(self.children)
 
-    def iter_parents(self) -> Iterable["Job"]:
+    def iter_parents(self) -> Iterable[Job]:
         """Iterate over parents all way up."""
         p = self.parent
         while p is not None:
             yield p
             p = p.parent
 
-    def iter_children(self) -> Iterable["Job"]:
+    def iter_children(self) -> Iterable[Job]:
         """Iterate over direct children."""
         if self.children:
             for r in self.children:
@@ -124,14 +124,14 @@ class Job:
                 if item:
                     yield item
 
-    def iter_siblings(self) -> Iterable["Job"]:
+    def iter_siblings(self) -> Iterable[Job]:
         """Iterate over siblings."""
         if self.parent:
             for item in self.parent.iter_children():
                 if item != self:
                     yield item
 
-    def iter_depends_on(self) -> Iterable["Job"]:
+    def iter_depends_on(self) -> Iterable[Job]:
         """
         Iterate dependencies.
         """
@@ -141,7 +141,7 @@ class Job:
                 if r:
                     yield r
 
-    def iter_group(self) -> Iterable["Job"]:
+    def iter_group(self) -> Iterable[Job]:
         """
         Iterate job and all direct and indirect children.
         """
@@ -171,7 +171,7 @@ class Job:
         return not self.is_waiting or self.is_blocked_by_parents() or self.is_blocked_by_siblings()
 
     @property
-    def leader(self) -> "Job":
+    def leader(self) -> Job:
         """
         Top-level job.
         """
@@ -376,7 +376,7 @@ class Job:
         req: JobRequest,
         *,
         parent: Job | None = None,
-    ) -> Iterator["Job"]:
+    ) -> Iterator[Job]:
         """
         Create jobs from request.
         """
@@ -428,7 +428,7 @@ class Job:
             yield from ch
 
     @classmethod
-    def from_dict(cls, doc: dict[str, Any], jmap: dict[ObjectId, "Job"] | None = None) -> "Job":
+    def from_dict(cls, doc: dict[str, Any], jmap: dict[ObjectId, Job] | None = None) -> Job:
         """
         Create job from database dict.
         """

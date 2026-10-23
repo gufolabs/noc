@@ -110,7 +110,7 @@ class SensorProfile(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    workflow: "Workflow" = PlainReferenceField(
+    workflow: Workflow = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "inv.Sensor")
     )
     style = ForeignKeyField(Style)
@@ -159,7 +159,7 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "SensorProfile":
+    def get_default_profile(cls) -> SensorProfile:
         sp = SensorProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
             sp = SensorProfile(

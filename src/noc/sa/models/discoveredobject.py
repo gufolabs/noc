@@ -87,7 +87,7 @@ class CheckStatus(EmbeddedDocument):
 class DataItem(EmbeddedDocument):
     source: str = StringField(required=True)
     last_update = DateTimeField(required=False)
-    remote_system: "RemoteSystem" = PlainReferenceField(RemoteSystem, required=False)
+    remote_system: RemoteSystem = PlainReferenceField(RemoteSystem, required=False)
     remote_id: str = StringField(required=False)
     labels: list[str] = ListField(StringField())
     service_groups: list[ObjectId] = ListField(ObjectIdField())
@@ -102,7 +102,7 @@ class DataItem(EmbeddedDocument):
             return f"{self.source}({self.last_update})@{self.remote_system.name}:{self.remote_id}: {','.join(self.data)}"
         return f"{self.source}({self.last_update}): {','.join(self.data)}"
 
-    def __eq__(self, other: "DataItem") -> bool:
+    def __eq__(self, other: DataItem) -> bool:
         if self.source != other.source:
             return False
         if other.remote_system and other.remote_system != self.remote_system:
@@ -153,10 +153,10 @@ class DiscoveredObject(Document):
         ],
     }
 
-    pool: "Pool" = PlainReferenceField(Pool, required=True)
+    pool: Pool = PlainReferenceField(Pool, required=True)
     address: str = StringField(required=True)
     address_bin = IntField()
-    state: "State" = PlainReferenceField(State)
+    state: State = PlainReferenceField(State)
     # profile = Predefined Profile
     # Flags
     is_dirty: bool = BooleanField(default=True)
@@ -251,7 +251,7 @@ class DiscoveredObject(Document):
         """Check record is duplicate"""
         return self.origin and self.origin != self.id
 
-    def iter_sorted_data(self, sources: list[str] | None = None) -> Iterable["DataItem"]:
+    def iter_sorted_data(self, sources: list[str] | None = None) -> Iterable[DataItem]:
         """Return data sorted by source"""
         sources = sources or self.sources
         yield from sorted(
@@ -312,7 +312,7 @@ class DiscoveredObject(Document):
         address: str,
         pool: Pool,
         data: list[PurgatoriumData],
-    ) -> list["DiscoveredObject"]:
+    ) -> list[DiscoveredObject]:
         """Find Discovered object by data"""
         q = m_q(pool=pool, address=address)
         for d in data:
@@ -333,7 +333,7 @@ class DiscoveredObject(Document):
         rule: str | None = None,
         update_ts: datetime.datetime | None = None,
         dry_run: bool = False,
-    ) -> "DiscoveredObject":
+    ) -> DiscoveredObject:
         """Check Discovered Object Exists"""
         oo = cls.find_object_by_data(address, pool, data)
         if len(oo) > 1:
@@ -370,11 +370,11 @@ class DiscoveredObject(Document):
     @classmethod
     def merge_discovered_objects(
         cls,
-        objects: list["DiscoveredObject"],
+        objects: list[DiscoveredObject],
         address: str,
         data: list[PurgatoriumData],
         dry_run: bool = False,
-    ) -> tuple["DiscoveredObject", list[PurgatoriumData]]:
+    ) -> tuple[DiscoveredObject, list[PurgatoriumData]]:
         """
         get_moved object
 
@@ -582,7 +582,7 @@ class DiscoveredObject(Document):
         return r
 
     @classmethod
-    def get_origin(cls, discovered: list["DiscoveredObject"]) -> "DiscoveredObject":
+    def get_origin(cls, discovered: list[DiscoveredObject]) -> DiscoveredObject:
         """Get origin records over Discovered Object"""
         origin = discovered[0]
         for d in discovered[1:]:
@@ -592,9 +592,9 @@ class DiscoveredObject(Document):
 
     def merge_duplicates(
         self,
-        duplicates: list["DiscoveredObject"],
+        duplicates: list[DiscoveredObject],
         is_new: bool = False,
-    ) -> tuple["DiscoveredObject", ResourceItem]:
+    ) -> tuple[DiscoveredObject, ResourceItem]:
         """
         Merge Duplicates Record, and data
         1. If not ETL sources, set duplicate to origin
@@ -651,7 +651,7 @@ class DiscoveredObject(Document):
         hostname: str | None = None,
         address: str | None = None,
         managed_object: ManagedObject | None = None,
-    ) -> list["DiscoveredObject"]:
+    ) -> list[DiscoveredObject]:
         """Check duplicate"""
         from noc.inv.models.subinterface import SubInterface
         from mongoengine.queryset.visitor import Q
@@ -682,7 +682,7 @@ class DiscoveredObject(Document):
         """Check RemoteSystem in data"""
         return any(d.remote_system and d.remote_system.id == remote_system.id for d in self.data)
 
-    def is_preferred(self, do: "DiscoveredObject") -> bool:
+    def is_preferred(self, do: DiscoveredObject) -> bool:
         """Compare DiscoveredObject"""
         if ETL_SOURCE not in do.sources:
             return len(self.sources) >= len(do.sources)
@@ -707,7 +707,7 @@ class DiscoveredObject(Document):
         logger.info("[%s] Rule and Source priority is same. Use address", self.address)
         return self.address_bin > do.address_bin
 
-    def check_duplicates(self, mos: list["ManagedObject"]) -> list["DiscoveredObject"]:
+    def check_duplicates(self, mos: list[ManagedObject]) -> list[DiscoveredObject]:
         """Getting DiscoveredObject duplicates record by ManagedObjects"""
         from noc.inv.models.subinterface import SubInterface
 
@@ -776,7 +776,7 @@ class DiscoveredObject(Document):
 
     def fix_duplicate_managed_object(
         self,
-        objects: list["ManagedObject"],
+        objects: list[ManagedObject],
     ) -> ManagedObject | None:
         """Choice from multiple ManagedObject only own"""
         for o in objects:

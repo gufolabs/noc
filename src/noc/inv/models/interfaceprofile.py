@@ -298,7 +298,7 @@ class InterfaceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "InterfaceProfile":
+    def get_default_profile(cls) -> InterfaceProfile:
         return InterfaceProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
 
     @classmethod
@@ -319,8 +319,8 @@ class InterfaceProfile(Document):
 
     @staticmethod
     def config_from_settings(
-        m: "InterfaceProfileMetrics", profile_interval: int | None = None
-    ) -> "MetricConfig":
+        m: InterfaceProfileMetrics, profile_interval: int | None = None
+    ) -> MetricConfig:
         """
         Returns MetricConfig from .metrics field
         :return:
@@ -349,7 +349,7 @@ class InterfaceProfile(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_lazy_labels(cls, interface_profile: "InterfaceProfile"):
+    def iter_lazy_labels(cls, interface_profile: InterfaceProfile):
         yield f"noc::interface_profile::{interface_profile.name}::="
 
     @property

@@ -161,7 +161,7 @@ class QueryField:
     @classmethod
     def from_query(
         cls, name: str, alias: str | None = None, table_name: str | None = None
-    ) -> "QueryField":
+    ) -> QueryField:
         """
         Build QueryField from query alias
         Attrs:
@@ -187,7 +187,7 @@ class QuerySet:
 
     def __init__(
         self,
-        proxy: "MetricScopeProxy",
+        proxy: MetricScopeProxy,
         group_by: tuple[str, ...] | None = None,
     ):
         """
@@ -208,7 +208,7 @@ class QuerySet:
     def __str__(self) -> str:
         return f"Query Set Fields: {self.fields.keys()}"
 
-    def __getattr__(self, item) -> "QuerySet":
+    def __getattr__(self, item) -> QuerySet:
         self.add_query_field(item, item)
         return self
 
@@ -218,7 +218,7 @@ class QuerySet:
         field: str | None = None,
         function: str | Function | None = None,
         **kwargs,
-    ) -> "QuerySet":
+    ) -> QuerySet:
         if field:
             self.fields[self.last_field].field = field
         if function:
@@ -326,7 +326,7 @@ class QuerySet:
                     meta[name] = value
 
     @classmethod
-    def parse_query(cls, sql: str) -> "QuerySet":
+    def parse_query(cls, sql: str) -> QuerySet:
         """Build Queryset by SQL Expression"""
 
     def add_query_field(self, query: QueryField | str, alias: str | None = None):
@@ -492,7 +492,7 @@ class MetricScopeProxy:
         group_by = group_by or self.last_group_by
         return self.queries.get(group_by)
 
-    def __getattr__(self, item) -> "QuerySet":
+    def __getattr__(self, item) -> QuerySet:
         qs = self.get_queryset()
         if not qs:
             qs = self.add_queryset()
@@ -505,7 +505,7 @@ class MetricScopeProxy:
         queries: list[str | QueryField] | None = None,
         group_by: list[str] | None = None,
         **kwargs,
-    ) -> "QuerySet":
+    ) -> QuerySet:
         qs = self.get_queryset(group_by)
         if not qs:
             qs = self.add_queryset(group_by)
@@ -532,7 +532,7 @@ class MetricProxy:
         self._scopes: dict[str, MetricScopeProxy] = {}  # Scope Storage
         self._conditions = kwargs
 
-    def __getattr__(self, item) -> "MetricScopeProxy":
+    def __getattr__(self, item) -> MetricScopeProxy:
         """
         Getting Metric Scope Proxy for request metrics
         Attrs:

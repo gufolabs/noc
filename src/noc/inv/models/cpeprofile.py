@@ -190,7 +190,7 @@ class CPEProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "CPEProfile":
+    def get_default_profile(cls) -> CPEProfile:
         sp = CPEProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
             sp = CPEProfile(

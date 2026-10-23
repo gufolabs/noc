@@ -105,7 +105,7 @@ class VLANProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "VLANProfile":
+    def get_default_profile(cls) -> VLANProfile:
         vp = VLANProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not vp:
             vp = VLANProfile(

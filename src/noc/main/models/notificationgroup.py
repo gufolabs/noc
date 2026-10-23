@@ -265,13 +265,13 @@ class NotificationGroup(NOCModel):
         return NotificationGroup.objects.filter(name=name).first()
 
     @classmethod
-    def get_groups_by_type(cls, message_type: MessageType) -> list["NotificationGroup"]:
+    def get_groups_by_type(cls, message_type: MessageType) -> list[NotificationGroup]:
         return list(
             NotificationGroup.objects.filter(message_types__message_type=message_type.value)
         )
 
     @classmethod
-    def get_groups_by_user(cls, user: User) -> list["NotificationGroup"]:
+    def get_groups_by_user(cls, user: User) -> list[NotificationGroup]:
         q = d_Q(subscription_settings__contains=[{"user": user.id}])
         for g in user.groups.filter():
             q |= d_Q(subscription_settings__contains=[{"group": g.id}])
@@ -280,7 +280,7 @@ class NotificationGroup(NOCModel):
     @classmethod
     def get_user_settings(
         cls,
-        group: "NotificationGroup",
+        group: NotificationGroup,
         user: User,
     ) -> NotificationGroupUserSettings | None:
         """Getting user settings for group"""
@@ -320,7 +320,7 @@ class NotificationGroup(NOCModel):
         cls,
         o: Any,
         user: User | None = None,
-    ) -> list["NotificationGroupSubscription"]:
+    ) -> list[NotificationGroupSubscription]:
         if not user:
             return NotificationGroupSubscription.objects.filter(
                 model_id=get_model_id(o),
@@ -422,7 +422,7 @@ class NotificationGroup(NOCModel):
 
     def get_active_user_contacts(
         self, user: User, ts: datetime.datetime | None = None
-    ) -> list["NotificationContact"]:
+    ) -> list[NotificationContact]:
         """Getting Active user Contacts for send notification"""
         r = []
         us = self.get_user_settings(self, user)
@@ -565,7 +565,7 @@ class NotificationGroup(NOCModel):
         title_tag: str | None = None,
         expired_at: datetime.datetime | None = None,
         suppress: bool | None = None,
-    ) -> "NotificationGroupUserSettings":
+    ) -> NotificationGroupUserSettings:
         """
         Update User settings for NotificationGroup
         Args:
@@ -610,7 +610,7 @@ class NotificationGroup(NOCModel):
         watchers: list[Any],
         suppresses: list[Any],
         remote_system: RemoteSystem | None = None,
-    ) -> "NotificationGroupSubscription":
+    ) -> NotificationGroupSubscription:
         """Update notification subscription"""
         n = NotificationGroupSubscription.objects.get(
             notification_group=self,
@@ -685,7 +685,7 @@ class NotificationGroup(NOCModel):
         cls,
         o: Any,
         remote_system: RemoteSystem | None = None,
-    ) -> Iterable["NotificationGroupSubscription"]:
+    ) -> Iterable[NotificationGroupSubscription]:
         """
         Object Subscription settings
         Args:

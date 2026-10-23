@@ -59,7 +59,7 @@ logger = logging.getLogger(__name__)
 
 
 class AddressItem(EmbeddedDocument):
-    pool: "Pool" = PlainReferenceField(Pool, required=False)
+    pool: Pool = PlainReferenceField(Pool, required=False)
     address: str = StringField(required=True)
     address_bin = IntField()
     is_active = BooleanField(default=True)
@@ -163,7 +163,7 @@ class ServiceInstance(Document):
                 return a.address
 
     @property
-    def config(self) -> "ServiceInstanceTypeConfig":
+    def config(self) -> ServiceInstanceTypeConfig:
         """Return configuration on type"""
         cfg = self.service.profile.get_instance_config(self.type, self.name)
         return cfg or ServiceInstanceTypeConfig()
@@ -208,7 +208,7 @@ class ServiceInstance(Document):
         service,
         cfg: ServiceInstanceConfig,
         settings: ServiceInstanceTypeConfig | None = None,
-    ) -> "ServiceInstance":
+    ) -> ServiceInstance:
         settings = settings or ServiceInstanceTypeConfig()
         qs = cfg.get_queryset(service, settings)
         instance = ServiceInstance.objects.filter(qs).first()
@@ -225,7 +225,7 @@ class ServiceInstance(Document):
         service,
         config: ServiceInstanceConfig,
         **kwargs,
-    ) -> "ServiceInstance":
+    ) -> ServiceInstance:
         """Create Service Instance"""
         # First discovered
         return ServiceInstance(
@@ -326,7 +326,7 @@ class ServiceInstance(Document):
             ServiceSummary.refresh_object(oo)
 
     @classmethod
-    def iter_object_instances(cls, managed_object: ManagedObject) -> Iterable["ServiceInstance"]:
+    def iter_object_instances(cls, managed_object: ManagedObject) -> Iterable[ServiceInstance]:
         """Iterate over Object Instances"""
         from noc.inv.models.subinterface import SubInterface
 
@@ -394,7 +394,7 @@ class ServiceInstance(Document):
         return True
 
     @classmethod
-    def get_alarm_reference(cls, alarm: "ActiveAlarm") -> list[str]:
+    def get_alarm_reference(cls, alarm: ActiveAlarm) -> list[str]:
         """"""
         r = []
         if "mac" in alarm.vars:
@@ -404,7 +404,7 @@ class ServiceInstance(Document):
         return r
 
     @classmethod
-    def get_alarm_addresses(cls, alarm: "ActiveAlarm") -> list[str]:
+    def get_alarm_addresses(cls, alarm: ActiveAlarm) -> list[str]:
         """Convert Active Alarm to addresses"""
         r = []
         # Alarm Class Vars ?

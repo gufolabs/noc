@@ -71,7 +71,7 @@ class Firmware(Document):
     def __str__(self):
         return self.full_name if self.full_name else self.version
 
-    def __eq__(self, other: "Firmware") -> bool:
+    def __eq__(self, other: Firmware) -> bool:
         if not other:
             return False
         if isinstance(other, Firmware):
@@ -84,7 +84,7 @@ class Firmware(Document):
             return False
         return r == 0
 
-    def __lt__(self, other: "Firmware") -> bool:
+    def __lt__(self, other: Firmware) -> bool:
         if not other:
             return False
         if isinstance(other, Firmware):
@@ -98,7 +98,7 @@ class Firmware(Document):
             return False
         return r < 0
 
-    def __le__(self, other: "Firmware") -> bool:
+    def __le__(self, other: Firmware) -> bool:
         if not other:
             return False
         if isinstance(other, Firmware):

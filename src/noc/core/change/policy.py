@@ -28,7 +28,7 @@ AUDIT_CHANGE = "noc.core.change.change.audit_change"
 REACTION_HANDLER = "noc.core.change.change.apply_reactions"
 
 cv_policy: ContextVar[BaseChangeTrackerPolicy | None] = ContextVar("cv_policy", default=None)
-cv_policy_stack: ContextVar[list["BaseChangeTrackerPolicy"] | None] = ContextVar(
+cv_policy_stack: ContextVar[list[BaseChangeTrackerPolicy] | None] = ContextVar(
     "cv_policy_stack", default=None
 )
 c_user: ContextVar[str | None] = ContextVar("c_user", default=None)
@@ -76,7 +76,7 @@ class ChangeTracker:
         CHANGE_HANDLERS["inv.Object"].add(SYNC_SENSOR_HANDLER)
 
     @staticmethod
-    def get_policy() -> "BaseChangeTrackerPolicy":
+    def get_policy() -> BaseChangeTrackerPolicy:
         policy = cv_policy.get()
         if not policy:
             policy = SimpleChangeTrackerPolicy()
@@ -138,7 +138,7 @@ class ChangeTracker:
             self.get_policy().register_ds(items=datastreams)  # Handler -> Change
 
     @staticmethod
-    def push_policy(policy: "BaseChangeTrackerPolicy") -> None:
+    def push_policy(policy: BaseChangeTrackerPolicy) -> None:
         """
         Push new effective policy for the current thread,
         store current one in the stack

@@ -294,7 +294,7 @@ class RemoteSystem(Document):
         if config.datastream.enable_cfgmetricstarget:
             yield "cfgmetricstarget", f"main.RemoteSystem::{self.bi_id}"
 
-    def get_portmapper(self) -> "BasePortMapper":
+    def get_portmapper(self) -> BasePortMapper:
         """Getting portmapper functions"""
         p_name = self.portmapper_name or self.name
         return portmapper_loader.get(p_name)
@@ -486,7 +486,7 @@ class RemoteSystem(Document):
         scheduler.remove_job(jcls=self.JCLS_METRIC, key=self.id)
 
     @classmethod
-    def get_collector_config(cls, remote_system: "RemoteSystem") -> dict[str, Any]:
+    def get_collector_config(cls, remote_system: RemoteSystem) -> dict[str, Any]:
         """Collector config"""
         if remote_system.remote_collectors_policy != "D" and remote_system.api_key:
             return {
@@ -503,12 +503,12 @@ class RemoteSystem(Document):
         return {}
 
     @classmethod
-    def clean_reference(cls, remote_system: "RemoteSystem", remote_id: str):
+    def clean_reference(cls, remote_system: RemoteSystem, remote_id: str):
         """Build reference string. Maybe add aliases ?"""
         return f"{REFERENCE_CODE}:{remote_system.name}:{remote_id}"
 
     @classmethod
-    def from_reference(cls, reference: str) -> tuple["RemoteSystem", str]:
+    def from_reference(cls, reference: str) -> tuple[RemoteSystem, str]:
         if not reference.startswith(REFERENCE_CODE):
             raise ValueError("Unknown Reference format")
         _, name, remote_id = reference.split(":")
@@ -526,7 +526,7 @@ class RemoteSystem(Document):
         return self.enable_metrics or self.enable_fmevent
 
     @classmethod
-    def get_metric_config(cls, remote_system: "RemoteSystem"):
+    def get_metric_config(cls, remote_system: RemoteSystem):
         """Return MetricConfig for Target service"""
         enable_fmevent = remote_system.enable_fmevent and remote_system.event_sync_mode == "P"
         if not remote_system.enable_metrics and not enable_fmevent:

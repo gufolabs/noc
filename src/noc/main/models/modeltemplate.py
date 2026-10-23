@@ -113,7 +113,7 @@ class ResourceItem(BaseModel):
     # Send workflow event
     event: str | None = None
 
-    def merge_data(self, ri: "ResourceItem", systems_priority: list[str] | None = None):
+    def merge_data(self, ri: ResourceItem, systems_priority: list[str] | None = None):
         """Merge data over Multiple Resource Item"""
         if not self.mappings:
             self.mappings = {}
@@ -277,7 +277,7 @@ class ModelTemplate(Document):
     groups = EmbeddedDocumentListField(GroupItem)
     labels: list[str] = ListField(StringField())  # Manual Set
     # instances
-    default_state: "State" = PlainReferenceField(State)
+    default_state: State = PlainReferenceField(State)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=120)
     _code_cache = cachetools.TTLCache(maxsize=100, ttl=300)

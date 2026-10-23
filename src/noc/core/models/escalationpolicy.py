@@ -43,14 +43,14 @@ class EscalationPolicy(Enum):
         return _LABEL_TO_POLICY.get(f"noc::escalation::{choice}")
 
     @classmethod
-    def get_default(cls) -> "EscalationPolicy":
+    def get_default(cls) -> EscalationPolicy:
         """
         Get default escalation policy
         """
         return EscalationPolicy.ROOT
 
     @classmethod
-    def get_effective_policy(cls, labels: Iterable[list[str]]) -> "EscalationPolicy":
+    def get_effective_policy(cls, labels: Iterable[list[str]]) -> EscalationPolicy:
         """
         Calculate effective policy from a sequence of labels
         """

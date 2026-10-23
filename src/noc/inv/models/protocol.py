@@ -61,7 +61,7 @@ class ProtocolVariant:
     Add __contains__ for connection check
     """
 
-    protocol: "Protocol"
+    protocol: Protocol
     direction: str = "*"
     discriminator: str | None = None
     data: dict[str, str] | None = None
@@ -70,13 +70,13 @@ class ProtocolVariant:
     def __str__(self) -> str:
         return self.code
 
-    def __eq__(self, other: "ProtocolVariant") -> bool:
+    def __eq__(self, other: ProtocolVariant) -> bool:
         r = self.protocol.id == other.protocol.id and self.direction == other.direction
         if not self.discriminator:
             return r
         return r and self.discriminator == other.discriminator
 
-    def __contains__(self, item: "ProtocolVariant") -> bool:
+    def __contains__(self, item: ProtocolVariant) -> bool:
         if self.protocol.id != item.protocol.id or self.direction != item.direction:
             return False
         if (self.discriminator and not item.discriminator) or (
@@ -97,7 +97,7 @@ class ProtocolVariant:
         return f"{self.direction}::{self.protocol.code}::{self.discriminator}"
 
     @classmethod
-    def get_by_code(cls, code: str) -> "ProtocolVariant":
+    def get_by_code(cls, code: str) -> ProtocolVariant:
         """
         Generate Protocol Variant by code
         LLDP -> LLDP
@@ -198,7 +198,7 @@ class Protocol(Document):
     code = StringField(unique=True)
     description = StringField()
     uuid = UUIDField(binary=True)
-    technology: "Technology" = PlainReferenceField(Technology)
+    technology: Technology = PlainReferenceField(Technology)
     data = EmbeddedDocumentListField(ProtocolAttr)
     connection_schema = StringField(
         choices=[
@@ -288,7 +288,7 @@ class Protocol(Document):
         return safe_json_path(self.name)
 
     @classmethod
-    def get_variant_by_code(cls, code: str) -> "ProtocolVariant":
+    def get_variant_by_code(cls, code: str) -> ProtocolVariant:
         """
         Return protocol variant by code
 

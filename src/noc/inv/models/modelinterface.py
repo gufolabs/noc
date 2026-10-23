@@ -199,7 +199,7 @@ class ModelInterface(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_attr_cache"), lock=lambda _: id_lock)
-    def get_interface_attr(cls, interface: str, key: str) -> "ModelInterfaceAttr":
+    def get_interface_attr(cls, interface: str, key: str) -> ModelInterfaceAttr:
         mi = ModelInterface.objects.filter(name=interface).first()
         if not mi:
             raise ModelDataError(f"Invalid interface '{interface}'")

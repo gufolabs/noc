@@ -194,7 +194,7 @@ class Band(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
     name = StringField()
     parent = StringField()
-    orientation: "BandOrientation" = EnumField(BandOrientation)
+    orientation: BandOrientation = EnumField(BandOrientation)
     queries = EmbeddedDocumentListField(Query)
     condition_param = StringField(required=False)
     condition_value = StringField(required=False)

@@ -186,7 +186,7 @@ class ManagedObjectProfile(NOCModel):
         Style, verbose_name=_("Style"), blank=True, null=True, on_delete=models.CASCADE
     )
     # Workflow
-    workflow: "Workflow" = DocumentReferenceField(
+    workflow: Workflow = DocumentReferenceField(
         Workflow,
         null=False,
         blank=False,
@@ -740,7 +740,7 @@ class ManagedObjectProfile(NOCModel):
         choices=[("D", "Disable"), ("R", "By Rule")],
         default="R",
     )
-    match_rules: list["MatchRule"] = PydanticField(
+    match_rules: list[MatchRule] = PydanticField(
         _("Match Dynamic Rules"),
         schema=MatchRules,
         blank=True,
@@ -1127,7 +1127,7 @@ class ManagedObjectProfile(NOCModel):
         return Label.get_effective_setting(label, setting="enable_managedobjectprofile")
 
     @classmethod
-    def iter_lazy_labels(cls, object_profile: "ManagedObjectProfile"):
+    def iter_lazy_labels(cls, object_profile: ManagedObjectProfile):
         yield f"noc::managedobjectprofile::{object_profile.name}::="
 
     @classmethod

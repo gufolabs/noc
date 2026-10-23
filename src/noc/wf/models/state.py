@@ -104,7 +104,7 @@ class State(Document):
         "json_depends_on": ["wf.workflows"],
         "json_unique_fields": [("workflow", "name")],
     }
-    workflow: "Workflow" = PlainReferenceField(Workflow)
+    workflow: Workflow = PlainReferenceField(Workflow)
     name = StringField()
     uuid = UUIDField(binary=True)
     description = StringField()

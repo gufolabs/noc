@@ -39,11 +39,11 @@ class ConnectionRule(EmbeddedDocument):
     scope = PlainReferenceField(ConfigurationScope, required=True)
     match_context = StringField()
     match_connection_type: ConnectionType | None = PlainReferenceField(ConnectionType)
-    match_protocols: list["Protocol"] | None = PlainReferenceListField(Protocol)
+    match_protocols: list[Protocol] | None = PlainReferenceListField(Protocol)
     # Param Section
     # param, is_hide, is_readonly, choices
-    allowed_params: list["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
-    deny_params: list["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
+    allowed_params: list[ConfigurationParam] = PlainReferenceListField(ConfigurationParam)
+    deny_params: list[ConfigurationParam] = PlainReferenceListField(ConfigurationParam)
     disabled = BooleanField(default=False)
 
     @property
@@ -65,8 +65,8 @@ class ConnectionRule(EmbeddedDocument):
 class ParamRule(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
 
-    param: "ConfigurationParam" = PlainReferenceField(ConfigurationParam)
-    scope: "ConfigurationScope" = PlainReferenceField(ConfigurationScope)
+    param: ConfigurationParam = PlainReferenceField(ConfigurationParam)
+    scope: ConfigurationScope = PlainReferenceField(ConfigurationScope)
     dependency_param: ConfigurationParam | None = PlainReferenceField(
         ConfigurationParam, required=False
     )
@@ -139,14 +139,14 @@ class ObjectConfigurationRule(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_schema(self, param: "ConfigurationParam", o) -> ParamSchema | None:
+    def get_schema(self, param: ConfigurationParam, o) -> ParamSchema | None:
         schema = param.get_schema(o)
         for p in self.param_rules:
             if p.param.id == param.id and p.choices:
                 schema.choices = p.choices
         return schema
 
-    def get_scope(self, param: "ConfigurationParam", oc) -> ConfigurationScope | None:
+    def get_scope(self, param: ConfigurationParam, oc) -> ConfigurationScope | None:
         """
         Check ObjectModel Connection Match with Rule
         :return:

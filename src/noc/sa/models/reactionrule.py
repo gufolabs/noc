@@ -74,7 +74,7 @@ class ActionItem(EmbeddedDocument):
         ],
         default="A",
     )
-    handler: "Handler" = PlainReferenceField(Handler, required=False)
+    handler: Handler = PlainReferenceField(Handler, required=False)
     # End Commands Run
     allow_fail: bool = BooleanField(default=True)
     is_fatal: bool = BooleanField(default=False)
@@ -224,7 +224,7 @@ class Match(EmbeddedDocument):
     groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
     ex_groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
     remote_system: RemoteSystem | None = ReferenceField(RemoteSystem, required=False)
-    wf_states: list["State"] = ListField(ReferenceField(State, required=True))
+    wf_states: list[State] = ListField(ReferenceField(State, required=True))
 
     def clean(self):
         super().clean()
@@ -383,7 +383,7 @@ class ReactionRule(Document):
     #     )
 
     @classmethod
-    def iter_rules(cls, model_id: str, operation: str, m_ctx: dict[str, Any]) -> Iterable["str"]:
+    def iter_rules(cls, model_id: str, operation: str, m_ctx: dict[str, Any]) -> Iterable[str]:
         """Iterate rule for object"""
         for rule_id, match in cls.get_rules_matcher(model_id, operation):
             if not match or match(m_ctx):
@@ -481,7 +481,7 @@ class ReactionRule(Document):
     def iter_affected_rules(
         self,
         domains: list[Any],
-    ) -> Iterable[tuple["ReactionRule", Any, "AffectedRule"]]:
+    ) -> Iterable[tuple[ReactionRule, Any, AffectedRule]]:
         """Iterate over affected Rules"""
         # self ?
         for model_id, oid in domains or []:

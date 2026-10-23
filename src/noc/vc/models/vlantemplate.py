@@ -90,7 +90,7 @@ class VLANTemplate(Document):
                 template_id=str(self.id),
             )
 
-    def iter_vlans(self) -> Iterable[tuple[int, str, str, "VLANProfile"]]:
+    def iter_vlans(self) -> Iterable[tuple[int, str, str, VLANProfile]]:
         """
         Iterate over template vlans
         :return:

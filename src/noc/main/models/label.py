@@ -347,7 +347,7 @@ class Label(Document):
             pass
 
     @classmethod
-    def from_names(self, labels: list[str]) -> list["Label"]:
+    def from_names(self, labels: list[str]) -> list[Label]:
         """
         Conert list names to Labels list
         """
@@ -1334,7 +1334,7 @@ class Label(Document):
         key=lambda c, ri: getattr(ri, "regexp", None),
         lock=lambda _: re_lock,
     )
-    def _get_re(cls, rxi: "RegexItem") -> re.Pattern | None:
+    def _get_re(cls, rxi: RegexItem) -> re.Pattern | None:
         flags = 0
         if rxi.flag_multiline:
             flags |= re.MULTILINE

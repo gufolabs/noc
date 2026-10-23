@@ -103,7 +103,7 @@ class AddressProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> "AddressProfile":
+    def get_default_profile(cls) -> AddressProfile:
         ap = AddressProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not ap:
             wf = Workflow.get_default_workflow("ip.Address")

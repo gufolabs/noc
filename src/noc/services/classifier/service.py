@@ -277,7 +277,7 @@ class ClassifierService(BaseService):
 
     async def register_mx_message(
         self,
-        event: "Event",
+        event: Event,
         event_config: EventConfig,
         resolved_vars: dict[str, Any],
         mo: ManagedObject | None,

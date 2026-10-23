@@ -50,7 +50,7 @@ rx_empty_string = re.compile(r"\n{2,}")
 class ActionSetItem(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
 
-    action: "Action" = PlainReferenceField("sa.Action", required=True)
+    action: Action = PlainReferenceField("sa.Action", required=True)
     execute: str = StringField(
         # Success/Failed ?, from param
         choices=[
@@ -161,7 +161,7 @@ class Action(Document):
     access_level = IntField(default=15)
     # Optional handler for non-sa actions
     # script
-    handler: "Handler" = ReferenceField(Handler, required=False)
+    handler: Handler = ReferenceField(Handler, required=False)
     action_job: str = StringField(default="action_commands")
     # Job, Action cfg job, test SLA/ SLA by separate task
     action_set = EmbeddedDocumentListField(ActionSetItem)
@@ -312,7 +312,7 @@ class Action(Document):
 
     def iter_configs(
         self, profile, match_ctx, **kwargs
-    ) -> tuple["ActionCommandConfig", dict[str, Any], dict[str, Any]]:
+    ) -> tuple[ActionCommandConfig, dict[str, Any], dict[str, Any]]:
         """Iterate over Action Commands Configurations"""
         # ActionSet First
         ctx = {}
@@ -518,7 +518,7 @@ class Action(Document):
         domain: Any | None = None,
         managed_object: Any | None = None,
         **kwargs,
-    ) -> Iterable[tuple["Action", Any, dict[str, Any]]]:
+    ) -> Iterable[tuple[Action, Any, dict[str, Any]]]:
         """Return action ctx"""
         for mo, d_scopes, d_ctx in self.iter_domain_ctx(
             domain, managed_object=managed_object, **kwargs
@@ -586,9 +586,9 @@ class Action(Document):
 
     def get_job_by_actions(
         self,
-        actions: dict[Any, list[tuple["Action", dict[str, Any]]]],
+        actions: dict[Any, list[tuple[Action, dict[str, Any]]]],
         dry_run: bool = False,
-    ) -> "JobRequest":
+    ) -> JobRequest:
         """"""
         action_jobs = []
         for mo, aas in actions.items():
@@ -610,7 +610,7 @@ class Action(Document):
 
     def execute_actions(
         self,
-        actions: dict[Any, list[tuple["Action", dict[str, Any]]]],
+        actions: dict[Any, list[tuple[Action, dict[str, Any]]]],
         dry_run: bool = False,
         as_job: bool = False,
     ):

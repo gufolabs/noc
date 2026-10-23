@@ -254,5 +254,5 @@ class Platform(Document):
         return Label.get_effective_setting(label, setting="enable_platform")
 
     @classmethod
-    def iter_lazy_labels(cls, platform: "Platform"):
+    def iter_lazy_labels(cls, platform: Platform):
         yield f"noc::platform::{platform.name}::="

@@ -211,7 +211,7 @@ class Agent(Document):
         return 0
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Agent") -> Iterable[list[str]]:
+    def iter_effective_labels(cls, instance: Agent) -> Iterable[list[str]]:
         yield list(instance.labels or [])
         state = instance.state or instance.profile.workflow.get_default_state()
         if state.labels:
@@ -224,7 +224,7 @@ class Agent(Document):
         return state.is_productive
 
     @classmethod
-    def get_metric_config(cls, agent: "Agent"):
+    def get_metric_config(cls, agent: Agent):
         """Return MetricConfig for Target service"""
         from noc.inv.models.sensor import Sensor
 

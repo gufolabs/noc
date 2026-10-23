@@ -122,7 +122,7 @@ class EscalationItem(EmbeddedDocument):
         tt_login: str | None = None,
         pre_reason: str | None = None,
         promote_item: str | None = None,
-    ) -> list["ActionConfig"]:
+    ) -> list[ActionConfig]:
         """"""
         r = []
         if self.notification_group:
@@ -405,7 +405,7 @@ class EscalationProfile(Document):
         return self.escalations[0].delay
 
     @classmethod
-    def get_config(cls, profile: "EscalationProfile") -> dict[str, Any]:
+    def get_config(cls, profile: EscalationProfile) -> dict[str, Any]:
         """Build job config"""
         actions = []
         for e in profile.escalations:

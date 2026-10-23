@@ -157,5 +157,5 @@ class Vendor(Document):
             raise ValueError("Vendor without code")
 
     @classmethod
-    def iter_lazy_labels(cls, vendor: "Vendor"):
+    def iter_lazy_labels(cls, vendor: Vendor):
         yield f"noc::vendor::{vendor.name}::="

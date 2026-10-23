@@ -200,7 +200,7 @@ class TTSystem(Document):
         )
 
     @classmethod
-    def iter_lazy_labels(cls, ttsystem: "TTSystem"):
+    def iter_lazy_labels(cls, ttsystem: TTSystem):
         yield f"noc::ttsystem::{ttsystem.name}::="
 
     def can_escalate(self, obj) -> bool:

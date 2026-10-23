@@ -246,7 +246,7 @@ class AlarmClass(Document):
             return AlarmSeverity.get_by_code(self.labels[0][15:].upper())
         return None
 
-    def allow_rewrite(self, alarm_class: "AlarmClass") -> bool:
+    def allow_rewrite(self, alarm_class: AlarmClass) -> bool:
         """Check allowed Alarm Class for rewrite"""
         if not self.vars and not alarm_class.vars:
             return True
@@ -448,7 +448,7 @@ class AlarmClass(Document):
         return r
 
     @classmethod
-    def get_config(cls, alarm_class: "AlarmClass") -> dict[str, Any]:
+    def get_config(cls, alarm_class: AlarmClass) -> dict[str, Any]:
         """Alarm Class configuration"""
         from noc.fm.models.alarmrule import AlarmRule
 

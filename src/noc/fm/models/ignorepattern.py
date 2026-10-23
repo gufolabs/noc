@@ -48,7 +48,7 @@ class IgnorePattern(Document):
             yield "cfgeventrules", f"ignore_pattern:{self.id}"
 
     @classmethod
-    def get_rule_config(cls, pattern: "IgnorePattern"):
+    def get_rule_config(cls, pattern: IgnorePattern):
         """Return MetricConfig for Metrics service"""
         if not pattern.is_active:
             raise KeyError("Rule not activated")

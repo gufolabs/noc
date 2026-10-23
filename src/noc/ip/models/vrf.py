@@ -267,7 +267,7 @@ class VRF(NOCModel):
         return Label.get_effective_setting(label, setting="enable_vrf")
 
     @classmethod
-    def iter_lazy_labels(cls, vrf: "VRF"):
+    def iter_lazy_labels(cls, vrf: VRF):
         yield f"noc::ipvrf::{vrf.name}::="
 
     def get_css_class(self) -> str | None:

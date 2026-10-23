@@ -101,7 +101,7 @@ class AlarmSeverity(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_order_cache"), lock=lambda _: id_lock)
-    def get_ordered(cls) -> list["AlarmSeverity"]:
+    def get_ordered(cls) -> list[AlarmSeverity]:
         """
         Returns list of severities ordered in acvending order
         :return:

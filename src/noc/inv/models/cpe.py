@@ -173,7 +173,7 @@ class CPE(Document):
             ]
 
     @classmethod
-    def iter_effective_labels(cls, instance: "CPE") -> list[str]:
+    def iter_effective_labels(cls, instance: CPE) -> list[str]:
         yield list(instance.labels or [])
         if instance.profile.labels:
             yield list(instance.profile.labels)
@@ -288,7 +288,7 @@ class CPE(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
+        cls, mo: ManagedObject, run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected
@@ -351,7 +351,7 @@ class CPE(Document):
             )
 
     @classmethod
-    def get_metric_config(cls, cpe: "CPE"):
+    def get_metric_config(cls, cpe: CPE):
         """Return MetricConfig for Metrics service"""
         if not cpe.state or not cpe.state.is_productive:
             return {}
@@ -435,7 +435,7 @@ class CPE(Document):
         return f"/api/card/view/cpe/{obj_id}/"
 
     @classmethod
-    def get_metric_discovery_interval(cls, mo: "ManagedObject") -> int:
+    def get_metric_discovery_interval(cls, mo: ManagedObject) -> int:
         coll = cls._get_collection()
         r = coll.aggregate(
             [

@@ -123,7 +123,7 @@ class MetricType(Document):
     # Global ID
     uuid = UUIDField(binary=True)
     # Metric scope reference
-    scope: "MetricScope" = PlainReferenceField(MetricScope)
+    scope: MetricScope = PlainReferenceField(MetricScope)
     # Database field name
     field_name = StringField()
     # Database field type
@@ -149,7 +149,7 @@ class MetricType(Document):
         MeasurementUnits, default=MeasurementUnits.get_default_measurement_units
     )
     # Scale
-    scale: "Scale" = PlainReferenceField(Scale, default=Scale.get_default_scale)
+    scale: Scale = PlainReferenceField(Scale, default=Scale.get_default_scale)
     # Metric is delta scale
     is_delta = BooleanField(default=False)
     # Measure name, like 'kbit/s'
@@ -394,7 +394,7 @@ class MetricType(Document):
             yield "cfgmetrics", self.id
 
     @classmethod
-    def get_config(cls, metric_type: "MetricType"):
+    def get_config(cls, metric_type: MetricType):
         """Create config for Services"""
         rules = []
         for num, cm in enumerate(metric_type.collector_mappings):

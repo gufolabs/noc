@@ -195,7 +195,7 @@ class AdministrativeDomain(NOCModel):
         return Label.get_effective_setting(label, setting="enable_administrativedomain")
 
     @classmethod
-    def iter_lazy_labels(cls, adm_domain: "AdministrativeDomain"):
+    def iter_lazy_labels(cls, adm_domain: AdministrativeDomain):
         for ad in AdministrativeDomain.objects.filter(id__in=adm_domain.get_path()):
             if ad == adm_domain:
                 yield f"noc::adm_domain::{ad.name}::="

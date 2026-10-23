@@ -239,5 +239,5 @@ class Transition(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_active_transition_cache"), lock=lambda _: id_lock
     )
-    def get_active_transitions(cls, state: str, event: str) -> list["Transition"]:
+    def get_active_transitions(cls, state: str, event: str) -> list[Transition]:
         return list(Transition.objects.filter(from_state=state, event=event, is_active=True))

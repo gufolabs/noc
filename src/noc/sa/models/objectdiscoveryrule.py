@@ -231,7 +231,7 @@ class ObjectDiscoveryRule(Document):
     # Rule preference, processed from lesser to greater
     preference = IntField(required=True, default=100)
     network_ranges = EmbeddedDocumentListField(NetworkRange)
-    workflow: "Workflow" = PlainReferenceField(
+    workflow: Workflow = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "sa.DiscoveredObject")
     )
     sources = EmbeddedDocumentListField(SourceItem)  # Source match and priority
@@ -465,7 +465,7 @@ class ObjectDiscoveryRule(Document):
         return any(c.is_match(labels, data, checks, groups) for c in self.conditions)
 
     @cachetools.cachedmethod(operator.attrgetter("_prefix_cache"), lock=lambda _: id_lock)
-    def get_prefixes(self, pool: Pool | None = None) -> list["IPv4"]:
+    def get_prefixes(self, pool: Pool | None = None) -> list[IPv4]:
         """Return configured prefixes"""
         r = []
         for net in self.network_ranges:

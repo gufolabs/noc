@@ -112,7 +112,7 @@ class Profile(Document):
         return cls._generic_profile_id
 
     @classmethod
-    def iter_lazy_labels(cls, profile: "Profile"):
+    def iter_lazy_labels(cls, profile: Profile):
         yield f"noc::profile::{profile.name}::="
 
     @classmethod

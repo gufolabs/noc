@@ -62,7 +62,7 @@ class ServiceItem:
         return self.status == ItemStatus.NEW
 
     @classmethod
-    def from_service(cls, svc: Service, to_processed: bool = False) -> "ServiceItem":
+    def from_service(cls, svc: Service, to_processed: bool = False) -> ServiceItem:
         """Create item from Service instance"""
         return ServiceItem(service=svc, service_status=svc.oper_status, to_processed=to_processed)
 
@@ -98,7 +98,7 @@ class Item:
         return {"alarm": self.alarm.id, "status": self.status.value}
 
     @classmethod
-    def from_alarm(cls, alarm, is_clear: bool = False) -> "Item":
+    def from_alarm(cls, alarm, is_clear: bool = False) -> Item:
         """Create Item from Alarm"""
         if not alarm:
             return Item(alarm=None, status=ItemStatus.ARCHIVED)
@@ -198,7 +198,7 @@ class AlarmJob:
         return None
 
     @property
-    def leader_item(self) -> "Item":
+    def leader_item(self) -> Item:
         """Return first item"""
         if self.items[0].status == ItemStatus.ARCHIVED:
             raise ValueError("Not found Alarm Leader")
@@ -289,7 +289,7 @@ class AlarmJob:
         )
 
     @classmethod
-    def ensure_profile_job(cls, alarm: ActiveAlarm, pid: str) -> "AlarmJob":
+    def ensure_profile_job(cls, alarm: ActiveAlarm, pid: str) -> AlarmJob:
         """Ensure escalation Job"""
         from noc.fm.models.escalationprofile import EscalationProfile
         from noc.fm.models.alarmwatch import Effect
@@ -364,7 +364,7 @@ class AlarmJob:
                 ),
             )
 
-    def get_runner(self) -> "AlarmActionRunner":
+    def get_runner(self) -> AlarmActionRunner:
         """Getting runner"""
         return AlarmActionRunner(
             self.items,
@@ -567,7 +567,7 @@ class AlarmJob:
         static_delay: int | None = None,
         stub_tt_system: TTSystem | None = None,
         stub_user: User | None = None,
-    ) -> "AlarmJob":
+    ) -> AlarmJob:
         """Create Job from Request"""
         if not alarm and req.item:
             alarm = get_alarm(req.item.alarm)
@@ -615,7 +615,7 @@ class AlarmJob:
         dry_run: bool = False,
         sample: int = 0,
         static_delay: int | None = None,
-    ) -> "AlarmJob":
+    ) -> AlarmJob:
         """
         Restore Job State from Alarm:
         Args:

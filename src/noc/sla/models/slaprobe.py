@@ -157,7 +157,7 @@ class SLAProbe(Document):
             return si.managed_object
 
     @classmethod
-    def iter_effective_labels(cls, probe: "SLAProbe") -> list[str]:
+    def iter_effective_labels(cls, probe: SLAProbe) -> list[str]:
         return probe.labels + probe.profile.labels
 
     @classmethod
@@ -244,7 +244,7 @@ class SLAProbe(Document):
             )
 
     @classmethod
-    def get_metric_config(cls, sla_probe: "SLAProbe"):
+    def get_metric_config(cls, sla_probe: SLAProbe):
         """
         Return MetricConfig for Metrics service
         :return:
