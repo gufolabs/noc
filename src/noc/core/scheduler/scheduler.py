@@ -139,9 +139,9 @@ class Scheduler:
         self.logger.info("Running scheduler")
         self.scheduler_task = asyncio.create_task(self.scheduler_loop())
         self.scheduler_task.add_done_callback(
-            lambda task: setattr(self, "scheduler_task", None)
-            if self.scheduler_task is task
-            else None
+            lambda task: (
+                setattr(self, "scheduler_task", None) if self.scheduler_task is task else None
+            )
         )
 
     def get_collection(self):

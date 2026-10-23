@@ -365,9 +365,9 @@ class MetricsCollectorService(BaseService):
         check_callback.start()
         self.flush_data_task = asyncio.create_task(self.flush_data())
         self.flush_data_task.add_done_callback(
-            lambda task: setattr(self, "flush_data_task", None)
-            if self.flush_data_task is task
-            else None
+            lambda task: (
+                setattr(self, "flush_data_task", None) if self.flush_data_task is task else None
+            )
         )
 
     async def check_channels(self):

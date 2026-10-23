@@ -51,7 +51,9 @@ class RunnerService(BaseService):
         self.runner = Runner(concurrency=config.runner.max_running, queue=self.queue)
         self.sync_task_ref = asyncio.create_task(self.sync_task())
         self.sync_task_ref.add_done_callback(
-            lambda task: setattr(self, "sync_task_ref", None) if self.sync_task_ref is task else None
+            lambda task: (
+                setattr(self, "sync_task_ref", None) if self.sync_task_ref is task else None
+            )
         )
         await self.subscribe_stream(STREAM, self.slot_number, self.on_msg)
 

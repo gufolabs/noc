@@ -121,9 +121,9 @@ class MetricsService(BaseService):
         if global_config.metrics.flush_interval > 0:
             self.log_runner_task = asyncio.create_task(self.log_runner())
             self.log_runner_task.add_done_callback(
-                lambda task: setattr(self, "log_runner_task", None)
-                if self.log_runner_task is task
-                else None
+                lambda task: (
+                    setattr(self, "log_runner_task", None) if self.log_runner_task is task else None
+                )
             )
         # Start tracking changes
         self.start_background_task(self.get_metric_rules_mappings())
