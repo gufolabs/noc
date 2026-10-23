@@ -57,7 +57,7 @@ def test_get_by_signatures(name: str, is_classmethod: bool, args, return_type, m
     if is_classmethod:
         assert method.__self__ is model, f"{name} must be @classmethod"
     # Check parameters signature
-    sig = inspect.signature(method)
+    sig = inspect.signature(method, eval_str=True)
     for param_name, param_type in args:
         assert param_name in sig.parameters, f"Parameter `{param_name}` is missed"
         param = sig.parameters[param_name]
