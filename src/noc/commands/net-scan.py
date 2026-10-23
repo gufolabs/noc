@@ -136,28 +136,22 @@ class Command(BaseCommand):
         async def runner():
             nonlocal lock
             lock = asyncio.Lock()
-            register_task: asyncio.Task[None] | None = None
-
-            if not dry_run:
-                queue = asyncio.Queue()
-                loop = asyncio.get_running_loop()
-                register_task = loop.create_task(self.register_data(pool, queue))
-            else:
-                queue = None
-            tasks = [
-                asyncio.create_task(
-                    self.check_worker(
-                        queue, lock, addr_list, checks, ports, bar, print_out=print_out
-                    ),
-                    name=f"check-{i}",
-                )
-                for i in range(min(jobs, len(addr_list)))
-            ]
-            await asyncio.gather(*tasks)
-            if queue:
-                queue.put_nowait(None)
-                if register_task:
-                    await register_task
+            async with asyncio.TaskGroup() as task_group:
+                if not dry_run:
+                    queue = asyncio.Queue()
+                    task_group.create_task(self.register_data(pool, queue))
+                else:
+                    queue = None
+                async with asyncio.TaskGroup() as worker_group:
+                    for i in range(min(jobs, len(addr_list))):
+                        worker_group.create_task(
+                            self.check_worker(
+                                queue, lock, addr_list, checks, ports, bar, print_out=print_out
+                            ),
+                            name=f"check-{i}",
+                        )
+                if queue is not None:
+                    queue.put_nowait(None)
 
         addr_list = self.get_addresses(addresses, input, rule, ip_scan)
         lock: asyncio.Lock | None = None
