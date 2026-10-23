@@ -188,13 +188,16 @@ class Command(BaseCommand):
             loop = asyncio.get_running_loop()
             # Schedule workers
             queue = asyncio.Queue()
-            for _ in range(self.jobs):
+            workers = [
                 loop.create_task(
                     self.poll_worker(
                         queue, community, username, oid, timeout, self.version, f"worker-{_}"
                     )
                 )
+                for _ in range(self.jobs)
+            ]
             await self.poll_task(queue)
+            await asyncio.gather(*workers)
 
         self.addresses = set()
         # Direct addresses

@@ -136,11 +136,12 @@ class Command(BaseCommand):
         async def runner():
             nonlocal lock
             lock = asyncio.Lock()
+            register_task: asyncio.Task[None] | None = None
 
             if not dry_run:
                 queue = asyncio.Queue()
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.register_data(pool, queue))
+                register_task = loop.create_task(self.register_data(pool, queue))
             else:
                 queue = None
             tasks = [
@@ -155,6 +156,8 @@ class Command(BaseCommand):
             await asyncio.gather(*tasks)
             if queue:
                 queue.put_nowait(None)
+                if register_task:
+                    await register_task
 
         addr_list = self.get_addresses(addresses, input, rule, ip_scan)
         lock: asyncio.Lock | None = None
@@ -266,7 +269,7 @@ class Command(BaseCommand):
             if print_out:
                 self.print_out(addr, rtt, params["checks"])
 
-    async def register_data(self, pool, queue):
+    async def register_data(self, pool, queue) -> None:
         self.print("Run register data task")
         while True:
             item = await queue.get()

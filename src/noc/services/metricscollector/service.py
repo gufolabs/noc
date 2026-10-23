@@ -112,6 +112,7 @@ class MetricsCollectorService(BaseService):
         # Sensors
         self.sensor_configs: dict[str, SensorConfig] = {}
         self.stopping = False
+        self.flush_data_task: asyncio.Task[None] | None = None
         self.updated: set[str] = set()
         self.received: dict[str, int] = {}
         # Queue of channels to flush
@@ -362,7 +363,8 @@ class MetricsCollectorService(BaseService):
             self.check_channels, config.metricscollector.batch_delay_s
         )
         check_callback.start()
-        asyncio.create_task(self.flush_data())
+        self.flush_data_task = asyncio.create_task(self.flush_data())
+        self.flush_data_task.add_done_callback(lambda _: setattr(self, "flush_data_task", None))
 
     async def check_channels(self):
         ts = perf_counter()

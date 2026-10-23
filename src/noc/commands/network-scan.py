@@ -112,8 +112,7 @@ class Command(BaseCommand):
     ):
         async def ping_task():
             queue = asyncio.Queue(maxsize=self.jobs)
-            for _ in range(self.jobs):
-                asyncio.create_task(self.ping_worker(queue))
+            workers = [asyncio.create_task(self.ping_worker(queue)) for _ in range(self.jobs)]
             # Read exclude addresses from files
             """
             file example
@@ -188,14 +187,21 @@ class Command(BaseCommand):
                     except OSError as e:
                         self.die(f"Cannot read file {fn}: {e}\n")
             await queue.join()
+            for _ in workers:
+                await queue.put(None)
+            await queue.join()
+            await asyncio.gather(*workers)
 
         async def snmp_task():
             queue = asyncio.Queue(maxsize=self.jobs)
-            for _ in range(self.jobs):
+            workers = [
                 asyncio.create_task(self.snmp_worker(queue, community, oid, timeout, self.version))
+                for _ in range(self.jobs)
+            ]
             for a in self.enable_ping:
                 await queue.put(a)
             await queue.join()
+            await asyncio.gather(*workers)
 
         connect()
         self.addresses = set()  # ip for ping
