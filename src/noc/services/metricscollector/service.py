@@ -342,11 +342,11 @@ class MetricsCollectorService(BaseService):
     async def init_api(self):
         # Postpone initialization process until config datastream is fully processed
         self.n_parts = await self.get_stream_partitions("metrics")
-        asyncio.get_running_loop().create_task(self.get_metrics_mappings())
+        self.start_background_task(self.get_metrics_mappings())
         # Set by datastream.on_ready
         await self.ready_event.wait()
         if config.datastream.enable_cfgtarget:
-            asyncio.get_running_loop().create_task(self.get_object_mappings())
+            self.start_background_task(self.get_object_mappings())
             await self.event_source_ready.wait()
         self.logger.info("Stating invalid sources reporting task")
         self.report_invalid_callback = PeriodicCallback(self.report_invalid_sources, 120000)
@@ -364,7 +364,11 @@ class MetricsCollectorService(BaseService):
         )
         check_callback.start()
         self.flush_data_task = asyncio.create_task(self.flush_data())
-        self.flush_data_task.add_done_callback(lambda _: setattr(self, "flush_data_task", None))
+        self.flush_data_task.add_done_callback(
+            lambda task: setattr(self, "flush_data_task", None)
+            if self.flush_data_task is task
+            else None
+        )
 
     async def check_channels(self):
         ts = perf_counter()

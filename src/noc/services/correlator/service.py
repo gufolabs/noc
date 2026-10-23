@@ -150,7 +150,9 @@ class CorrelatorService(BaseService):
             self.scheduler.submit(jcls=ALARM_WATCHER_JCLS, key="", keep_ts=True)
         self.update_object_statuses_task = asyncio.create_task(self.update_object_statuses())
         self.update_object_statuses_task.add_done_callback(
-            lambda _: setattr(self, "update_object_statuses_task", None)
+            lambda task: setattr(self, "update_object_statuses_task", None)
+            if self.update_object_statuses_task is task
+            else None
         )
         # Subscribe stream, move to separate task to let the on_activate to terminate
         self.dispose_stream_task = self.loop.create_task(
@@ -162,7 +164,9 @@ class CorrelatorService(BaseService):
             )
         )
         self.dispose_stream_task.add_done_callback(
-            lambda _: setattr(self, "dispose_stream_task", None)
+            lambda task: setattr(self, "dispose_stream_task", None)
+            if self.dispose_stream_task is task
+            else None
         )
 
     def on_start(self) -> None:

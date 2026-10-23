@@ -138,7 +138,11 @@ class Scheduler:
         self.ensure_indexes()
         self.logger.info("Running scheduler")
         self.scheduler_task = asyncio.create_task(self.scheduler_loop())
-        self.scheduler_task.add_done_callback(lambda _: setattr(self, "scheduler_task", None))
+        self.scheduler_task.add_done_callback(
+            lambda task: setattr(self, "scheduler_task", None)
+            if self.scheduler_task is task
+            else None
+        )
 
     def get_collection(self):
         """

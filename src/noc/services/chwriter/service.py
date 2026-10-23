@@ -59,10 +59,16 @@ class CHWriterService(BaseService):
         self.logger.info("Sending records to %s", self.ch_address)
         self.subscribe_ch_streams_task = asyncio.create_task(self.subscribe_ch_streams())
         self.subscribe_ch_streams_task.add_done_callback(
-            lambda _: setattr(self, "subscribe_ch_streams_task", None)
+            lambda task: setattr(self, "subscribe_ch_streams_task", None)
+            if self.subscribe_ch_streams_task is task
+            else None
         )
         self.flush_data_task = asyncio.create_task(self.flush_data())
-        self.flush_data_task.add_done_callback(lambda _: setattr(self, "flush_data_task", None))
+        self.flush_data_task.add_done_callback(
+            lambda task: setattr(self, "flush_data_task", None)
+            if self.flush_data_task is task
+            else None
+        )
 
     async def iter_ch_streams(self) -> AsyncIterable[str]:
         """
