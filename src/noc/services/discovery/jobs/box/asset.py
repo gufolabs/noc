@@ -6,13 +6,14 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from collections import defaultdict
 import hashlib
 import base64
 from threading import Lock
 import operator
 import re
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -824,7 +825,7 @@ class AssetCheck(DiscoveryCheck):
                 r.append(n)
         return r
 
-    def get_vendor(self, v: str | None, o_type: str | None = "") -> Optional["Vendor"]:
+    def get_vendor(self, v: str | None, o_type: str | None = "") -> Vendor | None:
         """
         Get vendor instance or None. Create vendor if object type is XCVR.
         """
@@ -934,7 +935,7 @@ class AssetCheck(DiscoveryCheck):
         t_c: str,
         serial: str,
         data: list[ObjectAttr],
-    ) -> Optional["Object"]:
+    ) -> Object | None:
         """
         Resolve object type
         """
@@ -996,7 +997,7 @@ class AssetCheck(DiscoveryCheck):
         part_no: list[str] | str,
         serial: str | None,
         cpe_id: str | None = None,
-    ) -> Optional["ObjectModel"]:
+    ) -> ObjectModel | None:
         """
         Try to resolve using model map
         """

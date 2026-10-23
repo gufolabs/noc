@@ -6,11 +6,12 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import re
 from itertools import filterfalse
 from functools import partial
-from typing import Optional, Any
+from typing import Any
 from threading import Lock
 
 # Third-party modules
@@ -274,7 +275,7 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectDiscoveryRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ObjectDiscoveryRule | None:
         return ObjectDiscoveryRule.objects.filter(id=oid).first()
 
     @property
@@ -349,7 +350,7 @@ class ObjectDiscoveryRule(Document):
         checks: list[Any],
         data: list[Any] | None = None,
         sources: list[str] | None = None,
-    ) -> Optional["ObjectDiscoveryRule"]:
+    ) -> ObjectDiscoveryRule | None:
         """
         Return Effective rule by discovered data
 

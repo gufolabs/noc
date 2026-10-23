@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, cast
+from __future__ import annotations
+from typing import Any, cast
 from collections.abc import Iterable
 from enum import StrEnum
 import inspect
@@ -46,7 +47,7 @@ class Subscriber:
     __slots__ = ("input", "next", "node")
     node: "BaseCDAGNode"
     input: str
-    next: Optional["Subscriber"]
+    next: Subscriber | None
 
 
 config_proxy_sentinel = object()
@@ -197,7 +198,7 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         state: BaseModel | None = None,
         config: BaseModel | None = None,
         sticky: bool = False,
-    ) -> Optional["BaseCDAGNode"]:
+    ) -> BaseCDAGNode | None:
         """
         Construct node
         :return:
@@ -228,7 +229,7 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         state: dict[str, Any] | None = None,
         config: dict[str, Any] | None = None,
         static_config: dict[str, Any] | None = None,
-    ) -> Optional["BaseCDAGNode"]:
+    ) -> BaseCDAGNode | None:
         """
         Clone node
         :param node_id: Node Identifier

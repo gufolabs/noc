@@ -6,11 +6,11 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from threading import Lock
 import operator
 from functools import partial
 from dataclasses import dataclass
-from typing import Optional
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -110,12 +110,12 @@ class SLAProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["SLAProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> SLAProfile | None:
         return SLAProfile.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["SLAProfile"]:
+    def get_by_name(cls, name: str) -> SLAProfile | None:
         try:
             return SLAProfile.objects.get(name=name)
         except SLAProfile.DoesNotExist:
@@ -123,7 +123,7 @@ class SLAProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["SLAProfile"]:
+    def get_by_bi_id(cls, bi_id: int) -> SLAProfile | None:
         return SLAProfile.objects.filter(bi_id=bi_id).first()
 
     @classmethod

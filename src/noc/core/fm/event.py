@@ -6,8 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -233,9 +234,7 @@ class Event(BaseModel):
         return Event.model_validate(r)
 
     @classmethod
-    def get_by_id(
-        cls, event_id: str, /, client: ClickhouseClient | None = None
-    ) -> Optional["Event"]:
+    def get_by_id(cls, event_id: str, /, client: ClickhouseClient | None = None) -> Event | None:
         """
 
         :return:

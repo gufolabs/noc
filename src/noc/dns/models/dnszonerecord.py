@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
+from __future__ import annotations
 
 # Third-party modules
 from django.db import models
@@ -52,7 +52,7 @@ class DNSZoneRecord(NOCModel):
         )
 
     @classmethod
-    def get_by_id(cls, oid: int) -> Optional["DNSZoneRecord"]:
+    def get_by_id(cls, oid: int) -> DNSZoneRecord | None:
         return DNSZoneRecord.objects.filter(id=oid).first()
 
     def get_changed_instance(self):

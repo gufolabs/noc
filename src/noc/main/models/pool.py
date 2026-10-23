@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import threading
 import time
 import operator
-from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -61,17 +61,17 @@ class Pool(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Pool"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Pool | None:
         return Pool.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Pool"]:
+    def get_by_bi_id(cls, bi_id: int) -> Pool | None:
         return Pool.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["Pool"]:
+    def get_by_name(cls, name: str) -> Pool | None:
         return Pool.objects.filter(name=name).first()
 
     @classmethod

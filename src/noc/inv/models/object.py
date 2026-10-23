@@ -6,11 +6,12 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional, Any, Union
+from typing import Any
 from collections.abc import Iterator
 import warnings
 
@@ -206,14 +207,14 @@ class Object(Document):
     name = StringField()
     model: "ObjectModel" = PlainReferenceField(ObjectModel)
     data = EmbeddedDocumentListField(ObjectAttr)
-    parent: Optional["Object"] = PlainReferenceField("self", required=False)
+    parent: Object | None = PlainReferenceField("self", required=False)
     parent_connection = StringField(required=False)
     additional_connections = ListField(StringField(), required=False)
     comment = GridVCSField("object_comment")
     # Configuration Param
     cfg_data = EmbeddedDocumentListField(ObjectConfigurationData)
     # Map
-    layer: Optional["Layer"] = PlainReferenceField(Layer)
+    layer: Layer | None = PlainReferenceField(Layer)
     point = PointField(auto_index=True)
     # Current mode
     mode = StringField(required=False)
@@ -242,12 +243,12 @@ class Object(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Object"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Object | None:
         return Object.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Object"]:
+    def get_by_bi_id(cls, bi_id: int) -> Object | None:
         return Object.objects.filter(bi_id=bi_id).first()
 
     def resource_label(self) -> str:
@@ -603,7 +604,7 @@ class Object(Document):
             )
 
     def reset_cfg_data(
-        self, param: Union["ConfigurationParam", list["ConfigurationParam"]], scope: str | None
+        self, param: "ConfigurationParam" | list["ConfigurationParam"], scope: str | None
     ):
         """
         Remove Configuration Data for param from scope
@@ -780,7 +781,7 @@ class Object(Document):
         ro: "ObjectModel",
         remote_name: str | None = None,
         use_cable: bool = False,
-    ) -> Iterable[tuple[Optional["ObjectModel"], str]]:
+    ) -> Iterable[tuple[ObjectModel | None, str]]:
         """
         Iterate possible connections.
         """
@@ -801,7 +802,7 @@ class Object(Document):
         """
         return self.model.has_connection(name)
 
-    def get_p2p_connection(self, name: str) -> tuple[Any | None, Optional["Object"], str | None]:
+    def get_p2p_connection(self, name: str) -> tuple[Any | None, Object | None, str | None]:
         """
         Get neighbor for p2p connection (s and mf types)
         Returns connection, remote object, remote connection or
@@ -869,7 +870,7 @@ class Object(Document):
                     r.append([c, x.object, x.name])
         return r
 
-    def get_container(self) -> Optional["Object"]:
+    def get_container(self) -> Object | None:
         """
         Get container for object.
         """
@@ -1172,7 +1173,7 @@ class Object(Document):
     def get_log(self):
         return ObjectLog.objects.filter(object=self.id).order_by("ts")
 
-    def get_lost_and_found(self) -> Optional["Object"]:
+    def get_lost_and_found(self) -> Object | None:
         m = ObjectModel.get_by_name("Lost&Found")
         c = self.parent
         while c:
@@ -1233,7 +1234,7 @@ class Object(Document):
                 c.connection = left
                 c.save()
 
-    def get_pop(self) -> Optional["Object"]:
+    def get_pop(self) -> Object | None:
         """
         Find enclosing PoP
         :returns: PoP instance or None
@@ -1278,7 +1279,7 @@ class Object(Document):
         ).read_preference(ReadPreference.SECONDARY_PREFERRED)
 
     @classmethod
-    def get_cpe(cls, cpe) -> Optional["Object"]:
+    def get_cpe(cls, cpe) -> Object | None:
         """
         Get Object CPE by cpe
         """
@@ -1330,7 +1331,7 @@ class Object(Document):
                 yield mo
 
     @classmethod
-    def get_by_path(cls, path: list[str], hints=None) -> Optional["Object"]:
+    def get_by_path(cls, path: list[str], hints=None) -> Object | None:
         """
         Get object by given path.
         :param path: List of names following to path
@@ -1603,7 +1604,7 @@ class Object(Document):
         if pop:
             pop.update_pop_links()
 
-    def _get_container(self) -> Optional["Object"]:
+    def _get_container(self) -> Object | None:
         """
         Emulates deprecated container property
         """
@@ -1615,7 +1616,7 @@ class Object(Document):
             return None
         return self.parent
 
-    def _set_container(self, value: Optional["Object"]) -> None:
+    def _set_container(self, value: Object | None) -> None:
         warnings.warn(
             "Object.container is deprecated and will be removed in NOC 25.1",
             RemovedInNOC2501Warning,

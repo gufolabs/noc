@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Any
+from __future__ import annotations
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -113,7 +114,7 @@ class SubInterface(Document):
         return f"{self.managed_object.name} {self.name}"
 
     @classmethod
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["SubInterface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> SubInterface | None:
         return SubInterface.objects.filter(id=oid).first()
 
     @property

@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import re
 import datetime
 import logging
-from typing import Optional
 
 # Third-party modules
 from django.db.models import (
@@ -104,7 +104,7 @@ class Peer(NOCModel):
     )
     oper_status_change = DateTimeField("Oper Status Last Changed", null=True, blank=True)
     # RPSL Settings
-    peering_point: Optional["PeeringPoint"] = ForeignKey(
+    peering_point: PeeringPoint | None = ForeignKey(
         PeeringPoint, verbose_name="Peering Point", on_delete=CASCADE, null=True, blank=True
     )
     local_asn: "AS" = ForeignKey(AS, verbose_name="Local AS", on_delete=CASCADE)
@@ -146,7 +146,7 @@ class Peer(NOCModel):
         return f" {self.remote_asn} ({self.remote_ip})"
 
     @classmethod
-    def get_by_id(cls, oid: int) -> Optional["Peer"]:
+    def get_by_id(cls, oid: int) -> Peer | None:
         return Peer.objects.filter(id=oid).first()
 
     @property
@@ -246,7 +246,7 @@ class Peer(NOCModel):
         return self.profile.get_data("export_med")
 
     @classmethod
-    def get_peer(cls, address: str) -> Optional["Peer"]:
+    def get_peer(cls, address: str) -> Peer | None:
         """
         Get peer by address
         Attrs:
@@ -263,7 +263,7 @@ class Peer(NOCModel):
         return None
 
     @classmethod
-    def get_component(cls, managed_object, peer=None, **kwargs) -> Optional["Peer"]:
+    def get_component(cls, managed_object, peer=None, **kwargs) -> Peer | None:
         if peer:
             return Peer.get_peer(peer)
 

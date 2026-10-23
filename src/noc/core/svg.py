@@ -6,8 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import xml.etree.ElementTree as ET
-from typing import Optional, TextIO
+from typing import TextIO
 from collections.abc import Iterable
 from io import StringIO
 from copy import deepcopy
@@ -228,7 +229,7 @@ class SVG:
     def embed(
         self: "SVG",
         element_id: str,
-        source: Optional["SVG"],
+        source: SVG | None,
         additional: Iterable[str] | None = None,
         **kwargs,
     ) -> None:

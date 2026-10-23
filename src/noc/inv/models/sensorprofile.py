@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
+from __future__ import annotations
 import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Callable
 from functools import partial
 
@@ -117,7 +118,7 @@ class SensorProfile(Document):
     collect_interval = IntField(default=60)
     # PM Integration
     units: MeasurementUnits | None = PlainReferenceField(MeasurementUnits)
-    metric_type: Optional["MetricType"] = PlainReferenceField(MetricType)
+    metric_type: MetricType | None = PlainReferenceField(MetricType)
     mx_policy = StringField(
         choices=[("D", "Disable"), ("L", "Sensor Label"), ("A", "By Alias")], defaul="D"
     )
@@ -148,12 +149,12 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["SensorProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> SensorProfile | None:
         return SensorProfile.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["SensorProfile"]:
+    def get_by_bi_id(cls, bi_id: int) -> SensorProfile | None:
         return SensorProfile.objects.filter(bi_id=bi_id).first()
 
     @classmethod
@@ -229,7 +230,7 @@ class SensorProfile(Document):
         return tuple((x[0], tuple(r[x])) for x in sorted(r, key=lambda i: i[1]))
 
     @classmethod
-    def get_effective_profile(cls, o) -> Optional["str"]:
+    def get_effective_profile(cls, o) -> str | None:
         policy = getattr(o, "get_dynamic_classification_policy", None)
         if policy and policy() == "D":
             # Dynamic classification not enabled

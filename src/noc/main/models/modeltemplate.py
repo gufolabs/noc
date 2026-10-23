@@ -6,9 +6,10 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import threading
 import operator
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 import cachetools
@@ -286,12 +287,12 @@ class ModelTemplate(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ModelTemplate"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ModelTemplate | None:
         return ModelTemplate.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_code_cache"), lock=lambda _: id_lock)
-    def get_by_code(cls, code: str) -> Optional["ModelTemplate"]:
+    def get_by_code(cls, code: str) -> ModelTemplate | None:
         return ModelTemplate.objects.filter(code=code).first()
 
     @property

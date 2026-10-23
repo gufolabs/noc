@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -48,7 +49,7 @@ class Band:
     def __init__(
         self,
         name: str,
-        parent: Optional["Band"] = None,
+        parent: Band | None = None,
         orientation: BandOrientation = BandOrientation.HORIZONTAL,
         data: dict[str, Any] | None = None,
     ):
@@ -263,13 +264,13 @@ class Band:
             yield b
             yield from b.iter_nested_bands()
 
-    def get_child_by_name(self, name: str) -> Optional["Band"]:
+    def get_child_by_name(self, name: str) -> Band | None:
         """Getting Band by name"""
         for c in self.children_bands:
             if c.name == name:
                 return c
 
-    def find_band_recursively(self, name: str) -> Optional["Band"]:
+    def find_band_recursively(self, name: str) -> Band | None:
         """Find Band from"""
         if self.name == name:
             return self
@@ -294,7 +295,7 @@ class Band:
         return Band(name=band.name, orientation=band.orientation, data=params)
 
     @classmethod
-    def from_band(cls, band: "Band", data: dict[str, Any], parent: Optional["Band"] = None):
+    def from_band(cls, band: "Band", data: dict[str, Any], parent: Band | None = None):
         b = Band(
             name=band.name, parent=parent or band.parent, orientation=band.orientation, data=data
         )

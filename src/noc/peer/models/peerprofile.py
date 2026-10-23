@@ -6,10 +6,11 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 from threading import Lock, RLock
 from functools import partial
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 import cachetools
@@ -104,7 +105,7 @@ class PeerProfile(NOCModel):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: int) -> Optional["PeerProfile"]:
+    def get_by_id(cls, oid: int) -> PeerProfile | None:
         return PeerProfile.objects.filter(id=oid).first()
 
     @classmethod

@@ -6,13 +6,14 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import threading
 import random
 import string
 import logging
 import datetime
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Callable
 
 # Third-party modules
@@ -93,7 +94,7 @@ class ResourcePool(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ResourcePool"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ResourcePool | None:
         return ResourcePool.objects.filter(id=oid).first()
 
     @property

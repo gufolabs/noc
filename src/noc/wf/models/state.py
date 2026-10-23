@@ -6,10 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -220,12 +221,12 @@ class State(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["State"]:
+    def get_by_id(cls, oid: str | ObjectId) -> State | None:
         return State.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["State"]:
+    def get_by_bi_id(cls, bi_id: int) -> State | None:
         return State.objects.filter(bi_id=bi_id).first()
 
     def on_save(self):

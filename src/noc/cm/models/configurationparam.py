@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import threading
 import operator
 import re
 from dataclasses import dataclass
-from typing import Optional, NoReturn, Any
+from typing import NoReturn, Any
 from pathlib import Path
 
 # Third-party modules
@@ -244,14 +245,14 @@ class ConfigurationParam(Document):
     # Limitation
     schema = EmbeddedDocumentListField(ParamSchemaItem)
     choices = EmbeddedDocumentListField(ConfigurationParamChoiceItem)
-    choices_scope: Optional["ConfigurationScope"] = PlainReferenceField(
+    choices_scope: ConfigurationScope | None = PlainReferenceField(
         ConfigurationScope, required=False
     )
     # Threshold
     threshold_type = StringField(
         choices=["critical_min", "warning_min", "warning_max", "critical_max"]
     )
-    metric_type: Optional["MetricType"] = PlainReferenceField(MetricType, required=False)
+    metric_type: MetricType | None = PlainReferenceField(MetricType, required=False)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _code_cache = cachetools.TTLCache(maxsize=100, ttl=60)
@@ -261,12 +262,12 @@ class ConfigurationParam(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConfigurationParam"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ConfigurationParam | None:
         return ConfigurationParam.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_code_cache"), lock=lambda _: id_lock)
-    def get_by_code(cls, code) -> Optional["ConfigurationParam"]:
+    def get_by_code(cls, code) -> ConfigurationParam | None:
         return ConfigurationParam.objects.filter(code=code).first()
 
     def get_json_path(self) -> Path:

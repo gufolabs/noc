@@ -6,8 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable, Callable
 
 # Third-party modules
@@ -183,7 +184,7 @@ class AlarmRule:
                 g_type=GroupType.RULE,
             )
 
-    def get_job(self, alarm: ActiveAlarm) -> Optional["AlarmActionRequest"]:
+    def get_job(self, alarm: ActiveAlarm) -> AlarmActionRequest | None:
         if not self.job_config:
             return None
         cfg = self.job_config

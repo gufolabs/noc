@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import threading
 import operator
 import re
 from collections import defaultdict
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -176,12 +177,12 @@ class Action(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Action"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Action | None:
         return Action.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["Action"]:
+    def get_by_name(cls, name: str) -> Action | None:
         return Action.objects.filter(name=name).first()
 
     def get_json_path(self) -> Path:
@@ -492,7 +493,7 @@ class Action(Document):
             t_ctx |= ctx
             yield mo, scopes, t_ctx
 
-    def get_scope_config(self, name: str) -> Optional["ActionParameter"]:
+    def get_scope_config(self, name: str) -> ActionParameter | None:
         """Getting scope config"""
         for p in self.params:
             if p.scope and p.scope == name:

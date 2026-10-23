@@ -6,9 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Callable
 
 # Third-party modules
@@ -123,12 +124,12 @@ class Action(EmbeddedDocument):
             ("clear", "When clear alarm"),
         ],
     )
-    handler: Optional["Handler"] = PlainReferenceField(Handler, required=False)
+    handler: Handler | None = PlainReferenceField(Handler, required=False)
     notification_group = ForeignKeyField(NotificationGroup, required=False)
-    user: Optional["User"] = ForeignKeyField(User, required=False)
-    template: Optional["Template"] = ForeignKeyField(Template, required=False)
+    user: User | None = ForeignKeyField(User, required=False)
+    template: Template | None = ForeignKeyField(Template, required=False)
     message: str = StringField(required=False)
-    object_action: Optional["ObjectAction"] = ReferenceField(ObjectAction)
+    object_action: ObjectAction | None = ReferenceField(ObjectAction)
     # Run Diagnostic
     # script
     # allow_fail: bool = BooleanField(default=True) To check
@@ -251,17 +252,17 @@ class AlarmRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> AlarmRule | None:
         return AlarmRule.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["AlarmRule"]:
+    def get_by_name(cls, name: str) -> AlarmRule | None:
         return AlarmRule.objects.filter(name=name).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["AlarmRule"]:
+    def get_by_bi_id(cls, bi_id: int) -> AlarmRule | None:
         return AlarmRule.objects.filter(bi_id=bi_id).first()
 
     def get_matcher(self) -> Callable:

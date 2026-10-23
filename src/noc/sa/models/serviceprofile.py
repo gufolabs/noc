@@ -6,11 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional
 from collections.abc import Iterable
 from functools import partial
 
@@ -72,7 +72,7 @@ class DiagnosticSettings(EmbeddedDocument):
     handler: "Handler" = ReferenceField(Handler, required=False)
     instance_checks = BooleanField(default=False)
     ctx: str = ListField(StringField(required=True))
-    alarm_class: Optional["AlarmClass"] = ReferenceField(AlarmClass, required=False)
+    alarm_class: AlarmClass | None = ReferenceField(AlarmClass, required=False)
     alarm_subject: str = StringField(max_length=256, required=False)
     # For instance ?
     failed_status = EnumField(Status, required=False)
@@ -186,7 +186,7 @@ class CalculatedStatusRule(EmbeddedDocument):
 
     meta = {"strict": False, "auto_create_index": False}
 
-    group: Optional["ResourceGroup"] = ReferenceField(ResourceGroup, required=False)
+    group: ResourceGroup | None = ReferenceField(ResourceGroup, required=False)
     type = StringField(
         choices=[
             ("S", "Service (Using)"),
@@ -304,8 +304,8 @@ class AlarmStatusRule(EmbeddedDocument):
     exclude_labels = ListField(StringField())
     affected_instance = BooleanField(default=False)  # Include ServiceInstance to
     required_reference = BooleanField(default=False)  # Required service component on Alarm
-    min_severity: Optional["AlarmSeverity"] = PlainReferenceField(AlarmSeverity)  # Min Severity
-    max_severity: Optional["AlarmSeverity"] = PlainReferenceField(AlarmSeverity)  # Max Severity
+    min_severity: AlarmSeverity | None = PlainReferenceField(AlarmSeverity)  # Min Severity
+    max_severity: AlarmSeverity | None = PlainReferenceField(AlarmSeverity)  # Max Severity
     # set_weight
     status = EnumField(Status, required=False)  # Default status by Severity
 
@@ -470,12 +470,12 @@ class ServiceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ServiceProfile | None:
         return ServiceProfile.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_code_cache"), lock=lambda _: id_lock)
-    def get_by_code(cls, code: str) -> Optional["ServiceProfile"]:
+    def get_by_code(cls, code: str) -> ServiceProfile | None:
         return ServiceProfile.objects.filter(code=code).first()
 
     def on_save(self):
@@ -530,7 +530,7 @@ class ServiceProfile(Document):
 
     def get_instance_config(
         self, i_type: InstanceType, name: str | None = None
-    ) -> Optional["ServiceInstanceTypeConfig"]:
+    ) -> ServiceInstanceTypeConfig | None:
         """Getting instance Config"""
         if self.instance_policy == "A":
             cfg = ServiceInstanceTypeConfig()
@@ -561,7 +561,7 @@ class ServiceProfile(Document):
             type: service, client
         """
 
-    def get_rule_by_alarm(self, aa, is_reference: bool = False) -> Optional["AlarmStatusRule"]:
+    def get_rule_by_alarm(self, aa, is_reference: bool = False) -> AlarmStatusRule | None:
         if self.alarm_affected_policy in {"D"}:
             return None
         if self.alarm_affected_policy == "B" and not self.alarm_status_rules:

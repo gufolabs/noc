@@ -6,9 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 from collections import defaultdict
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Callable, Iterable
 from threading import Lock
 
@@ -195,7 +196,7 @@ class MetricRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> MetricRule | None:
         return MetricRule.objects.filter(id=oid).first()
 
     @classmethod

@@ -6,8 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from threading import Lock
-from typing import Optional
 from collections.abc import Iterable
 import operator
 import logging
@@ -79,7 +79,7 @@ class VLANTemplate(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["VLANTemplate"]:
+    def get_by_id(cls, oid: str | ObjectId) -> VLANTemplate | None:
         return VLANTemplate.objects.filter(id=oid).first()
 
     def on_save(self):

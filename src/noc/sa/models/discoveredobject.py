@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import logging
 import itertools
-from typing import Optional
 from collections.abc import Iterable
 
 # Third-party modules
@@ -160,7 +160,7 @@ class DiscoveredObject(Document):
     # profile = Predefined Profile
     # Flags
     is_dirty: bool = BooleanField(default=True)
-    origin: Optional["DiscoveredObject"] = ReferenceField("self", required=False)
+    origin: DiscoveredObject | None = ReferenceField("self", required=False)
     # is_conflicted
     label = StringField()
     description = StringField()
@@ -181,9 +181,9 @@ class DiscoveredObject(Document):
     duplicate_keys = ListField(LongField())
     managed_object_id: int | None = IntField(required=False)
     # Link to agent
-    agent: Optional["ObjectId"] = ObjectIdField(required=False)
+    agent: ObjectId | None = ObjectIdField(required=False)
     # Link to Rule
-    rule: Optional["ObjectDiscoveryRule"] = PlainReferenceField(ObjectDiscoveryRule, required=False)
+    rule: ObjectDiscoveryRule | None = PlainReferenceField(ObjectDiscoveryRule, required=False)
     effective_data: dict[str, str] = DictField()
     # Labels
     extra_labels: dict[str, list[str]] = DictField()
@@ -457,7 +457,7 @@ class DiscoveredObject(Document):
         update_ts: datetime.datetime | None = None,
         rule=None,
         dry_run: bool = False,
-    ) -> Optional["DiscoveredObject"]:  # MergeRule
+    ) -> DiscoveredObject | None:  # MergeRule
         """
         Register New record
         1. Ensure Discovery Object
@@ -504,7 +504,7 @@ class DiscoveredObject(Document):
             o.touch(ts=update_ts)
         return o
 
-    def get_rule(self, sources: list[str] | None = None) -> Optional["ObjectDiscoveryRule"]:
+    def get_rule(self, sources: list[str] | None = None) -> ObjectDiscoveryRule | None:
         """Get Discovered Object rule"""
         return ObjectDiscoveryRule.get_rule(
             self.address,
@@ -777,7 +777,7 @@ class DiscoveredObject(Document):
     def fix_duplicate_managed_object(
         self,
         objects: list["ManagedObject"],
-    ) -> Optional["ManagedObject"]:
+    ) -> ManagedObject | None:
         """Choice from multiple ManagedObject only own"""
         for o in objects:
             if o.name == self.hostname:
@@ -1060,7 +1060,7 @@ class DiscoveredObject(Document):
             self.set_dirty("Update checks")
 
     def sync_object_data(
-        self, ctx: ResourceItem, managed_object: Optional["ManagedObject"] = None, dry_run=False
+        self, ctx: ResourceItem, managed_object: ManagedObject | None = None, dry_run=False
     ) -> bool | None:
         if not self.managed_object_id and not managed_object:
             logger.warning("Not exists ManagedObject. Skipping...")

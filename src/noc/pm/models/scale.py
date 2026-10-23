@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from threading import Lock
-from typing import Any, Optional
+from typing import Any
 import bisect
 import operator
 from pathlib import Path
@@ -69,12 +70,12 @@ class Scale(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Scale"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Scale | None:
         return Scale.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_code_cache"), lock=lambda _: id_lock)
-    def get_by_code(cls, code: str) -> Optional["Scale"]:
+    def get_by_code(cls, code: str) -> Scale | None:
         return Scale.objects.filter(code=code).first()
 
     @classmethod

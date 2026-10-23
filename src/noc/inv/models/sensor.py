@@ -6,12 +6,13 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import logging
 import operator
 import datetime
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -156,12 +157,12 @@ class Sensor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Sensor"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Sensor | None:
         return Sensor.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Sensor"]:
+    def get_by_bi_id(cls, bi_id: int) -> Sensor | None:
         return Sensor.objects.filter(bi_id=bi_id).first()
 
     def iter_changed_datastream(self, changed_fields=None):
@@ -192,9 +193,7 @@ class Sensor(Document):
             ]
 
     @classmethod
-    def get_component(
-        cls, managed_object, sensor: str | None = None, **kwargs
-    ) -> Optional["Sensor"]:
+    def get_component(cls, managed_object, sensor: str | None = None, **kwargs) -> Sensor | None:
         if not sensor:
             return None
         if sensor:

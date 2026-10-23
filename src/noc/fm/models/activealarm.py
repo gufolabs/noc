@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import logging
 import asyncio
@@ -13,7 +14,6 @@ import operator
 from collections import defaultdict
 from itertools import chain
 from typing import (
-    Optional,
     Any,
     Protocol,
     runtime_checkable,
@@ -196,11 +196,11 @@ class ActiveAlarm(Document):
         return str(self.id)
 
     @classmethod
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ActiveAlarm"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ActiveAlarm | None:
         return ActiveAlarm.objects.filter(id=oid).first()
 
     @classmethod
-    def get_by_tt_id(cls, tt_id: str) -> Optional["ActiveAlarm"]:
+    def get_by_tt_id(cls, tt_id: str) -> ActiveAlarm | None:
         return ActiveAlarm.objects.filter(log__tt_id=tt_id).first()
 
     def iter_changed_datastream(self, changed_fields=None):
@@ -416,7 +416,7 @@ class ActiveAlarm(Document):
         force: bool = False,
         source=None,
         dry_run: bool = False,
-    ) -> Optional["ArchivedAlarm"]:
+    ) -> ArchivedAlarm | None:
         """
         Clear alarm
         Args:
@@ -1666,7 +1666,7 @@ class ActiveAlarm(Document):
 
 @runtime_checkable
 class AlarmComponent(Protocol):
-    def get_component(self, **kwargs) -> Optional["Generic"]: ...
+    def get_component(self, **kwargs) -> Generic | None: ...
 
 
 class ComponentHub:

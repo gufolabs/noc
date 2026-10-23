@@ -6,12 +6,13 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import logging
 import datetime
 import operator
 import time
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -188,7 +189,7 @@ class AlarmJob:
         return self.__str__()
 
     @classmethod
-    def get_by_id(cls, oid: str, is_dirty: bool = False) -> Optional["AlarmJob"]:
+    def get_by_id(cls, oid: str, is_dirty: bool = False) -> AlarmJob | None:
         from noc.fm.models.alarmjob import AlarmJob as AlarmJobState
 
         state = AlarmJobState.objects.filter(id=oid).as_pymongo()
@@ -776,7 +777,7 @@ class AlarmJob:
         data: dict[str, Any],
         is_dirty: bool = False,
         stub_alarms: list[ActiveAlarm] | None = None,
-    ) -> Optional["AlarmJob"]:
+    ) -> AlarmJob | None:
         """"""
         if stub_alarms:
             items = [Item.from_alarm(a) for a in stub_alarms]
@@ -848,7 +849,7 @@ class AlarmJob:
         # self.run()
 
     @classmethod
-    def ensure_job(cls, tt_id: str) -> Optional["AlarmJob"]:
+    def ensure_job(cls, tt_id: str) -> AlarmJob | None:
         """ensure_tt_job"""
         job = cls.get_by_tt_id(tt_id)
         if job:
@@ -859,7 +860,7 @@ class AlarmJob:
         return AlarmJob.from_alarm(aa)
 
     @classmethod
-    def get_by_tt_id(cls, tt_id) -> Optional["AlarmJob"]:
+    def get_by_tt_id(cls, tt_id) -> AlarmJob | None:
         """Getting Alarm Job by TT ID"""
         return None
 

@@ -6,9 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import uuid
 import threading
-from typing import Optional
 import operator
 from pathlib import Path
 
@@ -67,17 +67,17 @@ class Profile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Profile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Profile | None:
         return Profile.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Profile"]:
+    def get_by_bi_id(cls, bi_id: int) -> Profile | None:
         return Profile.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["Profile"]:
+    def get_by_name(cls, name: str) -> Profile | None:
         return Profile.objects.filter(name=name).first()
 
     def to_json(self) -> str:

@@ -6,8 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules
@@ -188,7 +189,7 @@ class MetricAction(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricAction"]:
+    def get_by_id(cls, oid: str | ObjectId) -> MetricAction | None:
         return MetricAction.objects.filter(id=oid).first()
 
     def clean(self):

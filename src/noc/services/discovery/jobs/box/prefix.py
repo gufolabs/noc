@@ -6,10 +6,10 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from collections import namedtuple, defaultdict
 
 # Third-party modules
-from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -127,7 +127,7 @@ class PrefixCheck(DiscoveryCheck):
         :return:
         """
 
-        def get_vlan(data) -> Optional["VLAN"]:
+        def get_vlan(data) -> VLAN | None:
             vlans = data.get("vlan_ids")
             if not vlans or len(vlans) > 1:
                 return None

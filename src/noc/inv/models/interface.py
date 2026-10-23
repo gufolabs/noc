@@ -6,11 +6,12 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import logging
 import operator
 import re
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -155,7 +156,7 @@ class Interface(Document):
         return f"{self.managed_object.name}: {self.name}"
 
     @classmethod
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Interface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Interface | None:
         return Interface.objects.filter(id=oid).first()
 
     @classmethod
@@ -163,7 +164,7 @@ class Interface(Document):
         cls,
         managed_object_id: int,
         ifindex: int,
-    ) -> Optional["Interface"]:
+    ) -> Interface | None:
         return Interface.objects.filter(managed_object=managed_object_id, ifindex=ifindex).first()
 
     def clean(self):
@@ -187,7 +188,7 @@ class Interface(Document):
     @cachetools.cachedmethod(operator.attrgetter("_component_cache"))
     def get_component(
         cls, managed_object: "ManagedObject", interface=None, ifindex=None, **kwargs
-    ) -> Optional["Interface"]:
+    ) -> Interface | None:
         from noc.inv.models.subinterface import SubInterface
 
         q = {}

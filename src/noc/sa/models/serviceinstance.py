@@ -6,9 +6,10 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import logging
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -113,7 +114,7 @@ class ServiceInstance(Document):
     # Sources that approved data
     sources: list[InputSource] = ListField(EnumField(InputSource))
     # Object
-    managed_object: Optional["ManagedObject"] = ForeignKeyField(ManagedObject, required=False)
+    managed_object: ManagedObject | None = ForeignKeyField(ManagedObject, required=False)
     # For ETL services, Object id in remote system
     remote_id = StringField()
     # NRI port id, converted by portmapper to native name
@@ -190,7 +191,7 @@ class ServiceInstance(Document):
         return f"[{self.type}] {name}"
 
     @classmethod
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceInstance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ServiceInstance | None:
         return ServiceInstance.objects.filter(id=oid).first()
 
     def on_save(self):
@@ -287,7 +288,7 @@ class ServiceInstance(Document):
             # Clean Source, ETL - Remove Remote_id, NRI Port, Addresses
             ServiceInstance.objects.filter(id=self.id).update(sources=self.sources)
 
-    def refresh_managed_object(self, o: Optional["ManagedObject"] = None, bulk=None):
+    def refresh_managed_object(self, o: ManagedObject | None = None, bulk=None):
         """
         Update ManagedObject on instance
         Args:

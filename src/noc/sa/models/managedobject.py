@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import difflib
 import logging
 import os
@@ -17,7 +18,7 @@ import warnings
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import chain
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -471,7 +472,7 @@ class ManagedObject(NOCModel):
         app_label = "sa"
 
     name: str = CharField("Name", max_length=64, unique=True)
-    container: Optional["Object"] = DocumentReferenceField(Object, null=True, blank=True)
+    container: Object | None = DocumentReferenceField(Object, null=True, blank=True)
     administrative_domain: "AdministrativeDomain" = CachedForeignKey(
         AdministrativeDomain, verbose_name="Administrative Domain", on_delete=CASCADE
     )
@@ -500,9 +501,9 @@ class ManagedObject(NOCModel):
         blank=False,
         default=Profile.get_default_profile,
     )
-    vendor: Optional["Vendor"] = DocumentReferenceField(Vendor, null=True, blank=True)
-    platform: Optional["Platform"] = DocumentReferenceField(Platform, null=True, blank=True)
-    version: Optional["Firmware"] = DocumentReferenceField(Firmware, null=True, blank=True)
+    vendor: Vendor | None = DocumentReferenceField(Vendor, null=True, blank=True)
+    platform: Platform | None = DocumentReferenceField(Platform, null=True, blank=True)
+    version: Firmware | None = DocumentReferenceField(Firmware, null=True, blank=True)
     # Firmware version to upgrade
     # Empty, when upgrade not scheduled
     next_version: Firmware | None = DocumentReferenceField(Firmware, null=True, blank=True)
@@ -511,7 +512,7 @@ class ManagedObject(NOCModel):
     )
     description = CharField("Description", max_length=256, null=True, blank=True)
     # Access
-    auth_profile: Optional["AuthProfile"] = CachedForeignKey(
+    auth_profile: AuthProfile | None = CachedForeignKey(
         AuthProfile, verbose_name="Auth Profile", null=True, blank=True, on_delete=CASCADE
     )
     scheme = IntegerField("Scheme", choices=SCHEME_CHOICES)
@@ -1000,7 +1001,7 @@ class ManagedObject(NOCModel):
         lock=lambda _: id_lock,
         version=MANAGEDOBJECT_CACHE_VERSION,
     )
-    def get_by_id(cls, oid: int) -> Optional["ManagedObject"]:
+    def get_by_id(cls, oid: int) -> ManagedObject | None:
         """
         Get ManagedObject by id. Cache returned instance for future use.
 
@@ -1011,14 +1012,12 @@ class ManagedObject(NOCModel):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["ManagedObject"]:
+    def get_by_bi_id(cls, bi_id: int) -> ManagedObject | None:
         return ManagedObject.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_mapping_cache"), lock=lambda _: id_lock)
-    def get_by_mapping(
-        cls, remote_system: RemoteSystem, remote_id: str
-    ) -> Optional["ManagedObject"]:
+    def get_by_mapping(cls, remote_system: RemoteSystem, remote_id: str) -> ManagedObject | None:
         return ManagedObject.objects.filter(
             Q(remote_system=str(remote_system.id), remote_id=remote_id)
             | Q(
@@ -1166,7 +1165,7 @@ class ManagedObject(NOCModel):
     @classmethod
     def get_component(
         cls, managed_object: "ManagedObject", mac=None, ipv4=None, vrf=None, **kwargs
-    ) -> Optional["ManagedObject"]:
+    ) -> ManagedObject | None:
         from noc.inv.models.subinterface import SubInterface
         from noc.inv.models.forwardinginstance import ForwardingInstance
         from noc.inv.models.discoveryid import DiscoveryID
@@ -2116,7 +2115,7 @@ class ManagedObject(NOCModel):
             return self.object_profile.dynamic_classification_policy
         return self.dynamic_classification_policy
 
-    def get_effective_l2_domain(self) -> Optional["L2Domain"]:
+    def get_effective_l2_domain(self) -> L2Domain | None:
         if self.l2_domain:
             return self.l2_domain
         return self.segment.get_effective_l2_domain()

@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import itertools
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -127,12 +128,12 @@ class L2Domain(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["L2Domain"]:
+    def get_by_id(cls, oid: str | ObjectId) -> L2Domain | None:
         return L2Domain.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["L2Domain"]:
+    def get_by_bi_id(cls, bi_id: int) -> L2Domain | None:
         return L2Domain.objects.filter(bi_id=bi_id).first()
 
     @classmethod
@@ -207,7 +208,7 @@ class L2Domain(Document):
             )
         )
 
-    def get_default_vlan_profile(self) -> Optional["VLANProfile"]:
+    def get_default_vlan_profile(self) -> VLANProfile | None:
         """
         Return Effective VLAN Profile
         * L2Domain
@@ -221,7 +222,7 @@ class L2Domain(Document):
             return self.profile.default_vlan_profile
         return VLANProfile.get_default_profile()
 
-    def get_effective_vlan_template(self) -> Optional["VLANTemplate"]:
+    def get_effective_vlan_template(self) -> VLANTemplate | None:
         """Return Effective VLAN Template"""
         if self.vlan_template:
             return self.vlan_template
@@ -232,14 +233,14 @@ class L2Domain(Document):
             return self.profile.vlan_discovery_policy
         return self.vlan_discovery_policy
 
-    def get_vlan_discovery_filter(self) -> Optional["VLANFilter"]:
+    def get_vlan_discovery_filter(self) -> VLANFilter | None:
         if self.vlan_discovery_filter:
             return self.vlan_discovery_filter
         return self.profile.vlan_discovery_filter
 
     def get_effective_vlan_id(
         self,
-        vlan_filter: Optional["VLANFilter"] = None,
+        vlan_filter: VLANFilter | None = None,
         pool: "ResourcePool" = None,
         policy_order: bool = False,
     ) -> list[int]:

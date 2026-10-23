@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Callable
 import operator
 
@@ -94,7 +95,7 @@ class ASProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ASProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ASProfile | None:
         return ASProfile.objects.filter(id=oid).first()
 
     @classmethod

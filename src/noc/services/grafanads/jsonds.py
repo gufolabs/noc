@@ -6,10 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import operator
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 from collections import defaultdict
 
@@ -448,7 +449,7 @@ class JsonDSAPI:
     def get_query_metric_type_condition(
         self,
         payload: dict[str, str | list[str]],
-        metric_type: Optional["MetricType"] = None,
+        metric_type: MetricType | None = None,
         user: User = None,
     ) -> str:
         """

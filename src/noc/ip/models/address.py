@@ -6,8 +6,9 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -157,7 +158,7 @@ class Address(NOCModel):
         return f"{self.vrf.name}({self.afi}): {self.address}"
 
     @classmethod
-    def get_by_id(cls, oid: int) -> Optional["Address"]:
+    def get_by_id(cls, oid: int) -> Address | None:
         return Address.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):
@@ -195,7 +196,7 @@ class Address(NOCModel):
         return "6" if ":" in address else "4"
 
     @classmethod
-    def get_collision(cls, vrf: "VRF", address: str) -> Optional["Address"]:
+    def get_collision(cls, vrf: "VRF", address: str) -> Address | None:
         """
         Check VRFGroup restrictions
         :return: VRF already containing address or None
@@ -373,7 +374,7 @@ class Address(NOCModel):
         keys: Iterable[str],
         domain,
         allow_create: bool = False,
-    ) -> Iterable[tuple[str, Optional["Address"], str | None]]:
+    ) -> Iterable[tuple[str, Address | None, str | None]]:
         processed = set()
         for addr in Address.objects.filter(prefix=domain, address__in=keys):
             yield addr.address, addr, None

@@ -6,9 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 import bson
@@ -99,11 +100,11 @@ class FirmwarePolicy(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["FirmwarePolicy"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> FirmwarePolicy | None:
         return FirmwarePolicy.objects.filter(id=oid).first()
 
     @classmethod
-    def get_status(cls, version: "Firmware", platform: Optional["Platform"] = None) -> str | None:
+    def get_status(cls, version: "Firmware", platform: Platform | None = None) -> str | None:
         if not version:
             return None
         fps = cls.get_effective_policies(version, platform)
@@ -192,7 +193,7 @@ class FirmwarePolicy(Document):
 
     @classmethod
     def get_effective_policies(
-        cls, version: "Firmware", platform: Optional["Platform"] = None
+        cls, version: "Firmware", platform: Platform | None = None
     ) -> list["FirmwarePolicy"]:
         """
 

@@ -6,9 +6,10 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from pathlib import Path
 import re
-from typing import Any, Optional
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -66,7 +67,7 @@ class ParamRule(EmbeddedDocument):
 
     param: "ConfigurationParam" = PlainReferenceField(ConfigurationParam)
     scope: "ConfigurationScope" = PlainReferenceField(ConfigurationScope)
-    dependency_param: Optional["ConfigurationParam"] = PlainReferenceField(
+    dependency_param: ConfigurationParam | None = PlainReferenceField(
         ConfigurationParam, required=False
     )
     dependency_param_values = ListField(StringField())
@@ -138,7 +139,7 @@ class ObjectConfigurationRule(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_schema(self, param: "ConfigurationParam", o) -> Optional["ParamSchema"]:
+    def get_schema(self, param: "ConfigurationParam", o) -> ParamSchema | None:
         schema = param.get_schema(o)
         for p in self.param_rules:
             if p.param.id == param.id and p.choices:

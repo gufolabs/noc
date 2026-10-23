@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import itertools
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -62,9 +63,9 @@ class MetricValue:
 
     value: float
     meta: dict[str, str]
-    value_scale: Optional["Scale"] = None
-    value_units: Optional["MeasurementUnits"] = None
-    value_type: Optional["MetricType"] = None
+    value_scale: Scale | None = None
+    value_units: MeasurementUnits | None = None
+    value_type: MetricType | None = None
 
     def __str__(self) -> str:
         # Type, Scale for int value
@@ -104,7 +105,7 @@ class Function:
     """
 
     name: str
-    function: Optional["Function"] = None
+    function: Function | None = None
     alias: str | None = None
     args: str | None = None
 

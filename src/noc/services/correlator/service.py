@@ -7,12 +7,13 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import sys
 import datetime
 import re
 from collections import defaultdict, deque
 import threading
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Iterable
 import operator
 from itertools import chain
@@ -844,8 +845,8 @@ class CorrelatorService(BaseService):
         managed_object: ManagedObject,
         r_vars: dict[str, Any],
         timestamp: datetime.datetime | None = None,
-        event: Optional["Event"] = None,
-    ) -> Optional["ActiveAlarm"]:
+        event: Event | None = None,
+    ) -> ActiveAlarm | None:
         """Clear alarm by rule"""
         managed_object = self.eval_expression(
             rule.managed_object, event=event, managed_object=managed_object
@@ -1959,7 +1960,7 @@ class CorrelatorService(BaseService):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_reference_cache"), lock=lambda _: ref_lock)
-    def get_by_reference(cls, reference: str) -> Optional["ActiveAlarm"]:
+    def get_by_reference(cls, reference: str) -> ActiveAlarm | None:
         return ActiveAlarm.objects.filter(reference=cls.get_reference_hash(reference)).first()
 
     def set_status(self, oid: int, status: bool, ts: datetime.datetime | None = None) -> None:

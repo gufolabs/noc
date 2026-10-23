@@ -6,12 +6,13 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import datetime
 import logging
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -163,9 +164,9 @@ class ServiceDependency(EmbeddedDocument):
 
     meta = {"strict": False, "auto_create_index": False}
 
-    service: Optional["Service"] = PlainReferenceField("sa.Service", required=False)
+    service: Service | None = PlainReferenceField("sa.Service", required=False)
     # Add to effective group, check group of client
-    group: Optional["ResourceGroup"] = ReferenceField(ResourceGroup, required=False)
+    group: ResourceGroup | None = ReferenceField(ResourceGroup, required=False)
     type = StringField(
         choices=[
             ("S", "Service (Using)"),
@@ -395,12 +396,12 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Service"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Service | None:
         return Service.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Service"]:
+    def get_by_bi_id(cls, bi_id: int) -> Service | None:
         return Service.objects.filter(bi_id=bi_id).first()
 
     @classmethod
@@ -410,7 +411,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_instance_cache"))
-    def get_by_instance(cls, address, port: str | None = None) -> Optional["Service"]:
+    def get_by_instance(cls, address, port: str | None = None) -> Service | None:
         if port:
             # Service.objects.filter(static_instances__match={"address": address, "port": port})
             si = ServiceInstance.objects.filter(addresses__address=address, port=port).first()
@@ -422,7 +423,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_mapping_cache"), lock=lambda _: id_lock)
-    def get_by_mapping(cls, remote_system: RemoteSystem, remote_id: str) -> Optional["Service"]:
+    def get_by_mapping(cls, remote_system: RemoteSystem, remote_id: str) -> Service | None:
         return Service.objects.filter(
             m_q(remote_system=str(remote_system.id), remote_id=remote_id)
             | m_q(mappings__match={"remote_id": remote_id, "remote_system": remote_system.id})
@@ -1396,7 +1397,7 @@ class Service(Document):
         # addresses
         # port
         # session_id ? register_session
-    ) -> Optional["ServiceInstance"]:
+    ) -> ServiceInstance | None:
         """
         Register Instance for Service
 
@@ -1447,7 +1448,7 @@ class Service(Document):
         service: str | None = None,
         remote_ref: str | None = None,
         **kwargs,
-    ) -> Optional["Service"]:
+    ) -> Service | None:
         logger.debug("Getting service by component: %s", kwargs)
         if service:
             return Service.get_by_id(service)

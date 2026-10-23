@@ -6,10 +6,11 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from collections import defaultdict
 import operator
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -159,7 +160,7 @@ class Prefix(NOCModel):
         blank=False,
         null=False,
     )
-    default_address_profile: Optional["AddressProfile"] = DocumentReferenceField(
+    default_address_profile: AddressProfile | None = DocumentReferenceField(
         AddressProfile, null=True, blank=True
     )
     source = models.CharField(
@@ -199,7 +200,7 @@ class Prefix(NOCModel):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: int) -> Optional["Prefix"]:
+    def get_by_id(cls, oid: int) -> Prefix | None:
         return Prefix.objects.filter(id=oid).first()
 
     @classmethod
@@ -245,7 +246,7 @@ class Prefix(NOCModel):
             return False
 
     @classmethod
-    def get_parent(cls, vrf, afi, prefix) -> Optional["Prefix"]:
+    def get_parent(cls, vrf, afi, prefix) -> Prefix | None:
         """
         Get nearest closing prefix
         """
@@ -548,7 +549,7 @@ class Prefix(NOCModel):
             )
         )
 
-    def rebase(self, vrf, new_prefix) -> Optional["Prefix"]:
+    def rebase(self, vrf, new_prefix) -> Prefix | None:
         """
         Rebase prefix to a new location
         :return:
@@ -768,7 +769,7 @@ class Prefix(NOCModel):
         """
         self._disable_delete_protection = True
 
-    def get_effective_as(self) -> Optional["AS"]:
+    def get_effective_as(self) -> AS | None:
         """
         Return effective AS (first found upwards)
         :return: AS instance or None
@@ -779,7 +780,7 @@ class Prefix(NOCModel):
             return None
         return self.parent.get_effective_as()
 
-    def get_effective_address_profile(self) -> Optional["AddressProfile"]:
+    def get_effective_address_profile(self) -> AddressProfile | None:
         """Return effective Address Profile (first found upwards)"""
         if self.default_address_profile:
             return self.default_address_profile

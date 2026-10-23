@@ -6,11 +6,12 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from pathlib import Path
 import re
 from threading import Lock
 import operator
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Callable
 
 # Third-party modules
@@ -220,22 +221,22 @@ class AlarmClass(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmClass"]:
+    def get_by_id(cls, oid: str | ObjectId) -> AlarmClass | None:
         return AlarmClass.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["AlarmClass"]:
+    def get_by_bi_id(cls, bi_id: int) -> AlarmClass | None:
         return AlarmClass.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["AlarmClass"]:
+    def get_by_name(cls, name: str) -> AlarmClass | None:
         return AlarmClass.objects.filter(name=name).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_rx_cache"), lock=lambda _: id_lock)
-    def get_by_rx_name(cls, name_rx: str) -> Optional["AlarmClass"]:
+    def get_by_rx_name(cls, name_rx: str) -> AlarmClass | None:
         name_rx = re.compile(name_rx)
         return AlarmClass.objects.filter(name=name_rx).first()
 

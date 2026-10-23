@@ -6,11 +6,12 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 from threading import Lock
 import operator
 import re
 from uuid import UUID
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Iterable
 from pathlib import Path
 from enum import Enum
@@ -531,17 +532,17 @@ class ObjectModel(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectModel"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ObjectModel | None:
         return ObjectModel.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["ObjectModel"]:
+    def get_by_name(cls, name: str) -> ObjectModel | None:
         return ObjectModel.objects.filter(name=name).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_uuid_cache"), lock=lambda _: id_lock)
-    def get_by_uuid(cls, uuid: UUID) -> Optional["ObjectModel"]:
+    def get_by_uuid(cls, uuid: UUID) -> ObjectModel | None:
         return ObjectModel.objects.filter(uuid=uuid).first()
 
     def get_short_label(self) -> str:
@@ -630,7 +631,7 @@ class ObjectModel(Document):
         for cc in ModelConnectionsCache.objects.filter(type__in=c_types, gender=og):
             yield cc.model, cc.name
 
-    def get_model_connection(self, name: str) -> Optional["ObjectModelConnection"]:
+    def get_model_connection(self, name: str) -> ObjectModelConnection | None:
         for c in self.connections:
             if c.name == name or (c.internal_name and c.internal_name == name):
                 return c
@@ -662,7 +663,7 @@ class ObjectModel(Document):
         return True, ""
 
     @classmethod
-    def get_model(cls, vendor: "Vendor", part_no: list[str] | str) -> Optional["ObjectModel"]:
+    def get_model(cls, vendor: "Vendor", part_no: list[str] | str) -> ObjectModel | None:
         """
         Get ObjectModel by part part_no,
         Search order:
@@ -680,7 +681,7 @@ class ObjectModel(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_model_cache"), lock=lambda _: id_lock)
-    def _get_model(cls, vendor: "Vendor", part_no: str) -> Optional["ObjectModel"]:
+    def _get_model(cls, vendor: "Vendor", part_no: str) -> ObjectModel | None:
         """
         Get ObjectModel by part part_no,
         Search order:

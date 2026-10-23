@@ -6,10 +6,10 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import threading
 import logging
-from typing import Optional
 
 # Third-party modules
 import bson
@@ -152,12 +152,12 @@ class ResourceGroup(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["ResourceGroup"]:
+    def get_by_id(cls, oid: str | ObjectId) -> ResourceGroup | None:
         return ResourceGroup.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["ResourceGroup"]:
+    def get_by_bi_id(cls, bi_id: int) -> ResourceGroup | None:
         return ResourceGroup.objects.filter(bi_id=bi_id).first()
 
     @classmethod

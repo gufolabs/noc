@@ -6,9 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 from threading import Lock
-from typing import Optional
 from functools import partial
 
 # Third-party modules
@@ -48,7 +48,7 @@ class AgentProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["AgentProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> AgentProfile | None:
         return AgentProfile.objects.filter(id=oid).first()
 
     @classmethod

@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import contextlib
 import time
 from contextvars import ContextVar
 from collections import defaultdict
-from typing import Optional, Literal
+from typing import Literal
 from abc import ABCMeta, abstractmethod
 
 # NOC modules
@@ -26,7 +27,7 @@ SYNC_SENSOR_HANDLER = "noc.core.change.change.apply_sync_sensors"
 AUDIT_CHANGE = "noc.core.change.change.audit_change"
 REACTION_HANDLER = "noc.core.change.change.apply_reactions"
 
-cv_policy: ContextVar[Optional["BaseChangeTrackerPolicy"]] = ContextVar("cv_policy", default=None)
+cv_policy: ContextVar[BaseChangeTrackerPolicy | None] = ContextVar("cv_policy", default=None)
 cv_policy_stack: ContextVar[list["BaseChangeTrackerPolicy"] | None] = ContextVar(
     "cv_policy_stack", default=None
 )
@@ -154,7 +155,7 @@ class ChangeTracker:
         cv_policy.set(policy)
 
     @staticmethod
-    def pop_policy() -> Optional["BaseChangeTrackerPolicy"]:
+    def pop_policy() -> BaseChangeTrackerPolicy | None:
         """
         Pop current effective policy from stack and restore previous one
         :return: Current effective policy

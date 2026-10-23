@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Any
+from __future__ import annotations
+from typing import Any
 from collections.abc import Iterable, Iterator
 from logging import getLogger
 from weakref import ref, ReferenceType
@@ -74,7 +75,7 @@ class Job:
         id: str | None = None,
         action: type[BaseAction] | None = None,
         allow_fail: bool = False,
-        parent: Optional["Job"] = None,
+        parent: Job | None = None,
         environment: dict[str, str] | None = None,
         locks: Iterable[str] | None = None,
         inputs: Iterable[Input] | None = None,
@@ -374,7 +375,7 @@ class Job:
         cls,
         req: JobRequest,
         *,
-        parent: Optional["Job"] = None,
+        parent: Job | None = None,
     ) -> Iterator["Job"]:
         """
         Create jobs from request.

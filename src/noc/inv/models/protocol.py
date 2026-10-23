@@ -6,12 +6,13 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import re
 from pathlib import Path
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 from collections.abc import Iterable
 
 # Third-party modules
@@ -231,17 +232,17 @@ class Protocol(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | ObjectId) -> Optional["Protocol"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Protocol | None:
         return Protocol.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["Protocol"]:
+    def get_by_bi_id(cls, bi_id: int) -> Protocol | None:
         return Protocol.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_code_cache"), lock=lambda _: id_lock)
-    def get_by_code(cls, code) -> Optional["Protocol"]:
+    def get_by_code(cls, code) -> Protocol | None:
         return Protocol.objects.filter(code=code).first()
 
     @classmethod

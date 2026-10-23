@@ -6,10 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
 import operator
 import datetime
 from threading import Lock
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 import bson
@@ -233,22 +234,22 @@ class RemoteSystem(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["RemoteSystem"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> RemoteSystem | None:
         return RemoteSystem.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_name(cls, name: str) -> Optional["RemoteSystem"]:
+    def get_by_name(cls, name: str) -> RemoteSystem | None:
         return RemoteSystem.objects.filter(name=name).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
-    def get_by_bi_id(cls, bi_id: int) -> Optional["RemoteSystem"]:
+    def get_by_bi_id(cls, bi_id: int) -> RemoteSystem | None:
         return RemoteSystem.objects.filter(bi_id=bi_id).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_api_key_cache"), lock=lambda _: id_lock)
-    def get_by_api_key(cls, api_key: str) -> Optional["RemoteSystem"]:
+    def get_by_api_key(cls, api_key: str) -> RemoteSystem | None:
         api_key = APIKey.get_by_api_key(api_key)
         if api_key:
             return RemoteSystem.objects.filter(api_key=api_key).first()
