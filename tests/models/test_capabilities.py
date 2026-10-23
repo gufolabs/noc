@@ -148,7 +148,9 @@ def test_set_caps(object_caps) -> None:
         ),
     ],
 )
-def test_get_scope_caps(caps, update_caps: dict[str, int], scope, expected_scope, expected, object_caps) -> None:
+def test_get_scope_caps(
+    caps, update_caps: dict[str, int], scope, expected_scope, expected, object_caps
+) -> None:
     for c in caps:
         object_caps.set_caps(**c)
     object_caps.update_caps(update_caps, source="manual", scope=scope)

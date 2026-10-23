@@ -170,7 +170,9 @@ def test_lte(raw, config: dict[str, dict[str, str]], expected: bool) -> None:
         ({"labels": ["tag2", "tag4"]}, {"labels": {"$all": ["tag4", "tag2"]}}, True),
     ],
 )
-def test_all(raw: dict[str, list[str]], config: dict[str, dict[str, list[str]]], expected: bool) -> None:
+def test_all(
+    raw: dict[str, list[str]], config: dict[str, dict[str, list[str]]], expected: bool
+) -> None:
     assert match(raw, config) is expected
 
 
@@ -233,7 +235,9 @@ def test_between(raw: dict[str, str], config: dict[str, dict[str, str]], expecte
         ),
     ],
 )
-def test_or(raw: dict[str, str], config: dict[str, list[dict[str, dict[str, str]]]], expected: bool) -> None:
+def test_or(
+    raw: dict[str, str], config: dict[str, list[dict[str, dict[str, str]]]], expected: bool
+) -> None:
     assert match(raw, config) is expected
 
 
@@ -256,5 +260,7 @@ def test_field_eq(raw: dict[str, str], config, expected: bool) -> None:
         ({"labels": ["tag2", "tag4"]}, {"labels": {"$all_ne": ["tag4", "tag2"]}}, False),
     ],
 )
-def test_negative(raw: dict[str, list[str]], config: dict[str, dict[str, list[str]]], expected: bool) -> None:
+def test_negative(
+    raw: dict[str, list[str]], config: dict[str, dict[str, list[str]]], expected: bool
+) -> None:
     assert match(raw, config) is expected

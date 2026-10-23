@@ -50,7 +50,9 @@ def test_timepattern_error(config: str) -> None:
         (["fri", "01.03"], 2005, 3, 13, False),
     ],
 )
-def test_timepattern_list(config: list[str], year: int, month: int, day: int, expected: bool) -> None:
+def test_timepattern_list(
+    config: list[str], year: int, month: int, day: int, expected: bool
+) -> None:
     tp = TimePatternList(config)
     for i in tp.patterns:
         assert TimePattern(i).match(datetime.datetime(year=year, month=month, day=day)) == expected

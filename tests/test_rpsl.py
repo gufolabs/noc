@@ -29,7 +29,9 @@ def test_rpsl_format(config, expected: str) -> None:
     ("config1", "config2", "config3", "config4", "expected"),
     [("key1", "value1", "key2", "value2", "key1:value1\nkey2:value2\n")],
 )
-def test_rpsl_multiple(config1: str, config2: str, config3: str, config4: str, expected: str) -> None:
+def test_rpsl_multiple(
+    config1: str, config2: str, config3: str, config4: str, expected: str
+) -> None:
     kv = []
     kv += rpsl_multiple(config1, config2)
     kv += rpsl_multiple(config3, config4)

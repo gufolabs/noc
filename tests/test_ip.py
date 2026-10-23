@@ -94,7 +94,9 @@ def test_ipv4_len(p1, p2) -> None:
         ("0.0.0.0/0", "0.0.0.0/1", -1, False, True, True, True, False, False),
     ],
 )
-def test_ipv4_comparison(p1: str, p2: str, c, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool) -> None:
+def test_ipv4_comparison(
+    p1: str, p2: str, c, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool
+) -> None:
     p1 = IPv4(p1)
     p2 = IPv4(p2)
     assert ((p1 > p2) - (p1 < p2)) == c
@@ -640,7 +642,9 @@ def test_ipv6_len(p1: str, p2: int) -> None:
         ("::100:100:300:400/64", "::100:200:300:400/64", -1, False, True, True, True, False, False),
     ],
 )
-def test_ipv6_comparison(p1: str, p2: str, c, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool) -> None:
+def test_ipv6_comparison(
+    p1: str, p2: str, c, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool
+) -> None:
     p1 = IPv6(p1)
     p2 = IPv6(p2)
     assert ((p1 > p2) - (p1 < p2)) == c
@@ -960,7 +964,9 @@ def test_ipv6_expand(addr: str, result: str) -> None:
         )
     ],
 )
-def test_prefixdb_ipv4(p1: str, p2: int, p3: str, p4: int, p5: str, p6: int, p7: str, p8: int, p9: str) -> None:
+def test_prefixdb_ipv4(
+    p1: str, p2: int, p3: str, p4: int, p5: str, p6: int, p7: str, p8: int, p9: str
+) -> None:
     db = PrefixDB()
     db[IPv4(p1)] = p2
     db[IPv4(p3)] = p4
@@ -990,7 +996,9 @@ def test_prefixdb_ipv4(p1: str, p2: int, p3: str, p4: int, p5: str, p6: int, p7:
         )
     ],
 )
-def test_prefixdb_ipv6(p1: str, p2: int, p3: str, p4: int, p5: str, p6: int, p7: str, p8: int, p9: str) -> None:
+def test_prefixdb_ipv6(
+    p1: str, p2: int, p3: str, p4: int, p5: str, p6: int, p7: str, p8: int, p9: str
+) -> None:
     db = PrefixDB()
     db[IPv6(p1)] = p2
     db[IPv6(p3)] = p4

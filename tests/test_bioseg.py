@@ -184,7 +184,9 @@ def test_collision_policy_type(match_type: str, is_persistent: bool, outcome: bo
         (">", 10, 20, False),
     ],
 )
-def test_collision_policy_level(match_level: str, attacker_level, target_level, outcome: bool) -> None:
+def test_collision_policy_level(
+    match_level: str, attacker_level, target_level, outcome: bool
+) -> None:
     cp = BioCollisionPolicy(match_type="*", match_level=match_level)
     assert cp.check_level(attacker_level, target_level) is outcome
 
