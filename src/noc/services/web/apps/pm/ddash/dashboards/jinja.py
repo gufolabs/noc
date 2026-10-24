@@ -38,9 +38,7 @@ class JinjaDashboard(BaseDashboard):
         for p in config.get_customized_paths(prefer_custom=True):
             if not p:
                 continue
-            custom_templates = (
-                Path(p) / "services" / "web" / "apps" / "pm" / "ddash" / "templates"
-            )
+            custom_templates = Path(p) / "services" / "web" / "apps" / "pm" / "ddash" / "templates"
             if custom_templates.is_dir():
                 template_paths.append(str(custom_templates))
         with ExitStack() as stack:
