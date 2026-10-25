@@ -90,6 +90,5 @@ migration_loaders: dict[str, Loader[type[BaseMigration]]] = {
         bases=config.iter_customized_bases(f"{app}.migrations"),
     )
     for app in INSTALLED_APPS
-    if app.startswith("noc.")
-    and _has_migrations(app[4:])
+    if app.startswith("noc.") and _has_migrations(app[4:])
 }
