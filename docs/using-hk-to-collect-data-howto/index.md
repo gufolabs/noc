@@ -21,7 +21,7 @@ Though some known restrictions exists and should be kept in mind:
 ## Implementing handler
 
 ```  py title="/opt/noc_custom/handlers/hks.py" linenums="1"
---8<-- "examples/handlers/hk/handler.py"
+--8 < --"examples/handlers/hk/handler.py"
 ```
 
 Place the resulting code into `/opt/noc_custom/handlers/hks.py`.

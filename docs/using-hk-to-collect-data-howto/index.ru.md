@@ -18,7 +18,7 @@
 ## Реализация функций-обработчиков
 
 ```  py title="/opt/noc_custom/handlers/hks.py" linenums="1"
---8<-- "examples/handlers/hk/handler.py"
+--8 < --"examples/handlers/hk/handler.py"
 ```
 
 
