@@ -18,6 +18,19 @@ from noc.settings import INSTALLED_APPS
 from .db import db
 
 
+def _has_migrations(app: str) -> bool:
+    """Check whether an application has a repository or custom migrations package."""
+    custom_path = Path(config.path.custom_path) if config.path.custom_path else None
+    for path in config.get_customized_paths(app, "migrations"):
+        root = Path(path)
+        is_custom = custom_path is not None and root.is_relative_to(custom_path)
+        if not root.is_absolute() and not is_custom:
+            root = config.noc_base / root
+        if root.is_dir():
+            return True
+    return False
+
+
 class BaseMigration:
     depends_on: list[tuple[str, str]] = []
     db = db
@@ -78,5 +91,5 @@ migration_loaders: dict[str, Loader[type[BaseMigration]]] = {
     )
     for app in INSTALLED_APPS
     if app.startswith("noc.")
-    and any(Path(path).is_dir() for path in config.get_customized_paths(app[4:], "migrations"))
+    and _has_migrations(app[4:])
 }
