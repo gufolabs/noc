@@ -18,6 +18,7 @@ from .access import HasPerm, Permit, Deny, Permission
 
 __all__ = ["api", "view"]
 
+
 def view[**P, R, Self](
     url: str,
     access: str | bool | Permission,

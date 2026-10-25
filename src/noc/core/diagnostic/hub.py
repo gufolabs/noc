@@ -50,6 +50,7 @@ FM_DIAGS = {SNMPTRAP_DIAG, SYSLOG_DIAG}
 DIAGNOCSTIC_LABEL_SCOPE = "diag"
 DEFER_CHANGE_STATE = "noc.core.diagnostic.decorator.change_state"
 
+
 def json_default(obj):
     if isinstance(obj, BaseModel):
         return obj.model_dump()
