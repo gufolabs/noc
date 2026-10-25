@@ -35,9 +35,7 @@ class Command(BaseCommand):
 
     def handle(self, slots=None, *args, **options):
         # Apply settings
-        changed = asyncio.run(
-            self.apply_stream_settings(slots), loop_factory=get_loop_factory()
-        )
+        changed = asyncio.run(self.apply_stream_settings(slots), loop_factory=get_loop_factory())
         if changed:
             self.print("CHANGED")
         else:

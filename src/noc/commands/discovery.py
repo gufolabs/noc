@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import asyncio
 import argparse
 import time
 from collections import defaultdict
@@ -189,5 +190,6 @@ class ServiceStub:
         :return:
         """
         from noc.core.dcs.loader import get_dcs, DEFAULT_DCS
+
         dcs = get_dcs(DEFAULT_DCS)
         return asyncio.run(dcs.get_slot_limit(slot_name), loop_factory=get_loop_factory())
