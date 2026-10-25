@@ -10,14 +10,12 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import TypeVar
 from collections.abc import Callable
 
 # NOC modules
 from noc.config import config
 
 logger = logging.getLogger(__name__)
-T = TypeVar("T")
 
 USE_UVLOOP = False
 
