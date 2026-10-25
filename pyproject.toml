@@ -143,8 +143,8 @@ exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules
 line-length = 100
 # Assume Python 3.13
 target-version = "py313"
-# Always autofix, but never try to fix `F401` (unused imports).
-fix = false #fix = true
+# Always autofix, but never try to fix `unfixable`
+fix = true
 
 [tool.ruff.lint]
 ignore = [
