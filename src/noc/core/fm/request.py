@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from typing import Literal
 
@@ -120,7 +120,7 @@ class AlarmActionRequest(BaseModel):
     id: str = Field(default_factory=lambda: str(ObjectId()))
     actions: list[ActionConfig]
     allowed_actions: list[AllowedAction] | None = None
-    start_at: datetime.datetime | None = None
+    start_at: dt.datetime | None = None
     item: ActionItem | None = None
     item_policy: EscalationPolicy = EscalationPolicy.ROOT
     # Group

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import logging
 import operator
 import uuid
@@ -158,7 +158,7 @@ class ActiveAlarm(Document):
     deferred_groups = ListField(BinaryField())
     # span context
     escalation_ctx = LongField(required=False)
-    wait_ts: datetime.datetime | None = DateTimeField(required=False)
+    wait_ts: dt.datetime | None = DateTimeField(required=False)
     # Directly affected services summary, grouped by profiles
     # (connected to the same managed object)
     direct_objects = EmbeddedDocumentListField(ObjectSummaryItem)
@@ -220,7 +220,7 @@ class ActiveAlarm(Document):
                 return ll.tt_id
 
     @property
-    def escalation_ts(self) -> datetime.datetime | None:
+    def escalation_ts(self) -> dt.datetime | None:
         for ll in self.log:
             if ll.tt_id:
                 return ll.timestamp
@@ -256,14 +256,14 @@ class ActiveAlarm(Document):
         return policy
 
     @property
-    def clear_timestamp(self) -> datetime.datetime | None:
+    def clear_timestamp(self) -> dt.datetime | None:
         """Return clear timestamp for Template Compat"""
         if hasattr(self, "_clear_ts"):
             return self._clear_ts
         return None
 
     @classmethod
-    def get_min_wait_ts(cls) -> datetime.datetime | None:
+    def get_min_wait_ts(cls) -> dt.datetime | None:
         """"""
         return (
             ActiveAlarm.objects()
@@ -320,7 +320,7 @@ class ActiveAlarm(Document):
             if "save_condition" not in kwargs:
                 kwargs["save_condition"] = {"id": self.id}
             try:
-                self.last_update = datetime.datetime.now().replace(microsecond=0)
+                self.last_update = dt.datetime.now().replace(microsecond=0)
                 self.save(**kwargs)
             except SaveConditionError:
                 pass  # Race condition, closed during update
@@ -362,11 +362,11 @@ class ActiveAlarm(Document):
         bulk: list[Any] | None = None,
         source: str | None = None,
         tt_id: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         is_internal: bool = True,
         quiet: bool = False,
     ):
-        timestamp = timestamp or datetime.datetime.now()
+        timestamp = timestamp or dt.datetime.now()
         if bulk is not None:
             bulk.append(
                 UpdateOne(
@@ -414,7 +414,7 @@ class ActiveAlarm(Document):
     def clear_alarm(
         self,
         message,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         force: bool = False,
         source=None,
         dry_run: bool = False,
@@ -432,7 +432,7 @@ class ActiveAlarm(Document):
 
         if self.alarm_class.is_ephemeral:
             self.delete()
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         if not force and not self.allow_clear:
             self.add_watch(Effect.CLEAR_ALARM, key="", immediate=True)
             ActiveAlarm.objects.filter(id=self.id).update(watchers=self.watchers)
@@ -493,7 +493,7 @@ class ActiveAlarm(Document):
         self._clear_ts = ts
         ct = self.alarm_class.get_control_time(self.reopens)
         if ct:
-            a.control_time = datetime.datetime.now() + datetime.timedelta(seconds=ct)
+            a.control_time = dt.datetime.now() + dt.timedelta(seconds=ct)
         if dry_run:
             self.status = "C"
             return a
@@ -628,7 +628,7 @@ class ActiveAlarm(Document):
 
     def acknowledge(self, user: User, msg="", touch: bool = True):
         """Acknowledge alarm by user"""
-        self.ack_ts = datetime.datetime.now()
+        self.ack_ts = dt.datetime.now()
         self.ack_user = user.username
         self.log_message(
             message=f"Acknowledged by {user.get_full_name()}({user.username}): {msg}",
@@ -652,7 +652,7 @@ class ActiveAlarm(Document):
             self.touch_watch()
 
     def register_clear(
-        self, msg: str, user: User | None = None, timestamp: datetime.datetime | None = None
+        self, msg: str, user: User | None = None, timestamp: dt.datetime | None = None
     ):
         """
         Register Alarm Clear Request on Correlator
@@ -689,7 +689,7 @@ class ActiveAlarm(Document):
             partition=partition % num_partitions,
         )
 
-    def get_wait_ts(self, timestamp: datetime.datetime | None = None):
+    def get_wait_ts(self, timestamp: dt.datetime | None = None):
         wait_ts = []
         for w in self.watchers:
             if w.root_only and self.root:
@@ -710,7 +710,7 @@ class ActiveAlarm(Document):
         immediate: bool = False,
         clear_only: bool = False,
         root_only: bool = False,
-        after: datetime.datetime | None = None,
+        after: dt.datetime | None = None,
         job: str | None = None,
         keep_args: bool = False,
         **kwargs,
@@ -789,7 +789,7 @@ class ActiveAlarm(Document):
             effect: Effect only
             dry_run: For tests run
         """
-        now = datetime.datetime.now() + datetime.timedelta(seconds=10)  # time drift
+        now = dt.datetime.now() + dt.timedelta(seconds=10)  # time drift
         jobs = set()
         for w in self.watchers:
             if w.clear_only and not is_clear:
@@ -822,12 +822,12 @@ class ActiveAlarm(Document):
 
     @property
     def duration(self) -> int:
-        dt = datetime.datetime.now() - self.timestamp
-        return dt.days * 86400 + dt.seconds
+        delta = dt.datetime.now() - self.timestamp
+        return delta.days * 86400 + delta.seconds
 
     @property
     def display_duration(self) -> str:
-        duration = datetime.datetime.now() - self.timestamp
+        duration = dt.datetime.now() - self.timestamp
         secs = duration.seconds % 60
         mins = (duration.seconds / 60) % 60
         hours = (duration.seconds / 3600) % 24
@@ -1187,7 +1187,7 @@ class ActiveAlarm(Document):
         # Check for loops, raise Value error if loop detected
         root_path = get_root_path(self.root)
         bulk = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for root in root_path:
             doc = alarms[root]
             consequences = children[root]

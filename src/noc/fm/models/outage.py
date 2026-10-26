@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import Document
@@ -41,7 +41,7 @@ class Outage(Document):
         :param ts: Effective event timestamp. None for current time
         :return:
         """
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         col = Outage._get_collection()
         lo = col.find_one(
             {"object": object.id, "start": {"$lte": ts}},

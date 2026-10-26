@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections.abc import Iterable
 from typing import Any
@@ -252,14 +252,14 @@ class ServiceInstance(Document):
     def seen(
         self,
         source: InputSource,
-        last_seen: datetime.datetime | None = None,
+        last_seen: dt.datetime | None = None,
         dry_run: bool = False,
     ):
         """Update source"""
         if source not in self.sources:
             self.sources.append(source)
         if source not in [InputSource.MANUAL, InputSource.CONFIG]:
-            self.last_seen = last_seen or datetime.datetime.now().replace(microsecond=0)
+            self.last_seen = last_seen or dt.datetime.now().replace(microsecond=0)
             self.service.fire_event("seen")
             self.expires = None
         # resource Seen
@@ -277,9 +277,7 @@ class ServiceInstance(Document):
         if dry_run:
             return
         if not self.sources and self.config.ttl and not force:
-            self.expires = self.expires or datetime.datetime.now() + datetime.timedelta(
-                seconds=self.config.ttl
-            )
+            self.expires = self.expires or dt.datetime.now() + dt.timedelta(seconds=self.config.ttl)
             ServiceInstance.objects.filter(id=self.id).update(
                 sources=self.sources, expires=self.expires
             )
@@ -464,7 +462,7 @@ class ServiceInstance(Document):
         port: str | None = None,
         session: str | None = None,
         pool: Pool | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ):
         """
         Add endpoint address to instance
@@ -553,7 +551,7 @@ class ServiceInstance(Document):
         self,
         res: list[Any],
         source: InputSource,
-        update_ts: datetime.datetime | None = None,
+        update_ts: dt.datetime | None = None,
         bulk=None,
     ):
         """

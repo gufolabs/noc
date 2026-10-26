@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import socket
 import struct
 from collections import defaultdict
@@ -73,7 +73,7 @@ def fix():
             out_logs = defaultdict(list)
         if mo_id not in mo_map:
             continue
-        ts: datetime.datetime = row["timestamp"].replace(microsecond=0)
+        ts: dt.datetime = row["timestamp"].replace(microsecond=0)
         out[key].append(
             orjson.dumps(
                 {

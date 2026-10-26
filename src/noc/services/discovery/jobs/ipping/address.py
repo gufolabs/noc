@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import orjson
@@ -59,7 +59,7 @@ class AddressCheck(BaseAddressCheck):
             vpn_db[IP.prefix(p)] = vpn_id
         address = []
         address_profile = AddressProfile.objects.filter().first()
-        now = datetime.datetime.now() - datetime.timedelta(days=7)
+        now = dt.datetime.now() - dt.timedelta(days=7)
         ts = (profile.ip_ping_discovery_last_run or now).replace(microsecond=0)
         ch = connection()
         last_ts = ts
@@ -83,7 +83,7 @@ class AddressCheck(BaseAddressCheck):
                     fqdn=None,
                 )
             )
-            last_ts = max(last_ts, datetime.datetime.fromisoformat(row["last"]))
+            last_ts = max(last_ts, dt.datetime.fromisoformat(row["last"]))
         if last_ts != self.object.ip_ping_discovery_last_run:
             self.object.ip_ping_discovery_last_run = last_ts
             self.object.save()

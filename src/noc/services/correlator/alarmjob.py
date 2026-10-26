@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 import time
@@ -256,13 +256,13 @@ class AlarmJob:
         """Check log for state logs"""
         return any(ll.status != ActionStatus.SKIP for ll in self.actions)
 
-    def get_next_ts(self) -> datetime.datetime | None:
+    def get_next_ts(self) -> dt.datetime | None:
         """
         Calculate next run ts. When set delay or Temp Error
         """
         for aa in sorted(self.actions, key=operator.attrgetter("timestamp")):
             if aa.status == ActionStatus.NEW and aa.when != WhenCondition.ON_END:
-                return (aa.timestamp + datetime.timedelta(seconds=1)).replace(microsecond=0)
+                return (aa.timestamp + dt.timedelta(seconds=1)).replace(microsecond=0)
         return None
 
     def get_span_sample(self) -> int:
@@ -381,13 +381,13 @@ class AlarmJob:
 
     def run(
         self,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         save_state: bool = True,
         force_end: bool = False,
         is_update: bool = False,
     ):
         """Main run action for job"""
-        now = ts or datetime.datetime.now().replace(microsecond=0)
+        now = ts or dt.datetime.now().replace(microsecond=0)
         if not self.items:
             self.logger.info("Nothing alarms for escalate")
             return
@@ -579,7 +579,7 @@ class AlarmJob:
         if not alarm:
             raise ValueError("Not Found alarm by id: %s", req.item.alarm)
         leader, groups = cls.get_leader(req.item_policy, alarm)
-        start = req.start_at or datetime.datetime.now()
+        start = req.start_at or dt.datetime.now()
         return AlarmJob(
             # Job Context
             items=[] if not leader else [Item.from_alarm(alarm)],
@@ -664,7 +664,7 @@ class AlarmJob:
         start_at, completed_at = None, None
         status = JobStatus.WAITING
         if is_completed:
-            completed_at = datetime.datetime.now().replace(microsecond=0)
+            completed_at = dt.datetime.now().replace(microsecond=0)
             status = JobStatus.SUCCESS
         for a in self.actions:
             if a.action == AlarmAction.CREATE_TT and a.document_id:
@@ -834,7 +834,7 @@ class AlarmJob:
         action: ActionConfig,
         user: User | None = None,
         tt_system: TTSystem | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
     ):
         """Run action on Job"""
         # NOC modules
@@ -843,7 +843,7 @@ class AlarmJob:
         if not self.is_allowed_action(action.action, user):
             self.logger.info("[%s] No Permission User for Run Action: %s", user, action.action)
             return
-        timestamp = timestamp or datetime.datetime.now()
+        timestamp = timestamp or dt.datetime.now()
         # self.add_action(action, timestamp)
         al = ActionLog.from_request(
             action,
@@ -878,7 +878,7 @@ class AlarmJob:
 
 class AlarmWatchersJob(PeriodicJob):
     def handler(self, **kwargs):
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         for aa in ActiveAlarm.objects.filter(wait_ts__lte=now):
             aa.touch_watch()
             aa.wait_ts = aa.get_wait_ts()
@@ -893,12 +893,12 @@ class AlarmWatchersJob(PeriodicJob):
         """
         Returns next repeat interval
         """
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         next_ts = ActiveAlarm.get_min_wait_ts()
         if not next_ts:
-            next_ts = now + datetime.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
+            next_ts = now + dt.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
         elif next_ts <= now:
-            next_ts = now + datetime.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
+            next_ts = now + dt.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
         self.logger.info("Schedule next ActiveAlarm watcher: %s", next_ts)
         return next_ts
 
@@ -912,7 +912,7 @@ def run_alarm_job(job_id: str, is_update: bool = False, is_clear: bool = False, 
     job.run()
     wait_ts = job.get_next_ts()
     if wait_ts:
-        Job.retry_after(delay=(wait_ts - datetime.datetime.now()).total_seconds())
+        Job.retry_after(delay=(wait_ts - dt.datetime.now()).total_seconds())
 
 
 def touch_alarm(alarm, *args, **kwargs):
@@ -923,4 +923,4 @@ def touch_alarm(alarm, *args, **kwargs):
     a.touch_watch()
     if a.wait_ts:
         print(a.watchers, a.wait_ts)
-        Job.retry_after(delay=(a.wait_ts - datetime.datetime.now()).total_seconds())
+        Job.retry_after(delay=(a.wait_ts - dt.datetime.now()).total_seconds())

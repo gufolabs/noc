@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 import re
 from collections.abc import Iterable
@@ -91,7 +91,7 @@ class SLAProbe(Document):
     # Timestamp expired
     expired = DateTimeField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     # Probe type
     type = StringField(choices=[(x, x) for x in PROBE_TYPES])
     tos = IntField(min=0, max=64)

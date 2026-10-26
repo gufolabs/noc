@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from threading import Lock
 
@@ -95,7 +95,7 @@ class APIKey(Document):
             return None, []
         # Check key expiration
         expires = doc.get("expires", None)
-        if expires and expires < datetime.datetime.now():
+        if expires and expires < dt.datetime.now():
             # Expired
             return None, []
         # Check ACL

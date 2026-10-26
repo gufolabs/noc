@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 from typing import Any
 
@@ -200,7 +200,7 @@ class ReportDsAlarms(ReportDataSource):
         else:
             match = {"timestamp": {"$gte": self.start, "$lte": self.end}}
         match_duration, mos_filter, ex_resource_group = {}, {}, None
-        datenow = datetime.datetime.now()
+        datenow = dt.datetime.now()
         alarm_collections = []
 
         for ff in self.filters:

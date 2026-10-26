@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any
 
 # Third-party modules
@@ -125,7 +125,7 @@ class NetworkInstanceDiscoveryJob(PeriodicJob):
     @classmethod
     def processed_records(
         cls, rows: list[dict[str, Any]]
-    ) -> dict[str, tuple[Interface, datetime.datetime]]:
+    ) -> dict[str, tuple[Interface, dt.datetime]]:
         """"""
         r = {}
         ref = ValueType.MAC_ADDRESS
@@ -166,17 +166,17 @@ class NetworkInstanceDiscoveryJob(PeriodicJob):
                 # Getting MAC Refs
                 r[ref.clean_reference(m)] = (
                     iface,
-                    datetime.datetime.fromisoformat(row["ls"]),
+                    dt.datetime.fromisoformat(row["ls"]),
                 )
         return r
 
     @classmethod
     def get_mac_neighbors(
-        cls, start: datetime.datetime | None = None, limit_mac_by_port: int | None = None
-    ) -> dict[str, tuple[Interface, datetime.datetime]]:
+        cls, start: dt.datetime | None = None, limit_mac_by_port: int | None = None
+    ) -> dict[str, tuple[Interface, dt.datetime]]:
         """Return Iface -> Mac Neighbor map"""
         limit_mac_by_port = limit_mac_by_port or LIMIT_MAC_BY_PORT
-        start = start or (datetime.datetime.now() - datetime.timedelta(days=REQUEST_DAYS))
+        start = start or (dt.datetime.now() - dt.timedelta(days=REQUEST_DAYS))
         ch = connection()
         r = ch.execute(SQL, args=[start.date().isoformat(), limit_mac_by_port], return_raw=True)
         r = orjson.loads(r)

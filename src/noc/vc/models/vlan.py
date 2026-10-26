@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 import random
 from collections.abc import Iterable
@@ -208,7 +208,7 @@ class VLAN(Document):
 
     def reserve(
         self,
-        allocated_till: datetime.datetime | None = None,
+        allocated_till: dt.datetime | None = None,
         user: Any | None = None,
         confirm: bool = True,
         reservation_id: str | None = None,

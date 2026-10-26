@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -21,7 +21,7 @@ class Script(BaseScript):
     def execute(self):
         v = self.http.get("/ISAPI/System/deviceInfo", cached=True, use_basic=True)
         v = v.replace("\n", "")
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         for child in root:
             key = child.tag.split("}")[1][0:]
             if key == "macAddress":

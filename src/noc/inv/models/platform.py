@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 import threading
 import uuid
@@ -216,7 +216,7 @@ class Platform(Document):
         """
         if not self.end_of_sale:
             return False
-        return datetime.date.today() > self.end_of_sale
+        return dt.date.today() > self.end_of_sale
 
     @property
     def is_end_of_support(self):
@@ -230,7 +230,7 @@ class Platform(Document):
         if self.end_of_xsupport:
             deadline.append(self.end_of_xsupport)
         if deadline:
-            return datetime.date.today() > max(deadline)
+            return dt.date.today() > max(deadline)
         return False
 
     def merge_platform(self, alias):

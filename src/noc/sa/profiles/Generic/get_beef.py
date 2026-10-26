@@ -7,7 +7,7 @@
 
 # Python modules
 import codecs
-import datetime
+import datetime as dt
 import uuid
 from collections import OrderedDict
 
@@ -36,7 +36,7 @@ class Script(BaseScript):
             "version": self.BEEF_FORMAT,
             "uuid": str(uuid.uuid4()),
             "spec": spec["uuid"],
-            "changed": datetime.datetime.now().isoformat(),
+            "changed": dt.datetime.now().isoformat(),
             "cli": [],
             "cli_fsm": [],
             "mib": [],

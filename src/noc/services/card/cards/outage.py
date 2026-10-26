@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # NOC modules
@@ -66,7 +66,7 @@ class OutageCard(BaseCard):
             qs = ActiveAlarm.objects.filter(
                 adm_path__in=self.get_user_domains(), root__exists=False
             )
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         segments = set()
         objects = set()
         for alarm in qs.only(

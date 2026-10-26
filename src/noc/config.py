@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import importlib
 import logging
 import os
@@ -1310,8 +1310,8 @@ class Config(BaseConfig):
         """
         UTC offset for configured timezone.
         """
-        dt = datetime.datetime.now(datetime.UTC)
-        offset = dt.astimezone(self.timezone).utcoffset()
+        now = dt.datetime.now(dt.UTC)
+        offset = now.astimezone(self.timezone).utcoffset()
         return int(offset.total_seconds())
 
     @staticmethod

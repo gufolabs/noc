@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import heapq
 import itertools
 import logging
@@ -355,8 +355,8 @@ class ReportDataSource:
         fields: list[str],
         objectids: list[str] | None = None,
         allobjectids: bool = False,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         interval: str | None = None,
         max_intervals: int | None = None,
         filters: list[dict[str, list[str] | str]] | None = None,
@@ -376,9 +376,9 @@ class ReportDataSource:
         self.groups: list[str] = groups or []
         if self.TIMEBASED and not start:
             raise ValueError("Timebased Report required start param")
-        self.end: datetime.datetime = end or datetime.datetime.now()
+        self.end: dt.datetime = end or dt.datetime.now()
         self.end = self.end.replace(tzinfo=None)
-        self.start: datetime.datetime = start or self.end - datetime.timedelta(days=1)
+        self.start: dt.datetime = start or self.end - dt.timedelta(days=1)
         self.start = self.start.replace(tzinfo=None)
         self.user = user
         if self.start and self.end and self.start >= self.end:
@@ -571,7 +571,7 @@ class CHTableReportDataSource(ReportDataSource):
         }
 
     def get_query_ch(
-        self, from_date: datetime.datetime, to_date: datetime.datetime, r_format: str | None = None
+        self, from_date: dt.datetime, to_date: dt.datetime, r_format: str | None = None
     ) -> str:
         ts_from_date = time.mktime(from_date.timetuple())
         ts_to_date = time.mktime(to_date.timetuple())

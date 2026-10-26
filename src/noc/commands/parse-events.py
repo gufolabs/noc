@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import csv
-import datetime
+import datetime as dt
 import operator
 import os
 import time
@@ -117,7 +117,7 @@ class Command(BaseCommand):
         return ecls.startswith("Unknown | ") and ecls != "Unknown | Ignore"
 
     def read_syslog(self, f):
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for line in f:
             yield ActiveEvent(
                 timestamp=now,

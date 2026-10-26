@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import uuid
 from collections import defaultdict
 
@@ -56,7 +56,7 @@ def fix():
             if model and hasattr(model, "get_by_id"):
                 o = model.get_by_id(int(row["object"]))
             name = str(o) if o else ""
-        ts: datetime.datetime = row["timestamp"].replace(microsecond=0)
+        ts: dt.datetime = row["timestamp"].replace(microsecond=0)
         out[key].append(
             orjson.dumps(
                 {

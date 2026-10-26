@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import pytest
@@ -16,14 +16,14 @@ from noc.core.dateutils import hits_in_range
 
 
 def test_hits_in_range() -> None:
-    start = datetime.datetime(2017, 9, 1)
-    stop = datetime.datetime(2017, 9, 2)
-    t0 = start - datetime.timedelta(hours=2)
-    t1 = start - datetime.timedelta(hours=1)
-    t2 = start + datetime.timedelta(hours=1)
-    t3 = stop - datetime.timedelta(hours=1)
-    t4 = stop + datetime.timedelta(hours=1)
-    t5 = stop + datetime.timedelta(hours=2)
+    start = dt.datetime(2017, 9, 1)
+    stop = dt.datetime(2017, 9, 2)
+    t0 = start - dt.timedelta(hours=2)
+    t1 = start - dt.timedelta(hours=1)
+    t2 = start + dt.timedelta(hours=1)
+    t3 = stop - dt.timedelta(hours=1)
+    t4 = stop + dt.timedelta(hours=1)
+    t5 = stop + dt.timedelta(hours=2)
     # Empty list leads to 0
     assert hits_in_range([], start, stop) == 0
     # Check start hit
@@ -45,19 +45,19 @@ def test_hits_in_range() -> None:
 @pytest.fixture(
     params=[
         # 1s
-        (datetime.timedelta(seconds=1), 1.0),
+        (dt.timedelta(seconds=1), 1.0),
         # 1m
-        (datetime.timedelta(minutes=1), 60.0),
+        (dt.timedelta(minutes=1), 60.0),
         # 1h
-        (datetime.timedelta(hours=1), 3600.0),
+        (dt.timedelta(hours=1), 3600.0),
         # 1day
-        (datetime.timedelta(days=1), 86400.0),
+        (dt.timedelta(days=1), 86400.0),
         # 7days
-        (datetime.timedelta(days=7), 604800.0),
+        (dt.timedelta(days=7), 604800.0),
         # 1mks
-        (datetime.timedelta(microseconds=1), 1e-6),
+        (dt.timedelta(microseconds=1), 1e-6),
         # 1day 1h 1m 1s 1msk
-        (datetime.timedelta(days=1, hours=1, minutes=1, microseconds=1), 90060.000001),
+        (dt.timedelta(days=1, hours=1, minutes=1, microseconds=1), 90060.000001),
     ]
 )
 def total_seconds_data(request):

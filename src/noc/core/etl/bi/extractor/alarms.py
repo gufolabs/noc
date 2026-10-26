@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.bi.models.alarms import Alarms
@@ -27,7 +27,7 @@ class AlarmsExtractor(ArchivingExtractor):
     name = "alarms"
     extract_delay = config.bi.extract_delay_alarms
     clean_delay = config.bi.clean_delay_alarms
-    reboot_interval = datetime.timedelta(seconds=config.bi.reboot_interval)
+    reboot_interval = dt.timedelta(seconds=config.bi.reboot_interval)
     enable_archive = config.bi.enable_alarms_archive
     archive_batch_limit = config.bi.alarms_archive_batch_limit
     archive_collection_template = config.bi.alarms_archive_policy

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections.abc import Callable
 
@@ -45,7 +45,7 @@ class DumpNode(BaseCDAGNode):
             if v is None:
                 continue
             r.append(f"{k}: {v}")
-        ts = datetime.datetime.fromtimestamp(ts // NS)
+        ts = dt.datetime.fromtimestamp(ts // NS)
         logger.info(f"[{ts}|{';'.join(labels)}] Inputs: {','.join(r)}")
 
     def get_input_type(self, name: str) -> int:

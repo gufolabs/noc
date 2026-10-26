@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 from collections.abc import Iterable
 from typing import Any
@@ -84,13 +84,13 @@ class EscalationJob(SequenceJob):
             return
         self.remove_job()
 
-    def end_escalation(self, timestamp: datetime.datetime | None = None):
+    def end_escalation(self, timestamp: dt.datetime | None = None):
         """
         Processed end escalation handlers
         """
         self.check_closed()
         if not self.object.end_timestamp:
-            self.object.end_timestamp = datetime.datetime.now().replace(microsecond=0)
+            self.object.end_timestamp = dt.datetime.now().replace(microsecond=0)
         # Remove or Suspend
         if not self.error:
             self.remove_job()
@@ -155,7 +155,7 @@ class EscalationJob(SequenceJob):
                         member=EscalationMember.TT_SYSTEM,
                         key=str(tt_system.id),
                         status=r.status,
-                        timestamp=datetime.datetime.now().replace(microsecond=0),
+                        timestamp=dt.datetime.now().replace(microsecond=0),
                         document_id=r.document,
                         error=r.error,
                         template=str(esc_item.template.id),
@@ -174,7 +174,7 @@ class EscalationJob(SequenceJob):
                     r = self.notify(esc_item.notification_group, subject=subject, body=body)
                     # Save to escalation context
                     self.object.set_escalation(
-                        timestamp=datetime.datetime.now().replace(microsecond=0),
+                        timestamp=dt.datetime.now().replace(microsecond=0),
                         member=EscalationMember.NOTIFICATION_GROUP,
                         key=str(esc_item.notification_group.id),
                         status=r.status,
@@ -194,7 +194,7 @@ class EscalationJob(SequenceJob):
         """
 
         ts = self.object.timestamp
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         self.logger.info("Start escalation sequence from: %s", self.object.sequence_num)
         for num, item in enumerate(self.object.profile.escalations):
             if num < self.object.sequence_num:

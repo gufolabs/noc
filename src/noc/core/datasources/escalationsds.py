@@ -7,7 +7,7 @@
 
 # Python Modules
 # Python modules
-import datetime
+import datetime as dt
 from collections import namedtuple
 from collections.abc import AsyncIterable, Iterable
 
@@ -48,8 +48,8 @@ class EscalationsDS(BaseDataSource):
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:
-        start: datetime.datetime = kwargs.get("start")
-        end: datetime.datetime = kwargs.get("end")
+        start: dt.datetime = kwargs.get("start")
+        end: dt.datetime = kwargs.get("end")
         q = {
             "timestamp": {"$gte": start, "$lte": end},
             "escalation_tt": {"$exists": True},

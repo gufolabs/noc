@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import time
 import yaml
 from typing import Any
@@ -32,8 +32,8 @@ from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
 from noc.services.correlator.alarmjob import AlarmJob
 
-DEFAULT_CLEAN = datetime.timedelta(weeks=4)
-CLEAN_WINDOW = datetime.timedelta(weeks=1)
+DEFAULT_CLEAN = dt.timedelta(weeks=4)
+CLEAN_WINDOW = dt.timedelta(weeks=1)
 
 
 class AlarmItem(BaseModel):
@@ -63,7 +63,7 @@ class AlarmItem(BaseModel):
                 "$op": "set_status",
                 "statuses": [
                     {
-                        "timestamp": datetime.datetime.now(),
+                        "timestamp": dt.datetime.now(),
                         "managed_object": self.managed_object,
                         "status": self.status,
                         "labels": self.labels,
@@ -161,7 +161,7 @@ class Command(BaseCommand):
         msg = {
             "$op": "clear",
             "reference": reference,
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": dt.datetime.now().isoformat(),
             "message": message,
         }
         self.publish(mo, msg)
@@ -186,7 +186,7 @@ class Command(BaseCommand):
         msg = {
             "$op": "raise",
             "reference": reference or self.get_default_reference(mo, ac, a_vars),
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": dt.datetime.now().isoformat(),
             "managed_object": str(mo.id),
             "alarm_class": ac.name,
             "labels": labels.split(",") if labels else [],
@@ -321,11 +321,9 @@ class Command(BaseCommand):
         if alarm_class:
             conditions["alarm_class"] = AlarmClass.get_by_name(alarm_class).id
         if before:
-            conditions["timestamp"] = {"$lte": datetime.datetime.strptime(before, "%Y-%m-%d")}
+            conditions["timestamp"] = {"$lte": dt.datetime.strptime(before, "%Y-%m-%d")}
         elif before_days:
-            conditions["timestamp"] = {
-                "$lte": datetime.datetime.now() - datetime.timedelta(days=before_days)
-            }
+            conditions["timestamp"] = {"$lte": dt.datetime.now() - dt.timedelta(days=before_days)}
         # else:
         #    self.print("Before is not set, use default. Clean ALL")
         #    before = datetime.datetime.now() - DEFAULT_CLEAN

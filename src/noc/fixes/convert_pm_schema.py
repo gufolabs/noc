@@ -7,7 +7,7 @@
 
 # Python modules
 import calendar
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -110,11 +110,11 @@ def get_insert_query(metric_scope: "MetricScope", start, stop, remote=None):
 
 
 def iter_time_interval():
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     end = END_DATE or now.replace(minute=0, second=0, microsecond=0)
-    start = end - datetime.timedelta(days=MIGRATE_DEPTH)
+    start = end - dt.timedelta(days=MIGRATE_DEPTH)
     if MIGRATE_DEPTH <= MIGRATE_CHUNK:
-        stop = min(end, start + datetime.timedelta(days=MIGRATE_CHUNK))
+        stop = min(end, start + dt.timedelta(days=MIGRATE_CHUNK))
         yield start, stop
         return
     # Shft stop to chunked interval

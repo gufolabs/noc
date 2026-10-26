@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import uuid
 from collections import defaultdict
 from dataclasses import asdict
@@ -101,7 +101,7 @@ class SyslogCollectorService(BaseService):
         self._publish_message(cfg, msg)
 
     def _publish_message(self, cfg, msg: dict[str, Any]):
-        msg["timestamp"] = datetime.datetime.now().isoformat()
+        msg["timestamp"] = dt.datetime.now().isoformat()
         msg["reference"] = f"{SYSLOGCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
 
@@ -178,7 +178,7 @@ class SyslogCollectorService(BaseService):
         changed = cfg.update_rcvd(timestamp, source_address)
         if changed:
             self.updated.add(cfg.id)
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         if cfg.archive_events and cfg.bi_id:
             # Archive message
             metrics["events_archived"] += 1
@@ -207,9 +207,7 @@ class SyslogCollectorService(BaseService):
             self.publish(
                 value=orjson.dumps(
                     {
-                        "timestamp": datetime.datetime.fromtimestamp(timestamp).replace(
-                            microsecond=0
-                        ),
+                        "timestamp": dt.datetime.fromtimestamp(timestamp).replace(microsecond=0),
                         "message_id": message_id,
                         "collector_type": "syslog",
                         "collector": config.pool,

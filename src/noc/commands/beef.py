@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import codecs
-import datetime
+import datetime as dt
 import os
 import re
 import uuid
@@ -162,7 +162,7 @@ class Command(BaseCommand):
             else:
                 path = smart_text(
                     mo.object_profile.beef_path_template.render_subject(
-                        object=mo, spec=sp, datetime=datetime
+                        object=mo, spec=sp, datetime=dt
                     )
                 )
             storage = mo.object_profile.beef_storage or self.get_storage(storage, beef=True)

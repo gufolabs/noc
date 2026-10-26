@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 import threading
 import uuid
@@ -343,7 +343,7 @@ class BIAPI(JSONRPCAPI):
         d.format = config.get("format", 1)
         config["id"] = str(d.id)
         d.config = zlib.compress(orjson.dumps(config))
-        d.changed = datetime.datetime.now()
+        d.changed = dt.datetime.now()
         d.title = config.get("title")  # @todo: Generate title
         d.description = config.get("description")
         d.tags = config.get("tags", [])

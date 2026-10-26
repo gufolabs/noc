@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from threading import Lock
 from typing import Any
@@ -339,7 +339,7 @@ class RemoteSystem(Document):
                 raise e
             error_report(suppress_log=quiet)
             error = str(e)
-        self.last_extract = datetime.datetime.now().replace(microsecond=0)
+        self.last_extract = dt.datetime.now().replace(microsecond=0)
         if not error:
             self.last_successful_extract = self.last_extract
         events_result = [r for r in results if r.loader == "fmevent"]
@@ -381,7 +381,7 @@ class RemoteSystem(Document):
                 raise e
             error_report(suppress_log=quiet)
             error = str(e)
-        self.last_load = datetime.datetime.now().replace(microsecond=0)
+        self.last_load = dt.datetime.now().replace(microsecond=0)
         if not error:
             self.last_successful_load = self.last_load
         self.load_error = error
@@ -407,9 +407,9 @@ class RemoteSystem(Document):
         step: str,
         error: str,
         recommended_actions: str | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ):
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         send_message(
             {
                 "remote_system": {"name": self.name, "id": str(self.id)},
@@ -461,7 +461,7 @@ class RemoteSystem(Document):
         """Create or remove scheduler job"""
         scheduler = Scheduler(self.SCHEDULER)
         if self.enable_sync and self.sync_interval:
-            ts = self.run_sync_at or datetime.datetime.now().replace(microsecond=0)
+            ts = self.run_sync_at or dt.datetime.now().replace(microsecond=0)
             if ts:
                 scheduler.submit(jcls=self.JCLS, key=self.id, ts=ts)
                 return
@@ -471,7 +471,7 @@ class RemoteSystem(Document):
         """Create or remove scheduler job"""
         scheduler = Scheduler(self.SCHEDULER)
         if self.enable_sync and self.event_sync_interval:
-            ts = self.run_sync_at or datetime.datetime.now().replace(microsecond=0)
+            ts = self.run_sync_at or dt.datetime.now().replace(microsecond=0)
             if ts:
                 scheduler.submit(jcls=self.JCLS_EVENT, key=self.id, ts=ts)
                 return
@@ -481,7 +481,7 @@ class RemoteSystem(Document):
         """Create or remove scheduler job"""
         scheduler = Scheduler(self.SCHEDULER)
         if self.enable_metrics and self.remote_collectors_policy == "D":
-            ts = self.run_sync_at or datetime.datetime.now().replace(microsecond=0)
+            ts = self.run_sync_at or dt.datetime.now().replace(microsecond=0)
             if ts:
                 scheduler.submit(jcls=self.JCLS_METRIC, key=self.id, ts=ts)
                 return
@@ -572,7 +572,7 @@ class RemoteSystem(Document):
             max_ts = max(max_ts, event.ts)
             svc.publish(orjson.dumps(event.model_dump()), f"events.{event.target.pool}")
         if max_ts:
-            self.last_extract_event = datetime.datetime.fromtimestamp(max_ts)
+            self.last_extract_event = dt.datetime.fromtimestamp(max_ts)
             RemoteSystem.objects.filter(id=self.id).update(
                 last_extract_event=self.last_extract_event,
                 last_successful_extract_event=self.last_successful_extract_event,

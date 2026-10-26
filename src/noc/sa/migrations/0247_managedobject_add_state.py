@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import orjson
@@ -24,7 +24,7 @@ class Migration(BaseMigration):
 
     @staticmethod
     def get_diagnostic(state="blocked"):
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         return orjson.dumps(
             {
                 "SA": {
@@ -51,7 +51,7 @@ class Migration(BaseMigration):
         )
         # Create index
         self.db.create_index("sa_managedobject", ["state"])
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         columns = {
             "state_changed": "State Changed",
             "expired": "Expired",

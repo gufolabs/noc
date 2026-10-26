@@ -8,7 +8,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import os
 import subprocess
 import sys
@@ -36,7 +36,7 @@ def get_hg_revisions(path):
         rev, date = line.split()
         if "-" in date:
             date, _r = date.split("-", 1)
-        s.append((rev, datetime.datetime.fromtimestamp(float(date))))
+        s.append((rev, dt.datetime.fromtimestamp(float(date))))
     s.reverse()
     return s
 

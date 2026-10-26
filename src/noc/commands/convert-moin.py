@@ -9,7 +9,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import gc
 import os
 import re
@@ -103,9 +103,7 @@ class Command(BaseCommand):
             rev_path = os.path.join(root, "revisions", rev)
             with open(rev_path) as f:
                 body = self.convert_body(smart_text(f.read(), encoding=self.encoding))
-            mtime = datetime.datetime.fromtimestamp(
-                os.stat(rev_path)[stat.ST_MTIME]
-            )  # Revision time
+            mtime = dt.datetime.fromtimestamp(os.stat(rev_path)[stat.ST_MTIME])  # Revision time
             if kbe is None:
                 kbe = KBEntry(
                     subject=name, body=body, language=self.language, markup_language="Creole"
@@ -130,7 +128,7 @@ class Command(BaseCommand):
             for a in os.listdir(attachments_root):
                 self.out(f"     {a}...")
                 a_path = os.path.join(attachments_root, a)
-                mtime = datetime.datetime.fromtimestamp(
+                mtime = dt.datetime.fromtimestamp(
                     os.stat(a_path)[stat.ST_MTIME]
                 )  # Attach modification time
                 with open(a_path) as f:

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import gzip
 import itertools
 import os
@@ -25,11 +25,11 @@ class Stream:
     def __init__(self, model, prefix, date=None) -> None:
         self.prefix = prefix
         self.model = model
-        self.date = date or datetime.date.today()
+        self.date = date or dt.date.today()
         self.chunk_count = itertools.count()
         self.out = None
         self.out_path = None
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         self.fs = f"{self.model._meta.db_table}-{now.strftime('%Y-%m-%d-%H-%M-%S-%f')}"
         self.chunk_size = 0
         self.ts_field = self.model._meta.ordered_fields[1].name
@@ -42,7 +42,7 @@ class Stream:
         if not date:
             if self.ts_field:
                 ts = kwargs[self.ts_field]
-                date = datetime.date(year=ts.year, month=ts.month, day=ts.day)
+                date = dt.date(year=ts.year, month=ts.month, day=ts.day)
         if not self.out:
             self.out_path = os.path.join(
                 self.prefix, f"{self.fs}-{int(next(self.chunk_count)):06}.jsonl.gz.tmp"

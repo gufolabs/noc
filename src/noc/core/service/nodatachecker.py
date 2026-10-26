@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections import defaultdict
 from dataclasses import dataclass
@@ -36,7 +36,7 @@ class DataSourceRecord:
         "remote_system",
         "ttl",
     )
-    data_ts: datetime.datetime
+    data_ts: dt.datetime
     last_ts: int
     ttl: int
     raised_alarm: bool
@@ -50,7 +50,7 @@ class DataSourceRecord:
         ts = ts or int(perf_counter())
         return (ts - self.last_ts) > self.ttl
 
-    def update_data(self, ts: datetime.datetime):
+    def update_data(self, ts: dt.datetime):
         """Update data ts"""
         self.data_ts = ts
         self.last_ts = int(perf_counter())
@@ -171,7 +171,7 @@ class NoDataChecker:
     def register_data(
         self,
         source_id: str,
-        ts: datetime.datetime,
+        ts: dt.datetime,
         collector: str | None = None,
         remote_system: str | None = None,
     ):

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.fm.models.activealarm import ActiveAlarm
@@ -45,9 +45,9 @@ class TTCard(BaseCard):
         if r["resolved"]:
             r["duration"] = r["close_ts"] - r["open_ts"]
         else:
-            r["duration"] = datetime.datetime.now() - r["open_ts"]
+            r["duration"] = dt.datetime.now() - r["open_ts"]
         r["alarms"] = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for ac in (ActiveAlarm, ArchivedAlarm):
             a = ac.objects.get_by_tt_id(r["full_id"])
             if a.status == "C":

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.aaa.models.apikey import APIAccess, APIKey
@@ -62,7 +62,7 @@ def test_apikey_access_non_expired() -> None:
     key = APIKey(
         name="key1",
         description="Expiring key",
-        expires=datetime.datetime(year=2050, month=1, day=1),
+        expires=dt.datetime(year=2050, month=1, day=1),
         is_active=True,
         key=secret,
         access=[
@@ -85,7 +85,7 @@ def test_apikey_access_expired() -> None:
     key = APIKey(
         name="key1",
         description="Expiring key",
-        expires=datetime.datetime.now(),
+        expires=dt.datetime.now(),
         is_active=True,
         key=secret,
         access=[

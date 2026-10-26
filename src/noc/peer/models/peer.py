@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import re
 
@@ -298,7 +298,7 @@ class Peer(NOCModel):
         if si:
             return si.managed_object
 
-    def set_oper_status(self, status: BGPState, timestamp: datetime.datetime | None = None):
+    def set_oper_status(self, status: BGPState, timestamp: dt.datetime | None = None):
         """
         Set Operational Status for Service
         Args:
@@ -312,7 +312,7 @@ class Peer(NOCModel):
         if current == status:
             logger.debug("[%s] Status is same. Skipping", self.id)
             return
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         logger.info(
             "[%s] Change Peer status: %s -> %s",
             self.id,

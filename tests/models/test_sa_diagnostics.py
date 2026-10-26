@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from dataclasses import dataclass
 
 # NOC modules
@@ -142,7 +142,7 @@ def test_bulk_set_state() -> None:
 
 def test_expired_checks() -> None:
     o = Object()
-    expired = datetime.datetime.now() - datetime.timedelta(hours=1)
+    expired = dt.datetime.now() - dt.timedelta(hours=1)
     o.diagnostics = {
         "D2": {
             "diagnostic": "D2",

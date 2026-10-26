@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -19,7 +19,7 @@ MIN_NEXT_SHIFT_SEC = 30
 class RunWatchersJob(PeriodicJob):
     def handler(self, **kwargs):
         model = get_model(self.attrs[self.ATTR_KEY])
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         self.logger.info("[%s] Run watcher", model)
         num, actions, stopped = 0, 0, 0
         for svc in model.objects.filter(watcher_wait_ts__lte=now):
@@ -52,11 +52,11 @@ class RunWatchersJob(PeriodicJob):
         """
         model = get_model(self.attrs[self.ATTR_KEY])
 
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         next_ts = model.get_min_wait_ts()
         if not next_ts:
-            next_ts = now + datetime.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
+            next_ts = now + dt.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
         elif next_ts <= now:
-            next_ts = now + datetime.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
+            next_ts = now + dt.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
         self.logger.debug("Schedule next Maintenance watcher TS: %s", next_ts)
         return next_ts

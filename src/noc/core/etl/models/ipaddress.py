@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from pydantic import field_validator
@@ -29,7 +29,7 @@ class IPAddress(BaseModel):
     ipv6_transition: Reference["IPAddress"] | None = None
     state: str | None = None
     # Last state change
-    state_changed: datetime.datetime | None = None
+    state_changed: dt.datetime | None = None
     # Workflow event
     event: str | None = None
     labels: list[str] | None = None

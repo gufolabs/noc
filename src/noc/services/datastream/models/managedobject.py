@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any
 
 # Third-party modules
@@ -164,7 +164,7 @@ class AssetItem(BaseModel):
 class ConfigItem(BaseModel):
     revision: str
     size: str
-    updated: datetime.datetime
+    updated: dt.datetime
 
 
 class ManagedObjectDataStreamItem(BaseModel):

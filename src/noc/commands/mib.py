@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import contextlib
-import datetime
+import datetime as dt
 import gzip
 import logging
 import os
@@ -186,7 +186,7 @@ class Command(BaseCommand):
             self.print(f"MIB not found: {mib_name[0]}")
             self.die("")
         # Build cmib
-        year = datetime.date.today().year
+        year = dt.date.today().year
         r = [
             "# ----------------------------------------------------------------------",
             f"# {mib}",
@@ -203,7 +203,7 @@ class Command(BaseCommand):
             "",
             "# Metadata",
             f'LAST_UPDATED = "{mib.last_updated.isoformat().split("T")[0]}"',
-            f'COMPILED = "{datetime.date.today().isoformat()}"',
+            f'COMPILED = "{dt.date.today().isoformat()}"',
             "",
             "# MIB Data: name -> oid",
             "MIB = {",

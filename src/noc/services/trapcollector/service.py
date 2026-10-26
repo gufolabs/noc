@@ -9,7 +9,7 @@
 # Python modules
 import asyncio
 import base64
-import datetime
+import datetime as dt
 from collections import defaultdict
 from dataclasses import asdict
 from typing import Any
@@ -104,7 +104,7 @@ class TrapCollectorService(BaseService):
         self._publish_message(cfg, msg)
 
     def _publish_message(self, cfg, msg: dict[str, Any]):
-        msg["timestamp"] = datetime.datetime.now().isoformat()
+        msg["timestamp"] = dt.datetime.now().isoformat()
         msg["reference"] = f"{TRAPCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
 
@@ -192,7 +192,7 @@ class TrapCollectorService(BaseService):
         self.publish(
             value=orjson.dumps(
                 {
-                    "timestamp": datetime.datetime.fromtimestamp(timestamp).replace(microsecond=0),
+                    "timestamp": dt.datetime.fromtimestamp(timestamp).replace(microsecond=0),
                     "message_id": message_id,
                     "collector_type": "snmptrap",
                     "collector": config.pool,

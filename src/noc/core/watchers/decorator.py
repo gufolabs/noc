@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 
 # NOC modules
@@ -20,12 +20,12 @@ WAIT_DEFAULT_INTERVAL_SEC = 180
 MIN_NEXT_SHIFT_SEC = 30
 
 
-def get_next_ts(next_ts: datetime.datetime | None):
-    now = datetime.datetime.now().replace(microsecond=0)
+def get_next_ts(next_ts: dt.datetime | None):
+    now = dt.datetime.now().replace(microsecond=0)
     if not next_ts:
-        next_ts = now + datetime.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
+        next_ts = now + dt.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
     elif next_ts <= now:
-        next_ts = now + datetime.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
+        next_ts = now + dt.timedelta(seconds=MIN_NEXT_SHIFT_SEC)
     return next_ts
 
 
@@ -65,7 +65,7 @@ def iter_document_watchers(self) -> Iterable["WatchItem"]:
         yield w.item
 
 
-def get_wait_ts(self, timestamp: datetime.datetime | None = None):
+def get_wait_ts(self, timestamp: dt.datetime | None = None):
     """Return near watch time"""
     wait_ts = []
     for w in self.iter_watchers():
@@ -83,7 +83,7 @@ def add_watch(
     effect: ObjectEffect,
     key: str | None = None,
     once: bool = True,
-    after: datetime.datetime | None = None,
+    after: dt.datetime | None = None,
     wait_avail: bool = False,
     remote_system: str | None = None,
     dry_run: bool = False,
@@ -168,7 +168,7 @@ def touch_watch(
         effect:
         dry_run: For tests run
     """
-    now = datetime.datetime.now() + datetime.timedelta(seconds=10)  # time drift
+    now = dt.datetime.now() + dt.timedelta(seconds=10)  # time drift
     r, to_remove = [], []
     for w in self.iter_watchers():
         if effect and w.effect != effect:

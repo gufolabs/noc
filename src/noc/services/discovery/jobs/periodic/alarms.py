@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 
 # Third-party modules
@@ -91,7 +91,7 @@ class AlarmsCheck(DiscoveryCheck):
             return None
 
     def raise_event(self, mo_id, pool_name, raw_vars):
-        d = datetime.datetime.strptime(raw_vars["ts"], "%Y-%m-%dT%H:%M:%S")
+        d = dt.datetime.strptime(raw_vars["ts"], "%Y-%m-%dT%H:%M:%S")
         ts = time.mktime(d.timetuple())
         msg = {"ts": ts, "object": mo_id, "source": "other", "data": raw_vars}
         self.logger.debug("Pub Event: %s", msg)

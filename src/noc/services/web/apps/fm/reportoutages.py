@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -50,28 +50,26 @@ class ReportOutagesApplication(SimpleReport):
     }
 
     def get_data(self, request: HttpRequest, duration, from_date=None, to_date=None, **kwargs):
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if not from_date:
             duration = 1
         if int(duration):
             self.logger.info("Use duration\n")
-            d = datetime.timedelta(seconds=int(duration))
+            d = dt.timedelta(seconds=int(duration))
             b = now - d
             q = Q(start__gte=b) | Q(stop__gte=b) | Q(stop__exists=False)
         else:
-            b = datetime.datetime.strptime(from_date, self.ISO_DATE_MASK)
+            b = dt.datetime.strptime(from_date, self.ISO_DATE_MASK)
             q = Q(start__gte=b) | Q(stop__gte=b) | Q(stop__exists=False)
             if to_date:
                 if from_date == to_date:
-                    t1 = datetime.datetime.strptime(
-                        to_date, self.ISO_DATE_MASK
-                    ) + datetime.timedelta(1)
+                    t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(1)
                 else:
-                    t1 = datetime.datetime.strptime(to_date, self.ISO_DATE_MASK)
+                    t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK)
             else:
                 t1 = now
             q &= Q(start__lte=t1) | Q(stop__lte=t1)
-            d = datetime.timedelta(seconds=int((t1 - b).total_seconds()))
+            d = dt.timedelta(seconds=int((t1 - b).total_seconds()))
         outages = defaultdict(list)
         otime = defaultdict(int)
         for o in Outage.objects.filter(q):
@@ -99,12 +97,14 @@ class ReportOutagesApplication(SimpleReport):
             m = mo.get(o)
             if not m:
                 continue  # Hanging Outage
-            dt = min(td, otime[o])
-            downtime = f"{int(dt // 3600 % 24):02}:{int(dt // 60 % 60):02}:{int(dt % 60):02}"
-            if dt >= 86400:
-                downtime = f"{int(dt // 86400)}d {downtime}"
+            delta = min(td, otime[o])
+            downtime = (
+                f"{int(delta // 3600 % 24):02}:{int(delta // 60 % 60):02}:{int(delta % 60):02}"
+            )
+            if delta >= 86400:
+                downtime = f"{int(delta // 86400)}d {downtime}"
             if td:
-                avail = float(td - dt) * 100 / td
+                avail = float(td - delta) * 100 / td
             else:
                 avail = 0
             r.append(

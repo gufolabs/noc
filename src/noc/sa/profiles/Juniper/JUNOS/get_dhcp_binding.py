@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 import time
 
@@ -32,7 +32,7 @@ class Script(BaseScript):
         data = self.cli("show dhcp server binding")
         for match in self.rx_line.finditer(data):
             e = match.group("expires")
-            expire = datetime.datetime.fromtimestamp(time.time() + int(e))
+            expire = dt.datetime.fromtimestamp(time.time() + int(e))
             r.append(
                 {
                     "ip": match.group("ip"),

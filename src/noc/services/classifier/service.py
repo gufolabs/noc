@@ -11,7 +11,7 @@ from __future__ import annotations
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import enum
 import operator
 import os
@@ -782,11 +782,11 @@ class ClassifierService(BaseService):
             ot = self.stats.get(EventMetrics.CR_PROCESSED, 0)
             total = nt - ot
             self.stats[EventMetrics.CR_PROCESSED] = nt
-            dt = t - self.last_ts
+            delta = t - self.last_ts
             if total:
-                speed = total / dt
+                speed = total / delta
                 self.logger.info(
-                    f"REPORT: {total} events in {dt * 1000:.2f}ms. {speed:.2f}ev/s ({', '.join(r)})"
+                    f"REPORT: {total} events in {delta * 1000:.2f}ms. {speed:.2f}ev/s ({', '.join(r)})"
                 )
         self.last_ts = t
 
@@ -856,7 +856,7 @@ class ClassifierService(BaseService):
         if event.target.address:
             data["ip"] = struct.unpack("!I", socket.inet_aton(event.target.address))[0]
         if event.start_ts:
-            data["start_ts"] = datetime.datetime.fromtimestamp(event.start_ts)
+            data["start_ts"] = dt.datetime.fromtimestamp(event.start_ts)
         source = self.source_lookup.resolve_target(event.target, remote_system=event.remote_system)
         if source and source.services:
             data["services"] = source.services

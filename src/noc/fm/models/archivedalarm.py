@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 
 # Third-party modules
@@ -150,7 +150,7 @@ class ArchivedAlarm(Document):
     def log_message(self, message, source=None):
         self.log.append(
             AlarmLog(
-                timestamp=datetime.datetime.now(),
+                timestamp=dt.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
@@ -180,8 +180,8 @@ class ArchivedAlarm(Document):
 
     @property
     def duration(self):
-        dt = self.clear_timestamp - self.timestamp
-        return dt.days * 86400 + dt.seconds
+        delta = self.clear_timestamp - self.timestamp
+        return delta.days * 86400 + delta.seconds
 
     @property
     def display_duration(self):
@@ -206,7 +206,7 @@ class ArchivedAlarm(Document):
         Reopen alarm back
         """
         reopens = self.reopens or 0
-        ts = datetime.datetime.now()
+        ts = dt.datetime.now()
         log = [*self.log, AlarmLog(timestamp=ts, from_status="C", to_status="A", message=message)]
         a = ActiveAlarm(
             id=self.id,
@@ -290,7 +290,7 @@ class ArchivedAlarm(Document):
         )
 
     def close_escalation(self):
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         self.escalation_close_ts = now
         self._get_collection().update_one({"_id": self.id}, {"$set": {"escalation_close_ts": now}})
 

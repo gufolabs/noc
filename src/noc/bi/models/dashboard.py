@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from base64 import b85encode
 from pathlib import Path
 
@@ -60,8 +60,8 @@ class Dashboard(Document):
     format = IntField(default=1)
     # gzip'ed data
     config = BinaryField()
-    created = DateTimeField(default=datetime.datetime.now)
-    changed = DateTimeField(default=datetime.datetime.now)
+    created = DateTimeField(default=dt.datetime.now)
+    changed = DateTimeField(default=dt.datetime.now)
     access = EmbeddedDocumentListField(DashboardAccess)
     # Global ID
     uuid = UUIDField(binary=True, unique=True)

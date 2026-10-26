@@ -5,7 +5,7 @@
 # See LICENSE for details
 # ---------------------------------------------------------------------
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from typing import Any
 
@@ -31,7 +31,7 @@ class MetricPlugin(InvPlugin):
     def get_sensor_values(self) -> dict[int, float]:
         r = {}
         ch = connection()
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         query = ch.execute(
             """
             SELECT sensor, argMax(value, ts) AS v

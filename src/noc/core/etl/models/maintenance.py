@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Literal
 
 # Third-party modules
@@ -32,8 +32,8 @@ class Maintenance(BaseModel):
     id: str
     subject: str
     type: str
-    start: datetime.datetime
-    stop: datetime.datetime
+    start: dt.datetime
+    stop: dt.datetime
     contacts: str
     is_completed: bool = False
     objects: list[MaintenanceObject | MaintenanceService]

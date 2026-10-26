@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import re
 
@@ -52,7 +52,7 @@ class Migration(BaseMigration):
             if last:
                 yield last.split(sep, 1)
 
-        delta = datetime.timedelta(days=5 * 365)
+        delta = dt.timedelta(days=5 * 365)
         user_cache = dict(self.db.execute("SELECT id, username FROM auth_user"))
         collection = self.mongo_db["noc.audittrail"]
         left = self.db.execute("SELECT COUNT(*) FROM main_audittrail")[0][0]

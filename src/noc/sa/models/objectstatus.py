@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from threading import Lock
 
@@ -82,7 +82,7 @@ class ObjectStatus(Document):
         return oid in cls.get_failed_objects()
 
     @classmethod
-    def get_last_status(cls, object) -> tuple[bool | None, datetime.datetime | None]:
+    def get_last_status(cls, object) -> tuple[bool | None, dt.datetime | None]:
         """
         Returns last registred status and update time
         :param object: Managed Object id
@@ -116,7 +116,7 @@ class ObjectStatus(Document):
         :param ts: Status change timestamp
         :return: True, if status has been changed, False - out-of-order update
         """
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         coll = ObjectStatus._get_collection()
         # Update naively
         # Must work in most cases
@@ -147,11 +147,11 @@ class ObjectStatus(Document):
         # NOC modules
         from noc.sa.models.managedobject import ManagedObject
 
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         coll = ObjectStatus._get_collection()
 
         bulk = []
-        outages: list[tuple[int, datetime.datetime, datetime.datetime]] = []
+        outages: list[tuple[int, dt.datetime, dt.datetime]] = []
         # Getting current status
         cs = {
             x["object"]: {"status": x["status"], "last": x.get("last")}

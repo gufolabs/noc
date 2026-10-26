@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.mib import mib
@@ -161,7 +161,7 @@ class Script(BaseScript):
     def parse_chassis_environment(self, response):
         # Cut the unnecessary namespaces
         xmlstring = re.sub(' xmlns="[^"]+"', "", response)
-        root = ElementTree.fromstring(xmlstring)
+        root = ET.fromstring(xmlstring)
 
         env_info = root.find("environment-information")
         if env_info is None:

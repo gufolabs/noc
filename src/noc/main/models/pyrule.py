@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import Document
@@ -38,4 +38,4 @@ class PyRule(Document):
         except SyntaxError as e:
             raise ValidationError(f"Cannot compile pyRule: {e}")
         # Update last_changed
-        self.last_changed = datetime.datetime.now()
+        self.last_changed = dt.datetime.now()

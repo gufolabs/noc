@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import itertools
 import logging
 from collections.abc import Iterable
@@ -54,7 +54,7 @@ DEFER_CHANGE_STATE = "noc.core.diagnostic.decorator.change_state"
 def json_default(obj):
     if isinstance(obj, BaseModel):
         return obj.model_dump()
-    if isinstance(obj, datetime.datetime):
+    if isinstance(obj, dt.datetime):
         return obj.replace(microsecond=0).isoformat(sep=" ")
     raise TypeError
 
@@ -244,7 +244,7 @@ class DiagnosticHub:
         diagnostic: str,
         state: str | DiagnosticState = "unknown",
         reason: str | None = None,
-        changed_ts: datetime.datetime | None = None,
+        changed_ts: dt.datetime | None = None,
         data: dict[str, Any] | None = None,
         to_sync: bool = True,
     ):
@@ -269,7 +269,7 @@ class DiagnosticHub:
             "[%s] Change diagnostic state: %s -> %s", diagnostic, d.state.value, state.value
         )
         # last_state = d.state
-        d.changed = changed_ts or datetime.datetime.now()
+        d.changed = changed_ts or dt.datetime.now()
         d.changed = d.changed.replace(microsecond=0, tzinfo=None)
         d.state = state
         d.reason = reason
@@ -497,7 +497,7 @@ class DiagnosticHub:
         # NOC modules
         from noc.core.service.loader import get_service
 
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         # Group Alarms
         groups = {}
         alarms = {}
@@ -592,7 +592,7 @@ class DiagnosticHub:
         from_state: str = DiagnosticState.unknown,
         reason: str | None = None,
         data: dict[str, Any] | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ):
         """
         Save diagnostic state changes to Archive.
@@ -622,8 +622,8 @@ class DiagnosticHub:
             return
         svc = get_service()
         if isinstance(ts, str):
-            ts = datetime.datetime.fromisoformat(ts)
-        now = ts or datetime.datetime.now()
+            ts = dt.datetime.fromisoformat(ts)
+        now = ts or dt.datetime.now()
         mo = self.__object.get_effective_managed_object()
         # Send Data
         dd = {
@@ -673,7 +673,7 @@ class DiagnosticHub:
         self.logger.debug("Register diagnostic metrics: %s", metrics)
         svc = get_service()
         r = {}
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         # Group Metric by row
         for m in metrics:
             mt = MetricType.get_by_name(m.metric_type)

@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from collections import defaultdict
 from collections.abc import Iterable
@@ -161,7 +161,7 @@ class JsonDSAPI:
 
     @staticmethod
     def iter_alarms_annotations(
-        annotation: AnnotationSection, f: datetime.datetime, t: datetime.datetime, user: User = None
+        annotation: AnnotationSection, f: dt.datetime, t: dt.datetime, user: User = None
     ) -> Iterable[Annotation]: ...
 
     @classmethod
@@ -364,7 +364,7 @@ class JsonDSAPI:
         return "arrayStringConcat(labels,'/')", "target"
 
     @staticmethod
-    def convert_ts_range(req) -> tuple[datetime.datetime, datetime.datetime]:
+    def convert_ts_range(req) -> tuple[dt.datetime, dt.datetime]:
         """
         Convert request range param to local datetime
         :return:

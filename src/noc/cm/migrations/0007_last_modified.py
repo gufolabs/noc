@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import os
 import stat
 
@@ -34,7 +34,7 @@ class Migration(BaseMigration):
                 for id, repo_path in self.db.execute(f"SELECT id,repo_path FROM cm_{ot}"):
                     path = os.path.join(repo, repo_path)
                     if os.path.exists(path):
-                        lm = datetime.datetime.fromtimestamp(os.stat(path)[stat.ST_MTIME])
+                        lm = dt.datetime.fromtimestamp(os.stat(path)[stat.ST_MTIME])
                         self.db.execute(
                             f"UPDATE cm_{ot} SET last_modified=%s WHERE id=%s", [lm, id]
                         )

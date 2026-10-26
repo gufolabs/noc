@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import heapq
 
 # Third-party modules
@@ -47,10 +47,10 @@ class LoginService(BaseService):
         Mark token as revoked. Any futher use will be prohibited
         :return: str
         """
-        ts = datetime.datetime.utcnow()
+        ts = dt.datetime.utcnow()
         if token in self.revoked_tokens:
             return
-        exp = datetime.datetime.fromtimestamp(get_exp_from_jwt(token, audience))
+        exp = dt.datetime.fromtimestamp(get_exp_from_jwt(token, audience))
         msg = {
             "token": token,
             "ts": ts.isoformat(),
@@ -60,7 +60,7 @@ class LoginService(BaseService):
         while token not in self.revoked_tokens:
             async with self.revoked_cond:
                 await self.revoked_cond.wait()
-        e2e = (datetime.datetime.utcnow() - ts).total_seconds()
+        e2e = (dt.datetime.utcnow() - ts).total_seconds()
         timeout = min(max(e2e * 3, 1), 30)
         await asyncio.sleep(timeout)
 
@@ -78,14 +78,14 @@ class LoginService(BaseService):
         heapq.heappush(
             self.revoked_expiry,
             (
-                datetime.datetime.strptime(msg_dict["expired"], "%Y-%m-%dT%H:%M:%S"),
+                dt.datetime.strptime(msg_dict["expired"], "%Y-%m-%dT%H:%M:%S"),
                 msg_dict["token"],
             ),
         )
         # Check expired tokens
         heapq.heapify(self.revoked_expiry)
         for r in self.revoked_expiry.copy():
-            if r[0] >= datetime.datetime.utcnow():
+            if r[0] >= dt.datetime.utcnow():
                 break
             self.revoked_tokens.remove(r[1])
             heapq.heappop(self.revoked_expiry)

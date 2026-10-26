@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import uuid
 from collections import defaultdict
 from functools import reduce
@@ -424,7 +424,7 @@ class ExtModelApplication(ExtApplication):
                     and not isinstance(v, int)
                     and not isinstance(v, (bool, list))
                 ):
-                    if isinstance(v, datetime.datetime):
+                    if isinstance(v, dt.datetime):
                         v = v.isoformat()
                     else:
                         v = smart_text(v)

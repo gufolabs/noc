@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 
 # NOC modules
@@ -113,8 +113,8 @@ class Script(BaseScript):
         if match:
             d = f"20{match.group('year')}-{match.group('month')}-{match.group('day')}"
             try:
-                valid_date = datetime.date.fromisoformat(d)
-                if valid_date < datetime.date.today():
+                valid_date = dt.date.fromisoformat(d)
+                if valid_date < dt.date.today():
                     i["mfg_date"] = d
             except ValueError:
                 pass

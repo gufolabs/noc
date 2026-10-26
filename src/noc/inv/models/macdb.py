@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import Document
@@ -45,7 +45,7 @@ class MACDB(Document):
     def save(self, *args, **kwargs):
         self.mac = MAC(self.mac)
         if not self.last_changed:
-            self.last_changed = datetime.datetime.now()
+            self.last_changed = dt.datetime.now()
         try:
             super().save(*args, **kwargs)
         except Exception as e:
@@ -61,7 +61,7 @@ class MACDB(Document):
         :return:
         """
         if not timestamp:
-            timestamp = datetime.datetime.now()
+            timestamp = dt.datetime.now()
         managed_object = interface.managed_object
         mac = MAC(mac)
         vcd = vc_domain.id if vc_domain else None

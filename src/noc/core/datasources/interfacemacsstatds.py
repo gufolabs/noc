@@ -7,7 +7,7 @@
 
 # Python Modules
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import AsyncIterable, Iterable
 
 # Third-party modules
@@ -61,8 +61,8 @@ class InterfaceMACsStatDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: "datetime.datetime | None" = None,
-        end: "datetime.datetime | None" = None,
+        start: "dt.datetime | None" = None,
+        end: "dt.datetime | None" = None,
         period_active: int | None = None,
         resolve_managedobject_id: bool = True,
         *args,

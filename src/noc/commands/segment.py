@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # NOC modules
@@ -119,7 +119,7 @@ class Command(BaseCommand):
                 self.print("No interfaces suitable for vacuum bulling")
                 continue
             # Get MAC addresses for bulling
-            t0 = datetime.datetime.now() - datetime.timedelta(seconds=self.MAC_WINDOW)
+            t0 = dt.datetime.now() - dt.timedelta(seconds=self.MAC_WINDOW)
             t0 = t0.replace(microsecond=0)
             sql = self.GET_MACS_SQL % (
                 mo.bi_id,

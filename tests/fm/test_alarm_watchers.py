@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import pytest
@@ -131,12 +131,12 @@ def test_alarm_after(alarm) -> None:
     After watchers. Execute watcher after deadline
     """
     # Add after watch - set wait_ts attribute
-    now = datetime.datetime.now() + datetime.timedelta(hours=1)
+    now = dt.datetime.now() + dt.timedelta(hours=1)
     alarm.add_watch(Effect.CLEAR_ALARM, key="", after=now)
     assert alarm.wait_ts == now
     alarm.touch_watch()
     # Repeat add after watch - update after
-    now = datetime.datetime.now() - datetime.timedelta(hours=1)
+    now = dt.datetime.now() - dt.timedelta(hours=1)
     alarm.add_watch(Effect.CLEAR_ALARM, key="", after=now)
     assert alarm.wait_ts == now
     # Do not Run CLEAR_ALARM effect on clear alarm

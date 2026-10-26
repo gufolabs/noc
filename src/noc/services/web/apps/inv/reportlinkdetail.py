@@ -7,7 +7,7 @@
 
 # Python modules
 import csv
-import datetime
+import datetime as dt
 import logging
 from io import BytesIO, TextIOWrapper
 from tempfile import TemporaryFile
@@ -150,7 +150,7 @@ class ReportLinkDetailApplication(ExtApplication):
                     return ""
                 if isinstance(v, str):
                     return smart_text(v)
-                if isinstance(v, datetime.datetime):
+                if isinstance(v, dt.datetime):
                     return v.strftime("%Y-%m-%d %H:%M:%S")
                 if not isinstance(v, str):
                     return str(v)
@@ -304,7 +304,7 @@ class ReportLinkDetailApplication(ExtApplication):
                     cmap,
                 )
             )
-        filename = f"links_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
+        filename = f"links_detail_report_{dt.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

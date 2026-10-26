@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from collections import defaultdict
 
@@ -84,7 +84,7 @@ class ManagedObjectCard(BaseCard):
         # @todo: Stage
         # @todo: Service range
         # @todo: Open TT
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         # Get object status and uptime
 
         alarms = list(ActiveAlarm.objects.filter(managed_object=self.object.id))
@@ -301,7 +301,7 @@ class ManagedObjectCard(BaseCard):
         maintenance = []
         m_id = list(self.object.affected_maintenances)
         for m in Maintenance.objects.filter(
-            id__in=m_id, is_completed=False, start__lte=now + datetime.timedelta(hours=1)
+            id__in=m_id, is_completed=False, start__lte=now + dt.timedelta(hours=1)
         ):
             maintenance.append(
                 {

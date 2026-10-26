@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from collections.abc import AsyncIterable, Iterable
 from typing import Any
@@ -218,8 +218,8 @@ class ReportDsAlarms(BaseDataSource):
     @classmethod
     def iter_data(
         cls,
-        start: datetime.datetime,
-        end: datetime.datetime | None,
+        start: dt.datetime,
+        end: dt.datetime | None,
         admin_domain_ads: list[int] | None = None,
         **filters: dict[str, Any] | None,
     ) -> Iterable[dict[str, Any]]:
@@ -230,7 +230,7 @@ class ReportDsAlarms(BaseDataSource):
         else:
             match = {"timestamp": {"$gte": start, "$lte": end}}
         match_middle, mos_filter, ex_resource_group = {}, {}, None
-        datenow = datetime.datetime.now()
+        datenow = dt.datetime.now()
         alarm_collections = []
         match_duration = {}
         # Administrative domain filter

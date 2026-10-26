@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 
 # NOC modules
@@ -31,7 +31,7 @@ class Span:
         in_label,
         out_label,
     ):
-        self.ts = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+        self.ts = dt.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
         self.id = int(id)
         self.parent = int(parent) if parent else None
         self.server = server

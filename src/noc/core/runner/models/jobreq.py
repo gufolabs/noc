@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Literal
 
 # Third-party modules
@@ -89,8 +89,8 @@ class JobRequest(BaseModel):
     require_approval: bool = False
     depends_on: list[str] | None = None
     environment: dict[str, str] | None = None
-    after: datetime.datetime | None = None
-    deadline: datetime.datetime | None = None
+    after: dt.datetime | None = None
+    deadline: dt.datetime | None = None
     resource_path: list[str] | None = None
     entity: str | None = None
     jobs: list["JobRequest"] | None = None

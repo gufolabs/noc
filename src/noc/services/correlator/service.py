@@ -11,7 +11,7 @@ from __future__ import annotations
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import operator
 import re
 import sys
@@ -103,7 +103,7 @@ class CorrelatorService(BaseService):
         self.triggers: dict[ObjectId, list[Trigger]] = {}
         self.rca_forward = {}  # alarm_class -> [RCA condition, ..., RCA condititon]
         self.rca_reverse = defaultdict(set)  # alarm_class -> set([alarm_class])
-        self.de: dict[bytes, list[tuple[datetime.datetime, Event]]] = {}  # Delayed Event
+        self.de: dict[bytes, list[tuple[dt.datetime, Event]]] = {}  # Delayed Event
         self.alarm_rule_set = AlarmRuleSet()
         self.alarm_class_vars = defaultdict(dict)
         self.status_changes = deque()  # Save status changes
@@ -307,7 +307,7 @@ class CorrelatorService(BaseService):
         self.logger.error("Failed to process event %s", event.id)
         # Prepare traceback
         t, v, tb = sys.exc_info()
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         r = [f"UNHANDLED EXCEPTION ({now!s})"]
         r += [str(t), str(v)]
         r.append(format_frames(get_traceback_frames(tb)))
@@ -397,7 +397,7 @@ class CorrelatorService(BaseService):
     def try_reopen_alarm(
         self,
         reference: bytes,
-        timestamp: datetime.datetime,
+        timestamp: dt.datetime,
         event: Event = None,
     ) -> ActiveAlarm | None:
         """
@@ -433,7 +433,7 @@ class CorrelatorService(BaseService):
     def refresh_alarm(
         self,
         alarm: ActiveAlarm,
-        timestamp: datetime.datetime,
+        timestamp: dt.datetime,
         severity: int | None = None,
     ):
         """
@@ -455,7 +455,7 @@ class CorrelatorService(BaseService):
             return
         alarm.severity = e_severity
         alarm.base_severity = severity or alarm.base_severity
-        alarm.last_update = datetime.datetime.now().replace(microsecond=0)
+        alarm.last_update = dt.datetime.now().replace(microsecond=0)
         # ActiveAlarm.objects.filter(id=alarm.id).update(
         #     severity=alarm.severity,
         #     base_severity=alarm.base_severity,
@@ -478,9 +478,9 @@ class CorrelatorService(BaseService):
         for rule in self.alarm_rule_set.iter_rules(alarm):
             after_ts = None
             if rule.rule_apply_delay:
-                after_ts = (
-                    alarm.timestamp + datetime.timedelta(seconds=rule.rule_apply_delay)
-                ).replace(microsecond=0)
+                after_ts = (alarm.timestamp + dt.timedelta(seconds=rule.rule_apply_delay)).replace(
+                    microsecond=0
+                )
                 self.logger.debug(
                     "[%s] Processed rule: %s, After: %s", alarm.id, rule.name, after_ts
                 )
@@ -529,9 +529,9 @@ class CorrelatorService(BaseService):
                 EscalationProfile.watch_escalation(rule.escalation_profile, alarm)
             if rule.clear_after_delay:
                 if rule.ttl_policy == "C":
-                    after = alarm.timestamp + datetime.timedelta(seconds=rule.clear_after_delay)
+                    after = alarm.timestamp + dt.timedelta(seconds=rule.clear_after_delay)
                 else:
-                    after = alarm.last_update + datetime.timedelta(seconds=rule.clear_after_delay)
+                    after = alarm.last_update + dt.timedelta(seconds=rule.clear_after_delay)
                 alarm.add_watch(Effect.CLEAR_ALARM, key=str(rule.id), after=after)
             else:
                 alarm.stop_watch(Effect.CLEAR_ALARM, key=str(rule.id))
@@ -541,7 +541,7 @@ class CorrelatorService(BaseService):
     async def raise_alarm(
         self,
         managed_object: ManagedObject | None,
-        timestamp: datetime.datetime,
+        timestamp: dt.datetime,
         alarm_class: AlarmClass,
         vars: dict[str, Any] | None,
         event: Event | None = None,
@@ -639,7 +639,7 @@ class CorrelatorService(BaseService):
             reference=ref_hash,
             log=[
                 AlarmLog(
-                    timestamp=datetime.datetime.now(),
+                    timestamp=dt.datetime.now(),
                     from_status="A",
                     to_status="A",
                     message=msg,
@@ -862,7 +862,7 @@ class CorrelatorService(BaseService):
         rule: EventAlarmRule,
         managed_object: ManagedObject,
         r_vars: dict[str, Any],
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         event: Event | None = None,
     ) -> ActiveAlarm | None:
         """Clear alarm by rule"""
@@ -905,7 +905,7 @@ class CorrelatorService(BaseService):
             managed_object=managed_object, alarm_class=rule.alarm_class, vars=r_vars
         )
         ref_hash = self.get_reference_hash(reference)
-        ws = event.timestamp - datetime.timedelta(seconds=rule.combo_window)
+        ws = event.timestamp - dt.timedelta(seconds=rule.combo_window)
         history = self.de.get(ref_hash, [])
         de = tuple(
             delayed_event
@@ -1229,7 +1229,7 @@ class CorrelatorService(BaseService):
             groups.append(GroupItem(reference=gi.reference, alarm_class=ac, title=gi_name))
         return groups or None
 
-    def parse_timestamp(self, iso_timestamp: str) -> datetime.datetime:
+    def parse_timestamp(self, iso_timestamp: str) -> dt.datetime:
         """
         It takes a string ISO timestamp, converts it to a datetime object, then converts it to local timezone,
         then removes the timezone info, then returns the datetime object
@@ -1244,7 +1244,7 @@ class CorrelatorService(BaseService):
             self.logger.debug("Raw timestamp: %s NOC timestamp: %s", iso_timestamp, timestamp)
             return timestamp
         self.logger.debug("Using current time as alarm timestamp")
-        return datetime.datetime.now()
+        return dt.datetime.now()
 
     def parse_object(self, oid) -> ManagedObject | None:
         """
@@ -1286,7 +1286,7 @@ class CorrelatorService(BaseService):
             return  # Nothing to clear, nothing to create
         # Check managed objects and timestamps
         mos: dict[str, ManagedObject] = {}
-        tses: dict[str, datetime.datetime] = {}
+        tses: dict[str, dt.datetime] = {}
         alarm_classes: dict[str, AlarmClass] = {}
         for ai in req.alarms:
             # Managed Object
@@ -1304,7 +1304,7 @@ class CorrelatorService(BaseService):
                 self.logger.error("Invalid alarm class: %s", ai.alarm_class)
                 return
             alarm_classes[ai.alarm_class] = alarm_class
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if not group_alarm:
             # Create group alarm
             # Calculate timestamp and managed object
@@ -1443,14 +1443,14 @@ class CorrelatorService(BaseService):
     async def clear_by_id(
         self,
         id: str | bytes,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         message: str | None = None,
         source: str | None = None,
     ) -> None:
         """
         Clear alarm by id
         """
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         # Get alarm
         alarm = ActiveAlarm.objects.filter(pk=id).first()
         if not alarm:
@@ -1483,14 +1483,14 @@ class CorrelatorService(BaseService):
     async def clear_by_reference(
         self,
         reference: str | bytes,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         message: str | None = None,
         event: Event | None = None,
     ) -> ActiveAlarm | None:
         """
         Clear alarm by reference
         """
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         # Normalize reference
         if isinstance(reference, str):
             ref_hash = self.get_reference_hash(reference)
@@ -1760,7 +1760,7 @@ class CorrelatorService(BaseService):
 
     @classmethod
     def get_group_deferred_count(
-        cls, h_ref: bytes, min_ts: datetime.datetime, max_ts: datetime.datetime
+        cls, h_ref: bytes, min_ts: dt.datetime, max_ts: dt.datetime
     ) -> int:
         """
         Get amount of waiting alarms for reference
@@ -1821,7 +1821,7 @@ class CorrelatorService(BaseService):
                 if group.min_threshold > 0 and group.window > 0:
                     # Check group has enough deferred alarms to raise thresholds
                     h_ref = self.get_reference_hash(group.reference)
-                    w_delta = datetime.timedelta(seconds=group.window)
+                    w_delta = dt.timedelta(seconds=group.window)
                     n_waiting = self.get_group_deferred_count(
                         h_ref, alarm.timestamp - w_delta, alarm.timestamp + w_delta
                     )
@@ -1862,7 +1862,7 @@ class CorrelatorService(BaseService):
                 deferred.append(self.get_reference_hash(ref))
         return active, deferred
 
-    async def clear_groups(self, groups: list[bytes], ts: datetime.datetime | None) -> None:
+    async def clear_groups(self, groups: list[bytes], ts: dt.datetime | None) -> None:
         """
         Clear group alarms from list when necessary
 
@@ -1981,7 +1981,7 @@ class CorrelatorService(BaseService):
     def get_by_reference(cls, reference: str) -> ActiveAlarm | None:
         return ActiveAlarm.objects.filter(reference=cls.get_reference_hash(reference)).first()
 
-    def set_status(self, oid: int, status: bool, ts: datetime.datetime | None = None) -> None:
+    def set_status(self, oid: int, status: bool, ts: dt.datetime | None = None) -> None:
         """
         Add status changes to
         :param oid: ManagedObject Id for setting status

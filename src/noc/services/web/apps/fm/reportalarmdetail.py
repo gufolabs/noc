@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from io import BytesIO
 from tempfile import TemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile
@@ -160,11 +160,11 @@ class ReportAlarmDetailApplication(ExtApplication):
         if ids:
             ids = ids.split()
             d_filters["objectids"] = ids
-            fd = datetime.datetime.now()
+            fd = dt.datetime.now()
             td = None
         elif from_date and to_date:
-            fd = datetime.datetime.strptime(from_date, "%d.%m.%Y")
-            td = datetime.datetime.strptime(to_date, "%d.%m.%Y") + datetime.timedelta(days=1)
+            fd = dt.datetime.strptime(from_date, "%d.%m.%Y")
+            td = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
         else:
             return HttpResponseBadRequest(_("One params - FROM_DATE/TO_DATE or IDS required"))
         d_filters["start"] = fd
@@ -193,7 +193,7 @@ class ReportAlarmDetailApplication(ExtApplication):
         if source in ["long_archive"]:
             report_ds = "reportdsalarmsbiarchive"
             o_format = "csv_zip"
-            if td - fd > datetime.timedelta(days=390):
+            if td - fd > dt.timedelta(days=390):
                 return HttpResponseBadRequest(
                     _(
                         "Report more than 1 year not allowed. If nedeed - request it from Administrator"
@@ -208,7 +208,7 @@ class ReportAlarmDetailApplication(ExtApplication):
             return HttpResponseNotFound(_(f"Report DataSource {report_ds} Not found"))
 
         data = report.query_sync(fields=out_columns, **d_filters)
-        filename = f"alarms_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
+        filename = f"alarms_detail_report_{dt.datetime.now().strftime('%Y%m%d')}"
         csv_header = ";".join(self.HEADER_ROW.get(cc, cc) for cc in data.columns) + "\n"
         if o_format == "csv":
             response = HttpResponse(

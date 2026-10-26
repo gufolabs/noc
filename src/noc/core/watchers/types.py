@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from dataclasses import dataclass
 
@@ -52,7 +52,7 @@ class WatchItem:
     effect: ObjectEffect
     # Match, Array
     key: str | None = None
-    after: datetime.datetime | None = None
+    after: dt.datetime | None = None
     once: bool = True
     wait_avail: bool = False
     remote_system: str | None = None

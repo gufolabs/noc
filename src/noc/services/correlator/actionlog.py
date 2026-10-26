@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from dataclasses import dataclass
 from typing import Any
 
@@ -57,7 +57,7 @@ class ActionLog:
         ex_effect: Effect | None = None,
         # Time ?
         subject: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         status: ActionStatus = ActionStatus.NEW,
         error: str | None = None,
         repeat_num: int | None = None,
@@ -111,7 +111,7 @@ class ActionLog:
     def is_match(
         self,
         severity: int,
-        timestamp: datetime.datetime,
+        timestamp: dt.datetime,
         ack_user: Any,
         effects: set[Effect] | None = None,
     ):
@@ -181,7 +181,7 @@ class ActionLog:
         Args:
             delay: Repeat delay
         """
-        ts = self.timestamp + datetime.timedelta(seconds=delay)
+        ts = self.timestamp + dt.timedelta(seconds=delay)
         return ActionLog(
             action=self.action,
             key=self.key,
@@ -205,7 +205,7 @@ class ActionLog:
     def from_request(
         cls,
         action: ActionConfig,
-        started_at: datetime.datetime,
+        started_at: dt.datetime,
         one_time: bool = False,
         user: int | None = None,
         tt_system: str | None = None,
@@ -232,7 +232,7 @@ class ActionLog:
             tt_system = TTSystem.get_by_id(tt_system)
         elif stub_tt_system:
             tt_system = stub_tt_system
-        ts = started_at + datetime.timedelta(seconds=action.delay)
+        ts = started_at + dt.timedelta(seconds=action.delay)
         return ActionLog(
             action=action.action,
             key=action.key,
@@ -332,7 +332,7 @@ class ActionLog:
         """Restore Action Log from Watch"""
         # Restore documentID, From WATCH, From LOG ?
         r = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if watch.effect == Effect.TT_SYSTEM:
             tt_s, tt_id = watch.key.split(":")
             tt_s = TTSystem.get_by_name(tt_s)

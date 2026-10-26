@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.dateutils import humanize_distance
@@ -24,7 +24,7 @@ class ReportStaleDiscoveryJob(SimpleReport):
     STALE_INTERVAL = 24 * 60 * 2
 
     def get_data(self, **kwargs):
-        old = datetime.datetime.now() - datetime.timedelta(minutes=self.STALE_INTERVAL)
+        old = dt.datetime.now() - dt.timedelta(minutes=self.STALE_INTERVAL)
         data = []
         for pool in Pool._get_collection().find({}, {"_id": 0, "name": 1}):
             scheduler = Scheduler("discovery", pool=pool["name"])

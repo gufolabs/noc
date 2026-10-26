@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import random
 import time
 from logging import getLogger
@@ -95,7 +95,7 @@ class DistributedLock(BaseLock):
                         "_id": lock_id,
                         "items": items,
                         "owner": self.owner,
-                        "expire": datetime.datetime.now() + datetime.timedelta(seconds=ttl),
+                        "expire": dt.datetime.now() + dt.timedelta(seconds=ttl),
                     }
                 )
                 return str(lock_id)

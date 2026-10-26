@@ -21,12 +21,12 @@ Only Added (A) and Modified (M) files are processed.
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 import subprocess
 from pathlib import Path
 
-CURRENT_YEAR = datetime.date.today().year
+CURRENT_YEAR = dt.date.today().year
 
 COPYRIGHT_RE = re.compile(r"(# Copyright \(C\) \d{4}-)(\d{4})")
 

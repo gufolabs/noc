@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 import warnings
 from collections.abc import Iterable, Iterator
@@ -1167,7 +1167,7 @@ class Object(Document):
         ObjectLog(
             object=self.id,
             user=user,
-            ts=datetime.datetime.now(),
+            ts=dt.datetime.now(),
             message=message,
             system=system,
             managed_object=managed_object,

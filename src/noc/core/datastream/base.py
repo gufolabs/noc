@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import hashlib
 import logging
 import re
@@ -606,7 +606,7 @@ class DataStream:
         """
         if not s:
             return ""
-        if isinstance(s, datetime.datetime):
+        if isinstance(s, dt.datetime):
             return s.isoformat()
         return smart_text(s)
 

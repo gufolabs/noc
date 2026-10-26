@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import orjson
@@ -114,13 +114,13 @@ class EventApplication(ExtApplication):
                 f"administrative_domain_bi_id IN ({','.join(str(x.bi_id) for x in AdministrativeDomain.objects.filter(id__in=administrative_domains))})"
             )
         if from_query:
-            from_query = datetime.datetime.fromisoformat(from_query)
+            from_query = dt.datetime.fromisoformat(from_query)
             r += [f"ts >= '{from_query.isoformat()}'", f"date >= '{from_query.date().isoformat()}'"]
         else:
-            from_query = datetime.datetime.now() - datetime.timedelta(seconds=EVENTS_DEFAULT_WINDOW)
+            from_query = dt.datetime.now() - dt.timedelta(seconds=EVENTS_DEFAULT_WINDOW)
             r.append(f"date >= '{from_query.date().isoformat()}'")
         if to_query:
-            to_query = datetime.datetime.fromisoformat(to_query)
+            to_query = dt.datetime.fromisoformat(to_query)
             r += [f"ts <= '{to_query.isoformat()}'", f"date <= '{to_query.date().isoformat()}'"]
         return r
 
@@ -129,8 +129,8 @@ class EventApplication(ExtApplication):
         cls,
         managed_object: int | None = None,
         segment: str | None = None,
-        from_query: datetime.date | None = None,
-        to_query: datetime.date | None = None,
+        from_query: dt.date | None = None,
+        to_query: dt.date | None = None,
         groups: list[str] | None = None,
         event_class: str | None = None,
         administrative_domains: list[int] | None = None,
@@ -263,7 +263,7 @@ class EventApplication(ExtApplication):
             sev = EventSeverity.INDETERMINATE
         e = Event(
             id=q["id"],
-            ts=datetime.datetime.fromisoformat(q["timestamp"]).timestamp(),
+            ts=dt.datetime.fromisoformat(q["timestamp"]).timestamp(),
             target=Target(**q["target_id"]),
             type=MessageType(
                 source=source,

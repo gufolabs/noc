@@ -8,7 +8,7 @@
 # Python modules
 import ast
 import bisect
-import datetime
+import datetime as dt
 import re
 from collections.abc import AsyncIterable, Iterable
 from operator import itemgetter
@@ -121,14 +121,14 @@ class MovedMACsDS(BaseDataSource):
         cls,
         fields: Iterable[str] | None = None,
         admin_domain_ads: list[int] | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         interface_profile: InterfaceProfile | None = None,
         exclude_serial_change: bool = False,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:
-        end = end + datetime.timedelta(days=1)
+        end = end + dt.timedelta(days=1)
         if interface_profile:
             iface_filter = (
                 f"dictGetString('{config.clickhouse.db_dictionaries}.interfaceattributes', "
@@ -142,7 +142,7 @@ class MovedMACsDS(BaseDataSource):
             DEVICE_MOVED_QUERY
             % (
                 start.date().isoformat(),
-                (end.date() - datetime.timedelta(days=1)).isoformat(),
+                (end.date() - dt.timedelta(days=1)).isoformat(),
             )
         ):
             serials_changed[int(row[0])] = row[1]
@@ -182,7 +182,7 @@ class MovedMACsDS(BaseDataSource):
             yield num, "sn_changed", _("Yes") if mo_bi_id in serials_changed else _("No")
             yield num, "vendor_mac", MACVendor.get_vendor(mac)
             yield num, "mac", mac
-            yield num, "migrate_ts", datetime.datetime.fromtimestamp(migrate[1]).isoformat(sep=" ")
+            yield num, "migrate_ts", dt.datetime.fromtimestamp(migrate[1]).isoformat(sep=" ")
             yield num, "from_iface_name", iface_from
             yield num, "from_iface_down", "--"
             yield num, "to_iface_name", iface_to

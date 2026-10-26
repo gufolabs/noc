@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import codecs
-import datetime
+import datetime as dt
 import os
 import pprint
 import re
@@ -358,7 +358,7 @@ class Command(BaseCommand):
             "version": BEEF_FORMAT,
             "uuid": str(uuid.uuid4()),
             "spec": None,
-            "changed": datetime.datetime.now().isoformat(),
+            "changed": dt.datetime.now().isoformat(),
             "cli": [],
             "cli_fsm": [],
             "mib": [],

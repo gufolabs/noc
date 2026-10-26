@@ -11,7 +11,7 @@ from __future__ import annotations
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import itertools
 import operator
 import re
@@ -212,7 +212,7 @@ class MetricsCollectorService(BaseService):
                     continue
                 if not target.managed_object:
                     continue
-                ts = datetime.datetime.fromtimestamp(clock)
+                ts = dt.datetime.fromtimestamp(clock)
                 out = {}
                 for metric, value in mms.items():
                     try:
@@ -238,7 +238,7 @@ class MetricsCollectorService(BaseService):
                     cfg = self.sensor_configs[cfg_id]
                 except KeyError:
                     continue
-                ts = datetime.datetime.fromtimestamp(clock)
+                ts = dt.datetime.fromtimestamp(clock)
                 if cfg.managed_object:
                     part = cfg.managed_object % self.n_parts
                 else:
@@ -296,7 +296,7 @@ class MetricsCollectorService(BaseService):
                     target = self.source_configs[target_id]
                 except KeyError:
                     continue
-                ts = datetime.datetime.fromtimestamp(clock)
+                ts = dt.datetime.fromtimestamp(clock)
                 self.no_data_checker.register_data(
                     str(target.bi_id),
                     ts=ts,

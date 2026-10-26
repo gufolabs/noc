@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 from .base import BaseModel
 from .project import Project
@@ -21,7 +21,7 @@ class IPVRF(BaseModel):
     # Workflow state
     state: str | None = None
     # Last state change
-    state_changed: datetime.datetime | None = None
+    state_changed: dt.datetime | None = None
     # Workflow event
     event: str | None = None
     rd: str | None = "0:0"

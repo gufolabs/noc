@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 import time
 
@@ -34,7 +34,7 @@ class Script(BaseScript):
             if d == "infinite":
                 expire = d
             else:
-                expire = datetime.datetime.fromtimestamp(time.time() + int(d))
+                expire = dt.datetime.fromtimestamp(time.time() + int(d))
             r.append(
                 {
                     "ip": match.group("ip"),

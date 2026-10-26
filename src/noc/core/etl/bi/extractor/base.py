@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -31,7 +31,7 @@ class BaseExtractor:
         self.prefix = prefix
         self.start = start
         self.stop = stop
-        self.clean_ts = stop - datetime.timedelta(seconds=self.clean_delay)
+        self.clean_ts = stop - dt.timedelta(seconds=self.clean_delay)
         self.last_ts = None
 
     @classmethod
@@ -56,6 +56,6 @@ class BaseExtractor:
         :return:
         """
         if cls.is_snapshot:
-            return datetime.datetime.now() - datetime.timedelta(seconds=cls.extract_delay + 1)
+            return dt.datetime.now() - dt.timedelta(seconds=cls.extract_delay + 1)
         # Should be overriden
         return None

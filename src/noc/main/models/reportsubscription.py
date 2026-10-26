@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import os
 import time
@@ -76,7 +76,7 @@ class ReportSubscription(Document):
 
     def update_status(self, status):
         self._get_collection().update_one(
-            {"_id": self.id}, {"$set": {"last_status": status, "last_run": datetime.datetime.now()}}
+            {"_id": self.id}, {"$set": {"last_status": status, "last_run": dt.datetime.now()}}
         )
 
     def can_run(self):
@@ -98,7 +98,7 @@ class ReportSubscription(Document):
             logger.error("[%s] Invalid application %s. Skipping", self.file_name, app_id)
             return None
         # Check file can be written
-        today = datetime.date.today()
+        today = dt.date.today()
         dirname = os.path.join(
             self.PREFIX, f"{int(today.year):04}", f"{int(today.month):02}", f"{int(today.day):02}"
         )
@@ -117,8 +117,8 @@ class ReportSubscription(Document):
         logger.info("[%s] Writing file %s", self.file_name, path)
         with open(path, "w") as f:
             f.write(data)
-        dt = time.time() - t0
-        logger.info("[%s] Done in %.2fs (%d bytes)", self.file_name, dt, len(data))
+        delta = time.time() - t0
+        logger.info("[%s] Done in %.2fs (%d bytes)", self.file_name, delta, len(data))
         return path
 
     def send_report(self, path):
@@ -171,8 +171,8 @@ class ReportJob(Job):
         return True
 
     def schedule_next(self, status):
-        ts = datetime.date.today() + datetime.timedelta(days=1)
-        ts = datetime.datetime.combine(ts, datetime.time(hour=self.HOUR))
+        ts = dt.date.today() + dt.timedelta(days=1)
+        ts = dt.datetime.combine(ts, dt.time(hour=self.HOUR))
         self.scheduler.set_next_run(
             self.attrs[self.ATTR_ID], status=status, ts=ts, duration=self.duration
         )

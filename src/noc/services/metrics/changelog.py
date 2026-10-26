@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import logging
 import random
 from typing import Any
@@ -80,7 +80,7 @@ class ChangeLog:
         Store all collected changes
         """
         states_count = 0
-        ts = datetime.datetime.now().replace(microsecond=0)
+        ts = dt.datetime.now().replace(microsecond=0)
         async with self.lock:
             if not self.state:
                 return  # Nothing to flush

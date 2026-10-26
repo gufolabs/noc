@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 from collections import defaultdict
 from collections.abc import AsyncIterable, Iterable
@@ -167,8 +167,8 @@ class LoadMetricsMaxDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         mo_profile: ManagedObjectProfile | None = None,
         interface_profile: InterfaceProfile | None = None,
         description: str | None = None,

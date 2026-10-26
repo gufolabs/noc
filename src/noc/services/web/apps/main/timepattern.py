@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.http import HttpRequest
@@ -43,8 +43,8 @@ class TimePatternApplication(ExtModelApplication):
     )
     def api_action_test(self, request: HttpRequest, ids, date=None, time=None):
         d = f"{date}T{time}"
-        dt = datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M")
+        ts = dt.datetime.strptime(d, "%Y-%m-%dT%H:%M")
         return {
-            "ts": dt.isoformat(),
-            "result": [{"id": p.id, "name": p.name, "result": p.match(dt)} for p in ids],
+            "ts": ts.isoformat(),
+            "result": [{"id": p.id, "name": p.name, "result": p.match(ts)} for p in ids],
         }

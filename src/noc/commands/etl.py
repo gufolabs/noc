@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import os
 import time
 import yaml
@@ -230,8 +230,8 @@ class Command(BaseCommand):
 
         deadline = None
         if ttl:
-            today = datetime.datetime.now()
-            deadline = today - datetime.timedelta(days=ttl)
+            today = dt.datetime.now()
+            deadline = today - dt.timedelta(days=ttl)
             self.print(f"Cleaned files before: {deadline}")
 
         if not files and not deadline:
@@ -259,7 +259,7 @@ class Command(BaseCommand):
             elif deadline:
                 for f in fn:
                     if (
-                        datetime.datetime.strptime(f.split(".", 1)[0], "import-%Y-%m-%d-%H-%M-%S")
+                        dt.datetime.strptime(f.split(".", 1)[0], "import-%Y-%m-%d-%H-%M-%S")
                         > deadline
                     ):
                         continue

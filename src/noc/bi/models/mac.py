@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 from typing import Any
 
@@ -86,7 +86,7 @@ class MAC(Model):
         where like(MACNumToString(mac), 'A0:AB:1B%') group by managed_object, interface, vlan;
         """
         query_field = ["mac", "managed_object"]
-        t0 = datetime.datetime.now() - datetime.timedelta(seconds=config.web.macdb_window)
+        t0 = dt.datetime.now() - dt.timedelta(seconds=config.web.macdb_window)
         t0 = t0.replace(microsecond=0)
 
         if not query:

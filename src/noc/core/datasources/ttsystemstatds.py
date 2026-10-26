@@ -7,7 +7,7 @@
 
 # Python Modules
 # Python modules
-import datetime
+import datetime as dt
 import time
 from collections.abc import AsyncIterable, Iterable
 
@@ -75,8 +75,8 @@ class TTSystemStatDS(BaseDataSource):
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[int, str, str | int]]:
-        start: datetime.datetime = kwargs.get("start")
-        end: datetime.datetime = kwargs.get("end")
+        start: dt.datetime = kwargs.get("start")
+        end: dt.datetime = kwargs.get("end")
         ts_start = time.mktime(start.timetuple())
         ts_end = time.mktime(end.timetuple())
         tt_systems = TTSystem.objects.filter().scalar("name")

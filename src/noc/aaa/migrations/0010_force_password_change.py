@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -31,5 +31,5 @@ class Migration(BaseMigration):
             return  # Password is already changed
         # Schedule password change
         self.db.execute(
-            "UPDATE auth_user SET change_at = %s WHERE id = %s", [datetime.datetime.now(), user_id]
+            "UPDATE auth_user SET change_at = %s WHERE id = %s", [dt.datetime.now(), user_id]
         )

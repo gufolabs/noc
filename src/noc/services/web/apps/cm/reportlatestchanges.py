@@ -7,7 +7,7 @@
 
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django import forms
@@ -48,7 +48,7 @@ class ReportLatestChangesApplication(SimpleReport):
     def get_data(
         self, request, repo="config", days=1, adm_domain=None, managed_object=None, **kwargs
     ):
-        baseline = datetime.datetime.now() - datetime.timedelta(days=days)
+        baseline = dt.datetime.now() - dt.timedelta(days=days)
         coll = get_db()[f"noc.gridvcs.{repo}.files"].with_options(
             read_preference=ReadPreference.SECONDARY_PREFERRED
         )

@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 import re
@@ -128,7 +128,7 @@ class Interface(Document):
     # Current status
     admin_status = BooleanField(required=False)
     oper_status = BooleanField(required=False)
-    oper_status_change = DateTimeField(required=False, default=datetime.datetime.now)
+    oper_status_change = DateTimeField(required=False, default=dt.datetime.now)
     full_duplex = BooleanField(required=False)
     in_speed = IntField(required=False)  # Input speed, kbit/s
     out_speed = IntField(required=False)  # Output speed, kbit/s
@@ -462,13 +462,13 @@ class Interface(Document):
             s += ["-", "-"]
         return "/".join(s)
 
-    def set_oper_status(self, status: bool, timestamp: datetime.datetime | None = None):
+    def set_oper_status(self, status: bool, timestamp: dt.datetime | None = None):
         """
         Set current oper status
         """
         if self.oper_status == status:
             return
-        timestamp = timestamp or datetime.datetime.now().replace(microsecond=0)
+        timestamp = timestamp or dt.datetime.now().replace(microsecond=0)
         if not self.oper_status_change or self.oper_status_change < timestamp:
             self.oper_status = status
             self.oper_status_change = timestamp

@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-import datetime
+import datetime as dt
 import gzip
 import os
 import random
@@ -162,8 +162,8 @@ class Command(BaseCommand):
         self,
         source: str,
         metrics: list[str],
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         register_metric: bool = False,
     ):
         """
@@ -174,8 +174,8 @@ class Command(BaseCommand):
         from noc.core.clickhouse.connect import connection
         from noc.pm.models.metrictype import MetricType
 
-        end = end or datetime.datetime.now()
-        start = start or end - datetime.timedelta(hours=4)
+        end = end or dt.datetime.now()
+        start = start or end - dt.timedelta(hours=4)
         source, o = self.get_source(source)
         r = defaultdict(list)
         units = {}
@@ -221,7 +221,7 @@ class Command(BaseCommand):
                     if k == "labels":
                         continue
                     elif k == "ts":
-                        v = datetime.datetime.fromisoformat(row[k])
+                        v = dt.datetime.fromisoformat(row[k])
                         row[k] = int(v.timestamp() * NS)
                         continue
                     row[k] = float(row[k])
@@ -231,8 +231,8 @@ class Command(BaseCommand):
         self,
         f_input: str | None,
         metrics: list[str] | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         register_metric: bool = False,
     ) -> Iterable[dict[str, float | str]]:
         if ":" in f_input:

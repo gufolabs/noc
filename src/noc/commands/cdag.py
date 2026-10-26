@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import os
 from collections import defaultdict
 from collections.abc import Iterable
@@ -98,8 +98,8 @@ class Command(BaseCommand):
 
         # now = datetime.datetime.now()
         # now = now - datetime.timedelta(hours=4)
-        end = datetime.datetime(2022, 3, 1)
-        start = end - datetime.timedelta(hours=4)
+        end = dt.datetime(2022, 3, 1)
+        start = end - dt.timedelta(hours=4)
         q_args = []
         if source.startswith("iface://"):
             source, iface = source[8:].split("::")
@@ -152,7 +152,7 @@ class Command(BaseCommand):
                 if k == "labels":
                     continue
                 elif k == "ts":
-                    v = datetime.datetime.fromisoformat(row[k])
+                    v = dt.datetime.fromisoformat(row[k])
                     row[k] = int(v.timestamp() * NS)
                     continue
                 row[k] = float(row[k])

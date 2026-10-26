@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.utils.dateformat import DateFormat
@@ -30,5 +30,5 @@ class Macro(BaseMacro):
             format_string = args["format"]
         else:
             format_string = "Y.m.d H:i:s"
-        df = DateFormat(datetime.datetime.now())
+        df = DateFormat(dt.datetime.now())
         return df.format(format_string)

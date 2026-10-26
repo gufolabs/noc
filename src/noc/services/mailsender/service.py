@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import smtplib
 from email.header import Header
 from email.mime.application import MIMEApplication
@@ -58,7 +58,7 @@ class MailSenderService(BaseService):
         self, message_id: int, data: dict[str, Any], address_to: str | None = None
     ) -> None:
         attachments = data.get("attachments", [])
-        now = datetime.datetime.now(config.timezone)
+        now = dt.datetime.now(config.timezone)
         md = now.strftime("%a, %d %b %Y %H:%M:%S %z")
         if "address" in data:
             address = [data["address"]]

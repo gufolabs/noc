@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import operator
 from collections import namedtuple
 
@@ -50,8 +50,8 @@ class Command(BaseCommand):
             a0 = ArchivedAlarm.objects.get(id=alarm[0])
         except ArchivedAlarm.DoesNotExist:
             self.die("Cannot find alarm")
-        t0 = a0.timestamp - datetime.timedelta(seconds=delta)
-        t1 = a0.timestamp + datetime.timedelta(seconds=delta)
+        t0 = a0.timestamp - dt.timedelta(seconds=delta)
+        t1 = a0.timestamp + dt.timedelta(seconds=delta)
         alarms = {}
         mos = list(a0.managed_object.segment.managed_objects)
         for a in ArchivedAlarm.objects.filter(

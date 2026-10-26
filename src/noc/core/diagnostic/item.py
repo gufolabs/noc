@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 from typing import Any, Union
 
@@ -36,7 +36,7 @@ class DiagnosticItem(BaseModel):
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
     reason: str | None = None
-    changed: datetime.datetime | None = None
+    changed: dt.datetime | None = None
     is_dirty: bool = False
     _config: DiagnosticConfig | None = PrivateAttr()
     _handler: DiagnosticHandler | None = PrivateAttr()
@@ -116,7 +116,7 @@ class DiagnosticItem(BaseModel):
             state = value.state
             reason = value.reason
         if value and value.checks:
-            now = datetime.datetime.now()
+            now = dt.datetime.now()
             checks = [c for c in value.checks if not c.is_expired(now)]
             if len(checks) != len(value.checks):
                 is_dirty = True
@@ -141,7 +141,7 @@ class DiagnosticItem(BaseModel):
             self.state = self.config.default_state
             self.reason = reason
         self.checks = []
-        self.changed = datetime.datetime.now().replace(microsecond=0)
+        self.changed = dt.datetime.now().replace(microsecond=0)
 
     def get_handler(self, logger=None) -> DiagnosticHandler:
         """Getting Diagnostic handler"""

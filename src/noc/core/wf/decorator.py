@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -48,7 +48,7 @@ def fire_transition(self, transition):
 
 
 def document_set_state(
-    self, state, state_changed: datetime.datetime | None = None, bulk=None, create=False
+    self, state, state_changed: dt.datetime | None = None, bulk=None, create=False
 ):
     """
     Set state
@@ -82,12 +82,12 @@ def document_set_state(
     self.state = state
     # Set start field
     if self._has_state_changed:
-        self.state_changed = state_changed or datetime.datetime.now()
+        self.state_changed = state_changed or dt.datetime.now()
         set_op["state_changed"] = self.state_changed
     # Fill expired field
     if self._has_expired:
         if state.ttl:
-            expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
+            expired = dt.datetime.now() + dt.timedelta(seconds=state.ttl)
         else:
             expired = None
         if self.expired != expired:
@@ -147,19 +147,17 @@ def document_set_state(
         )
 
 
-def document_touch(
-    self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None
-):
+def document_touch(self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return
     opset = {}
-    ts = (ts or datetime.datetime.now()).replace(microsecond=0)
+    ts = (ts or dt.datetime.now()).replace(microsecond=0)
     if self.state.update_last_seen:
         opset["last_seen"] = ts
         self.last_seen = ts
     if self.state.update_expired and self.state.ttl:
-        expired = ts + datetime.timedelta(seconds=self.state.ttl)
+        expired = ts + dt.timedelta(seconds=self.state.ttl)
         opset["expired"] = expired
         self.expired = expired
     if not self.first_discovered:
@@ -176,9 +174,7 @@ def document_touch(
         self._get_collection().update_one({"_id": self.pk}, op)
 
 
-def model_set_state(
-    self, state, state_changed: datetime.datetime | None = None, bulk=None, create=False
-):
+def model_set_state(self, state, state_changed: dt.datetime | None = None, bulk=None, create=False):
     """
     Set state
 
@@ -212,12 +208,12 @@ def model_set_state(
     self.state = state
     # Set start field
     if self._has_state_changed:
-        self.state_changed = state_changed or datetime.datetime.now()
+        self.state_changed = state_changed or dt.datetime.now()
         set_op["state_changed"] = self.state_changed
     # Fill expired field
     if self._has_expired:
         if state.ttl:
-            expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
+            expired = dt.datetime.now() + dt.timedelta(seconds=state.ttl)
         else:
             expired = None
         if self.expired != expired:
@@ -294,17 +290,17 @@ def model_set_state(
         )
 
 
-def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None):
+def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return
     opset = {}
-    ts = (ts or datetime.datetime.now()).replace(microsecond=0)
+    ts = (ts or dt.datetime.now()).replace(microsecond=0)
     if self.state.update_last_seen:
         opset["last_seen"] = ts
         self.last_seen = ts
     if self.state.update_expired and self.state.ttl:
-        expired = ts + datetime.timedelta(seconds=self.state.ttl)
+        expired = ts + dt.timedelta(seconds=self.state.ttl)
         opset["expired"] = expired
         self.expired = expired
     if not self.first_discovered:
@@ -363,7 +359,7 @@ def _on_model_post_save(sender, instance, *args, **kwargs):
         instance.set_state(new_state, create=True)
 
 
-def get_wiping_ttl(self) -> datetime.datetime | None:
+def get_wiping_ttl(self) -> dt.datetime | None:
     """Getting"""
     return self.state.ttl
 

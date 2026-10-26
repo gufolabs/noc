@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from enum import StrEnum
 
 # Third-party modules
@@ -41,7 +41,7 @@ class ManagedObject(BaseModel):
     # Workflow state
     state: str | None = None
     # Last state change
-    state_changed: datetime.datetime | None = None
+    state_changed: dt.datetime | None = None
     # Workflow event
     event: str | None = None
     container: Reference["Object"] | None = None

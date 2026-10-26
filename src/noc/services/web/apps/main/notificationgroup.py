@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.http import HttpRequest
@@ -88,7 +88,7 @@ class NotificationGroupApplication(ExtModelApplication):
         if not user:
             return self.response_not_found()
         if expired_at:
-            expired_at = datetime.datetime.fromisoformat(expired_at)
+            expired_at = dt.datetime.fromisoformat(expired_at)
         else:
             expired_at = None
         us = o.update_user_settings(

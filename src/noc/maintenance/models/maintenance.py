@@ -10,7 +10,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 import re
@@ -163,7 +163,7 @@ class Maintenance(Document):
     remote_objects = EmbeddedDocumentListField(RemoteObject)
     # Watchers
     watchers = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
+    watcher_wait_ts: dt.datetime | None = DateTimeField(required=False)
     # Object id in BI
     # bi_id = LongField(unique=True)
 
@@ -182,7 +182,7 @@ class Maintenance(Document):
         return Maintenance.objects.filter(id=oid).first()
 
     @classmethod
-    def get_min_wait_ts(cls) -> datetime.datetime | None:
+    def get_min_wait_ts(cls) -> dt.datetime | None:
         """"""
         return (
             Maintenance.objects()
@@ -200,7 +200,7 @@ class Maintenance(Document):
         """"""
         if self.is_completed:
             return False
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if self.time_pattern and not self.time_pattern.match(now):
             return False
         if self.auto_confirm:
@@ -208,13 +208,13 @@ class Maintenance(Document):
         return self.start <= now
 
     @property
-    def active_interval(self) -> tuple[datetime.datetime, datetime.datetime]:
+    def active_interval(self) -> tuple[dt.datetime, dt.datetime]:
         """For old fixes, String to datetime fields"""
         m_start, m_stop = self.start, self.stop
         if isinstance(m_start, str):
-            m_start = datetime.datetime.fromisoformat(m_start)
+            m_start = dt.datetime.fromisoformat(m_start)
         if isinstance(m_stop, str):
-            m_stop = datetime.datetime.fromisoformat(m_stop)
+            m_stop = dt.datetime.fromisoformat(m_stop)
         return m_start, m_stop
 
     def event(self, stage: str, data: dict[str, Any] | None = None):
@@ -304,7 +304,7 @@ class Maintenance(Document):
 
     def ensure_jobs(self):
         """Ensure maintenance Job"""
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         _m_start, m_stop = self.active_interval
         # Auto completed
         if self.auto_confirm and m_stop > now:
@@ -320,7 +320,7 @@ class Maintenance(Document):
             call_later(
                 "noc.services.escalator.maintenance.start_maintenance",
                 delay=max(
-                    (start - datetime.datetime.now()).total_seconds(),
+                    (start - dt.datetime.now()).total_seconds(),
                     60,
                 ),
                 scheduler="escalator",
@@ -331,7 +331,7 @@ class Maintenance(Document):
                 call_later(
                     "noc.services.escalator.maintenance.close_maintenance",
                     delay=max(
-                        (stop - datetime.datetime.now()).total_seconds(),
+                        (stop - dt.datetime.now()).total_seconds(),
                         60,
                     ),
                     scheduler="escalator",
@@ -395,7 +395,7 @@ class Maintenance(Document):
         Returns a list of currently affected object ids
         """
         data = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for d in Maintenance._get_collection().find(
             {"start": {"$lte": now}, "stop": {"$gte": now}, "is_completed": False},
             {"_id": 1, "time_pattern": 1},
@@ -416,9 +416,7 @@ class Maintenance(Document):
         return affected
 
 
-def update_affected_objects(
-    maintenance_id, start: datetime.datetime, stop: datetime.datetime | None = None
-):
+def update_affected_objects(maintenance_id, start: dt.datetime, stop: dt.datetime | None = None):
     """
     Calculate and fill affected objects
     """

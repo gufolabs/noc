@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 
 # Third-party modules
@@ -68,7 +68,7 @@ class FailedEvent(Document):
     def log_message(self, message):
         self.log.append(
             EventLog(
-                timestamp=datetime.datetime.now(),
+                timestamp=dt.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,

@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import os
 
 # Third-party modules
@@ -279,7 +279,7 @@ class Command(BaseCommand):
         if before_days:
             # Timestamp
             # before = parse(before)
-            before = datetime.datetime.now() - datetime.timedelta(days=before_days)
+            before = dt.datetime.now() - dt.timedelta(days=before_days)
             before = bson.ObjectId.from_datetime(before)
         elif before_revision and is_objectid(before_revision):
             # Timestamp

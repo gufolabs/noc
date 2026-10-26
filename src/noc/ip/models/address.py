@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 from typing import Any
 
@@ -306,7 +306,7 @@ class Address(NOCModel):
 
     def reserve(
         self,
-        allocated_till: datetime.datetime | None = None,
+        allocated_till: dt.datetime | None = None,
         user: Any | None = None,
         confirm: bool = True,
         reservation_id: str | None = None,

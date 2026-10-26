@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from collections import defaultdict
@@ -293,7 +293,7 @@ class Service(Document):
     profile: ServiceProfile = PlainReferenceField(ServiceProfile, required=True)
     name_template = StringField()
     # Creation timestamp
-    ts = DateTimeField(default=datetime.datetime.now)
+    ts = DateTimeField(default=dt.datetime.now)
     # Logical state of service
     state: State = PlainReferenceField(State)
     # Last state change
@@ -305,7 +305,7 @@ class Service(Document):
     # Oper Status Info
     oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
     # oper_status_factors= EmbeddedDocumentListField()
-    oper_status_change = DateTimeField(required=False, default=datetime.datetime.now)
+    oper_status_change = DateTimeField(required=False, default=dt.datetime.now)
     # affect_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
     # direct_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
     oper_status_factors = EmbeddedDocumentListField(StatusAffectedItem)
@@ -379,7 +379,7 @@ class Service(Document):
     mappings = EmbeddedDocumentListField(RemoteMappingItem)
     # Watchers
     watchers = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
+    watcher_wait_ts: dt.datetime | None = DateTimeField(required=False)
     # maintenances
 
     SUPPORTED_EFFECTS = frozenset(
@@ -485,7 +485,7 @@ class Service(Document):
             yield Label.build_expose_labels(svc["effective_labels"], "expose_sa_object")
 
     @classmethod
-    def get_min_wait_ts(cls) -> datetime.datetime | None:
+    def get_min_wait_ts(cls) -> dt.datetime | None:
         """"""
         return (
             Service.objects()
@@ -712,7 +712,7 @@ class Service(Document):
     def set_oper_status(
         self,
         status: Status,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         affected: list[AffectedItem] | None = None,
     ):
         """
@@ -738,7 +738,7 @@ class Service(Document):
             self.oper_status,
             status,
         )
-        timestamp = timestamp or datetime.datetime.now().replace(microsecond=0)
+        timestamp = timestamp or dt.datetime.now().replace(microsecond=0)
         if self.oper_status_change and self.oper_status_change > timestamp:
             logger.warning(
                 "[%s] New status timestamp LESS then current: '%s'. Reset timestamp",
@@ -959,7 +959,7 @@ class Service(Document):
             msg = {
                 "$op": "clear",
                 "reference": f"{SVC_REF_PREFIX}:{self.id}",
-                "timestamp": datetime.datetime.now().isoformat(),
+                "timestamp": dt.datetime.now().isoformat(),
                 "message": f"Service status to {self.oper_status.name}",
             }
         else:
@@ -1366,7 +1366,7 @@ class Service(Document):
         self,
         source: str | InputSource,
         instances: list[ServiceInstanceConfig],
-        last_update: datetime.datetime | None = None,
+        last_update: dt.datetime | None = None,
     ):
         """Synchronize instances for source"""
         if isinstance(source, str):
@@ -1487,7 +1487,7 @@ class Service(Document):
         cls,
         maintenance_id: str,
         services: list[Service],
-        start: datetime.datetime,
+        start: dt.datetime,
         affected_topology: bool = False,
         remote_system: RemoteSystem | None = None,
         remote_ids: list[str] | None = None,

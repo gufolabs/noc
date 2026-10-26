@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 import operator
 import uuid
@@ -48,7 +48,7 @@ class DSSnapshot:
     """Datasource snapshot"""
 
     name: str
-    report_ts: datetime.datetime
+    report_ts: dt.datetime
     report_uuid: uuid.UUID | None = None
     job_uuid: uuid.UUID | None = None
     labels: list[str] | None = None
@@ -58,8 +58,8 @@ clean_map = {
     "str": lambda x: str(x),
     "int": lambda x: int(x),
     "float": lambda x: float(x),
-    "date": lambda x: datetime.date.fromisoformat(x),
-    "datetime": lambda x: datetime.datetime.fromisoformat(x),
+    "date": lambda x: dt.date.fromisoformat(x),
+    "datetime": lambda x: dt.datetime.fromisoformat(x),
     "bool": lambda x: bool(x),
 }
 
@@ -159,9 +159,9 @@ class ParamInfo:
         return values[0]
 
     def clean_type(self, value: str):
-        if self.type == "date" and isinstance(value, datetime.date):
+        if self.type == "date" and isinstance(value, dt.date):
             return value
-        if self.type == "datetime" and isinstance(value, datetime.datetime):
+        if self.type == "datetime" and isinstance(value, dt.datetime):
             return value
         return clean_map[self.type](value)
 
@@ -271,13 +271,13 @@ class BaseDataSource:
     @classmethod
     def clean_interval(
         cls,
-        start: datetime.datetime,
-        end: datetime.datetime | None = None,
+        start: dt.datetime,
+        end: dt.datetime | None = None,
         period: int | None = None,
-    ) -> tuple[datetime.datetime, datetime.datetime]:
+    ) -> tuple[dt.datetime, dt.datetime]:
         """Clean datetime interval"""
-        end = (end or datetime.datetime.now()).replace(microsecond=0)
-        start = start or end - datetime.timedelta(seconds=period or cls.DEFAULT_INTERVAL)
+        end = (end or dt.datetime.now()).replace(microsecond=0)
+        start = start or end - dt.timedelta(seconds=period or cls.DEFAULT_INTERVAL)
         return start, end
 
     @classmethod
@@ -398,7 +398,7 @@ class BaseDataSource:
         # return pl.DataFrame(r, columns=[(c.name, c.type.value) for c in cls.fields])
 
     @classmethod
-    def get_clickhouse_snapshots(cls, ttl: datetime.datetime | None = None) -> list[DSSnapshot]:
+    def get_clickhouse_snapshots(cls, ttl: dt.datetime | None = None) -> list[DSSnapshot]:
         """Return available snapshots for Datasource"""
         if not cls.clickhouse_mirror():
             return []
@@ -421,7 +421,7 @@ class BaseDataSource:
             r.append(
                 DSSnapshot(
                     name=name,
-                    report_ts=datetime.datetime.fromisoformat(ts),
+                    report_ts=dt.datetime.fromisoformat(ts),
                     report_uuid=report_uuid,
                     job_uuid=job_uuid,
                     labels=labels,
@@ -460,10 +460,10 @@ class BaseDataSource:
         df: pl.DataFrame,
         report_uuid: uuid.UUID | None = None,
         job_uuid: uuid.UUID | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ):
         """Send DataFrame to clickhouse"""
-        ts = (ts or datetime.datetime.now()).replace(microsecond=0)
+        ts = (ts or dt.datetime.now()).replace(microsecond=0)
         ch_row = {
             "date": ts.date().isoformat(),
             "report_ts": ts.isoformat(sep=" "),

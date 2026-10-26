@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from importlib.resources import files
 from typing import Any
@@ -156,7 +156,7 @@ class BaseCard:
         """
         Convert to readable timestamp like YYYY-MM-DD HH:MM:SS
         """
-        if isinstance(ts, datetime.datetime):
+        if isinstance(ts, dt.datetime):
             return ts.strftime("%Y-%m-%d %H:%M:%S")
         return ts
 

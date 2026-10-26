@@ -8,7 +8,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import itertools
 import logging
 
@@ -215,7 +215,7 @@ class Command(BaseCommand):
         connect()
         ttl = getattr(config.datastream, f"{datastream}_ttl", 0)
         if ttl:
-            start_date = datetime.datetime.now() - datetime.timedelta(seconds=ttl)
+            start_date = dt.datetime.now() - dt.timedelta(seconds=ttl)
             ds = data_stream_loader.get(datastream)
             collection = ds.get_collection()
             collection.delete_many({"_id": {"$lte": ObjectId.from_datetime(start_date)}})

@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -35,7 +35,7 @@ class Script(BaseScript):
             ns["ns"] = ns["hikvision"]
         else:
             ns["ns"] = ns["isapi"]
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
 
         return {
             "vendor": "Hikvision",

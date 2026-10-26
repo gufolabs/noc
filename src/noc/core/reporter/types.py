@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from dataclasses import dataclass
 from io import BytesIO
@@ -199,7 +199,7 @@ class Parameter(BaseModel):
         if self.type == "integer":
             return int(value)
         if self.type == "date":
-            return datetime.datetime.strptime(value, "%d.%m.%Y")
+            return dt.datetime.strptime(value, "%d.%m.%Y")
         if self.type == "bool":
             return bool(value)
         if self.type == "fields_selector":

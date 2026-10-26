@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from collections import defaultdict
 from collections.abc import Iterable
@@ -213,8 +213,8 @@ class ZabbixEvent(BaseModel):
     hosts: list[ZabbixEventHost] | None = None
 
     @property
-    def created(self) -> datetime.datetime:
-        return datetime.datetime.fromtimestamp(self.clock)
+    def created(self) -> dt.datetime:
+        return dt.datetime.fromtimestamp(self.clock)
 
     @property
     def host(self) -> int | None:
@@ -380,7 +380,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                     m.topic_id = p["value"]
             self.media_types[m.media_id] = m
 
-    def get_next_event_ts(self, from_ts: datetime.datetime | None = None):
+    def get_next_event_ts(self, from_ts: dt.datetime | None = None):
         params = {
             "sortorder": "ASC",
             "limit": 1,
@@ -390,16 +390,16 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             params["time_from"] = int(from_ts.timestamp())
         oldest_event = self.api.event.get(**params)
         if oldest_event:
-            return datetime.datetime.fromtimestamp(int(oldest_event[0]["clock"]))
+            return dt.datetime.fromtimestamp(int(oldest_event[0]["clock"]))
 
-    def get_initial_from_ts(self) -> datetime.datetime:
+    def get_initial_from_ts(self) -> dt.datetime:
         if self.system.remote_system.last_successful_extract_event:
             time_from = self.system.remote_system.last_successful_extract_event
             self.logger.info("Initial TS from last_successful: from %s", time_from)
         else:
             time_from = self.get_next_event_ts()
             self.logger.info("Extracting all events from: %s", time_from)
-        return time_from or datetime.datetime.now() - datetime.timedelta(days=1)
+        return time_from or dt.datetime.now() - dt.timedelta(days=1)
 
     def get_alerts_tags(self, alerts) -> list[dict[str, str]]:
         """"""
@@ -417,7 +417,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             r.append({"tag": "alerts", "value": send_to})
         return r
 
-    def iter_events(self, start: datetime.datetime | None = None) -> Iterable[ZabbixEvent]:
+    def iter_events(self, start: dt.datetime | None = None) -> Iterable[ZabbixEvent]:
         params = {
             "selectHosts": ["hostid", "name"],
             # "selectRelatedObject": "extend",
@@ -430,8 +430,8 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             "sortorder": "DESC",
         }
         r_events_start = {}
-        time_step = datetime.timedelta(hours=2)
-        now = datetime.datetime.now().replace(microsecond=0)
+        time_step = dt.timedelta(hours=2)
+        now = dt.datetime.now().replace(microsecond=0)
         from_ts = start or self.get_initial_from_ts()
         self.logger.info("Extracting event from TS: %s", from_ts)
         while True:
@@ -448,7 +448,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                 from_ts = self.get_next_event_ts(from_ts)
                 from_ts -= time_step
             else:
-                from_ts += time_step + datetime.timedelta(seconds=1)
+                from_ts += time_step + dt.timedelta(seconds=1)
             host_ids, triggers_ids = set(), set()
             # Preprocessed
             for x in result:
@@ -559,9 +559,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
 
     def iter_data(self, checkpoint=None, **kwargs) -> Iterable[FMEventObject]:
         if checkpoint:
-            checkpoint = datetime.datetime.fromtimestamp(int(checkpoint)) + datetime.timedelta(
-                seconds=1
-            )
+            checkpoint = dt.datetime.fromtimestamp(int(checkpoint)) + dt.timedelta(seconds=1)
         non_started_ids = set()
         for e in self.iter_events(start=checkpoint):
             tid = str(e.object_id)
@@ -621,21 +619,21 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
     name = "metric"
     HOURS = 2
 
-    def get_start_ts(self) -> datetime.datetime:
+    def get_start_ts(self) -> dt.datetime:
         if self.system.remote_system.last_successful_extract_metrics:
             self.logger.info(
                 "Initial TS from last_successful: from %s",
                 self.system.remote_system.last_successful_extract_metrics,
             )
             return self.system.remote_system.last_successful_extract_metrics
-        return datetime.datetime.now() - datetime.timedelta(hours=self.HOURS)
+        return dt.datetime.now() - dt.timedelta(hours=self.HOURS)
 
     def iter_history(
         self,
         item_ids: list[str],
-        start: datetime.datetime,
-        end: datetime.datetime | None = None,
-    ) -> Iterable[tuple[int, datetime.datetime, float, float]]:
+        start: dt.datetime,
+        end: dt.datetime | None = None,
+    ) -> Iterable[tuple[int, dt.datetime, float, float]]:
         """Iter over Zabbix item history"""
         prev_value, prev_id = None, None
         while True:
@@ -654,22 +652,22 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
             if not r:
                 break
             for row in r:
-                clock = datetime.datetime.fromtimestamp(int(row["clock"]))
+                clock = dt.datetime.fromtimestamp(int(row["clock"]))
                 delta, value = 0, float(row["value"])
                 if prev_value and prev_id == row["itemid"]:
                     delta = value - prev_value
                 yield row["itemid"], clock, value, delta
                 prev_value, prev_id = value, row["itemid"]
-            start += datetime.timedelta(hours=self.HOURS)
+            start += dt.timedelta(hours=self.HOURS)
 
     def iter_metrics(
         self,
         item_ids: list[str],
-        end_ts: datetime.datetime | None = None,
+        end_ts: dt.datetime | None = None,
         **kwargs,
     ) -> Iterable[tuple[str, str | None, list[tuple[int, float]]]]:
         """"""
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         end_ts = end_ts or now
         start = self.get_start_ts()
         while item_ids:

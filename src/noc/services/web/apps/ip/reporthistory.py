@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 
 # Third-party modules
@@ -34,7 +34,7 @@ class ReportHistoryApplication(SimpleReport):
         )
         date_to = forms.DateField(
             label="Date to (YYYY-MM-DD)",
-            initial=datetime.date.today(),
+            initial=dt.date.today(),
             required=False,
             help_text="If empty, the Days parameter will be used",
         )
@@ -79,14 +79,14 @@ class ReportHistoryApplication(SimpleReport):
         if date_from and date_to:
             audit_trail = AuditTrail.objects.filter(
                 timestamp__gte=date_from,
-                timestamp__lte=date_to + datetime.timedelta(days=1),
+                timestamp__lte=date_to + dt.timedelta(days=1),
                 model_id__in=scope,
             ).order_by("-timestamp")
         else:
-            dt = datetime.date.today() - datetime.timedelta(days=days)
-            audit_trail = AuditTrail.objects.filter(timestamp__gte=dt, model_id__in=scope).order_by(
-                "-timestamp"
-            )
+            delta = dt.date.today() - dt.timedelta(days=days)
+            audit_trail = AuditTrail.objects.filter(
+                timestamp__gte=delta, model_id__in=scope
+            ).order_by("-timestamp")
         if search_ip:
             try:
                 audit_trail = audit_trail.filter(

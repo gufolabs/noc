@@ -8,7 +8,7 @@
 
 # Python modules
 import csv
-import datetime
+import datetime as dt
 import time
 from io import BytesIO, TextIOWrapper
 from tempfile import TemporaryFile
@@ -122,13 +122,13 @@ class ReportMetricsDetailApplication(ExtApplication):
 
         # Date Time Block
         if not from_date:
-            from_date = datetime.datetime.now() - datetime.timedelta(days=1)
+            from_date = dt.datetime.now() - dt.timedelta(days=1)
         else:
-            from_date = datetime.datetime.strptime(from_date, "%d.%m.%Y")
+            from_date = dt.datetime.strptime(from_date, "%d.%m.%Y")
         if not to_date or from_date == to_date:
-            to_date = from_date + datetime.timedelta(days=1)
+            to_date = from_date + dt.timedelta(days=1)
         else:
-            to_date = datetime.datetime.strptime(to_date, "%d.%m.%Y") + datetime.timedelta(days=1)
+            to_date = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
         # interval = (to_date - from_date).days
         ts_from_date = time.mktime(from_date.timetuple())
         ts_to_date = time.mktime(to_date.timetuple())
@@ -264,7 +264,7 @@ class ReportMetricsDetailApplication(ExtApplication):
                 res.append(row.get(y, ""))
             r.append(res)
 
-        filename = f"metrics_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
+        filename = f"metrics_detail_report_{dt.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

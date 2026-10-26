@@ -7,7 +7,7 @@
 
 # NOC Modules
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 # Third-party module
@@ -77,13 +77,13 @@ class FMEventLoader(BaseLoader):
             max_ts = max(max_ts, event.ts)
             svc.publish(orjson.dumps(event.model_dump()), f"events.{event.target.pool}")
         if max_ts:
-            self.system.remote_system.last_extract_event = datetime.datetime.fromtimestamp(max_ts)
+            self.system.remote_system.last_extract_event = dt.datetime.fromtimestamp(max_ts)
             return
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         if not self.system.remote_system.last_extract_event:
             self.system.remote_system.last_extract_event = now
         else:
-            le = self.system.remote_system.last_extract_event + datetime.timedelta(days=1)
+            le = self.system.remote_system.last_extract_event + dt.timedelta(days=1)
             self.system.remote_system.last_extract_event = min(le, now)
         self.logger.info("Last extract event TS: %s", self.system.remote_system.last_extract_event)
         self.logger.info("Send FM Event: %s", num)

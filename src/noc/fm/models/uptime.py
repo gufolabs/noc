@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import socket
 import struct
@@ -38,16 +38,16 @@ class Uptime(Document):
     last = DateTimeField()  # Last update
     last_value = FloatField()  # Last registred value
 
-    SEC = datetime.timedelta(seconds=1)
+    SEC = dt.timedelta(seconds=1)
     FWRAP = float((1 << 32) - 1) / 100.0
-    WRAP = datetime.timedelta(seconds=FWRAP)
+    WRAP = dt.timedelta(seconds=FWRAP)
     WPREC = 0.1  # Wrap precision
 
     def __str__(self):
         return f"{int(self.object)}"
 
     @classmethod
-    def register(cls, managed_object: ManagedObject, uptime: int) -> datetime.datetime | None:
+    def register(cls, managed_object: ManagedObject, uptime: int) -> dt.datetime | None:
         """
         Register uptime
         :param managed_object: Managed object reference
@@ -57,14 +57,14 @@ class Uptime(Document):
         if not uptime:
             return None
         oid = managed_object.id
-        now = datetime.datetime.now()
-        delta = datetime.timedelta(seconds=uptime)
+        now = dt.datetime.now()
+        delta = dt.timedelta(seconds=uptime)
         logger.debug("[%s] Register uptime %s", managed_object.name, delta)
         # Update data
         c = cls._get_collection()
         d = c.find_one({"object": oid, "stop": None})
         is_rebooted = False
-        ts: datetime.datetime | None = None
+        ts: dt.datetime | None = None
         if d:
             # Check for reboot
             if d["last_value"] > uptime:
@@ -119,7 +119,7 @@ class Uptime(Document):
         return ts
 
     @staticmethod
-    def send_reboot(mo, ts: datetime.datetime, last: datetime.datetime):
+    def send_reboot(mo, ts: dt.datetime, last: dt.datetime):
         svc = get_service()
         # Send reboot
         svc.register_metrics(

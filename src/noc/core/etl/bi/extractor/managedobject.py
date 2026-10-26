@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -68,9 +68,9 @@ class ManagedObjectsExtractor(BaseExtractor):
 
     def extract(self, *args, **options):
         nr = 0
-        ts = datetime.datetime.now()
+        ts = dt.datetime.now()
         # External data
-        stats_start = self.start - datetime.timedelta(days=1)  # configuration ?
+        stats_start = self.start - dt.timedelta(days=1)  # configuration ?
         x_data = [
             self.get_interfaces(),
             self.get_links(),

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 from typing import Any
 
@@ -128,7 +128,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
 
     def create_bgp_peer(self, local_as: AS, peer: DiscoveredPeer):
         """Create Peer on Database"""
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         p = Peer(
             local_asn=local_as,
             local_ip=peer.local_address,
