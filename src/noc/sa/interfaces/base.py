@@ -532,10 +532,10 @@ class DateTimeParameter(StringParameter):
             value = self.default
         if isinstance(value, str):
             if "." in value:
-                dt, _, us = value.partition(".")
-                dt = dt.datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
+                dt_part, _, us = value.partition(".")
+                dt_part = dt.datetime.strptime(dt_part, "%Y-%m-%dT%H:%M:%S")
                 us = int(us.rstrip("Z"), 10)
-                return dt + dt.timedelta(microseconds=us)
+                return dt_part + dt.timedelta(microseconds=us)
             return dt.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         if isinstance(value, dt):
             return value
@@ -561,12 +561,12 @@ class DateTimeShiftParameter(StringParameter):
             value = self.default
         if isinstance(value, str):
             if "." in value:
-                dt, _, us = value.partition(".")
-                dt = dt.datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
+                dt_part, _, us = value.partition(".")
+                dt_part = dt.datetime.strptime(dt_part, "%Y-%m-%dT%H:%M:%S")
                 if "+" in us:
                     us, _offset = us.split("+")
                 us = int(us.rstrip("Z"), 10)
-                return dt + dt.timedelta(microseconds=us)
+                return dt_part + dt.timedelta(microseconds=us)
             return dt.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         if isinstance(value, dt):
             return value

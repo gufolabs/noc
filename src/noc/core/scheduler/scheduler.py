@@ -369,10 +369,11 @@ class Scheduler:
                 njts = jobs[0].attrs[Job.ATTR_TS]
                 now = dt.datetime.now()
                 if njts > now:
-                    dt = njts - now
-                    dt = (dt.microseconds + dt.seconds * 1000000.0) / 1000000.0
-                    dt = max(dt, self.min_sleep)
-                    time.sleep(dt)
+                    delta = njts - now
+                    to_sleep = max(
+                        (delta.microseconds + delta.seconds * 1000000.0) / 1000000.0, self.min_sleep
+                    )
+                    time.sleep(to_sleep)
         return n
 
     def apply_bulk_ops(self):

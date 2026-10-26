@@ -155,14 +155,14 @@ class GridVCS:
                 if data == old_data:
                     return False
                 # Calculate reverse delta
-                dt, delta = self.get_delta(data, old_data)
+                delta_type, delta = self.get_delta(data, old_data)
                 delta = self.compress(delta, self.DEFAULT_COMPRESS)
                 # Save delta
                 self.fs.put(
                     delta,
                     object=object,
                     ts=f.ts,
-                    ft=dt,
+                    ft=delta_type,
                     encoding=self.ENCODING,
                     c=self.DEFAULT_COMPRESS,
                 )

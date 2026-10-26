@@ -180,8 +180,8 @@ class ArchivedAlarm(Document):
 
     @property
     def duration(self):
-        dt = self.clear_timestamp - self.timestamp
-        return dt.days * 86400 + dt.seconds
+        delta = self.clear_timestamp - self.timestamp
+        return delta.days * 86400 + delta.seconds
 
     @property
     def display_duration(self):
