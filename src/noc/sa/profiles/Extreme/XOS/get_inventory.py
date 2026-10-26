@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 from collections import defaultdict
 
@@ -91,7 +91,7 @@ class Script(BaseScript):
                 try:
                     if len(d["mfg_date"]) > 6:
                         d["mfg_date"] = d["mfg_date"][:6]
-                    d["mfg_date"] = datetime.datetime.strptime(d["mfg_date"], "%y%m%d")
+                    d["mfg_date"] = dt.datetime.strptime(d["mfg_date"], "%y%m%d")
                     xcvr["mfg_date"] = d["mfg_date"].strftime("%Y-%m-%d")
                 except ValueError:
                     self.logger.error(

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -53,14 +53,14 @@ class UptimeCheck(DiscoveryCheck):
             or not self.object.diagnostic.has_active_diagnostic(SNMP_DIAG)
         ):
             return
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if (now - c_uptime.last).total_seconds() > SNMP_FAILED_WINDOW:
             self.set_problem(
                 message="Failed getting uptime",
                 diagnostic=SNMP_DIAG,
             )
 
-    def send_reboot_message(self, ts: datetime.datetime) -> None:
+    def send_reboot_message(self, ts: dt.datetime) -> None:
         mo = self.object
         data = {
             "$version": 1,

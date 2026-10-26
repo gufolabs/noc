@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any, Literal
 
 # Third-party modules
@@ -14,13 +14,13 @@ from pydantic import BaseModel, Field
 
 
 class RangeSingle(BaseModel):
-    from_: datetime.datetime | str = Field(..., alias="from")
-    to: datetime.datetime | str
+    from_: dt.datetime | str = Field(..., alias="from")
+    to: dt.datetime | str
 
 
 class RangeSection(BaseModel):
-    from_: datetime.datetime = Field(..., alias="from")
-    to: datetime.datetime
+    from_: dt.datetime = Field(..., alias="from")
+    to: dt.datetime
     raw: RangeSingle
 
 

@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import logging
 import time
 from time import perf_counter
@@ -140,7 +140,7 @@ class Job:
                 "[%s] Starting at %s (Lag %.2fms)",
                 self.name,
                 self.scheduler.scheduler_id,
-                (datetime.datetime.now() - self.attrs[self.ATTR_TS]).total_seconds() * 1000.0,
+                (dt.datetime.now() - self.attrs[self.ATTR_TS]).total_seconds() * 1000.0,
             )
             # Run handler
             status = self.E_EXCEPTION
@@ -202,7 +202,7 @@ class Job:
                     self.scheduler.set_next_run(
                         self.attrs[self.ATTR_ID],
                         status=status,
-                        ts=datetime.datetime.now() + datetime.timedelta(seconds=delay),
+                        ts=dt.datetime.now() + dt.timedelta(seconds=delay),
                         duration=self.duration,
                         context_version=self.context_version,
                         context=ctx,
@@ -357,7 +357,7 @@ class Job:
         """
         if not ts:
             ts = time.time()
-        if ts and isinstance(ts, datetime.datetime):
+        if ts and isinstance(ts, dt.datetime):
             ts = time.mktime(ts.timetuple()) + float(ts.microsecond) / 1000000.0
         # Get start of current interval
         si = ts // interval * interval
@@ -366,7 +366,7 @@ class Job:
         # Shift to interval if in the past
         if si <= ts:
             si += interval
-        return datetime.datetime.fromtimestamp(si)
+        return dt.datetime.fromtimestamp(si)
 
     def get_runs(self) -> int:
         return self.attrs.get(Job.ATTR_RUNS, 0)

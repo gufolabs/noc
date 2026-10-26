@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 import threading
@@ -54,7 +54,7 @@ RETRY_DELTA = 60 / max(config.escalator.tt_escalation_limit - 1, 1)
 ESCALATION_CHECk_CLOSE_DELAY = 30
 
 retry_lock = threading.Lock()
-next_retry = datetime.datetime.now()
+next_retry = dt.datetime.now()
 
 
 class BaseSequence(ABC):
@@ -82,11 +82,11 @@ class BaseSequence(ABC):
         if delay:
             Job.retry_after(delay + 60, msg)
             return
-        now = datetime.datetime.now()
-        retry = now + datetime.timedelta(seconds=RETRY_TIMEOUT)
+        now = dt.datetime.now()
+        retry = now + dt.timedelta(seconds=RETRY_TIMEOUT)
         with retry_lock:
             retry = max(retry, next_retry)
-            next_retry = retry + datetime.timedelta(seconds=RETRY_DELTA)
+            next_retry = retry + dt.timedelta(seconds=RETRY_DELTA)
         delta = retry - now
         delay = delta.seconds + (1 if delta.microseconds else 0)
         Job.retry_after(delay, msg)
@@ -218,7 +218,7 @@ class EscalationSequence(BaseSequence):
         Check throttling limits. Retry job if overwhelmed.
         """
         limit = config.escalator.tt_escalation_limit
-        widow = datetime.datetime.now() - datetime.timedelta(seconds=config.escalator.ets)
+        widow = dt.datetime.now() - dt.timedelta(seconds=config.escalator.ets)
         n_escalated = ActiveAlarm._get_collection().count_documents(
             {"escalation_ts": {"$gte": widow}}
         )
@@ -251,7 +251,7 @@ class EscalationSequence(BaseSequence):
             return True
         return self.alarm.managed_object.can_notify()
 
-    def get_timestamp(self) -> datetime.datetime | None:
+    def get_timestamp(self) -> dt.datetime | None:
         """
         Get effective timestamp according to timestamp policy
         """
@@ -288,7 +288,7 @@ class EscalationSequence(BaseSequence):
             self.logger.info("Alarm has been closed during escalation. Try to deescalate")
             metrics["escalation_closed_while_escalated"] += 1
             if tt_id and not alarm.escalation_tt:
-                alarm.escalation_ts = datetime.datetime.now()
+                alarm.escalation_ts = dt.datetime.now()
                 alarm.escalation_tt = tt_id
                 alarm.save()
             if not alarm.escalation_close_ts and not alarm.escalation_close_error:
@@ -582,7 +582,7 @@ class EscalationSequence(BaseSequence):
         total_subscribers: defaultdict[ObjectId, int] = defaultdict(int)
         # @todo: Append profile
         doc = Escalation(
-            timestamp=datetime.datetime.now(), items=[], prev_escalation=self.prev_escalation
+            timestamp=dt.datetime.now(), items=[], prev_escalation=self.prev_escalation
         )
         for alarm in items:
             if alarm.alarm_class.is_ephemeral:
@@ -722,7 +722,7 @@ class EscalationSequence(BaseSequence):
                 self.logger.info("Escalation allowed by maintenance policy")
                 return
             if maintenance.escalation_policy == "S":
-                delay: datetime.timedelta = maintenance.stop - self.escalation_doc.timestamp
+                delay: dt.timedelta = maintenance.stop - self.escalation_doc.timestamp
                 self.logger.info("Escalation suspended, retry after Maintenance")
                 self.log_alarm(f"Escalation suspended. Object is under maintenance: {m_id}")
                 self.retry_job("Escalation suspended, retry after Maintenance", delay.seconds)
@@ -1001,7 +1001,7 @@ class DeescalationSequence(BaseSequence):
         Perform deescalation sequence
         """
         with self.lock.acquire(self.escalation_doc.get_lock_items()):
-            ts = datetime.datetime.now()
+            ts = dt.datetime.now()
             self.deescalate_tt()
             self.notify()
             # Close escalation doc

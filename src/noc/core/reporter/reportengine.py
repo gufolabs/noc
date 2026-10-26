@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections import defaultdict
 from io import BytesIO
@@ -70,7 +70,7 @@ class ReportEngine:
         if user:
             cleaned_param["user"] = user
         selected_fields = cleaned_param.get("fields")
-        error, start = None, datetime.datetime.now()
+        error, start = None, dt.datetime.now()
         self.logger.info("[%s] Running report with parameter: %s", rc.name, cleaned_param)
         try:
             band = self.load_bands(rc, cleaned_param, template)
@@ -103,9 +103,9 @@ class ReportEngine:
     def register_execute(
         cls,
         rc: ReportConfig,
-        start: datetime.datetime,
+        start: dt.datetime,
         params: dict[str, Any],
-        end: datetime.datetime | None = None,
+        end: dt.datetime | None = None,
         successfully: bool = False,
         canceled: bool = False,
         error_text: str | None = None,
@@ -119,7 +119,7 @@ class ReportEngine:
 
         svc = get_service()
 
-        end = end or datetime.datetime.now()
+        end = end or dt.datetime.now()
         svc.register_metrics(
             "reportexecutionhistory",
             [
@@ -154,9 +154,9 @@ class ReportEngine:
         fmt.render_document()
 
     @staticmethod
-    def align_date(date: datetime.datetime) -> datetime.datetime:
+    def align_date(date: dt.datetime) -> dt.datetime:
         """Align end date parameter"""
-        return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
+        return (date + dt.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
     def clean_param(self, rc: ReportConfig, params: dict[str, Any]):
         """Clean and validata input params"""
@@ -326,7 +326,7 @@ class ReportEngine:
         output_name = template.get_document_name()
         out_type = run_params.output_type or template.output_type
         ctx = root_band.get_data()
-        ctx["now"] = datetime.datetime.now().replace(microsecond=0)
+        ctx["now"] = dt.datetime.now().replace(microsecond=0)
         extension = out_type.value
         if out_type == OutputType.CSV_ZIP:
             extension = OutputType.CSV.value

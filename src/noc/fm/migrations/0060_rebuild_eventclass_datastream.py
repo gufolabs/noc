@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.migration.base import BaseMigration
@@ -16,7 +16,7 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         self.mongo_db["noc.schedules.scheduler"].insert_one(
             {
-                "ts": datetime.datetime.now().replace(microsecond=0),
+                "ts": dt.datetime.now().replace(microsecond=0),
                 "s": "R",
                 "runs": 0,
                 "f": 0,
@@ -30,7 +30,7 @@ class Migration(BaseMigration):
         )
         self.mongo_db["noc.schedules.scheduler"].insert_one(
             {
-                "ts": datetime.datetime.now().replace(microsecond=0),
+                "ts": dt.datetime.now().replace(microsecond=0),
                 "s": "R",
                 "runs": 0,
                 "f": 0,

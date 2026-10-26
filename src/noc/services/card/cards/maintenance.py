@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import jinja2
@@ -34,7 +34,7 @@ class MaintenanceCard(BaseCard):
                     s[k] = d[k]
 
         stpl = self.object.type.card_template or self.default_title_template
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if self.object.start > now:
             status = "before"
         elif self.object.is_completed:

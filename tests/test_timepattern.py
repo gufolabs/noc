@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import pytest
@@ -33,7 +33,7 @@ from noc.core.timepattern import TimePattern, TimePatternList
     ],
 )
 def test_timepattern(config, year: int, month: int, day: int, expected: bool) -> None:
-    assert TimePattern(config).match(datetime.datetime(year=year, month=month, day=day)) == expected
+    assert TimePattern(config).match(dt.datetime(year=year, month=month, day=day)) == expected
 
 
 @pytest.mark.parametrize("config", ["zho"])
@@ -55,4 +55,4 @@ def test_timepattern_list(
 ) -> None:
     tp = TimePatternList(config)
     for i in tp.patterns:
-        assert TimePattern(i).match(datetime.datetime(year=year, month=month, day=day)) == expected
+        assert TimePattern(i).match(dt.datetime(year=year, month=month, day=day)) == expected

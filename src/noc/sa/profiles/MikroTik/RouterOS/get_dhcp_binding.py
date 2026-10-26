@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -19,7 +19,7 @@ class Script(BaseScript):
 
     def execute(self):
         r = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for n, f, v in self.cli_detail("/ip dhcp-server lease print detail without-paging"):
             r.append(
                 {

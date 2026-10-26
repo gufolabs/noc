@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -109,7 +109,7 @@ class Command(BaseCommand):
 
     def handle_expire(self, dry_run=False, model=None, *args, **kwargs):
         model = model or self.EXPIRE_MODELS
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for m in model:
             c = get_model(m)
             if not c:

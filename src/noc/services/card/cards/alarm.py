@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 
 # Third-party modules
@@ -80,8 +80,8 @@ class AlarmCard(BaseCard):
             m_id = list(self.object.managed_object.affected_maintenances)
             mainteinance = Maintenance.objects.filter(
                 is_completed=False,
-                start__lte=datetime.datetime.now(),
-                stop__gte=datetime.datetime.now(),
+                start__lte=dt.datetime.now(),
+                stop__gte=dt.datetime.now(),
                 id__in=m_id,
             ).order_by("start")
         else:

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from urllib.parse import urlparse
 
 # Third-party modules
@@ -127,7 +127,7 @@ class TGBotTTSystem(BaseTTSystem):
 
     def get_updates(
         self,
-        last_run: datetime.datetime | None = None,
+        last_run: dt.datetime | None = None,
         last_update: str | None = None,
         tt_ids: list[str] | None = None,
     ) -> list[TTChange]:
@@ -145,7 +145,7 @@ class TGBotTTSystem(BaseTTSystem):
                 r.append(
                     TTChange(
                         document_id=str(message["reply_to_message"]["message_id"]),
-                        timestamp=datetime.datetime.fromtimestamp(message["date"]),
+                        timestamp=dt.datetime.fromtimestamp(message["date"]),
                         user="telegram",
                         action=TTAction.LOG,
                         change_id=str(u["update_id"]),

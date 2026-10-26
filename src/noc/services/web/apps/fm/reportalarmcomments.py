@@ -7,7 +7,7 @@
 
 # Python modules
 import csv
-import datetime
+import datetime as dt
 from io import BytesIO, TextIOWrapper
 from tempfile import TemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile
@@ -87,7 +87,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
                     return ""
                 if isinstance(v, str):
                     return smart_text(v)
-                if isinstance(v, datetime.datetime):
+                if isinstance(v, dt.datetime):
                     return v.strftime("%Y-%m-%d %H:%M:%S")
                 if not isinstance(v, str):
                     return smart_text(v)
@@ -139,9 +139,9 @@ class ReportAlarmCommentsApplication(ExtApplication):
             cmap = list(range(len(cols)))
 
         r = [translate_row(header_row, cmap)]
-        fd = datetime.datetime.strptime(to_date, "%d.%m.%Y") + datetime.timedelta(days=1)
+        fd = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
         match = {
-            "timestamp": {"$gte": datetime.datetime.strptime(from_date, "%d.%m.%Y"), "$lte": fd}
+            "timestamp": {"$gte": dt.datetime.strptime(from_date, "%d.%m.%Y"), "$lte": fd}
         }
         mos = ManagedObject.objects.filter()
 

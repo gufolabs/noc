@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import uuid
 
 # NOC modules
@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         sc = self.mongo_db["noc.synccaches"]
         for zone_id, sync_id in self.db.execute(
             """SELECT z.id, s.sync

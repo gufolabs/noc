@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from dataclasses import dataclass
 
@@ -145,13 +145,13 @@ class CheckStatus(BaseModel):
     skipped: bool = False
     error: str | None = None
     remote_system: str | None = None
-    expired: datetime.datetime | None = None
+    expired: dt.datetime | None = None
     source: InputSource = InputSource.UNKNOWN
 
-    def is_expired(self, ts: datetime.datetime | None = None) -> bool:
+    def is_expired(self, ts: dt.datetime | None = None) -> bool:
         if not self.expired:
             return False
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         return self.expired <= ts
 
     @classmethod
@@ -162,7 +162,7 @@ class CheckStatus(BaseModel):
     ) -> "CheckStatus":
         expired = None
         if cr.ttl:
-            expired = datetime.datetime.now().replace(microsecond=0) + datetime.timedelta(
+            expired = dt.datetime.now().replace(microsecond=0) + dt.timedelta(
                 seconds=cr.ttl
             )
         return CheckStatus(
@@ -188,10 +188,10 @@ class DiagnosticValue(BaseModel):
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
     reason: str | None = None
-    changed: datetime.datetime | None = None
+    changed: dt.datetime | None = None
 
     @property
-    def expired(self) -> datetime.datetime | None:
+    def expired(self) -> dt.datetime | None:
         """Return expired check timestamp"""
         r = [c.expired for c in self.checks or [] if c.expired]
         if r:

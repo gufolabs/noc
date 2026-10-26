@@ -7,7 +7,7 @@
 
 # Python import datetime
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.db import models
@@ -37,7 +37,7 @@ class Migration(BaseMigration):
                 ("password", models.CharField(max_length=128)),
                 ("is_active", models.BooleanField(default=True)),
                 ("is_superuser", models.BooleanField(default=False)),
-                ("date_joined", models.DateTimeField(default=datetime.datetime.now)),
+                ("date_joined", models.DateTimeField(default=dt.datetime.now)),
             ),
         )
         # Group model

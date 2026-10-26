@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -39,9 +39,9 @@ class Script(BaseScript):
         if d.get("mfg_date"):
             try:
                 if len(d["mfg_date"]) == 8:
-                    d["mfg_date"] = datetime.datetime.strptime(d["mfg_date"], "%m/%d/%y")
+                    d["mfg_date"] = dt.datetime.strptime(d["mfg_date"], "%m/%d/%y")
                 else:
-                    d["mfg_date"] = datetime.datetime.strptime(d["mfg_date"], "%m/%d/%Y")
+                    d["mfg_date"] = dt.datetime.strptime(d["mfg_date"], "%m/%d/%Y")
                 d["mfg_date"] = d["mfg_date"].strftime("%Y-%m-%d")
             except ValueError:
                 self.logger.warning("Unknown format manufacture date field")
@@ -75,10 +75,10 @@ class Script(BaseScript):
             try:
                 if len(d["mfg_date"]) == 8:
                     # 08/19/14
-                    d["mfg_date"] = datetime.datetime.strptime(d["mfg_date"], "%m/%d/%y")
+                    d["mfg_date"] = dt.datetime.strptime(d["mfg_date"], "%m/%d/%y")
                 else:
                     # 08/19/2014
-                    d["mfg_date"] = datetime.datetime.strptime(d["mfg_date"], "%m/%d/%Y")
+                    d["mfg_date"] = dt.datetime.strptime(d["mfg_date"], "%m/%d/%Y")
                 d["mfg_date"] = d["mfg_date"].strftime("%Y-%m-%d")
             except ValueError:
                 self.logger.warning("Unknown format manufacture date field")

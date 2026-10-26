@@ -8,7 +8,7 @@
 
 # Python modules
 import codecs
-import datetime
+import datetime as dt
 import hashlib
 import logging
 import re
@@ -137,7 +137,7 @@ class GeocoderCache(Document):
                 sq["lon"], sq["lat"] = r.lon, r.lat
             sq["exact"] = r.exact
         if not r or not r.exact:
-            sq["expires"] = datetime.datetime.now() + datetime.timedelta(seconds=cls.NEGATIVE_TTL)
+            sq["expires"] = dt.datetime.now() + dt.timedelta(seconds=cls.NEGATIVE_TTL)
         # Write to database
         c.update_one({"_id": hash}, {"$set": sq}, upsert=True)
         return r

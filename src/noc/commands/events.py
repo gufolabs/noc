@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import re
 import time
 from html.entities import name2codepoint
@@ -29,8 +29,8 @@ from noc.sa.models.profile import GENERIC_PROFILE
 from noc.services.classifier.eventconfig import EventConfig
 from noc.services.classifier.ruleset import RuleSet
 
-DEFAULT_CLEAN = datetime.timedelta(weeks=4)
-CLEAN_WINDOW = datetime.timedelta(weeks=1)
+DEFAULT_CLEAN = dt.timedelta(weeks=4)
+CLEAN_WINDOW = dt.timedelta(weeks=1)
 
 name2codepoint["#39"] = 39
 rx_cp = re.compile(f"&({'|'.join(name2codepoint)});")

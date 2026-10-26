@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from typing import Any
 
@@ -107,7 +107,7 @@ class AlarmApplication(ExtApplication):
         "profile": get_advanced_field,
     }
 
-    DEFAULT_ARCH_ALARM = datetime.timedelta(seconds=config.web.api_arch_alarm_limit)
+    DEFAULT_ARCH_ALARM = dt.timedelta(seconds=config.web.api_arch_alarm_limit)
 
     def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
@@ -211,9 +211,7 @@ class AlarmApplication(ExtApplication):
             if status == "C":
                 ca = int(q["cleared_after"])
                 if ca:
-                    q["clear_timestamp__gte"] = datetime.datetime.now() - datetime.timedelta(
-                        seconds=ca
-                    )
+                    q["clear_timestamp__gte"] = dt.datetime.now() - dt.timedelta(seconds=ca)
             q.pop("cleared_after")
         if "wait_tt" in q:
             if status == "A":
@@ -243,7 +241,7 @@ class AlarmApplication(ExtApplication):
                 and "escalation_tt__contains" not in q
                 and "managed_object" not in q
             ):
-                q["clear_timestamp__gte"] = datetime.datetime.now() - self.DEFAULT_ARCH_ALARM
+                q["clear_timestamp__gte"] = dt.datetime.now() - self.DEFAULT_ARCH_ALARM
         return q
 
     def advanced_filter(self, field, params):
@@ -797,8 +795,8 @@ class AlarmApplication(ExtApplication):
         sound = None
         volume = 0
         if delta:
-            dt = datetime.timedelta(seconds=int(delta))
-            t0 = datetime.datetime.now() - dt
+            delta_s = dt.timedelta(seconds=int(delta))
+            t0 = dt.datetime.now() - delta_s
             r = list(
                 ActiveAlarm._get_collection().aggregate(
                     [

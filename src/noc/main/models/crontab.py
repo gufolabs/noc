@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import crontab
@@ -91,7 +91,7 @@ class CronTab(Document):
         delta = entry.next(default_utc=False)
         if not delta:
             return None
-        return datetime.datetime.now() + datetime.timedelta(seconds=delta)
+        return dt.datetime.now() + dt.timedelta(seconds=delta)
 
     def get_handler(self):
         """

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # NOC modules
@@ -42,7 +42,7 @@ def wait_tt(alarm_id):
         # Close alarm
         alarm.clear_alarm(
             f"Closed by TT {alarm.escalation_tt}",
-            ts=ti.get("close_ts", datetime.datetime.now()),
+            ts=ti.get("close_ts", dt.datetime.now()),
             force=True,
         )
     else:

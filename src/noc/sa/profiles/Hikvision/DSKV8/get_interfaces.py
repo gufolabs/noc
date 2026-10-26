@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.ip import IPv4, IPv6
@@ -34,7 +34,7 @@ class Script(BaseScript):
             ns["ns"] = ns["hikvision"]
         else:
             ns["ns"] = ns["isapi"]
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         # mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
         for o in root:
             o_id = o.find("{{{}}}id".format(ns["ns"])).text
@@ -50,7 +50,7 @@ class Script(BaseScript):
             try:
                 v = self.http.get(f"/ISAPI/System/Network/interfaces/{o_id}/Link", use_basic=True)
                 v = v.replace("\n", "")
-                v = ElementTree.fromstring(v)
+                v = ET.fromstring(v)
                 mac = v.find("{{{}}}MACAddress".format(ns["ns"])).text
             except HTTPError:
                 mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]

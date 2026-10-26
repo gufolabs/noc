@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -65,8 +65,8 @@ def get_alarm_mock() -> "ActiveAlarm":
     )
     alarm = ActiveAlarm(
         id=ObjectId(),
-        timestamp=datetime.datetime.now(),
-        last_update=datetime.datetime.now(),
+        timestamp=dt.datetime.now(),
+        last_update=dt.datetime.now(),
         managed_object=MOMock(),
         alarm_class=alarm_class,
         severity=1000,

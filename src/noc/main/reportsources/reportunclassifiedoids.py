@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import orjson
@@ -54,7 +54,7 @@ class ReportUnclassifiedTrapOIDs(ReportSource):
         ch = connection()
         data = []
         ec = EventClass.objects.filter(name="Unknown | SNMP Trap").first()
-        now = datetime.datetime.now() - datetime.timedelta(days=7)
+        now = dt.datetime.now() - dt.timedelta(days=7)
         r = ch.execute(SQL, args=[ec.bi_id, now.date().isoformat()], return_raw=True)
         for row in r.splitlines():
             row = orjson.loads(row)

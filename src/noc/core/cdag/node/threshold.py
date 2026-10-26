@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections.abc import Iterable
 from typing import Any, Literal
@@ -26,7 +26,7 @@ class ThresholdState(BaseModel):
     active: bool = False
     reference: str | None = None
     pool: str | None = None
-    last_raise: datetime.datetime = None
+    last_raise: dt.datetime = None
 
 
 class ThresholdNodeState(BaseModel):
@@ -148,7 +148,7 @@ class ThresholdNode(BaseCDAGNode):
         """
 
         logger.info("[%s] Raise Alarm", th)
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         msg = {
             "$op": "raise",
             "reference": self.get_reference(th, target),
@@ -191,7 +191,7 @@ class ThresholdNode(BaseCDAGNode):
         msg = {
             "$op": "clear",
             "reference": self.state.thresholds[threshold].reference,
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": dt.datetime.now().isoformat(),
             "message": message,
         }
         self.publish_message(msg, self.state.thresholds[threshold].pool)
@@ -213,7 +213,7 @@ class ThresholdNode(BaseCDAGNode):
     def set_state(self, threshold: str, reference: str | None = None, pool: str | None = None):
         if threshold in self.state.thresholds:
             self.state.thresholds[threshold].active = True
-            self.state.thresholds[threshold].last_raise = datetime.datetime.now().replace(
+            self.state.thresholds[threshold].last_raise = dt.datetime.now().replace(
                 microsecond=0
             )
             self.state.thresholds[threshold].reference = reference
@@ -221,7 +221,7 @@ class ThresholdNode(BaseCDAGNode):
         else:
             self.state.thresholds[threshold] = ThresholdState(
                 active=True,
-                last_raise=datetime.datetime.now(),
+                last_raise=dt.datetime.now(),
                 reference=reference,
                 pool=pool,
             )

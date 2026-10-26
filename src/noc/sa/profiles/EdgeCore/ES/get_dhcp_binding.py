@@ -7,7 +7,7 @@
 
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 import time
 
@@ -29,7 +29,7 @@ class Script(BaseScript):
             data = self.cli("show ip dhcp snooping binding")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         basetimestamp = int(time.mktime(now.timetuple()))
         r = []
         for l in data.split("\n"):
@@ -39,7 +39,7 @@ class Script(BaseScript):
                 if d == "infinite":
                     expire = d
                 else:
-                    expire = datetime.datetime.fromtimestamp(basetimestamp + int(d))
+                    expire = dt.datetime.fromtimestamp(basetimestamp + int(d))
                 r.append(
                     {
                         "ip": match.group("ip"),

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import random
 
 # Third-party modules
@@ -24,7 +24,7 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         db = self.mongo_db
         lc = [n for n in db.list_collection_names() if n.startswith("noc.schedules.discovery.")]
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for discovery in lc:
             coll = db[discovery]
             _, _pool = discovery.rsplit(".", 1)

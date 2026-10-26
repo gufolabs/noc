@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.http import HttpRequest
@@ -75,7 +75,7 @@ class FilePlugin(InvPlugin):
                 name=f.name,
                 size=f.size,
                 mime_type=MIMEType.get_mime_type(f.name),
-                ts=datetime.datetime.now(),
+                ts=dt.datetime.now(),
                 description=request.POST.get(dn),
             )
             of.file.put(f.read())

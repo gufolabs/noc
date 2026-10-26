@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -51,7 +51,7 @@ def log_cmd(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_COMMAND),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_COMMAND),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_COMMAND,
@@ -65,7 +65,7 @@ def log_login(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_LOGIN),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_LOGIN),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_LOGIN,
@@ -79,7 +79,7 @@ def log_logout(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_LOGIN),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_LOGIN),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_LOGOUT,
@@ -93,7 +93,7 @@ def log_reboot(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_REBOOT),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_REBOOT),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_REBOOT,
@@ -107,7 +107,7 @@ def log_started(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_REBOOT),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_REBOOT),
         object=managed_object.id,
         user=None,
         op=Interaction.OP_STARTED,
@@ -121,7 +121,7 @@ def log_halted(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_REBOOT),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_REBOOT),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_HALTED,
@@ -135,7 +135,7 @@ def log_config_changed(event, managed_object):
     """
     InteractionLog(
         timestamp=event.timestamp,
-        expire=event.timestamp + datetime.timedelta(seconds=TTL_CONFIG),
+        expire=event.timestamp + dt.timedelta(seconds=TTL_CONFIG),
         object=managed_object.id,
         user=event.vars.get("user"),
         op=Interaction.OP_CONFIG_CHANGED,

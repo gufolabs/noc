@@ -7,7 +7,7 @@
 
 # Python modules
 import concurrent.futures
-import datetime
+import datetime as dt
 import logging
 import time
 from pickle import HIGHEST_PROTOCOL, dumps, loads
@@ -33,7 +33,7 @@ class SlowOp(Document):
     STATUS_COMPLETE = "C"
     STATUS_FAILED = "F"
     SLOW_TIMEOUT = 5.0
-    SLOW_TTL = datetime.timedelta(days=1)
+    SLOW_TTL = dt.timedelta(days=1)
 
     ts = DateTimeField()
     expire = DateTimeField()
@@ -71,7 +71,7 @@ class SlowOp(Document):
         except concurrent.futures.TimeoutError:
             logger.debug("Continuing slow operation %s (app=%s, user=%s)", fn, app_id, user)
             # Save slow op
-            now = datetime.datetime.now()
+            now = dt.datetime.now()
             so = SlowOp(
                 ts=now,
                 expire=now + cls.SLOW_TTL,

@@ -7,7 +7,7 @@
 
 # Python modules
 from copy import copy
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -35,7 +35,7 @@ class Script(BaseScript):
     def execute(self):
         r = []
         v = self.http.get("/ISAPI/Security/users", json=False, cached=True, use_basic=True)
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         v = self.xml_2_dict(root)
         users = v["UserList"]["User"]
 

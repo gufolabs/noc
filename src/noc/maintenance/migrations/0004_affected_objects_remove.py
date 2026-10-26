@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import orjson
@@ -47,7 +47,7 @@ class Migration(BaseMigration):
             if not mai:
                 # Not Find Maintenance
                 continue
-            if mai["stop"] < datetime.datetime.now():
+            if mai["stop"] < dt.datetime.now():
                 continue
             # Insert to ManagedObject
             self.db.execute(

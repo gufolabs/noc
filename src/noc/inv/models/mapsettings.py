@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from typing import Any
 
@@ -86,7 +86,7 @@ class MapSettings(Document):
     gen_params = DictField()
     # Change time
     last_change_id = DateTimeField()
-    current_change_id = DateTimeField(default=datetime.datetime.now())
+    current_change_id = DateTimeField(default=dt.datetime.now())
     # Changing user
     user = StringField()
     # Paper size
@@ -171,7 +171,7 @@ class MapSettings(Document):
             width:
             height:
         """
-        self.current_change_id = datetime.datetime.now().replace(microsecond=0)
+        self.current_change_id = dt.datetime.now().replace(microsecond=0)
         if user:
             self.user = user
         # Update nodes

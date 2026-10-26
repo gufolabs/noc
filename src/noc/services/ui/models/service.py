@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from pydantic import BaseModel
@@ -18,9 +18,9 @@ from .utils import Reference
 class DefaultServiceItem(BaseModel):
     id: str
     profile: Reference
-    ts: datetime.datetime
+    ts: dt.datetime
     state: Reference
-    state_changed: datetime.datetime
+    state_changed: dt.datetime
     labels: list[LabelItem]
     effective_labels: list[LabelItem]
     static_service_groups: list[Reference]
@@ -35,7 +35,7 @@ class DefaultServiceItem(BaseModel):
     order_id: str | None = None
     stage_id: str | None = None
     stage_name: str | None = None
-    stage_start: datetime.datetime | None = None
+    stage_start: dt.datetime | None = None
     account_id: str | None = None
     address: str | None = None
     managed_object: Reference | None = None
@@ -70,6 +70,6 @@ class PreviewServiceItem(BaseModel):
     profile: Reference
     parent: Reference | None = None
     state: Reference
-    state_changed: datetime.datetime | None = None
+    state_changed: dt.datetime | None = None
     description: str
     address: str

@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from collections import defaultdict
@@ -67,9 +67,9 @@ id_lock = Lock()
 logger = logging.getLogger(__name__)
 
 MODBUS_FORMAT = ["i16_be", "u16_be"]
-for dt in ["i32", "u32", "f32"]:
+for data_type in ["i32", "u32", "f32"]:
     for df in ["be", "le", "bs", "ls"]:
-        MODBUS_FORMAT.append(f"{dt}_{df}")
+        MODBUS_FORMAT.append(f"{data_type}_{df}")
 
 NS = 1_000_000_000
 
@@ -124,7 +124,7 @@ class Sensor(Document):
     # Timestamp expired
     expired = DateTimeField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     protocol = EnumField(SensorProtocol, default=SensorProtocol.OTHER)
     modbus_register = IntField()
     modbus_format = StringField(choices=MODBUS_FORMAT)
@@ -132,7 +132,7 @@ class Sensor(Document):
     ipmi_id = StringField()
     # Watchers
     watchers = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
+    watcher_wait_ts: dt.datetime | None = DateTimeField(required=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = PlainReferenceField(RemoteSystem)
@@ -325,13 +325,13 @@ class Sensor(Document):
     def set_value(
         self,
         value: float,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         units: MeasurementUnits | None = None,
         bulk: defaultdict[int, list[dict[str, Any]]] | None = None,
         shards: int | None = None,
     ):
         """Set Sensor value to PM Database"""
-        ts = ts or datetime.datetime.now().replace(microsecond=0)
+        ts = ts or dt.datetime.now().replace(microsecond=0)
         units = units or self.munits
         shards = shards or 1
         shard_key = self.bi_id
@@ -451,7 +451,7 @@ class Sensor(Document):
         return self.profile.wiping_ttl
 
     @classmethod
-    def get_min_wait_ts(cls) -> datetime.datetime | None:
+    def get_min_wait_ts(cls) -> dt.datetime | None:
         """"""
         return (
             Sensor.objects()

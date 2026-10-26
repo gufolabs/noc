@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import difflib
 import logging
 import operator
@@ -331,11 +331,11 @@ class Credentials:
 
 
 class MaintenanceItem(BaseModel):
-    start: datetime.datetime
+    start: dt.datetime
     # Time pattern when maintenance is active
     # None - active all the time
     time_pattern: int | None = None
-    stop: datetime.datetime | None = None
+    stop: dt.datetime | None = None
 
 
 MaintenanceItems = RootModel[dict[str, MaintenanceItem]]
@@ -361,7 +361,7 @@ DiagnosticItems = RootModel[dict[str, DiagnosticValue]]
 def default(obj):
     if isinstance(obj, BaseModel):
         return obj.model_dump()
-    if isinstance(obj, datetime.datetime):
+    if isinstance(obj, dt.datetime):
         return obj.replace(microsecond=0).isoformat(sep=" ")
     raise TypeError
 
@@ -1677,7 +1677,7 @@ class ManagedObject(NOCModel):
             return
         # Render path
         path = self.object_profile.config_mirror_template.render_subject(
-            object=self, datetime=datetime
+            object=self, datetime=dt
         ).strip()
         if not path:
             logger.debug("[%s] Empty mirror path. Skipping", self.name)
@@ -2554,12 +2554,12 @@ class ManagedObject(NOCModel):
         """
         return any(self.get_active_maintenances())
 
-    def get_active_maintenances(self, timestamp: datetime.datetime | None = None) -> list[str]:
+    def get_active_maintenances(self, timestamp: dt.datetime | None = None) -> list[str]:
         """
         Getting device active maintenances ids
         :return:
         """
-        timestamp = timestamp or datetime.datetime.now()
+        timestamp = timestamp or dt.datetime.now()
         r = []
         for mai_id, d in self.affected_maintenances.items():
             if d.get("time_pattern"):
@@ -2567,9 +2567,9 @@ class ManagedObject(NOCModel):
                 tp = TimePattern.get_by_id(d["time_pattern"])
                 if tp and not tp.match(timestamp):
                     continue
-            if datetime.datetime.fromisoformat(d["start"]) > timestamp:
+            if dt.datetime.fromisoformat(d["start"]) > timestamp:
                 continue
-            if d.get("stop") and datetime.datetime.fromisoformat(d["stop"]) < timestamp:
+            if d.get("stop") and dt.datetime.fromisoformat(d["stop"]) < timestamp:
                 # Already complete
                 continue
             r.append(mai_id)
@@ -2975,7 +2975,7 @@ class ManagedObject(NOCModel):
             scheduler.submit(jcls=WATCHER_JCLS, key="sa.ManagedObject", ts=get_next_ts(wait_ts))
 
     @classmethod
-    def get_min_wait_ts(cls) -> datetime.datetime | None:
+    def get_min_wait_ts(cls) -> dt.datetime | None:
         """"""
         r = ManagedObjectWatchers.objects.aggregate(Min("after"))
         return r.get("after__min")
@@ -3241,7 +3241,7 @@ class ManagedObject(NOCModel):
         cls,
         maintenance_id: str,
         objects: list[ManagedObject],
-        start: datetime.datetime,
+        start: dt.datetime,
         affected_topology: bool = False,
         remote_system: RemoteSystem | None = None,
         remote_ids: list[str] | None = None,
@@ -3330,7 +3330,7 @@ class ManagedObjectStatus(NOCModel):
         return f"{self.managed_object}: {self.status}"
 
     @classmethod
-    def get_last_status(cls, o) -> tuple[bool | None, datetime.datetime | None]:
+    def get_last_status(cls, o) -> tuple[bool | None, dt.datetime | None]:
         """
         Returns last registered status and update time
         :param o: Managed Object
@@ -3367,7 +3367,7 @@ class ManagedObjectStatus(NOCModel):
     @classmethod
     def update_status_bulk(
         cls,
-        statuses: list[tuple[int, bool, datetime.datetime | None]],
+        statuses: list[tuple[int, bool, dt.datetime | None]],
         update_jobs: bool = False,
     ):
         """
@@ -3387,9 +3387,9 @@ class ManagedObjectStatus(NOCModel):
         from noc.core.scheduler.scheduler import Scheduler
         from noc.core.service.loader import get_service
 
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         bulk = {}
-        outages: list[tuple[int, datetime.datetime, datetime.datetime]] = []
+        outages: list[tuple[int, dt.datetime, dt.datetime]] = []
         # Getting current status
         # Getting current status
         cs = {}

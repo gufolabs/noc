@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import Document
@@ -38,7 +38,7 @@ class L3Link(Document):
     # Name of discovery method or "manual"
     discovery_method = StringField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     # Timestamp of last confirmation
     last_seen = DateTimeField()
     # L3 path cost

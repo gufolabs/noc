@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from collections.abc import Callable
 from functools import partial
@@ -128,7 +128,7 @@ class ActionType(enum.Enum):
         obj.diagnostic.refresh_diagnostics(**kwargs)
 
     @staticmethod
-    def set_oper_status(obj, status, ts: datetime.datetime | None = None, **kwargs):
+    def set_oper_status(obj, status, ts: dt.datetime | None = None, **kwargs):
         """"""
         obj.set_oper_status(status=status, timestamp=ts)
 
@@ -137,7 +137,7 @@ class ActionType(enum.Enum):
         obj,
         diagnostic: str,
         status: bool,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         reason: str | None = None,
         **kwargs,
     ):
@@ -205,7 +205,7 @@ class ActionType(enum.Enum):
     def interaction_audit(
         obj,
         audit: int,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         command: str | None = None,
         user: str | None = None,
         **kwargs,
@@ -221,7 +221,7 @@ class ActionType(enum.Enum):
             text = interaction.config.text
         InteractionLog(
             timestamp=ts,
-            expire=ts + datetime.timedelta(seconds=interaction.config.ttl),
+            expire=ts + dt.timedelta(seconds=interaction.config.ttl),
             object=obj.id,
             user=user,
             op=interaction,

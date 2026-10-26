@@ -7,7 +7,7 @@
 
 # Python modules
 from copy import copy
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -38,7 +38,7 @@ class Script(BaseScript):
         c = "DeviceInfo\n"
         v = self.http.get("/ISAPI/System/deviceInfo", cached=True, use_basic=True)
         v = v.replace("\n", "")
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         v = self.xml_2_dict(root)
         for key in sorted(v["DeviceInfo"]):
             value = v["DeviceInfo"][key]
@@ -47,7 +47,7 @@ class Script(BaseScript):
             c += "    {} {}\n".format(key, value[0]["_text"] if value[0] else "")
         v = self.http.get("/ISAPI/Streaming/channels", use_basic=True)
         v = v.replace("\n", "")
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         v = self.xml_2_dict(root)
         channels = v["StreamingChannelList"]["StreamingChannel"]
         for o in channels:
@@ -70,7 +70,7 @@ class Script(BaseScript):
                     c += "    {} {}\n".format(key, value[0]["_text"])
         v = self.http.get("/ISAPI/Image/channels/1", use_basic=True)
         v = v.replace("\n", "")
-        root = ElementTree.fromstring(v)
+        root = ET.fromstring(v)
         v = self.xml_2_dict(root)
         o = v["ImageChannel"]
 
@@ -98,7 +98,7 @@ class Script(BaseScript):
                 continue
         try:
             v = self.http.get("/ISAPI/System/Video/inputs/channels", use_basic=True)
-            root = ElementTree.fromstring(v)
+            root = ET.fromstring(v)
             v = self.xml_2_dict(root)
             for vic in v["VideoInputChannelList"]["VideoInputChannel"]:
                 # vid = vic["id"][0]["_text"]
@@ -106,7 +106,7 @@ class Script(BaseScript):
                 vname = vic["name"][0]["_text"]
             v = self.http.get("/ISAPI/System/Video/inputs/channels/1/overlays", use_basic=True)
             v = v.replace("\n", "")
-            root = ElementTree.fromstring(v)
+            root = ET.fromstring(v)
             v = self.xml_2_dict(root)
             c += "Overlay\n"
             for o in v["VideoOverlay"]:
@@ -142,7 +142,7 @@ class Script(BaseScript):
         try:
             v = self.http.get("/ISAPI/System/time", use_basic=True)
             v = v.replace("\n", "")
-            root = ElementTree.fromstring(v)
+            root = ET.fromstring(v)
             v = self.xml_2_dict(root)
             c += "Time\n"
             for key, value in sorted(v["Time"].items()):
@@ -154,7 +154,7 @@ class Script(BaseScript):
         try:
             v = self.http.get("/ISAPI/System/time/ntpServers", use_basic=True)
             v = v.replace("\n", "")
-            root = ElementTree.fromstring(v)
+            root = ET.fromstring(v)
             v = self.xml_2_dict(root)
             ntp_servers = v["NTPServerList"]["NTPServer"]
             for i, o in enumerate(ntp_servers):
@@ -168,7 +168,7 @@ class Script(BaseScript):
             pass
         v = self.http.get("/ISAPI/Security/users", json=False, cached=True, use_basic=True)
         try:
-            root = ElementTree.fromstring(v)
+            root = ET.fromstring(v)
             v = self.xml_2_dict(root)
             c += "Users\n"
             for u in v["UserList"]["User"]:
@@ -177,6 +177,6 @@ class Script(BaseScript):
                     if key == "_text" or isinstance(value, str):
                         continue
                     c += "    {} {}\n".format(key, value[0]["_text"])
-        except ElementTree.ParseError:
+        except ET.ParseError:
             pass
         return c

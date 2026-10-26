@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from threading import Lock
@@ -172,14 +172,14 @@ class TTSystem(Document):
         """
         if not self.failed_till:
             return False
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         return now <= self.failed_till
 
     def register_failure(self):
         cooldown = self.failure_cooldown
         if not cooldown:
             return
-        d = datetime.datetime.now() + datetime.timedelta(seconds=cooldown)
+        d = dt.datetime.now() + dt.timedelta(seconds=cooldown)
         logger.info("[%s] Setting failure status till %s", self.name, d)
         self._get_collection().update_one({"_id": self.id}, {"$set": {"failed_till": d}})
 

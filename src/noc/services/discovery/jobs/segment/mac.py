@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 import logging
 
@@ -48,7 +48,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
             return
         # Fetch latest MAC tables snapshots from ClickHouse
         # @todo: Apply vlan restrictions
-        t0 = datetime.datetime.now() - datetime.timedelta(seconds=self.MAC_WINDOW)
+        t0 = dt.datetime.now() - dt.timedelta(seconds=self.MAC_WINDOW)
         t0 = t0.replace(microsecond=0)
         SQL = """SELECT managed_object, mac, argMax(ts, ts), argMax(interface, ts)
         FROM mac

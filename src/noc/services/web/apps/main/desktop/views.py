@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import os
 
 # Third-party modules
@@ -307,7 +307,7 @@ class DesktopApplication(ExtApplication):
 
     @api.get("^about/", access=True)
     def api_about(self, request: HttpRequest):
-        current_year = datetime.date.today().year
+        current_year = dt.date.today().year
         data = {
             "brand": config.brand,
             "version": version.version,

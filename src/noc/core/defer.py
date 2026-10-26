@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import warnings
 from threading import Lock
@@ -63,9 +63,9 @@ def call_later(
         # @todo: Really pass to defer?
     scheduler = Scheduler(scheduler, pool=pool)
     data = kwargs or {}
-    ts = datetime.datetime.now()
+    ts = dt.datetime.now()
     if delay:
-        ts += datetime.timedelta(seconds=delay)
+        ts += dt.timedelta(seconds=delay)
     # Process sharding
     if shard is None:
         shard = dict_hash_int_args(job_class=job_class, name=name, pool=pool, **kwargs)

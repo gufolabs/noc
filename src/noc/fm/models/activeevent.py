@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 from threading import Lock
 from typing import Any
@@ -122,7 +122,7 @@ class ActiveEvent(Document):
         log = [
             *self.log,
             EventLog(
-                timestamp=datetime.datetime.now(), from_status="N", to_status="F", message=message
+                timestamp=dt.datetime.now(), from_status="N", to_status="F", message=message
             ),
         ]
         e = FailedEvent(
@@ -143,7 +143,7 @@ class ActiveEvent(Document):
         log = [
             *self.log,
             EventLog(
-                timestamp=datetime.datetime.now(), from_status="A", to_status="S", message=message
+                timestamp=dt.datetime.now(), from_status="A", to_status="S", message=message
             ),
         ]
         e = ArchivedEvent(
@@ -181,7 +181,7 @@ class ActiveEvent(Document):
     def log_message(self, message):
         self.log.append(
             EventLog(
-                timestamp=datetime.datetime.now(),
+                timestamp=dt.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
@@ -190,7 +190,7 @@ class ActiveEvent(Document):
         self.save()
 
     @classmethod
-    def log_suppression(cls, event_id: ObjectId, timestamp: datetime.datetime):
+    def log_suppression(cls, event_id: ObjectId, timestamp: dt.datetime):
         """
         Increase repeat count and update timestamp, if required
         """
@@ -276,10 +276,10 @@ class ActiveEvent(Document):
         """
         return cls(
             id=d["id"],
-            timestamp=datetime.datetime.strptime(d["timestamp"], "%Y-%m-%d %H:%M:%S"),
+            timestamp=dt.datetime.strptime(d["timestamp"], "%Y-%m-%d %H:%M:%S"),
             managed_object=ManagedObject.get_by_bi_id(d["managed_object_bi_id"]),
             event_class=EventClass.get_by_bi_id(d["event_class_bi_id"]),
-            start_timestamp=datetime.datetime.strptime(d["start_timestamp"], "%Y-%m-%d %H:%M:%S"),
+            start_timestamp=dt.datetime.strptime(d["start_timestamp"], "%Y-%m-%d %H:%M:%S"),
             source=d["source"],
             raw_vars=d["raw_vars"],
             resolved_vars=d["resolved_vars"],

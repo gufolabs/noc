@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections.abc import Iterator
 
@@ -88,9 +88,9 @@ class MigrationRunner:
             if migration.is_applied(applied):
                 continue  # Already applied, skip
             self.logger.info("Applying %s", name)
-            ts = datetime.datetime.now()
+            ts = dt.datetime.now()
             migration.migrate()
-            delta = datetime.datetime.now() - ts
+            delta = dt.datetime.now() - ts
             applied.add(name)
             self.hist_coll.insert_one({"name": name, "ts": ts, "duration": delta.total_seconds()})
         self.logger.info("Done")

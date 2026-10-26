@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -37,14 +37,14 @@ class RemoteId(BaseModel):
 
 class ServiceStatusRequest(BaseModel):
     services: list[ServiceId | RemoteId]
-    changed_at: datetime.datetime | None = None
+    changed_at: dt.datetime | None = None
     suppress_not_found: bool = False
 
 
 class Status(BaseModel):
     id: str
     status: ServiceStatus
-    change: datetime.datetime
+    change: dt.datetime
     in_maintenance: bool = False
     parent: str | None = None
     remote_mappings: dict[str, str] | None = None

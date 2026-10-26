@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import itertools
 import operator
 from collections import defaultdict
@@ -61,7 +61,7 @@ class ObjectCard(BaseCard):
         children = []
         for o in ManagedObject.objects.filter(container=self.object.id):
             # Alarms
-            now = datetime.datetime.now()
+            now = dt.datetime.now()
             # Get object status and uptime
             alarms = list(ActiveAlarm.objects.filter(managed_object=o.id))
             current_state = None
@@ -156,7 +156,7 @@ class ObjectCard(BaseCard):
 
     @staticmethod
     def get_metrics(mos):
-        from_date = datetime.datetime.now() - datetime.timedelta(days=1)
+        from_date = dt.datetime.now() - dt.timedelta(days=1)
         from_date = from_date.replace(microsecond=0)
         # mo = self.object
         bi_map = {str(mo.bi_id): mo for mo in mos}

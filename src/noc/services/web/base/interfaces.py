@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.sa.interfaces.base import StringParameter
@@ -18,11 +18,11 @@ class DateTimeParameter(StringParameter):
     def clean(self, value):
         if value is None and self.default is not None:
             return self.default
-        if isinstance(value, datetime.datetime):
+        if isinstance(value, dt.datetime):
             return value
         for f in self.formats:
             try:
-                return datetime.datetime.strptime(value, f)
+                return dt.datetime.strptime(value, f)
             except ValueError:
                 pass
         self.raise_error("Invalid DateTime")

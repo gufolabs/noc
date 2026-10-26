@@ -7,7 +7,7 @@
 
 
 # Python modules
-import datetime
+import datetime as dt
 import re
 
 # NOC modules
@@ -33,7 +33,7 @@ class Script(BaseScript):
                 if d == "infinite":
                     expire = d
                 else:
-                    expire = datetime.datetime.strptime(d, "%b %d %Y %I:%M %p")
+                    expire = dt.datetime.strptime(d, "%b %d %Y %I:%M %p")
                 r.append(
                     {
                         "ip": match.group("ip"),

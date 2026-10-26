@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 import random
@@ -166,7 +166,7 @@ class ResourcePool(Document):
     def allocate(
         self,
         limit: int = 1,
-        allocated_till: datetime.datetime | None = None,
+        allocated_till: dt.datetime | None = None,
         allow_free: bool = False,
         reservation_id: str | None = None,
         user: str | None = None,

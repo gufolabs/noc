@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from collections.abc import Iterator
@@ -89,7 +89,7 @@ class User(NOCModel):
             "Designates that this user has all permissions without explicitly assigning them."
         ),
     )
-    date_joined = models.DateTimeField(default=datetime.datetime.now)
+    date_joined = models.DateTimeField(default=dt.datetime.now)
     groups = models.ManyToManyField(
         Group,
         blank=True,
@@ -209,7 +209,7 @@ class User(NOCModel):
             self.password_history = hist[: config.login.password_history]
         # Update password ttl
         if config.login.password_ttl > 0:
-            self.change_at = datetime.datetime.now() + datetime.timedelta(
+            self.change_at = dt.datetime.now() + dt.timedelta(
                 seconds=config.login.password_ttl
             )
         else:
@@ -247,7 +247,7 @@ class User(NOCModel):
             True: If user can log in.
             False: User cannot login.
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if self.valid_from and self.valid_from > now:
             return False
         return not (self.valid_until and self.valid_until < now)
@@ -275,7 +275,7 @@ class User(NOCModel):
             return False
         # Time based
         if self.change_at:
-            now = datetime.datetime.now()
+            now = dt.datetime.now()
             if self.change_at < now:
                 return True
         return must_change(self.password)
@@ -301,7 +301,7 @@ class User(NOCModel):
 
         :returns: List of (method, params)
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         return [c for c in self.contacts if c.time_pattern.match(now)]
 
     def get_full_name(self):
@@ -318,7 +318,7 @@ class User(NOCModel):
         :param ts: Login timestamp
         :return:
         """
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         self.last_login = ts
         self.save(update_fields=["last_login"])
 
@@ -348,7 +348,7 @@ class User(NOCModel):
         return "".join(r)
 
     @classmethod
-    def register_failed_login(cls, username: str) -> datetime.datetime | None:
+    def register_failed_login(cls, username: str) -> dt.datetime | None:
         """
         Register failed login attempt.
 
@@ -366,8 +366,8 @@ class User(NOCModel):
         if not user:
             return None  # Strange situation
         # Calculate retention time
-        now = datetime.datetime.now()
-        expire = now - datetime.timedelta(seconds=config.login.failed_attempts_window)
+        now = dt.datetime.now()
+        expire = now - dt.timedelta(seconds=config.login.failed_attempts_window)
         # Add to history
         failed_history = user.failed_history or []
         # Filter out expired items
@@ -378,7 +378,7 @@ class User(NOCModel):
         # Check thresholds
         if len(failed_history) >= config.login.max_failed_attempts:
             # Block
-            user.blocked_till = now + datetime.timedelta(
+            user.blocked_till = now + dt.timedelta(
                 seconds=config.login.failed_attempts_cooldown
             )
             logger.warning(

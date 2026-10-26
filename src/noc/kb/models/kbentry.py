@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import difflib
 
 # Third-party modules
@@ -84,7 +84,7 @@ class KBEntry(NOCModel):
                 kb_entry=self,
                 user=user,
                 diff=diff,
-                timestamp=datetime.datetime.now().replace(microsecond=0),
+                timestamp=dt.datetime.now().replace(microsecond=0),
             ).save()
 
     @property

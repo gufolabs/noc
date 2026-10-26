@@ -7,7 +7,7 @@
 
 # Python Modules
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import AsyncIterable, Iterable
 
 # Third-party modules
@@ -37,8 +37,8 @@ class RebootsDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

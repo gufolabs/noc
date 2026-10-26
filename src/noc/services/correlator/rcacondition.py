@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from bson import ObjectId
@@ -50,7 +50,7 @@ class RCACondition:
         return self.name
 
     def get_context(self, alarm):
-        return {"alarm": alarm, "datetime": datetime, "ObjectId": ObjectId}
+        return {"alarm": alarm, "datetime": dt, "ObjectId": ObjectId}
 
     def check_condition(self, alarm):
         return eval(self.condition, {}, self.get_context(alarm))

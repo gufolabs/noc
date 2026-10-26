@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from threading import Lock
@@ -129,7 +129,7 @@ class AlarmEscalation(Document):
         if alarm.alarm_class.is_ephemeral:
             # Ephemeral alarm has not escalated
             return
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for esc in cls.get_class_escalations(alarm.alarm_class):
             for e_item in esc.escalations:
                 # Check administrative domain
@@ -145,7 +145,7 @@ class AlarmEscalation(Document):
                 if e_item.resource_group and alarm.managed_object not in e_item.resource_group:
                     continue
                 logger.debug("[%s] Watch for %s after %s seconds", alarm.id, esc.name, e_item.delay)
-                et = alarm.timestamp + datetime.timedelta(seconds=e_item.delay)
+                et = alarm.timestamp + dt.timedelta(seconds=e_item.delay)
                 if timestamp_policy == "c":
                     # If escalation with current timestamp - shift consequence after main escalation
                     delay = max((et - now).total_seconds(), 120) + 120 if et > now else 120

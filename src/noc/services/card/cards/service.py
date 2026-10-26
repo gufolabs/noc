@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 
 # NOC modules
@@ -23,7 +23,7 @@ class ServiceCard(BaseCard):
     model = Service
 
     def get_data(self):
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         # Build service tree
         services = self.get_services()
         # Get interface and managed object
@@ -52,7 +52,7 @@ class ServiceCard(BaseCard):
             for m in Maintenance.objects.filter(
                 id__in=m_id,
                 is_completed=False,
-                start__lte=now + datetime.timedelta(hours=1),
+                start__lte=now + dt.timedelta(hours=1),
             ):
                 maintenance.append(
                     {

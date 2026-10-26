@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from collections.abc import Iterable
@@ -121,7 +121,7 @@ class CPE(Document):
     # Timestamp expired
     expired = DateTimeField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     # Probe type
     type = StringField(choices=[(x, x) for x in CPE_TYPES], default="other")
     # IPv4 CPE address, used for ManagedObject sync
@@ -391,7 +391,7 @@ class CPE(Document):
     def set_oper_status(
         self,
         status: bool,
-        change_ts: datetime.datetime | None = None,
+        change_ts: dt.datetime | None = None,
         bulk: list[Any] | None = None,
     ):
         """
@@ -400,7 +400,7 @@ class CPE(Document):
         :param change_ts: Status change Timestamp
         :return:
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         change_ts = change_ts or now
         if self.oper_status != status and (
             not self.oper_status_change or self.oper_status_change < now

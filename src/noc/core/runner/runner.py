@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 from collections.abc import Iterator
 from logging import getLogger
 from time import perf_counter_ns
@@ -123,7 +123,7 @@ class Runner:
             "locks": req.locks,
             "depends_on": [j.id for j in job.iter_depends_on()],
             "environment": req.environment or None,
-            "created_at": datetime.datetime.now(),
+            "created_at": dt.datetime.now(),
             "resource_path": req.resource_path,
             "entity": req.entity,
         }
@@ -281,9 +281,9 @@ class Runner:
             # Store
             r: dict[str, Any] = {"status": job.status.value}
             if job.is_running:
-                r["started_at"] = datetime.datetime.now()
+                r["started_at"] = dt.datetime.now()
             elif job.is_complete:
-                r["completed_at"] = datetime.datetime.now()
+                r["completed_at"] = dt.datetime.now()
                 if job.parent:
                     parent = job.parent
                     if parent.environment.is_dirty:

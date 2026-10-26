@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import functools
 import os
 import time
@@ -191,7 +191,7 @@ class PingService(BaseService):
 
     def set_status(self, ps: ProbeSetting, s: bool, ts=None, message: str | None = None):
         """Send status message to correlator service"""
-        ts = ts or datetime.datetime.now().replace(microsecond=0).isoformat()
+        ts = ts or dt.datetime.now().replace(microsecond=0).isoformat()
         # Set object status
         self.publish(
             orjson.dumps(
@@ -208,7 +208,7 @@ class PingService(BaseService):
 
     def clear_alarm(self, ps: ProbeSetting, ts=None, reason: str | None = None):
         """Send Clear Alarm message to Correlator"""
-        ts = ts or datetime.datetime.now().replace(microsecond=0).isoformat()
+        ts = ts or dt.datetime.now().replace(microsecond=0).isoformat()
         # Clear alarm
         self.publish(
             orjson.dumps(
@@ -309,8 +309,8 @@ class PingService(BaseService):
         metrics["ping_check_total"] += 1
         disable_message = False  # Disable sent Event message
         if ps.time_cond:
-            dt = datetime.datetime.fromtimestamp(t0)
-            if not eval(ps.time_cond, {"T": dt}):
+            ts = dt.datetime.fromtimestamp(t0)
+            if not eval(ps.time_cond, {"T": ts}):
                 if ps.expr_policy == "D":
                     metrics["ping_check_skips"] += 1
                     return
@@ -357,7 +357,7 @@ class PingService(BaseService):
             ps.status = s
         if ps and not self.is_throttled and not disable_message and s != ps.sent_status:
             # Build dispose message
-            ts = datetime.datetime.fromtimestamp(t0).isoformat()
+            ts = dt.datetime.fromtimestamp(t0).isoformat()
             if ps.is_fatal:
                 # Set status
                 self.set_status(ps, bool(s), ts=ts)

@@ -7,7 +7,7 @@
 
 # Python modules
 import csv
-import datetime
+import datetime as dt
 import functools
 import logging
 import os
@@ -507,7 +507,7 @@ class BaseLoader:
         v: dict[str, Any],
         inc_changes: dict[str, dict[str, list]] | None = None,
         state: str | None = None,
-        state_changed: datetime.datetime | None = None,
+        state_changed: dt.datetime | None = None,
         mappings: dict[Any, str] | None = None,
     ):
         """
@@ -662,7 +662,7 @@ class BaseLoader:
         """
         self.pending_deletes.append((item.id, item))
 
-    def change_workflow(self, o, state: str, changed_date: datetime.datetime | None = None):
+    def change_workflow(self, o, state: str, changed_date: dt.datetime | None = None):
         self.logger.debug("Change Workflow state: %s -> %s", o.state, state)
         if not o:
             return

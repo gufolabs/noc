@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import threading
 from collections import defaultdict
 
@@ -32,7 +32,7 @@ RETRY_DELTA = 60 / max(config.escalator.tt_escalation_limit - 1, 1)
 ESCALATION_CHECk_CLOSE_DELAY = 30
 
 retry_lock = threading.Lock()
-next_retry = datetime.datetime.now()
+next_retry = dt.datetime.now()
 
 
 class CheckTTJob(Job):
@@ -82,7 +82,7 @@ class CheckTTJob(Job):
     def handler(self, **kwargs):
         tts = self.object.get_system()
         waited_ids = self.get_waited_tt_ids()
-        last_ts: datetime.datetime = datetime.datetime.now()
+        last_ts: dt.datetime = dt.datetime.now()
         last_id: str | None = self.object.last_update_id
         changes = defaultdict(list)
         for c in tts.get_updates(
@@ -166,7 +166,7 @@ class CheckTTJob(Job):
             job: Escalation Doc
             changes:
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for user, change in changes:
             cfg = self.get_action_config(change, user)
             if cfg:
@@ -177,7 +177,7 @@ class CheckTTJob(Job):
     def schedule_next(self, status):
         # Get next run
         if status == self.E_EXCEPTION:
-            ts = datetime.datetime.now() + datetime.timedelta(seconds=60)
+            ts = dt.datetime.now() + dt.timedelta(seconds=60)
             self.scheduler.postpone_job(self.attrs[self.ATTR_ID])
         else:
             interval = self.object.check_updates_interval or config.escalator.wait_tt_check_interval

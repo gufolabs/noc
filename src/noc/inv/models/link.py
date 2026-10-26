@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -75,7 +75,7 @@ class Link(Document):
     # Name of discovery method or "manual"
     discovery_method = StringField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     # Timestamp of last confirmation
     last_seen = DateTimeField()
     # L2 path cost
@@ -174,7 +174,7 @@ class Link(Document):
         """
         Touch last_seen
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         op = {"last_seen": now}
         self.last_seen = now
         if method:

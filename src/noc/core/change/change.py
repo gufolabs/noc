@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 import uuid
 from collections import defaultdict
@@ -34,7 +34,7 @@ def audit_change(changes: list[dict[str, Any]]) -> None:
     for item in changes:
         item = ChangeItem(**item)
         o = get_object(item.model_id, item.item_id)
-        dt_object = datetime.datetime.fromtimestamp(item.ts)
+        dt_object = dt.datetime.fromtimestamp(item.ts)
         user = item.user if hasattr(item, "user") else None
         data.append(
             orjson.dumps(

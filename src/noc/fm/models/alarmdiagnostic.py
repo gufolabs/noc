@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import zlib
 
 # Third-party modules
@@ -27,18 +27,18 @@ class AlarmDiagnostic(Document):
     }
 
     alarm = ObjectIdField()
-    timestamp = DateTimeField(default=datetime.datetime.now)
+    timestamp = DateTimeField(default=dt.datetime.now)
     expires = DateTimeField()
     state = StringField(choices=[("R", "On Raise"), ("C", "On Clear"), ("P", "On Periodic")])
     data = BinaryField()
 
-    TTL = datetime.timedelta(days=14)
+    TTL = dt.timedelta(days=14)
 
     @classmethod
     def save_diagnostics(cls, alarm, diag, state):
         data = zlib.compress(b"\n\n".join(smart_bytes(d) for d in diag), 9)
         if state == "C":
-            expires = datetime.datetime.now() + cls.TTL
+            expires = dt.datetime.now() + cls.TTL
         else:
             expires = None
         AlarmDiagnostic(alarm=alarm.id, state=state, data=bson.Binary(data), expires=expires).save()
@@ -63,5 +63,5 @@ class AlarmDiagnostic(Document):
         if hasattr(alarm, "id"):
             alarm = alarm.id
         AlarmDiagnostic._get_collection().update_many(
-            {"alarm": alarm}, {"$set": {"expires": datetime.datetime.now() + cls.TTL}}
+            {"alarm": alarm}, {"$set": {"expires": dt.datetime.now() + cls.TTL}}
         )

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any
 
 # Third-party modules
@@ -30,7 +30,7 @@ class StateItem(BaseModel):
     id: str
     name: str
     workflow: WorkflowItem
-    allocated_till: datetime.datetime | None
+    allocated_till: dt.datetime | None
 
 
 class ProjectItem(BaseModel):

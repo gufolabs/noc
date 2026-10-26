@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -57,7 +57,7 @@ class Migration(BaseMigration):
                 msettings.insert(
                     {
                         "segment": str(sid),
-                        "changed": datetime.datetime.now(),
+                        "changed": dt.datetime.now(),
                         "user": "migration",
                         "nodes": nodes,
                         "links": [],

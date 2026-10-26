@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 
 # Third-party modules
@@ -66,20 +66,20 @@ class ReportTTSystemStatApplication(SimpleReport):
     ):
         # Date Time Block
         if from_date:
-            from_date = datetime.datetime.strptime(from_date, self.ISO_DATE_MASK)
+            from_date = dt.datetime.strptime(from_date, self.ISO_DATE_MASK)
         elif interval:
-            from_date = datetime.datetime.now() - datetime.timedelta(days=int(interval))
+            from_date = dt.datetime.now() - dt.timedelta(days=int(interval))
         else:
-            from_date = datetime.datetime.now() - datetime.timedelta(days=1)
+            from_date = dt.datetime.now() - dt.timedelta(days=1)
 
         if to_date:
-            to_date = datetime.datetime.strptime(to_date, self.ISO_DATE_MASK)
+            to_date = dt.datetime.strptime(to_date, self.ISO_DATE_MASK)
             if from_date == to_date:
-                to_date = from_date + datetime.timedelta(days=1)
+                to_date = from_date + dt.timedelta(days=1)
         elif interval:
-            to_date = from_date + datetime.timedelta(days=int(interval))
+            to_date = from_date + dt.timedelta(days=int(interval))
         else:
-            to_date = from_date + datetime.timedelta(days=1)
+            to_date = from_date + dt.timedelta(days=1)
         columns = [
             _("Server"),
             _("Service"),

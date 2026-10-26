@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import random
 
 # Third-party modules
@@ -68,12 +68,12 @@ class RCALock:
             return
         t = config.correlator.rca_lock_initial_timeout
         max_timeout = config.correlator.rca_lock_max_timeout
-        exp_delta = datetime.timedelta(seconds=config.correlator.rca_lock_expiry)
+        exp_delta = dt.timedelta(seconds=config.correlator.rca_lock_expiry)
         coll = self.get_collection()
         while True:
             try:
                 r = coll.insert_one(
-                    {"items": self.items, "expires": datetime.datetime.utcnow() + exp_delta}
+                    {"items": self.items, "expires": dt.datetime.utcnow() + exp_delta}
                 )
                 self.lock_id = r.inserted_id
                 metrics["rca_lock_acquired"] += 1

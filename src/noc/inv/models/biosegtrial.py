@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import Document
@@ -102,7 +102,7 @@ class BioSegTrial(Document):
         :return:
         """
         if config.biosegmentation.processed_trials_ttl:
-            self.expires = datetime.datetime.now() + datetime.timedelta(
+            self.expires = dt.datetime.now() + dt.timedelta(
                 seconds=config.biosegmentation.processed_trials_ttl
             )
 

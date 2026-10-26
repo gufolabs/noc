@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import pytest
@@ -36,7 +36,7 @@ class MyModel(Model):
     [
         (
             {
-                "date": datetime.date(year=2019, month=9, day=26),
+                "date": dt.date(year=2019, month=9, day=26),
                 "text": "Test",
                 "pairs": [{"index": 1, "text": "First"}, {"index": "2", "text": "Second"}],
             },
@@ -56,7 +56,7 @@ def test_to_json(data, expected) -> None:
 @pytest.mark.xfail
 def test_mymodel_to_python() -> None:
     # Check TSV conversion
-    today = datetime.date.today()
+    today = dt.date.today()
     ch_data = MyModel.to_python([today.isoformat(), "Test", "1:'First',2:'Second'"])
     valid_data = {
         "date": today,

@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.config import config
@@ -47,7 +47,7 @@ class SchedulerService(BaseService):
         scheduler = Scheduler(cls.name)
         if config.topo.enable_scheduler_task:
             scheduler.submit(
-                jcls=cls.TOPOLOGY_JOB, ts=datetime.datetime.now() + datetime.timedelta(seconds=60)
+                jcls=cls.TOPOLOGY_JOB, ts=dt.datetime.now() + dt.timedelta(seconds=60)
             )
             return
         scheduler.remove_job(jcls=cls.TOPOLOGY_JOB)
@@ -58,7 +58,7 @@ class SchedulerService(BaseService):
         scheduler = Scheduler(cls.name)
         scheduler.submit(
             jcls=cls.SYNC_PURGATORIUM_JOB,
-            ts=datetime.datetime.now() + datetime.timedelta(seconds=60),
+            ts=dt.datetime.now() + dt.timedelta(seconds=60),
         )
 
     @classmethod
@@ -67,7 +67,7 @@ class SchedulerService(BaseService):
         scheduler = Scheduler(cls.name)
         scheduler.submit(
             jcls=cls.NETWORK_INSTANCE_DISCOVERY_JOB,
-            ts=datetime.datetime.now() + datetime.timedelta(seconds=60),
+            ts=dt.datetime.now() + dt.timedelta(seconds=60),
         )
 
     @classmethod
@@ -87,5 +87,5 @@ class SchedulerService(BaseService):
         scheduler = Scheduler(cls.name)
         scheduler.submit(
             jcls=cls.UPDATE_CHECKERS_JOB,
-            ts=datetime.datetime.now() + datetime.timedelta(seconds=120),
+            ts=dt.datetime.now() + dt.timedelta(seconds=120),
         )

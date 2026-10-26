@@ -7,7 +7,7 @@
 
 # Python modules
 import csv
-import datetime
+import datetime as dt
 from collections import defaultdict, namedtuple
 from io import BytesIO, TextIOWrapper
 from tempfile import TemporaryFile
@@ -239,13 +239,13 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
 
         # Date Time Block
         if not from_date:
-            from_date = datetime.datetime.now() - datetime.timedelta(days=1)
+            from_date = dt.datetime.now() - dt.timedelta(days=1)
         else:
-            from_date = datetime.datetime.strptime(from_date, "%d.%m.%Y")
+            from_date = dt.datetime.strptime(from_date, "%d.%m.%Y")
         if not to_date or from_date == to_date:
-            to_date = from_date + datetime.timedelta(days=1)
+            to_date = from_date + dt.timedelta(days=1)
         else:
-            to_date = datetime.datetime.strptime(to_date, "%d.%m.%Y") + datetime.timedelta(days=1)
+            to_date = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
         diff = to_date - from_date
 
         # Load managed objects
@@ -431,7 +431,7 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                 if ss:
                     r.append(translate_row(row2, cmap))
 
-        filename = f"metrics_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
+        filename = f"metrics_detail_report_{dt.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

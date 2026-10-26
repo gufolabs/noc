@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any
 
 # Third-party modules
@@ -14,7 +14,7 @@ from pydantic import BaseModel, RootModel, model_validator
 
 
 class SendRequestItem(BaseModel):
-    ts: datetime.datetime
+    ts: dt.datetime
     labels: list[str] | None
     service: int
     collector: str

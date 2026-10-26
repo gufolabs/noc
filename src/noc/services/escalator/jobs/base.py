@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import threading
 
 # NOC modules
@@ -19,7 +19,7 @@ RETRY_DELTA = 60 / max(config.escalator.tt_escalation_limit - 1, 1)
 ESCALATION_CHECk_CLOSE_DELAY = 30
 
 retry_lock = threading.Lock()
-next_retry = datetime.datetime.now()
+next_retry = dt.datetime.now()
 
 
 class SequenceJob(Job):
@@ -30,7 +30,7 @@ class SequenceJob(Job):
     def schedule_next(self, status):
         # Get next run
         if status == self.E_EXCEPTION:
-            ts = datetime.datetime.now() + datetime.timedelta(seconds=60)
+            ts = dt.datetime.now() + dt.timedelta(seconds=60)
             self.scheduler.postpone_job(self.attrs[self.ATTR_ID])
         else:
             ts = self.object.get_next()
@@ -55,7 +55,7 @@ class SequenceJob(Job):
         """
         self.error = msg
 
-    def get_next_error_timestamp(self, delay: int | None = None) -> datetime.datetime:
+    def get_next_error_timestamp(self, delay: int | None = None) -> dt.datetime:
         """
         Reschedule current job and stop escalation
 
@@ -65,11 +65,11 @@ class SequenceJob(Job):
         global RETRY_DELTA, RETRY_TIMEOUT, next_retry, retry_lock
 
         self.logger.info("Retry after %ss: %s", delay, self.error)
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         if delay:
-            return now + datetime.timedelta(seconds=delay)
-        retry = now + datetime.timedelta(seconds=RETRY_TIMEOUT)
+            return now + dt.timedelta(seconds=delay)
+        retry = now + dt.timedelta(seconds=RETRY_TIMEOUT)
         with retry_lock:
             retry = max(retry, next_retry)
-            next_retry = retry + datetime.timedelta(seconds=RETRY_DELTA)
+            next_retry = retry + dt.timedelta(seconds=RETRY_DELTA)
         return retry

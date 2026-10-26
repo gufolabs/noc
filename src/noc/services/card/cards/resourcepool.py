@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from fastapi import Header, HTTPException, Request, status
@@ -31,7 +31,7 @@ class AllocatorRequest(BaseModel):
     limit: int = 1
     keys: list[ResourceKey]
     tt_id: str | None = None
-    allocated_till: datetime.date | None = None
+    allocated_till: dt.date | None = None
     action: str = "allocate"
     confirm: bool = False
 

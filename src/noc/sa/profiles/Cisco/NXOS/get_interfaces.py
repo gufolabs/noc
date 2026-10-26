@@ -9,7 +9,7 @@
 import re
 from collections import defaultdict
 from io import StringIO
-from xml.etree import ElementTree
+from xml.etree import ElementTree as ET
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -98,7 +98,7 @@ class Script(BaseScript):
             c = self.cli("show interface snmp-ifindex | xml | no-more")
             nsmap = {}
             r = {}
-            for event, elem in ElementTree.iterparse(StringIO(c), events=("end", "start-ns")):
+            for event, elem in ET.iterparse(StringIO(c), events=("end", "start-ns")):
                 if event == "start-ns":
                     ns, url = elem
                     nsmap[ns] = url
@@ -205,7 +205,7 @@ class Script(BaseScript):
             nsmap = {}
             results = []
             row = []
-            for event, elem in ElementTree.iterparse(StringIO(v), events=("end", "start-ns")):
+            for event, elem in ET.iterparse(StringIO(v), events=("end", "start-ns")):
                 if event == "start-ns":
                     ns, url = elem
                     nsmap[ns] = url

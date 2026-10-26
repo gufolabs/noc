@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -38,8 +38,8 @@ class Reboot(Document):
     def register(
         cls,
         managed_object: ManagedObject,
-        ts: datetime.datetime | None = None,
-        last: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
+        last: dt.datetime | None = None,
     ):
         """
         Register reboot.
@@ -49,7 +49,7 @@ class Reboot(Document):
         :param last: Last seen time
         """
         oid = managed_object.id
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         last = last or ts
         logger.debug("[%s] Register reboot at %s", managed_object.name, ts)
         cls._get_collection().insert_one({"object": oid, "ts": ts, "last": last})

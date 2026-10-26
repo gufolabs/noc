@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 from time import perf_counter
 
@@ -45,7 +45,7 @@ class RemoteSystemJob(PeriodicJob):
         send_message(
             {
                 "remote_system": {"name": self.object.name, "id": str(self.object.id)},
-                "ts": datetime.datetime.now().replace(microsecond=0).isoformat(),
+                "ts": dt.datetime.now().replace(microsecond=0).isoformat(),
                 "duration": duration,
                 "run_next": "",
                 "details": details,
@@ -148,7 +148,7 @@ class ETLMetricSyncJob(RemoteSystemJob):
         if not extractor:
             self.logger.info("Metrics extractor not supported for RemoteSystem. Skipping..")
             return
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         profiles = SensorProfile.objects.filter(enable_collect=True).scalar("id")
         if not profiles:
             RemoteSystem.objects.filter(id=self.object.id).update(

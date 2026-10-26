@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import time
 
@@ -29,8 +29,8 @@ def th_interval(mo, event):
 
 def grafana_date():
     # Date Time Block
-    from_date = datetime.datetime.now() - datetime.timedelta(hours=6)
-    date_limit = datetime.datetime.now() - datetime.timedelta(days=6)
+    from_date = dt.datetime.now() - dt.timedelta(hours=6)
+    date_limit = dt.datetime.now() - dt.timedelta(days=6)
     # interval = (to_date - from_date).days
     ts_from_date = time.mktime(from_date.timetuple())
     ts_date_limit = time.mktime(date_limit.timetuple())

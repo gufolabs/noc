@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from pydantic import BaseModel
@@ -33,11 +33,11 @@ class AlarmClassItem(BaseModel):
 
 
 class EscalationItem(BaseModel):
-    timestamp: datetime.datetime
+    timestamp: dt.datetime
     tt_id: str
     tt_system: str
     error: str | None
-    close_timestamp: datetime.datetime | None
+    close_timestamp: dt.datetime | None
     close_error: str | None
 
 
@@ -64,7 +64,7 @@ class SubscriberSummaryItem(BaseModel):
 class AlarmDataStreamItem(BaseModel):
     id: str
     change_id: str
-    timestamp: datetime.datetime
+    timestamp: dt.datetime
     severity: int
     reopens: int
     labels: list[str] | None

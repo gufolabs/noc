@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import socket
 import struct
 from collections import defaultdict
@@ -81,7 +81,7 @@ class PurgatoriumData:
     """
 
     source: str
-    ts: datetime.datetime | None = None
+    ts: dt.datetime | None = None
     remote_system: str | None = None
     labels: list[str] | None = None
     service_groups: list[ObjectId] | None = None
@@ -183,7 +183,7 @@ def register(
 
     """
     # address = IP.prefix(address)
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     svc = get_service()
     data = {
         "date": now.date().isoformat(),
@@ -233,10 +233,10 @@ def register(
 
 
 def iter_discovered_object(
-    from_ts: datetime.datetime | None = None,
+    from_ts: dt.datetime | None = None,
     ip_address: str | None = None,
 ) -> Iterable[
-    tuple[int, str, list[str], list[PurgatoriumData], list[ProtocolCheckResult], datetime.datetime]
+    tuple[int, str, list[str], list[PurgatoriumData], list[ProtocolCheckResult], dt.datetime]
 ]:
     """Iter Discovered Data by query"""
     # NOC modules
@@ -246,7 +246,7 @@ def iter_discovered_object(
 
     ch = connection()
     if not from_ts:
-        from_ts = datetime.datetime.now() - datetime.timedelta(
+        from_ts = dt.datetime.now() - dt.timedelta(
             seconds=config.network_scan.purgatorium_ttl
         )
     r = ch.execute(PURGATORIUM_SQL, return_raw=True, args=[from_ts.date().isoformat()])
@@ -286,7 +286,7 @@ def iter_discovered_object(
         p_data = tuple(
             PurgatoriumData(
                 source=source,
-                ts=datetime.datetime.fromisoformat(d.pop("ts")),
+                ts=dt.datetime.fromisoformat(d.pop("ts")),
                 remote_system=rs,
                 data=d,
                 caps=caps.get((source, rs)) or None,
@@ -299,7 +299,7 @@ def iter_discovered_object(
             for (source, rs), d in data.items()
         )
         checks = tuple(ProtocolCheckResult(**orjson.loads(c)) for c in row["all_checks"])
-        last_ts = datetime.datetime.fromisoformat(row["last_ts"]).replace(microsecond=0)
+        last_ts = dt.datetime.fromisoformat(row["last_ts"]).replace(microsecond=0)
         if ip_address and ip_address != row["address"]:
             continue
         yield row["pool"], row["address"], list(set(row["sources"])), p_data, checks, last_ts

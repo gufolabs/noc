@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.migration.base import BaseMigration
@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self) -> None:
         db = self.mongo_db
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         db.noc.maintenance.update_many(
             {"is_completed": False, "auto_confirm": {"$exists": False}, "stop": {"$lte": now}},
             {"$set": {"is_completed": True}},

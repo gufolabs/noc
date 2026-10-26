@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import enum
 from collections.abc import Iterable
 
@@ -472,8 +472,8 @@ class VCenterFMEventExtractor(VCenterExtractor):
         #     filter_spec = vim.event.EventFilterSpec(entity=by_entity, eventTypeId=ids)
         # Time Filter
         time_filter = vim.event.EventFilterSpec.ByTime()
-        time_filter.endTime = datetime.datetime.now()
-        time_filter.beginTime = datetime.datetime.now() - datetime.timedelta(hours=24)
+        time_filter.endTime = dt.datetime.now()
+        time_filter.beginTime = dt.datetime.now() - dt.timedelta(hours=24)
         # Event IDS
         ids = self.get_event_type_filter()
         event_filter = vim.event.EventFilterSpec(time=time_filter, eventTypeId=ids)

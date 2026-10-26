@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import operator
 import os
 import re
@@ -55,7 +55,7 @@ class Command(BaseCommand):
                     continue
                 path = os.path.join(self.PREFIX, fn)
                 ts = os.stat(path)[stat.ST_MTIME]
-                t = datetime.datetime.fromtimestamp(ts)
+                t = dt.datetime.fromtimestamp(ts)
                 with open(path) as f:
                     data = orjson.loads(f.read())
                 service = data["process"]

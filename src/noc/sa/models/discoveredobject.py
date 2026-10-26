@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import itertools
 import logging
 from collections.abc import Iterable
@@ -180,7 +180,7 @@ class DiscoveredObject(Document):
     # Timestamp expired
     expired = DateTimeField()
     # Timestamp of first discovery
-    first_discovered = DateTimeField(default=datetime.datetime.now)
+    first_discovered = DateTimeField(default=dt.datetime.now)
     # checks
     checks = EmbeddedDocumentListField(CheckStatus)
     data = EmbeddedDocumentListField(DataItem)
@@ -269,10 +269,10 @@ class DiscoveredObject(Document):
         logger.debug("[%s] Set dirty %s", self.address, msg or "")
         self.is_dirty |= True
 
-    def is_ttl(self, ts: datetime.datetime | None = None) -> bool:
+    def is_ttl(self, ts: dt.datetime | None = None) -> bool:
         if not self.rule.expired_ttl:
             return False
-        now = datetime.date.today()
+        now = dt.date.today()
         ts = ts or self.last_seen
         return (now - ts.date()).seconds > self.rule.expired_ttl
 
@@ -337,7 +337,7 @@ class DiscoveredObject(Document):
         checks: list[ProtocolCheckResult] | None = None,
         labels: list[str] | None = None,
         rule: str | None = None,
-        update_ts: datetime.datetime | None = None,
+        update_ts: dt.datetime | None = None,
         dry_run: bool = False,
     ) -> DiscoveredObject:
         """Check Discovered Object Exists"""
@@ -460,7 +460,7 @@ class DiscoveredObject(Document):
         data: list[PurgatoriumData],
         checks: list[ProtocolCheckResult] | None = None,
         labels: list[str] | None = None,
-        update_ts: datetime.datetime | None = None,
+        update_ts: dt.datetime | None = None,
         rule=None,
         dry_run: bool = False,
     ) -> DiscoveredObject | None:  # MergeRule
@@ -908,7 +908,7 @@ class DiscoveredObject(Document):
         client_groups: list[ObjectId] | None = None,
         capabilities: dict[str, str] | None = None,
         remote_system: str | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
         event: str = False,
         is_delete: bool = False,
     ):
@@ -929,7 +929,7 @@ class DiscoveredObject(Document):
         """
         if source == ETL_SOURCE and not remote_system:
             raise AttributeError("remote_system param is required for 'etl' source")
-        last_update = ts or datetime.datetime.now().replace(microsecond=0)
+        last_update = ts or dt.datetime.now().replace(microsecond=0)
         for d in self.data:
             if d.source != source:
                 continue
@@ -1147,12 +1147,12 @@ class DiscoveredObject(Document):
         return o
 
     @classmethod
-    def get_start_sync_ts(cls) -> datetime.datetime:
+    def get_start_sync_ts(cls) -> dt.datetime:
         """Getting Timestamp from started sync"""
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         ls = DiscoveredObject.objects.filter().order_by("-last_seen").scalar("last_seen").first()
         ls = ls or now
-        return ls - datetime.timedelta(seconds=config.network_scan.purgatorium_ttl)
+        return ls - dt.timedelta(seconds=config.network_scan.purgatorium_ttl)
 
 
 def sync_object():
@@ -1210,7 +1210,7 @@ def sync_purgatorium(
             logger.debug("Updated: %s", r)
             updated += 1
     # Expired objects
-    for o in DiscoveredObject.objects.filter(expired__gt=datetime.datetime.now()):
+    for o in DiscoveredObject.objects.filter(expired__gt=dt.datetime.now()):
         o.fire_event("expired")
     logger.debug("Removing expired objects")
     # Removed objects

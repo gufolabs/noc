@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from pydantic import field_validator
@@ -27,7 +27,7 @@ class IPPrefix(BaseModel):
     # Workflow state
     state: str | None = None
     # Last state change
-    state_changed: datetime.datetime | None = None
+    state_changed: dt.datetime | None = None
     # Workflow event
     event: str | None = None
     description: str | None = None

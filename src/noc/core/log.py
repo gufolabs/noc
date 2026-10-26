@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # NOC modules
@@ -42,7 +42,7 @@ class PrefixLoggerAdapter:
             if args:
                 msg = msg % args
             msg = "{} {} {}\n".format(
-                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
+                dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
                 self.prefix,
                 msg,
             )

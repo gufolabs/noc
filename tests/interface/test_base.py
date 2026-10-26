@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import pytest
@@ -368,7 +368,7 @@ def test_dictlist_parameter(raw, config, expected) -> None:
 
 
 def test_datetime_parameter() -> None:
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     assert DateTimeParameter().clean(now) == now.isoformat()
 
 

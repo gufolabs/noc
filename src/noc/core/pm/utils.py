@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import itertools
 from collections import defaultdict
 from collections.abc import Iterable
@@ -297,7 +297,7 @@ class QuerySet:
         """Run build query and fill query_cache result"""
         ch = ch_connection()
         # print("Query metrics", self.requested_fields, self.fields.keys())
-        from_date = datetime.datetime.now().replace(microsecond=0) - datetime.timedelta(minutes=30)
+        from_date = dt.datetime.now().replace(microsecond=0) - dt.timedelta(minutes=30)
         result = ch.execute(
             sql=self.query_expr(),
             args=[from_date.date().isoformat(), from_date.isoformat(sep=" ")],
@@ -531,7 +531,7 @@ class MetricProxy:
         MetricProxy([("managed_object", 22222222, "interface": "1/1/1")]).interface(queries=["load_in", "load_out"]).values()
     """
 
-    def __init__(self, query_ts: datetime.datetime | None = None, **kwargs) -> None:
+    def __init__(self, query_ts: dt.datetime | None = None, **kwargs) -> None:
         self._scopes: dict[str, MetricScopeProxy] = {}  # Scope Storage
         self._conditions = kwargs
 
@@ -594,7 +594,7 @@ class MetricProxy:
 
 def get_objects_metrics(
     managed_objects: Iterable | int,
-) -> tuple[dict[Any, dict[str, dict[str, int]]], dict[Any, datetime.datetime]]:
+) -> tuple[dict[Any, dict[str, dict[str, int]]], dict[Any, dt.datetime]]:
     """
     Attrs:
         managed_objects:
@@ -616,7 +616,7 @@ def get_objects_metrics(
         )
         * 2
     )
-    from_date = datetime.datetime.now() - datetime.timedelta(seconds=max(query_interval, 3600))
+    from_date = dt.datetime.now() - dt.timedelta(seconds=max(query_interval, 3600))
     from_date = from_date.replace(microsecond=0)
 
     # @todo Left Join
@@ -644,7 +644,7 @@ def get_objects_metrics(
     ch = ch_connection()
     mtable = []  # mo_id, mac, iface, ts
     metric_map = {}
-    last_ts: dict[ManagedObject, datetime.datetime] = {}  # mo -> ts
+    last_ts: dict[ManagedObject, dt.datetime] = {}  # mo -> ts
 
     for table, fields in itertools.groupby(sorted(mmm, key=lambda x: x[0]), key=lambda x: x[0]):
         fields = list(fields)
@@ -697,7 +697,7 @@ def get_interface_metrics(
     managed_objects: Iterable | int, metrics: dict[str, Any] | None = None
 ) -> tuple[
     dict[Any, dict[str, dict[str, float | int]]],
-    dict[Any, datetime.datetime],
+    dict[Any, dt.datetime],
 ]:
     """
 
@@ -733,7 +733,7 @@ def get_interface_metrics(
         )
         * 1.5
     )
-    from_date = datetime.datetime.now() - datetime.timedelta(seconds=max(query_interval, 3600))
+    from_date = dt.datetime.now() - dt.timedelta(seconds=max(query_interval, 3600))
     from_date = from_date.replace(microsecond=0)
     requested_metrics = []
     metric_fields = {}
@@ -761,7 +761,7 @@ def get_interface_metrics(
     )
     ch = ch_connection()
     metric_map: defaultdict[ManagedObject, dict[str, dict[str, int | float]]] = defaultdict(dict)
-    last_ts: dict[ManagedObject, datetime.datetime] = {}  # mo -> ts
+    last_ts: dict[ManagedObject, dt.datetime] = {}  # mo -> ts
     try:
         results = ch.execute(post=SQL, return_raw=True)
         results = orjson.loads(results)

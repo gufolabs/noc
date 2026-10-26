@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-import datetime
+import datetime as dt
 
 # Third-party modules
 from dateutil.parser import parse
@@ -202,7 +202,7 @@ class Command(BaseCommand):
                         f"Partition: {msg.partition} "
                         f"Offset: {msg.offset} "
                         f"Timestamp: {msg.timestamp} "
-                        f"({datetime.datetime.fromtimestamp(msg.timestamp / client.client.TIMESTAMP_MULTIPLIER)})"
+                        f"({dt.datetime.fromtimestamp(msg.timestamp / client.client.TIMESTAMP_MULTIPLIER)})"
                         f"Key: {msg.key} Headers: {msg.headers}"
                     )
                     print(msg.value)

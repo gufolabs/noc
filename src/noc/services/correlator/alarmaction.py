@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import uuid
 from logging import Logger
@@ -185,7 +185,7 @@ class AlarmActionRunner:
         self,
         tt_system: TTSystem,
         tt_id: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,
@@ -246,7 +246,7 @@ class AlarmActionRunner:
         tt_system: TTSystem,
         tt_id: str,
         subject: str,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,
@@ -290,7 +290,7 @@ class AlarmActionRunner:
         tt_system: TTSystem,
         tt_id: str,
         subject: str,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,
@@ -381,7 +381,7 @@ class AlarmActionRunner:
         user: User,
         requester: TTSystem | None = None,
         subject: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         **kwargs,
     ):
         """
@@ -400,14 +400,14 @@ class AlarmActionRunner:
         user: User,
         from_system: TTSystem | None = None,
         subject: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         **kwargs,
     ):
         """
         Clear alarm by tt_system or settings
 
         """
-        timestamp = timestamp or datetime.datetime.now().replace(microsecond=0)
+        timestamp = timestamp or dt.datetime.now().replace(microsecond=0)
         if self.dry_run:
             self.alarm.clear_alarm(subject, timestamp, dry_run=True)
         else:
@@ -439,7 +439,7 @@ class AlarmActionRunner:
         subject: str,
         body: str,
         tt_id: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,
@@ -578,7 +578,7 @@ class AlarmActionRunner:
         tt_id: str,
         subject: str | None = None,
         body: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,
@@ -635,7 +635,7 @@ class AlarmActionRunner:
         subject: str,
         body: str,
         tt_id: str | None = None,
-        timestamp: datetime.datetime | None = None,
+        timestamp: dt.datetime | None = None,
         login: str | None = None,
         queue: str | None = None,
         pre_reason: str | None = None,

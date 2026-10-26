@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import os
 import re
 import shutil
@@ -169,11 +169,11 @@ class MIBAPI(JSONRPCAPI):
                     depends_on[rm] = md
             # Get MIB latest revision date
             try:
-                last_updated = datetime.datetime.strptime(
+                last_updated = dt.datetime.strptime(
                     sorted([x["date"] for x in m.MIB[mib_name]["revisions"]])[-1], "%Y-%m-%d %H:%M"
                 )
             except (ValueError, KeyError):
-                last_updated = datetime.datetime(year=1970, month=1, day=1)
+                last_updated = dt.datetime(year=1970, month=1, day=1)
             self.logger.debug("Extract MIB typedefs")
             # Extract MIB typedefs
             typedefs = {}

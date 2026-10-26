@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # NOC modules
@@ -32,7 +32,7 @@ def update():
         ts = wdata[0][1]
         if "T" in ts:
             ts = ts.split("T", 1)[0]
-        paid_till = datetime.datetime.strptime(ts, "%Y-%m-%d").date()
+        paid_till = dt.datetime.strptime(ts, "%Y-%m-%d").date()
         if zone.paid_till == paid_till:
             continue
         logger.info("[%s] Changing expiry time: %s -> %s", zone.name, zone.paid_till, paid_till)
@@ -51,8 +51,8 @@ def notify():
         max_w = max(len(z) for z, x in data)
         return "\n".join(f"{z:{max_w}} | {x}" for z, x in data)
 
-    today = datetime.date.today()
-    delta = datetime.timedelta(seconds=config.dns.warn_before_expired)
+    today = dt.date.today()
+    delta = dt.timedelta(seconds=config.dns.warn_before_expired)
     shutoff = today + delta
     expiring = [
         (z.name, z.paid_till)

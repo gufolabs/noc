@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 import cachetools
@@ -107,7 +107,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
         result = self.object.scripts.get_interface_status_ex(interfaces=hints)
         collection = Interface._get_collection()
         bulk = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for i in result:
             iface = get_interface(i["interface"])
             if not iface:

@@ -197,7 +197,7 @@ select = [
   "C4", # flake8-comprehensions
   # "EM", # flake8-errmsg
   "ISC", # flake8-implicit-str-concat
-  # "ICN", # flake8-import-conventions
+  "ICN", # flake8-import-conventions
   "PT", # flake8-pytest-style
   "RET", # flake8-return
   "SIM", # flake8-simplify
@@ -215,6 +215,14 @@ unfixable = [
   "F811", # Redefinition of unused `ReportBand` from line 66
   "PLR1711", # Useless `return` statement at end of function  # "F811", # Redefinition of unused `ReportBand` from line 66
 ]
+
+[tool.ruff.lint.flake8-import-conventions.aliases]
+datetime = "dt"
+networkx = "nx"
+numpy = "np"
+"numpy.typing" = "npt"
+polars = "pl"
+"xml.etree.ElementTree" = "ET"
 
 [tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"

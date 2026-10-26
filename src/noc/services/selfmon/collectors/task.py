@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import OrderedDict
 
 # NOC modules
@@ -43,12 +43,12 @@ class TaskObjectCollector(BaseCollector):
         return r
 
     def iter_metrics(self):
-        now = datetime.datetime.now() - datetime.timedelta(seconds=NOW_SHIFT_SECONDS)
+        now = dt.datetime.now() - dt.timedelta(seconds=NOW_SHIFT_SECONDS)
         late_q = {Job.ATTR_STATUS: Job.S_WAIT, Job.ATTR_TS: {"$lt": now}}
         exp_q = {Job.ATTR_LAST_STATUS: Job.E_EXCEPTION}
         stale_q = {
             Job.ATTR_STATUS: Job.S_RUN,
-            Job.ATTR_TS: {"$lt": now - datetime.timedelta(hours=STALE_LAG_HOURS)},
+            Job.ATTR_TS: {"$lt": now - dt.timedelta(hours=STALE_LAG_HOURS)},
         }
         for scheduler_name, data in self.schedulers_list.items():
             sc = self.db[scheduler_name]

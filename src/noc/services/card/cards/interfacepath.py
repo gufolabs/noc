@@ -7,7 +7,7 @@
 
 # Python modules
 import codecs
-import datetime
+import datetime as dt
 
 #  Third-party modules
 from typing import Any
@@ -169,7 +169,7 @@ class InterfacePathCard(BaseCard):
         # Parse query params
         query: list[tuple[int, int, str]] = self.decode_query(self.handler.get_argument("key"))
         # Get metrics
-        from_ts = datetime.datetime.now() - datetime.timedelta(seconds=1800)
+        from_ts = dt.datetime.now() - dt.timedelta(seconds=1800)
         from_ts = from_ts.replace(microsecond=0)
         interface_sql = """
           SELECT

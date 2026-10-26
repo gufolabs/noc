@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import hashlib
 import logging
 import os
@@ -253,7 +253,7 @@ def get_traceback(reverse=config.traceback.reverse, fp=None, exc_info=None):
         check_fatal_errors(t, v)
     except:  # noqa
         logger.error("Check fatal error raise exception. Skipping...")
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     r = [
         f"UNHANDLED EXCEPTION ({now!s})",
         f"PROCESS: {version.process}",
@@ -278,10 +278,10 @@ def excepthook(t, v, tb):
     Override default exception handler
     """
     # Python modules
-    import datetime  # Required for pytest
+    import datetime as dt  # Required for pytest
     import sys
 
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     r = [f"UNHANDLED EXCEPTION ({now!s})"]
     r.append(f"Working directory: {os.getcwd()}")
     r += [str(t), str(v)]
@@ -312,7 +312,7 @@ def error_report(reverse=config.traceback.reverse, logger=logger, suppress_log=F
             # @todo: TZ
             # @todo: Installation ID
             c = {
-                "ts": datetime.datetime.now().isoformat(),
+                "ts": dt.datetime.now().isoformat(),
                 "uuid": fp,
                 # "installation": None,
                 "process": SERVICE_NAME,
@@ -333,7 +333,7 @@ def error_report(reverse=config.traceback.reverse, logger=logger, suppress_log=F
 
 
 def frame_report(frame, caption=None, logger=logger):
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     r = []
     if caption:
         r.append(caption)

@@ -8,7 +8,7 @@
 
 # Python modules
 import contextlib
-import datetime
+import datetime as dt
 import operator
 import types
 import zlib
@@ -230,7 +230,7 @@ class MODiscoveryJob(PeriodicJob):
         :return:
         """
         self.logger.debug("Updating diagnostics statuses: %s", problems)
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         processed = set()
         # Processed failed diagnostics
         with DiagnosticHub(self.object, sync_alarm=self.can_update_alarms()) as d:
@@ -286,7 +286,7 @@ class MODiscoveryJob(PeriodicJob):
             # No money, no honey
             return
         details: list[dict[str, Any]] = []
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         for p in problems:
             if not p.alarm_class:
                 continue

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import functools
 import importlib
 import logging
@@ -514,7 +514,7 @@ class Application(metaclass=ApplicationBase):
         """
         if v is None:
             return None
-        if isinstance(v, datetime.datetime):
+        if isinstance(v, dt.datetime):
             return v.astimezone(self.TZ).isoformat()
         raise Exception("Invalid to_json type")
 

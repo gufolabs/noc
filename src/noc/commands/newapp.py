@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import importlib
 import os
 import re
@@ -166,7 +166,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Template variables
-        vars = {"year": str(datetime.datetime.now().year), "model": None}
+        vars = {"year": str(dt.datetime.now().year), "model": None}
         # Detect templateset
         templateset = "application"
         if options["model"]:

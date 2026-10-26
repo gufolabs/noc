@@ -7,7 +7,7 @@
 
 # Python modules
 import bisect
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.translation import ugettext as _
@@ -56,13 +56,13 @@ def humanize_timedelta(delta):
 
 def humanize_distance(d):
     try:
-        dist = humanize_timedelta(datetime.datetime.now() - d)
+        dist = humanize_timedelta(dt.datetime.now() - d)
     except TypeError:
         dist = _("Never")
     return dist
 
 
-def total_seconds(td: datetime.timedelta) -> float:
+def total_seconds(td: dt.timedelta) -> float:
     """
     Return total seconds in timedelta object
     :param td: timedelta

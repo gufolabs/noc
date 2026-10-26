@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import gzip
 import os
 import re
@@ -107,7 +107,7 @@ class Command(BaseCommand):
         Convert YYYY-MM-DD date to DateTime
         """
         ts = time.strptime(s, "%Y-%m-%d")
-        return datetime.datetime(year=ts.tm_year, month=ts.tm_mon, day=ts.tm_mday)
+        return dt.datetime(year=ts.tm_year, month=ts.tm_mon, day=ts.tm_mday)
 
     def update_mib(self, mib, data, version=None):
         # Deserialize

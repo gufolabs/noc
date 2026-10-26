@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from django.db import models
@@ -105,8 +105,8 @@ class RefBook(NOCModel):
             return
         self.flush_refbook()
         self.bulk_upload(data)
-        self.last_updated = datetime.datetime.now()
-        self.next_update = self.last_updated + datetime.timedelta(days=self.refresh_interval)
+        self.last_updated = dt.datetime.now()
+        self.next_update = self.last_updated + dt.timedelta(days=self.refresh_interval)
         self.save()
 
     @property

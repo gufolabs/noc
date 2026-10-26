@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-import datetime
+import datetime as dt
 import logging
 import random
 import threading
@@ -89,7 +89,7 @@ class Scheduler:
         self.scheduler_task: asyncio.Task[None] | None = None
         self.run_callback = None
         self.check_time = check_time
-        self.read_ahead_interval = datetime.timedelta(milliseconds=check_time)
+        self.read_ahead_interval = dt.timedelta(milliseconds=check_time)
         if submit_threshold:
             self.submit_threshold = submit_threshold
         else:
@@ -265,7 +265,7 @@ class Scheduler:
             .find(
                 self.get_query(
                     {
-                        Job.ATTR_TS: {"$lte": datetime.datetime.now() + self.read_ahead_interval},
+                        Job.ATTR_TS: {"$lte": dt.datetime.now() + self.read_ahead_interval},
                         Job.ATTR_STATUS: Job.S_WAIT,
                     }
                 )
@@ -317,7 +317,7 @@ class Scheduler:
                 self.logger.info("All workers are busy. Sending %d jobs to burst", len(jobs))
                 self.jobs_burst = jobs
                 break
-            now = datetime.datetime.now()
+            now = dt.datetime.now()
             rl = min(sum(1 for j in jobs if j.attrs[Job.ATTR_TS] <= now), free_workers)
             rjobs, jobs = jobs[:rl], jobs[rl:]
             if rjobs:
@@ -367,7 +367,7 @@ class Scheduler:
             if jobs:
                 # Wait for next job within check_interval
                 njts = jobs[0].attrs[Job.ATTR_TS]
-                now = datetime.datetime.now()
+                now = dt.datetime.now()
                 if njts > now:
                     dt = njts - now
                     dt = (dt.microseconds + dt.seconds * 1000000.0) / 1000000.0
@@ -448,7 +448,7 @@ class Scheduler:
         :param max_runs: Limit maximum runs attempts
         :param shard: Shard number for job
         """
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         data = data or {}
         set_op = {}
         iset_op = {
@@ -462,7 +462,7 @@ class Scheduler:
         if ts:
             set_op[Job.ATTR_TS] = ts
         elif delta:
-            set_op[Job.ATTR_TS] = now + datetime.timedelta(seconds=delta)
+            set_op[Job.ATTR_TS] = now + dt.timedelta(seconds=delta)
         else:
             set_op[Job.ATTR_TS] = now
         if keep_ts:
@@ -508,7 +508,7 @@ class Scheduler:
         :param context_key: Cache key for context
         """
         # Build increase/set operations
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         set_op = {Job.ATTR_STATUS: Job.S_WAIT, Job.ATTR_LAST: now}
         inc_op = {}
         if status:
@@ -516,7 +516,7 @@ class Scheduler:
         if ts:
             set_op[Job.ATTR_TS] = ts
         elif delta:
-            set_op[Job.ATTR_TS] = now + datetime.timedelta(seconds=delta)
+            set_op[Job.ATTR_TS] = now + dt.timedelta(seconds=delta)
         else:
             set_op[Job.ATTR_TS] = now
         if duration:

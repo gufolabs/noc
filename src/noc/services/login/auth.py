@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import re
 from typing import Any
@@ -100,7 +100,7 @@ def get_jwt_token(user: str, expire: int | None = None, audience: str | None = N
         JWT token as text.
     """
     expire = expire or config.login.session_ttl
-    exp = datetime.datetime.utcnow() + datetime.timedelta(seconds=expire)
+    exp = dt.datetime.utcnow() + dt.timedelta(seconds=expire)
     payload = {
         "sub": user,
         "exp": exp,

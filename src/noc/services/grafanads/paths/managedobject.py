@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from time import mktime
 from typing import Any
 
@@ -82,8 +82,8 @@ class ManagedObjectJsonDS(JsonDSAPI):
     @staticmethod
     def iter_alarms_annotations(
         annotation: AnnotationSection,
-        f: datetime.datetime,
-        t: datetime.datetime,
+        f: dt.datetime,
+        t: dt.datetime,
         user: User = None,
     ):
         mo = ManagedObject.get_by_id(int(annotation.query))

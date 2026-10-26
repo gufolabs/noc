@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import difflib
 import struct
 import zlib
@@ -137,7 +137,7 @@ class GridVCS:
     def decompress_z(data: bytes) -> bytes:
         return zlib.decompress(data)
 
-    def put(self, object: int, data: str, ts: datetime.datetime | None = None) -> bool:
+    def put(self, object: int, data: str, ts: dt.datetime | None = None) -> bool:
         """
         Save data
         :param object: Object id
@@ -171,7 +171,7 @@ class GridVCS:
             except gridfs.errors.NoFile:
                 pass
         # Save new version
-        ts = ts or datetime.datetime.now()
+        ts = ts or dt.datetime.now()
         self.fs.put(
             self.compress(smart_bytes(data), self.DEFAULT_COMPRESS),
             object=object,

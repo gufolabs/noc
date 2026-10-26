@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -76,7 +76,7 @@ class AuditTrail(Document):
         if not changes:
             logger.debug("Nothing to log for %s", instance)
             return
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         model_id = get_model_id(sender)
         cls._get_collection().insert_one(
             {
@@ -144,7 +144,7 @@ class AuditTrail(Document):
 
     @classmethod
     def get_model_ttl(cls, model_id):
-        return datetime.timedelta(seconds=cls.DEFAULT_TTL)
+        return dt.timedelta(seconds=cls.DEFAULT_TTL)
 
     @classmethod
     def on_new_model(cls, sender, **kwargs):

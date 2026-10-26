@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from pickle import HIGHEST_PROTOCOL, dumps, loads
 
 # Third-party modules
@@ -41,7 +41,7 @@ class MongoCache(BaseCache):
 
     def get(self, key, default=None, version=None):
         k = self.make_key(key, version)
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         d = self.get_collection().find_one({self.KEY_FIELD: k})
         if d and d[self.EXPIRES_FIELD] > now:
             # Found, not expired
@@ -55,7 +55,7 @@ class MongoCache(BaseCache):
         """
         k = self.make_key(key, version)
         ttl = ttl or config.cache.default_ttl
-        expires = datetime.datetime.now() + datetime.timedelta(seconds=ttl)
+        expires = dt.datetime.now() + dt.timedelta(seconds=ttl)
         self.get_collection().update_one(
             {self.KEY_FIELD: k},
             {

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import socket
 import struct
@@ -327,7 +327,7 @@ def register_checks(
     if isinstance(source, str):
         source = InputSource(source)
     source = source or InputSource.UNKNOWN
-    now = datetime.datetime.now().replace(microsecond=0)
+    now = dt.datetime.now().replace(microsecond=0)
     svc = get_service()
     data = []
     for c in checks:

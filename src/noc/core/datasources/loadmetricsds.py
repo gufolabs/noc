@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import time
 from collections.abc import AsyncIterable, Iterable
 from typing import Any
@@ -177,8 +177,8 @@ class LoadMetricsDS(BaseDataSource):
         cls,
         fields: Iterable[str] | None = None,
         reporttype: str | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         interface_profile: InterfaceProfile | None = None,
         exclude_zero: bool = False,
         admin_domain_ads: list[int] | None = None,

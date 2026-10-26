@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -65,8 +65,8 @@ class ReportAvailabilityApplication(SimpleReport):
 
     @staticmethod
     def get_availability_interval(days):
-        now = datetime.datetime.now()
-        d = datetime.timedelta(days=days)
+        now = dt.datetime.now()
+        d = dt.timedelta(days=days)
         b = now - d
         outages = defaultdict(int)
         q = Q(start__gte=b) | Q(stop__gte=b) | Q(stop__exists=False)
@@ -135,14 +135,14 @@ class ReportAvailabilityApplication(SimpleReport):
         """
 
         if not from_date:
-            from_date = datetime.datetime.now() - datetime.timedelta(days=interval)
+            from_date = dt.datetime.now() - dt.timedelta(days=interval)
         else:
-            from_date = datetime.datetime.strptime(from_date, self.ISO_DATE_MASK)
+            from_date = dt.datetime.strptime(from_date, self.ISO_DATE_MASK)
 
         if not to_date or from_date == to_date:
-            to_date = from_date + datetime.timedelta(days=1)
+            to_date = from_date + dt.timedelta(days=1)
         else:
-            to_date = datetime.datetime.strptime(to_date, self.ISO_DATE_MASK) + datetime.timedelta(
+            to_date = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(
                 days=1
             )
 

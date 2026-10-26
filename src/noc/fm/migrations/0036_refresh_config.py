@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.migration.base import BaseMigration
@@ -28,7 +28,7 @@ class Migration(BaseMigration):
                     "IEventTrigger",
                     "stub",
                     "@pyrule\ndef refresh_config(event):\n    pass",
-                    datetime.datetime.now(),
+                    dt.datetime.now(),
                 ),
             )
         r_id = self.db.execute("SELECT id FROM main_pyrule WHERE name = %s", ["refresh_config"])[0][

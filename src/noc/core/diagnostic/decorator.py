@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 
 # NOC modules
@@ -57,7 +57,7 @@ def save_document_diagnostics(
     """"""
     # Expired/Add watchers
     self.diagnostics = [DiagnosticItemDoc.from_value(d) for d in diagnostics]
-    expired: list[datetime.datetime] = []
+    expired: list[dt.datetime] = []
     for d in diagnostics:
         expired.extend(c.expired for c in d.checks or [] if c.expired)
     if expired:
@@ -73,7 +73,7 @@ def save_document_diagnostics(
 def save_model_diagnostics(self, diagnostics: list[DiagnosticItem], dry_run: bool = False):
     """Update Model Instance diagnostics"""
     self.diagnostics = {d.diagnostic: d.get_value().model_dump() for d in diagnostics}
-    expired: list[datetime.datetime] = []
+    expired: list[dt.datetime] = []
     for d in diagnostics:
         expired.extend(c.expired for c in d.checks or [] if c.expired)
     if expired:

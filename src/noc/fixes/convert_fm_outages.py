@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -40,7 +40,7 @@ def fix():
             out = defaultdict(list)
         if row["object"] not in mo_map:
             continue
-        ts: datetime.datetime = row["stop"].replace(microsecond=0)
+        ts: dt.datetime = row["stop"].replace(microsecond=0)
         out[key].append(
             orjson.dumps(
                 {

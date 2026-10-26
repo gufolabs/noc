@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -31,7 +31,7 @@ class CheckItem(EmbeddedDocument):
     status: bool = BooleanField(required=True)
     args: dict[str, str] = DictField(required=False)
     skipped: bool = BooleanField(default=False)
-    expired: datetime.datetime | None = DateTimeField(required=False)
+    expired: dt.datetime | None = DateTimeField(required=False)
     source: InputSource = EnumField(InputSource, required=True, default=InputSource.UNKNOWN)
     error: str | None = StringField(required=False)
 
@@ -71,7 +71,7 @@ class DiagnosticItem(EmbeddedDocument):
     state: DiagnosticState = EnumField(DiagnosticState, default=DiagnosticState("unknown"))
     checks = EmbeddedDocumentListField(CheckItem)
     reason: str | None = StringField(required=False)
-    changed: datetime.datetime | None = DateTimeField(required=False)
+    changed: dt.datetime | None = DateTimeField(required=False)
 
     def __str__(self):
         return f"{self.diagnostic}: {','.join(c.name for c in self.checks)}; C: {self.changed}"

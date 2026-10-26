@@ -7,7 +7,7 @@
 
 # Python modules
 import bisect
-import datetime
+import datetime as dt
 from collections.abc import Iterable
 from typing import Any
 from urllib.parse import urlparse
@@ -345,7 +345,7 @@ class NetBoxIPPrefixExtractor(NetBoxExtractor):
                 description=r["description"],
                 labels=labels,
                 state=self.resource_state_map[r["status"]["value"]],
-                state_changed=datetime.datetime.fromisoformat(r["last_updated"]),
+                state_changed=dt.datetime.fromisoformat(r["last_updated"]),
             )
             duplicate.add(r["prefix"])
         print(roles)
@@ -382,7 +382,7 @@ class NetBoxIPAddressExtractor(NetBoxExtractor):
                 labels=[f"netbox::{x['name']}" for x in r["tags"]],
                 fqdn=fqdn,
                 state=self.resource_state_map[r["status"]["value"]],
-                state_changed=datetime.datetime.fromisoformat(r["last_updated"]),
+                state_changed=dt.datetime.fromisoformat(r["last_updated"]),
             )
             duplicate.add(address)
 

@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Any
 
 # Third-party modules
@@ -25,7 +25,7 @@ from noc.core.clickhouse.fields import DateField, DateTimeField
 
 from .enum import EventSeverity, EventSource
 
-MAX_DISPOSE_DELAY = datetime.timedelta(hours=12)
+MAX_DISPOSE_DELAY = dt.timedelta(hours=12)
 
 EVENT_QUERY = f"""
     SELECT
@@ -159,7 +159,7 @@ class Event(BaseModel):
 
     @property
     def timestamp(self):
-        return datetime.datetime.fromtimestamp(self.ts)
+        return dt.datetime.fromtimestamp(self.ts)
 
     @property
     def event_class(self) -> str | None:
@@ -185,7 +185,7 @@ class Event(BaseModel):
         Build instance from clickhouse query
         :return:
         """
-        ts = datetime.datetime.fromisoformat(data["timestamp"])
+        ts = dt.datetime.fromisoformat(data["timestamp"])
         if "managed_object" in data and isinstance(data["managed_object"], list):
             # For Clickhouse before 23.XXX
             data["managed_object"] = {
@@ -246,7 +246,7 @@ class Event(BaseModel):
         event_id = str(ObjectId(event_id))
         # Determine possible date
         oid = ObjectId(event_id)
-        ts: datetime.datetime = oid.generation_time.astimezone(config.timezone)
+        ts: dt.datetime = oid.generation_time.astimezone(config.timezone)
         from_ts = ts - MAX_DISPOSE_DELAY
         to_ts = ts + MAX_DISPOSE_DELAY
         # Make query

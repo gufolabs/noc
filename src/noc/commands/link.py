@@ -7,7 +7,7 @@
 
 # Python modules
 import argparse
-import datetime
+import datetime as dt
 import os
 import time
 from collections import defaultdict
@@ -130,8 +130,8 @@ class Command(BaseCommand):
         from noc.fm.models.activealarm import ActiveAlarm
         from noc.fm.models.alarmclass import AlarmClass
 
-        today = datetime.datetime.now()
-        deadline = today - datetime.timedelta(days=ttl)
+        today = dt.datetime.now()
+        deadline = today - dt.timedelta(days=ttl)
 
         alarm_mos = [
             d["managed_object"]

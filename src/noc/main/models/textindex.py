@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import re
 
@@ -90,7 +90,7 @@ class TextIndex(Document):
                     "card": data.get("card"),
                     "tags": data.get("labels"),
                     "language": "english",
-                    "changed": datetime.datetime.now(),
+                    "changed": dt.datetime.now(),
                 }
             },
             upsert=True,

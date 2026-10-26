@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 
 # Third-party modules
@@ -196,7 +196,7 @@ class DB:
                     default = default()
                 if isinstance(default, str):
                     default = "'{}'".format(default.replace("'", "''"))
-                elif isinstance(default, (datetime.date, datetime.time, datetime.datetime)):
+                elif isinstance(default, (dt.date, dt.time, dt.datetime)):
                     default = f"'{default}'"
                 if isinstance(default, str):
                     default = default.replace("%", "%%")

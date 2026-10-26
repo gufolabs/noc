@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from typing import Any
 
@@ -25,7 +25,7 @@ class AlarmNodeState(BaseModel):
     active: bool = False
     pool: str | None = None
     reference: str | None = None
-    last_raise: datetime.datetime = None
+    last_raise: dt.datetime = None
 
 
 class VarItem(BaseModel):
@@ -115,7 +115,7 @@ class AlarmNode(BaseCDAGNode):
             template = Template(v)
             return template.render(x=x, config=self.config)
 
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         ref = self.get_reference(target.managed_object)
         msg = {
             "$op": "raise",
@@ -161,7 +161,7 @@ class AlarmNode(BaseCDAGNode):
         msg = {
             "$op": "clear",
             "reference": self.state.reference,
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": dt.datetime.now().isoformat(),
             "message": message,
         }
         self.publish_message(msg, self.state.pool or self.config.pool)

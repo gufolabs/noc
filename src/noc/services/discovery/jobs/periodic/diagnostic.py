@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from typing import Literal
 
 # NOC modules
@@ -131,7 +131,7 @@ class DiagnosticCheck(DiscoveryCheck):
         :return:
         """
         r = {}
-        now = datetime.datetime.now()
+        now = dt.datetime.now()
         # Group Metric by row
         for m in metrics:
             mt = MetricType.get_by_name(m.metric_type)

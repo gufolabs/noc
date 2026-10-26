@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 from threading import Lock
 from typing import Any
@@ -448,9 +448,9 @@ class EscalationProfile(Document):
         # After
         delay = profile.get_delay()
         if profile.alarm_consequence_policy == "a":
-            after = alarm.timestamp + datetime.timedelta(seconds=delay)
+            after = alarm.timestamp + dt.timedelta(seconds=delay)
         else:
-            after = datetime.datetime.now().replace(microsecond=0)
+            after = dt.datetime.now().replace(microsecond=0)
         # Group
         root_only = False
         if profile.escalation_policy in {EscalationPolicy.ROOT, EscalationPolicy.ROOT_FIRST}:

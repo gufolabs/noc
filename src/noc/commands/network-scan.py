@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-import datetime
+import datetime as dt
 import logging
 import socket
 from io import BytesIO
@@ -228,7 +228,7 @@ class Command(BaseCommand):
         # administrative_domain = "default"
         profile = "Generic.Host"
         # object_profile = "default"
-        description = f"create object {datetime.datetime.now().strftime('%Y%m%d')}"
+        description = f"create object {dt.datetime.now().strftime('%Y%m%d')}"
         # segment = "ALL"
         # scheme = "1"
         # address = ""
@@ -433,7 +433,7 @@ class Command(BaseCommand):
             bodymessage = "Report in attachment.\n\nscan network:\n"
             for adr in self.nets:
                 bodymessage += adr + "\n"
-            filename = f"found_ip_{datetime.datetime.now().strftime('%Y%m%d')}"
+            filename = f"found_ip_{dt.datetime.now().strftime('%Y%m%d')}"
             if formats == "csv":
                 f = f"{filename}.csv"
                 attach = [{"filename": f, "data": data}]

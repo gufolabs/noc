@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import operator
 
 # Third-party modules
@@ -49,14 +49,14 @@ class ReportEscalationsApplication(SimpleReport):
         if not from_date:
             interval = 1
         if interval:
-            ts = datetime.datetime.now() - datetime.timedelta(days=interval)
+            ts = dt.datetime.now() - dt.timedelta(days=interval)
             q = {"timestamp": {"$gte": ts}}
         else:
-            t0 = datetime.datetime.strptime(from_date, self.ISO_DATE_MASK)
+            t0 = dt.datetime.strptime(from_date, self.ISO_DATE_MASK)
             if not to_date:
-                t1 = datetime.datetime.now()
+                t1 = dt.datetime.now()
             else:
-                t1 = datetime.datetime.strptime(to_date, self.ISO_DATE_MASK) + datetime.timedelta(
+                t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(
                     days=1
                 )
             q = {"timestamp": {"$gte": t0, "$lte": t1}}

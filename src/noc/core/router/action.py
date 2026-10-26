@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -276,7 +276,7 @@ class MessageAction(Action):
         obj = None
         if MX_WATCH_FOR_ID in msg.headers:
             obj = msg.headers[MX_WATCH_FOR_ID].decode()[2:]
-        ts = datetime.datetime.now()
+        ts = dt.datetime.now()
         message_type = MessageType(message_type.decode())
         body: dict[str, Any] | None = None
         for c in ng.get_active_contacts(obj, ts=ts):

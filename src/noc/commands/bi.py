@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-import datetime
+import datetime as dt
 import gzip
 import os
 import random
@@ -40,7 +40,7 @@ class Command(BaseCommand):
     EXTRACTORS = [RebootsExtractor, AlarmsExtractor, ManagedObjectsExtractor, AlarmLogsExtractor]
     # Extract by 1-day chunks
     EXTRACT_WINDOW = config.bi.extract_window
-    MIN_WINDOW = datetime.timedelta(seconds=2)
+    MIN_WINDOW = dt.timedelta(seconds=2)
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
@@ -87,8 +87,8 @@ class Command(BaseCommand):
         coll.update_one({"_id": name}, {"$set": {"last_extract": ts}}, upsert=True)
 
     def handle_extract(self, use_archive=False, *args, **options):
-        now = datetime.datetime.now()
-        window = datetime.timedelta(seconds=self.EXTRACT_WINDOW)
+        now = dt.datetime.now()
+        window = dt.timedelta(seconds=self.EXTRACT_WINDOW)
         for ecls in self.EXTRACTORS:
             if not ecls.is_enabled():
                 self.print(f"[{ecls.name}] Not enabled, skipping")
@@ -99,7 +99,7 @@ class Command(BaseCommand):
                 if not start:
                     self.print(f"[{ecls.name}] No data, skipping")
                     continue
-            stop = now - datetime.timedelta(seconds=ecls.extract_delay)
+            stop = now - dt.timedelta(seconds=ecls.extract_delay)
             extracted_record = 0
             is_exception = False
             while start < stop:
@@ -124,9 +124,9 @@ class Command(BaseCommand):
                     is_exception = True
                     continue
                 self.print(f"[{e.name}] Extracting {start} - {end} ... ", end="", flush=True)
-                dt = time.time() - t0
-                if dt > 0.0:
-                    self.print(f"{int(nr)} records in {dt:.3f}s ({float(nr) / dt:.2f}rec/s)")
+                delta = time.time() - t0
+                if delta > 0.0:
+                    self.print(f"{int(nr)} records in {delta:.3f}s ({float(nr) / delta:.2f}rec/s)")
                 else:
                     self.print("no records")
                 self.set_last_extract(ecls.name, e.last_ts or end)
@@ -136,11 +136,11 @@ class Command(BaseCommand):
                     extracted_record = nr
                     is_exception = False
                 if (
-                    window != datetime.timedelta(seconds=self.EXTRACT_WINDOW)
+                    window != dt.timedelta(seconds=self.EXTRACT_WINDOW)
                     and nr < extracted_record * 0.75
                 ):
                     self.print(f"[{e.name}] Restore Window to: {window * 2}")
-                    window = min(window * 2, datetime.timedelta(seconds=self.EXTRACT_WINDOW))
+                    window = min(window * 2, dt.timedelta(seconds=self.EXTRACT_WINDOW))
 
     def handle_dictionaries(self, *args, **options):
         # Extract dictionaries
@@ -237,13 +237,13 @@ class Command(BaseCommand):
             force = options.get("force")
             e = ecls(start=stop, stop=stop, prefix=self.data_prefix)
             self.print(
-                f"[{e.name}] Cleaned before {stop - datetime.timedelta(seconds=ecls.clean_delay)} ... \n",
+                f"[{e.name}] Cleaned before {stop - dt.timedelta(seconds=ecls.clean_delay)} ... \n",
                 end="",
                 flush=True,
             )
             if force:
                 self.print(
-                    f"All data before {e.name} from collection {stop - datetime.timedelta(seconds=ecls.clean_delay)} will be Remove..\n"
+                    f"All data before {e.name} from collection {stop - dt.timedelta(seconds=ecls.clean_delay)} will be Remove..\n"
                 )
                 for i in reversed(range(1, 10)):
                     self.print(f"{i}\n")

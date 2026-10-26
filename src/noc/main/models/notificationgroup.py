@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 # Python modules
-import datetime
+import datetime as dt
 import logging
 import operator
 from collections.abc import Iterable
@@ -397,7 +397,7 @@ class NotificationGroup(NOCModel):
     def members(self) -> list[NotificationContact]:
         """List of (time pattern, method, params, language)"""
         contacts = []
-        ts = datetime.datetime.now()
+        ts = dt.datetime.now()
         # Collect other notifications
         for ngo in self.iter_static_members():
             for c in ngo.contact.split(","):
@@ -423,7 +423,7 @@ class NotificationGroup(NOCModel):
         return contacts
 
     def get_active_user_contacts(
-        self, user: User, ts: datetime.datetime | None = None
+        self, user: User, ts: dt.datetime | None = None
     ) -> list[NotificationContact]:
         """Getting Active user Contacts for send notification"""
         r = []
@@ -448,9 +448,9 @@ class NotificationGroup(NOCModel):
     def get_active_contacts(
         self,
         obj: str | None = None,
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ) -> list[NotificationContact]:
-        now = ts or datetime.datetime.now()
+        now = ts or dt.datetime.now()
         contacts = []
         for ngo in self.iter_static_members():
             contacts += ngo.get_contacts()
@@ -566,7 +566,7 @@ class NotificationGroup(NOCModel):
         method: str | None = None,
         time_pattern: TimePattern | None = None,
         title_tag: str | None = None,
-        expired_at: datetime.datetime | None = None,
+        expired_at: dt.datetime | None = None,
         suppress: bool | None = None,
     ) -> NotificationGroupUserSettings:
         """
@@ -802,7 +802,7 @@ class NotificationGroup(NOCModel):
         self,
         message_type: str,
         meta: dict[MessageMeta, Any],
-        ts: datetime.datetime | None = None,
+        ts: dt.datetime | None = None,
     ) -> Iterable[tuple[str, dict[str, bytes], Template | None]]:
         """
         mx-compatible actions. Yields tuples of `stream`, `headers`
@@ -882,7 +882,7 @@ class NotificationGroupUserSettings(NOCModel):
         blank=False,
     )
     title_tag: str = CharField(max_length=30, blank=True)
-    expired_at: datetime.datetime | None = DateTimeField(
+    expired_at: dt.datetime | None = DateTimeField(
         "Expired Subscription After", auto_now_add=False
     )
     suppress = BooleanField("Deactivate Subscription", default=False)

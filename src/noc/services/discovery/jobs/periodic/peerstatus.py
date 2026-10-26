@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 
 # NOC modules
 from noc.core.bgp import BGPState
@@ -40,14 +40,14 @@ class PeerStatusCheck(DiscoveryCheck):
         hints = [{"peer": key} for key in peers] or None
         result = self.object.scripts.get_bgp_peer_status(peers=hints)
         self.logger.info("Result: %s", result)
-        now = datetime.datetime.now().replace(microsecond=0)
+        now = dt.datetime.now().replace(microsecond=0)
         for p in result:
             nei = p["neighbor"]
             if nei not in peers:
                 self.logger.info("Unknown peer. Skipping")
                 continue
             if "status_duration" in p:
-                state_changed = now - datetime.timedelta(seconds=p["status_duration"])
+                state_changed = now - dt.timedelta(seconds=p["status_duration"])
             else:
                 state_changed = now
             peer = peers[nei]

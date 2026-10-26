@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
+import datetime as dt
 from collections import defaultdict
 
 # Third-party modules
@@ -55,7 +55,7 @@ class UpdateCheckersJob(PeriodicJob):
 
     def handler(self, **kwargs):
         # LIMIT BY 3 checks and calculate diff
-        depth: datetime.datetime = datetime.datetime.now() - datetime.timedelta(
+        depth: dt.datetime = dt.datetime.now() - dt.timedelta(
             seconds=MAX_DEPTH_INTERVAL
         )
         last_success = self.attrs.get(Job.ATTR_LAST_SUCCESS, depth).replace(microsecond=0)

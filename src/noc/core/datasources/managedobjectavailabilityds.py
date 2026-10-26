@@ -7,7 +7,7 @@
 
 # Python Modules
 # Python modules
-import datetime
+import datetime as dt
 from collections.abc import AsyncIterable, Iterable
 
 # Third-party modules
@@ -55,7 +55,7 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
     ]
 
     @staticmethod
-    def get_reboots_by_object(start_date: datetime.datetime, stop_date: datetime.datetime):
+    def get_reboots_by_object(start_date: dt.datetime, stop_date: dt.datetime):
         """
         Reboots count from interval
         Args:
@@ -78,10 +78,10 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
 
     @staticmethod
     def get_status_outage(
-        start_date: datetime.datetime,
-        stop_date: datetime.datetime,
+        start_date: dt.datetime,
+        stop_date: dt.datetime,
         status: bool,
-        last: datetime.datetime | None = None,
+        last: dt.datetime | None = None,
     ) -> int:
         """
         Convert ManagedObjectStatus to outage interval
@@ -129,8 +129,8 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
             if not oid:
                 continue
             min_start, max_stop = (
-                datetime.datetime.fromisoformat(row["min_start"]),
-                datetime.datetime.fromisoformat(row["max_stop"]),
+                dt.datetime.fromisoformat(row["min_start"]),
+                dt.datetime.fromisoformat(row["max_stop"]),
             )
             duration = int(row["duration_u"])
             if min_start < start_date:
@@ -144,8 +144,8 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: datetime.datetime | None = None,
-        end: datetime.datetime | None = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         skip_full_avail=False,
         skip_zero_avail=False,
         skip_zero_access=False,
