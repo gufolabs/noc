@@ -207,9 +207,7 @@ class SyslogCollectorService(BaseService):
             self.publish(
                 value=orjson.dumps(
                     {
-                        "timestamp": dt.datetime.fromtimestamp(timestamp).replace(
-                            microsecond=0
-                        ),
+                        "timestamp": dt.datetime.fromtimestamp(timestamp).replace(microsecond=0),
                         "message_id": message_id,
                         "collector_type": "syslog",
                         "collector": config.pool,

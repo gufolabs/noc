@@ -277,9 +277,7 @@ class ServiceInstance(Document):
         if dry_run:
             return
         if not self.sources and self.config.ttl and not force:
-            self.expires = self.expires or dt.datetime.now() + dt.timedelta(
-                seconds=self.config.ttl
-            )
+            self.expires = self.expires or dt.datetime.now() + dt.timedelta(seconds=self.config.ttl)
             ServiceInstance.objects.filter(id=self.id).update(
                 sources=self.sources, expires=self.expires
             )

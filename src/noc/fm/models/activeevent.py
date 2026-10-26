@@ -121,9 +121,7 @@ class ActiveEvent(Document):
         message = f"Failed to classify on NOC version {version}"
         log = [
             *self.log,
-            EventLog(
-                timestamp=dt.datetime.now(), from_status="N", to_status="F", message=message
-            ),
+            EventLog(timestamp=dt.datetime.now(), from_status="N", to_status="F", message=message),
         ]
         e = FailedEvent(
             id=self.id,
@@ -142,9 +140,7 @@ class ActiveEvent(Document):
     def mark_as_archived(self, message):
         log = [
             *self.log,
-            EventLog(
-                timestamp=dt.datetime.now(), from_status="A", to_status="S", message=message
-            ),
+            EventLog(timestamp=dt.datetime.now(), from_status="A", to_status="S", message=message),
         ]
         e = ArchivedEvent(
             id=self.id,

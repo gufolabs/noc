@@ -142,9 +142,7 @@ class ReportAvailabilityApplication(SimpleReport):
         if not to_date or from_date == to_date:
             to_date = from_date + dt.timedelta(days=1)
         else:
-            to_date = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(
-                days=1
-            )
+            to_date = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(days=1)
 
         a = self.get_availability(
             start_date=from_date, stop_date=to_date, skip_zero_avail=skip_zero_avail

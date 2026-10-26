@@ -213,9 +213,7 @@ class ThresholdNode(BaseCDAGNode):
     def set_state(self, threshold: str, reference: str | None = None, pool: str | None = None):
         if threshold in self.state.thresholds:
             self.state.thresholds[threshold].active = True
-            self.state.thresholds[threshold].last_raise = dt.datetime.now().replace(
-                microsecond=0
-            )
+            self.state.thresholds[threshold].last_raise = dt.datetime.now().replace(microsecond=0)
             self.state.thresholds[threshold].reference = reference
             self.state.thresholds[threshold].pool = pool
         else:

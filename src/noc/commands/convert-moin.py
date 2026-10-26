@@ -103,9 +103,7 @@ class Command(BaseCommand):
             rev_path = os.path.join(root, "revisions", rev)
             with open(rev_path) as f:
                 body = self.convert_body(smart_text(f.read(), encoding=self.encoding))
-            mtime = dt.datetime.fromtimestamp(
-                os.stat(rev_path)[stat.ST_MTIME]
-            )  # Revision time
+            mtime = dt.datetime.fromtimestamp(os.stat(rev_path)[stat.ST_MTIME])  # Revision time
             if kbe is None:
                 kbe = KBEntry(
                     subject=name, body=body, language=self.language, markup_language="Creole"

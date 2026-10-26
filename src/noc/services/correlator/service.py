@@ -478,9 +478,9 @@ class CorrelatorService(BaseService):
         for rule in self.alarm_rule_set.iter_rules(alarm):
             after_ts = None
             if rule.rule_apply_delay:
-                after_ts = (
-                    alarm.timestamp + dt.timedelta(seconds=rule.rule_apply_delay)
-                ).replace(microsecond=0)
+                after_ts = (alarm.timestamp + dt.timedelta(seconds=rule.rule_apply_delay)).replace(
+                    microsecond=0
+                )
                 self.logger.debug(
                     "[%s] Processed rule: %s, After: %s", alarm.id, rule.name, after_ts
                 )

@@ -559,9 +559,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
 
     def iter_data(self, checkpoint=None, **kwargs) -> Iterable[FMEventObject]:
         if checkpoint:
-            checkpoint = dt.datetime.fromtimestamp(int(checkpoint)) + dt.timedelta(
-                seconds=1
-            )
+            checkpoint = dt.datetime.fromtimestamp(int(checkpoint)) + dt.timedelta(seconds=1)
         non_started_ids = set()
         for e in self.iter_events(start=checkpoint):
             tid = str(e.object_id)

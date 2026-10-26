@@ -55,9 +55,7 @@ class ReportRebootsApplication(SimpleReport):
             if not to_date:
                 t1 = dt.datetime.now()
             else:
-                t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(
-                    days=1
-                )
+                t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(days=1)
             match = {"ts": {"$gte": t0, "$lte": t1}}
         pipeline = [
             {"$match": match},

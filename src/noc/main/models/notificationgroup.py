@@ -882,9 +882,7 @@ class NotificationGroupUserSettings(NOCModel):
         blank=False,
     )
     title_tag: str = CharField(max_length=30, blank=True)
-    expired_at: dt.datetime | None = DateTimeField(
-        "Expired Subscription After", auto_now_add=False
-    )
+    expired_at: dt.datetime | None = DateTimeField("Expired Subscription After", auto_now_add=False)
     suppress = BooleanField("Deactivate Subscription", default=False)
 
     def __str__(self):

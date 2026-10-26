@@ -56,9 +56,7 @@ class ReportEscalationsApplication(SimpleReport):
             if not to_date:
                 t1 = dt.datetime.now()
             else:
-                t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(
-                    days=1
-                )
+                t1 = dt.datetime.strptime(to_date, self.ISO_DATE_MASK) + dt.timedelta(days=1)
             q = {"timestamp": {"$gte": t0, "$lte": t1}}
         q["escalation_tt"] = {"$exists": True}
         if not request.user.is_superuser:

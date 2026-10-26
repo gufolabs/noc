@@ -46,9 +46,7 @@ class SchedulerService(BaseService):
         """Create or remove Topology Scheduler job"""
         scheduler = Scheduler(cls.name)
         if config.topo.enable_scheduler_task:
-            scheduler.submit(
-                jcls=cls.TOPOLOGY_JOB, ts=dt.datetime.now() + dt.timedelta(seconds=60)
-            )
+            scheduler.submit(jcls=cls.TOPOLOGY_JOB, ts=dt.datetime.now() + dt.timedelta(seconds=60))
             return
         scheduler.remove_job(jcls=cls.TOPOLOGY_JOB)
 

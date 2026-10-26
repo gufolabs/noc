@@ -416,9 +416,7 @@ class Maintenance(Document):
         return affected
 
 
-def update_affected_objects(
-    maintenance_id, start: dt.datetime, stop: dt.datetime | None = None
-):
+def update_affected_objects(maintenance_id, start: dt.datetime, stop: dt.datetime | None = None):
     """
     Calculate and fill affected objects
     """

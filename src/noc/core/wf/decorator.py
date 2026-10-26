@@ -147,9 +147,7 @@ def document_set_state(
         )
 
 
-def document_touch(
-    self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None
-):
+def document_touch(self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return
@@ -176,9 +174,7 @@ def document_touch(
         self._get_collection().update_one({"_id": self.pk}, op)
 
 
-def model_set_state(
-    self, state, state_changed: dt.datetime | None = None, bulk=None, create=False
-):
+def model_set_state(self, state, state_changed: dt.datetime | None = None, bulk=None, create=False):
     """
     Set state
 

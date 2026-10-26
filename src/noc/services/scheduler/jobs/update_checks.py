@@ -55,9 +55,7 @@ class UpdateCheckersJob(PeriodicJob):
 
     def handler(self, **kwargs):
         # LIMIT BY 3 checks and calculate diff
-        depth: dt.datetime = dt.datetime.now() - dt.timedelta(
-            seconds=MAX_DEPTH_INTERVAL
-        )
+        depth: dt.datetime = dt.datetime.now() - dt.timedelta(seconds=MAX_DEPTH_INTERVAL)
         last_success = self.attrs.get(Job.ATTR_LAST_SUCCESS, depth).replace(microsecond=0)
         self.logger.info("Start update objects checks from history from: %s", last_success)
         ch = connection()

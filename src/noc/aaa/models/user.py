@@ -209,9 +209,7 @@ class User(NOCModel):
             self.password_history = hist[: config.login.password_history]
         # Update password ttl
         if config.login.password_ttl > 0:
-            self.change_at = dt.datetime.now() + dt.timedelta(
-                seconds=config.login.password_ttl
-            )
+            self.change_at = dt.datetime.now() + dt.timedelta(seconds=config.login.password_ttl)
         else:
             self.change_at = None
         # Calculate hash
@@ -378,9 +376,7 @@ class User(NOCModel):
         # Check thresholds
         if len(failed_history) >= config.login.max_failed_attempts:
             # Block
-            user.blocked_till = now + dt.timedelta(
-                seconds=config.login.failed_attempts_cooldown
-            )
+            user.blocked_till = now + dt.timedelta(seconds=config.login.failed_attempts_cooldown)
             logger.warning(
                 "Failed login attempt for user %s. "
                 "There are %d failed logins in %ds. "

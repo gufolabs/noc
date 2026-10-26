@@ -140,9 +140,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
 
         r = [translate_row(header_row, cmap)]
         fd = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
-        match = {
-            "timestamp": {"$gte": dt.datetime.strptime(from_date, "%d.%m.%Y"), "$lte": fd}
-        }
+        match = {"timestamp": {"$gte": dt.datetime.strptime(from_date, "%d.%m.%Y"), "$lte": fd}}
         mos = ManagedObject.objects.filter()
 
         ads = []

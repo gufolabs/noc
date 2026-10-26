@@ -323,9 +323,7 @@ class Command(BaseCommand):
         if before:
             conditions["timestamp"] = {"$lte": dt.datetime.strptime(before, "%Y-%m-%d")}
         elif before_days:
-            conditions["timestamp"] = {
-                "$lte": dt.datetime.now() - dt.timedelta(days=before_days)
-            }
+            conditions["timestamp"] = {"$lte": dt.datetime.now() - dt.timedelta(days=before_days)}
         # else:
         #    self.print("Before is not set, use default. Clean ALL")
         #    before = datetime.datetime.now() - DEFAULT_CLEAN

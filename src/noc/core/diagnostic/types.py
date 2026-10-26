@@ -162,9 +162,7 @@ class CheckStatus(BaseModel):
     ) -> "CheckStatus":
         expired = None
         if cr.ttl:
-            expired = dt.datetime.now().replace(microsecond=0) + dt.timedelta(
-                seconds=cr.ttl
-            )
+            expired = dt.datetime.now().replace(microsecond=0) + dt.timedelta(seconds=cr.ttl)
         return CheckStatus(
             name=cr.check,
             status=cr.status,

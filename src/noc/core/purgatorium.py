@@ -246,9 +246,7 @@ def iter_discovered_object(
 
     ch = connection()
     if not from_ts:
-        from_ts = dt.datetime.now() - dt.timedelta(
-            seconds=config.network_scan.purgatorium_ttl
-        )
+        from_ts = dt.datetime.now() - dt.timedelta(seconds=config.network_scan.purgatorium_ttl)
     r = ch.execute(PURGATORIUM_SQL, return_raw=True, args=[from_ts.date().isoformat()])
     for num, row in enumerate(r.splitlines(), start=1):
         row = orjson.loads(row)
