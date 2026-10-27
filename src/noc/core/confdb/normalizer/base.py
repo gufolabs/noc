@@ -20,9 +20,7 @@ from ..syntax.patterns import ANY, BOOL, REST, BasePattern, Token
 
 _match_seq = itertools.count()
 
-# Prepare for export
-ANY = ANY
-REST = REST
+__all__ = ["ANY", "REST", "BaseNormalizer", "deferable", "match"]
 
 
 class Node:

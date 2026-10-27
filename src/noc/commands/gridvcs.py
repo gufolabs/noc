@@ -100,7 +100,7 @@ class Command(BaseCommand):
         connect()
         self.vcs = GridVCS(self.repo)
         if self.repo in self.clean_int:
-            self.clean_id = lambda y: int(y)
+            self.clean_id = int
         else:
             self.clean_id = lambda y: y
         return getattr(self, f"handle_{options['cmd'].replace('-', '_')}")(*args, **options)

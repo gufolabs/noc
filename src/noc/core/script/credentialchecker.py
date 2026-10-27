@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Credential checker
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -148,7 +148,7 @@ class CredentialChecker:
         """
         yield from sorted(
             set(args[0]).intersection(*[set(s) for s in args[1:] if s]),
-            key=lambda x: order.index(x),
+            key=order.index,
         )
 
     @staticmethod

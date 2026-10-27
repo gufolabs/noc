@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # VCenter Connection Setup
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -26,8 +26,6 @@ class ConnectionFailure(Exception):
 
 def disconnect(alias=DEFAULT_CONNECTION_NAME):
     """Close the connection with a given alias."""
-    global _vim_connections, _vim_connection_settings
-
     connection = _vim_connections.pop(alias, None)
     if connection:
         logger.info("[%s] Close VIM connection", alias)
@@ -38,8 +36,6 @@ def disconnect(alias=DEFAULT_CONNECTION_NAME):
 
 def disconnect_all():
     """Close all registered database."""
-    global _vim_connections
-
     for alias in list(_vim_connections.keys()):
         disconnect(alias)
 
@@ -52,8 +48,6 @@ def register_connection(
     password=None,
 ):
     """Register connection settings"""
-    global _vim_connection_settings
-
     conn_settings = {
         "host": host,
         "user": username,
@@ -76,8 +70,6 @@ def _create_connection(alias, **connection_settings):
 
 def connect(host=None, alias=DEFAULT_CONNECTION_NAME, **kwargs):
     """Connect to"""
-    global _vim_connections, _vim_connection_settings
-
     if alias in _vim_connections:
         prev_conn_setting = _vim_connection_settings[alias]
         # Token ?
@@ -102,8 +94,6 @@ def connect(host=None, alias=DEFAULT_CONNECTION_NAME, **kwargs):
 
 def get_connection(alias=DEFAULT_CONNECTION_NAME, reconnect=False):
     """Return a connection with a given alias."""
-    global _vim_connections, _vim_connection_settings
-
     # If the requested alias already exists in the _connections list, return
     # it immediately.
     if alias in _vim_connections:

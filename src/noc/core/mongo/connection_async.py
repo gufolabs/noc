@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Mongo connection setup
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -31,7 +31,6 @@ def connect_async():
 
     :return:
     """
-    global _async_connections
     if _async_connections:
         return
     # temporary_errors = (ConnectionFailure, AutoReconnect)
@@ -69,18 +68,15 @@ def is_connected():
 
     :return: True if connect() has been called, False otherwise
     """
-    global _async_connections
     return bool(_async_connections)
 
 
 def get_connection():
-    global _async_connections
     if DEFAULT_CONNECTION_NAME in _async_connections:
         return _async_connections[DEFAULT_CONNECTION_NAME]
 
 
 def get_db():
-    global _dbs
     if DEFAULT_CONNECTION_NAME not in _dbs:
         conn = get_connection()
         _dbs[DEFAULT_CONNECTION_NAME] = conn.get_default_database()

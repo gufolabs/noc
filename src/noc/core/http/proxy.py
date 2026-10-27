@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Proxy settings
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ _urllib_proxies_installed = False
 
 
 def setup_urllib_proxies():
-    global _urllib_proxies_installed, SYSTEM_PROXIES
+    global _urllib_proxies_installed
 
     if _urllib_proxies_installed:
         return

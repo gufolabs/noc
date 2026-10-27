@@ -233,7 +233,6 @@ class MIBAPI(JSONRPCAPI):
         if self.rx_oid.match(oid):
             # oid -> name
             name = MIB.get_name(oid)
-            oid = oid
         else:
             name = oid
             oid = MIB.get_oid(name)

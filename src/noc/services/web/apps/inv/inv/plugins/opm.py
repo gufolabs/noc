@@ -117,7 +117,7 @@ class OPM4Card(BaseCard):
 class ROADM29Card(BaseCard):
     """ROADM 2x9"""
 
-    groups = groups = ["Com In", "Com Out"]
+    groups = ["Com In", "Com Out"]
     bands = [Band.C, Band.H]
 
     @classmethod

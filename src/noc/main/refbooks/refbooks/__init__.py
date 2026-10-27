@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Built-in refbooks
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,6 @@ lang_cache = {}
 
 
 def get_language(name):
-    global lang_cache
     if name not in lang_cache:
         lang = Language.objects.get(name=name)
         lang_cache[name] = lang

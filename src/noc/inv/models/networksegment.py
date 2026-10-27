@@ -106,7 +106,7 @@ class NetworkSegment(Document):
     )
     multicast_vlan = IntField(required=False, min_value=1, max_value=4095)
 
-    settings = DictField(default=lambda: {}.copy())
+    settings = DictField(default=dict)
     labels = ListField(StringField())
     l2_domain = PlainReferenceField(L2Domain, required=False)
     # Sibling segment, if part of larger structure with

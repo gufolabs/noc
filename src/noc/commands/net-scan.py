@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # device-discovery command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -297,8 +297,6 @@ class Command(BaseCommand):
         """
         Return checker function by name
         """
-        global checker_cache
-
         if name in checker_cache:
             return checker_cache[name]
         if name == ICMP_DIAG:

@@ -55,12 +55,12 @@ class DSSnapshot:
 
 
 clean_map = {
-    "str": lambda x: str(x),
-    "int": lambda x: int(x),
-    "float": lambda x: float(x),
-    "date": lambda x: dt.date.fromisoformat(x),
-    "datetime": lambda x: dt.datetime.fromisoformat(x),
-    "bool": lambda x: bool(x),
+    "str": str,
+    "int": int,
+    "float": float,
+    "date": dt.date.fromisoformat,
+    "datetime": dt.datetime.fromisoformat,
+    "bool": bool,
 }
 
 

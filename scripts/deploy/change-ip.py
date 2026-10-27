@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------
 # Change NOC's ip address
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ def take_postgresql_version():
             ],
             stdout=subprocess.PIPE,
             shell=True,
+            check=False,
         )
         return str(sp.stdout.decode("utf-8")).rstrip("\n")
     if distr_family == "rpm":
@@ -76,6 +77,7 @@ def take_postgresql_version():
             ["yum list installed postgresql* | grep -Po 'postgresql\\K\\d*(?=-server)'"],
             stdout=subprocess.PIPE,
             shell=True,
+            check=False,
         )
         ver = str(sp.stdout.decode("utf-8")).rstrip("\n")
         if ver == "96":

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Eltex.DSLAM.get_interface_status_ex
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -81,12 +81,9 @@ class Script(BaseScript):
         # Apply ifSpeed
         for ifindex, s in self.get_iftable(f"{o}.15.2.1.4").items():
             ri = r.get(ifindex)
-            if isinstance(s, int):
-                s = s
-            elif " " in str(s):
-                s = s.split()[0]
-            else:
-                s = 0
+            if not isinstance(s, int):
+                s = str(s)
+                s = s.split()[0] if " " in s else 0
             if ri:
                 s = int(s)
                 ri["in_speed"] = s * 1000

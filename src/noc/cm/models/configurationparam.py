@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ConfigurationParam model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ class ScopeVariant:
         scope, *v = code.split("::")
         s = ConfigurationScope.get_by_name(scope.strip("@"))
         if not s:
-            ValueError(f"Unknown scope: {scope}")
+            raise ValueError(f"Unknown scope: {scope}")
         # check value by helper
         return ScopeVariant(s, v[0] if v else None)
 

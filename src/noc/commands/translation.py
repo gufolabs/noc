@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # translation cli
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -167,7 +167,6 @@ class Command(BaseCommand):
                         mo = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".mo")
                         subprocess.check_call([BABEL, "compile", "-i", po, "-o", mo])
 
-    @staticmethod
     def handle_edit(self, service=None, language=None):
         pfx = Path("services", service[0], "translations", language[0], "LC_MESSAGES")
 
