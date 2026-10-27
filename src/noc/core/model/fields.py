@@ -354,11 +354,7 @@ class ObjectIDArrayField(ArrayField):
         if isinstance(value, (str, ObjectId)):
             value = [value]
         return "{{ {} }}".format(
-            ", ".join(
-                str(x)
-                for x in sorted(set(value), key=value.index)
-                if is_objectid(str(x))
-            )
+            ", ".join(str(x) for x in sorted(set(value), key=value.index) if is_objectid(str(x)))
         )
 
     def validate(self, value, model_instance):
