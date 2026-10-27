@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # MIB command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ class Command(BaseCommand):
                     yield lambda x: f.write(smart_bytes(x))
             else:
                 with open(path, "w") as f:
-                    yield lambda x: f.write(x)
+                    yield f.write
         else:
             self.print("Dumping to stdout")
             yield self.print

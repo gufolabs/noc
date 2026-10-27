@@ -61,7 +61,6 @@ class ActionBase(type):
     def __new__(
         mcs: "type[ActionBase]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
     ) -> type["Action"]:
-        global ACTION_TYPES
         cls = cast(type["Action"], type.__new__(mcs, name, bases, attrs))
         name = getattr(cls, "name", None)
         if name:
@@ -77,8 +76,6 @@ class Action(metaclass=ActionBase):
 
     @classmethod
     def from_data(cls, data):
-        global ACTION_TYPES
-
         action = ACTION_TYPES[data["action"]]
         headers = [HeaderItem(**h) for h in data.get("headers", [])]
         headers += action.get_headers(data) or []

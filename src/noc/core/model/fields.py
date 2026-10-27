@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Custom field types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -354,11 +354,7 @@ class ObjectIDArrayField(ArrayField):
         if isinstance(value, (str, ObjectId)):
             value = [value]
         return "{{ {} }}".format(
-            ", ".join(
-                str(x)
-                for x in sorted(set(value), key=lambda x: value.index(x))
-                if is_objectid(str(x))
-            )
+            ", ".join(str(x) for x in sorted(set(value), key=value.index) if is_objectid(str(x)))
         )
 
     def validate(self, value, model_instance):

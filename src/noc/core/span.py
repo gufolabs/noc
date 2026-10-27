@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # External call spans
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -131,7 +131,6 @@ class Span:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        global spans
         if self.is_sampled or self.hist or self.quantile:
             self.duration = int((perf_counter() - self.ts0) * US)
         if self.hist:

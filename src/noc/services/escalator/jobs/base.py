@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Sequence Job Class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ class SequenceJob(Job):
         Args:
             delay:
         """
-        global RETRY_DELTA, RETRY_TIMEOUT, next_retry, retry_lock
+        global next_retry
 
         self.logger.info("Retry after %ss: %s", delay, self.error)
         now = dt.datetime.now()

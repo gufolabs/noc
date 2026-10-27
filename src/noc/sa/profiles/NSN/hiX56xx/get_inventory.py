@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # NSN.hiX56xx.get_inventory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,11 +18,6 @@ class Script(BaseScript):
         v = self.scripts.get_version()
         serial = self.capabilities.get("Chassis | Serial Number")
         revision = self.capabilities.get("Chassis | HW Version")
-        if serial:
-            serial = serial
-        if revision:
-            revision = revision
-
         r = [
             {
                 "type": "CHASSIS",

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # UDP Server test
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ async def client_routine(server: UDPServerStub, datagrams_quantity: int) -> None
     # Create socket
     loop = asyncio.get_running_loop()
     transport, _ = await loop.create_datagram_endpoint(
-        lambda: asyncio.DatagramProtocol(), remote_addr=server.sock_addr
+        asyncio.DatagramProtocol, remote_addr=server.sock_addr
     )
     sock = transport.get_extra_info("socket")
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 4 * DATAGRAMS_FOR_CLIENT * MAX_MSG_SIZE)

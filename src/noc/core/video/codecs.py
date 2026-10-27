@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Video Codecs Parameters
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -39,8 +39,6 @@ def get_h264_profile_by_name(name):
     :param name: Profile name
     :return: H264Profile instance or None
     """
-    global _H264_PROFILE_BY_NAME
-
     return _H264_PROFILE_BY_NAME.get(name.lower())
 
 
@@ -52,6 +50,4 @@ def get_h264_profile_by_id(id, constraint=None):
     :param constraint: Constraint set id or None
     :return: H264Profile instance or None
     """
-    global _H264_PROFILE_BY_ID
-
     return _H264_PROFILE_BY_ID.get((id, constraint))

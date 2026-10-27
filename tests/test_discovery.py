@@ -188,7 +188,6 @@ def get_by_path(mo, path):
     :param path: dot-separated path
     :return: value or None
     """
-    global _configs
     v = _configs[mo.id]
     for part in path.split("."):
         if part in v:
@@ -206,7 +205,6 @@ def get_discovery_object_name(x):
 
 @pytest.fixture(scope="module", params=get_discovery_configs(), ids=get_discovery_object_name)
 def discovery_object(request):
-    global _configs
     name, _address, pool_name, beef_storage_url, beef_path, data = request.param
     beef = Beef.load(beef_storage_url, beef_path)
     mo = ManagedObject(

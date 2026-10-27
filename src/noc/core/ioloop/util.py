@@ -81,8 +81,6 @@ def run_sync[T](cb: Callable[[], T]) -> T:
     Returns:
         Callable result
     """
-    global _setup_completed
-
     if not _setup_completed:
         setup_asyncio()
 
@@ -99,7 +97,7 @@ def setup_asyncio() -> None:
 
     :return:
     """
-    global _setup_completed, USE_UVLOOP
+    global _setup_completed
 
     if _setup_completed:
         return

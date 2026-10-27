@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Video resolution helpers
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -73,6 +73,4 @@ def get_resolution(name):
     :param name: Video Resolution name
     :return: VideoResolution instance or None
     """
-    global _RESOLUTIONS
-
     return _RESOLUTIONS.get(name.lower())

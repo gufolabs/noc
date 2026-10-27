@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # TLS Middleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -21,8 +21,6 @@ def tls_middleware(get_response):
     """
 
     def middleware(request):
-        global _tls
-
         _tls.request = request
         set_user(getattr(request, "user", None))
         response = get_response(request)

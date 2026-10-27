@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Deferred calls
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -109,7 +109,6 @@ def defer(handler: str, key: int | None = None, **kwargs) -> None:
     :param kwargs: Callable arguments
     :return:
     """
-    global JOBS_PARTITIONS, jp_lock
 
     async def init_partitions():
         global JOBS_PARTITIONS

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Capability model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ class Capability(Document):
     type: ValueType = EnumField(ValueType, required=True)
     allow_manual = BooleanField(default=False)
     multi = BooleanField(default=False)
-    values = DictField(default=lambda: {}.copy())
+    values = DictField(default=dict)
     # Jinja2 template for managed object's card tags
     card_template = StringField(required=False)
     # Expose to agent, if set. Collector name

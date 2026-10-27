@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Brocade.IronWare.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ class Script(BaseScript):
             elif ii.startswith("loop"):
                 ii = ii.replace("loopback ", "lb")
             elif ii.startswith("lb"):
-                ii = ii
+                pass
             elif ii != "":
                 ii = ii.split(" ")[1]
             ospf.append(ii.strip())

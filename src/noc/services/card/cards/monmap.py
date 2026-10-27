@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # MonMap
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -202,7 +202,7 @@ class MonMapCard(BaseCard):
                 m_services, _m_subscribers = ServiceSummary.get_direct_summary(objects_status[r])
             profiles |= set(m_services)
             sss[r] = m_services
-        for r in sorted(sss, key=lambda k: ("error", "warning", "good", "maintenance").index(k)):
+        for r in sorted(sss, key=("error", "warning", "good", "maintenance").index):
             for p in profiles:
                 services[p].append((r, sss[r].get(p, None)))
         return {

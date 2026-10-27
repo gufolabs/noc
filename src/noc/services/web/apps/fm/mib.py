@@ -140,7 +140,7 @@ class MIBApplication(ExtDocApplication):
                 s.append(f"display-hint: {syntax['display_hint']}")
             if syntax["base_type"] in ("Enumeration", "Bits") and "enum_map" in syntax:
                 # Display enumeration
-                for k in sorted(syntax["enum_map"], key=lambda x: int(x)):
+                for k in sorted(syntax["enum_map"], key=int):
                     s.append(f"{k} -> {syntax['enum_map'][k]}")
             return s
 

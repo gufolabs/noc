@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Mongo connection setup
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -78,7 +78,6 @@ def is_connected() -> bool:
         True: if connect() has been called
         False:  otherwise
     """
-    global _connected
     return _connected
 
 

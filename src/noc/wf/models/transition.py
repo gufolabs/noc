@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # State transition
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -80,6 +80,9 @@ class TransitionVertex(EmbeddedDocument):
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
+
+    def __hash__(self) -> int:
+        return hash((self.x, self.y))
 
 
 @bi_sync

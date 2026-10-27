@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Escalation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023, The NOC Project
+# Copyright (C) 2007-2026, The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ class BaseSequence(ABC):
         :param msg: Retry
         :param delay: In seconds
         """
-        global RETRY_DELTA, RETRY_TIMEOUT, next_retry, retry_lock
+        global next_retry
 
         if delay:
             Job.retry_after(delay + 60, msg)

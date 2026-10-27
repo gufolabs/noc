@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Brocade.CER.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -70,10 +70,8 @@ class Script(BaseScript):
                 ii = ii.replace("loopback ", "lb")
                 ii = ii.split(" ")[0]
             elif ii.startswith("lb"):
-                ii = ii
                 ii = ii.split(" ")[0]
             elif ii.startswith("tn"):
-                ii = ii
                 ii = ii.split(" ")[0]
             elif ii != "":
                 ii = ii.split(" ")[1]

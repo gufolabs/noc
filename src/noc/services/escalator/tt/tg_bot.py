@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DIT TT Integration
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -121,9 +121,6 @@ class TGBotTTSystem(BaseTTSystem):
             if status == 429:
                 raise TemporaryTTError(body["description"])
             raise TTError(body["description"])
-
-    @staticmethod
-    def parse_update_message(self): ...
 
     def get_updates(
         self,

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Function matcher
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ def get_matcher(op: str, field: str, value: Any) -> Callable:
         case "$in" | "$all" | "$any":
             value = frozenset(v for v in value)
         case "$eq" | "$ne":
-            value = value
+            pass
         case "$gt" | "$gte" | "$lt" | "$lte":
             if field == "version":
                 value = alnum_key(value)
