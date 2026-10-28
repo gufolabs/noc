@@ -65,9 +65,8 @@ class WebService(BaseService):
         opts.update(
             {
                 # Granian checks mounts in order, so the exact index route goes first.
-                "static_path_route": ["/ui/index.html", "/index.html", "/ui"],
+                "static_path_route": ["/ui/index.html", "/ui"],
                 "static_path_mount": [
-                    index_path,
                     index_path,
                     ui_path,
                 ],
@@ -86,4 +85,4 @@ class WebService(BaseService):
             )
 
     async def redirect_to_index(self) -> RedirectResponse:
-        return RedirectResponse("/index.html", status_code=301)
+        return RedirectResponse("/ui/index.html", status_code=301)
