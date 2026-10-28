@@ -28,13 +28,14 @@ from typing import (
 import cachetools
 import setproctitle
 from a2wsgi import WSGIMiddleware
-from fastapi import FastAPI, Request
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException, RequestValidationError
 from granian.constants import Interfaces
 from granian.net import SocketSpec
 from granian.server.embed import Server
 from granian.utils.proxies import wrap_asgi_with_proxy_headers
+from gufo.loader import Loader, ModulePolicy
 from starlette.responses import JSONResponse, Response
 
 # NOC modules
@@ -66,7 +67,6 @@ from ..router.datastream import RouteDataStreamClient
 from .loader import set_service
 from .middleware.logging import LoggingMiddleware
 from .middleware.span import SpanMiddleware
-from .paths.loader import ServicePathLoader, loader
 from .rpc import RPCProxy
 
 DCS_SLOTS_CACHE = {}  # PROCESS -> object cache
@@ -475,17 +475,18 @@ class BaseService:
             collect_req_api_metric=self.collect_req_api_metric,
         )
         app.add_middleware(SpanMiddleware, service_name=self.name)
-        # Initialize routers
-        for path in loader.iter_classes():
-            app.include_router(loader.get_class(path))
-        service_paths = ("services", self.name, "paths")
-        if os.path.exists(os.path.join(*service_paths)):
-            extra_loader = ServicePathLoader()
-            extra_loader.base_path = service_paths
-            for path in extra_loader.iter_classes():
-                kls = extra_loader.get_class(path)
-                if kls:
-                    app.include_router(kls)
+        # Initialize common and service-specific API routers.
+        api_loader = Loader[APIRouter](
+            bases=[
+                *config.iter_customized_bases("noc.core.service.paths"),
+                *config.iter_customized_bases(f"noc.services.{self.name}.paths"),
+            ],
+            exclude=["base"],
+            attribute="router",
+            module_policy=ModulePolicy.RELAXED,
+        )
+        for router in api_loader.values():
+            app.include_router(router)
         self.configure_api_routes(app)
         # Attach third-party WSGI application
         if self.wsgi_app:
