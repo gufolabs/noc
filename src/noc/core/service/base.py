@@ -485,9 +485,7 @@ class BaseService:
             attribute="router",
             module_policy=ModulePolicy.RELAXED,
         )
-        self.logger.error("Init api!!!!")
         for router in api_loader.values():
-            self.logger.error("router=%s", router.__module__)
             app.include_router(router)
         self.configure_api_routes(app)
         # Attach third-party WSGI application
