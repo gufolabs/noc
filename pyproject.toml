@@ -37,7 +37,7 @@ dependencies = [
   "gufo_noc_speedup==0.1.1",
   "gufo-blob==0.2.0",
   "gufo-http==0.7.0",
-  "gufo-loader==2.0.1",
+  "gufo-loader==3.0.0",
   "gufo-ping==0.7.0",
   "gufo-snmp==0.12.0",
   "gufo-traceroute==0.2.0",
