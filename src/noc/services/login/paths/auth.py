@@ -34,6 +34,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 PINHOLE_PATHS = {
+    "/",
     "/api/login/login",
     "/api/login/is_logged",
     "/api/login/token",
