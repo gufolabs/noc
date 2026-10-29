@@ -45,8 +45,6 @@ class Command(BaseCommand):
                     continue
                 if f.endswith(".py"):
                     commands.add((prefix, f[:-3], get_help_from_command(os.path.join(root, f))))
-                elif f.endswith(".sh"):
-                    commands.add((prefix, f[:-3], ""))
         for cmd in sorted(commands):
             self.print(f"{cmd[0] + cmd[1]:20} {cmd[2]}")
         return 0
@@ -57,11 +55,6 @@ class Command(BaseCommand):
             path = os.path.join(root, f"{cmd}.py")
             if os.path.exists(path):
                 return subprocess.call([os.environ.get("NOC_CMD", "./noc"), cmd, "--help"])
-            # Shell, no help
-            path = os.path.join(root, f"{cmd}.sh")
-            if os.path.exists(path):
-                self.print(f"Help is not available for '{cmd}'")
-                return 1
         # Command not found
         self.print(f"Unknown command '{cmd}'")
         return 1

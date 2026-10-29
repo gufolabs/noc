@@ -9,7 +9,6 @@
 cd "$(dirname "${0}")" || exit
 NOC_CMD="$0"
 export NOC_CMD
-CMD="$1"
 
 if [ -f "$PWD/.env" ]; then
   # shellcheck disable=SC1091
@@ -26,16 +25,6 @@ fi
 
 if [ -z "${PYTHON_INTERPRETER}" ]; then
   export PYTHON_INTERPRETER='/usr/bin/env python3'
-fi
-
-if [ -f "${CUSTOM_PATH}/commands/$CMD.sh" ]; then
-    shift
-    exec /bin/sh "${CUSTOM_PATH}/commands/$CMD.sh" "$@"
-fi
-
-if [ -f "./commands/$CMD.sh" ]; then
-    shift
-    exec /bin/sh "./commands/$CMD.sh" "$@"
 fi
 
 exec ${PYTHON_INTERPRETER} -m noc.core.management.run "$@"
