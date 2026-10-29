@@ -2281,10 +2281,6 @@ msgstr ""
 msgid "Database Summary"
 msgstr "Resumo de banco de dados"
 
-#: services/web/apps/main/reportloc/views.py:19
-msgid "Lines Of Code"
-msgstr "Linhas de Código"
-
 #: services/web/apps/main/reportsubscription/views.py:20
 #: services/web/apps/main/reportsubscription/views.py:21
 msgid "Report Subscription"

@@ -2200,10 +2200,6 @@ msgstr ""
 msgid "Database Summary"
 msgstr ""
 
-#: services/web/apps/main/reportloc/views.py:19
-msgid "Lines Of Code"
-msgstr ""
-
 #: services/web/apps/main/reportsubscription/views.py:20
 #: services/web/apps/main/reportsubscription/views.py:21
 msgid "Report Subscription"
