@@ -510,7 +510,9 @@ class BaseService:
             port=port,
             interface=Interfaces.ASGI,
             backlog=2048,
-            log_access=True,
+            # Request logging is handled by LoggingMiddleware, which filters
+            # health checks and records the remaining requests.
+            log_access=False,
             log_access_format="%(method)s %(path)s %(status)d",
             log_enabled=True,
             **self.get_granian_options(),
