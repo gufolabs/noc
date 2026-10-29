@@ -21,5 +21,5 @@ class Command(BaseCommand):
             "args", nargs=argparse.REMAINDER, help="Arguments passed to supervisorctl"
         )
 
-    def handle(self, args: list[str], **options) -> int:
+    def handle(self, *args: str, **options) -> int:
         return subprocess.call(["./bin/supervisorctl", *args])
