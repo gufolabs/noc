@@ -237,9 +237,6 @@ class BaseService:
         sys.stdout.flush()
         os._exit(1)
 
-    def setup_test_logging(self) -> None:
-        self.logger = logging.getLogger(self.name)
-
     def setup_translation(self) -> None:
         # NOC modules
         from noc.core.translation import set_translation, ugettext
