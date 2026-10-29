@@ -27,7 +27,7 @@ from typing import (
 # Third-party modules
 import cachetools
 import setproctitle
-from a2wsgi import WSGIMiddleware
+from asgiref.wsgi import WsgiToAsgi
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException, RequestValidationError
@@ -490,7 +490,7 @@ class BaseService:
         self.configure_api_routes(app)
         # Attach third-party WSGI application
         if self.wsgi_app:
-            app.mount("/", WSGIMiddleware(self.wsgi_app))
+            app.mount("/", WsgiToAsgi(self.wsgi_app))
         addr, port = self.get_service_address()
         # Apply proxy headers with Granian's ASGI wrapper.
         asgi_app = wrap_asgi_with_proxy_headers(app, trusted_hosts="*")
