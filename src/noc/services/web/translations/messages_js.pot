@@ -207,9 +207,6 @@ msgstr ""
 #: ui/web/main/prefixtable/Application.js:20
 #: ui/web/main/prefixtable/Application.js:34
 #: ui/web/main/pyrule/Application.js:26 ui/web/main/pyrule/Application.js:40
-#: ui/web/main/refbookadmin/Application.js:25
-#: ui/web/main/refbookadmin/Application.js:52
-#: ui/web/main/refbookadmin/Application.js:139
 #: ui/web/main/regexplabel/Application.js:19
 #: ui/web/main/regexplabel/Application.js:33
 #: ui/web/main/remotesystem/Application.js:24
@@ -515,8 +512,6 @@ msgstr ""
 #: ui/web/main/prefixtable/Application.js:25
 #: ui/web/main/prefixtable/Application.js:40
 #: ui/web/main/pyrule/Application.js:47
-#: ui/web/main/refbookadmin/Application.js:68
-#: ui/web/main/refbookadmin/Application.js:156
 #: ui/web/main/regexplabel/Application.js:24
 #: ui/web/main/regexplabel/Application.js:39
 #: ui/web/main/remotesystem/Application.js:29
@@ -4406,7 +4401,6 @@ msgid "View as JSON"
 msgstr ""
 
 #: ui/web/fm/alarmclass/Application.js:520
-#: ui/web/main/refbookadmin/Application.js:122
 #: ui/web/main/reportconfig/Application.js:606
 msgid "By Builtin"
 msgstr ""
@@ -4878,8 +4872,6 @@ msgstr ""
 
 #: ui/web/fm/alarmtrigger/Application.js:75
 #: ui/web/fm/eventtrigger/Application.js:73
-#: ui/web/main/refbookadmin/Application.js:42
-#: ui/web/main/refbookadmin/Application.js:83
 #: ui/web/sa/commandsnippet/Application.js:109
 msgid "Is Enabled"
 msgstr ""
@@ -4891,7 +4883,6 @@ msgstr ""
 
 #: ui/web/fm/alarmtrigger/Application.js:134
 #: ui/web/fm/eventtrigger/Application.js:132
-#: ui/web/main/refbookadmin/Application.js:127
 msgid "By Enabled"
 msgstr ""
 
@@ -5477,7 +5468,7 @@ msgstr ""
 msgid "MIB"
 msgstr ""
 
-#: ui/web/fm/mib/Application.js:24 ui/web/main/refbookadmin/Application.js:101
+#: ui/web/fm/mib/Application.js:24
 msgid "Last Updated"
 msgstr ""
 
@@ -5527,8 +5518,6 @@ msgid "To OID"
 msgstr ""
 
 #: ui/web/fm/oidalias/Application.js:41 ui/web/main/label/Application.js:284
-#: ui/web/main/refbookadmin/Application.js:36
-#: ui/web/main/refbookadmin/Application.js:75
 msgid "Is Builtin"
 msgstr ""
 
@@ -8321,7 +8310,6 @@ msgid "Attrs"
 msgstr ""
 
 #: ui/web/inv/modelinterface/Application.js:95
-#: ui/web/main/refbookadmin/Application.js:149
 msgid "Req."
 msgstr ""
 
@@ -9911,8 +9899,6 @@ msgid "Show KB"
 msgstr ""
 
 #: ui/web/kb/kbentry/Application.js:103 ui/web/kb/kbentry/Application.js:129
-#: ui/web/main/refbookadmin/Application.js:30
-#: ui/web/main/refbookadmin/Application.js:59
 #: ui/web/main/reportconfig/Application.js:571
 #: ui/web/main/template/Application.js:91
 #: ui/web/main/userprofile/Application.js:47
@@ -10828,7 +10814,6 @@ msgstr ""
 
 #: ui/web/main/messageroute/Application.js:57
 #: ui/web/main/messageroute/Application.js:104
-#: ui/web/main/refbookadmin/Application.js:144
 #: ui/web/phone/numbercategory/Application.js:34
 #: ui/web/phone/numbercategory/Application.js:68
 msgid "Order"
@@ -11028,38 +11013,6 @@ msgstr ""
 
 #: ui/web/main/prefixtable/Application.js:81
 msgid "Test selected prefix tables ..."
-msgstr ""
-
-#: ui/web/main/refbookadmin/Application.js:91
-msgid "Refresh Interval (days)"
-msgstr ""
-
-#: ui/web/main/refbookadmin/Application.js:111
-msgid "Next Updated"
-msgstr ""
-
-#: ui/web/main/refbookadmin/Application.js:134
-msgid "Ref Book Fields"
-msgstr ""
-
-#: ui/web/main/refbookadmin/Application.js:161
-msgid "Search Method"
-msgstr ""
-
-#: ui/web/main/refbookadmin/LookupField.js:18
-msgid "string"
-msgstr ""
-
-#: ui/web/main/refbookadmin/LookupField.js:19
-msgid "substring"
-msgstr ""
-
-#: ui/web/main/refbookadmin/LookupField.js:20
-msgid "starting"
-msgstr ""
-
-#: ui/web/main/refbookadmin/LookupField.js:21
-msgid "3 Octets of the MAC"
 msgstr ""
 
 #: ui/web/main/remotesystem/Application.js:66
@@ -15489,4 +15442,3 @@ msgstr ""
 #: ui/web/wf/workflow/WFInspector.js:45
 msgid "Reset changes"
 msgstr ""
-
