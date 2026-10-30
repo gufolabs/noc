@@ -13,6 +13,7 @@ import logging
 import os
 from collections import OrderedDict
 from http import HTTPStatus
+from pathlib import Path
 from typing import Any, cast
 
 # Third-party modules
@@ -34,6 +35,7 @@ from django.utils.timezone import get_current_timezone
 
 # NOC modules
 from noc import settings
+from noc.config import config
 from noc.core.feature import Feature
 from noc.core.forms import NOCForm
 from noc.models import is_document
@@ -264,14 +266,22 @@ class Application(metaclass=ApplicationBase):
         :return:
         """
         if not self.j2_env:
-            self.j2_env = jinja2.Environment(
-                loader=jinja2.FileSystemLoader(
-                    [
-                        os.path.join("services", "web", "apps", self.module, self.app, "templates"),
-                        "templates",
-                    ]
+            loaders = []
+            custom_path = Path(config.path.custom_path) if config.path.custom_path else None
+            if custom_path:
+                if not custom_path.is_absolute():
+                    custom_path = config.noc_base / custom_path
+                app_templates = (
+                    custom_path / "services" / "web" / "apps" / self.module / self.app / "templates"
                 )
+                loaders.append(jinja2.FileSystemLoader(str(app_templates)))
+            loaders.append(
+                jinja2.PackageLoader(self.__class__.__module__.rsplit(".", 1)[0], "templates")
             )
+            if custom_path:
+                loaders.append(jinja2.FileSystemLoader(str(custom_path / "templates")))
+            loaders.append(jinja2.PackageLoader("noc", "templates"))
+            self.j2_env = jinja2.Environment(loader=jinja2.ChoiceLoader(loaders))
         return self.j2_env
 
     def render(

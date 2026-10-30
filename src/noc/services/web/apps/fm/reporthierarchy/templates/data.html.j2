@@ -1,4 +1,3 @@
-{% load noctags %}
 <style>
 .category {
     font-weight: bold;
@@ -6,7 +5,6 @@
 }
 
 .item {
-    
 }
 
 .offset {
@@ -19,7 +17,16 @@ UL.rules, UL.rules LI {
     list-style-position: outside;
 }
 </style>
-<h2>Event Classes Hierarchy ({{ne}} classes, {{ncr}} rules)</h2>
+{% macro bool_icon(value) -%}
+    {%- if value is none -%}
+        ?
+    {%- elif value -%}
+        <img src='/ui/pkg/django-media/admin/img/icon-yes.svg' alt='Yes' />
+    {%- else -%}
+        <img src='/ui/pkg/django-media/admin/img/icon-no.svg' alt='No' />
+    {%- endif -%}
+{%- endmacro %}
+<h2>Event Classes Hierarchy ({{ ne|e }} classes, {{ ncr|e }} rules)</h2>
 
 <table>
     <thead>
@@ -32,13 +39,15 @@ UL.rules, UL.rules LI {
             <th>Rules</th>
         </tr>
     </thead>
+{% set row = namespace(index=0) %}
 {% for level, c, rules in event_classes %}
     {% if level != -1 %}
-    <tr class="category"><td colspan="6">{{c}}</td></tr>
+    <tr class="category"><td colspan="6">{{ c|e }}</td></tr>
     {% else %}
-    <tr class="item {% cycle "row1" "row2" %}" >
-        <td>{{c.name}}</td>
-        <td>{{c.description}}</td>
+    <tr class="item {{ 'row1' if row.index % 2 == 0 else 'row2' }}">
+        {% set row.index = row.index + 1 %}
+        <td>{{ c.name|e }}</td>
+        <td>{{ c.description|e }}</td>
         <td>
             {% if c.action == "D" %}Drop{% endif %}
             {% if c.action == "L" %}Log{% endif %}
@@ -47,21 +56,21 @@ UL.rules, UL.rules LI {
         <td>
             {% for v in c.vars %}
                 {% if not v.required %}<i>{% endif %}
-                <b>{{v.name}} ({{v.type}}):</b> {{v.description}}<br/>
+                <b>{{ v.name|e }} ({{ v.type|e }}):</b> {{ v.description|e }}<br/>
                 {% if not v.required %}</i>{% endif %}
             {% endfor %}
         </td>
         <td>
             {% for r in c.disposition %}
-                <b>{{r.name}}:</b><br/>if&nbsp;({{r.condition}}):<br/>then&nbsp;{{r.action}}
-                {% if r.action == "raise" or r.action == "clear"%}<a href="#">{{r.alarm_class.name}}</a>{% endif %}
+                <b>{{ r.name|e }}:</b><br/>if&nbsp;({{ r.condition|e }}):<br/>then&nbsp;{{ r.action|e }}
+                {% if r.action == "raise" or r.action == "clear" %}<a href="#">{{ r.alarm_class.name|e }}</a>{% endif %}
                 <br/>
             {% endfor %}
         </td>
         <td>
             <ul class="rules">
             {% for r in rules %}
-                <li>{{r.name}}</li>
+                <li>{{ r.name|e }}</li>
             {% endfor %}
             </ul>
         </td>
@@ -70,7 +79,7 @@ UL.rules, UL.rules LI {
 {% endfor %}
 </table>
 
-<h2>Alarm Classes Hierarchy ({{na}} total)</h2>
+<h2>Alarm Classes Hierarchy ({{ na|e }} total)</h2>
 <table>
     <thead>
         <tr>
@@ -85,26 +94,26 @@ UL.rules, UL.rules LI {
     </thead>
 {% for level, a in alarm_classes %}
     {% if level != -1 %}
-    <tr class="category"><td colspan="8">{{a}}</td></tr>
+    <tr class="category"><td colspan="8">{{ a|e }}</td></tr>
     {% else %}
     <tr>
-        <td>{{a.name}}</td>
-        <td>{{a.description}}</td>
-        <td>{{a.is_unique|bool_icon}}</td>
-        <td>{{a.discriminator|join:", "}}</td>
-        <td>{{a.user_clearable|bool_icon}}</td>
+        <td>{{ a.name|e }}</td>
+        <td>{{ a.description|e }}</td>
+        <td>{{ bool_icon(a.is_unique) }}</td>
+        <td>{{ a.discriminator|join(', ')|e }}</td>
+        <td>{{ bool_icon(a.user_clearable) }}</td>
         <td>
             {% for v in a.vars %}
-            <b>{{v.name}}:</b> {{v.description}}<br/>{% if v.default %}default: {{v.default}}<br/>{% endif %}
+            <b>{{ v.name|e }}:</b> {{ v.description|e }}<br/>{% if v.default %}default: {{ v.default|e }}<br/>{% endif %}
             {% endfor %}
         </td>
         <td>
             {% for rc in a.root_cause %}
-                <b>{{rc.name}}:</b><br/>
-                Root: {{rc.root.name}}<br/>
-                Window: {{rc.window}}<br/>
-                {% for k, v in rc.condition.items %}
-                    {{k}}&nbsp;==&nbsp;{{v}}<br/>
+                <b>{{ rc.name|e }}:</b><br/>
+                Root: {{ rc.root.name|e }}<br/>
+                Window: {{ rc.window|e }}<br/>
+                {% for k, v in rc.condition.items() %}
+                    {{ k|e }}&nbsp;==&nbsp;{{ v|e }}<br/>
                 {% endfor %}
             {% endfor %}
         </td>
