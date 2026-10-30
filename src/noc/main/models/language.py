@@ -15,7 +15,6 @@ from noc.core.model.decorator import on_delete_check
 
 @on_delete_check(
     check=[
-        ("main.RefBook", "language"),
         ("kb.KBEntry", "language"),
         ("kb.KBEntryTemplate", "language"),
     ]

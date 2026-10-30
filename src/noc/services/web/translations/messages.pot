@@ -236,8 +236,6 @@ msgstr ""
 #: services/web/apps/main/pool/views.py:20
 #: services/web/apps/main/prefixtable/views.py:26
 #: services/web/apps/main/pyrule/views.py:21
-#: services/web/apps/main/refbook/views.py:42
-#: services/web/apps/main/refbookadmin/views.py:24
 #: services/web/apps/main/remotesystem/views.py:20
 #: services/web/apps/main/reportsubscription/views.py:21
 #: services/web/apps/main/resourcestate/views.py:20
@@ -2177,13 +2175,6 @@ msgstr ""
 msgid "PyRule"
 msgstr ""
 
-#: services/web/apps/main/refbook/views.py:40
-#: services/web/apps/main/refbook/views.py:42
-#: services/web/apps/main/refbookadmin/views.py:23
-#: services/web/apps/main/refbookadmin/views.py:24
-msgid "Reference Books"
-msgstr ""
-
 #: services/web/apps/main/remotesystem/views.py:20
 msgid "Remote Systems"
 msgstr ""
@@ -2866,4 +2857,3 @@ msgstr ""
 #: services/web/apps/wf/workflow/views.py:34
 msgid "Workflows"
 msgstr ""
-
