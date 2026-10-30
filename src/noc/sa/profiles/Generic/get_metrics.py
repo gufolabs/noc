@@ -8,12 +8,12 @@
 # Python modules
 import itertools
 import operator
-import os
 import re
 import time
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, cast
 
 # Third-party modules
@@ -40,7 +40,6 @@ from noc.sa.interfaces.igetmetrics import IGetMetrics
 
 NS = 1000_000_000.0
 SNMP_OVERLOAD_VALUE = 0xFFFFFFFFFFFFFFFF  # 18446744073709551615 for 64-bit counter
-PROFILES_PATH = os.path.join("sa", "profiles")
 
 
 class MetricConfig:
@@ -196,42 +195,53 @@ class MetricScriptBase(BaseScriptMetaclass):
         :return:
         """
 
-        def sort_path_key(s):
-            """
-            M - Main, C - Custom, G - Generic, P - profile
-            \\|G|P
-            -+-+-
-            M|3|1
-            C|2|0
-            :return:
-            """
-            if s.startswith(PROFILES_PATH):
-                return 3 if "Generic" in s else 1
-            return 2 if "Generic" in s else 0
-
         pp = script.name.rsplit(".", 1)[0]
         if pp == "Generic":
-            paths = config.get_customized_paths("sa", "profiles", "Generic", "snmp_metrics")
+            resources = itertools.chain(
+                mcs.iter_snmp_metric_resources("Generic"),
+                mcs.iter_snmp_metric_resources("Generic", custom=True),
+            )
         else:
             v, p = pp.split(".")
-            paths = sorted(
-                config.get_customized_paths("sa", "profiles", "Generic", "snmp_metrics")
-                + config.get_customized_paths("sa", "profiles", v, p, "snmp_metrics"),
-                key=sort_path_key,
+            # Keep the existing precedence: custom profile, built-in profile,
+            # custom Generic, then built-in Generic.
+            resources = itertools.chain(
+                mcs.iter_snmp_metric_resources(v, p, custom=True),
+                mcs.iter_snmp_metric_resources(v, p),
+                mcs.iter_snmp_metric_resources("Generic", custom=True),
+                mcs.iter_snmp_metric_resources("Generic"),
             )
-        for path in paths:
-            if not os.path.exists(path):
-                continue
-            for root, dirs, files in os.walk(path):
-                for f in files:
-                    if f.endswith(".json"):
-                        mcs.apply_snmp_rules_from_json(script, os.path.join(root, f))
+        for resource in resources:
+            for json_file in mcs.iter_json_resources(resource):
+                mcs.apply_snmp_rules_from_json(script, json_file)
+
+    @staticmethod
+    def iter_snmp_metric_resources(
+        *profile: str, custom: bool = False
+    ) -> Iterator[Path]:
+        """Yield the SNMP metric resource directory for a profile, if present."""
+        if custom:
+            if not config.path.custom_path:
+                return
+            root = Path(config.path.custom_path)
+        else:
+            root = config.noc_base
+        resource = root.joinpath("sa", "profiles", *profile, "snmp_metrics")
+        if resource.is_dir():
+            yield resource
 
     @classmethod
-    def apply_snmp_rules_from_json(mcs, script, path):
-        # @todo: Check read access
-        with open(path) as f:
-            data = f.read()
+    def iter_json_resources(mcs, resource: Path) -> Iterator[Path]:
+        """Recursively yield JSON files from a resource directory."""
+        for entry in resource.iterdir():
+            if entry.is_dir():
+                yield from mcs.iter_json_resources(entry)
+            elif entry.is_file() and entry.name.endswith(".json"):
+                yield entry
+
+    @classmethod
+    def apply_snmp_rules_from_json(mcs, script, path: Path):
+        data = path.read_text(encoding="utf-8")
         try:
             data = orjson.loads(data)
         except ValueError as e:
