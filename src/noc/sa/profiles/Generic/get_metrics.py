@@ -216,9 +216,7 @@ class MetricScriptBase(BaseScriptMetaclass):
                 mcs.apply_snmp_rules_from_json(script, json_file)
 
     @staticmethod
-    def iter_snmp_metric_resources(
-        *profile: str, custom: bool = False
-    ) -> Iterator[Path]:
+    def iter_snmp_metric_resources(*profile: str, custom: bool = False) -> Iterator[Path]:
         """Yield the SNMP metric resource directory for a profile, if present."""
         if custom:
             if not config.path.custom_path:
