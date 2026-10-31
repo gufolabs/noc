@@ -14,7 +14,7 @@ from noc.core.interface.parameter import BaseParameter as Parameter
 
 from .error import InterfaceTypeError
 
-RESERVED_NAMES = {"returns", "template", "form", "preview", "check"}
+RESERVED_NAMES = {"returns", "form", "preview", "check"}
 
 
 class BaseInterfaceMetaclass(type):
@@ -44,7 +44,6 @@ class BaseInterfaceMetaclass(type):
 
 
 class BaseInterface(metaclass=BaseInterfaceMetaclass):
-    template = None  # Relative template path in sa/templates/
     form = None
     preview = None
     check = None
