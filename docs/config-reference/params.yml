@@ -19,6 +19,10 @@ params:
   activator.tos:
     max: '255'
     min: '0'
+  api.backlog:
+    default: '2048'
+  api.listen:
+    default: auto:0
   audit.command_ttl:
     default: '2592000'
   audit.config_changed_ttl:
@@ -554,8 +558,6 @@ params:
   liftbridge.enable_http_proxy: {}
   liftbridge.publish_async_ack_timeout:
     default: '10'
-  listen:
-    default: auto:0
   log_format:
     default: '%(asctime)s [%(name)s] %(message)s'
   logging.log_api_calls: {}

@@ -122,6 +122,30 @@ class PrefixRewrite(BaseRewrite):
         return None
 
 
+class NameRewrite(BaseRewrite):
+    """Rewrite an exact configuration parameter name."""
+
+    def __init__(
+        self, name: str, rewrite_to: str, /, deprecation: type[Warning] | None = None
+    ) -> None:
+        super().__init__(deprecation=deprecation)
+        self.name = name
+        self.rewrite_to = rewrite_to
+
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
+        if key != self.name:
+            return key, value
+        if self.deprecation:
+            msg = f"`{key}` is deprecated and must be renamed to `{self.rewrite_to}`"
+            warnings.warn(msg, self.deprecation)
+        return self.rewrite_to, value
+
+    def reverse_rewrite(self, key: str) -> str | None:
+        if key == self.rewrite_to:
+            return self.name
+        return None
+
+
 class ValueRewrite(BaseRewrite):
     """
     Map parameter's values according to map.

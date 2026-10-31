@@ -38,16 +38,6 @@ Hostname.
 
 {{ config_param("language_code") }}
 
-## listen
-
-API listen address in form `<address>:<port>`, where `<address>` is one of:
-
-* `auto` - use hostname to detect address.
-* interface name, like `eth0`
-* IP address.
-
-{{ config_param("listen") }}
-
 ## log_format
 
 {{ config_param("log_format") }}

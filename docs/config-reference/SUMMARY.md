@@ -1,5 +1,6 @@
 * [Configuration System Overview](index.md)
 * [Global Configuration](global.md)
+* [[api] section](api.md)
 * [[activator] Section](activator.md)
 * [[audit] section](audit.md)
 * [[bi] section](bi.md)

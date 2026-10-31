@@ -29,6 +29,7 @@ from noc.core.config.base import (
     BaseRewrite,
     ConfigSection,
     DeprecatedValue,
+    NameRewrite,
     PrefixRewrite,
     ValueRewrite,
 )
@@ -46,7 +47,7 @@ from noc.core.config.params import (
     TimeZoneParameter,
     UUIDParameter,
 )
-from noc.core.deprecations import RemovedInNOC26Warning
+from noc.core.deprecations import RemovedInNOC26Warning, RemovedInNOC27Warning
 
 SECRETS_BASE = Path("/", "run", "secrets")
 
@@ -67,6 +68,10 @@ class Config(BaseConfig):
             "debug": logging.DEBUG,
         },
     )
+
+    class api(ConfigSection):
+        listen = StringParameter(default="auto:0")
+        backlog = IntParameter(default=2048)
 
     class activator(ConfigSection):
         tos = IntParameter(min=0, max=255, default=0)
@@ -431,8 +436,6 @@ class Config(BaseConfig):
         compression_threshold = IntParameter(default=524288)
         compression_method = StringParameter(choices=["", "zlib", "lzma"], default="zlib")
         enable_http_proxy = BooleanParameter(default=False)
-
-    listen = StringParameter(default="auto:0")
 
     log_format = StringParameter(default="%(asctime)s [%(name)s] %(message)s")
 
@@ -1350,6 +1353,7 @@ class Config(BaseConfig):
 
 config = Config(
     rewrites=[
+        NameRewrite("listen", "api.listen", deprecation=RemovedInNOC27Warning),
         PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",
