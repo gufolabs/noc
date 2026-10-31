@@ -517,12 +517,11 @@ class Config(BaseConfig):
         compression_method = StringParameter(choices=["", "zlib", "lzma"], default="zlib")
         enable_http_proxy = BooleanParameter(default=False)
 
-    log_format = StringParameter(default="%(asctime)s [%(name)s] %(message)s")
-
     thread_stack_size = IntParameter(default=0)
     version_format = StringParameter(default="%(version)s+%(branch)s.%(number)s.%(changeset)s")
 
     class logging(ConfigSection):
+        format = StringParameter(default="%(asctime)s [%(name)s] %(message)s")
         log_api_calls = BooleanParameter(default=False)
         log_sql_statements = BooleanParameter(default=False)
 
@@ -1254,7 +1253,7 @@ class Config(BaseConfig):
             from noc.core.log import ErrorFormatter
 
             # Logger is already initialized
-            fmt = ErrorFormatter(self.log_format, None)
+            fmt = ErrorFormatter(self.logging.format, None)
             for h in logging.root.handlers:
                 if isinstance(h, logging.StreamHandler):
                     h.stream = sys.stdout
@@ -1262,7 +1261,7 @@ class Config(BaseConfig):
             logging.root.setLevel(self.loglevel)
         else:
             # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=self.loglevel)
+            logging.basicConfig(stream=sys.stdout, format=self.logging.format, level=self.loglevel)
         logging.captureWarnings(True)
 
     def _setup_timezone(self) -> None:
@@ -1432,6 +1431,7 @@ class Config(BaseConfig):
 config = Config(
     rewrites=[
         NameRewrite("listen", "api.listen", deprecation=RemovedInNOC27Warning),
+        NameRewrite("log_format", "logging.format", deprecation=RemovedInNOC27Warning),
         PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",

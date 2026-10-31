@@ -558,7 +558,7 @@ params:
   liftbridge.enable_http_proxy: {}
   liftbridge.publish_async_ack_timeout:
     default: '10'
-  log_format:
+  logging.format:
     default: '%(asctime)s [%(name)s] %(message)s'
   logging.log_api_calls: {}
   logging.log_sql_statements: {}
