@@ -37,7 +37,7 @@ ENV \
     DJANGO_SETTINGS_MODULE=noc.settings \
     NOC_THREAD_STACK_SIZE=524288 \
     NOC_PYTHON_INTERPRETER=/usr/local/bin/python3 \
-    NOC_LISTEN="auto:1200" \
+    NOC_API_LISTEN="auto:1200" \
     PROJ_DIR=/usr \
     PYTHONPATH=/opt/noc/src
 COPY . /opt/noc/
@@ -57,7 +57,7 @@ ENV \
     DJANGO_SETTINGS_MODULE=noc.settings \
     NOC_THREAD_STACK_SIZE=524288 \
     NOC_PYTHON_INTERPRETER=/usr/local/bin/python3 \
-    NOC_LISTEN="auto:1200" \
+    NOC_API_LISTEN="auto:1200" \
     PYTHONPATH=/workspaces/noc/src \
     PROJ_DIR=/usr\
     NODE_OPTIONS=--max-old-space-size=8192\

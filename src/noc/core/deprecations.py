@@ -28,3 +28,7 @@ class RemovedInNOC2501Warning(DeprecationWarning):
 
 class RemovedInNOC26Warning(PendingDeprecationWarning):
     """Features to be removed in NOC 26."""
+
+
+class RemovedInNOC27Warning(PendingDeprecationWarning):
+    """Features to be removed in NOC 27."""

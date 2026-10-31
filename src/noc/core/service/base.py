@@ -357,11 +357,11 @@ class BaseService:
         """Returns an (address, port) for HTTP service listener"""
         if self.address and self.port:
             return self.address, self.port  # Already resolved
-        if config.listen:
-            addr, port = config.listen.split(":")
+        if config.api.listen:
+            addr, port_str = config.api.listen.split(":")
             port_tracker = config.instance
         else:
-            addr, port = "auto", 0
+            addr, port_str = "auto", "0"
             port_tracker = 0
         if addr == "auto":
             addr = config.node
@@ -369,7 +369,7 @@ class BaseService:
         elif not is_ipv4(addr):
             addr = self.resolve_addr(addr)
             self.logger.info("Resolving address to %s", addr)
-        port = int(port) + port_tracker
+        port = int(port_str) + port_tracker
         return addr, port
 
     def resolve_addr(self, addr: str) -> str:
@@ -506,11 +506,7 @@ class BaseService:
             address=addr,
             port=port,
             interface=Interfaces.ASGI,
-            backlog=2048,
-            # Request logging is handled by LoggingMiddleware, which filters
-            # health checks and records the remaining requests.
-            log_access=False,
-            log_access_format="%(method)s %(path)s %(status)d",
+            backlog=config.api.backlog,
             log_enabled=True,
             **self.get_granian_options(),
         )

@@ -99,6 +99,7 @@ Then following environment will be processed as:
 | Environment                | Configuration          |
 | -------------------------- | ---------------------- |
 | NOC_FEATURE_UVLOOP=1       | feature.uvloop=True    |
+| NOC_API_LISTEN=auto:1200   | api.listen=auto:1200    |
 | NOC_TIMEZONE=Europe/Moscow | timezone=Europe/Moscow |
 | NOC_FOOBAR                 | _ignored_              |
 | MYVAR_FEATURE_UVLOOP=1     | _ignored_              |
