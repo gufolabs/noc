@@ -67,7 +67,7 @@ class DesktopApplication(ExtApplication):
         """
         return self.render(
             request,
-            "desktop.html",
+            "desktop.html.j2",
             language=self.get_language(request),
             theme=config.web.theme,
             brand=config.brand,

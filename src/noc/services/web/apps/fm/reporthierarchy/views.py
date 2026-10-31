@@ -47,6 +47,8 @@ class HierarchyReportAppplication(ReportApplication):
             ac.append((len(p) * 24, cc.name))
             ac += [(-1, c) for c in a]
             na += len(a)
-        return self.render_template(
-            "data.html", event_classes=ec, alarm_classes=ac, ne=ne, na=na, ncr=ncr
+        return (
+            self.get_environment()
+            .get_template("data.html.j2")
+            .render(event_classes=ec, alarm_classes=ac, ne=ne, na=na, ncr=ncr)
         )
