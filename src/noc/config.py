@@ -69,10 +69,6 @@ class Config(BaseConfig):
         },
     )
 
-    class api(ConfigSection):
-        listen = StringParameter(default="auto:0")
-        backlog = IntParameter(default=2048)
-
     class activator(ConfigSection):
         tos = IntParameter(min=0, max=255, default=0)
         script_threads = IntParameter(default=10)
@@ -82,6 +78,10 @@ class Config(BaseConfig):
         http_connect_timeout = IntParameter(default=20)
         http_request_timeout = IntParameter(default=30)
         http_validate_cert = BooleanParameter(default=False)
+
+    class api(ConfigSection):
+        listen = StringParameter(default="auto:0")
+        backlog = IntParameter(default=2048)
 
     class audit(ConfigSection):
         command_ttl = SecondsParameter(default="1m")
