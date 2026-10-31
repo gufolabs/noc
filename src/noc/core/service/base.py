@@ -31,7 +31,7 @@ from asgiref.wsgi import WsgiToAsgi
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException, RequestValidationError
-from granian.constants import Interfaces
+from granian.constants import HTTPModes, Interfaces
 from granian.net import SocketSpec
 from granian.server.embed import Server
 from granian.utils.proxies import wrap_asgi_with_proxy_headers
@@ -39,7 +39,7 @@ from gufo.loader import Loader, ModulePolicy
 from starlette.responses import JSONResponse, Response
 
 # NOC modules
-from noc.config import config
+from noc.config import APIHTTPVersion, config
 from noc.core.affinity import AFF_NONE, AffinityController
 from noc.core.dcs.loader import DEFAULT_DCS, get_dcs
 from noc.core.debug import error_report, excepthook
@@ -499,14 +499,22 @@ class BaseService:
 
             await asgi_app(scope, receive, send_with_startup_signal)
 
+        server_options = {
+            "http": {
+                APIHTTPVersion.AUTO: HTTPModes.auto,
+                APIHTTPVersion.HTTP_1_1: HTTPModes.http1,
+                APIHTTPVersion.HTTP_2: HTTPModes.http2,
+            }[config.api.http_version],
+            "backlog": config.api.backlog,
+            "log_enabled": True,
+        }
+        server_options.update(self.get_granian_options())
         server = NOCGranianServer(
             app_with_startup_signal,
             address=addr,
             port=port,
             interface=Interfaces.ASGI,
-            backlog=config.api.backlog,
-            log_enabled=True,
-            **self.get_granian_options(),
+            **server_options,
         )
         self.server = server
         assert self.loop is not None
