@@ -38,10 +38,6 @@ Hostname.
 
 {{ config_param("language_code") }}
 
-## log_format
-
-{{ config_param("log_format") }}
-
 ## thread_stack_size
 
 {{ config_param("thread_stack_size") }}
