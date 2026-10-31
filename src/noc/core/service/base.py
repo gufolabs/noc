@@ -126,8 +126,6 @@ class BaseService:
     # Use watchdog for check Service register in consul
     use_watchdog = False
 
-    LOG_FORMAT = config.log_format
-
     DEFAULT_SHARDING_KEY = "managed_object"
     SHARDING_KEYS = {"span": "ctx"}
 

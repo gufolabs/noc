@@ -25,7 +25,6 @@ class CommandError(Exception):
 
 
 class BaseCommand:
-    LOG_FORMAT = config.log_format
     help = ""  # Help text (shows ./noc help)
 
     def __init__(self, stdout: TextIO | None = None, stderr: TextIO | None = None) -> None:
