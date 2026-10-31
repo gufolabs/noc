@@ -28,7 +28,7 @@ from aiokafka.producer.producer import AIOKafkaProducer
 from aiokafka.structs import OffsetAndTimestamp
 
 # NOC modules
-from noc.config import config
+from noc.config import KafkaCompressionType, config
 from noc.core.ioloop.util import run_sync
 
 # NOC Modules
@@ -182,7 +182,9 @@ class KafkaClient:
             sasl_plain_password=config.kafka.password,
             max_request_size=config.kafka.max_request_size,
             compression_type=(
-                None if config.kafka.compression_type == "none" else config.kafka.compression_type
+                None
+                if config.kafka.compression_type is KafkaCompressionType.NONE
+                else config.kafka.compression_type
             ),
         )
         while True:

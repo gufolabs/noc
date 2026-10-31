@@ -5,6 +5,10 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from enum import StrEnum
+from typing import assert_type
+
 # Third-party modules
 import pytest
 
@@ -13,6 +17,7 @@ from noc.core.config.base import BaseConfig
 from noc.core.config.params import (
     BooleanParameter,
     BytesSizeParameter,
+    EnumParameter,
     FloatParameter,
     HandlerParameter,
     IntParameter,
@@ -74,6 +79,49 @@ def test_string_parameter_none() -> None:
 
     config = Config()
     assert config.string is None
+
+
+class ExampleEnum(StrEnum):
+    FIRST = "first"
+    SECOND = "second"
+
+
+def test_enum_parameter_returns_enum_member() -> None:
+    class Config(BaseConfig):
+        value = EnumParameter[ExampleEnum](enum=ExampleEnum)
+
+    config = Config()
+    config.value = "second"
+    parameter = EnumParameter[ExampleEnum](enum=ExampleEnum)
+    assert_type(parameter.clean("second"), ExampleEnum)
+    assert config.value is ExampleEnum.SECOND
+
+
+def test_enum_parameter_accepts_enum_member() -> None:
+    class Config(BaseConfig):
+        value = EnumParameter[ExampleEnum](enum=ExampleEnum)
+
+    config = Config()
+    config.value = ExampleEnum.FIRST
+    assert config.value is ExampleEnum.FIRST
+
+
+@pytest.mark.parametrize("default", ["first", ExampleEnum.FIRST])
+def test_enum_parameter_defaults(default: str | ExampleEnum) -> None:
+    class Config(BaseConfig):
+        value = EnumParameter[ExampleEnum](enum=ExampleEnum, default=default)
+
+    config = Config()
+    assert config.value is ExampleEnum.FIRST
+
+
+def test_enum_parameter_errors() -> None:
+    class Config(BaseConfig):
+        value = EnumParameter[ExampleEnum](enum=ExampleEnum)
+
+    config = Config()
+    with pytest.raises(ValueError, match="Invalid value: invalid"):
+        config.value = "invalid"
 
 
 def test_secret_parameter() -> None:
