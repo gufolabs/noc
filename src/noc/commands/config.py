@@ -8,10 +8,13 @@
 # Python modules
 import argparse
 from contextlib import suppress
+from enum import Enum
 from pathlib import Path
+from typing import Any
 
 # NOC modules
 from noc.config import config
+from noc.core.config.params import EnumParameter
 from noc.core.management.base import BaseCommand
 
 
@@ -62,15 +65,20 @@ class Command(BaseCommand):
         ]
         params = {}
         for name, param in config.iter_params():
-            p = {}
+            p: dict[str, Any] = {}
             # default
             default = getattr(param, "default", "none")
-            if default:
+            if isinstance(default, Enum):
+                default = default.value
+            if default or (isinstance(param, EnumParameter) and default is not None):
                 p["default"] = str(default)
             # choices
-            choices = getattr(param, "choices", [])
+            if isinstance(param, EnumParameter):
+                choices = [member.value for member in param.enum]
+            else:
+                choices = getattr(param, "choices", [])
             if choices:
-                p["choices"] = sorted(choices)
+                p["choices"] = sorted(choices, key=str)
             # min
             p_min = getattr(param, "min", None)
             if p_min is not None:

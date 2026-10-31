@@ -21,7 +21,7 @@ from aiokafka.errors import (
 from atomicl import AtomicLong
 
 # NOC modules
-from noc.config import config
+from noc.config import KafkaCompressionType, config
 from noc.core.comp import smart_text
 from noc.core.msgstream.message import Message
 from noc.core.mx import KAFKA_PARTITION, MX_SHARDING_KEY, MX_TO
@@ -119,7 +119,7 @@ class KafkaSenderService(BaseService):
             max_request_size=config.kafkasender.max_request_size,
             compression_type=(
                 None
-                if config.kafkasender.compression_type == "none"
+                if config.kafkasender.compression_type is KafkaCompressionType.NONE
                 else config.kafkasender.compression_type
             ),
             retry_backoff_ms=10000,
