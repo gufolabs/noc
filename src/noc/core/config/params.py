@@ -9,6 +9,7 @@
 import itertools
 import logging
 from collections.abc import Iterable
+from enum import Enum
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -68,6 +69,25 @@ class StringParameter(BaseParameter[str]):
             if r not in self.choices:
                 raise ValueError(f"Invalid value: {r}")
         return r
+
+
+class EnumParameter[T: Enum](BaseParameter[T]):
+    """Validate a configuration value against an Enum and return its member."""
+
+    def __init__(
+        self, enum: type[T], default: T | str | None = None, help: str | None = None
+    ) -> None:
+        self.enum = enum
+        super().__init__(default=default, help=help)
+
+    def clean(self, v: Any) -> T:
+        if isinstance(v, self.enum):
+            return v
+        try:
+            return self.enum(v)
+        except (TypeError, ValueError):
+            msg = f"Invalid value: {v}"
+            raise ValueError(msg) from None
 
 
 class SecretParameter(BaseParameter[str]):
