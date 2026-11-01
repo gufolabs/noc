@@ -14,8 +14,6 @@ import pytest
 # NOC modules
 from noc.models import DB_MODEL_TYPE, is_document
 
-from .util import get_all_models
-
 
 def int_or_oid(x) -> str:
     if is_document(x):
@@ -43,8 +41,8 @@ def int_or_oid(x) -> str:
         ),
     ],
 )
-@pytest.mark.parametrize("model", get_all_models(), ids=lambda x: x.__name__)
-def test_get_by_signatures(name: str, args, model: DB_MODEL_TYPE) -> None:
+def test_get_by_signatures(all_models: DB_MODEL_TYPE, name: str, args) -> None:
+    model = all_models
     method = getattr(model, name, None)
     if not method:
         pytest.skip(f"No {name} method")

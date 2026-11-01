@@ -7,38 +7,39 @@
 
 # Third-party modules
 import bson
-import pytest
 
-from .util import get_documents, get_models
+# NOC modules
+from noc.models import DB_MODEL_TYPE
+from tests.database import DatabaseInfo
 
 
-@pytest.mark.parametrize("model", [x for x in get_models() if hasattr(x, "get_by_id")])
-def test_model_get_by_id(model, database) -> None:
-    assert callable(model.get_by_id)
-    r = model.objects.all()[:1]
+def test_model_get_by_id(models_with_get_by_id: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
+    assert callable(models_with_get_by_id.get_by_id)
+    r = models_with_get_by_id.objects.all()[:1]
     if r:
         r = r[0]
-        record = model.get_by_id(r.pk)
+        record = models_with_get_by_id.get_by_id(r.pk)
         assert record
         assert record.pk == r.pk
     else:
-        record = model.get_by_id(0)
+        record = models_with_get_by_id.get_by_id(0)
         assert not record
 
 
-@pytest.mark.parametrize("model", [x for x in get_documents() if hasattr(x, "get_by_id")])
-def test_document_get_by_id(model, database) -> None:
-    assert callable(model.get_by_id)
-    r = model.objects.first()
+def test_document_get_by_id(
+    documents_with_get_by_id: DB_MODEL_TYPE, database: DatabaseInfo
+) -> None:
+    assert callable(documents_with_get_by_id.get_by_id)
+    r = documents_with_get_by_id.objects.first()
     if r:
-        record = model.get_by_id(r.pk)
+        record = documents_with_get_by_id.get_by_id(r.pk)
         assert record
         assert record.pk == r.pk
-        record = model.get_by_id(str(r.pk))
+        record = documents_with_get_by_id.get_by_id(str(r.pk))
         assert record
         assert record.pk == r.pk
     else:
-        record = model.get_by_id(bson.ObjectId())
+        record = documents_with_get_by_id.get_by_id(bson.ObjectId())
         assert not record
-        record = model.get_by_id("000000000000000000000000")
+        record = documents_with_get_by_id.get_by_id("000000000000000000000000")
         assert not record

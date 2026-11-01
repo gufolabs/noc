@@ -5,22 +5,19 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Third-party modules
-import pytest
+# NOC modules
+from noc.models import DB_MODEL_TYPE
+from tests.database import DatabaseInfo
 
-from .util import get_documents, get_models
 
-
-@pytest.mark.parametrize("model", get_models())
-def test_model_str(model, database) -> None:
-    for o in model.objects.all():
+def test_model_str(models: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
+    for o in models.objects.all():
         s = str(o)
         assert s
         assert isinstance(s, str)
 
 
-@pytest.mark.parametrize("model", get_documents())
-def test_document_str(model, database) -> None:
-    for o in model.objects.all():
+def test_document_str(documents: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
+    for o in documents.objects.all():
         s = str(o)
         assert isinstance(s, str)

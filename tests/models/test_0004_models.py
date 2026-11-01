@@ -6,34 +6,23 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-import cachetools
-import pytest
 from django.db.models import BooleanField
 from django.db.models.fields import NOT_PROVIDED
 
 # NOC modules
-from noc.models import get_model_id
-
-from .util import get_models
+from noc.models import DB_MODEL_TYPE, get_model_id
 
 
-@cachetools.cached({})
-def get_fields():
-    r = []
-    for model in get_models():
-        for f in model._meta.fields:
-            r += [(get_model_id(model), f.name, f)]
-    return r
+def test_boolean_defaults(models: DB_MODEL_TYPE) -> None:
+    for field in models._meta.fields:
+        if not isinstance(field, BooleanField):
+            continue
+        assert field.default is not None
+        assert field.default != NOT_PROVIDED, (
+            f"BooleanField default for {get_model_id(models)}.{field.name} "
+            "must be set to either True or False"
+        )
 
 
-@pytest.mark.parametrize(
-    ("model_id", "field_name", "field"), [x for x in get_fields() if isinstance(x[2], BooleanField)]
-)
-def test_boolean_defaults(model_id, field_name, field) -> None:
-    assert field.default is not None
-    assert field.default != NOT_PROVIDED, "BooleanField default must be set to either True or False"
-
-
-@pytest.mark.parametrize("model", get_models())
-def test_tucked_pants(model) -> None:
-    assert hasattr(model, "_tucked_pants"), "Model must be subclass of NOCModel"
+def test_tucked_pants(models: DB_MODEL_TYPE) -> None:
+    assert hasattr(models, "_tucked_pants"), "Model must be subclass of NOCModel"

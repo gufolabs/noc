@@ -6,37 +6,23 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-import pytest
 from django.db import connection
 
-from .util import get_documents, get_models
+# NOC modules
+from noc.models import DB_MODEL_TYPE
+from tests.database import DatabaseInfo
 
 
-@pytest.mark.parametrize("model", get_models())
-def test_db_table(model, database) -> None:
-    if not hasattr(model, "_meta"):
-        pytest.skip("No _meta")
-    if not hasattr(model._meta, "db_table"):
-        pytest.skip("No db_table")
-
+def test_db_table(models: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
     cursor = connection.cursor()
-    cursor.execute("SELECT COUNT(*) FROM pg_class WHERE relname=%s", [model._meta.db_table])
-    assert cursor.fetchall()[0][0] == 1, f"Database table '{model._meta.db_table}' is not exists"
+    cursor.execute("SELECT COUNT(*) FROM pg_class WHERE relname=%s", [models._meta.db_table])
+    assert cursor.fetchall()[0][0] == 1, f"Database table '{models._meta.db_table}' is not exists"
 
 
-@pytest.mark.parametrize("model", get_models())
-def test_model_count(model, database) -> None:
-    if not hasattr(model, "_meta"):
-        pytest.skip("No _meta")
-    if not hasattr(model._meta, "db_table"):
-        pytest.skip("No db_table")
-
+def test_model_count(models: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
     cursor = connection.cursor()
-    cursor.execute(f"SELECT COUNT(*) FROM {model._meta.db_table}")
+    cursor.execute(f"SELECT COUNT(*) FROM {models._meta.db_table}")
 
 
-@pytest.mark.parametrize("model", get_documents())
-def test_document_count(model, database) -> None:
-    if not hasattr(model, "_meta"):
-        pytest.skip("No _meta")
-    model._get_collection().count_documents({})
+def test_document_count(documents: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
+    documents._get_collection().count_documents({})

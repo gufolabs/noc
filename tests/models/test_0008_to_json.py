@@ -9,27 +9,20 @@
 from pathlib import Path
 from uuid import UUID
 
-# Third-party modules
-import pytest
-
 # NOC modules
 from noc.core.protocols.to_json import ToJson
+from noc.models import DB_MODEL_TYPE
 
 from ..utils import check_protocol
-from .util import get_documents
-
-SELECTED_MODELS = [x for x in get_documents() if hasattr(x, "get_json_path")]
 
 
-@pytest.mark.parametrize("model", SELECTED_MODELS)
-def test_to_json_protocol(model) -> None:
-    check_protocol(ToJson, model)
+def test_to_json_protocol(json_documents: DB_MODEL_TYPE) -> None:
+    check_protocol(ToJson, json_documents)
 
 
-@pytest.mark.parametrize("model", SELECTED_MODELS)
-def test_get_json_path(model) -> None:
+def test_get_json_path(json_documents: DB_MODEL_TYPE) -> None:
     seen: dict[Path, UUID] = {}
-    for o in model.objects.all():
+    for o in json_documents.objects.all():
         path = o.get_json_path()
         assert path
         assert isinstance(path, Path)
@@ -37,15 +30,14 @@ def test_get_json_path(model) -> None:
         taken_by = seen.get(path)
         if taken_by:
             print(f">>> UUID: {o.uuid} -- {o}")
-            t_o = model.objects.get(uuid=taken_by)
+            t_o = json_documents.objects.get(uuid=taken_by)
             print(f"   taken by {t_o.uuid} -- {t_o}")
         assert taken_by is None, f"{path} requested by {o.uuid} but already taken by {taken_by}"
         seen[path] = o.uuid
 
 
-@pytest.mark.parametrize("model", SELECTED_MODELS)
-def test_to_json(model) -> None:
-    for o in model.objects.all():
+def test_to_json(json_documents: DB_MODEL_TYPE) -> None:
+    for o in json_documents.objects.all():
         j = o.to_json()
         assert j
         assert isinstance(j, str)
