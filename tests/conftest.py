@@ -226,9 +226,7 @@ def documents(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODE
 
 @pytest.fixture(
     scope="session",
-    params=tuple(
-        model for model in database_info.models if hasattr(model, "get_by_id")
-    ),
+    params=tuple(model for model in database_info.models if hasattr(model, "get_by_id")),
     ids=lambda model: model.__name__,
 )
 def models_with_get_by_id(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
@@ -237,9 +235,7 @@ def models_with_get_by_id(database: DatabaseInfo, request: pytest.FixtureRequest
 
 @pytest.fixture(
     scope="session",
-    params=tuple(
-        model for model in database_info.documents if hasattr(model, "get_by_id")
-    ),
+    params=tuple(model for model in database_info.documents if hasattr(model, "get_by_id")),
     ids=lambda model: model.__name__,
 )
 def documents_with_get_by_id(
@@ -250,9 +246,7 @@ def documents_with_get_by_id(
 
 @pytest.fixture(
     scope="session",
-    params=tuple(
-        model for model in database_info.models if hasattr(model, "get_by_bi_id")
-    ),
+    params=tuple(model for model in database_info.models if hasattr(model, "get_by_bi_id")),
     ids=lambda model: model.__name__,
 )
 def models_with_get_by_bi_id(
@@ -263,9 +257,7 @@ def models_with_get_by_bi_id(
 
 @pytest.fixture(
     scope="session",
-    params=tuple(
-        model for model in database_info.documents if hasattr(model, "get_by_bi_id")
-    ),
+    params=tuple(model for model in database_info.documents if hasattr(model, "get_by_bi_id")),
     ids=lambda model: model.__name__,
 )
 def documents_with_get_by_bi_id(
@@ -276,9 +268,7 @@ def documents_with_get_by_bi_id(
 
 @pytest.fixture(
     scope="session",
-    params=tuple(
-        model for model in database_info.documents if hasattr(model, "get_json_path")
-    ),
+    params=tuple(model for model in database_info.documents if hasattr(model, "get_json_path")),
     ids=lambda model: model.__name__,
 )
 def json_documents(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:

@@ -13,9 +13,7 @@ from noc.models import DB_MODEL_TYPE
 from tests.database import DatabaseInfo
 
 
-def test_model_get_by_id(
-    models_with_get_by_id: DB_MODEL_TYPE, database: DatabaseInfo
-) -> None:
+def test_model_get_by_id(models_with_get_by_id: DB_MODEL_TYPE, database: DatabaseInfo) -> None:
     assert callable(models_with_get_by_id.get_by_id)
     r = models_with_get_by_id.objects.all()[:1]
     if r:
