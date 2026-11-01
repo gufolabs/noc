@@ -58,7 +58,6 @@ class CLIProtocolChecker(BaseChecker):
         check: Check,
     ) -> Iterable[tuple[Protocol, CLICredential]]:
         """
-
         Returns:
             An iterator containing the credential for the requested protocol,
             if one is configured.
