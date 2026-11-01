@@ -100,6 +100,20 @@ class KafkaSASLMechanism(StrEnum):
     SCRAM_SHA_512 = "SCRAM-SHA-512"
 
 
+class APIHTTPVersion(StrEnum):
+    """HTTP protocol mode for the API server.
+
+    Attributes:
+        AUTO: Accept HTTP/1.1 and HTTP/2.
+        HTTP_1_1: Accept only HTTP/1.1.
+        HTTP_2: Accept only HTTP/2.
+    """
+
+    AUTO = "AUTO"
+    HTTP_1_1 = "HTTP_1_1"
+    HTTP_2 = "HTTP_2"
+
+
 class KafkaSecurityProtocol(StrEnum):
     """Transport security protocols supported by Kafka producers.
 
@@ -164,6 +178,11 @@ class Config(BaseConfig):
     class api(ConfigSection):
         listen = StringParameter(default="auto:0")
         backlog = IntParameter(default=2048)
+        http_version = EnumParameter(
+            APIHTTPVersion,
+            default=APIHTTPVersion.AUTO,
+            help="HTTP protocol mode used by the API server",
+        )
 
     class audit(ConfigSection):
         command_ttl = SecondsParameter(default="1m")

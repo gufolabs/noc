@@ -21,6 +21,12 @@ params:
     min: '0'
   api.backlog:
     default: '2048'
+  api.http_version:
+    choices:
+    - AUTO
+    - HTTP_1_1
+    - HTTP_2
+    default: AUTO
   api.listen:
     default: auto:0
   audit.command_ttl:

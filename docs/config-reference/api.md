@@ -22,3 +22,13 @@ deprecation period.
 Maximum number of pending connections in the listener queue.
 
 {{ config_param("api.backlog") }}
+
+## http_version
+
+HTTP protocol mode accepted by the API server:
+
+* `AUTO` accepts HTTP/1.1 and HTTP/2.
+* `HTTP_1_1` accepts only HTTP/1.1.
+* `HTTP_2` accepts only HTTP/2. On a cleartext listener, clients must use h2c prior knowledge.
+
+{{ config_param("api.http_version") }}
