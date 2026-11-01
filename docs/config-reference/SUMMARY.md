@@ -65,5 +65,4 @@
 * [[topo] section](topo.md)
 * [[traceback] section](traceback.md)
 * [[trapcollector] section](trapcollector.md)
-* [[ui] section](ui.md)
 * [[web] section](web.md)

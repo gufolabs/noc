@@ -940,15 +940,13 @@ class Config(BaseConfig):
         map_lon = StringParameter(default="108.567849")
         map_lat = StringParameter(default="66.050063")
         max_image_size = BytesSizeParameter(default="2M")
+        max_avatar_size = BytesSizeParameter(default="256K")
+        max_rest_limit = IntParameter(default=100)
         topology_map_grid_size = IntParameter(min=5, default=25)
         report_csv_delimiter = StringParameter(choices=[";", ","], default=";")
         enable_report_history = BooleanParameter(
             default=False, help="Enable Save Report Execution history"
         )
-
-    class ui(ConfigSection):
-        max_avatar_size = BytesSizeParameter(default="256K")
-        max_rest_limit = IntParameter(default=100)
 
     class datasource(ConfigSection):
         chunk_size = IntParameter(default=1000)
@@ -1451,6 +1449,7 @@ config = Config(
     rewrites=[
         NameRewrite("listen", "api.listen", deprecation=RemovedInNOC27Warning),
         NameRewrite("log_format", "logging.format", deprecation=RemovedInNOC27Warning),
+        PrefixRewrite("ui", "web", deprecation=RemovedInNOC27Warning),
         PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",

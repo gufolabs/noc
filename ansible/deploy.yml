@@ -62,7 +62,6 @@
     - role: nbi
     - role: worker
     - role: metrics
-    - role: ui
     - role: mx
     - role: kafkasender
     - role: mib

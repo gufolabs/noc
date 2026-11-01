@@ -988,10 +988,6 @@ params:
     default: '0.9'
   trapcollector.target_check_ttl:
     default: '604800'
-  ui.max_avatar_size:
-    default: '262144'
-  ui.max_rest_limit:
-    default: '100'
   version_format:
     default: '%(version)s+%(branch)s.%(number)s.%(changeset)s'
   watchdog.check_interval:
@@ -1026,8 +1022,12 @@ params:
     default: '66.050063'
   web.map_lon:
     default: '108.567849'
+  web.max_avatar_size:
+    default: '262144'
   web.max_image_size:
     default: '2097152'
+  web.max_rest_limit:
+    default: '100'
   web.max_threads:
     default: '10'
   web.max_upload_size:

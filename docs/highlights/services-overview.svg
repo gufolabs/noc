@@ -656,7 +656,7 @@
           <rect x="304" width="420.0924" height="21.666" y="310.0976" stroke="none"/>
         </g>
         <g font-size="15px" stroke-linecap="butt" transform="matrix(0.738,0,0,0.738,-81.9188,2.214)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke-miterlimit="1.45">
-          <text x="306" xml:space="preserve" y="326.5995" stroke="none">UI Services</text>
+          <text x="306" xml:space="preserve" y="326.5995" stroke="none">Web-facing Services</text>
         </g>
       </g>
       <g text-rendering="geometricPrecision" stroke-miterlimit="1.45" stroke-dasharray="6,2" shape-rendering="geometricPrecision" transform="matrix(0.738,0,0,0.738,-81.9188,2.214)" stroke-linecap="butt">

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# DocumentResource API
+# ModelResource API
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2021 The NOC Project
 # See LICENSE for details
@@ -11,15 +11,14 @@ from http import HTTPStatus
 from typing import Any
 
 # Third-party modules
+from django.core.exceptions import FieldDoesNotExist
+from django.db.models import Count, ForeignKey, Model, QuerySet
 from fastapi import HTTPException
-from mongoengine.document import Document
-from mongoengine.fields import ReferenceField
-from mongoengine.queryset import QuerySet
 
 # NOC modules
 from noc.aaa.models.user import User
 from noc.config import config
-from noc.core.mongo.fields import ForeignKeyField, PlainReferenceField
+from noc.core.model.fields import DocumentReferenceField
 from noc.core.typing import SupportsGetById
 from noc.models import get_model
 
@@ -27,9 +26,9 @@ from ...models.utils import SummaryItem
 from .base import BaseResourceAPI
 
 
-class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
+class ModelResourceAPI[T: Model](BaseResourceAPI[T]):
     """
-    Generic mongoengine-backed REST api.
+    Generic Django-backed REST api.
     """
 
     model: T
@@ -56,7 +55,9 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
         Calculate total amount of items, satisfying criteria
         :return:
         """
-        if field not in self.model._fields:
+        try:
+            field = self.model._meta.get_field(field)
+        except FieldDoesNotExist:
             raise HTTPException(
                 status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail=f"Unknown model field: {field}"
             )
@@ -65,15 +66,15 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
             for t in transforms:
                 qs = t(qs)
         return [
-            SummaryItem(id=str(r["_id"]), label=str(r["_id"]), count=int(r["count"]))
-            for r in qs.aggregate([{"$group": {"_id": f"${field}", "count": {"$sum": 1}}}])
+            SummaryItem(id=str(r[field.name]), label=str(r[field.name]), count=int(r["count"]))
+            for r in qs.values(field.name).annotate(count=Count("id"))
         ]
 
     def get_items(
         self,
         user: User,
         sort: list[str],
-        limit: int = config.ui.max_rest_limit,
+        limit: int = config.web.max_rest_limit,
         offset: int = 0,
         transforms: list[Callable] | None = None,
     ) -> list[T]:
@@ -136,12 +137,11 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
         self.add_cleaner(name, inner)
 
     def setup_cleaners(self):
-        def ensure_remote(remote: SupportsGetById | str) -> SupportsGetById:
-            if isinstance(remote, str):
-                return get_model(remote)
-            return remote
-
-        for name, field in self.model._fields.items():
-            match field:
-                case ForeignKeyField() | ReferenceField() | PlainReferenceField():
-                    self.add_ref_cleaner(field.name, ensure_remote(field.document_type))
+        for field in self.model._meta.local_fields:
+            if isinstance(field, ForeignKey):
+                self.add_ref_cleaner(field.name, field.remote_field.model)
+            elif isinstance(field, DocumentReferenceField):
+                remote = field.document
+                if isinstance(remote, str):
+                    remote = get_model(remote)
+                self.add_ref_cleaner(field.name, remote)
