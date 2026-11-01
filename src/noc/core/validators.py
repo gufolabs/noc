@@ -35,7 +35,7 @@ rx_objectid = re.compile(r"^[0-9a-f]{24}$")
 #
 # Validators returning boolean
 #
-def is_int(v):
+def is_int(v: str | int | float | None) -> bool:
     """
     Check for valid integer
 
@@ -57,7 +57,7 @@ def is_int(v):
     return True
 
 
-def is_float(v):
+def is_float(v: str | int | float | None) -> bool:
     """
     Check for valid float
 
@@ -81,7 +81,7 @@ def is_float(v):
     return True
 
 
-def is_asn(v):
+def is_asn(v: str | int) -> bool:
     """
     Check value is valid 2-byte or 4-byte autonomous system number
 
@@ -99,7 +99,7 @@ def is_asn(v):
         return False
 
 
-def is_ipv4(v):
+def is_ipv4(v: str) -> bool:
     """
     Check value is valid IPv4 address
 
@@ -125,7 +125,7 @@ def is_ipv4(v):
         return False
 
 
-def is_ipv6(v):
+def is_ipv6(v: str) -> bool:
     """
     Check value is valid IPv6 address
 
@@ -194,7 +194,7 @@ def is_ipv6(v):
     return True
 
 
-def is_ipv4_prefix(v):
+def is_ipv4_prefix(v: str) -> bool:
     """
     Check value is valid IPv4 prefix
 
@@ -226,7 +226,7 @@ def is_ipv4_prefix(v):
 is_cidr = is_ipv4_prefix
 
 
-def is_ipv6_prefix(v):
+def is_ipv6_prefix(v: str) -> bool:
     """
     Check value is valid IPv6 prefix
 
@@ -255,7 +255,7 @@ def is_ipv6_prefix(v):
     return 0 <= y <= 128
 
 
-def is_prefix(v):
+def is_prefix(v: str) -> bool:
     """
     Check value is valid IPv4 or IPv6 prefix
 
@@ -267,7 +267,7 @@ def is_prefix(v):
     return is_ipv4_prefix(v) or is_ipv6_prefix(v)
 
 
-def is_rd(v):
+def is_rd(v: str) -> bool:
     """
     Check value is valid Route Distinguisher
 
@@ -340,7 +340,7 @@ def is_rd(v):
     return False
 
 
-def is_as_set(v):
+def is_as_set(v: str) -> bool:
     """
     Check value is valuid AS-SET
 
@@ -352,7 +352,7 @@ def is_as_set(v):
     return rx_asset.match(v) is not None
 
 
-def is_fqdn(v):
+def is_fqdn(v: str) -> bool:
     """
     Check value is valid FQDN
 
@@ -364,7 +364,7 @@ def is_fqdn(v):
     return rx_fqdn.match(v) is not None
 
 
-def is_re(v):
+def is_re(v: str) -> bool:
     """
     Check value is valid regular expression
 
@@ -380,7 +380,7 @@ def is_re(v):
         return False
 
 
-def is_vlan(v):
+def is_vlan(v: str | int) -> bool:
     """
     Check value is valid VLAN ID
 
@@ -402,7 +402,7 @@ def is_vlan(v):
         return False
 
 
-def is_mac(v):
+def is_mac(v: str | None) -> bool:
     """
     >>> is_mac("1234.5678.9ABC")
     True
@@ -442,7 +442,7 @@ def is_mac(v):
         return False
 
 
-def is_email(v):
+def is_email(v: str) -> bool:
     """
     Check value is valid email
 
@@ -454,7 +454,7 @@ def is_email(v):
     return rx_email.match(v) is not None
 
 
-def is_oid(v):
+def is_oid(v: str) -> bool:
     """
     Check OID
 
@@ -466,7 +466,7 @@ def is_oid(v):
     return rx_oid.match(v) is not None
 
 
-def is_extension(v):
+def is_extension(v: str) -> bool:
     """
     Check value is file extension starting with dot
 
@@ -478,7 +478,7 @@ def is_extension(v):
     return rx_extension.match(v) is not None
 
 
-def is_mimetype(v):
+def is_mimetype(v: str) -> bool:
     """
     Check value is MIME Type
 
@@ -490,7 +490,7 @@ def is_mimetype(v):
     return rx_mimetype.match(v) is not None
 
 
-def is_uuid(v):
+def is_uuid(v: str) -> bool:
     """
     Check value is UUID
     Returns:
@@ -503,7 +503,7 @@ def is_uuid(v):
         return False
 
 
-def is_objectid(v):
+def is_objectid(v: str | None) -> str | bool | None:
     """
     Check value is mongodb's ObjectId
 

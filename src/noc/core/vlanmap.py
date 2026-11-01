@@ -5,8 +5,14 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from collections.abc import Sequence
 
-def process_vlan_map(vlans, rules):
+VLAN = int
+VLANRule = dict[str, str | int | None]
+
+
+def process_vlan_map(vlans: list[VLAN], rules: Sequence[VLANRule]) -> list[VLAN]:
     """
     Apply VLAN translation rules for ethernet services.
     `vlans` are coded by list:
@@ -62,7 +68,7 @@ def process_vlan_map(vlans, rules):
     return result
 
 
-def process_chain(vlans, chain):
+def process_chain(vlans: list[VLAN], chain: Sequence[Sequence[VLANRule]]) -> list[VLAN]:
     """
     Pass vlan stack through the chain of rules
     Args:

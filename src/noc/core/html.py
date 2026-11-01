@@ -5,8 +5,15 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from typing import Protocol
 
-def tags_list(o):
+
+class HasTags(Protocol):
+    tags: str | list[str] | None
+
+
+def tags_list(o: HasTags) -> str:
     if isinstance(o.tags, str):
         tags = [x for x in o.tags.split(",") if x]
     else:

@@ -7,6 +7,7 @@
 
 # Python modules
 from collections import defaultdict
+from collections.abc import MutableMapping
 
 # Third-party modules
 from atomicl import AtomicLong
@@ -17,7 +18,7 @@ from atomicl import AtomicLong
 metrics = defaultdict(lambda: AtomicLong(0))
 
 
-def apply_metrics(d):
+def apply_metrics(d: MutableMapping[str, object]) -> MutableMapping[str, object]:
     """
     Apply metrics value to dictionary d
     Args:

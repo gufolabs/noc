@@ -95,7 +95,7 @@ class ConduitsPlugin(InvPlugin):
             if object.point and remote.point:
                 map_distance = distance(object.point, remote.point)
                 br = bearing(object.point, remote.point)
-                sbr = bearing_sym(object.data, remote.data)
+                sbr = bearing_sym(object.point, remote.point)
             cd = conduits[remote]
             ducts.append(
                 {

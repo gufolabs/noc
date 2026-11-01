@@ -31,14 +31,14 @@ def json_escape(s: str | bool | None) -> str:
     return s.replace("\\", "\\\\").replace("\n", "\\n").replace('"', '\\"')
 
 
-def fm_escape(s) -> str:
+def fm_escape(s: str | bytes) -> str:
     """
     Escape binary FM data to string
     """
     return smart_text(binascii.b2a_qp(smart_bytes(s)).replace(b"=\n", b""))
 
 
-def fm_unescape(s) -> bytes:
+def fm_unescape(s: str | bytes) -> bytes:
     """
     Decode escaped FM data to a raw string
     'ab\\xffcd'

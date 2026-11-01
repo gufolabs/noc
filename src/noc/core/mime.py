@@ -29,7 +29,7 @@ class ContentType(IntEnum):
         return _CONTENT_TYPE.get(self.value)
 
     @property
-    def is_image(self):
+    def is_image(self) -> bool:
         return self.value in _IMAGE_TYPE
 
     @classmethod
