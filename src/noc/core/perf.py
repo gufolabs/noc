@@ -23,7 +23,7 @@ def apply_metrics(d):
     Args:
         d: Dictionary
     Returns:
-        Result of apply metrics value to dictionary d.
+        The input dictionary updated with the current metrics values.
     """
     for k, v in metrics.items():
         if isinstance(v, AtomicLong):

@@ -52,7 +52,8 @@ class Transaction:
 
         Args:
             node: BaseNode instance
-        :returns: True if all required nodes are activated, False otherwise
+        Returns:
+            True if all required inputs are activated; otherwise, False.
         """
         req_left = self.req_left[node]  # Can raise KeyError
         if req_left <= 1:

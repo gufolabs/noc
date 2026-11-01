@@ -324,7 +324,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
 
         Args:
             name: Input name
-        :returns: input type as IN_*
+        Returns:
+            Input type: `IN_INVALID`, `IN_REQUIRED`, or `IN_OPTIONAL`.
         """
         if name in self.static_inputs:
             return IN_REQUIRED
@@ -337,7 +338,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         Check if the node has input with given name
         Args:
             name: name of input
-        :returns: True, if input exists
+        Returns:
+            True if the input exists; otherwise, False.
         """
         return self.get_input_type(name) != IN_INVALID
 

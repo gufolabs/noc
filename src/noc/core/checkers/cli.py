@@ -42,7 +42,8 @@ class CLIProtocolChecker(BaseChecker):
         """
         Todo replace to error_code
         Returns:
-            Result of todo replace to error_code.
+            True if the message indicates an unsupported protocol error;
+            otherwise, False.
         """
         if "Exception: TimeoutError()" in message:
             return True
@@ -59,7 +60,8 @@ class CLIProtocolChecker(BaseChecker):
         """
 
         Returns:
-            Returned value.
+            An iterator containing the credential for the requested protocol,
+            if one is configured.
         """
         if check.credential:
             yield self.PROTO_CHECK_MAP[check.name], check.credential

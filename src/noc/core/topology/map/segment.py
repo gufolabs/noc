@@ -224,7 +224,8 @@ class SegmentTopology(TopologyBase):
         """
         Yields ObjectUplinks items for segment
 
-        :returns: ObjectUplinks items
+        Returns:
+            An iterator of `ObjectUplinks` items for the segment.
         """
 
         def get_node_uplinks(node: str) -> list[str]:

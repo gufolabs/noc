@@ -14,7 +14,8 @@ def deep_copy(t: dict[Any, Any]) -> dict[Any, Any]:
     Returns copy of dict `t`, following nested dict structures.
     Args:
         t: Input dictionary
-    :returns: Copied dictionary
+    Returns:
+        A recursively copied dictionary.
     """
     r = {}
     for k, v in t.items():
@@ -33,7 +34,8 @@ def deep_merge(t: dict[Any, Any], d: dict[Any, Any]) -> dict[Any, Any]:
     Args:
         t: Input dict
         d: Input dict
-    :returns: Merged dict
+    Returns:
+        A merged dictionary, with values from `d` overriding values from `t`.
     """
 
     def _merge(x: dict[Any, Any], y: dict[Any, Any]) -> None:

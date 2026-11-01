@@ -33,7 +33,7 @@ async def start_prof():
     """
     Start code profiling
     Returns:
-        Result of start code profiling.
+        A status message indicating whether profiling started.
     """
     # Third-party modules
     import yappi
@@ -54,7 +54,7 @@ async def stop_prof():
     """
     Stop code profiling
     Returns:
-        Result of stop code profiling.
+        A status message indicating whether profiling stopped.
     """
     # Third-party modules
     import yappi
@@ -75,7 +75,7 @@ async def get_prof_threads():
     """
     Get running threads info
     Returns:
-        Result of get running threads info.
+        Formatted information about running threads.
     """
     # Third-party modules
     import yappi
@@ -96,7 +96,7 @@ async def get_prof_funcs():
     """
     Get profiler functions statistics
     Returns:
-        Result of get profiler functions statistics.
+        Formatted profiler function statistics.
     """
     # Third-party modules
     import yappi
@@ -123,7 +123,7 @@ async def open_manhole():
     """
     Open manhole
     Returns:
-        Result of open manhole.
+        The UNIX domain socket path for the manhole connection.
     """
     # Third-party modules
     import manhole
@@ -139,7 +139,7 @@ async def inc_loglevel():
     """
     Increase loglevel
     Returns:
-        Result of increase loglevel.
+        The new logging level as a string.
     """
     current_level = logging.root.getEffectiveLevel()
     new_level = max(logging.DEBUG, current_level - 10)
@@ -155,7 +155,7 @@ async def dec_loglevel():
     """
     Decrease loglevel
     Returns:
-        Result of decrease loglevel.
+        The new logging level as a string.
     """
     current_level = logging.root.getEffectiveLevel()
     new_level = min(logging.CRITICAL, current_level + 10)
@@ -174,7 +174,7 @@ async def forensic_start():
     """
     Start forensic logging
     Returns:
-        Result of start forensic logging.
+        `"true"` if forensic logging was started; otherwise, `"false"`.
     """
     if not config.features.forensic:
         logger.critical("Starting forensic logging")
@@ -193,7 +193,7 @@ async def forensic_stop():
     """
     Stop forensic logging
     Returns:
-        Result of stop forensic logging.
+        `"true"` if forensic logging was stopped; otherwise, `"false"`.
     """
     if config.features.forensic:
         logger.critical("Stopping forensic logging")
@@ -212,7 +212,7 @@ async def start_memtrace():
     """
     Start code profiling
     Returns:
-        Result of start code profiling.
+        A status message confirming that memory tracing started.
     """
     # NOC modules
     from noc.core.service.loader import get_service
@@ -232,7 +232,7 @@ async def stop_memtrace():
     """
     Start code profiling
     Returns:
-        Result of start code profiling.
+        A status message confirming that memory tracing stopped.
     """
     tracemalloc.stop()
     tracemalloc.clear_traces()

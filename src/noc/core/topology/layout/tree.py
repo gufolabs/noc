@@ -62,7 +62,8 @@ class TreeLayout(LayoutBase):
             G: Graph instance
             node: Tree root
             uplink: Exclude uplink direction for recursive descent
-        :returns: Tree width
+        Returns:
+            The number of columns required by the subtree rooted at `node`.
         """
         downlinks = [n for n in nx.all_neighbors(G, node) if n != uplink]
         w = 0
