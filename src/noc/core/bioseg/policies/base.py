@@ -47,14 +47,16 @@ class BaseBioSegPolicy:
     def trial(self) -> str:
         """
         Perform trial between attacker and target
-        :return: Outcome
+        Returns:
+            Outcome
         """
         raise NotImplementedError
 
     def get_power(self, seg: NetworkSegment) -> int:
         """
         Calculate network segment's power
-        :return:
+        Returns:
+            Result of calculate network segment's power.
         """
         pwr = self._powers.get(seg)
         if pwr is not None:
@@ -82,7 +84,8 @@ class BaseBioSegPolicy:
     def consume_objects(self, src: NetworkSegment, dst: NetworkSegment) -> None:
         """
         Move all objects from src to dst
-        :return:
+        Returns:
+            Result of move all objects from src to dst.
         """
         self.logger.info("%s consumes objects from %s", dst.name, src.name)
         objects: list[ManagedObject] = self.get_objects(src)
@@ -123,7 +126,8 @@ class BaseBioSegPolicy:
     def refresh_topology(self, seg: NetworkSegment):
         """
         Rebuild topology and recalculate uplinks
-        :return:
+        Returns:
+            Result of rebuild topology and recalculate uplinks.
         """
         update_uplinks(seg.id)
 
@@ -131,7 +135,8 @@ class BaseBioSegPolicy:
         """
         Try to destroy empty network segment
 
-        :return:
+        Returns:
+            Result of try to destroy empty network segment.
         """
         self.logger.info(f"Try to destroy segment {seg.name}")
         if seg.profile.is_persistent:

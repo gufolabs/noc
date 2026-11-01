@@ -194,7 +194,8 @@ class AlarmNode(BaseCDAGNode):
     def is_required_input(self, name: str) -> bool:
         """
         If set deactivate_x Input, used it for check deactivate_level
-        :return:
+        Returns:
+            Result of if set deactivate_x input, used it for check deactivate_level.
         """
         if self.state.active and self.dynamic_inputs and name == "deactivate_x":
             return True

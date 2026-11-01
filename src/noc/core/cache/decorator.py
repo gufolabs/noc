@@ -18,13 +18,15 @@ def cachedmethod(cache=None, key="cache-%s", lock=None, ttl=None, version=0):
     """
     Decorator to wrap class instance or method
     with memorizing callable
-    :param cache: In-memory function which follows dict protocol.
+    Args:
+        cache: In-memory function which follows dict protocol.
         None, when no in-memory caching required
-    :param key: Key mask to convert args to string
-    :param lock: Callable to get threading lock
-    :param ttl: Record time-to-live
-    :param version: External cache version
-    :return:
+        key: Key mask to convert args to string
+        lock: Callable to get threading lock
+        ttl: Record time-to-live
+        version: External cache version
+    Returns:
+        Result of decorator to wrap class instance or method.
     """
 
     def decorator(method):

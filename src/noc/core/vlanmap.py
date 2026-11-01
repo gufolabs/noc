@@ -29,9 +29,11 @@ def process_vlan_map(vlans, rules):
       * drop - Drop top of internal stack
     * vlan - optional VLAN parameter
 
-    :param vlans: List of input vlan tags.
-    :param rules: List of rules
-    :return: List of output vlan tags
+    Args:
+        vlans: List of input vlan tags.
+        rules: List of rules
+    Returns:
+        List of output vlan tags
     """
     result = vlans[:]
     stack = []
@@ -63,9 +65,11 @@ def process_vlan_map(vlans, rules):
 def process_chain(vlans, chain):
     """
     Pass vlan stack through the chain of rules
-    :param vlans: Vlan stack as in process_vlan_map function
-    :param chain: List of list of rules. i.e.  [first ingress, first egress, ..., last ingress, last egress]
-    :return: Vlan stack as in process_vlan_map function
+    Args:
+        vlans: Vlan stack as in process_vlan_map function
+        chain: List of list of rules. i.e.  [first ingress, first egress, ..., last ingress, last egress]
+    Returns:
+        Vlan stack as in process_vlan_map function
     """
     result = vlans[:]
     for rules in chain:

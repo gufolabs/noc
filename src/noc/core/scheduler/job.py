@@ -97,8 +97,9 @@ class Job:
 
     def __init__(self, scheduler, attrs) -> None:
         """
-        :param scheduler: Scheduler instance
-        :param attrs: dict containing record from scheduler's collection
+        Args:
+            scheduler: Scheduler instance
+            attrs: dict containing record from scheduler's collection
         """
         self.scheduler = scheduler
         self.attrs = attrs
@@ -219,7 +220,8 @@ class Job:
         """
         Get dereference query condition.
         Called by dereference()
-        :return: dict or None
+        Returns:
+            dict or None
         """
         return {"pk": self.attrs[self.ATTR_KEY]}
 
@@ -255,7 +257,8 @@ class Job:
     def can_run(self):
         """
         Check wrether the job can be launched
-        :return:
+        Returns:
+            Result of check wrether the job can be launched.
         """
         return True
 
@@ -290,14 +293,15 @@ class Job:
     ):
         """
         Submit new job or change schedule for existing one
-        :param scheduler: scheduler name
-        :param name: Job full name
-        :param key: Job key
-        :param data: Job data
-        :param pool: Pool name
-        :param ts: Next run timestamp
-        :param delta: Run after *delta* seconds
-        :param keep_ts: Do not touch timestamp of existing jobs,
+        Args:
+            scheduler: scheduler name
+            name: Job full name
+            key: Job key
+            data: Job data
+            pool: Pool name
+            ts: Next run timestamp
+            delta: Run after *delta* seconds
+            keep_ts: Do not touch timestamp of existing jobs,
             set timestamp only for created jobs
         """
         from .scheduler import Scheduler
@@ -333,16 +337,19 @@ class Job:
         Must be called from job handler to deal with temporary problems.
         Current job handler will be terminated and job
         will be scheduled after *delay* seconds
-        :param delay: Delay in seconds
-        :param msg: Informational message
-        :return:
+        Args:
+            delay: Delay in seconds
+            msg: Informational message
+        Returns:
+            Result of must be called from job handler to deal with temporary problems.
         """
         raise RetryAfter(msg, delay=delay)
 
     def is_retries_exceeded(self):
         """
         Check if maximal amount of retries is exceeded
-        :return:
+        Returns:
+            Result of check if maximal amount of retries is exceeded.
         """
         runs = self.attrs.get(Job.ATTR_RUNS, 0)
         max_runs = self.attrs.get(Job.ATTR_MAX_RUNS, 0)
@@ -352,8 +359,10 @@ class Job:
     def get_next_timestamp(interval, offset=0.0, ts=None):
         """
         Calculate next timestamp
-        :param ts: current timestamp
-        :return: datetime object
+        Args:
+            ts: current timestamp
+        Returns:
+            datetime object
         """
         if not ts:
             ts = time.time()

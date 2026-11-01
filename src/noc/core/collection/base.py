@@ -136,14 +136,16 @@ class Collection:
     def get_state_collection(self):
         """
         Return mongo collection for state
-        :return:
+        Returns:
+            Result of return mongo collection for state.
         """
         return get_db()[self.STATE_COLLECTION]
 
     def get_state(self) -> dict[str, str]:
         """
         Returns collection state as a dict of UUID -> hash
-        :return:
+        Returns:
+            Result of returns collection state as a dict of uuid -> hash.
         """
         coll = self.get_state_collection()
         # Get state from database
@@ -167,7 +169,8 @@ class Collection:
     def save_state(self, state: dict[str, str]) -> None:
         """
         Save collection state
-        :return:
+        Returns:
+            Result of save collection state.
         """
         coll = self.get_state_collection()
         coll.update_one(
@@ -186,14 +189,16 @@ class Collection:
     def get_builtins(cls, name: str) -> set[str]:
         """
         Returns set of UUIDs for collection
-        :return:
+        Returns:
+            Result of returns set of uuids for collection.
         """
         return set(Collection(name).get_state())
 
     def get_legacy_state_path(self) -> Path:
         """
         Return legacy CSV state file path
-        :return:
+        Returns:
+            Result of return legacy csv state file path.
         """
         parts = self.name.split(".")
         return Path("local", "collections", parts[0], parts[1]).with_suffix(".csv")
@@ -464,7 +469,8 @@ class Collection:
     def fix_uuids(self):
         """
         Convert string UUIDs to binary
-        :return:
+        Returns:
+            Result of convert string uuids to binary.
         """
         bulk = []
         for d in self.model._get_collection().find(
@@ -479,7 +485,8 @@ class Collection:
     def install(cls, data):
         """
         Write data to the proper path
-        :return:
+        Returns:
+            Result of write data to the proper path.
         """
         c = Collection(data["$collection"])
         data = c.dereference(data)

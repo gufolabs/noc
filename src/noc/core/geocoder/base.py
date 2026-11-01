@@ -41,9 +41,10 @@ class BaseGeocoder:
     def forward(self, query: str, bounds=None) -> GeoCoderResult:
         """
         Forward lookup
-        :param query: Address as string
-        :type query: str
-        :return: GeoCoderResult or None
+        Args:
+            query (str): Address as string
+        Returns:
+            GeoCoderResult or None
         """
         try:
             return next(self.iter_query(query, bounds))
@@ -53,22 +54,24 @@ class BaseGeocoder:
     def iter_query(self, query: str, bounds=None) -> Iterator[GeoCoderResult]:
         """
         Get list of probable address candidates
-        :return:
+        Returns:
+            Result of get list of probable address candidates.
         """
         raise NotImplementedError()
 
     def iter_recursive_query(self, query: str, bounds=None) -> Iterator[GeoCoderResult]:
         """
         Get list of all addresses within the query
-        :return:
+        Returns:
+            Result of get list of all addresses within the query.
         """
         yield from self.iter_query(query, bounds)
 
     def get(self, url: str) -> tuple[int, bytes]:
         """
         Perform get request
-        :type url: str
-        :return:
+        Returns:
+            Result of perform get request.
         """
         with HttpClient(
             timeout=60,
@@ -84,7 +87,8 @@ class BaseGeocoder:
     def get_path(data, path):
         """
         Returns nested object referred by dot-separated path, or None
-        :return:
+        Returns:
+            Result of returns nested object referred by dot-separated path, or none.
         """
         o = data
         for p in path.split("."):

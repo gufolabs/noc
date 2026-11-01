@@ -61,7 +61,8 @@ class BaseLoader:
     mappings of ID between NOC and remote system. Populated by loader
     automatically.
 
-    :param fields: List of either field names or tuple of
+    Args:
+        fields: List of either field names or tuple of
         (field name, related loader name)
     """
 
@@ -749,7 +750,8 @@ class BaseLoader:
     def post_save(self, o, fields: dict[str, Any]):
         """
         Method fields updated separate method (example - capabilities)
-        :return:
+        Returns:
+            Result of method fields updated separate method (example - capabilities).
         """
         return
 

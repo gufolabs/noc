@@ -52,9 +52,11 @@ def lldp_caps_to_bits(caps, caps_map):
     Convert list of LLDP capabilities names to integer,
     suitable to IGetLLDPNeighbors remote_capabilities
 
-    :param caps: List of LLDP capabilities names
-    :param caps_map: name -> LLDP_CAP_* mapping. Name in lowercase
-    :return: IGetLLDPNeighbors.remote_capabilities
+    Args:
+        caps: List of LLDP capabilities names
+        caps_map: name -> LLDP_CAP_* mapping. Name in lowercase
+    Returns:
+        IGetLLDPNeighbors.remote_capabilities
     """
     r = 0
     for cap in caps:
@@ -67,8 +69,10 @@ def lldp_caps_to_bits(caps, caps_map):
 def lldp_bits_to_caps(bits):
     """
     Convert capabilities bits to canonical names
-    :param bits: Integer of bits
-    :return: List of names
+    Args:
+        bits: Integer of bits
+    Returns:
+        List of names
     """
     r = []
     for i in range(8):

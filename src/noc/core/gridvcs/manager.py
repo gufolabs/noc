@@ -99,8 +99,10 @@ class GridVCSObjectProxy:
         """
         Check config has revision
 
-        :param r: String containing revision id
-        :return: True if object has revision
+        Args:
+            r: String containing revision id
+        Returns:
+            True if object has revision
         """
         g = self.get_gridvcs()
         return bool(g.find_revision(self.id, r))

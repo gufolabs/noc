@@ -66,7 +66,8 @@ class ChangeTracker:
     def load_receivers() -> None:
         """
         Return changes receiver
-        :return:
+        Returns:
+            Result of return changes receiver.
         """
         # NOC modules
         from noc.core.bi.dictionaries.loader import loader
@@ -147,7 +148,8 @@ class ChangeTracker:
         """
         Push new effective policy for the current thread,
         store current one in the stack
-        :return:
+        Returns:
+            Result of push new effective policy for the current thread,.
         """
         # Store previous policy
         prev_policy = cv_policy.get()
@@ -163,7 +165,8 @@ class ChangeTracker:
     def pop_policy() -> BaseChangeTrackerPolicy | None:
         """
         Pop current effective policy from stack and restore previous one
-        :return: Current effective policy
+        Returns:
+            Current effective policy
         """
         # Get current policy
         policy = cv_policy.get()

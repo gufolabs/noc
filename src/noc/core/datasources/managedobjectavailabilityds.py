@@ -85,11 +85,13 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
     ) -> int:
         """
         Convert ManagedObjectStatus to outage interval
-        :param start_date: Start interval time
-        :param stop_date: End interval time
-        :param status: Object Status
-        :param last: Last changed status
-        :return:
+        Args:
+            start_date: Start interval time
+            stop_date: End interval time
+            status: Object Status
+            last: Last changed status
+        Returns:
+            Result of convert managedobjectstatus to outage interval.
         """
         if status:
             # If device available, zero outage

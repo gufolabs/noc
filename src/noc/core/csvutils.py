@@ -28,10 +28,9 @@ IGNORED_FIELDS = {"id", "bi_id"}
 def update_if_changed(obj, values):
     """
     Update fields if changed.
-    :param obj: Document instance
-    :type obj: Document
-    :param values: New values
-    :type values: dict
+    Args:
+        obj (Document): Document instance
+        values (dict): New values
     :returns: List of changed (key, value)
     """
     changes = []

@@ -28,7 +28,9 @@ def get_hist(*args):
 def apply_hists(d):
     """
     Apply histogram values to dict d
-    :param d: Dictionary
-    :return:
+    Args:
+        d: Dictionary
+    Returns:
+        Result of apply histogram values to dict d.
     """
     d.update(hists)

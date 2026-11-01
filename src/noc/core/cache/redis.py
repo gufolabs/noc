@@ -44,7 +44,8 @@ class RedisCache(BaseCache):
     def get(self, key, default=None, version=None):
         """
         Returns value or raise KeyError
-        :return: value
+        Returns:
+            value
         """
         k = self.make_key(key, version)
         try:
@@ -59,7 +60,8 @@ class RedisCache(BaseCache):
     def set(self, key, value, ttl=None, version=None):
         """
         Set key
-        :return:
+        Returns:
+            Result of set key.
         """
         k = self.make_key(key, version)
         ttl = ttl or config.redis.default_ttl

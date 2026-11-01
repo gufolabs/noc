@@ -12,7 +12,8 @@ from typing import Any
 def deep_copy(t: dict[Any, Any]) -> dict[Any, Any]:
     """
     Returns copy of dict `t`, following nested dict structures.
-    :param t: Input dictionary
+    Args:
+        t: Input dictionary
     :returns: Copied dictionary
     """
     r = {}
@@ -29,8 +30,9 @@ def deep_merge(t: dict[Any, Any], d: dict[Any, Any]) -> dict[Any, Any]:
     Merge contents of dicts `t` and `d`, including nested dicts,
     and returns merged dict. Values from `d` override values from `t`
 
-    :param t: Input dict
-    :param d: Input dict
+    Args:
+        t: Input dict
+        d: Input dict
     :returns: Merged dict
     """
 

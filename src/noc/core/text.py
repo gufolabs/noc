@@ -52,24 +52,16 @@ def parse_table(
     ddd   eee     fff
     Will be parsed down to the [["a","b","c"],["ddd","eee","fff"]]
 
-    :param s: Table for parsing
-    :type s: str
-    :param allow_wrap: Union if cell contins multiple line
-    :type allow_wrap: bool
-    :param allow_extend: Check if column on row longest then column width, enlarge it and shift rest of columns
-    :type allow_extend: bool
-    :param expand_columns: Expand columns covering all available width
-    :type expand_columns: bool
-    :param max_width: Max table width, if table width < max_width extend length, else - nothing
-    :type max_width: int
-    :param footer: stop iteration if match expression footer
-    :type footer: string
-    :param n_row_delim: Append delimiter to next cell line
-    :type n_row_delim: string
-    :param line_wrapper: Call line_wrapper with line argument
-    :type line_wrapper: callable
-    :param row_wrapper: Call row_wrapper with row argument
-    :type row_wrapper: callable
+    Args:
+        s (str): Table for parsing
+        allow_wrap (bool): Union if cell contins multiple line
+        allow_extend (bool): Check if column on row longest then column width, enlarge it and shift rest of columns
+        expand_columns (bool): Expand columns covering all available width
+        max_width (int): Max table width, if table width < max_width extend length, else - nothing
+        footer (string): stop iteration if match expression footer
+        n_row_delim (string): Append delimiter to next cell line
+        line_wrapper (callable): Call line_wrapper with line argument
+        row_wrapper (callable): Call row_wrapper with row argument
     """
     r = []
     columns = []

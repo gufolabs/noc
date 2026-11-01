@@ -47,7 +47,8 @@ class _VarVisitor(ast.NodeVisitor):
 def get_vars(expr: str) -> list[str]:
     """
     Parse expression and get the list of variables
-    :return:
+    Returns:
+        Result of parse expression and get the list of variables.
     """
     tree = ast.parse(expr, mode="eval")
     visitor = _VarVisitor()
@@ -58,7 +59,8 @@ def get_vars(expr: str) -> list[str]:
 def get_fn(expr: str) -> Callable:
     """
     Compile expression to function
-    :return:
+    Returns:
+        Result of compile expression to function.
     """
     x_vars = get_vars(expr)
     src = f"def fn({','.join(x_vars)}):\n    return {expr}\n"

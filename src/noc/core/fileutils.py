@@ -96,7 +96,8 @@ def urlopen(url, auto_deflate=False):
 def iter_open(path):
     """
     Generator yielding file-like objects from path
-    :return:
+    Returns:
+        Result of generator yielding file-like objects from path.
     """
     if path.endswith("tar.gz") or path.endswith("tgz"):
         tf = tarfile.open(path, "r:gz")
@@ -122,8 +123,10 @@ def make_persistent(path, tmp_suffix=".tmp"):
     """
     Make file persistent removing `tmp_suffix` suffix
 
-    :param path: File path
-    :return: True if file has been moved, false otherwise
+    Args:
+        path: File path
+    Returns:
+        True if file has been moved, false otherwise
     """
     if not path.endswith(tmp_suffix):
         return False

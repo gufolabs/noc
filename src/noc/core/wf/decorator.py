@@ -28,9 +28,12 @@ logger = logging.getLogger(__name__)
 def fire_event(self, event, bulk=None):
     """
     Perform transition using event name
-    :param event: event name
-    :param bulk
-    :return:
+    Args:
+        event: Event name to fire.
+        bulk: Bulk operation context.
+
+    Returns:
+        None.
     """
     if not self.state:
         logger.info("[%s] Cannot fire event '%s'. No default state. Skipping", self, event)
@@ -41,8 +44,10 @@ def fire_event(self, event, bulk=None):
 def fire_transition(self, transition):
     """
     Perform transition
-    :param transition: Transition instance
-    :return:
+    Args:
+        transition: Transition instance
+    Returns:
+        Result of perform transition.
     """
     self.state.fire_transition(transition, self)
 
@@ -373,7 +378,8 @@ def workflow(cls):
     * set_state - change .state field with calling State.on_state_enter
     * fire_event - Perform transition using event name
     * fire_transition - Perform transition
-    :return:
+    Returns:
+        Result of @workflow decorator denotes models which have .state.
     """
     cls.fire_event = fire_event
     cls.fire_transition = fire_transition

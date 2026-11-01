@@ -32,7 +32,8 @@ logger = logging.getLogger("ctl")
 async def start_prof():
     """
     Start code profiling
-    :return:
+    Returns:
+        Result of start code profiling.
     """
     # Third-party modules
     import yappi
@@ -52,7 +53,8 @@ async def start_prof():
 async def stop_prof():
     """
     Stop code profiling
-    :return:
+    Returns:
+        Result of stop code profiling.
     """
     # Third-party modules
     import yappi
@@ -72,7 +74,8 @@ async def stop_prof():
 async def get_prof_threads():
     """
     Get running threads info
-    :return:
+    Returns:
+        Result of get running threads info.
     """
     # Third-party modules
     import yappi
@@ -92,7 +95,8 @@ async def get_prof_threads():
 async def get_prof_funcs():
     """
     Get profiler functions statistics
-    :return:
+    Returns:
+        Result of get profiler functions statistics.
     """
     # Third-party modules
     import yappi
@@ -118,7 +122,8 @@ async def get_prof_funcs():
 async def open_manhole():
     """
     Open manhole
-    :return:
+    Returns:
+        Result of open manhole.
     """
     # Third-party modules
     import manhole
@@ -133,7 +138,8 @@ async def open_manhole():
 async def inc_loglevel():
     """
     Increase loglevel
-    :return:
+    Returns:
+        Result of increase loglevel.
     """
     current_level = logging.root.getEffectiveLevel()
     new_level = max(logging.DEBUG, current_level - 10)
@@ -148,7 +154,8 @@ async def inc_loglevel():
 async def dec_loglevel():
     """
     Decrease loglevel
-    :return:
+    Returns:
+        Result of decrease loglevel.
     """
     current_level = logging.root.getEffectiveLevel()
     new_level = min(logging.CRITICAL, current_level + 10)
@@ -166,7 +173,8 @@ async def dec_loglevel():
 async def forensic_start():
     """
     Start forensic logging
-    :return:
+    Returns:
+        Result of start forensic logging.
     """
     if not config.features.forensic:
         logger.critical("Starting forensic logging")
@@ -184,7 +192,8 @@ async def forensic_start():
 async def forensic_stop():
     """
     Stop forensic logging
-    :return:
+    Returns:
+        Result of stop forensic logging.
     """
     if config.features.forensic:
         logger.critical("Stopping forensic logging")
@@ -202,7 +211,8 @@ async def forensic_stop():
 async def start_memtrace():
     """
     Start code profiling
-    :return:
+    Returns:
+        Result of start code profiling.
     """
     # NOC modules
     from noc.core.service.loader import get_service
@@ -221,7 +231,8 @@ async def start_memtrace():
 async def stop_memtrace():
     """
     Start code profiling
-    :return:
+    Returns:
+        Result of start code profiling.
     """
     tracemalloc.stop()
     tracemalloc.clear_traces()
@@ -230,7 +241,8 @@ async def stop_memtrace():
 
 async def trace_leak(svc, delay=60, top=20, trace=1):
     """
-    :return:
+    Returns:
+        Returned value.
     """
     logger.info("Start trace: delay: %s, top: %s, trace: %s", delay, top, trace)
     tracemalloc.start(25)

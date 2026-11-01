@@ -31,7 +31,8 @@ FIELDS_MAP = {
 def parse_response(data):
     """Parse whois response
 
-    :return:
+    Returns:
+        Result of parse whois response.
     """
     r = []
     for line in data.splitlines():
@@ -49,10 +50,12 @@ def parse_response(data):
 async def send_whois_request(host: str, port: int, query: bytes) -> bytes:
     """Sending a TCP request to the whois server
 
-    :param host: Whois server
-    :param port: Port
-    :param query: Domain name to search
-    :return: Query result
+    Args:
+        host: Whois server
+        port: Port
+        query: Domain name to search
+    Returns:
+        Query result
     """
     reader, writer = await asyncio.open_connection(host, port)
     writer.write(query)
@@ -71,7 +74,8 @@ async def send_whois_request(host: str, port: int, query: bytes) -> bytes:
 async def whois_async(query, fields=None):
     """
     Perform whois request
-    :return:
+    Returns:
+        Result of perform whois request.
     """
     logger.debug("whois %s", query)
     # Get appropriate whois server

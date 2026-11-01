@@ -12,7 +12,8 @@ import math
 def hsv_to_rgb(h, s, v):
     """
     HSV -> RGB convertor, for Python 2.5 compatibility
-    :return:
+    Returns:
+        Result of hsv -> rgb convertor, for python 2.5 compatibility.
     """
     h = float(h)
     hi = math.floor(h / 60.0) % 6

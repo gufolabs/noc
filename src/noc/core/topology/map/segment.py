@@ -100,14 +100,16 @@ class SegmentTopology(TopologyBase):
         """
         Find uplinks basing on segment hierarchy. Any object with parent segment
         is uplink
-        :return:
+        Returns:
+            Result of find uplinks basing on segment hierarchy. any object with parent segment.
         """
         return [i for i in self.G.nodes if self.G.nodes[i].get("role") == "uplink"]
 
     def get_uplinks_molevel(self) -> list[str]:
         """
         Find uplinks basing on Managed Object's level. Top-leveled objects are returned.
-        :return:
+        Returns:
+            Result of find uplinks basing on managed object's level. top-leveled objects are returned.
         """
         max_level = max(
             self.G.nodes[i].get("level")
@@ -124,14 +126,16 @@ class SegmentTopology(TopologyBase):
     def get_uplinks_seg(self) -> list[str]:
         """
         All segment objects are uplinks
-        :return:
+        Returns:
+            Result of all segment objects are uplinks.
         """
         return [i for i in self.G.nodes if self.G.nodes[i].get("role") == "segment"]
 
     def get_uplinks_minaddr(self) -> list[str]:
         """
         Segment's Object with lesser address is uplink
-        :return:
+        Returns:
+            Result of segment's object with lesser address is uplink.
         """
         s = next(
             iter(
@@ -147,7 +151,8 @@ class SegmentTopology(TopologyBase):
     def get_uplinks_maxaddr(self) -> list[str]:
         """
         Segment's Object with greater address is uplink
-        :return:
+        Returns:
+            Result of segment's object with greater address is uplink.
         """
         s = next(
             sorted(

@@ -47,7 +47,8 @@ class MergeBioSegPolicy(BaseBioSegPolicy):
     def get_effective_policy(self) -> type[BaseBioSegPolicy]:
         """
         Calculate effective policy
-        :return:
+        Returns:
+            Result of calculate effective policy.
         """
         attacker_power = self.get_power(self.attacker)
         target_power = self.get_power(self.target)

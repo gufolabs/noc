@@ -13,6 +13,7 @@ from noc.core.service.loader import get_service as _get_service
 def get_service() -> BaseService:
     """
     Returns service instance
-    :return:
+    Returns:
+        Result of returns service instance.
     """
     return _get_service()

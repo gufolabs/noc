@@ -19,12 +19,10 @@ class PeriodicCallback:
         This function sets up a timer that will run the coroutine every
         interval miliseconds, starting after delay seconds
 
-        :param cb: The coroutine to call
-        :type cb: Coroutine
-        :param interval: The interval in milliseconds between each call of the callback
-        :type interval: int
-        :param delay: The delay before the first call to the callback, defaults to 0
-        :type delay: int (optional)
+        Args:
+            cb (Coroutine): The coroutine to call
+            interval (int): The interval in milliseconds between each call of the callback
+            delay (int (optional)): The delay before the first call to the callback, defaults to 0
         """
         self.cb = cb
         self.interval = float(interval) / 1000.0

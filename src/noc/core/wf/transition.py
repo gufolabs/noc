@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 def state_job(handler, model, object):
     """
     State.job_handler wrapper
-    :return:
+    Returns:
+        Result of state.job_handler wrapper.
     """
     # Resolve handler
     h = get_handler(handler)

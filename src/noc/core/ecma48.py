@@ -70,7 +70,8 @@ def compile_ecma_def(s: str) -> str:
 def get_ecma_re() -> bytes:
     """
     Compile ECMA-48 definitions to regular expression
-    :return:
+    Returns:
+        Result of compile ecma-48 definitions to regular expression.
     """
     re_csi = compile_ecma_def(CSI)
     re_c1 = compile_ecma_def(C1).replace("\\x5b", "")

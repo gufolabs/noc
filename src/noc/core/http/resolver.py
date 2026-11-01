@@ -26,7 +26,8 @@ ns_cache = cachetools.TTLCache(
 async def resolve_async(host: str) -> str | None:
     """
     Resolve host and return address
-    :return:
+    Returns:
+        Result of resolve host and return address.
     """
     with ns_lock:
         addrs = ns_cache.get(host)
@@ -49,7 +50,8 @@ async def resolve_async(host: str) -> str | None:
 def resolve_sync(host: str) -> str | None:
     """
     Resolve host and return address
-    :return:
+    Returns:
+        Result of resolve host and return address.
     """
     with ns_lock:
         addrs = ns_cache.get(host)

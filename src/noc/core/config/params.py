@@ -404,7 +404,8 @@ class ServiceParameter(BaseParameter[list[ServiceItem]]):
 
     def as_list(self) -> list[str]:
         """
-        :return: List of <host>:<port>
+        Returns:
+            List of <host>:<port>
         """
         if self.value:
             return [str(i) for i in self.value]
@@ -428,6 +429,7 @@ class ServiceParameter(BaseParameter[list[ServiceItem]]):
         """
         Change parameter's critical status
 
-        :return:
+        Returns:
+            Result of change parameter's critical status.
         """
         self.critical = critical

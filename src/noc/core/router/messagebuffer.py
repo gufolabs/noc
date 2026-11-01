@@ -39,7 +39,8 @@ class MBuffer:
     def put(self, msg: Message, group_key: str | None = None):
         """
         Put block of data to buffer
-        :return:
+        Returns:
+            Result of put block of data to buffer.
         """
         if not msg.value:
             return
@@ -60,7 +61,8 @@ class MBuffer:
     def iter_slice(self) -> Iterable[Message]:
         """
         Iterates tuple of (stream, partition, data)
-        :return:
+        Returns:
+            Result of iterates tuple of (stream, partition, data).
         """
         r_size = self.qsize()
         while r_size:
@@ -78,7 +80,8 @@ class MBuffer:
     def is_empty(self) -> bool:
         """
         Check if buffer is empty
-        :return:
+        Returns:
+            Result of check if buffer is empty.
         """
         with self.lock:
             return bool(self.qsize())

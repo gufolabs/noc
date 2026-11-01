@@ -46,7 +46,8 @@ class BaseModel(_BaseModel):
     def from_iter(cls, value: Iterable[Any]) -> "BaseModel":
         """
         Convert tuple or list from legacy CSV to BaseModel instance
-        :return:
+        Returns:
+            Result of convert tuple or list from legacy csv to basemodel instance.
         """
         return cls(**{fn: val for fn, val in zip_longest(cls._csv_fields.default, value) if fn})
 

@@ -19,17 +19,21 @@ class BaseConstraint:
         """
         Check if neighbor is valid neighbor for the path
 
-        :param current: Current Managed Object
-        :param neighbor: Neighbor Managed Object
-        :return: True if path can be continued via neighbors
+        Args:
+            current: Current Managed Object
+            neighbor: Neighbor Managed Object
+        Returns:
+            True if path can be continued via neighbors
         """
         return True
 
     def is_valid_link(self, link: Link) -> bool:
         """
         Check if link is valid on the path
-        :param link: Link instance
-        :return:
+        Args:
+            link: Link instance
+        Returns:
+            Result of check if link is valid on the path.
         """
         return True
 
@@ -37,7 +41,8 @@ class BaseConstraint:
         """
         Check if interface is valid interface on the path
 
-        :return:
+        Returns:
+            Result of check if interface is valid interface on the path.
         """
         return True
 
@@ -45,8 +50,10 @@ class BaseConstraint:
         """
         Check if egress interface is valid interface on the path
 
-        :param interface: Interface instance
-        :return: True if path can be continued across the interface
+        Args:
+            interface: Interface instance
+        Returns:
+            True if path can be continued across the interface
         """
         return self.is_valid_interface(interface)
 
@@ -54,8 +61,10 @@ class BaseConstraint:
         """
         Check if ingress interface is valid interface on the path
 
-        :param interface: Interface instance
-        :return: True if path can be continued across the interface
+        Args:
+            interface: Interface instance
+        Returns:
+            True if path can be continued across the interface
         """
         return self.is_valid_interface(interface)
 

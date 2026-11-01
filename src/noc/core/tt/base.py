@@ -245,7 +245,8 @@ class TTSystemCtx:
     def get_config(self):
         """
 
-        :return:
+        Returns:
+            Returned value.
         """
 
     def create(
@@ -283,7 +284,8 @@ class TTSystemCtx:
     def comment_tt(self, message: str):
         """
         Add document commentaries
-        :return:
+        Returns:
+            Result of add document commentaries.
         """
         """Append comment to tt"""
         self.tt_system.comment(
@@ -299,7 +301,8 @@ class TTSystemCtx:
     def close(self, subject: str | None = None, body: str | None = None):
         """
         Close document in TT System
-        :return:
+        Returns:
+            Result of close document in tt system.
         """
         self.tt_system.close(
             DeescalationContext(
@@ -348,9 +351,11 @@ class TTSystemCtx:
     def set_error(self, code: str | None = None, text: str | None = None) -> None:
         """
         Set error result and code for current span
-        :param code: Optional error code
-        :param text: Optional error text
-        :return:
+        Args:
+            code: Optional error code
+            text: Optional error text
+        Returns:
+            Result of set error result and code for current span.
         """
         if code is not None:
             self.error_code = code

@@ -41,9 +41,11 @@ class Stream:
     def f(self, r, n):
         """
         Error function invariant
-        :param r: Current rank
-        :param n: Total amount of records
-        :return: Error function
+        Args:
+            r: Current rank
+            n: Total amount of records
+        Returns:
+            Error function
         """
         raise NotImplementedError
 
@@ -53,7 +55,8 @@ class Stream:
     def insert(self, v):
         """
         Submit value to stream
-        :return:
+        Returns:
+            Result of submit value to stream.
         """
         # Fast unsorted insert untill buffer limit is reached or first query
         self.samples.append(Sample(v, 1, 0))
@@ -64,7 +67,8 @@ class Stream:
     def _maybe_sort(self):
         """
         Order samples when necessary
-        :return:
+        Returns:
+            Result of order samples when necessary.
         """
         if self.sorted:
             return
@@ -74,7 +78,8 @@ class Stream:
     def flush(self):
         """
         Flush unmerged samples into merged stream
-        :return:
+        Returns:
+            Result of flush unmerged samples into merged stream.
         """
         self._maybe_sort()
         self._merge()
@@ -83,7 +88,8 @@ class Stream:
     def _merge(self):
         """
         Merge unmerged and merged samples, maintaining merged samples in sorted order
-        :return:
+        Returns:
+            Result of merge unmerged and merged samples, maintaining merged samples in sorted order.
         """
 
         def get_next(iter):
@@ -172,7 +178,8 @@ class Stream:
     def query(self, q):
         """
         Query returns computed q-th percentile value.
-        :return:
+        Returns:
+            Result of query returns computed q-th percentile value.
         """
         assert 0.0 <= q <= 1.0
         if not self.merged:
@@ -204,7 +211,8 @@ class Stream:
     def reset(self):
         """
         Reset all data
-        :return:
+        Returns:
+            Result of reset all data.
         """
         self.samples = []
         self.merged_width = 0
@@ -261,7 +269,8 @@ class TargetedStream(Stream):
     their absolute errors, i.e. the true quantile of a value returned by a query
     is guaranteed to be within (Quantile±Epsilon).
 
-    :param targets: List of (quantile, epsilon)
+    Args:
+        targets: List of (quantile, epsilon)
     """
 
     def __init__(self, n, targets) -> None:
@@ -286,10 +295,11 @@ class Summary:
     i.e. given `ttl` == 60 and `n` == 5 `Summary` will collects quantiles
     for 1, 2, 3, 4 and 5 minutes intervals.
 
-    :param ttl: Slot time-to live in seconds
-    :param n: Amount of slots to collect
-    :param kls: `Stream` subclass
-    :param *args: `Stream` constructor parameters
+    Args:
+        ttl: Slot time-to live in seconds
+        n: Amount of slots to collect
+        kls: `Stream` subclass
+        *args: `Stream` constructor parameters
     """
 
     def __init__(self, ttl, n, kls, *args) -> None:
@@ -303,8 +313,10 @@ class Summary:
     def register(self, value):
         """
         Register measured `value` to all slots
-        :param value: Floating point collecting values
-        :return:
+        Args:
+            value: Floating point collecting values
+        Returns:
+            Result of register measured `value` to all slots.
         """
         with self.lock:
             self._maybe_rotate()
@@ -314,9 +326,11 @@ class Summary:
     def query(self, q, *args):
         """
         Query quantile for given slots
-        :param q: Quantile value
-        :param args: List of slot numbers
-        :return:
+        Args:
+            q: Quantile value
+            args: List of slot numbers
+        Returns:
+            Result of query quantile for given slots.
         """
         with self.lock:
             self._maybe_rotate()
@@ -325,7 +339,8 @@ class Summary:
     def _maybe_rotate(self):
         """
         Rotate and flush slots when necessary
-        :return:
+        Returns:
+            Result of rotate and flush slots when necessary.
         """
         t = perf_counter()
         if not self.next_shift:

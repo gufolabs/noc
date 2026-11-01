@@ -60,8 +60,10 @@ class MIBRegistry:
     def mib_to_modname(name: str) -> str:
         """
         Convert MIB name to module name (without .py)
-        :param name: MIB name, like IF-MIB
-        :return: Module name, like if_mib
+        Args:
+            name: MIB name, like IF-MIB
+        Returns:
+            Module name, like if_mib
         """
         return name.lower().replace("-", "_")
 
@@ -69,8 +71,10 @@ class MIBRegistry:
         """
         Load MIB by name
 
-        :param name: MIB name, like IF-MIB
-        :return:
+        Args:
+            name: MIB name, like IF-MIB
+        Returns:
+            Result of load mib by name.
         """
         mod_name = self.mib_to_modname(name)
         if self.is_loaded(name):
@@ -98,7 +102,8 @@ class MIBRegistry:
     def is_loaded(self, name: str) -> bool:
         """
         Check MIB is loaded
-        :return:
+        Returns:
+            Result of check mib is loaded.
         """
         return name in self.loaded_mibs
 
@@ -106,7 +111,8 @@ class MIBRegistry:
         """
         Reset MIB cache
 
-        :return:
+        Returns:
+            Result of reset mib cache.
         """
         with self.load_lock:
             self.mib = {}
@@ -116,7 +122,8 @@ class MIBRegistry:
     def longest_match(d: dict[str, Any], k: str) -> Any | None:
         """
         Returns longest match of key `k` in dict `d`
-        :return:
+        Returns:
+            Result of returns longest match of key `k` in dict `d`.
         """
         for prefix in d:
             if prefix == k or k.startswith(prefix + "."):

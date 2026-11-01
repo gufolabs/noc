@@ -93,9 +93,11 @@ class RingLayout(TreeLayout):
     def get_subtrees_relative_pos(cls, G, ring):
         """
         Split subgraph with tree, starting from ring node
-        :param G: Graph instance
-        :param ring: all ring nodes
-        :return: dict or ring node -> dict of positions
+        Args:
+            G: Graph instance
+            ring: all ring nodes
+        Returns:
+            dict or ring node -> dict of positions
         """
         r = {}
         # Ring members set

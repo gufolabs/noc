@@ -93,7 +93,8 @@ class ModelMeta:
     def order_fields(self):
         """
         Fill `ordered_fields`
-        :return:
+        Returns:
+            Result of fill `ordered_fields`.
         """
         self.ordered_fields = sorted(self.fields.values(), key=operator.attrgetter("field_number"))
 
@@ -134,7 +135,8 @@ class Model(metaclass=ModelBase):
         """
         Clickhouse-safe field names
 
-        :return:
+        Returns:
+            Result of clickhouse-safe field names.
         """
         if "." in name:
             return f"`{name}`"
@@ -144,7 +146,8 @@ class Model(metaclass=ModelBase):
     def iter_create_sql(cls):
         """
         Yields (field name, db  type) for all model's fields
-        :return:
+        Returns:
+            Result of yields (field name, db  type) for all model's fields.
         """
         for field in cls._meta.ordered_fields:
             yield from field.iter_create_sql()
@@ -162,7 +165,8 @@ class Model(metaclass=ModelBase):
         """
         Fields creation statements
 
-        :return: SQL code with field creation statements
+        Returns:
+            SQL code with field creation statements
         """
         return ",\n".join(
             f"{cls.quote_name(name)} {db_type}" for name, db_type in cls.iter_create_sql()
@@ -182,7 +186,8 @@ class Model(metaclass=ModelBase):
     def cget_create_distributed_sql(cls):
         """
         Get CREATE TABLE for Distributed engine
-        :return:
+        Returns:
+            Result of get create table for distributed engine.
         """
         return (
             f"CREATE TABLE IF NOT EXISTS {cls._get_distributed_db_table()} AS {cls._get_raw_db_table()} "
@@ -204,7 +209,8 @@ class Model(metaclass=ModelBase):
         """
         Convert dict of kwargs to JSON-serializable dict
 
-        :return:
+        Returns:
+            Result of convert dict of kwargs to json-serializable dict.
         """
         r = {}
         for f in kwargs:
@@ -291,7 +297,8 @@ class Model(metaclass=ModelBase):
     def check_old_schema(cls, connect: "ClickhouseClient", table_name: str) -> bool:
         """
         Ensure create table Syntax. False for old Syntax, True for New
-        :return:
+        Returns:
+            Result of ensure create table syntax. false for old syntax, true for new.
         """
         r = connect.execute(
             f"""
@@ -379,7 +386,8 @@ class Model(metaclass=ModelBase):
     def transform_query(cls, query, user):
         """
         Transform query, possibly applying access restrictions
-        :return: query dict or None if access denied
+        Returns:
+            query dict or None if access denied
         """
         if not user or user.is_superuser:
             return query  # No restrictions
@@ -412,7 +420,8 @@ class Model(metaclass=ModelBase):
     def query(cls, query, user=None, dry_run=False):
         """
         Execute query and return result
-        :param query: dict of
+        Args:
+            query: dict of
             "fields": list of dicts
                 *expr -- field expression
                 *alias -- resulting name
@@ -426,9 +435,10 @@ class Model(metaclass=ModelBase):
             "sample": 0.0-1.0 -- randomly select rows
             @todo: group by
             @todo: order by
-        :param user: User doing query
-        :param dry_run: Do not query, only return it.
-        :return:
+            user: User doing query
+            dry_run: Do not query, only return it.
+        Returns:
+            Result of execute query and return result.
         """
         # NOC modules
         from noc.core.bi.query import escape_field, to_sql
@@ -507,7 +517,8 @@ class Model(metaclass=ModelBase):
         """
         Get primary key's name
 
-        :return: Field name
+        Returns:
+            Field name
         """
         return cls._meta.ordered_fields[0].name
 
@@ -608,7 +619,8 @@ class DictionaryMeta:
     def order_fields(self):
         """
         Fill `ordered_fields`
-        :return:
+        Returns:
+            Result of fill `ordered_fields`.
         """
         self.ordered_fields = sorted(self.fields.values(), key=operator.attrgetter("field_number"))
 
@@ -635,7 +647,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
     def get_config(cls):
         """
         Generate XML config
-        :return:
+        Returns:
+            Result of generate xml config.
         """
         x = [
             "<dictionaries>",
@@ -680,7 +693,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
         """
         Returns field type
 
-        :return:
+        Returns:
+            Result of returns field type.
         """
         return cls._meta.fields[name].get_db_type()
 
@@ -689,7 +703,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
         """
         Get primary key's name
 
-        :return: Field name
+        Returns:
+            Field name
         """
         if "name" in cls._meta.fields:
             return "name"
@@ -724,7 +739,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
     def iter_create_sql(cls, is_dictionary=False):
         """
         Yields (field name, db  type) for all model's fields
-        :return:
+        Returns:
+            Result of yields (field name, db  type) for all model's fields.
         """
         for field in cls._meta.ordered_fields:
             for fn, db_type in field.iter_create_sql():
@@ -776,7 +792,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
     def ensure_dictionary(cls, connect=None) -> bool:
         """
         Check dictionary is exists
-        :return: True, if table has been altered, False otherwise
+        Returns:
+            True, if table has been altered, False otherwise
         """
         # changed = False
         ch = connect or connection()
@@ -812,7 +829,8 @@ class ViewModel(Model, metaclass=ModelBase):
         7. rename table MVX_store to MVX
         8. create materialized view MVX_mv to MVX as select ....
         9. start ingestion
-        :return:
+        Returns:
+            Result of # how to convert mv implicit storage .inner (without to) to explicit storage (with to).
         """
         if not cls.is_aggregate():
             return False

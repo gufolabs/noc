@@ -10,8 +10,10 @@ def ext_format_middleware(get_response):
     """
     Set request.is_extjs according to __format=ext
 
-    :param get_response: Callable returning response from downstream middleware
-    :return:
+    Args:
+        get_response: Callable returning response from downstream middleware
+    Returns:
+        Result of set request.is_extjs according to __format=ext.
     """
 
     def middleware(request):

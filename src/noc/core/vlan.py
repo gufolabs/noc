@@ -17,7 +17,8 @@ rx_range = re.compile(r"^(\d+)\s*-\s*(\d+)$")
 def has_vlan(vlan_filter, vlan):
     """
     Check VLAN is within vlan_filter
-    :return:
+    Returns:
+        Result of check vlan is within vlan_filter.
     """
     if not isinstance(vlan, int):
         vlan = int(vlan)
@@ -51,7 +52,8 @@ def has_vlan(vlan_filter, vlan):
 def optimize_filter(vlan_filter, sep=","):
     """
     Reorder and optimize vlan filter
-    :return:
+    Returns:
+        Result of reorder and optimize vlan filter.
     """
 
     def get_part(v):

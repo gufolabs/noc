@@ -296,7 +296,8 @@ class OutputDocument(BaseModel):
     def content_type(self):
         """
         application/zip
-        :return:
+        Returns:
+            Result of application/zip.
         """
         if self.output_type == OutputType.CSV:
             return "text/csv"

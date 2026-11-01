@@ -35,7 +35,8 @@ class MongoCache(BaseCache):
     def ensure_indexes(cls):
         """
         Create all necessary indexes. Called by ensure-index
-        :return:
+        Returns:
+            Result of create all necessary indexes. called by ensure-index.
         """
         cls.get_collection().create_index(cls.EXPIRES_FIELD, expireAfterSeconds=0)
 
@@ -51,7 +52,8 @@ class MongoCache(BaseCache):
     def set(self, key, value, ttl=None, version=None):
         """
         Set key
-        :return:
+        Returns:
+            Result of set key.
         """
         k = self.make_key(key, version)
         ttl = ttl or config.cache.default_ttl

@@ -73,8 +73,8 @@ class ManagedObjectDPDS(BaseDataSource):
     def pipeline(filter_ids) -> list[dict[str, Any]]:
         """
         Generate pipeline for request
-        :type filter_ids: list
-        :return:
+        Returns:
+            Result of generate pipeline for request.
         """
         return [
             {

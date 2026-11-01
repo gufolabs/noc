@@ -54,9 +54,11 @@ class DB:
     def has_column(self, table_name, name):
         """
         Check if table has column
-        :param table_name: Table name
-        :param name: Column name
-        :return: True, if table has column, False otherwise
+        Args:
+            table_name: Table name
+            name: Column name
+        Returns:
+            True, if table has column, False otherwise
         """
         return self.execute(
             """
@@ -86,9 +88,11 @@ class DB:
     def execute(self, sql, params=None):
         """
         Executes the given SQL statement, with optional parameters
-        :param sql: SQL statement
-        :param params: List of positional parameters
-        :return:
+        Args:
+            sql: SQL statement
+            params: List of positional parameters
+        Returns:
+            Result of executes the given sql statement, with optional parameters.
         """
         params = params or []
         logger.debug("[SQL] %s (%s)", sql, params)
@@ -247,7 +251,8 @@ class DB:
         """
         Return the CREATE INDEX SQL statements for a single model field
 
-        :return:
+        Returns:
+            Result of return the create index sql statements for a single model field.
         """
 
         def qn(name):

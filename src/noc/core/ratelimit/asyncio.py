@@ -15,7 +15,8 @@ class AsyncRateLimit(BaseRateLimit):
     async def wait(self) -> None:
         """
         Wait when necessary to meet required rate
-        :return:
+        Returns:
+            Result of wait when necessary to meet required rate.
         """
         t = self.get_sleep_timeout()
         if t:

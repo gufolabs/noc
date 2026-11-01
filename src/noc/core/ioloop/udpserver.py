@@ -46,7 +46,8 @@ class UDPServer:
         * address:port
         * port
 
-        :return:
+        Returns:
+            Result of parses listen configuration and yield (address, port) tuples.
         """
         for listen in cfg.split(","):
             listen = listen.strip()
@@ -172,14 +173,16 @@ class UDPServer:
     def enable_reuseport(self) -> bool:
         """
         Override if SO_REUSEPORT should be set
-        :return:
+        Returns:
+            Result of override if so_reuseport should be set.
         """
         return False
 
     def enable_freebind(self) -> bool:
         """
         Override if IP_FREEBIND should be set
-        :return:
+        Returns:
+            Result of override if ip_freebind should be set.
         """
         return True
 
@@ -195,8 +198,10 @@ class UDPServer:
         """
         Called after socket created but before .bind().
         Can be overriden to adjust socket options in superclasses
-        :param sock: socket instance
-        :return: None
+        Args:
+            sock: socket instance
+        Returns:
+            None
         """
         # Set SO_REUSEPORT option
         if self.has_reuseport and self.enable_reuseport():
@@ -208,7 +213,8 @@ class UDPServer:
     def get_ip_freebind(self) -> int | None:
         """
         Many python distributions does not include IP_FREEBIND to socket module
-        :return: IP_FREEBIND value or None
+        Returns:
+            IP_FREEBIND value or None
         """
         if hasattr(socket, "IP_FREEBIND"):
             # Valid distribution

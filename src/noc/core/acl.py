@@ -13,8 +13,10 @@ import struct
 def _iter_pairs(prefixes):
     """
     Yield tuples of first, last addresses as integer
-    :param prefixes: Iterable of IPv4 prefixes
-    :return: yield (first, last)
+    Args:
+        prefixes: Iterable of IPv4 prefixes
+    Returns:
+        yield (first, last)
     """
     for prefix in prefixes:
         p, mask = prefix.split("/")
@@ -28,9 +30,11 @@ def _iter_pairs(prefixes):
 def match(prefixes, ip):
     """
     Check if ip is match against ACL
-    :param prefixes: Iterable of IPv4 prefixes
-    :param ip: IPv4 address
-    :return: True if ip is in prefixes
+    Args:
+        prefixes: Iterable of IPv4 prefixes
+        ip: IPv4 address
+    Returns:
+        True if ip is in prefixes
     """
     a = struct.unpack("!L", socket.inet_aton(ip))[0]
     return any(f <= a <= l for f, l in _iter_pairs(prefixes))

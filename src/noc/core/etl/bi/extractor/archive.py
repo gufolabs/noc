@@ -52,14 +52,16 @@ class ArchivingExtractor(BaseExtractor):
     def iter_archived_items(self):
         """
         Generator yielding documents to be archived
-        :return:
+        Returns:
+            Result of generator yielding documents to be archived.
         """
         return iter(())
 
     def iter_archived_collections(self) -> Iterable[str]:
         """
         Generator yielding archived collection names
-        :return:
+        Returns:
+            Result of generator yielding archived collection names.
         """
         for c in self._archive_db.list_collection_names():
             if not c.startswith(self.archive_collection_prefix):
@@ -69,7 +71,8 @@ class ArchivingExtractor(BaseExtractor):
     def calculate_meta(self, collection_name) -> dict[str, Any]:
         """
         Calculate Meta Information about archived collection
-        :return:
+        Returns:
+            Result of calculate meta information about archived collection.
         """
         coll = self._archive_db.get_collection(collection_name)
         start_document = coll.find_one(
@@ -107,7 +110,8 @@ class ArchivingExtractor(BaseExtractor):
     def archive(self):
         """
         Move data to archive collection
-        :return:
+        Returns:
+            Result of move data to archive collection.
         """
 
         def spool(collection_name):

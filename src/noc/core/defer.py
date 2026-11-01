@@ -40,13 +40,14 @@ def call_later(
 ):
     """
     Schedule to run callable *name* in scheduler process
-    :param name: Full callable name
-    :param delay: delay in seconds
-    :param scheduler: Name of scheduler
-    :param pool: Pool name
-    :param job_class: Job class
-    :param shard: Sharding key
-    :param max_runs: Maximum amount of retries
+    Args:
+        name: Full callable name
+        delay: delay in seconds
+        scheduler: Name of scheduler
+        pool: Pool name
+        job_class: Job class
+        shard: Sharding key
+        max_runs: Maximum amount of retries
     """
     # Check if defer should be used
     if (
@@ -104,10 +105,12 @@ jp_lock = Lock()
 def defer(handler: str, key: int | None = None, **kwargs) -> None:
     """
     Offload job to worker
-    :param handler: Full path to callable
-    :param key: Sharding key
-    :param kwargs: Callable arguments
-    :return:
+    Args:
+        handler: Full path to callable
+        key: Sharding key
+        kwargs: Callable arguments
+    Returns:
+        Result of offload job to worker.
     """
 
     async def init_partitions():

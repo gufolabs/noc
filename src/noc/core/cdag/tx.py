@@ -30,7 +30,8 @@ class Transaction:
     def get_inputs(self, node) -> dict[str, ValueType]:
         """
         Get node's actual inputs
-        :return:
+        Returns:
+            Result of get node's actual inputs.
         """
         inputs = self.inputs.get(node)
         if inputs is None:
@@ -49,7 +50,8 @@ class Transaction:
         Decrement required node's inputs count and return
         true if all inputs are activated
 
-        :param node: BaseNode instance
+        Args:
+            node: BaseNode instance
         :returns: True if all required nodes are activated, False otherwise
         """
         req_left = self.req_left[node]  # Can raise KeyError
@@ -62,7 +64,8 @@ class Transaction:
         """
         Mark state as changed
 
-        :return:
+        Returns:
+            Result of mark state as changed.
         """
         state = node.get_state()
         if not state:
@@ -74,6 +77,7 @@ class Transaction:
     def get_changed_state(self) -> dict[tuple[str, str], Any]:
         """
         Get side effect of transaction
-        :return:
+        Returns:
+            Result of get side effect of transaction.
         """
         return self._states

@@ -20,8 +20,10 @@ metrics = defaultdict(lambda: AtomicLong(0))
 def apply_metrics(d):
     """
     Apply metrics value to dictionary d
-    :param d: Dictionary
-    :return:
+    Args:
+        d: Dictionary
+    Returns:
+        Result of apply metrics value to dictionary d.
     """
     for k, v in metrics.items():
         if isinstance(v, AtomicLong):

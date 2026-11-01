@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 def moderate_pending() -> None:
     """
     Moderate pending trials
-    :return:
+    Returns:
+        Result of moderate pending trials.
     """
     pending = list(BioSegTrial.objects.filter(processed=False).order_by("id"))
     for trial in pending:
@@ -33,7 +34,8 @@ def moderate_trial(trial: BioSegTrial) -> None:
     """
     Moderate single trial
 
-    :return:
+    Returns:
+        Result of moderate single trial.
     """
     # Get objects when necessary
     attacker_object = None
@@ -111,7 +113,8 @@ def moderate(
     """
     Perform trial moderation
 
-    :return: outcome, error, fatal
+    Returns:
+        outcome, error, fatal
     """
     attacker_c_policy = get_collision_policy(
         attacker,

@@ -56,22 +56,23 @@ class Scheduler:
         """
         Create scheduler.
 
-        :param name: Unique scheduler name
-        :param pool: Pool name, if run in pooled mode
-        :param reset_running: Reset all running jobs to
+        Args:
+            name: Unique scheduler name
+            pool: Pool name, if run in pooled mode
+            reset_running: Reset all running jobs to
             wait state on start
-        :param max_threads: Thread executor threads
-        :param check_time: time in milliseconds to check for new jobs
-        :param max_chunk: Maximum amount of jobs which can be submitted
+            max_threads: Thread executor threads
+            check_time: time in milliseconds to check for new jobs
+            max_chunk: Maximum amount of jobs which can be submitted
             at one step
-        :param submit_threshold: Maximal executor queue length
+            submit_threshold: Maximal executor queue length
             when submitting of next chunk is allowed
-        :param filter: Additional filter to be applied to
+            filter: Additional filter to be applied to
             pending jobs
-        :param sample: Tracing sample rate. 0 - do not sample,
+            sample: Tracing sample rate. 0 - do not sample,
            1 - sample every job
            N > 1 - sample very Nth job
-        :param ignore_import_error: Do not remove job if caused import error.
+            ignore_import_error: Do not remove job if caused import error.
         """
         self.logger = logging.getLogger(f"scheduler.{name}")
         self.name = name
@@ -222,7 +223,8 @@ class Scheduler:
     def scheduler_tick(self):
         """
         Process single scheduler tick
-        :return:
+        Returns:
+            Result of process single scheduler tick.
         """
         n = 0
         try:
@@ -439,15 +441,16 @@ class Scheduler:
     ):
         """
         Submit new job or adjust existing one
-        :param jcls: Job class name
-        :param key: Job key
-        :param data: Job data (will be passed as handler's arguments)
-        :param ts: Set next run time (datetime)
-        :param delta: Set next run time after delta seconds
-        :param keep_ts: Do not touch timestamp of existing jobs,
+        Args:
+            jcls: Job class name
+            key: Job key
+            data: Job data (will be passed as handler's arguments)
+            ts: Set next run time (datetime)
+            delta: Set next run time after delta seconds
+            keep_ts: Do not touch timestamp of existing jobs,
             set timestamp only for created jobs
-        :param max_runs: Limit maximum runs attempts
-        :param shard: Shard number for job
+            max_runs: Limit maximum runs attempts
+            shard: Shard number for job
         """
         now = dt.datetime.now()
         data = data or {}
@@ -499,14 +502,15 @@ class Scheduler:
     ):
         """
         Reschedule job and set next run time
-        :param jid: Job id
-        :param status: Register run status
-        :param ts: Set next run time (datetime)
-        :param delta: Set next run time after delta seconds
-        :param duration: Set last run duration (in seconds)
-        :param context_version: Job context format version
-        :param context: Stored job context
-        :param context_key: Cache key for context
+        Args:
+            jid: Job id
+            status: Register run status
+            ts: Set next run time (datetime)
+            delta: Set next run time after delta seconds
+            duration: Set last run duration (in seconds)
+            context_version: Job context format version
+            context: Stored job context
+            context_key: Cache key for context
         """
         # Build increase/set operations
         now = dt.datetime.now()
@@ -568,7 +572,8 @@ class Scheduler:
     def apply_metrics(self, d):
         """
         Append scheduler metrics to dictionary d
-        :return:
+        Returns:
+            Result of append scheduler metrics to dictionary d.
         """
         if self.executor:
             self.executor.apply_metrics(d)

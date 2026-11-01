@@ -515,8 +515,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().convert_prefix("192.168.2.0 255.255.255.0")
         '192.168.2.0 255.255.255.0'
         ```
-        :param str prefix: IP Prefix
-        :return: IP MASK notation
+        Args:
+            str prefix: IP Prefix
+        Returns:
+            IP MASK notation
         """
         if "/" in prefix and self.requires_netmask_conversion:
             prefix = IPv4(prefix)
@@ -534,8 +536,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().convert_mac_to_colon("00:11:22:33:44:55")
         '0011:2233:4455'
         ```
-        :param str mac:
-        :return: MAC-address HH:HH:HH:HH:HH:HH
+        Args:
+            mac: MAC address to convert.
+        Returns:
+            MAC-address HH:HH:HH:HH:HH:HH
         """
         return mac
 
@@ -547,9 +551,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().convert_mac_to_cisco("00:11:22:33:44:55")
         '0011.2233.4455'
         ```
-        :param str mac: HH:HH:HH:HH:HH:HH
-
-        :return: MAC-address HHHH.HHHH.HHHH
+        Args:
+            str mac: HH:HH:HH:HH:HH:HH
+        Returns:
+            MAC-address HHHH.HHHH.HHHH
         """
         v = mac.replace(":", "").lower()
         return f"{v[:4]}.{v[4:8]}.{v[8:]}"
@@ -562,7 +567,8 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().convert_mac_to_huawei("00:11:22:33:44:55")
         '0011-2233-4455'
         ```
-        :return: MAC-address HHHH-HHHH-HHHH
+        Returns:
+            MAC-address HHHH-HHHH-HHHH
         """
         v = mac.replace(":", "").lower()
         return f"{v[:4]}-{v[4:8]}-{v[8:]}"
@@ -575,8 +581,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().convert_mac_to_dashed("00:11:22:33:44:55")
         '00-11-22-33-44-55'
         ```
-        :param str mac: MAC-address HH:HH:HH:HH:HH:HH
-        :return: MAC-address HH-HH-HH-HH-HH-HH
+        Args:
+            str mac: MAC-address HH:HH:HH:HH:HH:HH
+        Returns:
+            MAC-address HH-HH-HH-HH-HH-HH
         """
         v = mac.replace(":", "").lower()
         return f"{v[:2]}-{v[2:4]}-{v[4:6]}-{v[6:8]}-{v[8:10]}-{v[10:]}"
@@ -591,9 +599,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Normalize interface name
 
-        :param str s: Interface Name
-
-        :return: Normalize interface name
+        Args:
+            str s: Interface Name
+        Returns:
+            Normalize interface name
         """
         return s
 
@@ -652,9 +661,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         i.e. for LLDP discovery *Local* method
         Can be overriden to achieve desired behavior
 
-        :param str name: Interface Name
-
-        :return: List Alternative interface names
+        Args:
+            str name: Interface Name
+        Returns:
+            List Alternative interface names
         """
         return []
 
@@ -740,8 +750,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         >>> BaseProfile().get_connection_path("sfp 9")
         '9'
 
-        :param name: Connection Name
-        :return:
+        Args:
+            name: Connection Name
+        Returns:
+            Result of return interface path by inventory connection name.
         """
         if name.isdigit():
             return name
@@ -766,8 +778,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def get_protocol_prefixes(self, protocols: list[str]) -> list[str]:
         """
         Return interface prefix by Protocol
-        :param protocols: Protocols code list
-        :return:
+        Args:
+            protocols: Protocols code list
+        Returns:
+            Result of return interface prefix by protocol.
         """
         for pp in self.proto_prefixes:
             for p in protocols:
@@ -782,7 +796,8 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         3. If device supported stack - add first stack_member or 0
         4. Reverse path
         5. Product all variants with protocol prefix
-        :return:
+        Returns:
+            Result of 1. if device is not stackable and not module (len path) - return slot num.
         """
         if len(port.path) <= 1 and port.stack_num is None:
             return [port.name]
@@ -802,8 +817,9 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Generate prefix list:
 
-        :param str name: name of prefix list
-        :param List[str] pl: is a list of (prefix, min_len, max_len)
+        Args:
+            str name: name of prefix list
+            List[str] pl: is a list of (prefix, min_len, max_len)
 
         Strict - should tested prefix be exactly matched
         or should be more specific as well
@@ -833,9 +849,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                 show_category_heading: false
                 show_root_toc_entry: false
                 show_source: false
-        :param input: Input text for clean
-
-        :return: Text with strip control Sequences
+        Args:
+            input: Input text for clean
+        Returns:
+            Text with strip control Sequences
         """
         return strip_control_sequences(input)
 
@@ -843,9 +860,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Clean up config. Wipe out volatile strings before returning result
 
-        :param s: Configuration
-
-        :return: Clean up configuration
+        Args:
+            s: Configuration
+        Returns:
+            Clean up configuration
         """
         if self.rogue_chars:
             for cleaner in self.rogue_char_cleaners:
@@ -856,9 +874,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Clean up config. Wipe out volatile strings before returning result
 
-        :param str cfg: Configuration
-
-        :return: Clean up configuration
+        Args:
+            str cfg: Configuration
+        Returns:
+            Clean up configuration
         """
         if self.config_volatile:
             # Wipe out volatile strings before returning result
@@ -874,9 +893,11 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         in LLDP topology discovery.
         Remote object profile's .clean_lldp_neighbor() used
 
-        :param obj: Managed Object reference
-        :param neighbor: `IGetLLDPNeighbors.neighbors` item
-        :return: IGetLLDPNeighbors.neighbors item
+        Args:
+            obj: Managed Object reference
+            neighbor: `IGetLLDPNeighbors.neighbors` item
+        Returns:
+            IGetLLDPNeighbors.neighbors item
         """
         return neighbor
 
@@ -918,9 +939,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Return IGetInterface-compatible interface type
 
-        :param str name: Normalized interface name
-
-        :return: Optional[str]
+        Args:
+            str name: Normalized interface name
+        Returns:
+            Optional[str]
         """
         return
 
@@ -968,15 +990,18 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def get_mml_login(self, script):
         """
         Generate MML login command. .get_mml_command may be used for formatting
-        :param script: BaseScript instance
-        :return: Login command
+        Args:
+            script: BaseScript instance
+        Returns:
+            Login command
         """
         raise NotImplementedError()
 
     def get_mml_command(self, cmd, **kwargs):
         """
         Generate MML command
-        :return:
+        Returns:
+            Result of generate mml command.
         """
 
         def qi(s):
@@ -1002,8 +1027,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def parse_mml_header(self, header):
         """
         Parse MML response header
-        :param header: Response header
-        :return: error code, error message
+        Args:
+            header: Response header
+        Returns:
+            error code, error message
         """
         raise NotImplementedError()
 
@@ -1012,8 +1039,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Returns config tokenizer name and settings.
         object.matchers.XXXX can be used
-        :param object: ManagedObject instance
-        :return: config tokenizer name, config tokenizer settings
+        Args:
+            object: ManagedObject instance
+        Returns:
+            config tokenizer name, config tokenizer settings
         """
         return cls.config_tokenizer, cls.config_tokenizer_settings
 
@@ -1021,8 +1050,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def get_config_normalizer(cls, object):
         """
         Returns config normalizer name and settings
-        :param object: ManagedObject instance
-        :return:
+        Args:
+            object: ManagedObject instance
+        Returns:
+            Result of returns config normalizer name and settings.
         """
         return cls.config_normalizer, cls.config_normalizer_settings
 
@@ -1030,7 +1061,8 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def get_confdb_defaults(cls, object):
         """
         Returns a list of confdb defaults to be inserted on every ConfDB creation
-        :return:
+        Returns:
+            Result of returns a list of confdb defaults to be inserted on every confdb creation.
         """
         return cls.confdb_defaults
 
@@ -1038,9 +1070,11 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     def iter_config_applicators(cls, object, confdb):
         """
         Returns config applicators and settings
-        :param object: Managed Object instance
-        :param confdb: ConfDB Engine instance
-        :return: Iterate active config applicators (BaseApplicator instances)
+        Args:
+            object: Managed Object instance
+            confdb: ConfDB Engine instance
+        Returns:
+            Iterate active config applicators (BaseApplicator instances)
         """
 
         def get_applicator(cfg):
@@ -1096,8 +1130,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Returns list of http_request_middleware.
         matchers.XXXX can be used?
-        :param script: Script instance
-        :return:
+        Args:
+            script: Script instance
+        Returns:
+            Result of returns list of http_request_middleware.
         """
         return cls.http_request_middleware
 
@@ -1106,8 +1142,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         Returns a dict of snmp display_hints mapping.
         matchers.XXXX can be used
-        :param script: Script instance
-        :return:
+        Args:
+            script: Script instance
+        Returns:
+            Result of returns a dict of snmp display_hints mapping.
         """
         return cls.snmp_display_hints
 

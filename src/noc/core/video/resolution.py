@@ -70,7 +70,9 @@ def get_resolution(name):
     """
     Get VideoResolution for name alias
 
-    :param name: Video Resolution name
-    :return: VideoResolution instance or None
+    Args:
+        name: Video Resolution name
+    Returns:
+        VideoResolution instance or None
     """
     return _RESOLUTIONS.get(name.lower())

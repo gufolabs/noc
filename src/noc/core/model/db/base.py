@@ -32,7 +32,8 @@ class DatabaseWrapper(PGDatabaseWrapper):
     def get_new_connection(self, conn_params):
         """
         Return raw psycopg connection. Do not mess with django setup phase
-        :return:
+        Returns:
+            Result of return raw psycopg connection. do not mess with django setup phase.
         """
 
         def _resolve_deferred(name: str) -> None:
@@ -52,7 +53,8 @@ class DatabaseWrapper(PGDatabaseWrapper):
 
     def init_connection_state(self):
         """
-        :return:
+        Returns:
+            Returned value.
         """
         self.connection.autocommit = True
         self.connection.set_client_encoding("UTF8")

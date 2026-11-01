@@ -36,8 +36,10 @@ def get_h264_profile_by_name(name):
     """
     Get H.264 profile by name
 
-    :param name: Profile name
-    :return: H264Profile instance or None
+    Args:
+        name: Profile name
+    Returns:
+        H264Profile instance or None
     """
     return _H264_PROFILE_BY_NAME.get(name.lower())
 
@@ -46,8 +48,10 @@ def get_h264_profile_by_id(id, constraint=None):
     """
     Get H.264 profile by name
 
-    :param id: Profile id
-    :param constraint: Constraint set id or None
-    :return: H264Profile instance or None
+    Args:
+        id: Profile id
+        constraint: Constraint set id or None
+    Returns:
+        H264Profile instance or None
     """
     return _H264_PROFILE_BY_ID.get((id, constraint))

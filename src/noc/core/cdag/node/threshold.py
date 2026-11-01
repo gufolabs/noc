@@ -48,7 +48,8 @@ class ThresholdItem(BaseModel):
     def is_open_match(self, value: ValueType) -> bool:
         """
         Check if threshold profile is matched for open condition
-        :return:
+        Returns:
+            Result of check if threshold profile is matched for open condition.
         """
         return (
             (self.op == "<" and value < self.value)
@@ -60,7 +61,8 @@ class ThresholdItem(BaseModel):
     def is_clear_match(self, value: ValueType) -> bool:
         """
         Check if threshold profile is matched for clear condition
-        :return:
+        Returns:
+            Result of check if threshold profile is matched for clear condition.
         """
 
         if self.clear_value is None:

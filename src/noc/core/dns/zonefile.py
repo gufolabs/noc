@@ -102,7 +102,8 @@ $TTL {int(ttl)}
     def pretty_time(t):
         """
         Format seconds to human-readable time for comments
-        :return:
+        Returns:
+            Result of format seconds to human-readable time for comments.
         """
         if not t:
             return "zero"
@@ -125,7 +126,8 @@ $TTL {int(ttl)}
     def split_txt(cls, value):
         """
         Split TXT to up-to MAX_TXT parts
-        :return:
+        Returns:
+            Result of split txt to up-to max_txt parts.
         """
         if len(value) <= cls.MAX_TXT:
             if value[0] != '"':
