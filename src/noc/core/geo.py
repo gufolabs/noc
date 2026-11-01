@@ -27,12 +27,7 @@ ELLIPSOIDS["PZ-90"] = (6378.1365, 6356.751758, 1 / 298.2564151)
 ELLIPSOID = config.gis.ellipsoid
 
 Coordinate = int | float
-PointLike = (
-    list[Coordinate]
-    | tuple[Coordinate, Coordinate]
-    | geojson.Point
-    | dict[str, Any]
-)
+PointLike = list[Coordinate] | tuple[Coordinate, Coordinate] | geojson.Point | dict[str, Any]
 
 
 def _get_point(p: PointLike) -> GPoint:
