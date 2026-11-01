@@ -30,4 +30,3 @@
 * [trapcollector](trapcollector.md)
 * [web](web.md)
 * [worker](worker.md)
-* [ui](ui.md)

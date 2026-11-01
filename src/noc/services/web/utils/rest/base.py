@@ -172,7 +172,7 @@ class BaseResourceAPI[T](metaclass=ABCMeta):
         self,
         user: User,
         sort: list[str],
-        limit: int = config.ui.max_rest_limit,
+        limit: int = config.web.max_rest_limit,
         offset: int = 0,
         transforms: list[Callable] | None = None,
     ) -> list[T]:
@@ -270,7 +270,7 @@ class BaseResourceAPI[T](metaclass=ABCMeta):
 
         def inner_list(
             response: Response,
-            limit: int = config.ui.max_rest_limit,
+            limit: int = config.web.max_rest_limit,
             offset: int = 0,
             sort: str | None = None,
             ops: dict = Depends(get_list_dep()),
@@ -298,7 +298,7 @@ class BaseResourceAPI[T](metaclass=ABCMeta):
         def inner_summary(
             response: Response,
             field: str,
-            limit: int = config.ui.max_rest_limit,
+            limit: int = config.web.max_rest_limit,
             offset: int = 0,
             ops: dict = Depends(get_list_dep()),
             user: User = Security(get_user_scope, scopes=[self.get_scope_read(view)]),

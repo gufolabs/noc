@@ -17,7 +17,7 @@ NOC groups services to following groups:
 The _state_ must survive between restarts. Only storage services
 are allowed to write on disk. Other services has no global _context_ and
 may be moved between the nodes of cluster.
-* UI services - backend for user interface
+* Web-facing services - including the web service that serves the user interface
 * Pool services - interacts with network. Several pools can be deployed
 to deal with different parts of network.
 * Integration Services - a barrier between the NOC and the external world.

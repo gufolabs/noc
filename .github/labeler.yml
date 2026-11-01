@@ -112,7 +112,6 @@ s-web:
   - changed-files:
       - any-glob-to-any-file:
           - "src/noc/services/web/**"
-          - "src/noc/services/ui/**"
           - "src/noc/services/card/**"
           - "src/noc/services/login/**"
 s-other:

@@ -31,7 +31,7 @@ class Avatar(Document):
 
     user_id = StringField(primary_key=True)
     content_type = IntField(validation=validate_content_type)
-    data = BinaryField(max_bytes=config.ui.max_avatar_size)
+    data = BinaryField(max_bytes=config.web.max_avatar_size)
 
     def __str__(self) -> str:
         return self.user_id

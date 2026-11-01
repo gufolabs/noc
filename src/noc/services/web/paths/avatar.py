@@ -35,10 +35,10 @@ def get_avatar(user_id: str, _: User = Depends(get_current_user)):
 @router.post("/api/ui/avatar", response_model=StatusResponse, tags=["ui", "avatar"])
 def save_avatar(user: User = Depends(get_current_user), image: UploadFile = File(...)):
     async def read_file() -> bytes:
-        return await image.read(config.ui.max_avatar_size + 1)
+        return await image.read(config.web.max_avatar_size + 1)
 
     data = run_sync(read_file)
-    if len(data) > config.ui.max_avatar_size:
+    if len(data) > config.web.max_avatar_size:
         raise HTTPException(status_code=413)
     content_type = ContentType.from_content_type(image.content_type)
     if content_type is None:
