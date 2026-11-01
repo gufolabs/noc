@@ -17,7 +17,7 @@ from typing import Any
 # Third-party modules
 import orjson
 import pytest
-from django.db import models
+from django.db.models import ForeignKey, ManyToManyField
 from gufo.blob.sync import open_blob
 
 # NOC modules
@@ -407,12 +407,12 @@ def _load_data(data: list[dict[str, Any]]) -> None:
         if not is_document(model):
             # Django models
             for f in model._meta.fields:
-                if isinstance(f, (models.ForeignKey, CachedForeignKey)):
+                if isinstance(f, (ForeignKey, CachedForeignKey)):
                     refs[f.name] = f.remote_field.model
                 elif isinstance(f, DocumentReferenceField):
                     refs[f.name] = f.document
             for f in model._meta.many_to_many:
-                if isinstance(f, models.ManyToManyField):
+                if isinstance(f, ManyToManyField):
                     mrefs[f.name] = f.remote_field.model
         model_refs[data["$model"]] = refs
         m2m_refs[data["$model"]] = mrefs
