@@ -5,34 +5,30 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Third-party modules
-import pytest
-
-from .util import get_documents, get_models
+# NOC modules
+from noc.models import DB_MODEL_TYPE
 
 
-@pytest.mark.parametrize("model", [x for x in get_models() if hasattr(x, "get_by_bi_id")])
-def test_model_get_by_bi_id(model) -> None:
-    assert callable(model.get_by_bi_id)
-    r = model.objects.all()[:1]
+def test_model_get_by_bi_id(models_with_get_by_bi_id: DB_MODEL_TYPE) -> None:
+    assert callable(models_with_get_by_bi_id.get_by_bi_id)
+    r = models_with_get_by_bi_id.objects.all()[:1]
     if r:
         r = r[0]
-        record = model.get_by_bi_id(r.bi_id)
+        record = models_with_get_by_bi_id.get_by_bi_id(r.bi_id)
         assert record
         assert record.bi_id == r.bi_id
     else:
-        record = model.get_by_bi_id(0)
+        record = models_with_get_by_bi_id.get_by_bi_id(0)
         assert not record
 
 
-@pytest.mark.parametrize("model", [x for x in get_documents() if hasattr(x, "get_by_bi_id")])
-def test_document_get_by_bi_id(model) -> None:
-    assert callable(model.get_by_bi_id)
-    r = model.objects.first()
+def test_document_get_by_bi_id(documents_with_get_by_bi_id: DB_MODEL_TYPE) -> None:
+    assert callable(documents_with_get_by_bi_id.get_by_bi_id)
+    r = documents_with_get_by_bi_id.objects.first()
     if r:
-        record = model.get_by_bi_id(r.bi_id)
+        record = documents_with_get_by_bi_id.get_by_bi_id(r.bi_id)
         assert record
         assert record.bi_id == r.bi_id
     else:
-        record = model.get_by_bi_id(0)
+        record = documents_with_get_by_bi_id.get_by_bi_id(0)
         assert not record

@@ -24,7 +24,8 @@ from gufo.blob.sync import open_blob
 from noc.config import config
 from noc.core.management.base import command_loader
 from noc.core.model.fields import CachedForeignKey, DocumentReferenceField
-from noc.models import get_model, is_document
+from noc.models import DB_MODEL_TYPE, get_model, is_document
+from tests.database import DatabaseInfo, database_info
 
 IN_GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS", ""))
 IS_COLLECT_ONLY = any("--collect-only" in arg for arg in sys.argv)
@@ -176,7 +177,7 @@ def db_kafka(request):
 
 
 @pytest.fixture(scope="session")
-def database(request, db_postgres, db_mongo, db_clickhouse, db_kafka):
+def database(request, db_postgres, db_mongo, db_clickhouse, db_kafka) -> DatabaseInfo:
     if not IS_COLLECT_ONLY:
         _migrate_db()
         _migrate_clickhouse()
@@ -185,6 +186,103 @@ def database(request, db_postgres, db_mongo, db_clickhouse, db_kafka):
         _load_collections()
         _load_mibs()
         _load_fixtures()
+    return database_info
+
+
+@pytest.fixture(
+    scope="session",
+    params=database_info.all_models,
+    ids=lambda model: model.__name__,
+)
+def all_models(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(database_info.models_by_id),
+)
+def model_ids(database: DatabaseInfo, request: pytest.FixtureRequest) -> str:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=database_info.models,
+    ids=lambda model: model.__name__,
+)
+def models(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=database_info.documents,
+    ids=lambda model: model.__name__,
+)
+def documents(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(
+        model for model in database_info.models if hasattr(model, "get_by_id")
+    ),
+    ids=lambda model: model.__name__,
+)
+def models_with_get_by_id(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(
+        model for model in database_info.documents if hasattr(model, "get_by_id")
+    ),
+    ids=lambda model: model.__name__,
+)
+def documents_with_get_by_id(
+    database: DatabaseInfo, request: pytest.FixtureRequest
+) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(
+        model for model in database_info.models if hasattr(model, "get_by_bi_id")
+    ),
+    ids=lambda model: model.__name__,
+)
+def models_with_get_by_bi_id(
+    database: DatabaseInfo, request: pytest.FixtureRequest
+) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(
+        model for model in database_info.documents if hasattr(model, "get_by_bi_id")
+    ),
+    ids=lambda model: model.__name__,
+)
+def documents_with_get_by_bi_id(
+    database: DatabaseInfo, request: pytest.FixtureRequest
+) -> DB_MODEL_TYPE:
+    return request.param
+
+
+@pytest.fixture(
+    scope="session",
+    params=tuple(
+        model for model in database_info.documents if hasattr(model, "get_json_path")
+    ),
+    ids=lambda model: model.__name__,
+)
+def json_documents(database: DatabaseInfo, request: pytest.FixtureRequest) -> DB_MODEL_TYPE:
+    return request.param
 
 
 @with_timing("create_pg_db")
