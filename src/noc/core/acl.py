@@ -8,9 +8,10 @@
 # Python modules
 import socket
 import struct
+from collections.abc import Iterable, Iterator
 
 
-def _iter_pairs(prefixes):
+def _iter_pairs(prefixes: Iterable[str]) -> Iterator[tuple[int, int]]:
     """
     Yield tuples of first, last addresses as integer
     Args:
@@ -27,7 +28,7 @@ def _iter_pairs(prefixes):
         yield p & p_mask, p | b_mask
 
 
-def match(prefixes, ip):
+def match(prefixes: Iterable[str], ip: str) -> bool:
     """
     Check if ip is match against ACL
     Args:

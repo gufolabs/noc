@@ -7,6 +7,7 @@
 
 # Python modules
 import math
+from typing import Any
 
 # Third-party modules
 import geojson
@@ -25,25 +26,24 @@ ELLIPSOIDS["PZ-90"] = (6378.1365, 6356.751758, 1 / 298.2564151)
 
 ELLIPSOID = config.gis.ellipsoid
 
+Coordinate = int | float
+PointLike = list[Coordinate] | tuple[Coordinate, Coordinate] | geojson.Point | dict[str, Any]
 
-def _get_point(p: GPoint | list[float] | tuple[float, float] | geojson.Point | dict) -> GPoint:
+
+def _get_point(p: PointLike) -> GPoint:
     """
     Convert to geopy Point
     """
-    if isinstance(p, GPoint):
-        return p
-    if isinstance(p, (list, tuple)):
-        return GPoint(p[1], p[0])
-    if isinstance(p, geojson.Point):
-        return GPoint(p.coordinates[1], p.coordinates[0])
-    if isinstance(p, dict) and "coordinates" in p:
-        return GPoint(p["coordinates"][1], p["coordinates"][0])
-    if isinstance(p, dict) and "geopoint" in p:
-        return GPoint(p["geopoint"]["y"], p["geopoint"]["x"])
-    return GPoint(p.y, p.x)
+    match p:
+        case [x, y] | (x, y):
+            return GPoint(y, x)
+        case {"coordinates": [x, y] | (x, y)}:
+            return GPoint(y, x)
+        case _:
+            raise TypeError(f"Unsupported point type: {type(p).__name__}")
 
 
-def distance(p1, p2, ellipsoid=ELLIPSOID) -> float:
+def distance(p1: PointLike, p2: PointLike, ellipsoid: str = ELLIPSOID) -> float:
     """
     Distance between two points in meters
     """
@@ -51,7 +51,7 @@ def distance(p1, p2, ellipsoid=ELLIPSOID) -> float:
     return _distance(_get_point(p1), _get_point(p2), ellipsoid=ellipsoid).meters
 
 
-def bearing(p1, p2):
+def bearing(p1: PointLike, p2: PointLike) -> float:
     """
     Bearing from p1 to p2, in degrees, clockwise from north
     """
@@ -72,7 +72,7 @@ L_BEARINGS = len(BEARINGS)
 BS = 360.0 / L_BEARINGS
 
 
-def bearing_sym(p1, p2):
+def bearing_sym(p1: PointLike, p2: PointLike) -> str:
     """
     Compass-line symbolic bearing
     """
@@ -88,10 +88,10 @@ def get_bbox(x0: float, x1: float, y0: float, y1: float) -> geojson.Polygon:
         Result of get normalized bounding box.
     """
 
-    def bound_x(x):
+    def bound_x(x: float) -> float:
         return max(min(x, 180), -180)
 
-    def bound_y(y):
+    def bound_y(y: float) -> float:
         return max(min(y, 90), -90)
 
     x0 = bound_x(x0)
