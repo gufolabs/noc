@@ -30,7 +30,8 @@ class BaseCDAGFactory:
     def get_node_id(self, name: str) -> str:
         """
         Generate prefixed node id
-        :return:
+        Returns:
+            Result of generate prefixed node id.
         """
         if self.namespace and "::" not in name:
             return f"{self.namespace}::{name}"

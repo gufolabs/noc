@@ -116,7 +116,8 @@ class Check:
     def from_string(cls, url) -> "Check":
         """
         <check>://<cred>@<address>:<port>&arg0
-        :return:
+        Returns:
+            Result of <check>://<cred>@<address>:<port>&arg0.
         """
 
     @classmethod

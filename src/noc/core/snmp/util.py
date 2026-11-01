@@ -95,9 +95,10 @@ def render_tc(value: Any, base_type: str, format: str | None = None) -> str:
     """
     Render SNMP TC using DISPLAY-HINT according to RFC 2579
 
-    :param value: Binary string
-    :param base_type: Basic SNMP TC Type
-    :param format: Optional format string (DISPLAY-HINT)
+    Args:
+        value: Binary string
+        base_type: Basic SNMP TC Type
+        format: Optional format string (DISPLAY-HINT)
     """
     if format:
         if base_type == "Integer32":

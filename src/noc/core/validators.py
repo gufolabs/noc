@@ -493,7 +493,8 @@ def is_mimetype(v):
 def is_uuid(v):
     """
     Check value is UUID
-    :return:
+    Returns:
+        Result of check value is uuid.
     """
     try:
         uuid.UUID(v)
@@ -506,7 +507,8 @@ def is_objectid(v):
     """
     Check value is mongodb's ObjectId
 
-    :return:
+    Returns:
+        Result of check value is mongodb's objectid.
     """
     return v and rx_objectid.match(v) is not None
 

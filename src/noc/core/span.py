@@ -178,9 +178,11 @@ class Span:
     def set_error(self, code: int | None = None, text: str | None = None) -> None:
         """
         Set error result and code for current span
-        :param code: Optional error code
-        :param text: Optional error text
-        :return:
+        Args:
+            code: Optional error code
+            text: Optional error text
+        Returns:
+            Result of set error result and code for current span.
         """
         if code is not None:
             self.error_code = code
@@ -190,9 +192,11 @@ class Span:
     def set_error_from_exc(self, exc: Exception, code: int | None = ERR_UNKNOWN) -> None:
         """
         Set error result and code for current span from exception
-        :param exc: Raised exception
-        :param code: Optional error code
-        :return:
+        Args:
+            exc: Raised exception
+            code: Optional error code
+        Returns:
+            Result of set error result and code for current span from exception.
         """
         self.set_error(code=code, text=str(exc))
 
@@ -200,7 +204,8 @@ class Span:
 def get_spans():
     """
     Get and flush all spans
-    :return:
+    Returns:
+        Result of get and flush all spans.
     """
     global spans
 
@@ -213,7 +218,8 @@ def get_spans():
 def span_to_dict(span):
     """
     Convert span to object
-    :return:
+    Returns:
+        Result of convert span to object.
     """
     return dict(zip(SpanItemFields, span))
 
@@ -222,6 +228,7 @@ def get_current_span():
     """
     Get current span if active
 
-    :return: Current context, span
+    Returns:
+        Current context, span
     """
     return cv_span_context.get(), cv_span_parent.get()

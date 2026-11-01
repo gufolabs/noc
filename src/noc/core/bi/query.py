@@ -13,9 +13,10 @@ from noc.models import get_model
 
 class OP:
     """
-    :param min: Minimal count element in query
-    :param max: Maximal count element in query
-    :param convert: Convert function name
+    Args:
+        min: Minimal count element in query
+        max: Maximal count element in query
+        convert: Convert function name
     """
 
     def __init__(
@@ -50,8 +51,11 @@ class OP:
 def f_lookup(seq, model=None):
     """
     $lookup (dictionary, id [,field])
-    :param model
-    :return:
+    Args:
+        model: Optional model name used to resolve the lookup.
+
+    Returns:
+        SQL expression for the dictionary lookup.
     """
     dict_name = seq[0]
     if "." in dict_name:
@@ -71,7 +75,8 @@ def f_lookup(seq, model=None):
 def in_lookup(seq, model=None):
     """
     $lookup (field, expr)
-    :return:
+    Returns:
+        Result of $lookup (field, expr).
     """
     s3 = " NOT" if ("$not" in seq) or ("$NOT" in seq) else ""
     # check int
@@ -88,7 +93,8 @@ def in_lookup(seq, model=None):
 def f_ternary_if(seq, model=None):
     """
     $?
-    :return:
+    Returns:
+        Result of $?.
     """
     return f"(({to_sql(seq[0])}) ? ({to_sql(seq[1])}) : ({to_sql(seq[2])}))"
 
@@ -96,7 +102,8 @@ def f_ternary_if(seq, model=None):
 def f_between(seq, model=None):
     """
     $between(a, b)
-    :return:
+    Returns:
+        Result of $between(a, b).
     """
     return f"(({to_sql(seq[0])}) BETWEEN ({to_sql(seq[1])}) AND ({to_sql(seq[2])}))"
 
@@ -104,7 +111,8 @@ def f_between(seq, model=None):
 def f_names(seq, model=None):
     """
     $names (dict, field)
-    :return:
+    Returns:
+        Result of $names (dict, field).
     """
     dict_name = seq[0]
     if "." in dict_name:
@@ -115,7 +123,8 @@ def f_names(seq, model=None):
 def f_duration(seq, model=None):
     """
     $duration (dict, field)
-    :return:
+    Returns:
+        Result of $duration (dict, field).
     """
     return f"SUM(arraySum(i -> ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1]) < 0) ? 0 : ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1])), [{','.join(seq)}]))"
 
@@ -123,7 +132,8 @@ def f_duration(seq, model=None):
 def f_selector(seq, model=None):
     """
     $selector (expr, model, query)
-    :return:
+    Returns:
+        Result of $selector (expr, model, query).
     """
     expr, model_name, query = seq
     model = get_model(model_name)
@@ -237,7 +247,8 @@ def escape_field(s):
 def to_sql(expr, model=None):
     """
     Convert query expression to sql
-    :return:
+    Returns:
+        Result of convert query expression to sql.
     """
     match expr:
         case dict():

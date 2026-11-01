@@ -25,16 +25,19 @@ class MetricItem:
     def get_effective_collected_interval(self, collected_interval: int, buckets: int = 1):
         """
         Calculated Effective collected interval
-        :param collected_interval: Discovery interval
-        :param buckets: Number of metrics Sources buckets
-        :return:
+        Args:
+            collected_interval: Discovery interval
+            buckets: Number of metrics Sources buckets
+        Returns:
+            Result of calculated effective collected interval.
         """
         return collected_interval * max(1, round(self.interval / collected_interval * buckets))
 
     def is_run(self, collected_interval, source_code: int, buckets: int = 1, run: int = 0) -> bool:
         """
 
-        :return:
+        Returns:
+            Returned value.
         """
         # Effective collected interval
         ie = self.get_effective_collected_interval(collected_interval, buckets=buckets)
@@ -68,8 +71,10 @@ class MetricCollectorConfig:
     def get_source_code(self, interval: int):
         """
         Get Source Code for metric
-        :param interval: Metric Collected Interval
-        :return:
+        Args:
+            interval: Metric Collected Interval
+        Returns:
+            Result of get source code for metric.
         """
         if self.collector == "sla":
             return f"sla:{self.sla_probe}:{interval}"
@@ -83,10 +88,12 @@ class MetricCollectorConfig:
     def get_buckets(cls, d_interval: int, m_interval: int, sources: int) -> int:
         """
         Calculate number of buckets by sources count
-        :param d_interval: Metric discovery interval
-        :param m_interval: Source metric interval
-        :param sources: Source count
-        :return:
+        Args:
+            d_interval: Metric discovery interval
+            m_interval: Source metric interval
+            sources: Source count
+        Returns:
+            Result of calculate number of buckets by sources count.
         """
         r = sources / (m_interval / d_interval)
         return max(1, r)
@@ -94,10 +101,12 @@ class MetricCollectorConfig:
     def iter_collected_metrics(self, collected_interval: int, buckets: int = 1, run: int = 0):
         """
         Iterate collected metrics
-        :param collected_interval: Discovery interval
-        :param buckets: Number Source buckets
-        :param run: Number runs
-        :return:
+        Args:
+            collected_interval: Discovery interval
+            buckets: Number Source buckets
+            run: Number runs
+        Returns:
+            Result of iterate collected metrics.
         """
         for m in self.metrics:
             sc = bi_hash(self.get_source_code(m.interval))

@@ -144,7 +144,8 @@ class ConsulDCS(DCSBase):
     async def create_session(self):
         """
         Create consul session
-        :return:
+        Returns:
+            Result of create consul session.
         """
         self.logger.info("Creating session")
         checks = ["serfHealth"]
@@ -340,7 +341,8 @@ class ConsulDCS(DCSBase):
     async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
-        :return:
+        Returns:
+            Result of return the current limit for given slot.
         """
         manifest_path = self._get_manifest_path(name)
         while True:
@@ -374,9 +376,11 @@ class ConsulDCS(DCSBase):
     async def acquire_slot(self, name, limit):
         """
         Acquire shard slot
-        :param name: <service name>-<pool>
-        :param limit: Configured limit
-        :return: (slot number, number of instances)
+        Args:
+            name: <service name>-<pool>
+            limit: Configured limit
+        Returns:
+            (slot number, number of instances)
         """
         if not self.session:
             await self.create_session()
@@ -476,8 +480,10 @@ class ConsulDCS(DCSBase):
         """
         Synchronous call to resolve nearby service
         Commonly used for external services like databases
-        :param name: Service name
-        :return: address:port
+        Args:
+            name: Service name
+        Returns:
+            address:port
         """
         self.logger.debug("Resolve near service %s", name)
         index = 0

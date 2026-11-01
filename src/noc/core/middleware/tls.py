@@ -16,8 +16,10 @@ def tls_middleware(get_response):
     """
     Store request and user to thread-local storage
 
-    :param get_response: Callable returning response from downstream middleware
-    :return:
+    Args:
+        get_response: Callable returning response from downstream middleware
+    Returns:
+        Result of store request and user to thread-local storage.
     """
 
     def middleware(request):

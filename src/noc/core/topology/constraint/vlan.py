@@ -22,10 +22,11 @@ class VLANConstraint(BaseConstraint):
     """
     Follow only links with specific VLANs
 
-    :param vlan: VLAN id to check
-    :param allow_tagged: Allow links with tagged `vlan`
-    :param allow_untagged: Allow links with untagged `vlan`
-    :param strict: True - Both ends of the links must satisfy criteria,
+    Args:
+        vlan: VLAN id to check
+        allow_tagged: Allow links with tagged `vlan`
+        allow_untagged: Allow links with untagged `vlan`
+        strict: True - Both ends of the links must satisfy criteria,
         False - At least one end of the link must satisfy criteria.
     """
 

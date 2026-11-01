@@ -18,11 +18,12 @@ def iter_next_hops(G: "Graph", source: str, target: str) -> tuple[str, int]:
     Yields next hops (direct neighbors of `source` on the possible paths to `target`)
     and shortest path lengths
 
-    :param G: nx.Graph instance
-    :param source: Source node
-    :param target: Destination node
-
-    :return: Yields (neighbor, path length)
+    Args:
+        G: nx.Graph instance
+        source: Source node
+        target: Destination node
+    Returns:
+        Yields (neighbor, path length)
     """
     # Exclude source node from path calculations
     Gv = subgraph_view(G, filter_node=hide_nodes([source]))

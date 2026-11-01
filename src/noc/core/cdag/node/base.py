@@ -66,8 +66,9 @@ class ConfigProxy:
     def __init__(self, base: BaseModel, override: dict[str, Any]) -> None:
         """
         Base Configuration (on BaseModel)
-        :param override: Override part of config, used for override config param
-        :param static: Static part of config, used for store values on ConfigStore
+        Args:
+            override: Override part of config, used for override config param
+            static: Static part of config, used for store values on ConfigStore
         """
         self.__base = base
         self.__override = override
@@ -204,7 +205,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     ) -> BaseCDAGNode | None:
         """
         Construct node
-        :return:
+        Returns:
+            Result of construct node.
         """
         return cls(
             node_id,
@@ -235,12 +237,14 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     ) -> BaseCDAGNode | None:
         """
         Clone node
-        :param node_id: Node Identifier
-        :param prefix: Node Identifier prefix for create unique identifier
-        :param state: Node state
-        :param config: Config params for node
-        :param static_config: May be split config to two parts
-        :return:
+        Args:
+            node_id: Node Identifier
+            prefix: Node Identifier prefix for create unique identifier
+            state: Node state
+            config: Config params for node
+            static_config: May be split config to two parts
+        Returns:
+            Result of clone node.
         """
         if not hasattr(self, "config_cls"):
             cfg = None
@@ -282,7 +286,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def iter_inputs(self) -> Iterable[str]:
         """
         Enumerate all configured inputs
-        :return:
+        Returns:
+            Result of enumerate all configured inputs.
         """
         yield from self.static_inputs
         if self.allow_dynamic and self.dynamic_inputs:
@@ -300,7 +305,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def iter_unbound_inputs(self) -> Iterable[str]:
         """
         Iterate all unbound inputs
-        :return:
+        Returns:
+            Result of iterate all unbound inputs.
         """
         if not self.bound_inputs:
             yield from self.iter_inputs()
@@ -316,8 +322,10 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         * IN_REQUIRED - for required input
         * IN_OPTIONAL - for dynamic input
 
-        :param name: Input name
-        :returns: input type as IN_*
+        Args:
+            name: Input name
+        Returns:
+            Input type: `IN_INVALID`, `IN_REQUIRED`, or `IN_OPTIONAL`.
         """
         if name in self.static_inputs:
             return IN_REQUIRED
@@ -328,18 +336,22 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def has_input(self, name: str) -> bool:
         """
         Check if the node has input with given name
-        :param name: name of input
-        :returns: True, if input exists
+        Args:
+            name: name of input
+        Returns:
+            True if the input exists; otherwise, False.
         """
         return self.get_input_type(name) != IN_INVALID
 
     def activate(self, tx: Transaction, name: str, value: ValueType | str) -> None:
         """
         Activate named input with
-        :param tx: Transaction instance
-        :param name: Input name
-        :param value: Input value
-        :return:
+        Args:
+            tx: Transaction instance
+            name: Input name
+            value: Input value
+        Returns:
+            Result of activate named input with.
         """
         # Check for valid input name
         in_type = self.get_input_type(name)
@@ -375,7 +387,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def is_dynamic_input(self, name: str) -> bool:
         """
         Check if input is dynamic
-        :return:
+        Returns:
+            Result of check if input is dynamic.
         """
         return self.get_input_type(name) == IN_OPTIONAL
 
@@ -399,7 +412,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         """
         Activate const input. Called during construction time.
 
-        :return:
+        Returns:
+            Result of activate const input. called during construction time.
         """
         name = sys.intern(name)
         if self.get_input_type(name) == IN_INVALID:
@@ -416,10 +430,12 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     ) -> None:
         """
         Subscribe to node activation
-        :param node: Connected node
-        :param name: Connected input name
-        :param dynamic: Create input when necessary
-        :return:
+        Args:
+            node: Connected node
+            name: Connected input name
+            dynamic: Create input when necessary
+        Returns:
+            Result of subscribe to node activation.
         """
         if node == self:
             raise ValueError("Cannot subscribe to self")
@@ -449,9 +465,11 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def unsubscribe(self, node: BaseCDAGNode, name: str | None = None) -> None:
         """
         Unsubscribe node
-        :param node: Connected node
-        :param name: Connected input name
-        :return:
+        Args:
+            node: Connected node
+            name: Connected input name
+        Returns:
+            Result of unsubscribe node.
         """
         if node == self:
             raise ValueError("Cannot subscribe to self")
@@ -481,14 +499,16 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def get_value(self, *args, **kwargs) -> ValueType | None:  # pragma: no cover
         """
         Calculate node value. Returns None when input is malformed and should not be propagated
-        :return:
+        Returns:
+            Result of calculate node value. returns none when input is malformed and should not be propagated.
         """
         raise NotImplementedError
 
     def get_state(self) -> BaseModel | None:
         """
         Get current node state
-        :return:
+        Returns:
+            Result of get current node state.
         """
         return self.state
 
@@ -508,7 +528,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def is_const(self) -> bool:
         """
         Check if the node is constant value
-        :return:
+        Returns:
+            Result of check if the node is constant value.
         """
         if self._const_value is not None:
             return True
@@ -525,8 +546,10 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     def add_input(self, name: str, is_key: bool = False, is_required: bool = False) -> None:
         """
         Add new dynamic input
-        :param name: Input name
-        :return:
+        Args:
+            name: Input name
+        Returns:
+            Result of add new dynamic input.
         """
         if not self.allow_dynamic:
             raise TypeError("Dynamic inputs are not allowed")
@@ -549,7 +572,8 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         """
         Get dictionary of pre-set inputs and their values
 
-        :return: Dict of initial inputs' values
+        Returns:
+            Dict of initial inputs' values
         """
         if self.const_inputs:
             return self.const_inputs.copy()  # Clone predefined

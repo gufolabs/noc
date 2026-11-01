@@ -98,7 +98,8 @@ class MigrationRunner:
     def get_history(self) -> set[str]:
         """
         Get set of performed migration names
-        :return:
+        Returns:
+            Result of get set of performed migration names.
         """
         self.convert_south_history()
         return {d["name"] for d in self.hist_coll.find({}, {"name": 1})}
@@ -106,7 +107,8 @@ class MigrationRunner:
     def convert_south_history(self):
         """
         Convert south_migrationhistory
-        :return:
+        Returns:
+            Result of convert south_migrationhistory.
         """
         # Third-party modules
         from django.db import connection

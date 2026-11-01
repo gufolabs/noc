@@ -157,7 +157,8 @@ class StormProtection:
         Performs necessary actions with message according to storm policy of the device,
         i.e. raise alarm.
         Return True if message must be blocked in service and False otherwise.
-        :return:
+        Returns:
+            Result of performs necessary actions with message according to storm policy of the device,.
         """
         self.register_message(ip_address, address_config.storm_threshold)
         if self.device_is_verbose(ip_address):

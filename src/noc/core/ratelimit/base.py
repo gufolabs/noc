@@ -23,7 +23,8 @@ class BaseRateLimit:
     def get_sleep_timeout(self) -> float | None:
         """
         Get timeout for next sleep
-        :return:
+        Returns:
+            Result of get timeout for next sleep.
         """
         ts = perf_counter_ns()
         if not self.next:

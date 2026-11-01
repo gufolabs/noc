@@ -139,7 +139,8 @@ class ManagedObjectsExtractor(BaseExtractor):
     def get_links(self):
         """
         Build discovery method summary
-        :return:
+        Returns:
+            Result of build discovery method summary.
         """
 
         def link_data(mo):
@@ -172,7 +173,8 @@ class ManagedObjectsExtractor(BaseExtractor):
     def get_interfaces(self):
         """
         Build interface counts
-        :return:
+        Returns:
+            Result of build interface counts.
         """
         r = Interface._get_collection().aggregate(
             [
@@ -251,9 +253,8 @@ class ManagedObjectsExtractor(BaseExtractor):
     def get_object_metrics(start, stop):
         """
 
-        :type stop: datetime.datetime
-        :type stop: datetime.datetime
-        :return:
+        Returns:
+            Returned value.
         """
         r = {}
         bi_map = {

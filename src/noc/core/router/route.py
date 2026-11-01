@@ -237,7 +237,8 @@ class Route:
         """
         Iterate over available actions
 
-        :return: Stream name or empty string, dict of headers
+        Returns:
+            Stream name or empty string, dict of headers
         """
         for a in self.actions:
             yield from a.iter_action(msg, message_type)
@@ -254,7 +255,8 @@ class Route:
     def is_differ(self, data) -> bool:
         """
 
-        :return:
+        Returns:
+            Returned value.
         """
         return True
 

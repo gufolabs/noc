@@ -23,17 +23,20 @@ class ReportSource:
     def get_formats(self) -> dict[str, BandFormat]:
         """
         Report Format describe
-        :return:
+        Returns:
+            Result of report format describe.
         """
 
     def get_parameters(self):
         """
         Return Available report Parameters
-        :return:
+        Returns:
+            Result of return available report parameters.
         """
 
     def get_data(self, request, **kwargs) -> list[Band]:
         """
         Return Report Data
-        :return:
+        Returns:
+            Result of return report data.
         """

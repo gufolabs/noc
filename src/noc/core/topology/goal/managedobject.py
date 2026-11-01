@@ -58,8 +58,10 @@ class ManagedObjectGoal(BaseGoal):
         """
         Initialize segment path from starting node
 
-        :param start: Starting node Managed Object
-        :return:
+        Args:
+            start: Starting node Managed Object
+        Returns:
+            Result of initialize segment path from starting node.
         """
         # We will restrict search only to segments along the path
         seg_path = self.get_segment_path(start, self.object)
@@ -78,9 +80,11 @@ class ManagedObjectGoal(BaseGoal):
     def get_segment_path(start: ManagedObject, goal: ManagedObject) -> list[NetworkSegment]:
         """
         Returns a list of segments laying between two management objects
-        :param start: Managed Object instance
-        :param goal: Managed Object instance
-        :return: List of NetworkSegments
+        Args:
+            start: Managed Object instance
+            goal: Managed Object instance
+        Returns:
+            List of NetworkSegments
         """
 
         def merge_path(

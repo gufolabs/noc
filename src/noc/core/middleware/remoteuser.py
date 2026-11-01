@@ -26,8 +26,10 @@ def remote_user_middleware(get_response):
     If authentication is successful, the user is automatically logged in to
     persist the user in the session.
 
-    :param get_response: Callable returning response from downstream middleware
-    :return:
+    Args:
+        get_response: Callable returning response from downstream middleware
+    Returns:
+        Result of authenticate against remote_user request header.
     """
 
     def user_getter(user):

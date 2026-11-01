@@ -74,7 +74,8 @@ def new_bi_id() -> int:
 def bi_sync(cls):
     """
     Denote class to add bi_id defaults
-    :return:
+    Returns:
+        Result of denote class to add bi_id defaults.
     """
     if is_document(cls):
         f = cls._fields.get(BI_ID_FIELD)

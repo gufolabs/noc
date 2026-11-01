@@ -84,7 +84,8 @@ def bearing_sym(p1, p2):
 def get_bbox(x0: float, x1: float, y0: float, y1: float) -> geojson.Polygon:
     """
     Get normalized bounding box
-    :return:
+    Returns:
+        Result of get normalized bounding box.
     """
 
     def bound_x(x):

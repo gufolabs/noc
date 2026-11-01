@@ -23,9 +23,11 @@ class BaseGoal:
         Heuristic cost estimate for A* algorithm.
         Cost of going to the goal across this path from `current` to `neighbor` node
 
-        :param neighbor: Neighbor ManagedObject instance
-        :param current: optional Current ManagedObject instance
-        :return: Cost estimate
+        Args:
+            neighbor: Neighbor ManagedObject instance
+            current: optional Current ManagedObject instance
+        Returns:
+            Cost estimate
         """
         return self.DEFAULT_COST
 
@@ -33,8 +35,10 @@ class BaseGoal:
         """
         Check object is valid goal (end of path)
 
-        :param obj: ManagedObject
-        :return: True, if `obj` is the end of path
+        Args:
+            obj: ManagedObject
+        Returns:
+            True, if `obj` is the end of path
         """
         return False
 

@@ -90,8 +90,9 @@ class MetricsNode(BaseCDAGNode):
     ) -> None:
         """
         Set cleaners for scope
-        :param scope: Scope name
-        :param cleaners: Scope cleaners
+        Args:
+            scope: Scope name
+            cleaners: Scope cleaners
         """
         if scope not in scope_cleaners:
             scope_cleaners[scope] = cleaners
@@ -157,7 +158,8 @@ class MetricsNode(BaseCDAGNode):
     def load_mx_converters(cls):
         """
         Loading MX Metrics map rules
-        :return:
+        Returns:
+            Result of loading mx metrics map rules.
         """
         # NOC modules
         from noc.main.models.metricstream import MetricStream

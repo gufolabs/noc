@@ -284,9 +284,11 @@ class BaseDataSource:
     def query_sync(cls, fields: Iterable[str] | None = None, *args, **kwargs) -> pl.DataFrame:
         """
         Sync method for query report data
-        :param fields: list fields for filtered on query
-        :param args: arguments for report query
-        :return:
+        Args:
+            fields: list fields for filtered on query
+            args: arguments for report query
+        Returns:
+            Result of sync method for query report data.
         """
         # NOC modules
         from noc.core.ioloop.util import run_sync
@@ -298,7 +300,8 @@ class BaseDataSource:
         """
         Return Column Dtype
         columns=[("col1", pl.Float32), ("col2", pl.Int64)]
-        :return:
+        Returns:
+            Result of return column dtype.
         """
         c_map = {
             "string": pl.Utf8,
@@ -503,9 +506,11 @@ class BaseDataSource:
     ) -> AsyncIterable[dict[str, str]]:
         """
         Iterate data as row
-        :param fields: list fields for filtered on query
-        :param args: arguments for report query
-        :return:
+        Args:
+            fields: list fields for filtered on query
+            args: arguments for report query
+        Returns:
+            Result of iterate data as row.
         """
         r = {}
         c_row = 1
@@ -523,9 +528,11 @@ class BaseDataSource:
     ) -> AsyncIterable[tuple[int, str, str | int]]:
         """
         Method for query report data. Iterate over field data
-        :param fields: list fields for filtered on query
-        :param args: arguments for report query
-        :return:
+        Args:
+            fields: list fields for filtered on query
+            args: arguments for report query
+        Returns:
+            Result of method for query report data. iterate over field data.
         """
 
     @classmethod

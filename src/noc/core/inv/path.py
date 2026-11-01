@@ -44,20 +44,24 @@ def find_path(
     Build shortest path from object's connection until a connection with any of the
     target protocols found.
 
-    :param obj: Object instance
-    :param connection: Starting connection name
-    :param target_protocols: Iterable of protocols
-    :param max_depth: Path Limit
-    :param trace_wire: Tracing Wire connection (return neighbor conncted by wire)
-    :return:
+    Args:
+        obj: Object instance
+        connection: Starting connection name
+        target_protocols: Iterable of protocols
+        max_depth: Path Limit
+        trace_wire: Tracing Wire connection (return neighbor conncted by wire)
+    Returns:
+        Result of build shortest path from object's connection until a connection with any of the.
     """
 
     def get_action(ro: Object, r_name: str) -> ConnAction:
         """
         Check peer connection and return action
-        :param ro: Object reference
-        :param r_name: connection name
-        :return:
+        Args:
+            ro: Object reference
+            r_name: connection name
+        Returns:
+            Result of check peer connection and return action.
         """
         mc = ro.model.get_model_connection(r_name)
         if not mc:

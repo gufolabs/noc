@@ -41,7 +41,9 @@ class CLIProtocolChecker(BaseChecker):
     def is_unsupported_error(message) -> bool:
         """
         Todo replace to error_code
-        :return:
+        Returns:
+            True if the message indicates an unsupported protocol error;
+            otherwise, False.
         """
         if "Exception: TimeoutError()" in message:
             return True
@@ -57,7 +59,9 @@ class CLIProtocolChecker(BaseChecker):
     ) -> Iterable[tuple[Protocol, CLICredential]]:
         """
 
-        :return:
+        Returns:
+            An iterator containing the credential for the requested protocol,
+            if one is configured.
         """
         if check.credential:
             yield self.PROTO_CHECK_MAP[check.name], check.credential

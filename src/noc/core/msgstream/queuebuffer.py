@@ -31,7 +31,8 @@ class QBuffer:
     def put(self, stream: str, partition: int, data: list[dict[str, Any]]):
         """
         Put block of data to buffer
-        :return:
+        Returns:
+            Result of put block of data to buffer.
         """
         if not data:
             return
@@ -57,7 +58,8 @@ class QBuffer:
     def iter_slice(self) -> Iterable[tuple[str, int, bytes]]:
         """
         Iterates tuple of (stream, partition, data)
-        :return:
+        Returns:
+            Result of iterates tuple of (stream, partition, data).
         """
         with self.lock:
             for (stream, partition), out in self.buf.items():
@@ -68,7 +70,8 @@ class QBuffer:
     def is_empty(self) -> bool:
         """
         Check if buffer is empty
-        :return:
+        Returns:
+            Result of check if buffer is empty.
         """
         with self.lock:
             return bool(self.buf)

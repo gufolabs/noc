@@ -30,14 +30,16 @@ class BaseCache:
     def get(self, key: str, default: Any | None = None, version: int | None = None) -> Any | None:
         """
         Returns value or raise KeyError
-        :return:
+        Returns:
+            Result of returns value or raise keyerror.
         """
         return default
 
     def set(self, key: str, value: Any, ttl: int | None = None, version: int | None = None) -> None:
         """
         Set key
-        :return:
+        Returns:
+            Result of set key.
         """
 
     def delete(self, key: str, version: Any | None = None) -> None:

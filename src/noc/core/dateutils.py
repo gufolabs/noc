@@ -65,8 +65,10 @@ def humanize_distance(d):
 def total_seconds(td: dt.timedelta) -> float:
     """
     Return total seconds in timedelta object
-    :param td: timedelta
-    :return: seconds
+    Args:
+        td: timedelta
+    Returns:
+        seconds
     """
     return (td.microseconds + (td.seconds + td.days * 86400) * 1000000) / 1000000.0
 
@@ -74,10 +76,12 @@ def total_seconds(td: dt.timedelta) -> float:
 def hits_in_range(timestamps, start, stop):
     """
     Count timestamps falling in given range
-    :param timestamps: Ordered list of timestamps
-    :param start: starting timestamp (datetime)
-    :param stop: ending timestamp (datetime)
-    :return: Number of hits
+    Args:
+        timestamps: Ordered list of timestamps
+        start: starting timestamp (datetime)
+        stop: ending timestamp (datetime)
+    Returns:
+        Number of hits
     """
     s = bisect.bisect_left(timestamps, start)
     e = bisect.bisect_right(timestamps, stop, s)

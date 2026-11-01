@@ -206,9 +206,11 @@ class OduDiscriminator:
     def get_limit(self, d: "OduDiscriminator") -> int:
         """
         Return Multiplex Limit
-        :param d: Payload
+        Args:
+            d: Payload
         # :param d2: Container
-        :return:
+        Returns:
+            Result of return multiplex limit.
         """
         if self.odu == d.odu:
             return 1
@@ -225,8 +227,10 @@ class OduDiscriminator:
     def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> list[str]:
         """
         Same discriminator - container
-        :param d: Payload
-        :return:
+        Args:
+            d: Payload
+        Returns:
+            Result of same discriminator - container.
         """
         if isinstance(d, str):
             d = discriminator(d)

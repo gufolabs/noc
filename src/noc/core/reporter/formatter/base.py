@@ -62,13 +62,15 @@ class DataFormatter:
     def render_document(self):
         """
         Render document content. Override on child class
-        :return:
+        Returns:
+            Result of render document content. override on child class.
         """
 
     def create_document(self) -> bytes:
         """
         Create document method
-        :return:
+        Returns:
+            Result of create document method.
         """
         self.output_stream = BytesIO()
         self.render_document()

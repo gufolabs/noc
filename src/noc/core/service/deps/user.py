@@ -25,7 +25,8 @@ async def get_current_user(
     """
     Get request current user
 
-    :return:
+    Returns:
+        Result of get request current user.
     """
     if not remote_user and not getattr(svc, "auth_required", False):
         return None
@@ -45,7 +46,8 @@ def get_user_scope(
     """
     Get request current user, when having scope access
 
-    :return:
+    Returns:
+        Result of get request current user, when having scope access.
     """
     if not remote_user:
         raise HTTPException(403, "Not authorized")

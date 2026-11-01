@@ -53,7 +53,8 @@ class DCSBase:
     async def start(self):
         """
         Start all pending tasks
-        :return:
+        Returns:
+            Result of start all pending tasks.
         """
         self.thread_id = threading.get_ident()
         self.resolver_expiration_task = PeriodicCallback(self.expire_resolvers, 10000)
@@ -62,7 +63,8 @@ class DCSBase:
     def stop(self):
         """
         Stop all pending tasks
-        :return:
+        Returns:
+            Result of stop all pending tasks.
         """
         if self.resolver_expiration_task:
             self.resolver_expiration_task.stop()
@@ -88,10 +90,12 @@ class DCSBase:
     ):
         """
         Register service
-        :param tags: List of extra tags
-        :param check_interval: DCS Check Interval
-        :param check_timeout: DCS Check Timeout
-        :return:
+        Args:
+            tags: List of extra tags
+            check_interval: DCS Check Interval
+            check_timeout: DCS Check Timeout
+        Returns:
+            Result of register service.
         """
         raise NotImplementedError()
 
@@ -102,7 +106,8 @@ class DCSBase:
     async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
-        :return:
+        Returns:
+            Result of return the current limit for given slot.
         """
         raise NotImplementedError()
 
@@ -121,9 +126,11 @@ class DCSBase:
     async def acquire_slot(self, name, limit):
         """
         Acquire shard slot
-        :param name: <service name>-<pool>
-        :param limit: Configured limit
-        :return: (slot number, number of instances)
+        Args:
+            name: <service name>-<pool>
+            limit: Configured limit
+        Returns:
+            (slot number, number of instances)
         """
         raise NotImplementedError()
 
@@ -178,7 +185,8 @@ class DCSBase:
         """
         Returns *hint* when service is active or new service
         instance,
-        :return:
+        Returns:
+            Result of returns *hint* when service is active or new service.
         """
 
         async def _resolve():
@@ -194,8 +202,10 @@ class DCSBase:
         """
         Synchronous call to resolve nearby service
         Commonly used for external services like databases
-        :param name: Service name
-        :return: address:port
+        Args:
+            name: Service name
+        Returns:
+            address:port
         """
         raise NotImplementedError()
 
@@ -248,8 +258,10 @@ class ResolverBase:
     def set_services(self, services):
         """
         Update actual list of services
-        :param services: dict of service_id -> <address>:<port>
-        :return:
+        Args:
+            services: dict of service_id -> <address>:<port>
+        Returns:
+            Result of update actual list of services.
         """
         if self.to_shutdown:
             return
@@ -337,14 +349,16 @@ class ResolverBase:
     def policy_random(self):
         """
         Randomly select service
-        :return:
+        Returns:
+            Result of randomly select service.
         """
         return random.choice(self.service_ids)
 
     def policy_rr(self):
         """
         Round-robin selection of service
-        :return:
+        Returns:
+            Result of round-robin selection of service.
         """
         self.rr_index = min(self.rr_index + 1, len(self.service_ids) - 1)
         return self.service_ids[self.rr_index]
@@ -352,6 +366,7 @@ class ResolverBase:
     def is_expired(self) -> bool:
         """
         Check if resolver is no longer used and may be expired
-        :return:
+        Returns:
+            Result of check if resolver is no longer used and may be expired.
         """
         return perf_counter() - self.last_used > config.dcs.resolver_expiration_timeout

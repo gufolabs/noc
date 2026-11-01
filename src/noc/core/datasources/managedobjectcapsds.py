@@ -78,7 +78,8 @@ class ManagedObjectCapsDS(BaseDataSource):
     def get_caps_default(caps: Capability):
         """
         Capability field default value
-        :return:
+        Returns:
+            Result of capability field default value.
         """
         if caps.type is ValueType.STRING:
             return ""

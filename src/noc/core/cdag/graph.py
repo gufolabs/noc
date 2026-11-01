@@ -55,7 +55,8 @@ class CDAG:
     def begin(self) -> Transaction:
         """
         Start new transaction
-        :return:
+        Returns:
+            Result of start new transaction.
         """
         return Transaction(self)
 
@@ -65,7 +66,8 @@ class CDAG:
     def get_state(self) -> dict[str, Any]:
         """
         Construct current state
-        :return:
+        Returns:
+            Result of construct current state.
         """
         r = {}
         for node_id, node in self.nodes.items():
@@ -80,8 +82,10 @@ class CDAG:
     def merge(self, other: "CDAG", prefix: str | None = "") -> "CDAG":
         """
         Merge other graph into this one
-        :param prefix: Optional merged node's prefix
-        :return:
+        Args:
+            prefix: Optional merged node's prefix
+        Returns:
+            Result of merge other graph into this one.
         """
         # Merge nodes
         nodes: dict[str, BaseCDAGNode] = {}
@@ -110,7 +114,8 @@ class CDAG:
         """
         Build graphviz dot representation for graph
 
-        :return:
+        Returns:
+            Result of build graphviz dot representation for graph.
         """
         n_map: dict[str, str] = {}
         r = ["digraph {", '  rankdir="LR";']

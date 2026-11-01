@@ -121,8 +121,10 @@ class MessageStreamClient:
     def publish_sync(self, req: PublishRequest, wait_for_stream: bool = False) -> None:
         """
         Send publish request and wait for acknowledge
-        :param wait_for_stream: Wait for stream being created.
-        :return:
+        Args:
+            wait_for_stream: Wait for stream being created.
+        Returns:
+            Result of send publish request and wait for acknowledge.
         """
         run_sync(
             partial(
@@ -155,7 +157,8 @@ class MessageStreamClient:
     ) -> None:
         """
         Create Stream by settings
-        :return:
+        Returns:
+            Result of create stream by settings.
         """
         await self.client.create_stream(
             name=name,
@@ -174,7 +177,8 @@ class MessageStreamClient:
     async def ensure_stream(self, name: str, partitions: int | None = None) -> bool:
         """
         Ensure stream settings
-        :return:
+        Returns:
+            Result of ensure stream settings.
         """
         # Get stream config
         stream = get_stream(name)
@@ -209,14 +213,16 @@ class MessageStreamClient:
     async def fetch_cursor(self, stream: str, partition: int, cursor_id: str) -> int:
         """
         Getting stream cursor value
-        :return:
+        Returns:
+            Result of getting stream cursor value.
         """
         return await self.client.fetch_cursor(stream, partition, cursor_id)
 
     async def set_cursor(self, stream: str, partition: int, cursor_id: str, offset: int) -> None:
         """
         Set stream cursor value
-        :return:
+        Returns:
+            Result of set stream cursor value.
         """
         await self.client.set_cursor(stream, partition, cursor_id, offset=offset)
 
@@ -231,12 +237,14 @@ class MessageStreamClient:
         """
         Build message
 
-        :param data: Data for transmit
-        :param stream: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding
-        :param partition: Partition for send
-        :return:
+        Args:
+            data: Data for transmit
+            stream: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding
+            partition: Partition for send
+        Returns:
+            Result of build message.
         """
         if not isinstance(data, bytes):
             data = orjson.dumps(data)
@@ -309,9 +317,11 @@ class MessageStreamClient:
     ) -> dict[int, int]:
         """
         Copy message from one topic to another
-        :param from_topic: From topic
-        :param to_topic: To topic
-        :param partitions: Number of from partition or MAP
-        :return:
+        Args:
+            from_topic: From topic
+            to_topic: To topic
+            partitions: Number of from partition or MAP
+        Returns:
+            Result of copy message from one topic to another.
         """
         raise NotImplementedError()

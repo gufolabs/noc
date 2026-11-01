@@ -48,14 +48,16 @@ class WindowNode(BaseCDAGNode):
     def is_filled_ticks(self) -> bool:
         """
         Check window has enough ticks
-        :return:
+        Returns:
+            Result of check window has enough ticks.
         """
         return len(self.state.values) >= self.config.min_window
 
     def is_filled_seconds(self, ts: int) -> bool:
         """
         Check window has enough seconds
-        :return:
+        Returns:
+            Result of check window has enough seconds.
         """
         return (
             bool(self.state.timestamps)

@@ -16,8 +16,10 @@ from .version import SNMP_v1, SNMP_v2c
 def set_pdu(community, varbinds, request_id=None, version=SNMP_v2c):
     """
     Generate SNMP v2c SET PDU
-    :param varbinds: List of (oid, value)
-    :return:
+    Args:
+        varbinds: List of (oid, value)
+    Returns:
+        Result of generate snmp v2c set pdu.
     """
     if version not in (SNMP_v1, SNMP_v2c):
         raise NotImplementedError("Unsupported SNMP version")

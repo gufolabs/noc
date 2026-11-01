@@ -145,7 +145,8 @@ class MAC(str):
         >>> MAC("AA:BB:CC:DD:EE:FF").shift(4096)
         'AA:BB:CC:DD:FE:FF'
 
-        :return:
+        Returns:
+            Result of return shifted mac address.
         """
         # Convert to 64-bit integer
         v = 0
@@ -160,7 +161,8 @@ class MAC(str):
     def is_multicast(self) -> bool:
         """
         Check if MAC address is multicast one
-        :return: True if MAC is multicast
+        Returns:
+            True if MAC is multicast
         """
         return bool(int(self.split(":", 1)[0], 16) & 0x1)
 

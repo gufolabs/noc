@@ -22,7 +22,8 @@ from noc.models import get_model, get_model_id
 def is_document(klass):
     """
     Check klass is Document instance
-    :return:
+    Returns:
+        Result of check klass is document instance.
     """
     return isinstance(klass._meta, dict)
 
@@ -192,7 +193,8 @@ def on_delete_check(
         ]
     )
 
-    :return:
+    Returns:
+        Result of class decorator to check and process constraints before.
     """
 
     def on_delete_handler(sender, instance=None, *args, **kwargs):
@@ -245,7 +247,8 @@ def on_delete_check(
     def is_list(model, field) -> bool:
         """
         Detect field is array
-        :return:
+        Returns:
+            Result of detect field is array.
         """
         if "__" in field:
             field, _ = field.split("__", 1)
@@ -269,7 +272,8 @@ def on_delete_check(
     def get_related_query(o, model, field):
         """
         Prepare query for request related objects
-        :return:
+        Returns:
+            Result of prepare query for request related objects.
         """
         if setup["is_label"] and is_document(model) and field == "labels":
             return {f"{field}__contains": o.name}

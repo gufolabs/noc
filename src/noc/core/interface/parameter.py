@@ -26,11 +26,11 @@ class BaseParameter:
     def raise_error(self, value, msg=""):
         """Raise InterfaceTypeError
 
-        :param value: Value where error detected
-        :type value: Arbitrary python type
-        :param msg: Optional message
-        :type msg: String
-        :raises InterfaceTypeError
+        Args:
+            value (Arbitrary python type): Value where error detected
+            msg (String): Optional message
+        Raises:
+            InterfaceTypeError: Raised when the operation fails.
         """
         raise InterfaceTypeError(f"{self.__class__.__name__}: {value!r}. {msg}")
 
@@ -38,9 +38,10 @@ class BaseParameter:
         """
         Input parameter normalization
 
-        :param value: Input parameter
-        :type value: Arbitrary python type
-        :return: Normalized value
+        Args:
+            value (Arbitrary python type): Input parameter
+        Returns:
+            Normalized value
         """
         return value
 
@@ -49,11 +50,11 @@ class BaseParameter:
         Clean up script input parameters. Can be overloaded to
         handle profile specific.
 
-        :param profile: Profile
-        :type profile: Profile instance
-        :param value: Input parameter
-        :type value: Arbitrary python type
-        :return: Normalized value
+        Args:
+            profile (Profile instance): Profile
+            value (Arbitrary python type): Input parameter
+        Returns:
+            Normalized value
         """
         return self.clean(value)
 
@@ -62,11 +63,11 @@ class BaseParameter:
         Clean up script result parameters. Can be overloaded to
         handle profile specific.
 
-        :param profile: Profile
-        :type profile: Profile instance
-        :param value: Input parameter
-        :type value: Arbitrary python type
-        :return: Normalized value
+        Args:
+            profile (Profile instance): Profile
+            value (Arbitrary python type): Input parameter
+        Returns:
+            Normalized value
         """
         return self.clean(value)
 
@@ -74,9 +75,10 @@ class BaseParameter:
         """
         Clean up form field
 
-        :param value: Input parameter
-        :type value: Arbitrary python type
-        :return: Normalized value
+        Args:
+            value (Arbitrary python type): Input parameter
+        Returns:
+            Normalized value
         """
         # Third-party modules
         from django.forms import ValidationError

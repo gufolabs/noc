@@ -71,13 +71,15 @@ async def fetch(
 ) -> tuple[int, dict[str, Any], bytes]:
     """
 
-    :param url: Fetch URL
-    :param method: request method "GET", "POST", "PUT" etc
-    :param headers: Dict of additional headers
-    :param body: Request body for POST and PUT request
-    :param eof_mark: Do not consider connection reset as error if
+    Args:
+        url: Fetch URL
+        method: request method "GET", "POST", "PUT" etc
+        headers: Dict of additional headers
+        body: Request body for POST and PUT request
+        eof_mark: Do not consider connection reset as error if
       eof_mark received (string or list)
-    :return: code, headers, body
+    Returns:
+        code, headers, body
     """
 
     def get_connect_options():

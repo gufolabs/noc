@@ -44,8 +44,10 @@ class BaseExtractor:
     def clean(self, force=False):
         """
 
-        :param force: Really remove data
-        :return:
+        Args:
+            force: Really remove data
+        Returns:
+            Returned value.
         """
 
     @classmethod
@@ -53,7 +55,8 @@ class BaseExtractor:
         """
         Returns timestamp of first record
         or None when no data found
-        :return:
+        Returns:
+            Result of returns timestamp of first record.
         """
         if cls.is_snapshot:
             return dt.datetime.now() - dt.timedelta(seconds=cls.extract_delay + 1)

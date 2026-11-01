@@ -92,7 +92,8 @@ class BaseExtractor:
     def ensure_import_dir(self) -> None:
         """
         Ensure import directory is exists
-        :return:
+        Returns:
+            Result of ensure import directory is exists.
         """
         if os.path.isdir(self.import_dir):
             return
@@ -113,7 +114,8 @@ class BaseExtractor:
         with e.with_new_state() as f:
             ...
 
-        :return:
+        Returns:
+            Result of new state context manager. usage::.
         """
         f = self.get_new_state()
         try:
@@ -135,7 +137,8 @@ class BaseExtractor:
         with e.with_problem_file() as f:
             ...
 
-        :return:
+        Returns:
+            Result of new state context manager. usage::.
         """
         f = self.get_problem_file()
         try:

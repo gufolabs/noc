@@ -664,7 +664,8 @@ class DiagnosticHub:
           noc::diagnostic::<name>
           noc::check::<name>
           arg0
-        :return:
+        Returns:
+            Result of metrics labels:.
         """
         # NOC modules
         from noc.core.service.loader import get_service

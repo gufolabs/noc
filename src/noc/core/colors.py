@@ -12,7 +12,8 @@ import math
 def hsv_to_rgb(h, s, v):
     """
     HSV -> RGB convertor, for Python 2.5 compatibility
-    :return:
+    Returns:
+        An RGB color tuple with 8-bit channel values.
     """
     h = float(h)
     hi = math.floor(h / 60.0) % 6

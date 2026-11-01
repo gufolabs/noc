@@ -55,7 +55,8 @@ class BaseGroupTTSystem(BaseTTSystem):
     def add_to_group_tt(self, gtt_id, obj):
         """
         Add object to the group tt
-        :param gtt_id: Group tt id, as returned by create_group_tt
-        :param obj: Supported object's identifier
+        Args:
+            gtt_id: Group tt id, as returned by create_group_tt
+            obj: Supported object's identifier
         """
         raise NotImplementedError()

@@ -364,8 +364,10 @@ _AC_PRIME = 8191  # Prime number, 5th Mersenne prime
 def get_avatar_bg_color(n: int) -> str:
     """
     Get persistent shuffled colors for avatars
-    :param n: Positive number, usually user id
-    :return:
+    Args:
+        n: Positive number, usually user id
+    Returns:
+        Result of get persistent shuffled colors for avatars.
     """
     # Wrap possibly too long number
     n = n % _AC_PRIME
@@ -376,7 +378,8 @@ def get_avatar_bg_color(n: int) -> str:
 def split_rgb(color: str) -> tuple[int, int, int]:
     """
     Split color #RRGGBB to a tuple of (R, G, B)
-    :return:
+    Returns:
+        Result of split color #rrggbb to a tuple of (r, g, b).
     """
     return int(color[1:3], 16), int(color[3:5], 16), int(color[5:], 16)
 
@@ -384,7 +387,8 @@ def split_rgb(color: str) -> tuple[int, int, int]:
 def get_fg_color(color: str) -> str:
     """
     Return contrast foreground color
-    :return:
+    Returns:
+        Result of return contrast foreground color.
     """
 
     def distance(c1: tuple[int, int, int], c2: tuple[int, int, int]):

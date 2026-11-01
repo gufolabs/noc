@@ -29,7 +29,8 @@ def connect_async():
 
     .. versionadded:: 21.1
 
-    :return:
+    Returns:
+        Result of connect to the mongo database.
     """
     if _async_connections:
         return
@@ -66,7 +67,8 @@ def is_connected():
 
     .. versionadded: 21.1
 
-    :return: True if connect() has been called, False otherwise
+    Returns:
+        True if connect() has been called, False otherwise
     """
     return bool(_async_connections)
 

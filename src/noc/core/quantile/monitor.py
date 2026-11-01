@@ -63,8 +63,10 @@ def get_quantile(*args):
 def apply_quantiles(d):
     """
     Apply histogram values to dict d
-    :param d: Dictionary
-    :return:
+    Args:
+        d: Dictionary
+    Returns:
+        Result of apply histogram values to dict d.
     """
     for x in quantiles:
         if isinstance(x, tuple):

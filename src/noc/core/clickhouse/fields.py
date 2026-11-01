@@ -28,9 +28,10 @@ class BaseField:
     ) -> None:
         """
 
-        :param default: Default field value (if value not set)
-        :param description: Field description
-        :param low_cardinality: Enable low_cardinality for field
+        Args:
+            default: Default field value (if value not set)
+            description: Field description
+            low_cardinality: Enable low_cardinality for field
         """
         self.field_number = next(self.FIELD_NUMBER)
         self.name = None
@@ -43,8 +44,10 @@ class BaseField:
         """
         Set field name according to model
 
-        :param name: Field name
-        :return:
+        Args:
+            name: Field name
+        Returns:
+            Result of set field name according to model.
         """
         self.name = name
 
@@ -52,7 +55,8 @@ class BaseField:
         """
         Yields (field name, db type) for all nested fields
 
-        :return:
+        Returns:
+            Result of yields (field name, db type) for all nested fields.
         """
         yield self.name, self.get_db_type()
 
@@ -60,8 +64,10 @@ class BaseField:
         """
         Return Field type. Use it in create query
 
-        :param name: Optional nested field name
-        :return:
+        Args:
+            name: Optional nested field name
+        Returns:
+            Result of return field type. use it in create query.
         """
         if self.low_cardinality:
             return f"LowCardinality({self.db_type})"
@@ -70,7 +76,8 @@ class BaseField:
     def get_displayed_type(self):
         """
         Return Field type for external application
-        :return:
+        Returns:
+            Result of return field type for external application.
         """
         return self.db_type
 
@@ -78,9 +85,11 @@ class BaseField:
         """
         Append converted `value` to `row _json` dict
 
-        :param json: Row dict
-        :param value: Raw value
-        :return:
+        Args:
+            json: Row dict
+            value: Raw value
+        Returns:
+            Result of append converted `value` to `row _json` dict.
         """
         row_json[self.name] = self.to_json(value)
 
@@ -88,8 +97,10 @@ class BaseField:
         """
         Convert `value` to JSON-serializeable format
 
-        :param value: Input value
-        :return: JSON-serializable value
+        Args:
+            value: Input value
+        Returns:
+            JSON-serializable value
         """
         if value is None:
             return self.default_value
@@ -98,7 +109,8 @@ class BaseField:
     def to_python(self, value):
         """
         Use method when field convert to python object
-        :return:
+        Returns:
+            Result of use method when field convert to python object.
         """
         return value
 
@@ -110,8 +122,10 @@ class BaseField:
         """
         Split nested path to field name and nested name
 
-        :param name: Nested field name
-        :return: (Field name, Nested name)
+        Args:
+            name: Nested field name
+        Returns:
+            (Field name, Nested name)
         """
         name = name.strip("`")
         if "." in name:
@@ -287,7 +301,8 @@ class IPv4Field(BaseField):
         """
         Convert IPv4 as integer
 
-        :return:
+        Returns:
+            Result of convert ipv4 as integer.
         """
         if value is None:
             return 0
@@ -309,7 +324,8 @@ class IPv6Field(BaseField):
         """
         Convert IPv6 as integer
 
-        :return:
+        Returns:
+            Result of convert ipv6 as integer.
         """
         if value is None:
             return 0

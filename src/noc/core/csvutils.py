@@ -28,11 +28,11 @@ IGNORED_FIELDS = {"id", "bi_id"}
 def update_if_changed(obj, values):
     """
     Update fields if changed.
-    :param obj: Document instance
-    :type obj: Document
-    :param values: New values
-    :type values: dict
-    :returns: List of changed (key, value)
+    Args:
+        obj (Document): Document instance
+        values (dict): New values
+    Returns:
+        A list of changed `(key, value)` pairs.
     """
     changes = []
     for k, v in values.items():
@@ -126,8 +126,9 @@ def csv_export(model, queryset=None, first_row_only=False):
 def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
     """
     Import from CSV
-    :returns: (record_count,error_message).
-              record_count is None if error_message set
+    Returns:
+        A tuple of record count and error message. The record count is `None`
+        when an error message is returned.
     """
     # Detect UTF8 BOM (EF BB BF)
     if f.read(3) != "\xef\xbb\xbf":

@@ -86,7 +86,8 @@ class Target(BaseModel):
     def reference(self) -> int:
         """
         Calculate target reference
-        :return:
+        Returns:
+            Result of calculate target reference.
         """
         if not self.id:
             return bi_hash((self.pool, self.address))
@@ -169,7 +170,8 @@ class Event(BaseModel):
     def resolve_managed_object_target(bi_id) -> tuple[str, str]:
         """
         Try resolva ManagedObject for old format event
-        :return:
+        Returns:
+            Result of try resolva managedobject for old format event.
         """
         # NOC modules
         from noc.sa.models.managedobject import ManagedObject
@@ -183,7 +185,8 @@ class Event(BaseModel):
     def from_json(cls, data: dict[str, Any]) -> Event:
         """
         Build instance from clickhouse query
-        :return:
+        Returns:
+            Result of build instance from clickhouse query.
         """
         ts = dt.datetime.fromisoformat(data["timestamp"])
         if "managed_object" in data and isinstance(data["managed_object"], list):
@@ -241,7 +244,8 @@ class Event(BaseModel):
     def get_by_id(cls, event_id: str, /, client: ClickhouseClient | None = None) -> Event | None:
         """
 
-        :return:
+        Returns:
+            Returned value.
         """
         event_id = str(ObjectId(event_id))
         # Determine possible date

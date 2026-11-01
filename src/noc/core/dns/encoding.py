@@ -14,7 +14,8 @@ IDNA_PREFIX = "xn--"
 def to_idna(zone: str) -> str:
     """
     Convert literal zone name to IDNA encoding
-    :return:
+    Returns:
+        Result of convert literal zone name to idna encoding.
     """
     return smart_text(smart_text(zone).lower().encode("idna"))
 
@@ -22,7 +23,8 @@ def to_idna(zone: str) -> str:
 def from_idna(zone: str) -> str:
     """
     Convert IDNA zone name representation to literal name
-    :return:
+    Returns:
+        Result of convert idna zone name representation to literal name.
     """
     if not is_idna(zone):
         return zone
@@ -32,6 +34,7 @@ def from_idna(zone: str) -> str:
 def is_idna(zone: str) -> bool:
     """
     Check if zone name is in IDNA representation
-    :return:
+    Returns:
+        Result of check if zone name is in idna representation.
     """
     return IDNA_PREFIX in zone

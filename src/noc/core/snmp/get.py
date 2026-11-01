@@ -21,7 +21,8 @@ from .version import SNMP_v1, SNMP_v2c
 def _build_pdu(community: str, pdu_type: int, oids, request_id, version: int = SNMP_v2c) -> bytes:
     """
     Generate SNMP v2c GET/GETNEXT
-    :return:
+    Returns:
+        Result of generate snmp v2c get/getnext.
     """
     if version not in (SNMP_v1, SNMP_v2c):
         raise NotImplementedError("Unsupported SNMP version")
@@ -53,7 +54,8 @@ def _build_pdu(community: str, pdu_type: int, oids, request_id, version: int = S
 def get_pdu(community, oids, request_id=None, version=SNMP_v2c):
     """
     Generate SNMP v2c GET PDU
-    :return:
+    Returns:
+        Result of generate snmp v2c get pdu.
     """
     return _build_pdu(community, PDU_GET_REQUEST, oids, request_id, version)
 
@@ -61,7 +63,8 @@ def get_pdu(community, oids, request_id=None, version=SNMP_v2c):
 def getnext_pdu(community, oid, request_id=None, version=SNMP_v2c):
     """
     Generate SNMP v2c GETNEXT PDU
-    :return:
+    Returns:
+        Result of generate snmp v2c getnext pdu.
     """
     return _build_pdu(community, PDU_GETNEXT_REQUEST, [oid], request_id, version)
 
@@ -108,7 +111,8 @@ _ResponseParser = Callable[[bytes, _DisplayHints | None], GetResponse]
 def parse_get_response(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Common response parser
-    :return:
+    Returns:
+        Result of common response parser.
     """
     decoder = BERDecoder(display_hints=display_hints)
     data = decoder.parse_sequence(pdu)[0]
@@ -128,7 +132,8 @@ def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = Non
     """
     Raw response parser for beef collector
 
-    :return:
+    Returns:
+        Result of raw response parser for beef collector.
     """
     decoder = BERDecoder()
     # Strip outer sequence
@@ -175,7 +180,8 @@ def parse_get_response_strict(
     reasonal values, rather than blowing out processing pipeline.
     May have performance impact over `parse_get_response`
 
-    :return:
+    Returns:
+        Result of strict response parser suspects that varbind part of response.
     """
     decoder = BERDecoder(display_hints=display_hints)
     data = decoder.parse_sequence(pdu)[0]

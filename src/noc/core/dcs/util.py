@@ -46,7 +46,8 @@ def resolve(
     """
     Returns *hint* when service is active or new service
     instance,
-    :return:
+    Returns:
+        Result of returns *hint* when service is active or new service.
     """
 
     async def _resolve():

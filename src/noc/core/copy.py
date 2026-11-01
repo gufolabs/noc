@@ -12,8 +12,10 @@ from typing import Any
 def deep_copy(t: dict[Any, Any]) -> dict[Any, Any]:
     """
     Returns copy of dict `t`, following nested dict structures.
-    :param t: Input dictionary
-    :returns: Copied dictionary
+    Args:
+        t: Input dictionary
+    Returns:
+        A recursively copied dictionary.
     """
     r = {}
     for k, v in t.items():
@@ -29,9 +31,11 @@ def deep_merge(t: dict[Any, Any], d: dict[Any, Any]) -> dict[Any, Any]:
     Merge contents of dicts `t` and `d`, including nested dicts,
     and returns merged dict. Values from `d` override values from `t`
 
-    :param t: Input dict
-    :param d: Input dict
-    :returns: Merged dict
+    Args:
+        t: Input dict
+        d: Input dict
+    Returns:
+        A merged dictionary, with values from `d` overriding values from `t`.
     """
 
     def _merge(x: dict[Any, Any], y: dict[Any, Any]) -> None:

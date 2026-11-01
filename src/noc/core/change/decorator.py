@@ -46,7 +46,8 @@ def get_applied_rules(instance, op: str, changed_fields=None) -> list[str] | Non
 def change(model=None, *, audit=True):
     """
     @change decorator to enable generalized change tracking on the model.
-    :return:
+    Returns:
+        Result of @change decorator to enable generalized change tracking on the model.
     """
     if model is None:
         return partial(change, audit=audit)

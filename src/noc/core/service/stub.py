@@ -140,11 +140,13 @@ class ServiceStub:
         """
         Build message and schedule to send to mx service
 
-        :param data: Data for transmit
-        :param message_type: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding over MX services
-        :return:
+        Args:
+            data: Data for transmit
+            message_type: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding over MX services
+        Returns:
+            Result of build message and schedule to send to mx service.
         """
         msg = Router.get_message(data, message_type.value, headers, sharding_key)
         self.logger.debug("Send message: %s", msg)
@@ -153,7 +155,8 @@ class ServiceStub:
     async def get_stream_partitions(self, stream: str) -> int:
         """
 
-        :return:
+        Returns:
+            Returned value.
         """
         async with MessageStreamClient() as client:
             while True:
@@ -171,7 +174,8 @@ class ServiceStub:
     def get_slot_limits(slot_name):
         """
         Get slot count
-        :return:
+        Returns:
+            Result of get slot count.
         """
         dcs = get_dcs(DEFAULT_DCS)
         return run_sync(partial(dcs.get_slot_limit, slot_name))

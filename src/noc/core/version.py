@@ -25,7 +25,8 @@ class Version:
     def has_git(self) -> bool:
         """
         Check .git directory is exists and git executable is in $PATH
-        :return:
+        Returns:
+            Result of check .git directory is exists and git executable is in $path.
         """
         if os.path.exists(".git"):
             with open(os.devnull, "w") as null:
@@ -36,7 +37,8 @@ class Version:
     def branch(self) -> str:
         """
         Returns current branch
-        :return:
+        Returns:
+            Result of returns current branch.
         """
         if self.has_git:
             try:
@@ -54,7 +56,8 @@ class Version:
     def changeset(self) -> str:
         """
         Returns current changeset
-        :return:
+        Returns:
+            Result of returns current changeset.
         """
         if self.has_git:
             try:

@@ -61,7 +61,8 @@ class NOCModelBase(ModelBase):
     def tuck_up_pants(mcs, kls):
         """
         implicit initialization of django models registry.
-        :return:
+        Returns:
+            Result of implicit initialization of django models registry.
         """
         label = kls._meta.app_label
         app_name = f"noc.{label}"

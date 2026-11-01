@@ -66,10 +66,12 @@ class ProfileChecker:
     def find_profile(self, method: str, param: str, result: str) -> Profile | None:
         """
         Find profile by method
-        :param method: Fingerprint getting method
-        :param param: Method params
-        :param result: Getting params result
-        :return:
+        Args:
+            method: Fingerprint getting method
+            param: Method params
+            result: Getting params result
+        Returns:
+            Result of find profile by method.
         """
         r = defaultdict(list)
         d = self.get_rules()
@@ -122,7 +124,8 @@ class ProfileChecker:
     def get_error(self) -> str | None:
         """
         Get error message
-        :return:
+        Returns:
+            Result of get error message.
         """
         return self.error
 
@@ -244,7 +247,8 @@ class ProfileChecker:
     def snmp_v1_get(self, param):
         """
         Perform SNMP v1 request. May be overridden for testing
-        :return:
+        Returns:
+            Result of perform snmp v1 request. may be overridden for testing.
         """
         self.logger.info("SNMP v1 GET: %s", param)
         try:
@@ -258,7 +262,8 @@ class ProfileChecker:
     def snmp_v2c_get(self, param):
         """
         Perform SNMP v2c request. May be overridden for testing
-        :return:
+        Returns:
+            Result of perform snmp v2c request. may be overridden for testing.
         """
         self.logger.info("SNMP v2c GET: %s", param)
         try:
@@ -272,8 +277,10 @@ class ProfileChecker:
     def http_get(self, url):
         """
         Perform HTTP request. May be overridden for testing
-        :param url: Request URL
-        :return:
+        Args:
+            url: Request URL
+        Returns:
+            Result of perform http request. may be overridden for testing.
         """
         self.logger.info("HTTP Request: %s", url)
         try:
@@ -287,7 +294,9 @@ class ProfileChecker:
     def https_get(self, url):
         """
         Perform HTTP request. May be overridden for testing
-        :param url: Request URL
-        :return:
+        Args:
+            url: Request URL
+        Returns:
+            Result of perform http request. may be overridden for testing.
         """
         return self.http_get(url)

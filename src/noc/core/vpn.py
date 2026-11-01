@@ -22,13 +22,15 @@ T_MAP = {"vrf": "VRF", "vpls": "VPLS"}
 def get_vpn_id(vpn: dict[str, Any]) -> str:
     """
     Calculate RFC2685-compatible VPN ID
-    :param vpn: Dict containing following keys
+    Args:
+        vpn: Dict containing following keys
         * type - with VPN type ("VRF", "VPLS", "VLL", "EVPN")
         * vpn_id (optional) - given vpn id
         * rd (optional) - VRF RD
         * name (optional) - Local VPN name
         * rt_export (optional) - List of exported route targets (["xx:yy", ..., "xx:yy"]
-    :return:
+    Returns:
+        Result of calculate rfc2685-compatible vpn id.
     """
     vpn_id = vpn.get("vpn_id")
     if vpn_id:

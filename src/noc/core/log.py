@@ -21,9 +21,10 @@ class PrefixLoggerAdapter:
 
     def __init__(self, logger, prefix, target=None) -> None:
         """
-        :param logger: Parent logger
-        :param prefix: Prefix to add in front of every message
-        :param target: Optional file-like handle to duplicate output
+        Args:
+            logger: Parent logger
+            prefix: Prefix to add in front of every message
+            target: Optional file-like handle to duplicate output
         """
         self.logger = logger
         self.target = target

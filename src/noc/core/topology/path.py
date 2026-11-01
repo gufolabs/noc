@@ -38,9 +38,11 @@ def get_shortest_path(start: ManagedObject, goal: ManagedObject) -> list[Managed
     """
     Returns a list of Managed Objects along shortest path
     using modified A* algorithm
-    :param start: Starting managed object's id
-    :param goal: Ending managed object's id
-    :return:
+    Args:
+        start: Starting managed object's id
+        goal: Ending managed object's id
+    Returns:
+        Result of returns a list of managed objects along shortest path.
     """
     finder = KSPFinder(start, ManagedObjectGoal(goal))
     r: list[ManagedObject] = []
@@ -85,7 +87,8 @@ class KSPFinder:
         Returns a list of Managed Objects along shortest path
         using modified A* algorithm
 
-        :return:
+        Returns:
+            Result of returns a list of managed objects along shortest path.
         """
         return self._find_shortest_path(self.start)
 
@@ -99,9 +102,11 @@ class KSPFinder:
         Returns a list of Managed Objects along shortest path
         using modified A* algorithm
 
-        :param pruned_links: Set of links id to be excluded from path calculation
-        :param max_depth: Depth limit search
-        :return:
+        Args:
+            pruned_links: Set of links id to be excluded from path calculation
+            max_depth: Depth limit search
+        Returns:
+            Result of returns a list of managed objects along shortest path.
         """
 
         def max_path_length() -> int:
@@ -244,7 +249,8 @@ class KSPFinder:
         Returns a list of up to `n_shortest` shortest paths.
         Yen's algorithm applied to A*
 
-        :return:
+        Returns:
+            Result of returns a list of up to `n_shortest` shortest paths.
         """
 
         def to_path(path: list[PathInfo]) -> list[ManagedObject]:

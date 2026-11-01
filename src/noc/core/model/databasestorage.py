@@ -46,9 +46,11 @@ class DatabaseStorage(Storage):
         """
         Internal implementation of the open()
 
-        :param name: Full path
-        :param mode: File mode (ignored)
-        :return: File object or None
+        Args:
+            name: Full path
+            mode: File mode (ignored)
+        Returns:
+            File object or None
         """
         cursor = self.get_cursor()
         cursor.execute(
@@ -61,9 +63,11 @@ class DatabaseStorage(Storage):
 
     def _save(self, name, content):
         """
-        :param name: Full path
-        :param content: File object
-        :return: File name
+        Args:
+            name: Full path
+            content: File object
+        Returns:
+            File name
         """
         cursor = self.get_cursor()
         binary = content.read()
@@ -88,8 +92,10 @@ class DatabaseStorage(Storage):
     def exists(self, name):
         """
         Check file exists
-        :param name: Full path
-        :return: True if file exists
+        Args:
+            name: Full path
+        Returns:
+            True if file exists
         """
         cursor = self.get_cursor()
         cursor.execute(f"SELECT COUNT(*) FROM {self.db_table} WHERE {self.name_field}=%s", [name])
@@ -100,15 +106,18 @@ class DatabaseStorage(Storage):
         Returns full filesystem path as specified in Storage API.
         Raises NotImplementedError because Storage is not related to filesystem
 
-        :return:
+        Returns:
+            Result of returns full filesystem path as specified in storage api.
         """
         raise NotImplementedError
 
     def size(self, name):
         """
         Get file size
-        :param name: Full name
-        :return: File size
+        Args:
+            name: Full name
+        Returns:
+            File size
         """
         cursor = self.get_cursor()
         cursor.execute(
@@ -125,8 +134,10 @@ class DatabaseStorage(Storage):
     def delete(self, name):
         """
         Deletes file
-        :param name: Full path
-        :return:
+        Args:
+            name: Full path
+        Returns:
+            Result of deletes file.
         """
         cursor = self.get_cursor()
         cursor.execute(f"DELETE FROM {self.db_table} WHERE {self.name_field}=%s", [name])
@@ -134,7 +145,8 @@ class DatabaseStorage(Storage):
     def get_available_name(self, name, max_length=None):
         """
         Returns converted file name (Required by Storage API)
-        :return:
+        Returns:
+            Result of returns converted file name (required by storage api).
         """
         return name
 
@@ -142,8 +154,10 @@ class DatabaseStorage(Storage):
         """
         Returns a directory listing
 
-        :param name: Full path of directory
-        :return: List of file names
+        Args:
+            name: Full path of directory
+        Returns:
+            List of file names
         """
         cursor = self.get_cursor()
         if not name.endswith("/"):
@@ -163,7 +177,8 @@ class DatabaseStorage(Storage):
         * name - full path
         * size - file size
         * mtime - last modification time
-        :return:
+        Returns:
+            Result of get file stats. stats is a hash of:.
         """
         cursor = self.get_cursor()
         cursor.execute(
@@ -179,7 +194,8 @@ class DatabaseStorage(Storage):
     def set_mtime(self, name, mtime):
         """
         Set file's mtime
-        :return:
+        Returns:
+            Result of set file's mtime.
         """
         cursor = self.get_cursor()
         cursor.execute(

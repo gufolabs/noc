@@ -13,6 +13,7 @@ def is_related_field(f: Field) -> bool:
     """
     Check field instance is related field.
 
-    :return:
+    Returns:
+        Result of check field instance is related field.
     """
     return f.remote_field is not None

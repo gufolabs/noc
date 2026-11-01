@@ -172,7 +172,8 @@ class ProbeNode(BaseCDAGNode):
     def get_bound(v: int) -> int:
         """
         Detect wrap bound
-        :return:
+        Returns:
+            Result of detect wrap bound.
         """
         if v <= MAX31:
             return MAX31
@@ -229,8 +230,10 @@ class ProbeNode(BaseCDAGNode):
     def get_scale(cls, code: str) -> tuple[int, int]:
         """
         Get scale base and exponent by code
-        :param code: Scale code
-        :return: Tuple of base, exp
+        Args:
+            code: Scale code
+        Returns:
+            Tuple of base, exp
         """
         # Lock-free positive case
         x = cls._scales.get(code)
@@ -249,7 +252,8 @@ class ProbeNode(BaseCDAGNode):
     def iter_conversion(cls, code: str) -> Iterable[tuple[str, str]]:
         """
         Iterate all possible conversions for unit code
-        :return:
+        Returns:
+            Result of iterate all possible conversions for unit code.
         """
         if cls._MS_CONVERT:
             # Test branch
@@ -276,7 +280,8 @@ class ProbeNode(BaseCDAGNode):
     def set_convert(cls, data: dict[str, dict[str, str]]) -> None:
         """
         Override database-based measure units by test data
-        :return:
+        Returns:
+            Result of override database-based measure units by test data.
         """
         cls._MS_CONVERT = data
 
@@ -284,7 +289,8 @@ class ProbeNode(BaseCDAGNode):
     def reset_convert(cls):
         """
         Remove conversion override set by .set_convert()
-        :return:
+        Returns:
+            Result of remove conversion override set by .set_convert().
         """
         cls._MS_CONVERT = {}
 
@@ -292,7 +298,8 @@ class ProbeNode(BaseCDAGNode):
     def set_scale(cls, data: dict[str, tuple[int, int]]) -> None:
         """
         Override database-based scales by test data
-        :return:
+        Returns:
+            Result of override database-based scales by test data.
         """
         cls._SCALE = data
 
@@ -300,7 +307,8 @@ class ProbeNode(BaseCDAGNode):
     def reset_scale(cls):
         """
         Remove scale-based override set by .set_scale()
-        :return:
+        Returns:
+            Result of remove scale-based override set by .set_scale().
         """
         cls._SCALE = {}
 

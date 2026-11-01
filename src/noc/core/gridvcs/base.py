@@ -60,9 +60,11 @@ class GridVCS:
     def get_delta(self, src: str, dst: str) -> tuple[str, bytes]:
         """
         Calculate strings delta
-        :param src: Source string
-        :param dst: Destination string
-        :return: (<type>, delta)
+        Args:
+            src: Source string
+            dst: Destination string
+        Returns:
+            (<type>, delta)
         """
         delta = bsdiff4.diff(src, dst)
         if len(delta) >= len(dst):
@@ -73,10 +75,12 @@ class GridVCS:
     def apply_delta(cls, type: str, src: str, delta: bytes) -> str:
         """
         Apply delta
-        :param type: Delta type
-        :param src: Source string
-        :param delta: Delta
-        :return: Patched string
+        Args:
+            type: Delta type
+            src: Source string
+            delta: Delta
+        Returns:
+            Patched string
         """
         return getattr(cls, f"apply_delta_{type}")(src, delta)
 
@@ -84,7 +88,8 @@ class GridVCS:
     def apply_delta_F(src: str, delta: bytes) -> str:
         """
         Raw string
-        :return:
+        Returns:
+            Result of raw string.
         """
         return delta.decode()
 
@@ -93,7 +98,8 @@ class GridVCS:
         """
         Mercurial mdiff. Slow python implementation ported from Mercurial 0.4.
         For legacy installations support only
-        :return:
+        Returns:
+            Result of mercurial mdiff. slow python implementation ported from mercurial 0.4.
         """
         last = pos = 0
         r: list[str] = []
@@ -113,7 +119,8 @@ class GridVCS:
     def apply_delta_B(src: str, delta: bytes) -> str:
         """
         BSDIFF4 diff
-        :return:
+        Returns:
+            Result of bsdiff4 diff.
         """
         return bsdiff4.patch(src, delta).decode()
 
@@ -140,10 +147,12 @@ class GridVCS:
     def put(self, object: int, data: str, ts: dt.datetime | None = None) -> bool:
         """
         Save data
-        :param object: Object id
-        :param data: Data to store
-        :param ts: Timestamp
-        :return:
+        Args:
+            object: Object id
+            data: Data to store
+            ts: Timestamp
+        Returns:
+            Result of save data.
         """
         if self.fs.exists(object=object):
             # Save delta
@@ -185,9 +194,11 @@ class GridVCS:
     def get(self, object: int, revision: Revision | None = None) -> str | None:
         """
         Get data
-        :param object: Object id
-        :param revision: Revision instance
-        :return: Revision text
+        Args:
+            object: Object id
+            revision: Revision instance
+        Returns:
+            Revision text
         """
         if not revision:
             try:
@@ -207,7 +218,8 @@ class GridVCS:
     def delete(self, object: int) -> None:
         """
         Delete object's data and history
-        :return:
+        Returns:
+            Result of delete object's data and history.
         """
         for r in self.iter_revisions(object):
             self.fs.delete(r.id)
@@ -215,7 +227,8 @@ class GridVCS:
     def iter_revisions(self, object: int, reverse: bool | None = False) -> Iterable[Revision]:
         """
         Get object's revision
-        :return: List of Revisions
+        Returns:
+            List of Revisions
         """
         d = pymongo.DESCENDING if reverse else pymongo.ASCENDING
         for r in self.files.find({"object": object}).sort("ts", d):
@@ -224,7 +237,8 @@ class GridVCS:
     def find_last_revision(self, object: int) -> Revision | None:
         """
         Find last revision or return None
-        :return:
+        Returns:
+            Result of find last revision or return none.
         """
         r = self.files.find_one({"object": object}, sort=[("ts", pymongo.DESCENDING)])
         if r:
@@ -233,8 +247,10 @@ class GridVCS:
 
     def find_revision(self, object: int, revision: str) -> Revision | None:
         """
-        :param revision: Revision id
-        :return:
+        Args:
+            revision: Revision id
+        Returns:
+            Returned value.
         """
         r = self.files.find_one({"object": object, "_id": ObjectId(revision)})
         if r:
@@ -246,16 +262,19 @@ class GridVCS:
         """
         Returns unified diff between src and dest
 
-        :param src: Source text
-        :param dst: Destination text
-        :return: Unified diff text
+        Args:
+            src: Source text
+            dst: Destination text
+        Returns:
+            Unified diff text
         """
         return "\n".join(difflib.unified_diff(src.splitlines(), dst.splitlines(), lineterm=""))
 
     def diff(self, object: int, rev1: str, rev2: str) -> str:
         """
         Get unified diff between revisions
-        :return:
+        Returns:
+            Result of get unified diff between revisions.
         """
         src = self.get(object, rev1) or ""
         dst = self.get(object, rev2) or ""
@@ -265,7 +284,8 @@ class GridVCS:
         """
         Get unified diff between multiple object's revisions
 
-        :return:
+        Returns:
+            Result of get unified diff between multiple object's revisions.
         """
         src = self.get(obj1, rev1) or ""
         dst = self.get(obj2, rev2) or ""

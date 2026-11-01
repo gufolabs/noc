@@ -119,7 +119,8 @@ class AdmDivExtractor(BaseExtractor):
         """
         Checking duble oktmo code
 
-        :return:
+        Returns:
+            Result of checking duble oktmo code.
         """
         if kod3 == "000":
             oktmo = f"{ter}{kod1}{kod2}{kod3}"
@@ -132,7 +133,8 @@ class AdmDivExtractor(BaseExtractor):
         """
         Creating parent code
 
-        :return:
+        Returns:
+            Result of creating parent code.
         """
         if self.region != "0" and kod1[1:3] == "00" and kod2 == "000" and kod3 == "000":
             return f"{ter}000000000"

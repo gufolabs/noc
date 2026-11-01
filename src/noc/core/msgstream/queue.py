@@ -34,7 +34,8 @@ class MessageStreamQueue:
     def put(self, req: PublishRequest, fifo: bool = True) -> None:
         """
         Put request into queue
-        :return:
+        Returns:
+            Result of put request into queue.
         """
         with self.lock:
             if fifo:
@@ -51,7 +52,8 @@ class MessageStreamQueue:
         """
         Get request from queue. Wait forever, if timeout is None,
         of return None if timeout is expired.
-        :return:
+        Returns:
+            Result of get request from queue. wait forever, if timeout is none,.
         """
         with self.lock:
             # Direct path, in case the queue is not empty
@@ -96,7 +98,8 @@ class MessageStreamQueue:
     async def drain(self, timeout: float | None = None) -> bool:
         """
         Wait until queue is empty
-        :return:
+        Returns:
+            Result of wait until queue is empty.
         """
         with self.lock:
             if self.waiter:

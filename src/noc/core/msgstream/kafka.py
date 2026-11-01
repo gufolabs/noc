@@ -90,7 +90,8 @@ class KafkaClient:
     async def close(self):
         """
         Close connections
-        :return:
+        Returns:
+            Result of close connections.
         """
         if self.producer:
             await self.producer.stop()
@@ -118,9 +119,11 @@ class KafkaClient:
     ) -> Metadata:
         """
         Fetch cluster metadata
-        :param stream: topic name
-        :param wait_for_stream: Wait for cluster init
-        :return:
+        Args:
+            stream: topic name
+            wait_for_stream: Wait for cluster init
+        Returns:
+            Result of fetch cluster metadata.
         """
         client = self.get_kafka_client()
         await client.bootstrap()
@@ -165,7 +168,8 @@ class KafkaClient:
     async def get_producer(self) -> AIOKafkaProducer:
         """
         Returns connected kafka producer
-        :return:
+        Returns:
+            Result of returns connected kafka producer.
         """
         if self.producer:
             return self.producer
@@ -222,7 +226,8 @@ class KafkaClient:
     def get_kafka_client(self) -> AIOKafkaClient:
         """
         Return Async Kafka Client
-        :return:
+        Returns:
+            Result of return async kafka client.
         """
         if not self.client:
             self.client = AIOKafkaClient(
@@ -233,7 +238,8 @@ class KafkaClient:
     async def get_kafka_admin_client(self) -> AIOKafkaAdminClient:
         """
         Return Kafka Admin Client
-        :return:
+        Returns:
+            Result of return kafka admin client.
         """
         if not self.admin_client:
             self.admin_client = AIOKafkaAdminClient(
@@ -246,8 +252,10 @@ class KafkaClient:
     def get_topic_config(name, replication_factor: int = 1) -> dict[str, str]:
         """
         Return topic retention settings
-        :param replication_factor: Cluster replicator factor
-        :return:
+        Args:
+            replication_factor: Cluster replicator factor
+        Returns:
+            Result of return topic retention settings.
         """
         if name.startswith("__"):
             return {}
@@ -276,7 +284,8 @@ class KafkaClient:
     ) -> None:
         """
         Create Stream by settings
-        :return:
+        Returns:
+            Result of create stream by settings.
         """
         admin_client = await self.get_kafka_admin_client()
         await admin_client.create_topics(
@@ -294,8 +303,10 @@ class KafkaClient:
     async def delete_stream(self, name: str) -> None:
         """
         Delete topic by name
-        :param name: Topic name
-        :return:
+        Args:
+            name: Topic name
+        Returns:
+            Result of delete topic by name.
         """
         admin_client = await self.get_kafka_admin_client()
         try:
@@ -333,11 +344,13 @@ class KafkaClient:
         # finally:
         #     await consumer.stop()
 
-        :param streams: Topic list
-        :param partition: Partition num (for manual assign)
-        :param start_offset: Offset for staring read
-        :param start_timestamp: Timestamp for staring read
-        :return:
+        Args:
+            streams: Topic list
+            partition: Partition num (for manual assign)
+            start_offset: Offset for staring read
+            start_timestamp: Timestamp for staring read
+        Returns:
+            Result of client example:.
         """
         consumer = await self.get_consumer(group_id=group_id)
         if partition is not None:
@@ -393,7 +406,8 @@ class KafkaClient:
     ) -> AsyncIterable[Message]:
         """
         For compatible NOC Client method
-        :return:
+        Returns:
+            Result of for compatible noc client method.
         """
         # async with consumer as c:
         await self._subscribe(
@@ -420,7 +434,8 @@ class KafkaClient:
     ) -> None:
         """
         Publish message to stream
-        :return:
+        Returns:
+            Result of publish message to stream.
         """
         logger.debug("Sending to topic %s", stream)
         producer = await self.get_producer()
@@ -457,9 +472,11 @@ class KafkaClient:
     async def fetch_cursor(self, stream: str, partition: int, cursor_id: str) -> int:
         """
         Fetch cursor offset for stream
-        :param stream: Topic name
-        :param partition: Partition number
-        :return:
+        Args:
+            stream: Topic name
+            partition: Partition number
+        Returns:
+            Result of fetch cursor offset for stream.
         """
         consumer = await self.get_consumer(group_id=stream)
         return await consumer.committed(TopicPartition(topic=stream, partition=partition))
@@ -467,9 +484,11 @@ class KafkaClient:
     async def set_cursor(self, stream: str, partition: int, cursor_id: str, offset: int) -> None:
         """
         Setting cursor offset for stream
-        :param stream: Topic name
-        :param partition: Partition number
-        :return:
+        Args:
+            stream: Topic name
+            partition: Partition number
+        Returns:
+            Result of setting cursor offset for stream.
         """
         logger.debug("[%s|%s] Set cursor to1: %s", stream, partition, offset)
         consumer = await self.get_consumer(group_id=stream)
@@ -487,10 +506,12 @@ class KafkaClient:
     ) -> dict[int, int]:
         """
         Copy message from one topic to another
-        :param from_topic: From topic
-        :param to_topic: To topic
-        :param partitions: Number of from partition
-        :return:
+        Args:
+            from_topic: From topic
+            to_topic: To topic
+            partitions: Number of from partition
+        Returns:
+            Result of copy message from one topic to another.
         """
         n_msg: dict[int, int] = {}  # partition -> copied messages
         if not partitions:

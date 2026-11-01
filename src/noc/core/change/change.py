@@ -106,8 +106,10 @@ def on_change(
 def apply_datastream(ds_changes: dict[str, set[str]] | None = None) -> None:
     """
     Apply datastream changes
-    :param ds_changes: Changes Items
-    :return:
+    Args:
+        ds_changes: Changes Items
+    Returns:
+        Result of apply datastream changes.
     """
     # NOC modules
     from noc.core.datastream.base import data_stream_loader

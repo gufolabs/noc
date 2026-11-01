@@ -65,8 +65,10 @@ class WhoisCacheLoader:
         def q(s):
             """
             Sometimes, no-brake space symbol (\xa0) occures in whois database
-            :param s: Source line
-            :return: Cleaned string
+            Args:
+                s: Source line
+            Returns:
+                Cleaned string
             """
             return s.replace("\xa0", "").strip()
 
@@ -123,12 +125,14 @@ class WhoisCacheLoader:
         """
         Fetch RPSL file, parse and return a set of pairs (key, value),
         where key and value fields set by key_field and values_field parameters
-        :param url: URL to download RPSL
-        :param r: defaultdict(list)
-        :param key_field: key field
-        :param values_field: falue field
-        :param forward: True for forward lookup, False otherwise
-        :return: Number of parsed items
+        Args:
+            url: URL to download RPSL
+            r: defaultdict(list)
+            key_field: key field
+            values_field: falue field
+            forward: True for forward lookup, False otherwise
+        Returns:
+            Number of parsed items
         """
         if forward:
 
@@ -162,7 +166,8 @@ class WhoisCacheLoader:
     def process_as_set_members(self):
         """
         Update as-set -> members
-        :return:
+        Returns:
+            Result of update as-set -> members.
         """
         r = defaultdict(list)
         if self.use_ripe:
@@ -190,7 +195,8 @@ class WhoisCacheLoader:
     def process_origin_route(self):
         """
         Update origin -> route
-        :return:
+        Returns:
+            Result of update origin -> route.
         """
         # Get AS with discovered routes
         discoverable_as = {

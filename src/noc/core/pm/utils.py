@@ -32,10 +32,11 @@ from noc.pm.models.scale import Scale
 def is_nan(*v: str) -> bool:
     """
     Compare value with \\N
-    :param:
-        v: Metric Value from CH
-    :return:
-        True if \\N, else False
+    Args:
+        v: Metric values from ClickHouse.
+
+    Returns:
+        True if any value is \\N; otherwise, False.
     """
     return any(x == "\\N" for x in v)
 

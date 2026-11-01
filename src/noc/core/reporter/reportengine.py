@@ -56,9 +56,11 @@ class ReportEngine:
     def run_report(self, r_params: RunParams, user: Any | None = None):
         """
         Run report withs params
-        :param r_params: Report params
-        :param user: Execute from user
-        :return:
+        Args:
+            r_params: Report params
+            user: Execute from user
+        Returns:
+            Result of run report withs params.
         """
         # Handler param
         out: BytesIO = BytesIO()
@@ -112,7 +114,8 @@ class ReportEngine:
         user: str | None = None,
     ):
         """
-        :return:
+        Returns:
+            Returned value.
         """
         # NOC modules
         from noc.core.service.loader import get_service
@@ -320,7 +323,8 @@ class ReportEngine:
     def resolve_output_filename(self, run_params: RunParams, root_band: Band) -> str:
         """
         Return document filename by
-        :return:
+        Returns:
+            Result of return document filename by.
         """
         template = run_params.get_template()
         output_name = template.get_document_name()

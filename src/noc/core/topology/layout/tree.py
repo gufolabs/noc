@@ -58,10 +58,12 @@ class TreeLayout(LayoutBase):
     def get_tree_width(G, node, uplink=None):
         """
         Calculate children tree width (in columns)
-        :param G: Graph instance
-        :param node: Tree root
-        :param uplink: Exclude uplink direction for recursive descent
-        :returns: Tree width
+        Args:
+            G: Graph instance
+            node: Tree root
+            uplink: Exclude uplink direction for recursive descent
+        Returns:
+            The number of columns required by the subtree rooted at `node`.
         """
         downlinks = [n for n in nx.all_neighbors(G, node) if n != uplink]
         w = 0
@@ -77,12 +79,14 @@ class TreeLayout(LayoutBase):
         """
         Calculate tree nodes positions.
         Tree must be precalculated with get_tree_width function
-        :param G: Graph instance
-        :param node: root node
-        :param x0: x coordinate offset
-        :param total_w: total tree width
-        :param level: current level
-        :return: dict of node -> np.array
+        Args:
+            G: Graph instance
+            node: root node
+            x0: x coordinate offset
+            total_w: total tree width
+            level: current level
+        Returns:
+            dict of node -> np.array
         """
         root = G.nodes[node]
         downlinks = root["tree_downlinks"]

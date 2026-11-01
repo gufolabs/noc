@@ -95,7 +95,8 @@ def setup_asyncio() -> None:
     """
     Initial setup of asyncio
 
-    :return:
+    Returns:
+        Result of initial setup of asyncio.
     """
     global _setup_completed
 
@@ -126,7 +127,8 @@ class NOCEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
     def reset_called(self) -> None:
         """
         Reset called status
-        :return:
+        Returns:
+            Result of reset called status.
         """
         self._local._set_called = False
 
@@ -165,6 +167,7 @@ if USE_UVLOOP:
         def reset_called(self) -> None:
             """
             Reset called status
-            :return:
+            Returns:
+                Result of reset called status.
             """
             self._local._set_called = False

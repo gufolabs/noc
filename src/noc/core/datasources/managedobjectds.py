@@ -268,9 +268,11 @@ class ManagedObjectDS(BaseDataSource):
     async def query(cls, fields: Iterable[str] | None = None, *args, **kwargs) -> pl.DataFrame:
         """
         Method for query report data. Return pandas dataframe.
-        :param fields: list fields for filtered on query
-        :param args: arguments for report query
-        :return:
+        Args:
+            fields: list fields for filtered on query
+            args: arguments for report query
+        Returns:
+            Result of method for query report data. return pandas dataframe.
         """
         if "detail_query" in kwargs:
             print("Detail Query execute", kwargs["detail_query"])
@@ -332,7 +334,8 @@ class ManagedObjectDS(BaseDataSource):
     def get_caps_default(caps: Capability):
         """
         Capability field default value
-        :return:
+        Returns:
+            Result of capability field default value.
         """
         if caps.type is ValueType.STRING:
             return ""

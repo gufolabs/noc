@@ -31,9 +31,10 @@ class BaseLock(ABC):
 
     def __init__(self, category: str, owner: str, ttl: float | None = None) -> None:
         """
-        :param category: Lock category name
-        :param owner: Lock owner id
-        :param ttl: Default lock ttl in seconds
+        Args:
+            category: Lock category name
+            owner: Lock owner id
+            ttl: Default lock ttl in seconds
         """
         self.category = category
         self.owner = owner
