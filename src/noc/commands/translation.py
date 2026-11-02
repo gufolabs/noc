@@ -41,13 +41,14 @@ class Command(BaseCommand):
         #    "messages": ["services/bi/**.py", "services/bi/**.html.j2", "bi/models/**.py"],
         #    "messages_js": ["ui/bi2/bi.js"],
         # },
-        "card": {
-            "messages": ["services/card/**.py", "services/card/**.html.j2"],
-            "messages_js": ["ui/card/**.js"],
-        },
-        "login": {"messages": ["services/login/**.py"], "messages_js": ["ui/login/**.js"]},
+        "login": {"messages": ["src/noc/services/login/**.py"], "messages_js": ["ui/login/**.js"]},
         "web": {
-            "messages": ["services/web/apps/**.py", "core/**.py"],
+            "messages": [
+                "src/noc/services/web/apps/**.py",
+                "src/noc/services/web/cards/**.py",
+                "src/noc/services/web/cards/**.html.j2",
+                "src/noc/core/**.py",
+            ],
             "messages_js": ["ui/web/**.js"],
         },
     }
@@ -83,7 +84,7 @@ class Command(BaseCommand):
         for svc in services:
             if svc not in self.SERVICES:
                 self.die(f"Unknown service: {svc}")
-            t_dir = Path("services", svc, "translations")
+            t_dir = Path("src", "noc", "services", svc, "translations")
             if not t_dir.exists():
                 os.makedirs(t_dir)
             with NamedTemporaryFile() as cfg:
@@ -116,7 +117,7 @@ class Command(BaseCommand):
         for svc in services:
             if svc not in self.SERVICES:
                 self.die(f"Unknown service: {svc}")
-            t_dir = Path("services", svc, "translations")
+            t_dir = Path("src", "noc", "services", svc, "translations")
             for domain in self.SERVICES[svc]:
                 pot = t_dir / f"{domain}.pot"
                 for lang in self.TRANSLATIONS:
@@ -151,7 +152,7 @@ class Command(BaseCommand):
         for svc in services:
             if svc not in self.SERVICES:
                 self.die(f"Unknown service: {svc}")
-            t_dir = Path("services", svc, "translations")
+            t_dir = Path("src", "noc", "services", svc, "translations")
             for domain in self.SERVICES[svc]:
                 for lang in self.TRANSLATIONS:
                     po = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".po")
@@ -165,7 +166,7 @@ class Command(BaseCommand):
                             subprocess.check_call([POJSON, "-p", po], stdout=fp)
                     else:
                         mo = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".mo")
-                        subprocess.check_call([BABEL, "compile", "-i", po, "-o", mo])
+                        subprocess.check_call([BABEL, "compile", "-i", str(po), "-o", str(mo)])
 
     def handle_edit(self, service=None, language=None):
         pfx = Path("services", service[0], "translations", language[0], "LC_MESSAGES")
