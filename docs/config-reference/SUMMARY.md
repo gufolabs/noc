@@ -6,7 +6,6 @@
 * [[bi] section](bi.md)
 * [[biosegmentation] section](biosegmentation.md)
 * [[cache] section](cache.md)
-* [[card] section](card.md)
 * [[chwriter] section](chwriter.md)
 * [[classifier] section](classifier.md)
 * [[clickhouse] section](clickhouse.md)

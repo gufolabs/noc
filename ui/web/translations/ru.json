@@ -13,10 +13,6 @@
         "Project-Id-Version": "The NOC Project VERSION",
         "Report-Msgid-Bugs-To": "EMAIL@ADDRESS"
     },
-    "Home": [
-        null,
-        "Главная"
-    ],
     " - Failed": [
         null,
         " - Ошибка"
@@ -5833,10 +5829,6 @@
         null,
         "Следующий запуск"
     ],
-    "Next Updated": [
-        null,
-        "Следующее обновление"
-    ],
     "Next change": [
         null,
         "Следующее изменение"
@@ -7113,10 +7105,6 @@
         null,
         "Отказоустойчивый"
     ],
-    "Ref Book Fields": [
-        null,
-        "Поля"
-    ],
     "Reference": [
         null,
         "Идентификатор"
@@ -7128,10 +7116,6 @@
     "Refresh": [
         null,
         "Обновить"
-    ],
-    "Refresh Interval (days)": [
-        null,
-        "Интервал обновления (в днях)"
     ],
     "Refresh data": [
         null,

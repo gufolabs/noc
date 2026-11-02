@@ -20,8 +20,7 @@ The following extensions are supported for the system:
     * `profiles` - SA (Service Activation) profiles [SA Profile](../profiles-reference/index.md).
     * `interfaces` - SA interfaces [SA Interface](../concepts/sa-profile/index.md#SA-Interfaces).
 * `services` - System service extensions.
-    * `card` - Custom cards [Card](../card/index.md).
-    * `web` - Custom web applications [Web](../web/index.md).
+    * `web` - Custom web applications and cards [Web service](../services-reference/web.md), [Card](../card/index.md).
     * `nbi` - NBI (Northbound Interface) API endpoint [NBI](../nbi-api-reference/index.md).
 * `templates` - `Jinja` templates for various parts of the system.
     * `ddash` - Templates for `PM` (Performance Monitoring) metric graphs.
@@ -55,9 +54,10 @@ Extensions are stored separately from the main code and are dynamically loaded b
 │   ├── interfaces
 │   └── profiles
 ├── services
-│   ├── card
 │   ├── nbi
 │   └── web
+│       └── cards
+│           └── templates
 ├── templates
 │   └── ddash
 └── tt

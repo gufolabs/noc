@@ -52,5 +52,4 @@ services:
       - consul-template
     required_assets:
       - web
-      - card
       - bi

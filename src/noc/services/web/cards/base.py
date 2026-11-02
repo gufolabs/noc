@@ -8,7 +8,6 @@
 # Python modules
 import datetime as dt
 import operator
-from importlib.resources import files
 from typing import Any
 
 # Third-party modules
@@ -19,6 +18,7 @@ from jinja2 import Environment, Template
 from noc.config import config
 from noc.core.perf import metrics
 from noc.core.translation import ugettext as _
+from noc.services.web.base.card import get_card_template_path
 from noc.sa.models.useraccess import UserAccess
 
 
@@ -27,7 +27,6 @@ class BaseCard:
     default_template_name = "default"
     template_cache = {}  # name -> Template instance
     actions = []
-    TEMPLATE_PATH = files("noc.services.card").joinpath("templates")
     model = None
     DEFAULT_MO_TITLE_TEMPLATE = "{{ object.object_profile.name }}: {{ object.name }}"
     DEFAULT_SERVICE_TITLE_TEMPLATE = (
@@ -108,7 +107,7 @@ class BaseCard:
         name = self.get_template_name()
         if name not in self.template_cache:
             self.template_cache[name] = None
-            template_path = self.TEMPLATE_PATH.joinpath(name + ".html.j2")
+            template_path = get_card_template_path(name + ".html.j2")
             if template_path.is_file():
                 env = Environment()
                 env.filters.update(
@@ -270,6 +269,6 @@ class BaseCard:
 
 
 card_loader = Loader[type[BaseCard]](
-    bases=config.iter_customized_bases("noc.services.card.cards"),
+    bases=config.iter_customized_bases("noc.services.web.cards"),
     exclude=("base",),
 )

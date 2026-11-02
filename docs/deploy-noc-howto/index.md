@@ -67,7 +67,6 @@ Download fresh installation scenarios:
 
     * [activator](../services-reference/activator.md)
     * [bi](../services-reference/bi.md)
-    * [card](../services-reference/card.md)
     * [ch_datasource](../services-reference/datasource.md)
     * [chwriter](../services-reference/chwriter.md)
     * [classifier](../services-reference/classifier.md)

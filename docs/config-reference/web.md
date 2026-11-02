@@ -29,6 +29,14 @@ before a RequestDataTooBig is raised.
 
 {{ config_param("web.language") }}
 
+## alarmheat_tooltip_limit
+
+{{ config_param("web.alarmheat_tooltip_limit") }}
+
+## metric_request_interval
+
+{{ config_param("web.metric_request_interval") }}
+
 ## install_collection
 
 {{ config_param("web.install_collection") }}
@@ -66,3 +74,8 @@ and will be removed in NOC 27. Use `web.max_avatar_size` and
 `NOC_WEB_MAX_REST_LIMIT` in environment configuration. The old YAML keys and
 `NOC_UI_MAX_AVATAR_SIZE` / `NOC_UI_MAX_REST_LIMIT` environment variables remain
 available during the deprecation period.
+
+The former `card.language`, `card.alarmheat_tooltip_limit`, and
+`card.metric_request_interval` parameters are deprecated and will be removed in
+NOC 27. Replace them with `web.language`, `web.alarmheat_tooltip_limit`, and
+`web.metric_request_interval` in configuration files and environment variables.

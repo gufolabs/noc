@@ -4425,10 +4425,6 @@
         null,
         "Próxima Execução"
     ],
-    "Next Updated": [
-        null,
-        "Última Atualização"
-    ],
     "Next change": [
         null,
         "última mudança"
@@ -5977,10 +5973,6 @@
         null,
         "Busca ..."
     ],
-    "Search Method": [
-        null,
-        "Busca realizada"
-    ],
     "Search complete": [
         null,
         "Busca realizada"
@@ -7388,14 +7380,6 @@
     "sec": [
         null,
         "serviço"
-    ],
-    "starting": [
-        null,
-        "Iniciando"
-    ],
-    "string": [
-        null,
-        "Iniciando"
     ],
     "successfully": [
         null,

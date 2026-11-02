@@ -685,7 +685,7 @@
       </g>
       <g>
         <g text-rendering="geometricPrecision" stroke-miterlimit="1.45" shape-rendering="geometricPrecision" font-family="sans-serif" transform="matrix(0.738,0,0,0.738,-81.9188,2.214)" stroke-linecap="butt">
-          <text x="432.1829" xml:space="preserve" y="284.6328" stroke="none">card</text>
+          <text x="432.1829" xml:space="preserve" y="284.6328" stroke="none">web/card API</text>
         </g>
       </g>
     </g>

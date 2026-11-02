@@ -7,26 +7,26 @@ These are `ReadOnly` (*non-editable*) custom user interfaces consisting of stati
 * Works even on very old browser versions
 * Allows link exchange thanks to accessibility via `URL`
 
-The base directory is `<noc>/services/card/` and has the following structure:
+The card backend is part of the web service. Its base directory is
+`<noc>/services/web/cards/` and has the following structure:
 
 ```
-services/
-└──card
-    ├── cards
-    └── templates
-    └── translations
-        ├── pt_BR
-        └── ru
+services/web/
+└── cards
+    ├── base.py
+    ├── managedobject.py
+    ├── templates
+    └── ...
 
 ```
 
 Here is an explanation of the directory contents:
 
-- **cards**: This directory contains the backend code for generating variables used in the `environment` of the template engine.
+- **cards**: This directory contains card classes that generate variables used in the template context. Custom card classes belong in `<custom root>/services/web/cards/`.
 
-- **templates**: This directory contains HTML templates used to create card pages. The template files have the extension `<template_name>.html.j2`.
+- **templates**: This directory contains HTML templates used to create card pages. The template files have the extension `<template_name>.html.j2`. Custom templates belong in `<custom root>/services/web/cards/templates/` and take precedence over built-in templates.
 
-- **translations**: This directory stores translation strings.
+Card translation strings are stored with the web service in `services/web/translations/`.
 
 !!! note
 
@@ -38,7 +38,9 @@ The base class for a card is `BaseCard`, located in the `cards/base.py` file. Ca
 It is mandatory to implement the `get_data` method, which returns a set of variables for use in the template of the card page. 
 Additionally, attributes such as `name` (unique name for the card), `default_template_name` (the name of the card's template), and `model` (a reference to the data model the card works with) should be filled in.
 
-To access a card, the URL is formed in the following format: `<root>/<card_name>/<ID>/`, where:
+To display a card, use `<root>/api/card/view/<card_name>/<ID>/`. The card search page is available at `<root>/api/card/index.html`, and card search requests use `/api/card/search/`.
+
+The view URL contains:
 
 - `<root>` is the base URL of the NOC system.
 - `<card_name>` is the name of the card specified in the `name` attribute.
@@ -56,7 +58,7 @@ Card File:
 
 ```python
 from noc.inv.models.firmware import Firmware
-from .base import BaseCard  # Base class
+from noc.services.web.cards.base import BaseCard
 
 
 class FirmwarePlanCard(BaseCard):
@@ -110,7 +112,6 @@ class AlarmHeatCard(BaseCard):
     default_template_name = "alarmheat"
 
     _layer_cache = {}
-    TOOLTIP_LIMIT = config.card.alarmheat_tooltip_limit
 
     def get_data(self):
         return {

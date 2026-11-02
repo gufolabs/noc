@@ -150,25 +150,6 @@
       vars:
         goss_service_name: web
 
-- name: Install NOC card
-  hosts: svc-card-exec
-  become: true
-  strategy: "free"
-  gather_facts: true
-  tags:
-    - noc
-    - card
-  vars_files:
-    - "../../vars/main.yml"
-    - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "../vars/main.yml"
-  roles:
-    - role: card
-    - role: goss
-      tags: [goss]
-      vars:
-        goss_service_name: card
-
 - name: Install NOC activator
   hosts: svc-activator-exec
   become: true

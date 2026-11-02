@@ -52,7 +52,7 @@ Located in `Device Management (Service Activation) -> Settings (Setup) -> Manage
 
 ### Card
 
-* Card - the name of the [Card](../../services-reference/card.md) template opened for `ManagedObject`.
+* Card - the name of the [card](../../card/index.md) template opened for `ManagedObject`.
 * Card Title Template - template for the title of the `ManagedObject` device card.
 
 ### Ping (Availability Check)

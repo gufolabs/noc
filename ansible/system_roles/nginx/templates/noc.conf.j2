@@ -134,17 +134,6 @@ server {
         auth_request_set $groups $upstream_http_remote_groups;
     }
 
-{% if 'svc-card-exec' in groups and groups['svc-card-exec'] | length > 0 %}
-    # Card service api
-    location /api/card/ {
-        proxy_pass http://card;
-        auth_request /api/auth/auth/;
-        auth_request_set $user $upstream_http_remote_user;
-        auth_request_set $groups $upstream_http_remote_groups;
-        error_page 401 = @error401;
-    }
-{% endif %}
-
 {% if 'svc-mrt-exec' in groups and groups['svc-mrt-exec'] | length > 0 %}
     # mrt service api
     location /api/mrt/ {

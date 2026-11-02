@@ -41,13 +41,14 @@ class Command(BaseCommand):
         #    "messages": ["services/bi/**.py", "services/bi/**.html.j2", "bi/models/**.py"],
         #    "messages_js": ["ui/bi2/bi.js"],
         # },
-        "card": {
-            "messages": ["services/card/**.py", "services/card/**.html.j2"],
-            "messages_js": ["ui/card/**.js"],
-        },
         "login": {"messages": ["services/login/**.py"], "messages_js": ["ui/login/**.js"]},
         "web": {
-            "messages": ["services/web/apps/**.py", "core/**.py"],
+            "messages": [
+                "services/web/apps/**.py",
+                "services/web/cards/**.py",
+                "services/web/cards/**.html.j2",
+                "core/**.py",
+            ],
             "messages_js": ["ui/web/**.js"],
         },
     }

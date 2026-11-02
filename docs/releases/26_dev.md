@@ -106,3 +106,9 @@ Text values are no longer converted automatically and are incompatible.
 Built-in dynamic dashboard templates have moved into the web application. If you have custom dynamic dashboard templates, move them from `<custom root>/templates/ddash` to
 `<custom root>/services/web/apps/pm/ddash/templates`.
 
+### Card Backend Moved to the Web Service
+
+The card backend is now part of the web service. Move custom card classes from `<custom root>/services/card/cards` to `<custom root>/services/web/cards`, and move custom card templates from `<custom root>/services/card/templates` to `<custom root>/services/web/cards/templates`. Update custom card imports from `noc.services.card.cards` to `noc.services.web.cards`, and imports of the card API base from `noc.services.card.base` to `noc.services.web.base.card`.
+
+Card configuration parameters have moved to the `web` section. The old `card.language`, `card.alarmheat_tooltip_limit`, and `card.metric_request_interval` names are rewritten to `web.language`, `web.alarmheat_tooltip_limit`, and `web.metric_request_interval` with a deprecation warning; remove the old names before upgrading to NOC 27.
+

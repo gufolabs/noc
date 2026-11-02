@@ -1,7 +1,6 @@
 * [Overview](index.md)
 * [activator](activator.md)
 * [bi](bi.md)
-* [card](card.md)
 * [chwriter](chwriter.md)
 * [classifier](classifier.md)
 * [correlator](correlator.md)

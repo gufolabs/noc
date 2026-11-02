@@ -51,7 +51,6 @@ class MonMapCard(BaseCard):
     fake_service = "5a9f7309c165cf528d9d8f95"
 
     _layer_cache = {}
-    TOOLTIP_LIMIT = config.card.alarmheat_tooltip_limit
 
     @property
     def card_js(self) -> list[str]:

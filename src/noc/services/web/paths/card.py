@@ -7,7 +7,6 @@
 
 # Python modules
 import operator
-from importlib.resources import files
 from threading import Lock
 from urllib.parse import unquote
 
@@ -22,8 +21,8 @@ from jinja2 import Template
 from noc.aaa.models.user import User
 from noc.core.debug import ErrorReport, error_report
 from noc.core.perf import metrics
-from noc.services.card.base import BaseAPI
-from noc.services.card.cards.base import BaseCard, card_loader
+from noc.services.web.base.card import BaseAPI, get_card_template_path
+from noc.services.web.cards.base import BaseCard, card_loader
 
 user_lock = Lock()
 
@@ -89,7 +88,7 @@ class CardAPI(BaseAPI):
 
     def get_card_template(self):
         if not self.CARD_TEMPLATE:
-            template_path = files("noc.services.card").joinpath("templates", "card.html.j2")
+            template_path = get_card_template_path("card.html.j2")
             with template_path.open("r", encoding="utf-8") as f:
                 self.CARD_TEMPLATE = Template(f.read())
         return self.CARD_TEMPLATE

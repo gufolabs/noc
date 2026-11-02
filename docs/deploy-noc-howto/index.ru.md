@@ -48,7 +48,6 @@
 1. Ставим флажки напротив следующих сервисов:
 	* [activator](https://docs.getnoc.com/master/en/services-reference/activator/)
 	* [bi](https://docs.getnoc.com/master/en/services-reference/bi/)
-	* [card](https://docs.getnoc.com/master/en/services-reference/card/)
 	* [ch_datasource](https://docs.getnoc.com/master/en/services-reference/datasource/)
 	* [chwriter](https://docs.getnoc.com/master/en/services-reference/chwriter/)
 	* [classifier](https://docs.getnoc.com/master/en/services-reference/classifier/)

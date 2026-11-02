@@ -238,11 +238,6 @@ class Config(BaseConfig):
         default_ttl = SecondsParameter(default="1d")
         pool_size = IntParameter(default=8)
 
-    class card(ConfigSection):
-        language = StringParameter(default="en")
-        alarmheat_tooltip_limit = IntParameter(default=5)
-        metric_request_interval = SecondsParameter(default="1h")
-
     class chwriter(ConfigSection):
         # LiftBridge partition (CH shard id)
         shard_id = IntParameter(help="CH Shard Id", default=0)
@@ -929,6 +924,8 @@ class Config(BaseConfig):
         )
         max_upload_size = IntParameter(default=16777216)
         language = StringParameter(default="en")
+        alarmheat_tooltip_limit = IntParameter(default=5)
+        metric_request_interval = SecondsParameter(default="1h")
         install_collection = BooleanParameter(default=False)
         max_threads = IntParameter(default=10)
         macdb_window = IntParameter(default=4 * 86400)
@@ -1449,6 +1446,17 @@ config = Config(
     rewrites=[
         NameRewrite("listen", "api.listen", deprecation=RemovedInNOC27Warning),
         NameRewrite("log_format", "logging.format", deprecation=RemovedInNOC27Warning),
+        NameRewrite("card.language", "web.language", deprecation=RemovedInNOC27Warning),
+        NameRewrite(
+            "card.alarmheat_tooltip_limit",
+            "web.alarmheat_tooltip_limit",
+            deprecation=RemovedInNOC27Warning,
+        ),
+        NameRewrite(
+            "card.metric_request_interval",
+            "web.metric_request_interval",
+            deprecation=RemovedInNOC27Warning,
+        ),
         PrefixRewrite("ui", "web", deprecation=RemovedInNOC27Warning),
         PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(

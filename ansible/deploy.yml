@@ -42,7 +42,6 @@
     - role: runner
     - role: escalator
     - role: web
-    - role: card
     - role: selfmon
     - role: activator
     - role: grafanads

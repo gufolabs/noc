@@ -52,7 +52,7 @@
 
 ### Card(Карточка)
 
-* Карточка (`Card`) - название шаблона [Карточки (`Card`)](../../services-reference/card.md), открываемой для `ManagedObject`
+* Карточка (`Card`) — название шаблона [карточки](../../card/index.ru.md), открываемой для `ManagedObject`
 * Шаблон заголовка карточки (`Card Title Template`) - шаблон для заголовка карточки Устройства `ManagedObject`
 
 
