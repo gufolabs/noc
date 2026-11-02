@@ -18,8 +18,8 @@ from jinja2 import Environment, Template
 from noc.config import config
 from noc.core.perf import metrics
 from noc.core.translation import ugettext as _
-from noc.services.web.base.card import get_card_template_path
 from noc.sa.models.useraccess import UserAccess
+from noc.services.web.base.card import get_card_template_path
 
 
 class BaseCard:
