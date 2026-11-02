@@ -7,6 +7,7 @@
 
 # Python modules
 import re
+from collections.abc import Iterator
 
 # NOC modules
 from noc.core.validators import is_vlan
@@ -14,7 +15,7 @@ from noc.core.validators import is_vlan
 rx_range = re.compile(r"^(\d+)\s*-\s*(\d+)$")
 
 
-def has_vlan(vlan_filter, vlan):
+def has_vlan(vlan_filter: str, vlan: int | str) -> bool:
     """
     Check VLAN is within vlan_filter
     Returns:
@@ -49,21 +50,21 @@ def has_vlan(vlan_filter, vlan):
     return False
 
 
-def optimize_filter(vlan_filter, sep=","):
+def optimize_filter(vlan_filter: str, sep: str = ",") -> str:
     """
     Reorder and optimize vlan filter
     Returns:
         Result of reorder and optimize vlan filter.
     """
 
-    def get_part(v):
+    def get_part(v: str) -> tuple[int, int]:
         v = v.strip()
         if "-" in v:
             v1, v2 = [int(x) for x in v.split("-")]
             return min(v1, v2), max(v1, v2)
         return int(v), int(v)
 
-    def iter_merge(parts):
+    def iter_merge(parts: list[tuple[int, int]]) -> Iterator[tuple[int, int]]:
         last = parts.pop(0)
         for n in parts:
             if last[1] >= n[0] - 1:
@@ -73,7 +74,7 @@ def optimize_filter(vlan_filter, sep=","):
                 last = n
         yield last
 
-    def fmt(p):
+    def fmt(p: tuple[int, int]) -> str:
         f, t = p
         if f == t:
             return str(f)

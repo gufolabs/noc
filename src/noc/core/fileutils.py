@@ -13,10 +13,13 @@ from io import BytesIO
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.typing import SupportsStr
 from noc.core.version import version
 
 
-def safe_rewrite(path, text, mode=None):
+def safe_rewrite(
+    path: str | os.PathLike[str], text: str | bytes | SupportsStr, mode: int | None = None
+) -> None:
     """
     Create new file filled with "text" safely
     """
@@ -38,7 +41,7 @@ def safe_rewrite(path, text, mode=None):
         os.chmod(path, mode)
 
 
-def write_tempfile(text):
+def write_tempfile(text: str) -> str:
     """
     Create temporary file, write content and return path
     """
@@ -119,7 +122,7 @@ def iter_open(path):
         f.close()
 
 
-def make_persistent(path, tmp_suffix=".tmp"):
+def make_persistent(path: str, tmp_suffix: str = ".tmp") -> bool | None:
     """
     Make file persistent removing `tmp_suffix` suffix
 

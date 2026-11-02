@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from collections.abc import Iterable, Mapping
+
 # Chassis subtypes
 LLDP_CHASSIS_SUBTYPE_CHASSIS_COMPONENT = 1
 LLDP_CHASSIS_SUBTYPE_INTERFACE_ALIAS = 2
@@ -47,7 +50,7 @@ LLDP_CAP_NAMES = {
 }
 
 
-def lldp_caps_to_bits(caps, caps_map):
+def lldp_caps_to_bits(caps: Iterable[str], caps_map: Mapping[str, int]) -> int:
     """
     Convert list of LLDP capabilities names to integer,
     suitable to IGetLLDPNeighbors remote_capabilities
@@ -66,7 +69,7 @@ def lldp_caps_to_bits(caps, caps_map):
     return r
 
 
-def lldp_bits_to_caps(bits):
+def lldp_bits_to_caps(bits: int) -> list[str]:
     """
     Convert capabilities bits to canonical names
     Args:

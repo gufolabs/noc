@@ -5,10 +5,13 @@
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Python modules
+from collections.abc import Iterable
+
 RPLS_IDENT = 20
 
 
-def rpsl_format(rpsl, ident=None):
+def rpsl_format(rpsl: str | Iterable[str], ident: int | None = None) -> str:
     """
     Idents RPSL by aligning left side of values
     Emply strings and strings without ':' are silently dropped
@@ -26,7 +29,7 @@ def rpsl_format(rpsl, ident=None):
     return "\n".join(out) + "\n"
 
 
-def rpsl_multiple(key, value):
+def rpsl_multiple(key: str, value: str | None) -> list[str]:
     if not value:
         return []
     mask = f"{key}: %s"
