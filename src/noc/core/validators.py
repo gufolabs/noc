@@ -503,14 +503,14 @@ def is_uuid(v: str) -> bool:
         return False
 
 
-def is_objectid(v: str | None) -> str | bool | None:
+def is_objectid(v: str | None) -> bool:
     """
     Check value is mongodb's ObjectId
 
     Returns:
         Result of check value is mongodb's objectid.
     """
-    return v and rx_objectid.match(v) is not None
+    return bool(v) and rx_objectid.match(v) is not None
 
 
 def generic_validator(check, error_message):
