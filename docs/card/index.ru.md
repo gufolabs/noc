@@ -9,24 +9,25 @@
 * Работает даже на очень старых версиях браузеров
 * Благодаря доступность черезе `URL` позволяет организовать обмен ссылками
 
-Базовой директории является `<noc>/services/card/`, представляет собой следующую структуру:
+Бэкенд карточек входит в состав web-сервиса. Базовая директория —
+`<noc>/services/web/cards/`:
 
 ```
-services/
-└──card
-    ├── cards
-    └── templates
-    └── translations
-        ├── pt_BR
-        └── ru
+services/web/
+└── cards
+    ├── base.py
+    ├── managedobject.py
+    ├── templates
+    └── ...
 
 ```
 
 В директориях представлено следующее содержимое:
 
-* **cards** *бэкэнд* генератор переменных для `environment` шаблонизатора
-* **templates** Шаблон HTML для формирования страницы карточки. Файл с расширением `<template_name>.html.j2`
-* **translations** - строки перевода
+* **cards** — классы карточек, формирующие контекст шаблона. Пользовательские классы размещаются в `<custom root>/services/web/cards/`
+* **templates** — HTML-шаблоны карточек с расширением `<template_name>.html.j2`. Пользовательские шаблоны размещаются в `<custom root>/services/web/cards/templates/` и имеют приоритет над встроенными
+
+Переводы карточек входят в переводы web-сервиса.
 
 <!-- prettier-ignore -->
 !!! note
@@ -39,7 +40,9 @@ services/
 и заполнение аттрибутов `name` - имя карточки (должно быть уникальным) и `default_template_name` - имя шаблона карточки, 
 `model` - ссылка на модель данных с которой работает карточка.
 
-Для вызова карточки формируется URL вида `<root>/<card_name>/<ID>/`, где:
+Карточка открывается по адресу `<root>/api/card/view/<card_name>/<ID>/`. Страница поиска карточек доступна по адресу `<root>/api/card/index.html`, запросы поиска выполняются через `/api/card/search/`.
+
+В URL карточки используются:
 
 * `<root>` - базовый URL НОКа
 * `<card_name>` - имя карточки, указанное в аттрибуте `name`
@@ -58,7 +61,7 @@ services/
 
 ```python
 from noc.inv.models.firmware import Firmware
-from .base import BaseCard  # Базовый класс
+from noc.services.web.cards.base import BaseCard
 
 
 class FirmwarePlanCard(BaseCard):
@@ -114,7 +117,6 @@ class AlarmHeatCard(BaseCard):
     default_template_name = "alarmheat"
 
     _layer_cache = {}
-    TOOLTIP_LIMIT = config.card.alarmheat_tooltip_limit
 
     def get_data(self):
         return {

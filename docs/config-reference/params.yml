@@ -93,12 +93,6 @@ params:
     default: '3600'
   cache.vcprefixes:
     default: '3600'
-  card.alarmheat_tooltip_limit:
-    default: '5'
-  card.language:
-    default: en
-  card.metric_request_interval:
-    default: '3600'
   chwriter.batch_delay_ms:
     default: '10000'
   chwriter.batch_size:
@@ -1003,6 +997,8 @@ params:
   web.api_row_limit: {}
   web.api_unlimited_row_limit:
     default: '1000'
+  web.alarmheat_tooltip_limit:
+    default: '5'
   web.enable_remote_system_last_extract_info: {}
   web.enable_report_history: {}
   web.events_windows:
@@ -1032,6 +1028,8 @@ params:
     default: '10'
   web.max_upload_size:
     default: '16777216'
+  web.metric_request_interval:
+    default: '3600'
   web.report_csv_delimiter:
     choices:
     - ','

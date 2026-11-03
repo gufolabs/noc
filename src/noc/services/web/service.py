@@ -28,6 +28,7 @@ class WebService(BaseService):
     name = "web"
     api = []
     use_translation = True
+    use_jinja = True
     use_mongo = True
     use_router = True
     use_watchdog = config.watchdog.enable_watchdog

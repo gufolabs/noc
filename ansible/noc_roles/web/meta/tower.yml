@@ -4,7 +4,7 @@ forms:
     description: >
       <strong>Service type</strong>: Internal <br/>
       <strong>Short description</strong>: Web interface daemon<br/>
-      <strong>Long description</strong>: Nginx upstream to show web interface<br/>
+      <strong>Long description</strong>: Serves the web interface, REST API, and read-only cards<br/>
       <strong>Scale Recommendations</strong>: At least two per system. <br/>
       <strong>docs</strong>: <a href=https://docs.getnoc.com/services-reference/web/ target=_blank>Web</a><br/>
       <strong>Placement constraint</strong>: On node with service Nginx <br/>
@@ -61,6 +61,7 @@ services:
     required_assets:
       - web
       - mib
+      - card
     depends:
       - noc
       - nginx

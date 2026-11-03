@@ -2,13 +2,11 @@
 
 The NOC platform supports user interface localization into various languages. Currently, the following services support localization:
 
-* Web
-* Card
+* Web, including cards
 * Login
 
 Language selection is done in the service settings through the Tower interface:
 
-![Language settings for Card service](tower_service_card_lang.png)
 ![Language settings for Web service](tower_service_web_lang.png)
 
 After changing the language, you need to deploy with the following options enabled:
@@ -23,9 +21,8 @@ or
 
 Localization files are located in the following directories:
 
-* `service/web/translations` - translations for Web
-* `service/card/translations` - translations for Card
-* `service/login/translations` - translations for Login
+* `services/web/translations` - translations for the web interface and cards
+* `services/login/translations` - translations for Login
 
 The name of the translation directory must be specified in the respective service settings.  
 To create your own translations, you can place additional folders next to the main ones.
@@ -135,7 +132,7 @@ After editing, compile the translations:
 
 ![Compiling translation](compile_translation_phrases.png)
 
-After compilation, you need to restart the relevant service (web, card, login).
+After compilation, restart the relevant service (web or login).
 
 ### Publishing the Translation
 

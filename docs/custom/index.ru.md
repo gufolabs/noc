@@ -21,8 +21,7 @@
     * `profiles` - Профили SA [SA Profile](../profiles-reference/index.md)
     * `interfaces` - Интерфейсы SA [SA Interface](../profiles-reference/index.md#Интерфейсы-SA)
 * `services` - расширения сервисов системы
-    * `card` - пользовательские карточки [Card](../card/index.md)
-    * `web` - пользовательские веб приложения [Web](../web/index.md)
+    * `web` - пользовательские веб-приложения и карточки [Web-сервис](../services-reference/web.md), [Card](../card/index.ru.md)
     * `nbi` - NBI API endpoint [NBI](../nbi-api-reference/index.md)
 * `templates` - `Jinja` шаблоны для различных частей системы
     * `ddash` - шаблоны для графиков метрик `PM`
@@ -61,9 +60,10 @@ cтруктура выглядит следующим образом:
 │   ├── interfaces
 │   └── profiles
 ├── services
-│   ├── card
 │   ├── nbi
 │   └── web
+│       └── cards
+│           └── templates
 ├── templates
 │   └── ddash
 └── tt

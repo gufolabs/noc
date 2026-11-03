@@ -35,7 +35,6 @@ class AlarmHeatCard(BaseCard):
     default_template_name = "alarmheat"
 
     _layer_cache = {}
-    TOOLTIP_LIMIT = config.card.alarmheat_tooltip_limit
 
     @property
     def card_js(self) -> list[str]:
@@ -169,7 +168,7 @@ class AlarmHeatCard(BaseCard):
                     if mo["id"] not in data:
                         data[mo["id"]] = w
                 data: list[int] = sorted(data, key=lambda z: data[z], reverse=True)[
-                    : self.TOOLTIP_LIMIT
+                    : config.web.alarmheat_tooltip_limit
                 ]
                 points.append(
                     geojson.Feature(

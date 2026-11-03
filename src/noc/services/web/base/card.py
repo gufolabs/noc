@@ -8,6 +8,8 @@
 # Python modules
 import hashlib
 import os
+from importlib.resources import files
+from importlib.resources.abc import Traversable
 from pathlib import Path
 
 # Third-party modules
@@ -20,6 +22,15 @@ from noc.config import config
 from noc.core.service.loader import get_service
 
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
+
+
+def get_card_template_path(name: str) -> Traversable:
+    """Resolve a custom card template before the built-in template."""
+    if config.path.custom_path:
+        custom_path = Path(config.path.custom_path) / "services/web/cards/templates" / name
+        if custom_path.is_file():
+            return custom_path
+    return files("noc.services.web.cards").joinpath("templates", name)
 
 
 class BaseAPI:
@@ -88,8 +99,8 @@ class BaseAPI:
         )
 
     def handler_index(self, request: Request):
-        templates_dir = os.path.join(self.PREFIX, "ui", self.service.name)
-        language = config.card.language
+        templates_dir = os.path.join(self.PREFIX, "ui", "card")
+        language = config.web.language
         templates = Jinja2Templates(directory=templates_dir)
         result = templates.TemplateResponse(
             "index.html",
