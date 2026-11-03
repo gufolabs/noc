@@ -57,6 +57,11 @@ class Command(BaseCommand):
         # Python modules
         import yaml
 
+        class ConfigDocsDumper(yaml.SafeDumper):
+            def choose_scalar_style(self):
+                style = super().choose_scalar_style()
+                return '"' if style == "'" else style
+
         r = [
             "# This file is auto-generated",
             "# Do not edit manually!",
@@ -88,7 +93,7 @@ class Command(BaseCommand):
             if p_max is not None:
                 p["max"] = str(p_max)
             params[name] = p
-        r.append(yaml.dump({"params": params}))
+        r.append(yaml.dump({"params": params}, Dumper=ConfigDocsDumper))
         path = Path("docs", "config-reference", "params.yml")
         self.print(f"Writing {path}")
         with open(path, "w") as fp:
