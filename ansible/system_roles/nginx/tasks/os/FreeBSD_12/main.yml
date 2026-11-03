@@ -30,10 +30,6 @@
          server 127.0.0.1:65535; # check consul for login service
       }
 
-      upstream card {
-         server 127.0.0.1:65535; # check consul for card service
-      }
-
       upstream mrt {
          server 127.0.0.1:65535; # check consul for mrt service
       }
