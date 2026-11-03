@@ -22,7 +22,7 @@ from noc.pm.models.metrictype import MetricType
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.profile import Profile
 
-from ..base import API_ACCESS_HEADER, FORBIDDEN_MESSAGE, NBIAPI
+from .nbi_base import API_ACCESS_HEADER, FORBIDDEN_MESSAGE, NBIAPI
 
 S_INTERFACE = "interface"
 
@@ -82,7 +82,7 @@ class ObjectMetricsAPI(NBIAPI):
             raise HTTPException(400, "Invalid range")
         # Check time range
         delta = to_ts - from_ts
-        if delta.total_seconds() > config.nbi.objectmetrics_max_interval:
+        if delta.total_seconds() > config.web.objectmetrics_max_interval:
             raise HTTPException(400, "Requested range too large")
         # Prepare data for queries
         objects = set()

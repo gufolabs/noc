@@ -16,7 +16,7 @@ from pydantic import BaseModel
 from noc.main.models.remotesystem import RemoteSystem
 from noc.sa.models.service import Service
 
-from ..base import API_ACCESS_HEADER, FORBIDDEN_MESSAGE, NBIAPI
+from .nbi_base import API_ACCESS_HEADER, FORBIDDEN_MESSAGE, NBIAPI
 
 router = APIRouter()
 

@@ -20,8 +20,8 @@ may be moved between the nodes of cluster.
 * Web-facing services - including the web service that serves the user interface, REST API, and card endpoints
 * Pool services - interacts with network. Several pools can be deployed
 to deal with different parts of network.
-* Integration Services - a barrier between the NOC and the external world.
-Services like *nbi* and *datastream* offer integration interfaces to
+* Integration interfaces - a barrier between the NOC and the external world.
+The NBI API, served by the web service, and DataStream provide interfaces to
 access NOC data and perform basic operations initiated by external systems.
 Other services can request various external systems to reach the
 seamless integration.

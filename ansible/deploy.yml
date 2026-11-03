@@ -58,7 +58,6 @@
     - role: discovery
     - role: bi
     - role: datastream
-    - role: nbi
     - role: worker
     - role: metrics
     - role: mx

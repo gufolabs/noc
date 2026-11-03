@@ -1,3 +1,3 @@
 # web service
 
-The web service serves the browser interface and its REST API, including the `/api/ui/` and `/api/card/` endpoints. It also renders read-only cards; see the [card guide](../card/index.md).
+The web service serves the browser interface and its REST APIs, including the `/api/ui/`, `/api/card/` endpoints and the [NBI API](../nbi-api-reference/index.md) under `/api/nbi/`.

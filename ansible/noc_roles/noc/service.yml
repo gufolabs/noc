@@ -55,25 +55,6 @@
       vars:
         goss_service_name: mib
 
-- name: Install NOC nbi
-  hosts: svc-nbi-exec
-  become: true
-  strategy: "free"
-  gather_facts: true
-  tags:
-    - noc
-    - nbi
-  vars_files:
-    - "../../vars/main.yml"
-    - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
-    - "../vars/main.yml"
-  roles:
-    - role: nbi
-    - role: goss
-      tags: [goss]
-      vars:
-        goss_service_name: nbi
-
 - name: Install NOC mrt
   hosts: svc-mrt-exec
   become: true

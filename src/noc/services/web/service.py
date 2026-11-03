@@ -32,6 +32,7 @@ class WebService(BaseService):
     use_mongo = True
     use_router = True
     use_watchdog = config.watchdog.enable_watchdog
+    collect_req_api_metric = True
 
     def __init__(self) -> None:
         super().__init__()

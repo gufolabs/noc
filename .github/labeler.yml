@@ -91,7 +91,7 @@ s-integration:
   - changed-files:
       - any-glob-to-any-file:
           - "src/noc/services/datastream/**"
-          - "src/noc/services/nbi/**"
+          - "src/noc/services/web/paths/nbi_*.py"
           - "src/noc/services/kafkasender/**"
           - "src/noc/services/mailsender/**"
           - "src/noc/services/mx/**"
