@@ -71,11 +71,11 @@ class ReportLOC(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Peer",
-                "ASN",
-                "Import Filter",
-                TableColumn("Cone Power", format="numeric", align="right"),
-                TableColumn("Uniq. Cone Power", format="numeric", align="right"),
+                t("header-peer"),
+                t("header-asn"),
+                t("header-import-filter"),
+                TableColumn(t("header-cone-power"), format="numeric", align="right"),
+                TableColumn(t("header-uniq-cone-power"), format="numeric", align="right"),
             ],
             data=r,
         )

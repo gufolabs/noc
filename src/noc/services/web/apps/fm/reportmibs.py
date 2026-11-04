@@ -34,11 +34,11 @@ class ReportreportMIBs(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                TableColumn("MIB", total_label="Total:"),
-                TableColumn("Last Updated", format="date"),
-                TableColumn("Entries", align="right", format="integer", total="sum"),
-                TableColumn("Depends on"),
-                TableColumn("Used by"),
+                TableColumn(t("header-mib"), total_label="Total:"),
+                TableColumn(t("header-last-updated"), format="date"),
+                TableColumn(t("header-entries"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-depends-on")),
+                TableColumn(t("header-used-by")),
             ],
             data=data,
             enumerate=True,

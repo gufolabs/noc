@@ -67,9 +67,13 @@ class ReportDiscoveryApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                " ",
+                t("header-empty"),
                 TableColumn(
-                    "Count", align="right", format="integer", total="sum", total_label="Total"
+                    t("header-count"),
+                    align="right",
+                    format="integer",
+                    total="sum",
+                    total_label="Total",
                 ),
             ],
             data=data,

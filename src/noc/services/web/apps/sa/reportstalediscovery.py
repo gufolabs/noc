@@ -12,7 +12,6 @@ import datetime as dt
 from noc.core.dateutils import humanize_distance
 from noc.core.i18n import t
 from noc.core.scheduler.scheduler import Scheduler
-from noc.core.translation import ugettext as _
 from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
 from noc.services.web.base.simplereport import SimpleReport
@@ -59,16 +58,16 @@ class ReportStaleDiscoveryJob(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Admin. Domain"),
-                _("Object"),
-                _("Profile"),
-                _("Platform"),
-                _("Version"),
-                _("Address"),
-                _("Segment"),
-                _("Job"),
-                _("Last Success"),
-                _("Reason"),
+                t("header-admin-domain-610498"),
+                t("header-object"),
+                t("header-profile"),
+                t("header-platform"),
+                t("header-version"),
+                t("header-address"),
+                t("header-segment-44986c"),
+                t("header-job"),
+                t("header-last-success"),
+                t("header-reason"),
             ],
             data=sorted(data),
             enumerate=True,

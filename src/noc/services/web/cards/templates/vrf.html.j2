@@ -6,25 +6,25 @@
         </th>
     </tr>
     <tr>
-        <th scope="row">{{ _("Profile") }}</th>
+        <th scope="row">{{ t("header-profile") }}</th>
         <td>{{object.profile.name}}</td>
     <tr>
     <tr>
-        <th scope="row">{{ _("RD") }}</th>
+        <th scope="row">{{ t("header-rd") }}</th>
         <td>{{ object.rd }}</td>
     <tr>
     {% if object.description %}
     <tr>
-        <th scope="row">{{ _("Description") }}</th>
+        <th scope="row">{{ t("header-description") }}</th>
         <td>{{object.description}}</td>
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("VPN ID") }}</th>
+        <th scope="row">{{ t("header-vpn-id") }}</th>
         <td>{{ object.vpn_id }}</td>
     <tr>
     <tr>
-        <th scope="row">{{ _("Prefixes") }}</th>
+        <th scope="row">{{ t("header-prefixes") }}</th>
         <td>
             {% if ipv4_prefix %}<a href="/api/card/view/prefix/{{ ipv4_prefix.id }}/">IPv4</a>{% endif %}
             {% if ipv6_prefix %}<a href="/api/card/view/prefix/{{ ipv6_prefix.id }}/">IPv6</a>{% endif %}

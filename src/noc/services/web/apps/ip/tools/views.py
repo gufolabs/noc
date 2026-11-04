@@ -98,10 +98,10 @@ class ToolsAppplication(Application):
         """
 
         ns = forms.CharField(
-            label=_("NS"),
+            label=t("label-ns"),
             help_text=_("Name server IP address. NS must have zone transfer enabled for NOC host"),
         )
-        zone = forms.CharField(label=_("Zone"), help_text=_("DNS Zone name to transfer"))
+        zone = forms.CharField(label=t("label-zone"), help_text=_("DNS Zone name to transfer"))
 
     @api.post(
         r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",

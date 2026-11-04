@@ -86,17 +86,17 @@ class ReportDiscoveryProblem:
 
 class ReportForm(forms.Form):
     pool = forms.ChoiceField(
-        label=_("Managed Objects Pool"),
+        label=t("label-managed-objects-pool"),
         required=False,
         choices=[*list(Pool.objects.order_by("name").scalar("id", "name")), (None, "-" * 9)],
     )
     obj_profile = forms.ModelChoiceField(
-        label=_("Managed Objects Profile"),
+        label=t("label-managed-objects-profile"),
         required=False,
         queryset=ManagedObjectProfile.objects.order_by("name"),
     )
     resource_group = forms.ChoiceField(
-        label=_("Managed Objects Group (Selector)"),
+        label=t("label-managed-objects-group-selector"),
         required=False,
         help_text="Group for choice",
         choices=[
@@ -104,12 +104,12 @@ class ReportForm(forms.Form):
             (None, "-" * 9),
         ],
     )
-    avail_status = forms.BooleanField(label=_("Filter by Ping status"), required=False)
-    profile_check_only = forms.BooleanField(label=_("Profile check only"), required=False)
-    failed_scripts_only = forms.BooleanField(label=_("Failed discovery only"), required=False)
-    filter_pending_links = forms.BooleanField(label=_("Filter Pending links"), required=False)
-    filter_none_objects = forms.BooleanField(label=_("Filter None problems"), required=False)
-    filter_view_other = forms.BooleanField(label=_("Show other problems"), required=False)
+    avail_status = forms.BooleanField(label=t("label-filter-by-ping-status"), required=False)
+    profile_check_only = forms.BooleanField(label=t("label-profile-check-only"), required=False)
+    failed_scripts_only = forms.BooleanField(label=t("label-failed-discovery-only"), required=False)
+    filter_pending_links = forms.BooleanField(label=t("label-filter-pending-links"), required=False)
+    filter_none_objects = forms.BooleanField(label=t("label-filter-none-problems"), required=False)
+    filter_view_other = forms.BooleanField(label=t("label-show-other-problems"), required=False)
 
 
 class ReportFilterApplication(SimpleReport):
@@ -218,14 +218,14 @@ class ReportFilterApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Managed Object"),
-                _("Address"),
-                _("Profile"),
-                _("Administrative Domain"),
-                _("Avail"),
-                _("Last successful discovery"),
-                _("Discovery"),
-                _("Error"),
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                t("header-profile"),
+                t("header-administrative-domain-d113be"),
+                t("header-avail-389d90"),
+                t("header-last-successful-discovery"),
+                t("header-discovery"),
+                t("header-error"),
             ],
             data=data,
         )

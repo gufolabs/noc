@@ -17,9 +17,9 @@ class Reportreportnszonesummary(SimpleReport):
         return self.from_query(
             title=self.title,
             columns=[
-                "NS",
-                TableColumn("Master", format="integer", align="right"),
-                TableColumn("Slave", format="integer", align="right"),
+                t("header-ns"),
+                TableColumn(t("header-master"), format="integer", align="right"),
+                TableColumn(t("header-slave"), format="integer", align="right"),
             ],
             query="""SELECT ns.name,
                     (

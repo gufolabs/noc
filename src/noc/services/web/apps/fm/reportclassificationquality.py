@@ -28,10 +28,10 @@ class ReportClassificationQuality(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "",
-                TableColumn("Classified", format="integer", align="right"),
-                TableColumn("Total", format="integer", align="right"),
-                TableColumn("Quality", format="percent", align="right"),
+                t("header-empty"),
+                TableColumn(t("header-classified"), format="integer", align="right"),
+                TableColumn(t("header-total"), format="integer", align="right"),
+                TableColumn(t("header-quality"), format="percent", align="right"),
             ],
             data=data,
         )

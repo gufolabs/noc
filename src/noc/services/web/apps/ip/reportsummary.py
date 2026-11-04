@@ -27,9 +27,9 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportForm(forms.Form):
-    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4"))])
-    prefix = forms.CharField(label=_("Prefix"))
+    vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(label=t("label-address-family"), choices=[("4", t("label-ipv4"))])
+    prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data["vrf"]
@@ -78,9 +78,9 @@ class ReportSummary(SimpleReport):
                 title=_("Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s")
                 % {"vrf": vrf.name, "afi": afi, "prefix": p.prefix},
                 columns=[
-                    "",
-                    TableColumn(_("Size"), format="numeric", align="right"),
-                    TableColumn(_("%"), format="percent", align="right"),
+                    t("header-empty"),
+                    TableColumn(t("header-size"), format="numeric", align="right"),
+                    TableColumn(t("header-percent"), format="percent", align="right"),
                 ],
                 data=data,
             )

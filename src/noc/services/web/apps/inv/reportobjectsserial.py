@@ -11,7 +11,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.firmware import Firmware
 from noc.inv.models.object import Object
 from noc.inv.models.platform import Platform
@@ -25,7 +24,7 @@ from noc.services.web.base.simplereport import SimpleReport
 
 class ReportForm(forms.Form):
     resource_group = forms.ChoiceField(
-        label=_("Managed Objects Group (Selector)"),
+        label=t("label-managed-objects-group-selector"),
         required=True,
         help_text="Group for choice",
         choices=list(ResourceGroup.objects.order_by("name").scalar("id", "name")),
@@ -50,13 +49,13 @@ class ReportFilterApplication(SimpleReport):
         )
 
         columns = [
-            _("Managed Objects"),
-            _("Address"),
-            _("Vendor"),
-            _("Platform"),
-            _("HW Revision"),
-            _("SW Version"),
-            _("Serial"),
+            t("header-managed-objects"),
+            t("header-address"),
+            t("header-vendor"),
+            t("header-platform"),
+            t("header-hw-revision"),
+            t("header-sw-version"),
+            t("header-serial"),
         ]
         data = []
         mos = {

@@ -2,7 +2,7 @@
 <tbody>
     <tr>
         <th colspan="2" class="{{ {'C': 'success', 'A': 'danger'}[alarm.status] }}">
-            {{ _("Alarm") }}: {{ subject }}
+            {{ t("header-alarm") }}: {{ subject }}
             {{ service_summary | glyph_summary }}
             <span style="float: right">
                 {{ duration }}({{ timestamp | timestamp}})
@@ -10,15 +10,15 @@
         </th>
     </tr>
     <tr>
-        <th scope="row">{{ _("Class") }}</th>
+        <th scope="row">{{ t("header-class") }}</th>
         <td>{{ alarm.alarm_class.name }}</td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Severity") }}</th>
+        <th scope="row">{{ t("header-severity") }}</th>
         <td>{{ severity.name }} ({{ alarm.severity }})</td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Object") }}</th>
+        <th scope="row">{{ t("header-object") }}</th>
         {% if not managed_object %}
         <td> - </td>
         {% else %}
@@ -35,7 +35,7 @@
         {% endif %}
     </tr>
     <tr>
-        <th scope="row" class="col-sm-1">{{ _("Location") }}</th>
+        <th scope="row" class="col-sm-1">{{ t("header-location-d219c6") }}</th>
         <td>
             {% for p in container_path %}
             {% if not loop.first %}&gt;{% endif %}
@@ -44,7 +44,7 @@
         </td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Segment") }}</th>
+        <th scope="row">{{ t("header-segment-44986c") }}</th>
         {% if managed_object %}
         <td>
             <a href="/api/card/view/segment/{{ managed_object.segment.id }}/">{{ managed_object.segment.name }}</a>
@@ -55,7 +55,7 @@
         {% endif %}
     </tr>
     <tr>
-        <th scope="row">{{ _("Administrative Domain") }}</th>
+        <th scope="row">{{ t("header-administrative-domain-d113be") }}</th>
         {% if managed_object %}
         <td>{{ managed_object.administrative_domain.name }}</td>
         {% else %}
@@ -64,7 +64,7 @@
     </tr>
     {% if alarm.escalation_tt %}
     <tr>
-        <th scope="row">{{ _("Escalation") }}</th>
+        <th scope="row">{{ t("header-escalation") }}</th>
         <td>
             TT <a href="/api/card/view/tt/{{ alarm.escalation_tt }}/">{{ alarm.escalation_tt }}</a> ({{ alarm.escalation_ts | timestamp }})
         </td>
@@ -72,7 +72,7 @@
     {% endif %}
     {% if alarm.escalation_error %}
     <tr>
-        <th scope="row">{{ _("Escalation Error") }}</th>
+        <th scope="row">{{ t("header-escalation-error") }}</th>
         <td>
             {{ alarm.escalation_error }}
         </td>
@@ -80,7 +80,7 @@
     {% else %}
         {% if tt_system_failed %}
         <tr>
-            <th scope="row">{{ _("Escalation Error") }}</th>
+            <th scope="row">{{ t("header-escalation-error") }}</th>
             <td>
                 {{ tt_system }}: {{ _("Temporary unavailable") }}
             </td>
@@ -89,47 +89,47 @@
     {% endif %}
     {% if escalation_ctx or escalation_close_ctx %}
     <tr>
-        <th scope="row">{{ _("Escalation trace") }}</tr>
+        <th scope="row">{{ t("header-escalation-trace") }}</tr>
         <tr>
             {% if escalation_ctx %}
-            <a href="/api/card/view/span/{{ escalation_ctx }}/">{{ _("Escalation trace") }}</a>
+            <a href="/api/card/view/span/{{ escalation_ctx }}/">{{ t("header-escalation-trace") }}</a>
             {% endif %}
             {% if escalation_close_ctx %}
-            <a href="/api/card/view/span/{{ escalation_close_ctx }}/">{{ _("Deescalation trace") }}</a>
+            <a href="/api/card/view/span/{{ escalation_close_ctx }}/">{{ t("header-deescalation-trace") }}</a>
             {% endif %}
         <tr>
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Body") }}</th>
+        <th scope="row">{{ t("header-body") }}</th>
         <td><pre>{{ body }}</pre></td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Symptoms") }}</th>
+        <th scope="row">{{ t("header-symptoms") }}</th>
         <td><pre>{{ alarm.alarm_class.symptoms }}</pre></td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Probable Causes") }}</th>
+        <th scope="row">{{ t("header-probable-causes") }}</th>
         <td><pre>{{ alarm.alarm_class.probable_causes }}</pre></td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Recommended Actions") }}</th>
+        <th scope="row">{{ t("header-recommended-actions") }}</th>
         <td><pre>{{ alarm.alarm_class.recommended_actions }}</pre></td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Alarms") }}</th>
+        <th scope="row">{{ t("header-alarms") }}</th>
         <td>
             <table class="table table-condensed">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>{{ _("Timestamp") }}</th>
-                        <th>{{ _("Services") }}</th>
-                        <th>{{ _("Duration") }}</th>
-                        <th>{{ _("Object") }}</th>
-                        <th>{{ _("IP") }}</th>
-                        <th>{{ _("Class") }}</th>
-                        <th>{{ _("Subject") }}</th>
+                        <th>{{ t("header-timestamp") }}</th>
+                        <th>{{ t("header-services") }}</th>
+                        <th>{{ t("header-duration") }}</th>
+                        <th>{{ t("header-object") }}</th>
+                        <th>{{ t("header-ip") }}</th>
+                        <th>{{ t("header-class") }}</th>
+                        <th>{{ t("header-subject") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,7 +160,7 @@
     </tr>
     {% if diagnostic %}
     <tr>
-        <th scope="row">{{ _("Diagnostic") }}</th>
+        <th scope="row">{{ t("header-diagnostic") }}</th>
         <td>
             {% for d in diagnostic %}
                 <div class="panel panel-default">
@@ -177,7 +177,7 @@
     {% endif %}
     {% if log %}
     <tr>
-        <th scope="row">{{ _("Log") }}</th>
+        <th scope="row">{{ t("header-log") }}</th>
         <td>
             {% for l in log %}
                 <div class="panel panel-default">
@@ -196,14 +196,14 @@
     {% endif %}
     {% if maintenance %}
     <tr>
-        <th scope="row">{{ _("Maintenance") }}</th>
+        <th scope="row">{{ t("header-maintenance-94de30") }}</th>
         <td>
             <table class="table table-condensed">
                 <thead>
-                <th scope="row">{{ _("Subject") }}</th>
-                <th scope="row">{{ _("Type") }}</th>
-                <th scope="row">{{ _("Date") }}</th>
-                <th scope="row">{{ _("Contacts") }}</th>
+                <th scope="row">{{ t("header-subject") }}</th>
+                <th scope="row">{{ t("header-type") }}</th>
+                <th scope="row">{{ t("header-date") }}</th>
+                <th scope="row">{{ t("header-contacts") }}</th>
                 </thead>
                 <tbody>
                 {% for m in maintenance %}

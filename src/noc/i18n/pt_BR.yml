@@ -155,6 +155,78 @@ app-title-vlan: VLAN
 app-title-vpn: VPN
 app-title-vrf: VRF
 app-title-vrfgroup: Grupos de VRF
+header-action: Ação
+header-address: IP
+header-administrative-domain-d113be: Domínio Administrativo
+header-alarm: Alerta
+header-alarms: Alertas
+header-as: AS
+header-availability: Disponibilidade
+header-capabilities: Capacidades
+header-comment: Comentário
+header-cpe: CPE
+header-description: Descrição
+header-dns-zone: Zona de DNS
+header-domain: Domínio
+header-enum: ENUM
+header-escalation-timestamp: Escalação de Timestamp
+header-expired: Expirado
+header-firmware-policy: Política de Firmware
+header-fqdn: FQDN
+header-id: ID
+header-ip: IP
+header-l3: L3
+header-last-changed: Última Modificação
+header-mac: MAC
+header-maintenance-94de30: Manutenção
+header-managed-object-62561c: Objeto Gerenciado
+header-managed-objects: Objetos Gerenciados
+header-mib: MIB
+header-oid: OID
+header-paid-till: Licenciado Até
+header-percent: '%'
+header-platform: Plataforma
+header-prefix: Prefixo
+header-profile: Perfil
+header-project-f6f4da: Projeto
+header-quantity: Quantidade
+header-range: Intervalo
+header-segment-44986c: Segmento
+header-size: Tamanho
+header-subscriber: Assinante
+header-subscribers-6f13df: Assinantes
+header-supplier: Fornecedor
+header-technology: Tecnologia
+header-time-pattern: Padrão de Tempo
+header-tt: TT
+header-vendor: Fabricante
+header-version: Versão
+header-vlan-560367: VLAN
+header-vpn: VPN
+header-vrf: VRF
+header-zone: Zona
+label-1-day: 1 dia
+label-1-month: 1 mês
+label-1-week: 1 semana
+label-address-family: Família de IP
+label-administrative-domain: Domínio Administrativo
+label-as-number: Número de AS
+label-by-administrative-domain: Por Domínio Administrativo
+label-by-administrative-domain-and-profile: Por Domínio Administrativo e Perfil
+label-by-platform: Por Plataforma
+label-by-profile: Por Perfil
+label-by-version: Por Versão
+label-description: Descrição
+label-dns: DNS
+label-fqdn: FQDN
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-managed-object: Objeto Gerenciado
+label-prefix: Prefixo
+label-profile: Perfil
+label-range: Intervalo
+label-vrf: VRF
+label-zone: Zona
 nav-account: Conta
 nav-action: Ações
 nav-actioncommands: Comandos de Ação
@@ -178,6 +250,7 @@ nav-communitytype: Tipos de Comunidade
 nav-connectionrule: Regras de Conexão
 nav-connectiontype: Tipos de Conexão
 nav-coverage: Cobertura
+nav-csv: Exportar/Importar de CSV
 nav-customfield: Campos Personalizados
 nav-customfieldenumgroup: Grupos Enumeráveis
 nav-division: Divisões

@@ -155,43 +155,14 @@ msgid "Dashboard"
 msgstr ""
 
 #: services/web/apps/cm/reportlatestchanges/views.py
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Report Type"
-msgstr ""
-
-#: services/web/apps/cm/reportlatestchanges/views.py
-msgid "In Days"
-msgstr ""
-
-#: services/web/apps/cm/reportlatestchanges/views.py
-msgid "Managed Objects Administrative Domain (for config only)"
-msgstr ""
-
-#: services/web/apps/cm/reportlatestchanges/views.py
-msgid "Managed object search (for config only)"
-msgstr ""
-
-#: services/web/apps/cm/reportlatestchanges/views.py
 msgid "Use name, network (ex 10.0.0.0/8) or MAC"
 msgstr ""
-
-#: services/web/apps/cm/reportlatestchanges/views.py
-msgid "Last Changed"
-msgstr "Última Modificação"
-
-#: services/web/apps/crm/subscriber/views.py
-msgid "Subscriber"
-msgstr "Assinante"
 
 #: services/web/apps/crm/subscriber/views.py
 #: services/web/apps/fm/alarm/views.py
 #: services/web/apps/fm/reportescalations/views.py
 msgid "Subscribers"
 msgstr "Assinantes"
-
-#: services/web/apps/crm/supplier/views.py
-msgid "Supplier"
-msgstr "Fornecedor"
 
 #: services/web/apps/dns/dnsserver/views.py
 msgid "DNS Server"
@@ -210,10 +181,6 @@ msgid "Domain"
 msgstr "Domínio"
 
 #: services/web/apps/dns/reportexpiringdomains/views.py
-msgid "Expired"
-msgstr "Expirado"
-
-#: services/web/apps/dns/reportexpiringdomains/views.py
 msgid "Paid Till"
 msgstr "Licenciado Até"
 
@@ -226,10 +193,6 @@ msgstr "Licenciado Até"
 #: services/web/apps/ip/reportsummary/views.py
 msgid "Prefix"
 msgstr "Prefixo"
-
-#: services/web/apps/fm/alarm/views.py
-msgid "Alarm"
-msgstr "Alerta"
 
 #: services/web/apps/fm/alarm/views.py services/web/apps/main/home/views.py
 msgid "Alarms"
@@ -250,133 +213,13 @@ msgstr ""
 msgid "Alarm Class"
 msgstr "Classe de Alerta"
 
-# | msgid "Classification Rule"
-#: services/web/apps/fm/dispositionrule/views.py
-#, fuzzy
-msgid "Disposition Rule"
-msgstr "Regra de Classificação"
-
-# | msgid "Classification Rules"
-#: services/web/apps/fm/dispositionrule/views.py
-#, fuzzy
-msgid "Disposition Rules"
-msgstr "Regras de Classificação"
-
 #: services/web/apps/fm/eventclass/views.py
 msgid "Event Class"
 msgstr "Classe de Evento"
 
-#: services/web/apps/fm/reportalarmcomments/views.py
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "ALARM_CLASS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "ALARM_FROM_TS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "ALARM_TO_TS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "ALARM_TT"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-#: services/web/apps/fm/reportalarmdetail/views.py
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "OBJECT_NAME"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-#: services/web/apps/fm/reportalarmdetail/views.py
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "OBJECT_ADDRESS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-#: services/web/apps/fm/reportalarmdetail/views.py
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "OBJECT_ADMDOMAIN"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "LOG_TIMESTAMP"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "LOG_SOURCE"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmcomments/views.py
-msgid "LOG_MESSAGE"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "ROOT_ID"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "FROM_TS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "TO_TS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "DURATION_SEC"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "OBJECT_HOSTNAME"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "OBJECT_PROFILE"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "OBJECT_PLATFORM"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "OBJECT_VERSION"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "OBJECT_PROJECT"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "ALARM_SUBJECT"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "MAINTENANCE"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "OBJECTS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "SUBSCRIBERS"
-msgstr ""
-
 #: services/web/apps/fm/reportalarmdetail/views.py
 #: services/web/apps/fm/reportescalations/views.py
 msgid "TT"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "ESCALATION_TS"
-msgstr ""
-
-#: services/web/apps/fm/reportalarmdetail/views.py
-msgid "LOCATION"
 msgstr ""
 
 #: services/web/apps/fm/reportalarmdetail/views.py
@@ -390,59 +233,10 @@ msgid ""
 msgstr ""
 
 #: services/web/apps/fm/reportavailability/views.py
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportoutages/views.py
-#: services/web/apps/fm/reportreboots/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "From Date"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportoutages/views.py
-#: services/web/apps/fm/reportreboots/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "To Date"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
 #: services/web/apps/sa/reportdiscoveryproblem/views.py
 #: services/web/apps/sa/reportobjectsummary/views.py
 msgid "Administrative Domain"
 msgstr "Domínio Administrativo"
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Skip full available"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Skip zero available"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Skip zero access port"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Availability"
-msgstr "Disponibilidade"
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Availability (last day)"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Availability (last week)"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Availability (last month)"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Adm. Domain"
-msgstr ""
 
 #: services/web/apps/fm/reportavailability/views.py
 #: services/web/apps/fm/reportescalations/views.py
@@ -486,77 +280,12 @@ msgstr "IP"
 msgid "Profile"
 msgstr "Perfil"
 
-#: services/web/apps/fm/reportavailability/views.py
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Avail"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Total unavail (sec)"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-msgid "Count outages"
-msgstr ""
-
-#: services/web/apps/fm/reportavailability/views.py
-#: services/web/apps/fm/reportreboots/views.py
-msgid "Reboots"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportoutages/views.py
-#: services/web/apps/fm/reportreboots/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Range"
-msgstr "Intervalo"
-
 #: core/dateutils.py services/web/apps/fm/reportescalations/views.py
 #: services/web/apps/fm/reportoutages/views.py
 #: services/web/apps/fm/reportreboots/views.py
 #: services/web/apps/fm/reportttsystemstat/views.py
 msgid "1 day"
 msgstr "1 dia"
-
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportoutages/views.py
-#: services/web/apps/fm/reportreboots/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "1 week"
-msgstr "1 semana"
-
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportoutages/views.py
-#: services/web/apps/fm/reportreboots/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "1 month"
-msgstr "1 mês"
-
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Interval"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-msgid "Escalations (1 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-msgid "Escalations (7 days)"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-msgid "Escalations (30 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Timestamp"
-msgstr ""
-
-#: services/web/apps/fm/reportescalations/views.py
-msgid "Escalation Timestamp"
-msgstr "Escalação de Timestamp"
 
 #: services/web/apps/fm/reportescalations/views.py
 #: services/web/apps/fm/reportoutages/views.py
@@ -571,10 +300,6 @@ msgstr "Plataforma"
 msgid "Segment"
 msgstr "Segmento"
 
-#: services/web/apps/fm/reportescalations/views.py
-msgid "Objects"
-msgstr ""
-
 # | msgid "Alarm Classes"
 # | msgid "Alarm Rules"
 #: services/web/apps/fm/reportlocalrules/views.py
@@ -584,18 +309,6 @@ msgstr "Classes de Alerta"
 
 #: services/web/apps/fm/reportoutages/views.py
 msgid "Duration"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Outages (1 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Outages (7 days)"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Outages (30 day)"
 msgstr ""
 
 #: services/web/apps/fm/reportoutages/views.py
@@ -613,95 +326,7 @@ msgid "No"
 msgstr ""
 
 #: services/web/apps/fm/reportoutages/views.py
-msgid "Managed"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
 msgid "Status"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Downtime"
-msgstr ""
-
-#: services/web/apps/fm/reportoutages/views.py
-msgid "Downs"
-msgstr ""
-
-#: services/web/apps/fm/reportreboots/views.py
-msgid "Inteval"
-msgstr ""
-
-#: services/web/apps/fm/reportreboots/views.py
-msgid "Reboots (1 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportreboots/views.py
-msgid "Reboots (7 days)"
-msgstr ""
-
-#: services/web/apps/fm/reportreboots/views.py
-msgid "Reboot (30 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "TTSystem Stat (1 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "TTSystem Stat (7 days)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "TTSystem Stat (30 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "TTSystem Errors (1 day)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Server"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Request count"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Success request count"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Failed request count"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Success request (%)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Q1 (ms)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Q2 (ms)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "Q3 (ms)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "p95 (ms)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "max (ms)"
-msgstr ""
-
-#: services/web/apps/fm/reportttsystemstat/views.py
-msgid "TT ID"
 msgstr ""
 
 #: services/web/apps/fm/reportttsystemstat/views.py
@@ -711,22 +336,6 @@ msgstr ""
 #: services/web/apps/fm/reportttsystemstat/views.py
 msgid "Error text"
 msgstr ""
-
-#: services/web/apps/gis/area/views.py
-msgid "Area"
-msgstr "Região"
-
-#: services/web/apps/gis/area/views.py
-msgid "Areas"
-msgstr "Regiões"
-
-#: services/web/apps/gis/overlay/views.py
-msgid "Overlay"
-msgstr "Sobreposição"
-
-#: services/web/apps/gis/overlay/views.py
-msgid "Overlays"
-msgstr "Sobreposições"
 
 #: services/web/apps/inv/__init__.py services/web/apps/inv/inv/views.py
 msgid "Inventory"
@@ -749,11 +358,6 @@ msgstr ""
 #: services/web/apps/sa/reportobjectsummary/views.py
 msgid "Firmware Policy"
 msgstr "Política de Firmware"
-
-#: services/web/apps/inv/interface/views.py
-#: services/web/apps/ip/reportvpnstatus/views.py
-msgid "Interfaces"
-msgstr ""
 
 #: services/web/apps/inv/interfaceprofile/views.py
 msgid "Interface Profile"
@@ -784,35 +388,9 @@ msgid "Protocol"
 msgstr "Ferramentas"
 
 #: services/web/apps/inv/reportdiscoverycaps/views.py
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Managed Objects Pool"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoverycaps/views.py
-#: services/web/apps/inv/reportdiscoveryproblem/views.py
-#: services/web/apps/inv/reportpendinglinks/views.py
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Managed Objects Profile"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoverycaps/views.py
-#: services/web/apps/sa/reportstalediscovery/views.py
-msgid "Object"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoverycaps/views.py
 #: services/web/apps/main/__init__.py
 msgid "Main"
 msgstr "Principal"
-
-#: services/web/apps/inv/reportdiscoverypoison/views.py
-#: services/web/apps/main/pool/views.py
-msgid "Pool"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoverypoison/views.py
-msgid "Exclude on MAC Black List"
-msgstr ""
 
 #: core/datasources/discoveryidcachepoisonds.py
 #: services/web/apps/inv/reportdiscoverypoison/views.py
@@ -822,15 +400,6 @@ msgstr ""
 #: core/datasources/discoveryidcachepoisonds.py
 #: services/web/apps/inv/reportdiscoverypoison/views.py
 msgid "MO is move"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoverypoison/views.py
-msgid "is managed"
-msgstr ""
-
-#: services/web/apps/inv/reportdiscoveryproblem/views.py
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Managed Objects Pools"
 msgstr ""
 
 #: services/web/apps/inv/reportdiscoveryproblem/views.py
@@ -849,102 +418,6 @@ msgstr "Nenhum link"
 msgid "No uplinks"
 msgstr "Nenhum uplink"
 
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "OBJECT_SEGMENT"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "CONTAINER_ADDRESS"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "IFACE_NAME"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "IFACE_DESCRIPTION"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "IFACE_SPEED"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "MAX_LOAD_IN, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "MAX_LOAD_IN_TIME"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "MAX_LOAD_OUT, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "MAX_LOAD_OUT_TIME"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "AVG_LOAD_IN, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "AVG_LOAD_OUT, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "TOTAL_IN, Mbyte"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "TOTAL_OUT, Mbyte"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_IFACE_NAME"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_IFACE_DESCRIPTION"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_IFACE_SPEED"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_MAX_LOAD_IN, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_MAX_TIME_IN"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_MAX_LOAD_OUT, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_MAX_TIME_OUT"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_AVG_LOAD_IN, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_AVG_LOAD_OUT, Mbps"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_TOTAL_IN, Mbyte"
-msgstr ""
-
-#: services/web/apps/inv/reportmaxmetrics/views.py
-msgid "UPLINK_TOTAL_OUT, Mbyte"
-msgstr ""
-
 #: services/web/apps/inv/reportmetrics/views.py
 msgid "Not object found for set Report Param."
 msgstr ""
@@ -956,13 +429,6 @@ msgstr ""
 #: services/web/apps/inv/reportmovedmac/views.py
 msgid "Migrate (Device Changed)"
 msgstr ""
-
-# | msgid "Managed Object Selector"
-#: services/web/apps/inv/reportobjectsserial/views.py
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-#, fuzzy
-msgid "Managed Objects Group (Selector)"
-msgstr "Seletor de Objeto Gerenciado"
 
 #: services/web/apps/inv/reportobjectsserial/views.py
 #: services/web/apps/main/home/views.py
@@ -976,23 +442,7 @@ msgid "Vendor"
 msgstr "Fabricante"
 
 #: services/web/apps/inv/reportobjectsserial/views.py
-msgid "HW Revision"
-msgstr ""
-
-#: services/web/apps/inv/reportobjectsserial/views.py
-msgid "SW Version"
-msgstr ""
-
-#: services/web/apps/inv/reportobjectsserial/views.py
 msgid "Serial"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Show problem on already linked"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Administrative domain"
 msgstr ""
 
 #: services/web/apps/inv/reportpendinglinks/views.py
@@ -1000,36 +450,8 @@ msgid "Interface"
 msgstr ""
 
 #: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Direction"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Remote Interface"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Remote Object"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
 msgid "Detail"
 msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Remote Hostname"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Remote Description"
-msgstr ""
-
-#: services/web/apps/inv/reportpendinglinks/views.py
-msgid "Remote Chassis"
-msgstr ""
-
-#: services/web/apps/inv/technology/views.py
-msgid "Technology"
-msgstr "Tecnologia"
 
 #: services/web/apps/inv/unknownmodel/views.py
 msgid "Cleaned"
@@ -1101,63 +523,24 @@ msgstr ""
 msgid "Prefix not found"
 msgstr "Prefixo não encontrado"
 
-#: services/web/apps/ip/reportallocated/views.py
-#, python-format
-msgid "Allocated blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
-msgstr "Blocos alocados na VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
-
-#: services/web/apps/ip/reportexpanded/views.py
-#, python-format
-msgid "All allocated blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
-msgstr "Todos os blocos alocados na VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
-
-#: services/web/apps/ip/reportfilter/views.py
-msgid "Filter"
-msgstr ""
-
-#: services/web/apps/ip/reportfilter/views.py
-msgid "AS Number"
-msgstr "Número de AS"
-
 #: services/web/apps/ip/reportfree/views.py
 msgid "VRF Required"
 msgstr "VRF Requerida"
-
-#: services/web/apps/ip/reportfree/views.py
-#, python-format
-msgid "Free blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
-msgstr "Blocos livres na VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
 
 #: services/web/apps/ip/reportsummary/views.py
 #, python-format
 msgid "Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s"
 msgstr "Resumo para a VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
 
-#: services/web/apps/ip/reportsummary/views.py
-msgid "Size"
-msgstr "Tamanho"
-
-#: services/web/apps/ip/reportsummary/views.py
-msgid "%"
-msgstr ""
-
 #: services/web/apps/ip/tools/views.py
 msgid "Permission denied"
 msgstr "Permissão negada"
-
-#: services/web/apps/ip/tools/views.py
-msgid "NS"
-msgstr ""
 
 #: services/web/apps/ip/tools/views.py
 msgid "Name server IP address. NS must have zone transfer enabled for NOC host"
 msgstr ""
 "Endereço IP do servidor de nomes. NS deve ter uma zona de transferência "
 "habilitada para o NOC"
-
-#: services/web/apps/ip/tools/views.py
-msgid "Zone"
-msgstr "Zona"
 
 #: services/web/apps/ip/tools/views.py
 msgid "DNS Zone name to transfer"
@@ -1184,18 +567,6 @@ msgstr ""
 "é o padrão)"
 
 #: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "Cisco IOS policer"
-msgstr ""
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "Cisco IOS rate-limit"
-msgstr ""
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "Juniper JUNOS policer"
-msgstr ""
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
 msgid "Integer is required"
 msgstr "Inteiro requerido"
 
@@ -1213,34 +584,6 @@ msgstr ""
 "normal-burst-bytes=bits-per-second*Tc/8. Modo recomendado para a taxa-"
 "limite de valores de cálculo é: burst-normal=bits-per-second*Tc/8, burst-"
 "max=2*burst-normal"
-
-#: services/web/apps/main/checkpoint/views.py
-msgid "Checkpoints"
-msgstr ""
-
-#: services/web/apps/main/checkpoint/views.py
-msgid "Comment"
-msgstr "Comentário"
-
-#: services/web/apps/main/checkpoint/views.py
-msgid "Private"
-msgstr "Privado"
-
-#: services/web/apps/main/checkpoint/views.py
-msgid "Checkpoint has been set"
-msgstr "Checkpoint adicionado"
-
-#: services/web/apps/main/csv/views.py
-msgid "CSV Export/Import"
-msgstr "Exportar/Importar de CSV"
-
-#: services/web/apps/main/desktop/views.py
-msgid "Failed to change credentials"
-msgstr "Falha ao modificar credenciais"
-
-#: services/web/apps/main/font/views.py
-msgid "Fonts"
-msgstr ""
 
 # | msgid "Welcome"
 #: services/web/apps/main/home/views.py
@@ -1351,10 +694,6 @@ msgstr ""
 msgid "Prefix List built"
 msgstr ""
 
-#: services/web/apps/phone/phonenumber/views.py
-msgid "Phone Number"
-msgstr ""
-
 #: services/web/apps/project/project/views.py
 msgid "Project"
 msgstr "Projeto"
@@ -1422,47 +761,11 @@ msgstr "Perfil de Objeto Gerenciado"
 msgid "Managed Object Profiles"
 msgstr "Perfis de Objeto Gerenciado"
 
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Filter by Ping status"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Profile check only"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Failed discovery only"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Filter Pending links"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Filter None problems"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Show other problems"
-msgstr ""
-
 # | msgid "Stale discovery"
 #: services/web/apps/sa/reportdiscoveryproblem/views.py
 #, fuzzy
 msgid "Problem Discovery (pool)"
 msgstr "Descoberta Stale"
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Last successful discovery"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Discovery"
-msgstr ""
-
-#: services/web/apps/sa/reportdiscoveryproblem/views.py
-msgid "Error"
-msgstr ""
 
 #: services/web/apps/sa/reportobjectdetail/views.py
 msgid "ADM_PATH1"
@@ -1479,60 +782,6 @@ msgid "Unknown"
 msgstr ""
 
 #: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Profile"
-msgstr "Por Perfil"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Administrative Domain"
-msgstr "Por Domínio Administrativo"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Administrative Domain and Profile"
-msgstr "Por Domínio Administrativo e Perfil"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Labels"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Platform"
-msgstr "Por Plataforma"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "By Version"
-msgstr "Por Versão"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Managed Objects Summary (profile)"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Managed Objects Summary (domain)"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Managed Objects Summary (domain-profile)"
-msgstr ""
-
-# | msgid "Managed Objects Summary"
-#: services/web/apps/sa/reportobjectsummary/views.py
-#, fuzzy
-msgid "Managed Objects Summary (label)"
-msgstr "Resumo de Objetos Gerenciados"
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Managed Objects Summary (platform)"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Managed Objects Summary (version)"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
-msgid "Label"
-msgstr ""
-
-#: services/web/apps/sa/reportobjectsummary/views.py
 #: services/web/apps/sa/reportstalediscovery/views.py
 msgid "Version"
 msgstr "Versão"
@@ -1545,38 +794,12 @@ msgstr "Quantidade"
 msgid "Admin. Domain"
 msgstr ""
 
-#: services/web/apps/sa/reportstalediscovery/views.py
-msgid "Job"
-msgstr ""
-
-#: services/web/apps/sa/reportstalediscovery/views.py
-msgid "Last Success"
-msgstr ""
-
-#: services/web/apps/sa/reportstalediscovery/views.py
-msgid "Reason"
-msgstr ""
-
-#: services/web/apps/sa/service/views.py
-msgid "Services"
-msgstr ""
-
 #: services/web/apps/sa/useraccess/views.py
 msgid "User Access"
 msgstr "Permissão de Usuário"
 
-# | msgid "Domain"
-#: services/web/apps/vc/l2domain/views.py
-#, fuzzy
-msgid "L2 Domain"
-msgstr "Domínio"
-
 #: services/web/apps/vc/vlan/views.py
 msgid "VLAN"
-msgstr ""
-
-#: services/web/apps/vc/vpn/views.py
-msgid "VPN"
 msgstr ""
 
 #: services/web/cards/base.py
@@ -1599,12 +822,6 @@ msgid "Source"
 msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Class"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
 msgid "Severity"
 msgstr ""
 
@@ -1616,40 +833,7 @@ msgid "Location"
 msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
-#: services/web/cards/templates/maintenance.html.j2
-msgid "Escalation"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Escalation Error"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
 msgid "Temporary unavailable"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Escalation trace"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Deescalation trace"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Body"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Symptoms"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Probable Causes"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Recommended Actions"
 msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
@@ -1658,22 +842,6 @@ msgstr ""
 #: services/web/cards/templates/segmentalarm.html.j2
 #: services/web/cards/templates/sensor_controller.html.j2
 msgid "IP"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-#: services/web/cards/templates/service.html.j2 services/web/cards/templates/tt.html.j2
-msgid "Subject"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Diagnostic"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Log"
 msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
@@ -1699,28 +867,6 @@ msgstr ""
 #: services/web/cards/templates/alarmheat.html.j2
 #: services/web/cards/templates/monmap.html.j2 services/web/cards/templates/path.html.j2
 msgid "Loading ..."
-msgstr ""
-
-#: services/web/cards/templates/cpe.html.j2
-msgid "Local Id"
-msgstr ""
-
-#: services/web/cards/templates/dialplan.html.j2
-msgid "Mask"
-msgstr ""
-
-#: services/web/cards/templates/dialplan.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Ranges"
-msgstr ""
-
-#: services/web/cards/templates/dialplan.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Numbers"
-msgstr ""
-
-#: services/web/cards/templates/firmware.html.j2
-msgid "URL"
 msgstr ""
 
 #: services/web/cards/templates/interfacepath.html.j2
@@ -1774,31 +920,11 @@ msgstr ""
 msgid "Errors"
 msgstr ""
 
-#: services/web/cards/templates/kbentry.html.j2
-msgid "Attachments"
-msgstr ""
-
-#: services/web/cards/templates/maintenance.html.j2
-msgid "Affected objects"
-msgstr ""
-
 #: services/web/cards/templates/maintenance.html.j2
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/object.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Model"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-#: services/web/cards/templates/service.html.j2
-msgid "Start"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-#: services/web/cards/templates/service.html.j2
-msgid "Stop"
 msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
@@ -1904,64 +1030,7 @@ msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/sensor_controller.html.j2
-msgid "Local port"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Remote object"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Remote port"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Local description"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Remote description"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
 msgid "LinkGraph"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-#: services/web/cards/templates/service.html.j2
-msgid "Port"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Admin"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Oper"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Load In"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Load Out"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Errors In"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Errors Out"
 msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
@@ -1976,90 +1045,13 @@ msgstr ""
 msgid "Run VPN Trace"
 msgstr ""
 
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Revision"
-msgstr ""
-
 #: services/web/cards/templates/object.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Children"
 msgstr ""
 
-#: services/web/cards/templates/object.html.j2
-msgid "Value"
-msgstr ""
-
 #: services/web/cards/templates/outage.html.j2
 msgid "Outages Summary"
-msgstr ""
-
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-#: services/web/cards/templates/project.html.j2
-msgid "Dialplan"
-msgstr ""
-
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Category"
-msgstr ""
-
-#: services/web/cards/templates/phonenumber.html.j2
-msgid "ENUM"
-msgstr ""
-
-#: services/web/cards/templates/phonerange.html.j2
-#: services/web/cards/templates/project.html.j2
-msgid "Phone Range"
-msgstr ""
-
-#: services/web/cards/templates/phonerange.html.j2
-#: services/web/cards/templates/project.html.j2
-msgid "Number"
-msgstr ""
-
-#: services/web/cards/templates/platform.html.j2
-msgid "Aliases"
-msgstr ""
-
-#: services/web/cards/templates/platform.html.j2
-msgid "Start of Sale"
-msgstr ""
-
-#: services/web/cards/templates/platform.html.j2
-msgid "End of Ext. Support"
-msgstr ""
-
-#: services/web/cards/templates/platform.html.j2
-msgid "SNMP sysObjectId"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Is affilated"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Tech Contact"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Tech Contact Phone"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Sub.Interfaces"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Sub.Interface"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "as-set"
-msgstr ""
-
-#: services/web/cards/templates/project.html.j2
-msgid "Peer"
 msgstr ""
 
 #: services/web/cards/templates/resourcegroup.html.j2
@@ -2067,45 +1059,8 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
-#: services/web/cards/templates/resourcegroup.html.j2
-msgid "Provide Resources"
-msgstr ""
-
-#: services/web/cards/templates/resourcegroup.html.j2
-msgid "Consume Resources"
-msgstr ""
-
-#: services/web/cards/templates/resourcegroup.html.j2
-msgid "Nested Groups"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-msgid "Redundancy"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/segmentalarm.html.j2
-msgid "Summary"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-msgid "VLAN Translation"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-msgid "Rule"
-msgstr ""
-
 #: services/web/cards/templates/segment.html.j2
 msgid "No VLAN propagation"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-msgid "VLANs"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2 services/web/cards/templates/vlan.html.j2
-msgid "Translation"
 msgstr ""
 
 #: services/web/cards/templates/sensor_controller.html.j2
@@ -2116,80 +1071,8 @@ msgstr ""
 msgid "Sensors"
 msgstr ""
 
-#: services/web/cards/templates/service.html.j2
-msgid "Connection"
-msgstr ""
-
-#: services/web/cards/templates/service.html.j2
-msgid "CPE"
-msgstr ""
-
-#: services/web/cards/templates/service.html.j2
-msgid "Terminator"
-msgstr ""
-
-#: services/web/cards/templates/service.html.j2
-msgid "Session"
-msgstr ""
-
-#: services/web/cards/templates/subscribersession.html.j2
-msgid "MAC Vendor"
-msgstr ""
-
-#: services/web/cards/templates/technology.html.j2
-msgid "Service Model"
-msgstr ""
-
-#: services/web/cards/templates/technology.html.j2
-msgid "Client Model"
-msgstr ""
-
-#: services/web/cards/templates/technology.html.j2
-msgid "Single Service"
-msgstr ""
-
-#: services/web/cards/templates/technology.html.j2
-msgid "Single Client"
-msgstr ""
-
-#: services/web/cards/templates/technology.html.j2
-msgid "Allow Children"
-msgstr ""
-
-#: services/web/cards/templates/timepattern.html.j2
-msgid "Terms"
-msgstr ""
-
 #: services/web/cards/templates/totaloutage.html.j2
 msgid "No outages detected"
-msgstr ""
-
-#: services/web/cards/templates/tt.html.j2
-msgid "Stage"
-msgstr ""
-
-#: services/web/cards/templates/tt.html.j2
-msgid "Pre Reason"
-msgstr ""
-
-#: services/web/cards/templates/tt.html.j2
-msgid "Final Reason"
-msgstr ""
-
-#: services/web/cards/templates/tt.html.j2
-msgid "Comments"
-msgstr ""
-
-#: services/web/cards/templates/vlan.html.j2
-msgid "Untagged"
-msgstr ""
-
-#: services/web/cards/templates/vlan.html.j2
-msgid "Tagged"
-msgstr ""
-
-#: services/web/cards/templates/vlan.html.j2
-msgid "L3"
 msgstr ""
 
 #: services/web/cards/templates/vrf.html.j2

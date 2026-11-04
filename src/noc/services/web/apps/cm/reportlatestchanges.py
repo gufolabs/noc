@@ -27,16 +27,17 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 class ReportForm(forms.Form):
     repo = forms.ChoiceField(
-        label=_("Report Type"), choices=[("config", "config"), ("dnszone", "DNS")]
+        label=t("label-report-type"),
+        choices=[("config", t("label-config")), ("dnszone", t("label-dns"))],
     )
-    days = forms.IntegerField(label=_("In Days"), min_value=1)
+    days = forms.IntegerField(label=t("label-in-days"), min_value=1)
     adm_domain = forms.ModelChoiceField(
-        label=_("Managed Objects Administrative Domain (for config only)"),
+        label=t("label-managed-objects-administrative-domain-for-config-only"),
         required=False,
         queryset=AdministrativeDomain.objects.order_by("name"),
     )
     managed_object = forms.CharField(
-        label=_("Managed object search (for config only)"),
+        label=t("label-managed-object-search-for-config-only"),
         required=False,
         help_text=_("Use name, network (ex 10.0.0.0/8) or MAC"),
     )
@@ -112,11 +113,11 @@ class ReportLatestChangesApplication(SimpleReport):
         return self.from_dataset(
             title=f"{self.title}: {repo} in {int(days)} days",
             columns=[
-                "ID",
-                "Name",
-                "Address",
-                "Profile",
-                TableColumn(_("Last Changed"), format="datetime"),
+                t("header-id"),
+                t("header-name"),
+                t("header-address"),
+                t("header-profile"),
+                TableColumn(t("header-last-changed"), format="datetime"),
             ],
             data=result,
             enumerate=True,

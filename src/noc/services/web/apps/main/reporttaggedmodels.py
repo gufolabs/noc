@@ -34,4 +34,6 @@ class ReportTaggedModels(SimpleReport):
                     except Exception:
                         pass
         data = sorted((m._meta.app_label, m._meta.verbose_name) for m in seen)
-        return self.from_dataset(title=self.title, columns=["Module", "Model"], data=data)
+        return self.from_dataset(
+            title=self.title, columns=[t("header-module"), t("header-model")], data=data
+        )

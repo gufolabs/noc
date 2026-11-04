@@ -37,10 +37,10 @@ class ReportRulesetSummary(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "",
-                TableColumn("Builtin", align="right", format="integer"),
-                TableColumn("Local", align="right", format="integer"),
-                TableColumn("Total", align="right", format="integer"),
+                t("header-empty"),
+                TableColumn(t("header-builtin"), align="right", format="integer"),
+                TableColumn(t("header-local"), align="right", format="integer"),
+                TableColumn(t("header-total"), align="right", format="integer"),
             ],
             data=data,
         )

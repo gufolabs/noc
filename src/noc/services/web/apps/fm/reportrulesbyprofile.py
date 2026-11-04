@@ -46,11 +46,11 @@ class Reportreportrulesbyprofile(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Profile",
-                TableColumn("Syslog", align="right", format="integer", total="sum"),
-                TableColumn("SNMP Traps", align="right", format="integer", total="sum"),
-                TableColumn("Other", align="right", format="integer", total="sum"),
-                TableColumn("Total", align="right", format="integer", total="sum"),
+                t("header-profile"),
+                TableColumn(t("header-syslog"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-snmp-traps"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-other"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-total"), align="right", format="integer", total="sum"),
             ],
             data=data,
         )

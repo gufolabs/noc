@@ -11,7 +11,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.firmware import Firmware
 from noc.inv.models.firmwarepolicy import FirmwarePolicy
 from noc.inv.models.platform import Platform
@@ -20,12 +19,12 @@ from noc.sa.models.useraccess import UserAccess
 from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, TableColumn
 
 report_types = [
-    ("profile", _("By Profile")),
-    ("domain", _("By Administrative Domain")),
-    ("domain-profile", _("By Administrative Domain and Profile")),
-    ("label", _("By Labels")),
-    ("platform", _("By Platform")),
-    ("version", _("By Version")),
+    ("profile", t("label-by-profile")),
+    ("domain", t("label-by-administrative-domain")),
+    ("domain-profile", t("label-by-administrative-domain-and-profile")),
+    ("label", t("label-by-labels")),
+    ("platform", t("label-by-platform")),
+    ("version", t("label-by-version")),
 ]
 
 fp_map = {
@@ -37,7 +36,7 @@ fp_map = {
 
 
 class ReportForm(forms.Form):
-    report_type = forms.ChoiceField(label=_("Report Type"), choices=report_types)
+    report_type = forms.ChoiceField(label=t("label-report-type"), choices=report_types)
 
 
 class ReportObjectsSummary(SimpleReport):
@@ -45,20 +44,22 @@ class ReportObjectsSummary(SimpleReport):
     form = ReportForm
     predefined_reports = {
         "profile": PredefinedReport(
-            _("Managed Objects Summary (profile)"), {"report_type": "profile"}
+            t("label-managed-objects-summary-profile"), {"report_type": "profile"}
         ),
         "domain": PredefinedReport(
-            _("Managed Objects Summary (domain)"), {"report_type": "domain"}
+            t("label-managed-objects-summary-domain"), {"report_type": "domain"}
         ),
         "domain-profile": PredefinedReport(
-            _("Managed Objects Summary (domain-profile)"), {"report_type": "domain-profile"}
+            t("label-managed-objects-summary-domain-profile"), {"report_type": "domain-profile"}
         ),
-        "label": PredefinedReport(_("Managed Objects Summary (label)"), {"report_type": "label"}),
+        "label": PredefinedReport(
+            t("label-managed-objects-summary-label"), {"report_type": "label"}
+        ),
         "platform": PredefinedReport(
-            _("Managed Objects Summary (platform)"), {"report_type": "platform"}
+            t("label-managed-objects-summary-platform"), {"report_type": "platform"}
         ),
         "version": PredefinedReport(
-            _("Managed Objects Summary (version)"), {"report_type": "version"}
+            t("label-managed-objects-summary-version"), {"report_type": "version"}
         ),
     }
 
@@ -87,12 +88,12 @@ class ReportObjectsSummary(SimpleReport):
                 wr_and2 = (f"AND administrative_domain_id in ({ad})", "")
         # By Profile
         if report_type == "profile":
-            columns = [_("Profile")]
+            columns = [t("header-profile")]
             query = """SELECT profile,COUNT(*) FROM sa_managedobject
                     {}{} GROUP BY 1 ORDER BY 2 DESC""".format(*wr)
         # By Administrative Domain
         elif report_type == "domain":
-            columns = [_("Administrative Domain")]
+            columns = [t("header-administrative-domain-d113be")]
             query = """SELECT a.name,COUNT(*)
                   FROM sa_managedobject o JOIN sa_administrativedomain a ON (o.administrative_domain_id=a.id)
                   {}{}
@@ -100,7 +101,7 @@ class ReportObjectsSummary(SimpleReport):
                   ORDER BY 2 DESC""".format(*wr)
         # By Profile and Administrative Domains
         elif report_type == "domain-profile":
-            columns = [_("Administrative Domain"), _("Profile")]
+            columns = [t("header-administrative-domain-d113be"), t("header-profile")]
             query = """SELECT d.name,profile,COUNT(*)
                     FROM sa_managedobject o JOIN sa_administrativedomain d ON (o.administrative_domain_id=d.id)
                     {}{}
@@ -108,7 +109,7 @@ class ReportObjectsSummary(SimpleReport):
                     """.format(*wr)
         # By Labels
         elif report_type == "label":
-            columns = [_("Label")]
+            columns = [t("header-label")]
             query = """
               SELECT t.label, COUNT(*)
               FROM (
@@ -123,14 +124,14 @@ class ReportObjectsSummary(SimpleReport):
               ORDER BY 2 DESC;
             """.format(*wr_and2)
         elif report_type == "platform":
-            columns = [_("Platform"), _("Profile")]
+            columns = [t("header-platform"), t("header-profile")]
             query = """select sam.profile, sam.platform, COUNT(platform)
                     from sa_managedobject sam {}{} group by 1,2 order by count(platform) desc;""".format(
                 *wr
             )
 
         elif report_type == "version":
-            columns = [_("Profile"), _("Version"), _("Firmware Policy")]
+            columns = [t("header-profile"), t("header-version"), t("header-firmware-policy")]
             query = """select sam.profile, sam.version, COUNT(version)
                     from sa_managedobject sam {}{} group by 1,2 order by count(version) desc;""".format(
                 *wr
@@ -142,7 +143,9 @@ class ReportObjectsSummary(SimpleReport):
             if r == report_type:
                 title = self.title + ": " + rt
                 break
-        columns.append(TableColumn(_("Quantity"), align="right", total="sum", format="integer"))
+        columns.append(
+            TableColumn(t("header-quantity"), align="right", total="sum", format="integer")
+        )
 
         cursor = self.cursor()
         cursor.execute(query, ())

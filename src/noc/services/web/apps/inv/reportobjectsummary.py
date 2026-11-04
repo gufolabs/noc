@@ -39,7 +39,10 @@ class ReportObjectSummaryApplication(SimpleReport):
         )
         return self.from_dataset(
             title=self.title,
-            columns=["Model", TableColumn("Count", format="numeric", align="right", total="sum")],
+            columns=[
+                t("header-model"),
+                TableColumn(t("header-count"), format="numeric", align="right", total="sum"),
+            ],
             data=data,
             enumerate=True,
         )

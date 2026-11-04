@@ -87,9 +87,9 @@
                     <table>
                         <thead>
                             <tr>
-                                <th class="col-sm-7">{{ _("Subject") }}</th>
-                                <th class="col-sm-3">{{ _("Start") }}</th>
-                                <th class="col-sm-3">{{ _("Stop") }}</th>
+                                <th class="col-sm-7">{{ t("header-subject") }}</th>
+                                <th class="col-sm-3">{{ t("header-start") }}</th>
+                                <th class="col-sm-3">{{ t("header-stop") }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,9 +246,9 @@
                 <div class="col-sm-11">
                     <table class="table table-condensed table-hover">
                         <thead>
-                            <th>{{ _("Group") }}</th>
-                            <th>{{ _("Technology") }}</th>
-                            <th>{{ _("Type") }}</th>
+                            <th>{{ t("header-group") }}</th>
+                            <th>{{ t("header-technology") }}</th>
+                            <th>{{ t("header-type") }}</th>
                         </thead>
                         <tbody>
                             {% for g in service_groups %}
@@ -272,9 +272,9 @@
                 <div class="col-sm-11">
                     <table class="table table-condensed table-hover">
                         <thead>
-                            <th>{{ _("Group") }}</th>
-                            <th>{{ _("Technology") }}</th>
-                            <th>{{ _("Type") }}</th>
+                            <th>{{ t("header-group") }}</th>
+                            <th>{{ t("header-technology") }}</th>
+                            <th>{{ t("header-type") }}</th>
                         </thead>
                         <tbody>
                             {% for g in client_groups %}
@@ -341,11 +341,11 @@
                 <div class="col-sm-11">
                     <table class="table table-condensed table-hover table-bordered">
                         <thead>
-                            <th class="col-sm-2">{{ _("Local port") }}</th>
-                            <th class="col-sm-4">{{ _("Remote object") }}</th>
-                            <th class="col-sm-1">{{ _("Remote port") }}</th>
-                            <th class="col-sm-3">{{ _("Local description") }}</th>
-                            <th class="col-sm-3">{{ _("Remote description") }}</th>
+                            <th class="col-sm-2">{{ t("header-local-port") }}</th>
+                            <th class="col-sm-4">{{ t("header-remote-object-d33f14") }}</th>
+                            <th class="col-sm-1">{{ t("header-remote-port") }}</th>
+                            <th class="col-sm-3">{{ t("header-local-description") }}</th>
+                            <th class="col-sm-3">{{ t("header-remote-description-6d7f6e") }}</th>
                         </thead>
                         <tbody>
                             {% for l in links %}
@@ -410,13 +410,13 @@
                     <table class="table table-condensed">
                         <thead>
                             <th></th>
-                            <th>{{ _("Timestamp") }}</th>
-                            <th>{{ _("Services") }}</th>
-                            <th>{{ _("Duration") }}</th>
-                            <th>{{ _("Object") }}</th>
-                            <th>{{ _("IP") }}</th>
-                            <th>{{ _("Class") }}</th>
-                            <th>{{ _("Subject") }}</th>
+                            <th>{{ t("header-timestamp") }}</th>
+                            <th>{{ t("header-services") }}</th>
+                            <th>{{ t("header-duration") }}</th>
+                            <th>{{ t("header-object") }}</th>
+                            <th>{{ t("header-ip") }}</th>
+                            <th>{{ t("header-class") }}</th>
+                            <th>{{ t("header-subject") }}</th>
                         </thead>
                         <tbody>
                             {% for a in alarms %}
@@ -445,20 +445,20 @@
             <div class="col-sm-12">
                 <table class="table table-condensed table-hover">
                     <thead>
-                        <th class="col-sm-1/8">{{ _("Port") }}</th>
+                        <th class="col-sm-1/8">{{ t("header-port") }}</th>
                         <th class="col-sm-1/8"></th>
-                        <th class="col-sm-1/12">{{ _("Admin") }}/<br/>{{ _("Oper") }}</th>
-                        <th class="col-sm-1/8">{{ _("Speed") }}/<br/>{{ _("Duplex") }}</th>
-                        <th class="col-sm-1/6">{{ _("Load In") }}</th>
-                        <th class="col-sm-1/6">{{ _("Load Out") }}</th>
-                        <th class="col-sm-1/6">{{ _("Errors In") }}</th>
-                        <th class="col-sm-1/6">{{ _("Errors Out") }}</th>
-                        <th class="col-sm-1/6">{{ _("MAC") }}</th>
-                        <th class="col-sm-2">{{ _("VLAN") }}</th>
-                        <th class="col-sm-1">{{ _("Profile") }}</th>
-                        <th class="col-sm-1/12">{{ _("Errors") }}</th>
-                        <th class="col-sm-1/12">{{ _("Status") }}</th>
-                        <th class="col-sm-1/12">{{ _("Description") }}</th>
+                        <th class="col-sm-1/12">{{ t("header-admin") }}/<br/>{{ t("header-oper") }}</th>
+                        <th class="col-sm-1/8">{{ t("header-speed") }}/<br/>{{ t("header-duplex") }}</th>
+                        <th class="col-sm-1/6">{{ t("header-load-in") }}</th>
+                        <th class="col-sm-1/6">{{ t("header-load-out") }}</th>
+                        <th class="col-sm-1/6">{{ t("header-errors-in") }}</th>
+                        <th class="col-sm-1/6">{{ t("header-errors-out") }}</th>
+                        <th class="col-sm-1/6">{{ t("header-mac") }}</th>
+                        <th class="col-sm-2">{{ t("header-vlan-560367") }}</th>
+                        <th class="col-sm-1">{{ t("header-profile") }}</th>
+                        <th class="col-sm-1/12">{{ t("header-errors") }}</th>
+                        <th class="col-sm-1/12">{{ t("header-status") }}</th>
+                        <th class="col-sm-1/12">{{ t("header-description") }}</th>
                     </thead>
                     <tbody>
                         {% for i in interfaces %}
@@ -562,11 +562,11 @@
             <div class="col-sm-10">
                 <table class="table table-condensed">
                     <thead>
-                        <th>{{ _("Name") }}</th>
-                        <th>{{ _("Model") }}</th>
-                        <th>{{ _("Revision") }}</th>
-                        <th>{{ _("Serial") }}</th>
-                        <th>{{ _("Description") }}</th>
+                        <th>{{ t("header-name") }}</th>
+                        <th>{{ t("header-model") }}</th>
+                        <th>{{ t("header-revision") }}</th>
+                        <th>{{ t("header-serial") }}</th>
+                        <th>{{ t("header-description") }}</th>
                     </thead>
                     <tbody>
                         {% for i in inventory %}

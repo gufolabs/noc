@@ -53,12 +53,12 @@ class ReportIPUsageApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Prefix",
-                "Description",
-                TableColumn("IP Used", align="right", format="numeric"),
-                TableColumn("IP Free", align="right", format="numeric"),
-                TableColumn("IP Total", align="right", format="numeric"),
-                TableColumn("% Used", align="right", format="percent"),
+                t("header-prefix"),
+                t("header-description"),
+                TableColumn(t("header-ip-used"), align="right", format="numeric"),
+                TableColumn(t("header-ip-free"), align="right", format="numeric"),
+                TableColumn(t("header-ip-total"), align="right", format="numeric"),
+                TableColumn(t("header-used"), align="right", format="percent"),
             ],
             data=data,
         )

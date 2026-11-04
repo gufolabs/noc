@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from collections.abc import Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -20,10 +19,10 @@ I18N_PATH = Path(__file__).parents[2] / "src" / "noc" / "i18n"
 
 
 @pytest.fixture(scope="module")
-def en_catalog() -> Iterable[MessageCatalog]:
+def en_catalog() -> MessageCatalog:
     catalog = MessageCatalog(Language.EN, I18N_PATH)
     catalog._load_patterns()
-    yield catalog
+    return catalog
 
 
 @pytest.mark.parametrize("language", list(Language))

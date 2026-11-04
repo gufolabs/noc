@@ -167,18 +167,18 @@ class ReportInterfaceStatusApplication(ExtApplication):
         ]
 
         header_row = [
-            "MANAGED_OBJECT",
-            "OBJECT_ADDRESS",
-            "OBJECT_MODEL",
-            "OBJECT_SOFTWARE",
-            "PORT_NAME",
-            "PORT_PROFILE_NAME",
-            "PORT_STATUS",
-            "LINK_STATUS",
-            "PORT_SPEED",
-            "PORT_DUPLEX",
-            "PORT_UNTAGGED_VLAN",
-            "PORT_TAGGED_VLANS",
+            t("header-managed-object-f070ef"),
+            t("header-object-address"),
+            t("header-object-model"),
+            t("header-object-software"),
+            t("header-port-name"),
+            t("header-port-profile-name"),
+            t("header-port-status"),
+            t("header-link-status"),
+            t("header-port-speed"),
+            t("header-port-duplex"),
+            t("header-port-untagged-vlan"),
+            t("header-port-tagged-vlans"),
         ]
 
         if columns:

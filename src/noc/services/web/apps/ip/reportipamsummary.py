@@ -17,10 +17,10 @@ class ReportIPAMSummaryApplication(SimpleReport):
         return self.from_query(
             title="IPAM Summary",
             columns=[
-                "VRF",
-                "RD",
-                TableColumn("Prefixes", align="right", format="integer", total="sum"),
-                TableColumn("Addresses", align="right", format="integer", total="sum"),
+                t("header-vrf"),
+                t("header-rd"),
+                TableColumn(t("header-prefixes"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-addresses"), align="right", format="integer", total="sum"),
             ],
             query="""
                 SELECT vrf.name, vrf.rd,

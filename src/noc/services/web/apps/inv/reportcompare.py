@@ -51,7 +51,14 @@ class ReportCompareApplication(SimpleReport):
 
         return self.from_dataset(
             title=self.title,
-            columns=["Model", "W", "H", "D", "RU", "Weight (kg)"],
+            columns=[
+                t("header-model"),
+                t("header-w"),
+                t("header-h"),
+                t("header-d"),
+                t("header-ru"),
+                t("header-weight-kg"),
+            ],
             data=data,
             enumerate=True,
         )

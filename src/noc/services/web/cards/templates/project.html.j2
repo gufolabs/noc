@@ -1,26 +1,26 @@
 <table class="table table-condensed table-hover">
 <tbody>
     <tr>
-        <th scope="row">{{ _("Name") }}</th>
+        <th scope="row">{{ t("header-name") }}</th>
         <td>{{object.name}}</td>
     <tr>
     {% if object.description %}
     <tr>
-        <th scope="row">{{ _("Description") }}</th>
+        <th scope="row">{{ t("header-description") }}</th>
         <td>{{object.description}}</td>
     <tr>
     {% endif %}
 
     {% if suppliers %}
     <tr>
-        <th scope="row">{{ _("Supplier") }}</th>
+        <th scope="row">{{ t("header-supplier") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Profile") }}</th>
-                    <th>{{ _("State") }}</th>
-                    <th>{{ _("Is affilated") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-profile") }}</th>
+                    <th>{{ t("header-state") }}</th>
+                    <th>{{ t("header-is-affilated") }}</th>
                 </thead>
                 <tbody>
                     {% for s in suppliers %}
@@ -39,16 +39,16 @@
 
     {% if subscribers %}
     <tr>
-        <th scope="row">{{ _("Subscribers") }}</th>
+        <th scope="row">{{ t("header-subscribers-6f13df") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Profile") }}</th>
-                    <th>{{ _("State") }}</th>
-                    <th>{{ _("Address") }}</th>
-                    <th>{{ _("Tech Contact") }}</th>
-                    <th>{{ _("Tech Contact Phone") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-profile") }}</th>
+                    <th>{{ t("header-state") }}</th>
+                    <th>{{ t("header-address") }}</th>
+                    <th>{{ t("header-tech-contact") }}</th>
+                    <th>{{ t("header-tech-contact-phone") }}</th>
                 </thead>
                 <tbody>
                     {% for s in subscribers %}
@@ -69,12 +69,12 @@
 
     {% if vrfs %}
     <tr>
-        <th scope="row">{{ _("VRF") }}</th>
+        <th scope="row">{{ t("header-vrf") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for vrf in vrfs %}
@@ -91,14 +91,14 @@
 
     {% if prefixes %}
     <tr>
-        <th scope="row">{{ _("Prefix") }}</th>
+        <th scope="row">{{ t("header-prefix") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("VRF") }}</th>
-                    <th>{{ _("Prefix") }}</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-vrf") }}</th>
+                    <th>{{ t("header-prefix") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for prefix in prefixes %}
@@ -117,14 +117,14 @@
 
     {% if addresses %}
     <tr>
-        <th scope="row">{{ _("Address") }}</th>
+        <th scope="row">{{ t("header-address") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("VRF") }}</th>
-                    <th>{{ _("Address") }}</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-vrf") }}</th>
+                    <th>{{ t("header-address") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for address in addresses %}
@@ -143,12 +143,12 @@
 
     {% if dns_zones %}
     <tr>
-        <th scope="row">{{ _("DNS Zone") }}</th>
+        <th scope="row">{{ t("header-dns-zone") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Serial") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-serial") }}</th>
                 </thead>
                 <tbody>
                     {% for zone in dns_zones %}
@@ -165,12 +165,12 @@
 
     {% if managed_objects %}
     <tr>
-        <th scope="row">{{ _("Managed Objects") }}</th>
+        <th scope="row">{{ t("header-managed-objects") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Object") }}</th>
-                    <th>{{ _("Address") }}</th>
+                    <th>{{ t("header-object") }}</th>
+                    <th>{{ t("header-address") }}</th>
                 </thead>
                 <tbody>
                     {% for mo in managed_objects %}
@@ -187,13 +187,13 @@
 
     {% if interfaces %}
     <tr>
-        <th scope="row">{{ _("Interface") }}</th>
+        <th scope="row">{{ t("header-interface") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Object") }}</th>
-                    <th>{{ _("Interface") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-object") }}</th>
+                    <th>{{ t("header-interface") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for iface in interfaces %}
@@ -211,12 +211,12 @@
 
     {% if sub_interfaces %}
     <tr>
-        <th scope="row">{{ _("Sub.Interfaces") }}</th>
+        <th scope="row">{{ t("header-sub-interfaces") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Object") }}</th>
-                    <th>{{ _("Sub.Interface") }}</th>
+                    <th>{{ t("header-object") }}</th>
+                    <th>{{ t("header-sub-interface") }}</th>
                 </thead>
                 <tbody>
                     {% for siface in sub_interfaces %}
@@ -233,11 +233,11 @@
 
     {% if assets %}
     <tr>
-        <th scope="row">{{ _("as-set") }}</th>
+        <th scope="row">{{ t("header-as-set") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
+                    <th>{{ t("header-name") }}</th>
                 </thead>
                 <tbody>
                     {% for asset in assets %}
@@ -253,12 +253,12 @@
 
     {% if ases %}
     <tr>
-        <th scope="row">{{ _("AS") }}</th>
+        <th scope="row">{{ t("header-as") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("AS") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-as") }}</th>
                 </thead>
                 <tbody>
                     {% for asn in ases %}
@@ -275,11 +275,11 @@
 
     {% if peers %}
     <tr>
-        <th scope="row">{{ _("Peer") }}</th>
+        <th scope="row">{{ t("header-peer") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Peer") }}</th>
+                    <th>{{ t("header-peer") }}</th>
                 </thead>
                 <tbody>
                     {% for peer in peers %}
@@ -295,14 +295,14 @@
 
     {% if phoneranges %}
     <tr>
-        <th scope="row">{{ _("Phone Range") }}</th>
+        <th scope="row">{{ t("header-phone-range") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Dialplan") }}</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Range") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-dialplan") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-range") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for r in phoneranges %}
@@ -321,14 +321,14 @@
 
     {% if phonenumbers %}
     <tr>
-        <th scope="row">{{ _("Phone Number") }}</th>
+        <th scope="row">{{ t("header-phone-number") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Dialplan") }}</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Number") }}</th>
-                    <th>{{ _("State") }}</th>
+                    <th>{{ t("header-dialplan") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-number") }}</th>
+                    <th>{{ t("header-state") }}</th>
                 </thead>
                 <tbody>
                     {% for n in phonenumbers %}
@@ -347,11 +347,11 @@
 
     {% if vpns %}
     <tr>
-        <th scope="row">{{ _("VPN") }}</th>
+        <th scope="row">{{ t("header-vpn") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Number") }}</th>
+                    <th>{{ t("header-number") }}</th>
                 </thead>
                 <tbody>
                     {% for vpn in vpns %}
@@ -367,13 +367,13 @@
 
     {% if vlans %}
     <tr>
-        <th scope="row">{{ _("VLAN") }}</th>
+        <th scope="row">{{ t("header-vlan-560367") }}</th>
         <td>
             <table class="table">
                 <thead>
-                    <th>{{ _("Segment") }}</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("VLAN") }}</th>
+                    <th>{{ t("header-segment-44986c") }}</th>
+                    <th>{{ t("header-name") }}</th>
+                    <th>{{ t("header-vlan-560367") }}</th>
                 </thead>
                 <tbody>
                     {% for vlan in vlans %}

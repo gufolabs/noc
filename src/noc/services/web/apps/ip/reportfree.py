@@ -22,9 +22,12 @@ from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportForm(forms.Form):
-    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4")), ("6", _("IPv6"))])
-    prefix = forms.CharField(label=_("Prefix"))
+    vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(
+        label=t("label-address-family"),
+        choices=[("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+    )
+    prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data.get("vrf")
@@ -50,7 +53,7 @@ class FreeBlocksReport(SimpleReport):
         p = IP.prefix(prefix.prefix)
         return self.from_dataset(
             title=_(f"Free blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
-            columns=["Free Blocks"],
+            columns=[t("header-free-blocks")],
             data=[
                 [smart_text(f)]
                 for f in p.iter_free([IP.prefix(c.prefix) for c in prefix.children_set.all()])

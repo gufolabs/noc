@@ -8,7 +8,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Description") }}
+        {{ t("header-description") }}
     </th>
     <td>
         {% if object.description %} {{ object.description }} {% endif %}
@@ -16,7 +16,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Service Model") }}
+        {{ t("header-service-model") }}
     </th>
     <td>
         {% if object.service_model %} {{ object.service_model }} {% endif %}
@@ -24,7 +24,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Client Model") }}
+        {{ t("header-client-model") }}
     </th>
     <td>
         {% if object.client_model %} {{ object.client_model }} {% endif %}
@@ -32,7 +32,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Single Service") }}
+        {{ t("header-single-service") }}
     </th>
     <td>
         {{ object.single_service }}
@@ -40,7 +40,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Single Client") }}
+        {{ t("header-single-client") }}
     </th>
     <td>
         {{ object.single_client }}
@@ -48,7 +48,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Allow Children") }}
+        {{ t("header-allow-children") }}
     </th>
     <td>
         {{ object.allow_children }}

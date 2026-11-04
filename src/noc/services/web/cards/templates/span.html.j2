@@ -32,14 +32,14 @@
         </th>
     </tr>
     <tr>
-        <th>Server</th>
-        <th>Service</th>
-        <th>Time</th>
-        <th>Duration (us)</th>
-        <th>Sample</th>
-        <th>Label</th>
-        <th>Error</th>
-        <th class="graph">Graph</th>
+        <th>{{ t("header-server") }}</th>
+        <th>{{ t("header-service") }}</th>
+        <th>{{ t("header-time") }}</th>
+        <th>{{ t("header-duration-us") }}</th>
+        <th>{{ t("header-sample") }}</th>
+        <th>{{ t("header-label") }}</th>
+        <th>{{ t("header-error") }}</th>
+        <th class="graph">{{ t("header-graph") }}</th>
     </tr>
     {% for span in spans %}
         <tr>

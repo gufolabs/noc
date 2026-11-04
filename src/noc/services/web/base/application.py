@@ -38,6 +38,7 @@ from noc import settings
 from noc.config import config
 from noc.core.feature import Feature
 from noc.core.forms import NOCForm
+from noc.core.i18n import t
 from noc.models import is_document
 
 from .access import HasPerm
@@ -237,11 +238,11 @@ class Application(metaclass=ApplicationBase):
         if isinstance(template, str):
             template = [template]
         r = []
-        for t in template:
+        for tpl in template:
             r += [
-                os.path.join("services", "web", "apps", self.module, self.app, "templates", t),
-                os.path.join(self.module, "templates", t),
-                os.path.join("templates", t),
+                os.path.join("services", "web", "apps", self.module, self.app, "templates", tpl),
+                os.path.join(self.module, "templates", tpl),
+                os.path.join("templates", tpl),
             ]
         return r
 
@@ -282,6 +283,7 @@ class Application(metaclass=ApplicationBase):
                 loaders.append(jinja2.FileSystemLoader(str(custom_path / "templates")))
             loaders.append(jinja2.PackageLoader("noc", "templates"))
             self.j2_env = jinja2.Environment(loader=jinja2.ChoiceLoader(loaders))
+            self.j2_env.globals["t"] = t
         return self.j2_env
 
     def render(
@@ -294,7 +296,7 @@ class Application(metaclass=ApplicationBase):
             env = self.get_environment()
             tpl = env.get_template(template)
             return HttpResponse(tpl.render(request=request, app=self, **(dict if dict else kwargs)))
-        ctx = {"app": self}
+        ctx = {"app": self, "t": t}
         if dict:
             ctx.update(dict)
         else:

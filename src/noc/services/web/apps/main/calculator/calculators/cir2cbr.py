@@ -10,6 +10,7 @@ from django import forms
 from django.utils.safestring import mark_safe
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 
 from .base import BaseCalculator
@@ -29,9 +30,9 @@ class CalculatorForm(forms.Form):
     calculation = forms.ChoiceField(
         required=True,
         choices=[
-            ("ios_policy", _("Cisco IOS policer")),
-            ("ios_rate", _("Cisco IOS rate-limit")),
-            ("junos_policy", _("Juniper JUNOS policer")),
+            ("ios_policy", t("label-cisco-ios-policer")),
+            ("ios_rate", t("label-cisco-ios-rate-limit")),
+            ("junos_policy", t("label-juniper-junos-policer")),
         ],
     )
 

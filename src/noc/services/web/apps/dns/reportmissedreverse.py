@@ -25,7 +25,7 @@ class Reportreportmissedreverse(SimpleReport):
         vrf_id = VRF.get_global().id
         return self.from_query(
             title=self.title,
-            columns=["Prefix", TableColumn("Zone", format=reverse_format)],
+            columns=[t("header-prefix"), TableColumn(t("header-zone"), format=reverse_format)],
             query="""
                 SELECT prefix,prefix
                 FROM ip_prefix

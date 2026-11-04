@@ -19,5 +19,8 @@ class ReportOverlappedOIDsApplication(SimpleReport):
             (o.oid, o.name, ", ".join(o.aliases)) for o in MIBData.objects.filter(aliases__ne=[])
         ]
         return self.from_dataset(
-            title=self.title, columns=["OID", "Chosen Name", "Aliases"], data=data, enumerate=True
+            title=self.title,
+            columns=[t("header-oid"), t("header-chosen-name"), t("header-aliases")],
+            data=data,
+            enumerate=True,
         )

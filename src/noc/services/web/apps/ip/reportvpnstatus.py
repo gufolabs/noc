@@ -7,7 +7,6 @@
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.forwardinginstance import ForwardingInstance
 from noc.inv.models.subinterface import SubInterface
 from noc.ip.models.vrf import VRF
@@ -35,5 +34,7 @@ class ReportVPNStatusApplication(SimpleReport):
                 data.append(SectionRow(name=f"VRF {vrf.name}, RD: {vrf.rd} [{vrf.state.name}]"))
                 data += d
         return self.from_dataset(
-            title=self.title, columns=[_("Managed Object"), _("Interfaces")], data=data
+            title=self.title,
+            columns=[t("header-managed-object-62561c"), t("header-interfaces")],
+            data=data,
         )

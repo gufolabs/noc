@@ -26,26 +26,26 @@ class ReportHistoryApplication(SimpleReport):
     title = t("app-title-reporthistory")
 
     class form(forms.Form):
-        days = forms.IntegerField(label="Days", initial=3)
+        days = forms.IntegerField(label=t("label-days"), initial=3)
         date_from = forms.DateField(
-            label="Date from (YYYY-MM-DD)",
+            label=t("label-date-from-yyyy-mm-dd"),
             required=False,
             help_text="If empty, the Days parameter will be used",
         )
         date_to = forms.DateField(
-            label="Date to (YYYY-MM-DD)",
+            label=t("label-date-to-yyyy-mm-dd"),
             initial=dt.date.today(),
             required=False,
             help_text="If empty, the Days parameter will be used",
         )
-        search_ip = forms.CharField(label="Search by ip", required=False)
-        search_prefix = forms.CharField(label="Search by prefix", required=False)
-        search_user = forms.CharField(label="Search by user", required=False)
+        search_ip = forms.CharField(label=t("label-search-by-ip"), required=False)
+        search_prefix = forms.CharField(label=t("label-search-by-prefix"), required=False)
+        search_user = forms.CharField(label=t("label-search-by-user"), required=False)
         include_prefixes = forms.BooleanField(
-            label="Include Prefixes", required=False, initial=True
+            label=t("label-include-prefixes"), required=False, initial=True
         )
         include_addresses = forms.BooleanField(
-            label="Include Addresses", required=False, initial=True
+            label=t("label-include-addresses"), required=False, initial=True
         )
 
     rx_detail = re.compile(r"^(.+?): (.+?) -> (.+?)$", re.MULTILINE | re.UNICODE)
@@ -132,5 +132,13 @@ class ReportHistoryApplication(SimpleReport):
             )
 
         return self.from_dataset(
-            title=self.title, columns=["Time", "User", "Action", "Object", "Detail"], data=r
+            title=self.title,
+            columns=[
+                t("header-time"),
+                t("header-user"),
+                t("header-action"),
+                t("header-object"),
+                t("header-detail"),
+            ],
+            data=r,
         )

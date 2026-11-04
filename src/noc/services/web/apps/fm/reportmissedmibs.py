@@ -36,9 +36,9 @@ class ReportMissedMIBs(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "OID",
-                "Name",
-                TableColumn("Count", format="integer", align="right", total="sum"),
+                t("header-oid"),
+                t("header-name"),
+                TableColumn(t("header-count"), format="integer", align="right", total="sum"),
             ],
             data=data,
         )

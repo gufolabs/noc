@@ -3,12 +3,12 @@
 </tbody>
 <tr>
     <th colspan="2">
-        {{ _("Phone Number") }}: {{ object.number }}
+        {{ t("header-phone-number") }}: {{ object.number }}
     </th>
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Dialplan") }}
+        {{ t("header-dialplan") }}
     </th>
     <td>
         <a href="/api/card/view/dialplan/{{ object.dialplan.id }}/">{{ object.dialplan.name }}</a>
@@ -20,7 +20,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Category") }}
+        {{ t("header-category") }}
     </th>
     <td>
         {% if object.category %}{{ object.category.name }}{% endif %}
@@ -28,7 +28,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("State") }}
+        {{ t("header-state") }}
     </th>
     <td>
         {{ object.state.name }}
@@ -36,7 +36,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Protocol") }}
+        {{ t("header-protocol") }}
     </th>
     <td>
         {{ object.protocol }}
@@ -44,7 +44,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Profile") }}
+        {{ t("header-profile") }}
     </th>
     <td>
         {% if object.profile %}{{ object.profile.name }}{% endif %}
@@ -52,7 +52,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Project") }}
+        {{ t("header-project-f6f4da") }}
     </th>
     <td>
         {% if object.project %}{{ object.project.name }}{% endif %}
@@ -61,7 +61,7 @@
 
 <tr>
     <th scope="row">
-        {{ _("Description") }}
+        {{ t("header-description") }}
     </th>
     <td>
         {% if object.description %} {{ object.description }} {% endif %}
@@ -70,7 +70,7 @@
 
 <tr>
     <th scope="row">
-        {{ _("ENUM") }}
+        {{ t("header-enum") }}
     </th>
     <td>
         {{ object.enum }}
@@ -79,13 +79,13 @@
 
 {% if service_groups %}
     <tr>
-        <th scope="row">{{ _("Provides Resources") }}</th>
+        <th scope="row">{{ t("header-provides-resources") }}</th>
         <td>
             <table class="table table-condensed table-hover">
                 <thead>
-                    <th>{{ _("Group") }}</th>
-                    <th>{{ _("Technology") }}</th>
-                    <th>{{ _("Type") }}</th>
+                    <th>{{ t("header-group") }}</th>
+                    <th>{{ t("header-technology") }}</th>
+                    <th>{{ t("header-type") }}</th>
                 </thead>
                 <tbody>
                 {% for g in service_groups %}
@@ -102,13 +102,13 @@
 {% endif %}
 {% if client_groups %}
     <tr>
-        <th scope="row">{{ _("Consumes Resources") }}</th>
+        <th scope="row">{{ t("header-consumes-resources") }}</th>
         <td>
             <table class="table table-condensed table-hover">
                 <thead>
-                    <th>{{ _("Group") }}</th>
-                    <th>{{ _("Technology") }}</th>
-                    <th>{{ _("Type") }}</th>
+                    <th>{{ t("header-group") }}</th>
+                    <th>{{ t("header-technology") }}</th>
+                    <th>{{ t("header-type") }}</th>
                 </thead>
                 <tbody>
                 {% for g in client_groups %}

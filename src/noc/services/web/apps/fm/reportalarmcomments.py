@@ -20,7 +20,6 @@ from django.http import HttpResponse
 # NOC modules
 from noc.core.comp import smart_text
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.fm.models.alarmclass import AlarmClass
 from noc.fm.models.archivedalarm import ArchivedAlarm
@@ -116,17 +115,17 @@ class ReportAlarmCommentsApplication(ExtApplication):
         ]
 
         header_row = [
-            "ID",
-            _("ALARM_CLASS"),
-            _("ALARM_FROM_TS"),
-            _("ALARM_TO_TS"),
-            _("ALARM_TT"),
-            _("OBJECT_NAME"),
-            _("OBJECT_ADDRESS"),
-            _("OBJECT_ADMDOMAIN"),
-            _("LOG_TIMESTAMP"),
-            _("LOG_SOURCE"),
-            _("LOG_MESSAGE"),
+            t("header-id"),
+            t("header-alarm-class"),
+            t("header-alarm-from-ts"),
+            t("header-alarm-to-ts"),
+            t("header-alarm-tt"),
+            t("header-object-name"),
+            t("header-object-address"),
+            t("header-object-admdomain"),
+            t("header-log-timestamp"),
+            t("header-log-source"),
+            t("header-log-message"),
         ]
 
         if columns:

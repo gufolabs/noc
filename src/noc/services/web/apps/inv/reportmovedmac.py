@@ -206,18 +206,18 @@ class ReportMovedMacApplication(ExtApplication):
         ]
 
         header_row = [
-            "OBJECT_NAME",
-            "OBJECT_ADDRESS",
-            "OBJECT_ADM_DOMAIN",
-            "EVENT_TYPE",
-            "SN_CHANGED",
-            "VENDOR_MAC",
-            "MAC",
-            "MIGRATE_TS",
-            "FROM_IFACE_NAME",
-            "FROM_IFACE_DOWN",
-            "TO_IFACE_NAME",
-            "TO_IFACE_DOWN",
+            t("header-object-name"),
+            t("header-object-address"),
+            t("header-object-adm-domain"),
+            t("header-event-type"),
+            t("header-sn-changed"),
+            t("header-vendor-mac"),
+            t("header-mac"),
+            t("header-migrate-ts"),
+            t("header-from-iface-name"),
+            t("header-from-iface-down"),
+            t("header-to-iface-name"),
+            t("header-to-iface-down"),
         ]
         if columns:
             cmap = []

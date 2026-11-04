@@ -16,6 +16,7 @@ from jinja2 import Environment, Template
 
 # NOC modules
 from noc.config import config
+from noc.core.i18n import t
 from noc.core.perf import metrics
 from noc.core.translation import ugettext as _
 from noc.sa.models.useraccess import UserAccess
@@ -110,6 +111,7 @@ class BaseCard:
             template_path = get_card_template_path(name + ".html.j2")
             if template_path.is_file():
                 env = Environment()
+                env.globals["t"] = t
                 env.filters.update(
                     {
                         "managed_object_title": self.f_managed_object_title,

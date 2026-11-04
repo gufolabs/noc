@@ -30,10 +30,10 @@ class ReportUnknownModelsSummary(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Vendor",
-                "Part No",
-                "Description",
-                TableColumn("Count", format="numeric", align="right", total="sum"),
+                t("header-vendor"),
+                t("header-part-no"),
+                t("header-description"),
+                TableColumn(t("header-count"), format="numeric", align="right", total="sum"),
             ],
             data=data,
         )

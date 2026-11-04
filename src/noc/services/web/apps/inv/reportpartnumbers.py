@@ -37,7 +37,18 @@ class ReportPartnumbersApplication(SimpleReport):
 
         return self.from_dataset(
             title=self.title,
-            columns=["0", "1", "2", "3", "0", "1", "2", "3", "Name", "Description"],
+            columns=[
+                t("header-part-number-0"),
+                t("header-part-number-1"),
+                t("header-part-number-2"),
+                t("header-part-number-3"),
+                t("header-part-number-0"),
+                t("header-part-number-1"),
+                t("header-part-number-2"),
+                t("header-part-number-3"),
+                t("header-name"),
+                t("header-description"),
+            ],
             data=data,
             enumerate=True,
         )

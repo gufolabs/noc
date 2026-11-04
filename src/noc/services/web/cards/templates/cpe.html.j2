@@ -6,17 +6,17 @@
         </th>
     </tr>
     <tr>
-        <th scope="row">{{ _("Profile") }}</th>
+        <th scope="row">{{ t("header-profile") }}</th>
         <td>{{object.profile.name}}</td>
     <tr>
     {% if object.description %}
     <tr>
-        <th scope="row">{{ _("Description") }}</th>
+        <th scope="row">{{ t("header-description") }}</th>
         <td>{{object.description}}</td>
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Local Id") }}</th>
+        <th scope="row">{{ t("header-local-id") }}</th>
         <td>{{ object.controller.name }}{{ object.local_id }} </td>
     <tr>
 </tbody>

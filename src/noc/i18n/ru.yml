@@ -229,6 +229,321 @@ app-title-vpn: VPN
 app-title-vrf: VRF
 app-title-vrfgroup: Группы VRF
 app-title-workflow: Редактор процессов
+header-action: Действие
+header-address: Адрес
+header-adm-domain: З.О.
+header-admin: Админ
+header-admin-domain-610498: З.О.
+header-administrative-domain-07d5e8: З.О.
+header-administrative-domain-d113be: Зона ответственности
+header-affected-objects: Затронутое оборудование
+header-alarm: Авария
+header-alarm-class: Класс аварии
+header-alarm-from-ts: Время начала
+header-alarm-subject: Заголовок аварии
+header-alarm-to-ts: Время закрытия
+header-alarm-tt: Номер ТТ
+header-alarms: Аварии
+header-aliases: Псевдонимы
+header-allow-children: Разрешить наследников
+header-as: AS
+header-attachments: Вложения
+header-avail-389d90: Доступность
+header-availability: Доступность
+header-avg-load-in-mbps: Средняя загрузка входящий, Мбит/с
+header-avg-load-out-mbps: Средняя загрузка исходящий, Мбит/с
+header-body: Текст
+header-capabilities: Свойства
+header-category: Категория
+header-children: Потомок
+header-class: Класс
+header-client-model: Модель клиента
+header-comment: Комментарий
+header-comments: Комментарии
+header-connection: Связь
+header-consume-resources: Потреблённые ресурсы
+header-consumes-resources: Потребляет ресурсы
+header-contacts: Контакты
+header-container-address: Почтовый адрес объекта
+header-count-outages: Число периодов
+header-cpe: CPE
+header-date: Дата
+header-description: Описание
+header-detail: Ссылка на детализацию
+header-diagnostic: Диагностика
+header-dialplan: Номерной план
+header-direction: Направление проблемы
+header-discovery: Опрос
+header-dns-zone: Зона DNS
+header-domain: Домен
+header-downs: Простои
+header-downtime: Время простоя
+header-duplex: Дуплекс
+header-duration: Продолжительность
+header-duration-sec: Длительность (сек)
+header-end-of-ext-support: Конец расширенной поддержки
+header-end-of-sale: Конец продаж
+header-end-of-support: Конец поддержки
+header-enum: ENUM
+header-error: Ошибка
+header-error-code: Код ошибки
+header-error-text: Текст ошибки
+header-errors: Ошибки
+header-errors-in: Вх. ошибки
+header-errors-out: Исх. ошибки
+header-escalation: Эскалация
+header-escalation-error: Ошибка эскалации
+header-escalation-timestamp: Время эскалации
+header-escalation-ts: Время эскалации
+header-expired: Просрочен
+header-failed-request-count: Кол-во ошибочных запросов
+header-filter: Фильтр
+header-final-reason: Финальная диагностика
+header-firmware-policy: Политика версий прошивок
+header-fqdn: FQDN
+header-from-ts: Время начала
+header-group: Группа
+header-hostname: Имя хоста
+header-hw-revision: Версия прошивки
+header-id: ID
+header-iface-description: Описание интерфейса
+header-iface-name: Имя интерфейса
+header-iface-speed: Скорость интерфейса
+header-interface: Интерфейс
+header-interfaces: Интерфейсы
+header-ip: IP
+header-is-managed: управляемый
+header-job: Задача (Job)
+header-l2-domain: Домен L2
+header-l3: L3
+header-label: Метка
+header-labels: Метки
+header-last-changed: Последнее изменение
+header-last-success: Последний успех
+header-last-successful-discovery: Время последнего запуска
+header-load-in: Вх. загрузка
+header-load-out: Исх. загрузка
+header-local-description: Описание порта
+header-local-port: Локальный порт
+header-location-40c332: Адрес
+header-location-d219c6: Расположение
+header-log: История
+header-log-message: Текст комментария
+header-log-source: Автор комментария
+header-log-timestamp: Время комментария
+header-mac: MAC
+header-mac-vendor: MAC производителя
+header-maintenance-81e0be: РНР
+header-maintenance-94de30: РНР
+header-managed: Управляемый
+header-managed-object-62561c: Объекты управления
+header-managed-objects: Список объектов
+header-mask: Маска
+header-max-load-in-mbps: Максимальная загрузка входящий, Мбит/с
+header-max-load-in-time: Время максимальной нагрузки, входящий
+header-max-load-out-mbps: Максимальная загрузка исходящий, Мбит/с
+header-max-load-out-time: Время максимальной нагрузки, исходящий
+header-max-ms: макс. время (мс)
+header-mib: MIB
+header-model: Модель
+header-name: Имя адреса
+header-nested-groups: Вложенные группы
+header-number: Номер
+header-numbers: Номера
+header-object: Объект
+header-object-address: IP Адрес
+header-object-admdomain: З.О.
+header-object-hostname: Имя хоста
+header-object-name: Имя объекта
+header-object-platform: Платформа
+header-object-profile: Профиль
+header-object-project: Проект
+header-object-segment: Сегмент объекта
+header-object-version: Версия ПО
+header-objects-72a83a: Объекты
+header-objects-83ccf1: Объекты
+header-oid: OID
+header-oper: Опер
+header-p95-ms: 95% перцентиль (мс)
+header-paid-till: Оплачен до
+header-parent: Родитель
+header-part-number-0: Номер детали 0
+header-part-number-1: Номер детали 1
+header-part-number-2: Номер детали 2
+header-part-number-3: Номер детали 3
+header-percent: "%"
+header-phone-number: Телефонный номер
+header-phone-range: Диапазон номеров
+header-platform: Платформа
+header-pool: Пул
+header-port: Порт
+header-pre-reason: Предв. диагностика
+header-prefix: Префикс
+header-prefixes: Префиксы
+header-probable-causes: Возможная причина
+header-profile: Профиль
+header-project-f6f4da: Проект
+header-protocol: Протокол
+header-provide-resources: Предоставленные ресурсы
+header-provides-resources: Предоставляет ресурсы
+header-q1-ms: Квантиль (25%)
+header-q2-ms: Медиана (мс)
+header-q3-ms: Квантиль (75%)
+header-quantity: Количество
+header-range: Диапазон
+header-ranges: Диапазоны
+header-reason: Причина
+header-reboots: Перезагрузки
+header-recommended-actions: Рекомендованные действия
+header-redundancy: Резервирование
+header-remote-chassis: Соседний MAC адрес (по данным LLDP)
+header-remote-description-6d7f6e: Описание порта соседа
+header-remote-description-987a22: Описание соседа (по данным LLDP)
+header-remote-hostname: Имя хоста соседа  (по данным LLDP)
+header-remote-interface: Соседний интерфейс
+header-remote-object-d33f14: Сосед
+header-remote-object-e48a25: Соседнее устройство
+header-remote-port: Порт соседа
+header-request-count: Кол-во запросов
+header-revision: Ревизия
+header-root-id: ID первопричины
+header-rule: Правило
+header-segment-44986c: Сегмент
+header-serial: Серийный номер
+header-server: Имя сервера
+header-service: Сервис
+header-service-model: Модель сервиса
+header-services: Сервисы
+header-session: Сессия
+header-severity: Серьезность
+header-size: Размер
+header-source: Источник
+header-speed: Скорость
+header-stage: Этап
+header-start: Начало
+header-start-of-sale: Начало продаж
+header-state: Состояние
+header-status: Состояние
+header-stop: Окончание
+header-sub-interfaces: СабИнтерфейсы
+header-subject: Тема
+header-subscriber: Абонент
+header-subscribers-6f13df: Абоненты
+header-subscribers-97ec75: Задето абонентов
+header-success-request: Процент успешных
+header-success-request-count: Кол-во успешных запросов
+header-summary: Суммарно
+header-supplier: Поставщик
+header-sw-version: Версия ПО
+header-symptoms: Симптомы
+header-tags: Теги
+header-tech-contact: Контакт инженера
+header-tech-contact-phone: Телефон инженера
+header-technology: Технология
+header-terminator: Терминатор
+header-terms: Диапазон
+header-time-pattern: Маска времени
+header-timestamp: Время
+header-to-ts: Время закрытия
+header-total-in-mbyte: Суммарно входящего трафика, Мбайт
+header-total-out-mbyte: Суммарно исходящего трафика, Мбайт
+header-total-unavail-sec: Общее время недос. (сек)
+header-translation: Трансляции
+header-tt: Номер ТТ
+header-tt-id: Номер ТТ
+header-type: Вид работ
+header-uplink-avg-load-in-mbps: Средняя загрузка Uplink входящий, Мбит/с
+header-uplink-avg-load-out-mbps: Средняя загрузка Uplink исходящий, Мбит/с
+header-uplink-iface-description: Описание интерфейса Uplink
+header-uplink-iface-name: Имя интерфейса Uplink
+header-uplink-iface-speed: Скорость интерфейса Uplink
+header-uplink-max-load-in-mbps: Максимальная загрузка Uplink входящий, Мбит/с
+header-uplink-max-load-out-mbps: Максимальная загрузка Uplink исходящий, Мбит/с
+header-uplink-max-time-in: Время максимальной нагрузки Uplink, входящий
+header-uplink-max-time-out: Время максимальной нагрузки Uplink, исходящий
+header-uplink-total-in-mbyte: Суммарно входящего трафика Uplink, Мбайт
+header-uplink-total-out-mbyte: Суммарно исходящего трафика Uplink, Мбайт
+header-value: Значение
+header-vendor: Производитель
+header-version: Версия
+header-vlan-560367: VLAN
+header-vlan-translation: Трансляции ВЛАНов
+header-vpn: VPN
+header-vrf: VRF
+header-zone: Зона
+label-1-day: 1 день
+label-1-month: 1 месяц
+label-1-week: 1 неделя
+label-address-family: Семейство адресов
+label-administrative-domain: Зона ответственности
+label-as-number: Номер AS
+label-availability-last-day: Доступность (последний день)
+label-availability-last-month: Доступность (последний месяц)
+label-availability-last-week: Доступность (последняя неделя)
+label-by-administrative-domain: По З.О.
+label-by-administrative-domain-and-profile: По З.О. и профилю
+label-by-labels: По меткам
+label-by-platform: По платформе
+label-by-profile: По профилю
+label-by-version: По версии
+label-description: Описание
+label-dns: DNS
+label-duration: Продолжительность
+label-escalation-error-details: Детализация ошибок эскалации
+label-escalations-1-day: Эскалации (за 1 день)
+label-escalations-30-day: Эскалации (за 30 дней)
+label-escalations-7-days: Эскалации (за 7 дней)
+label-exclude-on-mac-black-list: Исключить строки из Чёрного списка MAC'ов
+label-failed-discovery-only: Исключить из вывода проблемы доступа
+label-filter-by-ping-status: Отфильтрвовать недоступные (не пингуются)
+label-filter-none-problems: Отфильтровать незаполненные проблемы
+label-filter-pending-links: Отфильтровать неподтверждённые линки
+label-fqdn: FQDN
+label-from-date: С
+label-in-days: Глубина (дней)
+label-interval: Интервал
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-managed-object: Объекты управления
+label-managed-object-search-for-config-only: Устройство (только для конфигурации)
+label-managed-objects-administrative-domain-for-config-only: З.О. (только для конфигурации)
+label-managed-objects-group-selector: Группа устройств (Селектор)
+label-managed-objects-pool: Пул объекта
+label-managed-objects-pools: Пул
+label-managed-objects-profile: Профиль объекта
+label-managed-objects-summary-domain: Сводка по объектам (по З.О.)
+label-managed-objects-summary-domain-profile: Сводка по объектам (по З.О. и профилю)
+label-managed-objects-summary-label: Сводка по объектам (по меткам)
+label-managed-objects-summary-platform: Сводка по объектам (по платформе)
+label-managed-objects-summary-profile: Сводка по объектам (по профилю)
+label-managed-objects-summary-version: Сводка по объектам (по версии)
+label-name: Имя адреса
+label-outages-1-day: Оперативная обстановка (за 1 день)
+label-outages-30-day: Оперативная обстановка (за 30 дней)
+label-outages-7-days: Оперативная обстановка (за 7 дней)
+label-pool: Пул
+label-prefix: Префикс
+label-profile: Профиль
+label-profile-check-only: Вывести только проблемы доступа
+label-range: Диапазон
+label-reboot-30-day: Перезагрузки (за 30 дней)
+label-reboots-1-day: Перезагрузки (за 1 день)
+label-reboots-7-days: Перезагрузки (за 7 дней)
+label-report-format: Формат отчёта
+label-report-type: Тип отчёта
+label-show-other-problems: Отобразить неклассифицированные проблемы
+label-show-problem-on-already-linked: Показать проблемы на слинкованных интерфейсах
+label-skip-full-available: Пропустить доступные за интервал
+label-skip-zero-access-port: Пропустить с неактивными портами доступа
+label-skip-zero-available: Пропустить недоступные за интервал
+label-statistics: Статистика
+label-to-date: По
+label-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
+label-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
+label-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
+label-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
+label-vrf: VRF
+label-zone: Зона
 nav-account: Учетная запись
 nav-action: Действия
 nav-actioncommands: Действия через команды
@@ -271,6 +586,7 @@ nav-cpeprofile: Профили CPE
 nav-crashinfo: Дампы
 nav-credentialcheckrule: Правила проверки доступа
 nav-crontab: Планировщик
+nav-csv: Импорт/экспорт CSV
 nav-customfield: Свои поля
 nav-dashboard: График
 nav-datastreamconfig: Пользовательские DataStream

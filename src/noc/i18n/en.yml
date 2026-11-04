@@ -283,6 +283,482 @@ app-title-vrf: VRF
 app-title-vrfgroup: VRF Groups
 app-title-wfmigration: WF Migration
 app-title-workflow: Workflows
+header-action: Action
+header-address: Address
+header-addresses: Addresses
+header-adm-domain: Adm. Domain
+header-admin: Admin
+header-admin-domain-2b0276: ADMIN_DOMAIN
+header-admin-domain-610498: Admin. Domain
+header-administrative-domain-07d5e8: Administrative domain
+header-administrative-domain-d113be: Administrative Domain
+header-affected-objects: Affected objects
+header-afi: AFI
+header-alarm: Alarm
+header-alarm-class: ALARM_CLASS
+header-alarm-from-ts: ALARM_FROM_TS
+header-alarm-subject: ALARM_SUBJECT
+header-alarm-to-ts: ALARM_TO_TS
+header-alarm-tt: ALARM_TT
+header-alarms: Alarms
+header-aliases: Aliases
+header-allocated-5cf7f4: allocated
+header-allocated-c249df: Allocated
+header-allow-children: Allow Children
+header-as: AS
+header-as-set: as-set
+header-asn: ASN
+header-attachments: Attachments
+header-auth-profile: AUTH_PROFILE
+header-avail-059853: AVAIL
+header-avail-389d90: Avail
+header-availability: Availability
+header-avg-load-in-mbps: AVG_LOAD_IN, Mbps
+header-avg-load-out-mbps: AVG_LOAD_OUT, Mbps
+header-body: Body
+header-builtin: Builtin
+header-capabilities: Capabilities
+header-category: Category
+header-children: Children
+header-chosen-name: Chosen Name
+header-class: Class
+header-classified: Classified
+header-client-model: Client Model
+header-comment: Comment
+header-comments: Comments
+header-cone-power: Cone Power
+header-connection: Connection
+header-consume-resources: Consume Resources
+header-consumes-resources: Consumes Resources
+header-contacts: Contacts
+header-container: CONTAINER
+header-container-address: CONTAINER_ADDRESS
+header-count: Count
+header-count-outages: Count outages
+header-cpe: CPE
+header-d: D
+header-date: Date
+header-deescalation-trace: Deescalation trace
+header-depends-on: Depends on
+header-description: Description
+header-detail: Detail
+header-device: Device
+header-diagnostic: Diagnostic
+header-dialplan: Dialplan
+header-direction: Direction
+header-discovery: Discovery
+header-discr: Discr.
+header-disposition: Disposition
+header-dns-zone: DNS Zone
+header-domain: Domain
+header-downs: Downs
+header-downtime: Downtime
+header-duplex: Duplex
+header-duration: Duration
+header-duration-sec: DURATION_SEC
+header-duration-us: Duration (us)
+header-empty: ''
+header-end-of-ext-support: End of Ext. Support
+header-end-of-sale: End of Sale
+header-end-of-support: End of Support
+header-entries: Entries
+header-enum: ENUM
+header-error: Error
+header-error-code: Error code
+header-error-text: Error text
+header-errors: Errors
+header-errors-in: Errors In
+header-errors-out: Errors Out
+header-escalation: Escalation
+header-escalation-error: Escalation Error
+header-escalation-timestamp: Escalation Timestamp
+header-escalation-trace: Escalation trace
+header-escalation-ts: ESCALATION_TS
+header-event-type: EVENT_TYPE
+header-expired: Expired
+header-failed-request-count: Failed request count
+header-filter: Filter
+header-final-reason: Final Reason
+header-firmware-policy: Firmware Policy
+header-fqdn: FQDN
+header-free: Free
+header-free-blocks: Free Blocks
+header-from-iface-down: FROM_IFACE_DOWN
+header-from-iface-name: FROM_IFACE_NAME
+header-from-ts: FROM_TS
+header-graph: Graph
+header-group: Group
+header-h: H
+header-hostname: Hostname
+header-hw-revision: HW Revision
+header-id: ID
+header-iface-description: IFACE_DESCRIPTION
+header-iface-name: IFACE_NAME
+header-iface-speed: IFACE_SPEED
+header-import-filter: Import Filter
+header-interface: Interface
+header-interfaces: Interfaces
+header-ip: IP
+header-ip-free: IP Free
+header-ip-total: IP Total
+header-ip-used: IP Used
+header-is-affilated: Is affilated
+header-is-managed: is managed
+header-job: Job
+header-key-re: Key RE
+header-l2-domain: L2 Domain
+header-l3: L3
+header-label: Label
+header-labels: Labels
+header-last-changed: Last Changed
+header-last-config-ts: LAST_CONFIG_TS
+header-last-seen-17bff7: LAST_SEEN
+header-last-seen-20c226: Last Seen
+header-last-success: Last Success
+header-last-successful-discovery: Last successful discovery
+header-last-updated: Last Updated
+header-link-count: LINK_COUNT
+header-link-proto: LINK_PROTO
+header-link-status: LINK_STATUS
+header-load-in: Load In
+header-load-out: Load Out
+header-local: Local
+header-local-description: Local description
+header-local-id: Local Id
+header-local-port: Local port
+header-location-40c332: LOCATION
+header-location-d219c6: Location
+header-log: Log
+header-log-message: LOG_MESSAGE
+header-log-source: LOG_SOURCE
+header-log-timestamp: LOG_TIMESTAMP
+header-mac: MAC
+header-mac-vendor: MAC Vendor
+header-maintenance-81e0be: MAINTENANCE
+header-maintenance-94de30: Maintenance
+header-managed: Managed
+header-managed-object-62561c: Managed Object
+header-managed-object-f070ef: MANAGED_OBJECT
+header-managed-objects: Managed Objects
+header-mask: Mask
+header-master: Master
+header-max-load-in-mbps: MAX_LOAD_IN, Mbps
+header-max-load-in-time: MAX_LOAD_IN_TIME
+header-max-load-out-mbps: MAX_LOAD_OUT, Mbps
+header-max-load-out-time: MAX_LOAD_OUT_TIME
+header-max-ms: max (ms)
+header-mib: MIB
+header-migrate-ts: MIGRATE_TS
+header-model: Model
+header-modified: Modified
+header-modified-by: Modified by
+header-module: Module
+header-n: N
+header-name: Name
+header-nested-groups: Nested Groups
+header-ns: NS
+header-number: Number
+header-numbers: Numbers
+header-object: Object
+header-object-address: OBJECT_ADDRESS
+header-object-adm-domain: OBJECT_ADM_DOMAIN
+header-object-admdomain: OBJECT_ADMDOMAIN
+header-object-attr-patch: OBJECT_ATTR_PATCH
+header-object-bootprom: OBJECT_BOOTPROM
+header-object-hostname: OBJECT_HOSTNAME
+header-object-hwversion: OBJECT_HWVERSION
+header-object-model: OBJECT_MODEL
+header-object-name: OBJECT_NAME
+header-object-platform: OBJECT_PLATFORM
+header-object-profile: OBJECT_PROFILE
+header-object-project: OBJECT_PROJECT
+header-object-segment: OBJECT_SEGMENT
+header-object-serial: OBJECT_SERIAL
+header-object-software: OBJECT_SOFTWARE
+header-object-status: OBJECT_STATUS
+header-object-vendor: OBJECT_VENDOR
+header-object-version: OBJECT_VERSION
+header-object1-address: OBJECT1_ADDRESS
+header-object1-admin-domain: OBJECT1_ADMIN_DOMAIN
+header-object1-descr: OBJECT1_DESCR
+header-object1-iface: OBJECT1_IFACE
+header-object1-name: OBJECT1_NAME
+header-object1-platform: OBJECT1_PLATFORM
+header-object1-segment: OBJECT1_SEGMENT
+header-object1-speed: OBJECT1_SPEED
+header-object1-tags: OBJECT1_TAGS
+header-object2-address: OBJECT2_ADDRESS
+header-object2-admin-domain: OBJECT2_ADMIN_DOMAIN
+header-object2-descr: OBJECT2_DESCR
+header-object2-iface: OBJECT2_IFACE
+header-object2-name: OBJECT2_NAME
+header-object2-platform: OBJECT2_PLATFORM
+header-object2-segment: OBJECT2_SEGMENT
+header-object2-speed: OBJECT2_SPEED
+header-object2-tags: OBJECT2_TAGS
+header-objects-72a83a: Objects
+header-objects-83ccf1: OBJECTS
+header-oid: OID
+header-oper: Oper
+header-other: Other
+header-p95-ms: p95 (ms)
+header-pages: Pages
+header-paid-till: Paid Till
+header-parent: Parent
+header-part-no: Part No
+header-part-number-0: Part Number 0
+header-part-number-1: Part Number 1
+header-part-number-2: Part Number 2
+header-part-number-3: Part Number 3
+header-peer: Peer
+header-percent: "%"
+header-phone-number: Phone Number
+header-phone-range: Phone Range
+header-phys-interface-count: PHYS_INTERFACE_COUNT
+header-platform: Platform
+header-pool: Pool
+header-port: Port
+header-port-duplex: PORT_DUPLEX
+header-port-name: PORT_NAME
+header-port-profile-name: PORT_PROFILE_NAME
+header-port-speed: PORT_SPEED
+header-port-status: PORT_STATUS
+header-port-tagged-vlans: PORT_TAGGED_VLANS
+header-port-untagged-vlan: PORT_UNTAGGED_VLAN
+header-pre-reason: Pre Reason
+header-prefix: Prefix
+header-prefixes: Prefixes
+header-probable-causes: Probable Causes
+header-problem: Problem
+header-profile: Profile
+header-profile-name: PROFILE_NAME
+header-project-16eeaf: PROJECT
+header-project-f6f4da: Project
+header-protocol: Protocol
+header-provide-resources: Provide Resources
+header-provides-resources: Provides Resources
+header-q1-ms: Q1 (ms)
+header-q2-ms: Q2 (ms)
+header-q3-ms: Q3 (ms)
+header-quality: Quality
+header-quantity: Quantity
+header-range: Range
+header-ranges: Ranges
+header-rd: RD
+header-reason: Reason
+header-reboots: Reboots
+header-recommended-actions: Recommended Actions
+header-records: Records
+header-redundancy: Redundancy
+header-references: References
+header-remote-chassis: Remote Chassis
+header-remote-description-6d7f6e: Remote description
+header-remote-description-987a22: Remote Description
+header-remote-hostname: Remote Hostname
+header-remote-interface: Remote Interface
+header-remote-object-d33f14: Remote object
+header-remote-object-e48a25: Remote Object
+header-remote-port: Remote port
+header-request-count: Request count
+header-required: Required
+header-resource: Resource
+header-revision: Revision
+header-root-cause: Root Cause
+header-root-id: ROOT_ID
+header-ru: RU
+header-rule: Rule
+header-rules: Rules
+header-sample: Sample
+header-segment-44986c: Segment
+header-segment-aeb83a: SEGMENT
+header-serial: Serial
+header-server: Server
+header-service: Service
+header-service-model: Service Model
+header-services: Services
+header-session: Session
+header-severity: Severity
+header-single-client: Single Client
+header-single-service: Single Service
+header-size: Size
+header-size-usage: Size (Usage)
+header-slave: Slave
+header-sn-changed: SN_CHANGED
+header-snmp-sysobjectid: SNMP sysObjectId
+header-snmp-traps: SNMP Traps
+header-source: Source
+header-speed: Speed
+header-stage: Stage
+header-start: Start
+header-start-of-sale: Start of Sale
+header-state: State
+header-status: Status
+header-stop: Stop
+header-sub-interface: Sub.Interface
+header-sub-interfaces: Sub.Interfaces
+header-subject: Subject
+header-subscriber: Subscriber
+header-subscribers-6f13df: Subscribers
+header-subscribers-97ec75: SUBSCRIBERS
+header-success-request: Success request (%)
+header-success-request-count: Success request count
+header-summary: Summary
+header-supplier: Supplier
+header-sw-version: SW Version
+header-symptoms: Symptoms
+header-syslog: Syslog
+header-table: Table
+header-tablespace: Tablespace
+header-tagged: Tagged
+header-tags: Tags
+header-tech-contact: Tech Contact
+header-tech-contact-phone: Tech Contact Phone
+header-technology: Technology
+header-terminator: Terminator
+header-terms: Terms
+header-time: Time
+header-time-pattern: Time Pattern
+header-timestamp: Timestamp
+header-to-iface-down: TO_IFACE_DOWN
+header-to-iface-name: TO_IFACE_NAME
+header-to-ts: TO_TS
+header-total: Total
+header-total-in-mbyte: TOTAL_IN, Mbyte
+header-total-out-mbyte: TOTAL_OUT, Mbyte
+header-total-unavail-sec: Total unavail (sec)
+header-translation: Translation
+header-tt: TT
+header-tt-id: TT ID
+header-type: Type
+header-uniq-cone-power: Uniq. Cone Power
+header-unique: Unique
+header-untagged: Untagged
+header-uplink-avg-load-in-mbps: UPLINK_AVG_LOAD_IN, Mbps
+header-uplink-avg-load-out-mbps: UPLINK_AVG_LOAD_OUT, Mbps
+header-uplink-iface-description: UPLINK_IFACE_DESCRIPTION
+header-uplink-iface-name: UPLINK_IFACE_NAME
+header-uplink-iface-speed: UPLINK_IFACE_SPEED
+header-uplink-max-load-in-mbps: UPLINK_MAX_LOAD_IN, Mbps
+header-uplink-max-load-out-mbps: UPLINK_MAX_LOAD_OUT, Mbps
+header-uplink-max-time-in: UPLINK_MAX_TIME_IN
+header-uplink-max-time-out: UPLINK_MAX_TIME_OUT
+header-uplink-total-in-mbyte: UPLINK_TOTAL_IN, Mbyte
+header-uplink-total-out-mbyte: UPLINK_TOTAL_OUT, Mbyte
+header-url: URL
+header-usage: Usage
+header-used: "% Used"
+header-used-by: Used by
+header-user: User
+header-user-clearable: User clearable
+header-value: Value
+header-value-re: Value RE
+header-vars: Vars
+header-vendor: Vendor
+header-vendor-mac: VENDOR_MAC
+header-version: Version
+header-views: Views
+header-vlan-560367: VLAN
+header-vlan-6c174b: Vlan
+header-vlan-translation: VLAN Translation
+header-vlans: VLANs
+header-vpn: VPN
+header-vpn-id: VPN ID
+header-vrf: VRF
+header-w: W
+header-weight-kg: Weight (kg)
+header-zone: Zone
+label-1-day: 1 day
+label-1-month: 1 month
+label-1-week: 1 week
+label-address-family: Address Family
+label-administrative-domain: Administrative Domain
+label-all: All
+label-as-number: AS Number
+label-availability-last-day: Availability (last day)
+label-availability-last-month: Availability (last month)
+label-availability-last-week: Availability (last week)
+label-by-administrative-domain: By Administrative Domain
+label-by-administrative-domain-and-profile: By Administrative Domain and Profile
+label-by-labels: By Labels
+label-by-platform: By Platform
+label-by-profile: By Profile
+label-by-version: By Version
+label-cisco-ios-policer: Cisco IOS policer
+label-cisco-ios-rate-limit: Cisco IOS rate-limit
+label-config: config
+label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
+label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
+label-days: Days
+label-dbm: dBm
+label-description: Description
+label-dns: DNS
+label-duration: Duration
+label-escalation-error-details: Escalation Error Details
+label-escalations-1-day: Escalations (1 day)
+label-escalations-30-day: Escalations (30 day)
+label-escalations-7-days: Escalations (7 days)
+label-exclude-on-mac-black-list: Exclude on MAC Black List
+label-fail: Fail
+label-failed-discovery-only: Failed discovery only
+label-filter-by-ping-status: Filter by Ping status
+label-filter-none-problems: Filter None problems
+label-filter-pending-links: Filter Pending links
+label-fqdn: FQDN
+label-from-date: From Date
+label-in-days: In Days
+label-include-addresses: Include Addresses
+label-include-prefixes: Include Prefixes
+label-interval: Interval
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-juniper-junos-policer: Juniper JUNOS policer
+label-managed-object: Managed Object
+label-managed-object-search-for-config-only: Managed object search (for config only)
+label-managed-objects-administrative-domain-for-config-only: Managed Objects Administrative Domain (for config only)
+label-managed-objects-group-selector: Managed Objects Group (Selector)
+label-managed-objects-pool: Managed Objects Pool
+label-managed-objects-pools: Managed Objects Pools
+label-managed-objects-profile: Managed Objects Profile
+label-managed-objects-summary-domain: Managed Objects Summary (domain)
+label-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
+label-managed-objects-summary-label: Managed Objects Summary (label)
+label-managed-objects-summary-platform: Managed Objects Summary (platform)
+label-managed-objects-summary-profile: Managed Objects Summary (profile)
+label-managed-objects-summary-version: Managed Objects Summary (version)
+label-mw: mW
+label-name: Name
+label-ns: NS
+label-outages-1-day: Outages (1 day)
+label-outages-30-day: Outages (30 day)
+label-outages-7-days: Outages (7 days)
+label-pool: Pool
+label-prefix: Prefix
+label-profile: Profile
+label-profile-check-only: Profile check only
+label-range: Range
+label-reboot-30-day: Reboot (30 day)
+label-reboots-1-day: Reboots (1 day)
+label-reboots-7-days: Reboots (7 days)
+label-report-format: Report Format
+label-report-type: Report Type
+label-search-by-ip: Search by ip
+label-search-by-prefix: Search by prefix
+label-search-by-user: Search by user
+label-show-other-problems: Show other problems
+label-show-problem-on-already-linked: Show problem on already linked
+label-skip: Skip
+label-skip-full-available: Skip full available
+label-skip-zero-access-port: Skip zero access port
+label-skip-zero-available: Skip zero available
+label-statistics: Statistics
+label-to-date: To Date
+label-ttsystem-errors-1-day: TTSystem Errors (1 day)
+label-ttsystem-stat-1-day: TTSystem Stat (1 day)
+label-ttsystem-stat-30-day: TTSystem Stat (30 day)
+label-ttsystem-stat-7-days: TTSystem Stat (7 days)
+label-update: Update
+label-vrf: VRF
+label-zone: Zone
 nav-account: Account
 nav-action: Actions
 nav-actioncommands: Action Commands
@@ -329,6 +805,7 @@ nav-cpeprofile: CPE Profiles
 nav-crashinfo: Crashinfo
 nav-credentialcheckrule: Credential Check Rules
 nav-crontab: CronTabs
+nav-csv: CSV Export/Import
 nav-customfield: Custom Fields
 nav-customfieldenumgroup: Enum Groups
 nav-dashboard: Dashboard

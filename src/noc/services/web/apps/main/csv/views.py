@@ -17,7 +17,6 @@ from django.http import HttpRequest, HttpResponse
 # NOC modules
 from noc.core.csvutils import IR_FAIL, IR_SKIP, IR_UPDATE, csv_export, csv_import, get_model_fields
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.models import get_model, get_model_id, load_models
 from noc.services.web.base.application import Application, view
 
@@ -28,7 +27,7 @@ class CSVApplication(Application):
     @view(
         url="^$",
         url_name="index",
-        menu=[t("app-group-setup"), _("CSV Export/Import")],
+        menu=[t("app-group-setup"), t("nav-csv")],
         access="import",
     )
     def view_index(self, request: HttpRequest):
@@ -66,7 +65,11 @@ class CSVApplication(Application):
 
         file = forms.FileField()
         resolve = forms.ChoiceField(
-            choices=[(IR_FAIL, "Fail"), (IR_SKIP, "Skip"), (IR_UPDATE, "Update")]
+            choices=[
+                (IR_FAIL, t("label-fail")),
+                (IR_SKIP, t("label-skip")),
+                (IR_UPDATE, t("label-update")),
+            ]
         )
         referer = forms.CharField(widget=forms.HiddenInput)
 
