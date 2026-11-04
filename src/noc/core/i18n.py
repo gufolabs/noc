@@ -18,7 +18,7 @@ from icu4py.locale import Locale
 from icu4py.messageformat import MessageFormat
 
 # NOC modules
-from noc.config import config
+from noc.config import Language, config
 
 __all__ = ["t"]
 
@@ -41,10 +41,10 @@ class MessageCatalog:
 
     FALLBACK_LANGUAGE = "en"
 
-    def __init__(self, language: str, locale_base: Path | None = None) -> None:
-        self._language = language
+    def __init__(self, language: Language, locale_base: Path | None = None) -> None:
+        self._language = language.value
         self._base = locale_base or config.noc_base / "i18n"
-        self._locale = Locale(language)
+        self._locale = Locale(self._language)
         self._loaded = False
         self._patterns: dict[str, str] = {}
         self._msg_formats: dict[str, MessageFormat | None] = {}

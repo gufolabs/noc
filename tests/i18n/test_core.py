@@ -14,6 +14,7 @@ from types import SimpleNamespace
 import pytest
 
 # NOC modules
+from noc.config import Language
 from noc.core import i18n
 
 
@@ -39,7 +40,7 @@ def test_catalog_uses_default_location(monkeypatch: pytest.MonkeyPatch, tmp_path
     write_json_catalog(base / "i18n", "en", {"hello": "Hello"})
     monkeypatch.setattr(i18n, "config", SimpleNamespace(noc_base=base))
 
-    catalog = i18n.MessageCatalog("en")
+    catalog = i18n.MessageCatalog(Language.EN)
 
     assert catalog["hello"].format({}) == "Hello"
     assert catalog._base == base / "i18n"
@@ -48,7 +49,7 @@ def test_catalog_uses_default_location(monkeypatch: pytest.MonkeyPatch, tmp_path
 def test_catalog_loads_json_and_caches_compiled_message(tmp_path: Path) -> None:
     """JSON catalogs load lazily and compiled messages are reused."""
     write_json_catalog(tmp_path, "en", {"hello": "Hello, {name}!"})
-    catalog = i18n.MessageCatalog("en", tmp_path)
+    catalog = i18n.MessageCatalog(Language.EN, tmp_path)
 
     assert catalog._loaded is False
     message = catalog["hello"]
@@ -61,7 +62,7 @@ def test_catalog_loads_json_and_caches_compiled_message(tmp_path: Path) -> None:
 def test_catalog_loads_yaml(tmp_path: Path) -> None:
     """YAML is used when a JSON catalog is absent."""
     write_yaml_catalog(tmp_path, "en", 'hello: "Hello from YAML"\n')
-    catalog = i18n.MessageCatalog("en", tmp_path)
+    catalog = i18n.MessageCatalog(Language.EN, tmp_path)
 
     assert catalog["hello"].format({}) == "Hello from YAML"
 
@@ -70,7 +71,7 @@ def test_json_catalog_takes_precedence_over_yaml(tmp_path: Path) -> None:
     """A JSON catalog wins when both supported formats are present."""
     write_json_catalog(tmp_path, "en", {"hello": "JSON"})
     write_yaml_catalog(tmp_path, "en", 'hello: "YAML"\n')
-    catalog = i18n.MessageCatalog("en", tmp_path)
+    catalog = i18n.MessageCatalog(Language.EN, tmp_path)
 
     assert catalog["hello"].format({}) == "JSON"
 
@@ -93,22 +94,32 @@ def test_catalog_uses_english_fallback_and_local_translation(tmp_path: Path) -> 
         'items: "{count, plural, one {# предмет} few {# предмета} '
         'many {# предметов} other {# предмета}}"\n',
     )
-    catalog = i18n.MessageCatalog("ru", tmp_path)
+    catalog = i18n.MessageCatalog(Language.RU, tmp_path)
 
     assert catalog["greeting"].format({}) == "Привет"
     assert catalog["farewell"].format({}) == "Goodbye"
+
+
+def test_catalog_accepts_language_enum(tmp_path: Path) -> None:
+    """MessageCatalog accepts the configured language enum directly."""
+    write_json_catalog(tmp_path, "en", {"hello": "Hello"})
+    write_json_catalog(tmp_path, "pt_BR", {"hello": "Olá"})
+    catalog = i18n.MessageCatalog(Language.PT_BR, tmp_path)
+
+    assert catalog._language == "pt_BR"
+    assert catalog["hello"].format({}) == "Olá"
 
 
 @pytest.mark.parametrize(
     ("language", "pattern", "values"),
     [
         (
-            "en",
+            Language.EN,
             "{count, plural, one {# item} other {# items}}",
             [(1, "1 item"), (2, "2 items")],
         ),
         (
-            "ru",
+            Language.RU,
             (
                 "{count, plural, one {# предмет} few {# предмета} "
                 "many {# предметов} other {# предмета}}"
@@ -123,16 +134,16 @@ def test_catalog_uses_english_fallback_and_local_translation(tmp_path: Path) -> 
     ],
 )
 def test_plural_categories(
-    tmp_path: Path, language: str, pattern: str, values: list[tuple[int, str]]
+    tmp_path: Path, language: Language, pattern: str, values: list[tuple[int, str]]
 ) -> None:
     """ICU plural rules select the expected forms for English and Russian."""
-    if language != "en":
+    if language != Language.EN:
         write_json_catalog(
             tmp_path,
             "en",
             {"items": "{count, plural, one {# item} other {# items}}"},
         )
-    write_json_catalog(tmp_path, language, {"items": pattern})
+    write_json_catalog(tmp_path, language.value, {"items": pattern})
     catalog = i18n.MessageCatalog(language, tmp_path)
 
     for count, expected in values:
@@ -142,7 +153,7 @@ def test_plural_categories(
 def test_catalog_caches_missing_key_error(tmp_path: Path) -> None:
     """Missing keys raise KeyError on both the first and later lookups."""
     write_json_catalog(tmp_path, "en", {"present": "Here"})
-    catalog = i18n.MessageCatalog("en", tmp_path)
+    catalog = i18n.MessageCatalog(Language.EN, tmp_path)
 
     with pytest.raises(KeyError, match="absent is not found"):
         catalog["absent"]
@@ -151,10 +162,10 @@ def test_catalog_caches_missing_key_error(tmp_path: Path) -> None:
         catalog["absent"]
 
 
-@pytest.mark.parametrize("language", ["en", "ru"])
-def test_catalog_raises_for_unsupported_language(tmp_path: Path, language: str) -> None:
+@pytest.mark.parametrize("language", [Language.EN, Language.RU])
+def test_catalog_raises_for_unsupported_language(tmp_path: Path, language: Language) -> None:
     """A missing requested catalog or missing fallback catalog is reported."""
-    if language == "ru":
+    if language == Language.RU:
         write_json_catalog(tmp_path, "ru", {"hello": "Привет"})
     catalog = i18n.MessageCatalog(language, tmp_path)
 
@@ -167,7 +178,7 @@ def test_translation_helper_uses_current_catalog(
 ) -> None:
     """The public t helper formats through the current module catalog."""
     write_json_catalog(tmp_path, "en", {"hello": "Hello, {name}!"})
-    monkeypatch.setattr(i18n, "catalog", i18n.MessageCatalog("en", tmp_path))
+    monkeypatch.setattr(i18n, "catalog", i18n.MessageCatalog(Language.EN, tmp_path))
 
     assert i18n.t("hello", name="NOC") == "Hello, NOC!"
 
@@ -177,6 +188,6 @@ def test_translation_helper_preserves_missing_arguments(
 ) -> None:
     """Arguments absent from kwargs remain as placeholders in the output."""
     write_json_catalog(tmp_path, "en", {"hello": "Hello, {name}! {missing}"})
-    monkeypatch.setattr(i18n, "catalog", i18n.MessageCatalog("en", tmp_path))
+    monkeypatch.setattr(i18n, "catalog", i18n.MessageCatalog(Language.EN, tmp_path))
 
     assert i18n.t("hello", name="NOC") == "Hello, NOC! {missing}"

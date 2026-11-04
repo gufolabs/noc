@@ -296,7 +296,7 @@ class Report(Document):
         # NOC modules
         from noc.config import config
 
-        lang = lang or config.language
+        lang = lang or config.language.value
         if field in self.localization:
             return self.localization[field].get(lang)
 
