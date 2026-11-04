@@ -1,7 +1,7 @@
 #jinja2: lstrip_blocks: True
 installation_name: {{ noc_installation_name }}
-{% if language is defined %}
-language: {{ language }}
+{% if noc_language is defined %}
+language: {{ noc_language }}
 {% endif %}
 
 pg:
