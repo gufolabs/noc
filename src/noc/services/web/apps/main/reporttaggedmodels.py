@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Tagged Models Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,13 +12,13 @@ import importlib
 from django.db import models as django_models
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.simplereport import SimpleReport
 from noc.settings import INSTALLED_APPS
 
 
 class ReportTaggedModels(SimpleReport):
-    title = _("Tagged Models")
+    title = t("app-title-reporttaggedmodels")
 
     def get_data(self, **kwargs):
         seen = set()

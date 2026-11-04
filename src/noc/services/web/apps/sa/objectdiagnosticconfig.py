@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # sa.objectdiagnosticconfig application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.models.objectdiagnosticconfig import ObjectDiagnosticConfig
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -16,8 +16,8 @@ class DiagnosticConfigApplication(ExtDocApplication):
     DiagnosticConfig application
     """
 
-    title = "Object Diagnostic Config"
-    menu = [_("Setup"), _("Object Diagnostic Configs")]
+    title = t("app-title-objectdiagnosticconfig")
+    menu = [t("app-group-setup"), t("nav-objectdiagnosticconfig")]
     model = ObjectDiagnosticConfig
     query_fields = ["name__icontains", "description__icontains"]
     default_ordering = ["name"]

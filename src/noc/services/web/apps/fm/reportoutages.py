@@ -15,6 +15,7 @@ from django.http import HttpRequest
 from mongoengine.queryset.visitor import Q
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.outage import Outage
 from noc.sa.models.managedobject import ManagedObject
@@ -41,7 +42,7 @@ class ReportForm(forms.Form):
 
 
 class ReportOutagesApplication(SimpleReport):
-    title = _("Outages")
+    title = t("app-title-reportoutages")
     form = ReportForm
     predefined_reports = {
         "1d": PredefinedReport(_("Outages (1 day)"), {"duration": 86400}),

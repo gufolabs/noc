@@ -1,17 +1,17 @@
 # ---------------------------------------------------------------------
 # DB Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportreportDBSummary(SimpleReport):
-    title = _("Database Summary")
+    title = t("app-title-reportdbsummary")
 
     def get_data(self, **kwargs):
         return self.from_query(

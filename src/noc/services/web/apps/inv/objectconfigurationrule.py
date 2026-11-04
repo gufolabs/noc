@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.objectconfigurationrule application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.objectconfigurationrule import ConnectionRule, ObjectConfigurationRule
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -16,8 +16,8 @@ class ObjectConfigurationRuleApplication(ExtDocApplication):
     Configuration Rule application
     """
 
-    title = _("Configuration Rules")
-    menu = [_("Setup"), _("Configuration Rules")]
+    title = t("app-title-objectconfigurationrule")
+    menu = [t("app-group-setup"), t("nav-objectconfigurationrule")]
     model = ObjectConfigurationRule
     query_fields = ["name__icontains"]
 

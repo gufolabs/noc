@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.firmware import Firmware
 from noc.inv.models.firmwarepolicy import FirmwarePolicy
@@ -40,7 +41,7 @@ class ReportForm(forms.Form):
 
 
 class ReportObjectsSummary(SimpleReport):
-    title = _("Managed Objects Summary")
+    title = t("app-title-sa-reportobjectsummary")
     form = ReportForm
     predefined_reports = {
         "profile": PredefinedReport(
@@ -137,9 +138,9 @@ class ReportObjectsSummary(SimpleReport):
 
         else:
             raise Exception(f"Invalid report type: {report_type}")
-        for r, t in report_types:
+        for r, rt in report_types:
             if r == report_type:
-                title = self.title + ": " + t
+                title = self.title + ": " + rt
                 break
         columns.append(TableColumn(_("Quantity"), align="right", total="sum", format="integer"))
 

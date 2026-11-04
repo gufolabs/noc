@@ -10,9 +10,9 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.feature import Feature
+from noc.core.i18n import t
 from noc.core.resource import resource_label
 from noc.core.techdomain.mapper.base import mapper_loader
-from noc.core.translation import ugettext as _
 from noc.inv.models.channel import Channel
 from noc.inv.models.endpoint import ConstraintItem, Endpoint, UsageItem
 from noc.services.web.base.docinline import DocInline
@@ -41,8 +41,8 @@ class ChannelApplication(ExtDocApplication):
     Channel application
     """
 
-    title = _("Channels")
-    menu = [_("Channels")]
+    title = t("app-title-channel")
+    menu = [t("nav-channel")]
     model = Channel
     glyph = "road"
     endpoints = EndpointDocInline(Endpoint)

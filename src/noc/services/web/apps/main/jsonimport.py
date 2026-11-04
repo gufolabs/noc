@@ -11,7 +11,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.collection.base import Collection
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.interfaces.base import StringParameter
 from noc.services.web.base.extapplication import ExtApplication, api
 
@@ -21,8 +21,8 @@ class JSONImportApplication(ExtApplication):
     main.jsonimport application
     """
 
-    title = _("JSON Import")
-    menu = [_("Setup"), _("JSON Import")]
+    title = t("app-title-jsonimport")
+    menu = [t("app-group-setup"), t("nav-jsonimport")]
 
     @api.post("^$", access="launch", validate={"json": StringParameter(required=True)})
     def api_import(self, request: HttpRequest, json):

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.style import Style
 from noc.sa.interfaces.base import ColorParameter
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
@@ -20,8 +20,8 @@ class StyleApplication(ExtModelApplication):
     Style application
     """
 
-    title = _("Style")
-    menu = [_("Setup"), _("Styles")]
+    title = t("app-title-style")
+    menu = [t("app-group-setup"), t("nav-style")]
     model = Style
     icon = "icon_style"
 

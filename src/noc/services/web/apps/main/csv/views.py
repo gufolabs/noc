@@ -16,15 +16,21 @@ from django.http import HttpRequest, HttpResponse
 
 # NOC modules
 from noc.core.csvutils import IR_FAIL, IR_SKIP, IR_UPDATE, csv_export, csv_import, get_model_fields
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.models import get_model, get_model_id, load_models
 from noc.services.web.base.application import Application, view
 
 
 class CSVApplication(Application):
-    title = _("CSV Export/Import")
+    title = t("app-title-csv")
 
-    @view(url="^$", url_name="index", menu=[_("Setup"), _("CSV Export/Import")], access="import")
+    @view(
+        url="^$",
+        url_name="index",
+        menu=[t("app-group-setup"), _("CSV Export/Import")],
+        access="import",
+    )
     def view_index(self, request: HttpRequest):
         load_models()
 

@@ -14,7 +14,7 @@ from django.http import HttpRequest, HttpResponse
 # NOC modules
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.user import User
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.interfaces.base import StringParameter
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.site import site
@@ -37,9 +37,9 @@ class UserApplication(ExtModelApplication):
     model = User
 
     glyph = "user"
-    menu = [_("Setup"), _("Users")]
+    menu = [t("app-group-setup"), t("nav-user")]
     icon = "icon_user"
-    title = _("Users")
+    title = t("app-title-user")
     app_alias = "auth"
     query_condition = "icontains"
     query_fields = ["username", "last_name", "email"]

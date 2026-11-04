@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # wf.state application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extdocapplication import ExtDocApplication
 from noc.wf.models.state import InteractionSetting, State
 from noc.wf.models.workflow import Workflow
@@ -17,8 +17,8 @@ class StateApplication(ExtDocApplication):
     State application
     """
 
-    title = _("States")
-    menu = [_("Setup"), _("States")]
+    title = t("app-title-state")
+    menu = [t("app-group-setup"), t("nav-state")]
     query_condition = "icontains"
     model = State
 

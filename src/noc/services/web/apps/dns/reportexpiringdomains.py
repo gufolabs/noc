@@ -11,6 +11,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.config import config
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
@@ -20,7 +21,7 @@ class ReportForm(forms.Form):
 
 
 class Reportreportexpiringdomains(SimpleReport):
-    title = _("Expiring Domains")
+    title = t("app-title-reportexpiringdomains")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, days, **kwargs):

@@ -18,6 +18,7 @@ from jinja2 import Template
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.user import User
 from noc.config import config
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.inv.models.channel import Channel
@@ -35,7 +36,7 @@ class HomeAppplication(ExtApplication):
     main.home application
     """
 
-    title = _("Home")
+    title = t("app-title-home")
     _welcome_text: str | None = None
     _community_text: str | None = None
 

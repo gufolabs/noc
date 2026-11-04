@@ -18,6 +18,7 @@ from django.http import HttpRequest, HttpResponse
 
 # NOC modules
 from noc.core.forms import NOCForm
+from noc.core.i18n import t
 from noc.core.ip import IP, IPv4, IPv6
 from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4, is_ipv6
@@ -36,7 +37,7 @@ from noc.services.web.base.application import Application, HasPerm, api
 # IP Block tools
 #
 class ToolsAppplication(Application):
-    title = _("Tools")
+    title = t("app-title-tools")
 
     @api.get(
         r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+?/\d+)/$",

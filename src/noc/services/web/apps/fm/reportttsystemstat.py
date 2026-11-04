@@ -16,6 +16,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.clickhouse.connect import connection
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.archivedalarm import ArchivedAlarm
 from noc.fm.models.ttsystem import TTSystem
@@ -44,7 +45,7 @@ class ReportForm(forms.Form):
 
 
 class ReportTTSystemStatApplication(SimpleReport):
-    title = _("TT system statistics")
+    title = t("app-title-reportttsystemstat")
     form = ReportForm
     predefined_reports = {
         "1d": PredefinedReport(_("TTSystem Stat (1 day)"), {"interval": 1}),

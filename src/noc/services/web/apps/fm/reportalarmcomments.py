@@ -19,6 +19,7 @@ from django.http import HttpResponse
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.fm.models.alarmclass import AlarmClass
@@ -53,8 +54,8 @@ def get_column_width(name):
 
 
 class ReportAlarmCommentsApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Alarm Comments")
-    title = _("Alarm Comments Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportalarmcomments")
+    title = t("app-title-reportalarmcomments")
 
     @api.get(
         "^download/$",

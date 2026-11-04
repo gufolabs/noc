@@ -10,9 +10,9 @@ import networkx as nx
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.service.client import open_sync_rpc
 from noc.core.service.error import RPCError
-from noc.core.translation import ugettext as _
 from noc.fm.models.mib import MIB
 from noc.fm.models.mibdata import MIBData
 from noc.fm.models.syntaxalias import SyntaxAlias
@@ -24,8 +24,8 @@ class MIBApplication(ExtDocApplication):
     MIB application
     """
 
-    title = _("MIB")
-    menu = _("MIB")
+    title = t("app-title-mib")
+    menu = t("nav-mib")
     model = MIB
 
     @api.get("^(?P<id>[0-9a-f]{24})/data/$", access="launch")

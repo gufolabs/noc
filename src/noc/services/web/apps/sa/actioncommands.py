@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # sa.actioncommands application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import jinja2
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.models.actioncommands import ActionCommands
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -19,8 +19,8 @@ class ActionCommandsApplication(ExtDocApplication):
     ActionCommands application
     """
 
-    title = _("Action Command")
-    menu = [_("Setup"), _("Action Commands")]
+    title = t("app-title-actioncommands")
+    menu = [t("app-group-setup"), t("nav-actioncommands")]
     model = ActionCommands
 
     def clean(self, data):

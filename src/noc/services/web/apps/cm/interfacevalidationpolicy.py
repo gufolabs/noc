@@ -7,7 +7,7 @@
 
 # NOC modules
 from noc.cm.models.interfacevalidationpolicy import InterfaceValidationPolicy
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
 
@@ -16,8 +16,8 @@ class InterfaceValidationPolicyApplication(ExtDocApplication):
     InterfaceValidationPolicy application
     """
 
-    title = "Interface Validation Policy"
-    menu = [_("Setup"), _("Interface Validation Policies")]
+    title = t("app-title-interfacevalidationpolicy")
+    menu = [t("app-group-setup"), t("nav-interfacevalidationpolicy")]
     model = InterfaceValidationPolicy
     glyph = "ambulance"
     implied_permissions = {

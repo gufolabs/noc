@@ -11,6 +11,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrf import VRF
@@ -21,7 +22,7 @@ from noc.vc.models.vlan import VLAN
 
 
 class ReportFilterApplication(SimpleReport):
-    title = _("Filter")
+    title = t("app-title-reportfilter")
 
     def get_form(self):
         class RForm(forms.Form):

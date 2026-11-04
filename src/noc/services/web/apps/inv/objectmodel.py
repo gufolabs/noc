@@ -14,8 +14,8 @@ from mongoengine.queryset import Q
 
 # NOC modules
 from noc.core.facade.template import get_facade_template, is_valid_model_for_template
+from noc.core.i18n import t
 from noc.core.prettyjson import to_json
-from noc.core.translation import ugettext as _
 from noc.inv.models.modelinterface import ModelInterface
 from noc.inv.models.objectmodel import ContainerType, ObjectModel, ProtocolVariantItem
 from noc.inv.models.protocol import ProtocolVariant
@@ -29,8 +29,8 @@ class ObjectModelApplication(ExtDocApplication):
     ObjectModel application
     """
 
-    title = _("Object Models")
-    menu = [_("Setup"), _("Object Models")]
+    title = t("app-title-objectmodel")
+    menu = [t("app-group-setup"), t("nav-objectmodel")]
     model = ObjectModel
     parent_model = DocCategory
     parent_field = "parent"
@@ -144,8 +144,8 @@ class ObjectModelApplication(ExtDocApplication):
         for c in o.connections:
             # Find compatible objects
             proposals = []
-            for t, n in o.iter_connection_proposals(c.name):
-                m = ObjectModel.objects.filter(id=t).first()
+            for om_id, n in o.iter_connection_proposals(c.name):
+                m = ObjectModel.objects.filter(id=om_id).first()
                 mc = m.get_model_connection(n)
                 proposals.append(
                     {

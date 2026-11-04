@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mac import MAC
 from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
@@ -30,7 +31,7 @@ class ReportForm(forms.Form):
 
 
 class ReportDiscoveryIDPoisonApplication(SimpleReport):
-    title = _("Discovery ID cache poison")
+    title = t("app-title-reportdiscoverypoison")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, pool=None, filter_dup_macs=False, **kwargs):

@@ -9,8 +9,8 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.prettyjson import to_json
-from noc.core.translation import ugettext as _
 from noc.inv.models.connectionrule import ConnectionRule
 from noc.sa.interfaces.base import DocumentParameter, ListOfParameter
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -21,8 +21,8 @@ class ConnectionRuleApplication(ExtDocApplication):
     ConnectionRule application
     """
 
-    title = _("Connection Rules")
-    menu = [_("Setup"), _("Connection Rules")]
+    title = t("app-title-connectionrule")
+    menu = [t("app-group-setup"), t("nav-connectionrule")]
     model = ConnectionRule
     query_fields = ["name__icontains", "description__icontains"]
 

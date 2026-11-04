@@ -24,6 +24,7 @@ from django.http import HttpResponse
 # NOC modules
 from noc.config import config
 from noc.core.clickhouse.connect import connection
+from noc.core.i18n import t
 from noc.core.mac import MAC
 from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
@@ -119,8 +120,8 @@ rx_port_num = re.compile(r"\d+$")
 
 
 class ReportMovedMacApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Moved MACs")
-    title = _("Moved MACs")
+    menu = t("app-group-reports") + "|" + t("nav-reportmovedmac")
+    title = t("app-title-reportmovedmac")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7

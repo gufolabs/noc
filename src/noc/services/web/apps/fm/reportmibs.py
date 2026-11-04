@@ -9,14 +9,14 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.mib import MIB
 from noc.fm.models.mibdata import MIBData
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportreportMIBs(SimpleReport):
-    title = _("Installed MIBs")
+    title = t("app-title-reportmibs")
 
     def get_data(self, request: HttpRequest, **kwargs):
         data = []  # Mib, Last Updated, Entries, Depends, Used by

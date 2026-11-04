@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.alarmclass import AlarmClass, AlarmClassCategory
 from noc.fm.models.eventclass import EventClass, EventClassCategory
 from noc.fm.models.eventclassificationrule import EventClassificationRule
@@ -21,7 +21,7 @@ class HierarchyReportAppplication(ReportApplication):
     FM Events and Alarms hierarchy
     """
 
-    title = _("Events and Alarm Hierarchy")
+    title = t("app-title-reporthierarchy")
 
     def report_html(self, request: HttpRequest, result=None, query=None):
         # Event classes

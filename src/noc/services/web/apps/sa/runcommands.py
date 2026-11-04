@@ -9,8 +9,8 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.models.valuetype import ValueType
-from noc.core.translation import ugettext as _
 from noc.sa.interfaces.base import DictParameter, ListOfParameter, ModelParameter
 from noc.sa.models.action import Action
 from noc.sa.models.commandsnippet import CommandSnippet
@@ -20,8 +20,8 @@ from noc.services.web.base.extapplication import ExtApplication
 
 
 class RunCommandsApplication(ExtApplication):
-    title = _("Run Commands")
-    menu = [_("Run Commands (On Group Edit option)")]
+    title = t("app-title-runcommands")
+    menu = [t("nav-runcommands")]
 
     implied_permissions = {"launch": ["sa:objectlist:read"]}
 

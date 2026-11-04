@@ -15,7 +15,7 @@ from noc.aaa.models.modelprotectionprofile import (
     ModelProtectionProfile,
 )
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.models import get_model, is_document
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -27,8 +27,8 @@ class ModelProtectionProfileApplication(ExtDocApplication):
     ModelProtection Profile application
     """
 
-    title = "ModelProtection Profile"
-    menu = [_("Setup"), _("ModelProtection Profile")]
+    title = t("app-title-modelprotectionprofile")
+    menu = [t("app-group-setup"), t("nav-modelprotectionprofile")]
     model = ModelProtectionProfile
     # glyph = "key"
 

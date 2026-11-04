@@ -15,10 +15,10 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.comp import smart_bytes
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.scheduler.job import Job
 from noc.core.scheduler.scheduler import Scheduler
-from noc.core.translation import ugettext as _
 from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.profile import Profile
@@ -30,8 +30,8 @@ class MonitorApplication(ObjectListApplication):
     sa.monitor application
     """
 
-    title = _("Monitor")
-    menu = _("Monitor")
+    title = t("app-title-monitor")
+    menu = t("nav-monitor")
     icon = "icon_monitor"
 
     rx_time = re.compile(r"Completed. Status: SUCCESS\s\((?P<time>\S+)\)", re.MULTILINE)

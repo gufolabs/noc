@@ -12,8 +12,8 @@ from operator import attrgetter
 from django.http import HttpRequest, HttpResponse
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.prefixaccess import PrefixAccess
 from noc.ip.models.vrf import VRF
@@ -28,7 +28,7 @@ class PrefixApplication(ExtModelApplication):
     Prefix application
     """
 
-    title = _("Prefix")
+    title = t("app-title-prefix")
     model = Prefix
 
     def can_create(self, user, obj):

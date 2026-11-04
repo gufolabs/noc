@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Allocated Blocks Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ from django.db.models import Q
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
@@ -47,7 +48,7 @@ class ReportForm(forms.Form):
 
 
 class ReportAllocated(SimpleReport):
-    title = _("Allocated Blocks")
+    title = t("app-title-reportallocated")
     form = ReportForm
 
     def get_form(self):

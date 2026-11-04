@@ -1,11 +1,12 @@
 # ---------------------------------------------------------------------
 # ip.reportvpnstatus
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.forwardinginstance import ForwardingInstance
 from noc.inv.models.subinterface import SubInterface
@@ -14,7 +15,7 @@ from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 
 class ReportVPNStatusApplication(SimpleReport):
-    title = _("VPN Status")
+    title = t("app-title-reportvpnstatus")
 
     def get_data(self, **kwargs):
         data = []

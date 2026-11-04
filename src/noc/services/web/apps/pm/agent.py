@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.pm.models.agent import Agent
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -18,6 +18,6 @@ class AgentApplication(ExtDocApplication):
     Agent application
     """
 
-    title = "Agent"
-    menu = [_("Setup"), _("Agent")]
+    title = t("app-title-agent")
+    menu = [t("app-group-setup"), t("nav-agent")]
     model = Agent

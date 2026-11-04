@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # vc.l2domain application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.db.models import Count
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.networksegment import NetworkSegment
 from noc.sa.models.managedobject import ManagedObject
 from noc.services.web.base.decorators.state import state_handler
@@ -26,8 +26,8 @@ class L2DomainApplication(ExtDocApplication):
     L2 Domain application
     """
 
-    title = "L2 Domain"
-    menu = [_("L2 Domain")]
+    title = t("app-title-l2domain")
+    menu = [t("nav-l2domain")]
     model = L2Domain
     query_fields = ["name", "description"]
     query_condition = "icontains"

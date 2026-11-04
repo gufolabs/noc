@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.main.models.prefixtable import PrefixTable, PrefixTablePrefix
 from noc.sa.interfaces.base import IPParameter, ListOfParameter, ModelParameter
@@ -25,8 +25,8 @@ class PrefixTableApplication(ExtModelApplication):
     PrefixTable application
     """
 
-    title = _("Prefix Table")
-    menu = [_("Setup"), _("Prefix Tables")]
+    title = t("app-title-prefixtable")
+    menu = [t("app-group-setup"), t("nav-prefixtable")]
     model = PrefixTable
 
     prefixes = ModelInline(PrefixTablePrefix)

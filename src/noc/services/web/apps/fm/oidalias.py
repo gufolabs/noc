@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.oidalias import OIDAlias
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -19,8 +19,8 @@ class OIDAliasApplication(ExtDocApplication):
     OIDAlias application
     """
 
-    title = _("OID Aliases")
-    menu = [_("Setup"), _("OID Aliases")]
+    title = t("app-title-oidalias")
+    menu = [t("app-group-setup"), t("nav-oidalias")]
     model = OIDAlias
 
     @api.get("^(?P<id>[0-9a-f]{24})/json/$", access="read")

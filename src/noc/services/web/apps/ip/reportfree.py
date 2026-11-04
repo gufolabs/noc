@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Free Blocks Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ from django import forms
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
@@ -42,7 +43,7 @@ class ReportForm(forms.Form):
 
 
 class FreeBlocksReport(SimpleReport):
-    title = _("Free Blocks")
+    title = t("app-title-reportfree")
     form = ReportForm
 
     def get_data(self, vrf, afi, prefix, **kwargs):

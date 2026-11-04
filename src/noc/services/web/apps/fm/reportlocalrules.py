@@ -12,6 +12,7 @@ from django.utils.html import escape
 # NOC modules
 from noc.core.collection.base import Collection
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.text import indent
 from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
@@ -19,7 +20,7 @@ from noc.services.web.base.reportapplication import ReportApplication
 
 
 class ReportClassificationRules(ReportApplication):
-    title = _("Local Classification Rules (JSON)")
+    title = t("app-title-reportlocalrules")
 
     def report_html(self, request: HttpRequest, result=None, query=None):
         builtins = Collection.get_builtins("fm.eventclassificationrules")

@@ -9,7 +9,7 @@
 from django.http import HttpRequest, HttpResponse
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.facade import Facade
 from noc.main.models.doccategory import DocCategory
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -20,8 +20,8 @@ class FacadeApplication(ExtDocApplication):
     Facade application
     """
 
-    title = _("Facades")
-    menu = [_("Setup"), _("Facades")]
+    title = t("app-title-facade")
+    menu = [t("app-group-setup"), t("nav-facade")]
     model = Facade
     parent_model = DocCategory
     parent_field = "parent"

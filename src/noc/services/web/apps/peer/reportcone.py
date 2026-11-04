@@ -9,15 +9,15 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.peer.models.peer import Peer
 from noc.peer.models.whoiscache import WhoisCache
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportLOC(SimpleReport):
-    title = _("Cone Analysis")
+    title = t("app-title-reportcone")
 
     def get_data(self, request: HttpRequest):
         def ppower(prefix):

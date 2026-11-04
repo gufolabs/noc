@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.core.vpn import get_vpn_id
 from noc.ip.models.vrf import VRF
 from noc.ip.models.vrfgroup import VRFGroup
@@ -31,8 +31,8 @@ class VRFApplication(ExtModelApplication):
     VRF application
     """
 
-    title = _("VRF")
-    menu = _("VRF")
+    title = t("app-title-vrf")
+    menu = t("nav-vrf")
     model = VRF
     query_fields = ["name", "rd", "description"]
 

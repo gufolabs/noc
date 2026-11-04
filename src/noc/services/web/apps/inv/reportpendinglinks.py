@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscovery
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -16,6 +16,7 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.cache.base import cache
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
@@ -161,7 +162,7 @@ class ReportPendingLinks:
 
 
 class ReportDiscoveryTopologyProblemApplication(SimpleReport):
-    title = _("Pending Links")
+    title = t("app-title-reportpendinglinks")
 
     def get_form(self):
         class ReportForm(forms.Form):

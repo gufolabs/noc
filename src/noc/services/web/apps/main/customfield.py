@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # main.customfield application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.customfield import CustomField
 from noc.services.web.base.extmodelapplication import ExtModelApplication
 
@@ -16,8 +16,8 @@ class CustomFieldApplication(ExtModelApplication):
     CustomField application
     """
 
-    title = _("Custom Fields")
-    menu = [_("Setup"), _("Custom Fields")]
+    title = t("app-title-customfield")
+    menu = [t("app-group-setup"), t("nav-customfield")]
     model = CustomField
     icon = "icon_cog_add"
     query_fields = ["name", "description", "table"]

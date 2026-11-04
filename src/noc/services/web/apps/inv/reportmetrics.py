@@ -20,6 +20,7 @@ from django.http import HttpResponse
 
 # NOC modules
 from noc.core.datasources.base import data_source_loader
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.networksegment import NetworkSegment
@@ -55,8 +56,8 @@ def get_column_width(name):
 
 
 class ReportMetricsDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Load Metrics")
-    title = _("Load Metrics")
+    menu = t("app-group-reports") + "|" + t("nav-reportmetrics")
+    title = t("app-title-reportmetrics")
     report_map = {
         "load_interfaces": {
             "url": "%(path)s?title=interface&biid=%(biid)s"

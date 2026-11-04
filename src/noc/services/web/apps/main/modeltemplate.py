@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.modeltemplate import ModelTemplate, Param
 from noc.models import get_model
 from noc.services.web.base.extdocapplication import ExtDocApplication, HttpResponse, api
@@ -20,8 +20,8 @@ class ModelTemplateApplication(ExtDocApplication):
     Model Template application
     """
 
-    title = "Model Template"
-    menu = [_("Setup"), _("Model Templates")]
+    title = t("app-title-modeltemplate")
+    menu = [t("app-group-setup"), t("nav-modeltemplate")]
     model = ModelTemplate
     query_fields = ["name__icontains", "description__icontains"]
     default_ordering = ["name"]

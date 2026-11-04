@@ -20,6 +20,7 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.capability import Capability
 from noc.inv.models.discoveryid import DiscoveryID
@@ -102,8 +103,8 @@ class ReportAdPath:
 
 
 class ReportObjectDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Object Detail")
-    title = _("Object Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportobjectdetail")
+    title = t("app-title-reportobjectdetail")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7

@@ -10,6 +10,7 @@ from django.http import HttpRequest
 from mongoengine.queryset import Q
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4_prefix
@@ -32,8 +33,8 @@ class DiscoveredObjectApplication(ExtDocApplication):
     Discovered Object
     """
 
-    title = _("Discovered Object")
-    menu = _("Discovered Object")
+    title = t("app-title-discoveredobject")
+    menu = t("nav-discoveredobject")
     icon = "icon_monitor"
     model = DiscoveredObject
     default_ordering = ["address"]

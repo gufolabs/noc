@@ -9,13 +9,13 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.vrf import VRF
 from noc.services.web.base.simplereport import SimpleReport
 
 
 class Reportreportduplicatedfqdns(SimpleReport):
-    title = _("Duplicated FQDNs")
+    title = t("app-title-reportduplicatedfqdns")
 
     def get_data(self, request: HttpRequest, **kwargs):
         vrf_id = VRF.get_global().id

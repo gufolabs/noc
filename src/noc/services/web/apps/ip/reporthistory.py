@@ -15,7 +15,7 @@ from django.utils.html import escape
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.address import Address
 from noc.ip.models.prefix import Prefix
 from noc.main.models.audittrail import AuditTrail
@@ -23,7 +23,7 @@ from noc.services.web.base.simplereport import SafeString, SectionRow, SimpleRep
 
 
 class ReportHistoryApplication(SimpleReport):
-    title = _("History")
+    title = t("app-title-reporthistory")
 
     class form(forms.Form):
         days = forms.IntegerField(label="Days", initial=3)

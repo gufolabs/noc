@@ -11,7 +11,7 @@ from django.http import HttpRequest
 from mongoengine.queryset.visitor import Q
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.maintenance.models.maintenance import (
     Maintenance,
@@ -29,8 +29,8 @@ class MaintenanceApplication(ExtDocApplication):
     Maintenance application
     """
 
-    title = _("Maintenance")
-    menu = _("Maintenance")
+    title = t("app-title-maintenance")
+    menu = t("nav-maintenance")
     model = Maintenance
     query_condition = "icontains"
     query_fields = ["subject"]

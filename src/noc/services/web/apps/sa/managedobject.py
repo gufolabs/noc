@@ -24,6 +24,7 @@ from noc.config import config
 from noc.core.comp import smart_bytes, smart_text
 from noc.core.debug import error_report
 from noc.core.geocoder.base import geocoder_loader
+from noc.core.i18n import t
 from noc.core.middleware.tls import get_user
 from noc.core.mongo.connection import get_db
 from noc.core.pm.utils import get_interface_metrics
@@ -83,8 +84,8 @@ class ManagedObjectApplication(ExtModelApplication):
     ManagedObject application
     """
 
-    title = _("Managed Objects")
-    menu = _("Managed Objects")
+    title = t("app-title-managedobject")
+    menu = t("nav-managedobject")
     model = ManagedObject
     query_condition = "icontains"
     query_fields = ["name", "description"]

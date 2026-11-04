@@ -14,8 +14,8 @@ from django.http import HttpRequest
 # NOC modules
 from noc.aaa.models.group import Group
 from noc.aaa.models.user import User
+from noc.core.i18n import t
 from noc.core.mx import NOTIFICATION_METHODS
-from noc.core.translation import ugettext as _
 from noc.main.models.messageroute import MessageRoute
 from noc.main.models.notificationgroup import NotificationGroup
 from noc.main.models.template import Template
@@ -36,8 +36,8 @@ class NotificationGroupApplication(ExtModelApplication):
     NotificationGroup application
     """
 
-    title = _("Notification Group")
-    menu = [_("Notification Groups")]
+    title = t("app-title-notificationgroup")
+    menu = [t("nav-notificationgroup")]
     model = NotificationGroup
     glyph = "envelope-o"
 

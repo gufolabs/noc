@@ -9,6 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.unknownmodel import UnknownModel
 from noc.sa.interfaces.base import DocumentParameter, ListOfParameter
@@ -20,8 +21,8 @@ class UnknownModelApplication(ExtDocApplication):
     UnknownModel application
     """
 
-    title = _("Unknown Models")
-    menu = _("Unknown Models")
+    title = t("app-title-unknownmodel")
+    menu = t("nav-unknownmodel")
     model = UnknownModel
 
     query_condition = "icontains"

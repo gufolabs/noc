@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.modelinterface import ModelInterface
 from noc.inv.models.protocol import Protocol
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -23,8 +23,8 @@ class ProtocolApplication(ExtDocApplication):
     Protocol application
     """
 
-    title = _("Protocol")
-    menu = [_("Setup"), _("Protocols")]
+    title = t("app-title-protocol")
+    menu = [t("app-group-setup"), t("nav-protocol")]
     model = Protocol
     query_fields = ["code__icontains", "name__icontains", "description__icontains"]
     default_ordering = ["code"]
@@ -100,9 +100,11 @@ class ProtocolApplication(ExtDocApplication):
                     }
                 )
         leafs = defaultdict(list)
-        for t, i1 in r.items():
+        for tech, i1 in r.items():
             for p, i2 in i1.items():
-                leafs[t].append({"name": p, "leaf": False, "is_protected": False, "children": i2})
+                leafs[tech].append(
+                    {"name": p, "leaf": False, "is_protected": False, "children": i2}
+                )
         return self.render_json(
             {
                 "name": "root",

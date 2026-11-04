@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # vc.vlanfilter application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.sa.interfaces.base import IntParameter
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -21,8 +21,8 @@ class VLANFilterApplication(ExtDocApplication):
     VLANFilter application
     """
 
-    title = _("VLAN Filter")
-    menu = [_("Setup"), _("VLAN Filters")]
+    title = t("app-title-vlanfilter")
+    menu = [t("app-group-setup"), t("nav-vlanfilter")]
     model = VLANFilter
 
     def bulk_field_match_labels(self, data):

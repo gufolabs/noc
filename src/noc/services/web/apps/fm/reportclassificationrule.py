@@ -13,6 +13,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import loader as profile_loader
 from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
@@ -24,7 +25,7 @@ class ReportForm(forms.Form):
 
 
 class ReportClassificationRules(SimpleReport):
-    title = _("Classification Rules")
+    title = t("app-title-reportclassificationrule")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, profile):

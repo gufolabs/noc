@@ -9,14 +9,14 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.activeevent import ActiveEvent
 from noc.fm.models.eventclass import EventClass
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportClassificationQuality(SimpleReport):
-    title = _("Classification Quality")
+    title = t("app-title-reportclassificationquality")
 
     def get_data(self, request: HttpRequest, **kwargs):
         default_ids = [c.id for c in EventClass.objects.filter(name__startswith="Unknown | ")]

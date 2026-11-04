@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # main.chpolicy application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ from dataclasses import dataclass
 # NOC modules
 from noc.config import config
 from noc.core.clickhouse.connect import connection
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.chpolicy import CHPolicy
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -29,8 +29,8 @@ class CHPolicyApplication(ExtDocApplication):
     CHPolicy application
     """
 
-    title = "CHPolicy"
-    menu = [_("Setup"), _("CH Policies")]
+    title = t("app-title-chpolicy")
+    menu = [t("app-group-setup"), t("nav-chpolicy")]
     model = CHPolicy
     query_fields = ["table__icontains"]
 

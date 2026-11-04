@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.connectiontype import ConnectionType
 from noc.inv.models.modelinterface import ModelInterface
 from noc.main.models.doccategory import DocCategory
@@ -21,8 +21,8 @@ class ConnectionTypeApplication(ExtDocApplication):
     ConnectionType application
     """
 
-    title = _("Connection Types")
-    menu = [_("Setup"), _("Connection Types")]
+    title = t("app-title-connectiontype")
+    menu = [t("app-group-setup"), t("nav-connectiontype")]
     model = ConnectionType
     parent_model = DocCategory
     parent_field = "parent"

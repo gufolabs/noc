@@ -14,6 +14,7 @@ from django.db import connection
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.reboot import Reboot
 from noc.sa.models.managedobject import ManagedObject
@@ -35,7 +36,7 @@ class ReportForm(forms.Form):
 
 
 class ReportRebootsApplication(SimpleReport):
-    title = _("Reboots")
+    title = t("app-title-reportreboots")
     form = ReportForm
     predefined_reports = {
         "1d": PredefinedReport(_("Reboots (1 day)"), {"interval": 1}),

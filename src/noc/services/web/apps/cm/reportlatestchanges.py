@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Latest Change Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ from django import forms
 from pymongo import ReadPreference
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.translation import ugettext as _
 from noc.dns.models.dnszone import DNSZone
@@ -42,7 +43,7 @@ class ReportForm(forms.Form):
 
 
 class ReportLatestChangesApplication(SimpleReport):
-    title = _("Latest Changes")
+    title = t("app-title-reportlatestchanges")
     form = ReportForm
 
     def get_data(

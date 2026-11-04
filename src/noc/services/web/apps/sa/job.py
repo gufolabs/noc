@@ -15,7 +15,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.feature import Feature
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.models.job import Job, JobStatus
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -47,8 +47,8 @@ class JobApplication(ExtDocApplication):
     Job application
     """
 
-    title = _("Jobs")
-    menu = [_("Jobs")]
+    title = t("app-title-job")
+    menu = [t("nav-job")]
     model = Job
     glyph = "truck"
     default_ordering = ["-id"]

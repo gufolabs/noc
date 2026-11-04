@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # main.reportsubscription application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.reportsubscription import ReportSubscription
 from noc.services.web.base.extdocapplication import ExtDocApplication
 from noc.services.web.base.site import site
@@ -17,8 +17,8 @@ class ReportSubscriptionApplication(ExtDocApplication):
     ReportSubscription application
     """
 
-    title = _("Report Subscription")
-    menu = [_("Setup"), _("Report Subscription")]
+    title = t("app-title-reportsubscription")
+    menu = [t("app-group-setup"), t("nav-reportsubscription")]
     model = ReportSubscription
 
     def bulk_field_report_label(self, data):

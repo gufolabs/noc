@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscovery
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.interface import Interface
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.link import Link
@@ -16,7 +16,7 @@ from noc.services.web.base.simplereport import SectionRow, SimpleReport, TableCo
 
 
 class ReportDiscoveryApplication(SimpleReport):
-    title = _("Discovery Summary")
+    title = t("app-title-reportdiscovery")
 
     def get_data(self, **kwargs):
         data = []

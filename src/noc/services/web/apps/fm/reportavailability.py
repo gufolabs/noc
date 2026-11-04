@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportavailability
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ from mongoengine.queryset.visitor import Q
 from pymongo import ReadPreference
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.translation import ugettext as _
 from noc.fm.models.outage import Outage
@@ -55,7 +56,7 @@ class ReportForm(forms.Form):
 
 
 class ReportAvailabilityApplication(SimpleReport):
-    title = _("Availability")
+    title = t("app-title-reportavailability")
     form = ReportForm
     predefined_reports = {
         "1d": PredefinedReport(_("Availability (last day)"), {"interval": 1}),

@@ -10,7 +10,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.aaa.models.usercontact import UserContact
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.notificationgroup import USER_NOTIFICATION_METHOD_CHOICES, NotificationGroup
 from noc.main.models.timepattern import TimePattern
 from noc.sa.interfaces.base import DictParameter, ListOfParameter, ModelParameter, StringParameter
@@ -23,7 +23,7 @@ class UserProfileApplication(ExtApplication):
     main.userprofile application
     """
 
-    title = _("User Profile")
+    title = t("app-title-userprofile")
     implied_permissions = {"launch": ["main:timepattern:lookup"]}
 
     @api.get("^$", access=PermitLogged())

@@ -15,9 +15,9 @@ from pydantic import ValidationError
 
 # NOC modules
 from noc.config import config
+from noc.core.i18n import t
 from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import OutputType, RunParams
-from noc.core.translation import ugettext as _
 from noc.main.models.report import Report
 from noc.models import get_model
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -28,8 +28,8 @@ class ReportConfigApplication(ExtDocApplication):
     Report application
     """
 
-    title = "Report Configs"
-    menu = _("Report Config")
+    title = t("app-title-reportconfig")
+    menu = t("nav-reportconfig")
     model = Report
 
     def instance_to_dict(self, o, fields=None, nocustom=False):

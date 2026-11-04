@@ -9,6 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.ip.models.address import Address
 from noc.ip.models.prefixaccess import PrefixAccess
 from noc.services.web.base.decorators.state import state_handler
@@ -21,7 +22,7 @@ class AddressApplication(ExtModelApplication):
     Address application
     """
 
-    title = "Address"
+    title = t("app-title-address")
     model = Address
     ignored_fields = ExtModelApplication.ignored_fields | {"prefix"}
 

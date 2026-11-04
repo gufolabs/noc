@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,6 +13,7 @@ import math
 from django import forms
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
 
 # Django Modules
@@ -45,7 +46,7 @@ class ReportForm(forms.Form):
 
 
 class ReportSummary(SimpleReport):
-    title = "Block Summary"
+    title = t("app-title-reportsummary")
     form = ReportForm
 
     def get_data(self, vrf, afi, prefix, **kwargs):

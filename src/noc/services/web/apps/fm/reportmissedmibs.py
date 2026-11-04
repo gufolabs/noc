@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Missed MIBs Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import re
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.activeevent import ActiveEvent
 from noc.fm.models.eventclass import EventClass
 from noc.fm.models.mib import MIB
@@ -17,7 +17,7 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportMissedMIBs(SimpleReport):
-    title = _("Missed MIBs")
+    title = t("app-title-reportmissedmibs")
 
     rx_unclassified = re.compile(r"\.\d+$")
 

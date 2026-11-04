@@ -18,6 +18,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 # NOC modules
 from noc.core.comp import smart_bytes
 from noc.core.datasources.base import BaseDataSource, data_source_loader
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.sa.interfaces.base import IntParameter, ObjectIdParameter, StringParameter
 from noc.sa.models.administrativedomain import AdministrativeDomain
@@ -59,8 +60,8 @@ def get_col_widths(dataframe: "pl.DataFrame", index_filed: str | None = None):
 
 
 class ReportAlarmDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Alarm Detail")
-    title = _("Alarm Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportalarmdetail")
+    title = t("app-title-reportalarmdetail")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.configuredmap import ConfiguredMap, ObjectFilter
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -19,8 +19,8 @@ class ConfiguredMapApplication(ExtDocApplication):
     ConnectionType application
     """
 
-    title = _("Configured Map")
-    menu = [_("Setup"), _("Configured Maps")]
+    title = t("app-title-configuredmap")
+    menu = [t("app-group-setup"), t("nav-configuredmap")]
     model = ConfiguredMap
     query_fields = ["name__icontains"]
 

@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.firmware import Firmware
 from noc.inv.models.object import Object
@@ -32,7 +33,7 @@ class ReportForm(forms.Form):
 
 
 class ReportFilterApplication(SimpleReport):
-    title = _("Managed Object Serial Number")
+    title = t("app-title-reportobjectsserial")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, resource_group=None):

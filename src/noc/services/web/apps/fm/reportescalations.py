@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 #  fm.reportescalations
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.fm.models.archivedalarm import ArchivedAlarm
@@ -36,7 +37,7 @@ class ReportForm(forms.Form):
 
 
 class ReportEscalationsApplication(SimpleReport):
-    title = _("Escalations")
+    title = t("app-title-reportescalations")
     form = ReportForm
     predefined_reports = {
         "1d": PredefinedReport(_("Escalations (1 day)"), {"interval": 1}),

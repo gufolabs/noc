@@ -13,7 +13,7 @@ from copy import deepcopy
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.models import get_model
 from noc.sa.interfaces.base import (
@@ -34,8 +34,8 @@ class WorkflowApplication(ExtDocApplication):
     Workflow application
     """
 
-    title = _("Workflows")
-    menu = [_("Setup"), _("Workflow")]
+    title = t("app-title-workflow")
+    menu = [t("app-group-setup"), t("nav-workflow")]
     model = Workflow
 
     NEW_ID = "000000000000000000000000"
@@ -75,17 +75,17 @@ class WorkflowApplication(ExtDocApplication):
                 "y": state.y,
             }
             r["states"].append(sr)
-        for t in Transition.objects.filter(workflow=wf.id):
+        for tr in Transition.objects.filter(workflow=wf.id):
             tr = {
-                "id": str(t.id),
-                "from_state": t.from_state.name,
-                "to_state": t.to_state.name,
-                "is_active": t.is_active,
-                "event": t.event,
-                "label": t.label,
-                "description": t.description,
-                "enable_manual": t.enable_manual,
-                "handlers": t.handlers,
+                "id": str(tr.id),
+                "from_state": tr.from_state.name,
+                "to_state": tr.to_state.name,
+                "is_active": tr.is_active,
+                "event": tr.event,
+                "label": tr.label,
+                "description": tr.description,
+                "enable_manual": tr.enable_manual,
+                "handlers": tr.handlers,
                 "required_rules": [
                     {
                         "labels": [
@@ -96,10 +96,10 @@ class WorkflowApplication(ExtDocApplication):
                         ],
                         "exclude_labels": [],
                     }
-                    for rr in t.required_rules
+                    for rr in tr.required_rules
                 ],
-                "vertices": [{"x": v.x, "y": v.y} for v in t.vertices],
-                "bi_id": str(t.bi_id) if t.bi_id else None,
+                "vertices": [{"x": v.x, "y": v.y} for v in tr.vertices],
+                "bi_id": str(tr.bi_id) if tr.bi_id else None,
             }
             r["transitions"].append(tr)
         return r
@@ -218,28 +218,28 @@ class WorkflowApplication(ExtDocApplication):
             current_transitions[str(ct.id)] = ct
         # Synchronize transitions
         seen_transitions = set()
-        for t in transitions:
+        for tr in transitions:
             transition = None
-            if t["id"]:
+            if tr["id"]:
                 # Existing transitions
-                seen_transitions.add(t["id"])
-                transition = current_transitions.get(t["id"])
+                seen_transitions.add(tr["id"])
+                transition = current_transitions.get(tr["id"])
             # Update transition attributes
             if not transition:
                 transition = Transition(workflow=wf)
                 changed = True
             else:
                 changed = False
-            for k in t:
+            for k in tr:
                 if k in ("id", "bi_id"):
                     continue
                 if k in ("from_state", "to_state"):
-                    t[k] = state_names[t[k]]
+                    tr[k] = state_names[tr[k]]
                 elif k == "vertices":
-                    t[k] = [TransitionVertex(x=vx["x"], y=vx["y"]) for vx in t[k]]
+                    tr[k] = [TransitionVertex(x=vx["x"], y=vx["y"]) for vx in tr[k]]
                 old = getattr(transition, k)
-                if old != t[k]:
-                    setattr(transition, k, t[k])
+                if old != tr[k]:
+                    setattr(transition, k, tr[k])
                     changed = True
             if changed:
                 transition.save()

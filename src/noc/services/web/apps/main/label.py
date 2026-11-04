@@ -13,7 +13,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.models import LABEL_MODELS
 from noc.sa.interfaces.base import ColorParameter
@@ -25,8 +25,8 @@ class LabelApplication(ExtDocApplication):
     Label application
     """
 
-    title = "Label"
-    menu = [_("Labels")]
+    title = t("app-title-label")
+    menu = [t("nav-label")]
     glyph = "tag"
     model = Label
     query_condition = "icontains"

@@ -1,0 +1,491 @@
+app-group-aaa: AAA
+app-group-bi: BI
+app-group-cm: Configuration Management
+app-group-crm: CRM
+app-group-dev: Development
+app-group-dns: DNS
+app-group-fm: Fault Management
+app-group-gis: GIS
+app-group-inv: Inventory
+app-group-ip: IPAM
+app-group-kb: Knowledge Base
+app-group-main: Main
+app-group-maintenance: Maintenance
+app-group-peer: Peering Management
+app-group-phone: Phone
+app-group-pm: Performance Management
+app-group-project: Project Management
+app-group-reports: Reports
+app-group-sa: Service Activation
+app-group-setup: Setup
+app-group-sla: SLA
+app-group-support: Support
+app-group-vc: VC Management
+app-group-wf: Workflow
+app-title-account: Account
+app-title-action: Action
+app-title-actioncommands: Action Command
+app-title-address: Address
+app-title-addressprofile: Address Profile
+app-title-addressrange: Address Ranges
+app-title-administrativedomain: Administrative Domains
+app-title-agent: Agent
+app-title-agentprofile: Agent Profile
+app-title-alarm: Alarm
+app-title-alarmclass: Alarm Class
+app-title-alarmclassconfig: Alarm Class Config
+app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
+app-title-alarmescalation: Alarm Escalation
+app-title-alarmrule: Alarm Rules
+app-title-alarmseverity: Alarm Severity
+app-title-alarmtrigger: Alarm Triggers
+app-title-allocationgroup: AllocationGroup
+app-title-apikey: API Key
+app-title-as: AS
+app-title-asprofile: AS Profile
+app-title-asset: AS Sets
+app-title-audittrail: Audit Trail
+app-title-authldapdomain: LDAP Domain
+app-title-authprofile: Auth Profile
+app-title-building: Building
+app-title-calculator: Calculators
+app-title-capability: Capability
+app-title-capsprofile: Caps Profile
+app-title-card: Cards
+app-title-channel: Channels
+app-title-chpolicy: CHPolicy
+app-title-classificationrule: Classification Rule
+app-title-commandsnippet: Command Snippets
+app-title-community: Communities
+app-title-communitytype: Community Types
+app-title-confdbquery: ConfDBQuery
+app-title-configurationparam: Configuration Param
+app-title-configurationscope: Configuration Scope
+app-title-configuredmap: Configured Map
+app-title-connectionrule: Connection Rules
+app-title-connectiontype: Connection Types
+app-title-coverage: Coverage
+app-title-cpe: CPEs
+app-title-cpeprofile: CPE Profile
+app-title-crashinfo: Crashinfo
+app-title-credentialcheckrule: Credential Check Rule
+app-title-crontab: CronTab
+app-title-csv: CSV Export/Import
+app-title-customfield: Custom Fields
+app-title-customfieldenumgroup: Enum Groups
+app-title-dashboard: Dashboard
+app-title-dashboardlayout: Dashboard Layout
+app-title-datastreamconfig: DataStream Config
+app-title-ddash: Dynamic Dashboard
+app-title-dialplan: DialPlan
+app-title-discoveredobject: Discovered Object
+app-title-division: Division
+app-title-dnsserver: DNS Server
+app-title-dnszone: DNS Zone
+app-title-dnszoneprofile: Zone Profiles
+app-title-endpoint: Endpoint
+app-title-escalationprofile: Escalation Profile
+app-title-event: Events
+app-title-eventclass: Event Class
+app-title-eventtrigger: Event Triggers
+app-title-extstorage: Ext. Storage
+app-title-facade: Facades
+app-title-firmware: Firmware
+app-title-firmwarepolicy: Firmware Policy
+app-title-getnow: Get Now
+app-title-glyph: Glyph
+app-title-group: Groups
+app-title-groupaccess: Group Access
+app-title-handler: Handler
+app-title-heatmap: Heatmap
+app-title-home: Home
+app-title-ifdescpatterns: IfDesc Patterns
+app-title-ignoreeventrule: Ignore Event Rules
+app-title-ignorepattern: Ignore Patterns
+app-title-imagestore: Images
+app-title-interface: Interfaces
+app-title-interfaceprofile: Interface Profile
+app-title-interfacevalidationpolicy: Interface Validation Policy
+app-title-inv: Inventory
+app-title-inv-reportdiscoveryproblem: Discovery Topology Problems
+app-title-inv-reportobjectsummary: Inventory Object Summary
+app-title-ipam: Assigned Addresses
+app-title-job: Jobs
+app-title-jsonimport: JSON Import
+app-title-kb: Knowledge Base
+app-title-kbentry: Entries
+app-title-kbentrytemplate: Templates
+app-title-l2domain: L2 Domain
+app-title-l2domainprofile: L2Domain Profile
+app-title-label: Label
+app-title-language: Languages
+app-title-layer: Layers
+app-title-macblacklist: MAC Blacklist
+app-title-macdb: MacDB
+app-title-maintainer: Maintainers
+app-title-maintenance: Maintenance
+app-title-maintenancetype: Maintenance Type
+app-title-managedobject: Managed Objects
+app-title-managedobjectprofile: Managed Object Profile
+app-title-map: Network Map
+app-title-measurementunits: MeasurementUnits
+app-title-messageroute: Message Route
+app-title-metricaction: Metric Action
+app-title-metricrule: Metric Rule
+app-title-metricscope: MetricScope
+app-title-metricstream: MetricStream
+app-title-metrictype: Metric Type
+app-title-mib: MIB
+app-title-mibpreference: MIB Preference
+app-title-mimetype: MIME Types
+app-title-modelinterface: Model Interface
+app-title-modelmapping: Model Mapping
+app-title-modelprotectionprofile: ModelProtection Profile
+app-title-modeltemplate: Model Template
+app-title-monitor: Monitor
+app-title-monmap: Monmap
+app-title-networksegment: Network Segment
+app-title-networksegmentprofile: Network Segment Profile
+app-title-notificationgroup: Notification Group
+app-title-numbercategory: Number Category
+app-title-objectconfigurationrule: Configuration Rules
+app-title-objectdiagnosticconfig: Object Diagnostic Config
+app-title-objectdiscoveryrule: Object Discovered Rules
+app-title-objectmodel: Object Models
+app-title-objectnotification: Object Notification
+app-title-objectnotify: Object Notifies
+app-title-objectvalidationpolicy: Object Validation Policy
+app-title-oidalias: OID Aliases
+app-title-organisation: Organisations
+app-title-outage: Outages
+app-title-peer: Peers
+app-title-peergroup: Peer Groups
+app-title-peeringpoint: Peering Points
+app-title-peerprofile: Peer Profile
+app-title-person: Persons/Roles
+app-title-phonenumber: Phone Number
+app-title-phonenumberprofile: Number Profile
+app-title-phonerange: Phone Range
+app-title-phonerangeprofile: Phone Range Profile
+app-title-platform: Platform
+app-title-pool: Pool
+app-title-prefix: Prefix
+app-title-prefixaccess: Prefix Access
+app-title-prefixlistbuilder: Prefix List Builder
+app-title-prefixprofile: Prefix Profile
+app-title-prefixtable: Prefix Table
+app-title-profile: Profile
+app-title-profilecheckrule: Profile Check Rule
+app-title-project: Project
+app-title-protocol: Protocol
+app-title-pyrule: PyRule
+app-title-quiz: Quiz
+app-title-reactionrule: Reaction Rules
+app-title-remotesystem: Remote System
+app-title-reportaddressfilter: Filter Address
+app-title-reportalarmcomments: Alarm Comments Detail
+app-title-reportalarmdetail: Alarm Detail
+app-title-reportallocated: Allocated Blocks
+app-title-reportavailability: Availability
+app-title-reportclassificationquality: Classification Quality
+app-title-reportclassificationrule: Classification Rules
+app-title-reportcompare: Compare Specs
+app-title-reportcone: Cone Analysis
+app-title-reportconfig: Report Configs
+app-title-reportdbsummary: Database Summary
+app-title-reportdiscovery: Discovery Summary
+app-title-reportdiscoverycaps: Discovery Object Caps
+app-title-reportdiscoverypoison: Discovery ID cache poison
+app-title-reportduplicatedfqdns: Duplicated FQDNs
+app-title-reportescalations: Escalations
+app-title-reportexpanded: All Allocated Blocks
+app-title-reportexpiringdomains: Expiring Domains
+app-title-reportfilter: Filter
+app-title-reportfree: Free Blocks
+app-title-reporthierarchy: Events and Alarm Hierarchy
+app-title-reporthistory: History
+app-title-reportifacestatus: Interface Status
+app-title-reportipamsummary: IPAM Summary
+app-title-reportipusage: IP Usage
+app-title-reportlatestchanges: Latest Changes
+app-title-reportlinkdetail: Link Detail
+app-title-reportlocalrules: Local Classification Rules (JSON)
+app-title-reportmaxmetrics: Load Metrics max
+app-title-reportmetrics: Load Metrics
+app-title-reportmibs: Installed MIBs
+app-title-reportmissedmibs: Missed MIBs
+app-title-reportmissedp2p: Missed Link Addresses
+app-title-reportmissedreverse: Missed Reverse Zones
+app-title-reportmovedmac: Moved MACs
+app-title-reportnszonesummary: NS Zone Summary
+app-title-reportobjectdetail: Object Detail
+app-title-reportobjectsserial: Managed Object Serial Number
+app-title-reportoutages: Outages
+app-title-reportoverlappedoids: Overlapped MIB OIDs
+app-title-reportoverview: Overview
+app-title-reportpartnumbers: Part Numbers
+app-title-reportpendinglinks: Pending Links
+app-title-reportreboots: Reboots
+app-title-reportrulesbyprofile: Rules by Profile
+app-title-reportrulesetsummary: Ruleset Summary
+app-title-reportstalediscovery: Stale discovery
+app-title-reportsubscription: Report Subscription
+app-title-reportsummary: Block Summary
+app-title-reporttaggedmodels: Tagged Models
+app-title-reportttsystemstat: TT system statistics
+app-title-reportunknownsummary: Unknown Models Summary
+app-title-reportvpnstatus: VPN Status
+app-title-resourcegroup: ResourceGroup
+app-title-resourcepool: ResourcePool
+app-title-resourcestate: Resource States
+app-title-rir: RIR
+app-title-runcommands: Run Commands
+app-title-sa-reportdiscoveryproblem: Discovery Problem
+app-title-sa-reportobjectsummary: Managed Objects Summary
+app-title-scale: Scale
+app-title-search: Search
+app-title-sensor: Sensor
+app-title-sensorprofile: SensorProfile
+app-title-service: Services
+app-title-serviceprofile: Service Profile
+app-title-slaprobe: SLA Probe
+app-title-slaprofile: SLA Profile
+app-title-spec: Spec
+app-title-state: States
+app-title-street: Street
+app-title-style: Style
+app-title-subscriber: Subscriber
+app-title-subscriberprofile: Subscriber Profile
+app-title-supplier: Supplier
+app-title-supplierprofile: Supplier Profile
+app-title-systemnotification: System Notifications
+app-title-systemtemplate: System Templates
+app-title-techdomain: Tech Domain
+app-title-technology: Technology
+app-title-template: Templates
+app-title-timepattern: Time Pattern
+app-title-tools: Tools
+app-title-totaloutage: Total Outages
+app-title-transition: Transitions
+app-title-ttsystem: TT System
+app-title-unknownmodel: Unknown Models
+app-title-user: Users
+app-title-useraccess: User Access
+app-title-userprofile: User Profile
+app-title-vendor: Vendor
+app-title-vlan: VLAN
+app-title-vlanfilter: VLAN Filter
+app-title-vlanprofile: VLAN Profile
+app-title-vlantemplate: VLAN Template
+app-title-vpn: VPN
+app-title-vpnprofile: VPN Profiles
+app-title-vrf: VRF
+app-title-vrfgroup: VRF Groups
+app-title-wfmigration: WF Migration
+app-title-workflow: Workflows
+nav-account: Account
+nav-action: Actions
+nav-actioncommands: Action Commands
+nav-addressprofile: Address Profiles
+nav-addressrange: Address Ranges
+nav-administrativedomain: Administrative Domains
+nav-agent: Agent
+nav-agentprofile: Agent Profiles
+nav-alarm: Alarms
+nav-alarmclass: Alarm Classes
+nav-alarmclassconfig: Alarm Class Config
+nav-alarmdiagnosticconfig: Alarm Diagnostic
+nav-alarmescalation: Alarm Escalation
+nav-alarmrule: Alarm Rules
+nav-alarmseverity: Alarm Severities
+nav-alarmtrigger: Alarm Triggers
+nav-allocationgroup: Allocation Groups
+nav-apikey: API Keys
+nav-as: ASes
+nav-asprofile: AS Profiles
+nav-asset: AS Sets
+nav-audittrail: Audit Trail
+nav-authldapdomain: LDAP Domains
+nav-authprofile: Auth Profiles
+nav-building: Buildings
+nav-capability: Capabilities
+nav-capsprofile: Caps Profiles
+nav-card: Cards
+nav-channel: Channels
+nav-chpolicy: CH Policies
+nav-classificationrule: Classification Rules
+nav-commandsnippet: Command Snippets
+nav-community: Communities
+nav-communitytype: Community Types
+nav-confdbquery: ConfDB Queries
+nav-configurationparam: Configuration Params
+nav-configurationscope: Configuration Scope
+nav-configuredmap: Configured Maps
+nav-connectionrule: Connection Rules
+nav-connectiontype: Connection Types
+nav-coverage: Coverage
+nav-cpe: CPEs
+nav-cpeprofile: CPE Profiles
+nav-crashinfo: Crashinfo
+nav-credentialcheckrule: Credential Check Rules
+nav-crontab: CronTabs
+nav-customfield: Custom Fields
+nav-customfieldenumgroup: Enum Groups
+nav-dashboard: Dashboard
+nav-dashboardlayout: Dashboard Layout
+nav-datastreamconfig: DataStream Config
+nav-dialplan: DialPlan
+nav-discoveredobject: Discovered Object
+nav-division: Divisions
+nav-dnsserver: DNS Servers
+nav-dnszone: Zones
+nav-dnszoneprofile: Zone Profiles
+nav-endpoint: Endpoints
+nav-escalationprofile: Escalation Profile
+nav-event: Events
+nav-eventclass: Event Classes
+nav-eventtrigger: Event Triggers
+nav-extstorage: Ext. Storages
+nav-facade: Facades
+nav-firmware: Firmware
+nav-firmwarepolicy: Firmware Policy
+nav-getnow: Get Now
+nav-glyph: Glyphs
+nav-group: Groups
+nav-groupaccess: Group Access
+nav-handler: Handlers
+nav-heatmap: Heatmap
+nav-ifdescpatterns: IfDesc Patterns
+nav-ignoreeventrule: Ignore Event Rules
+nav-ignorepattern: Ignore Patterns
+nav-imagestore: Images
+nav-interface: Interfaces
+nav-interfaceprofile: Interface Profiles
+nav-interfacevalidationpolicy: Interface Validation Policies
+nav-inv: Inventory
+nav-ipam: Assigned Addresses
+nav-job: Jobs
+nav-jsonimport: JSON Import
+nav-kb: Knowledge Base
+nav-kbentry: Entries
+nav-kbentrytemplate: Templates
+nav-l2domain: L2 Domain
+nav-l2domainprofile: L2Domain Profiles
+nav-label: Labels
+nav-language: Languages
+nav-layer: Layers
+nav-macblacklist: MAC Blacklist
+nav-macdb: Mac DB
+nav-maintainer: Maintainers
+nav-maintenance: Maintenance
+nav-maintenancetype: Maintenance Types
+nav-managedobject: Managed Objects
+nav-managedobjectprofile: Managed Object Profiles
+nav-map: Network Map
+nav-measurementunits: Measurement Units
+nav-messageroute: Message Routes
+nav-metricaction: Metric Actions
+nav-metricrule: Metric Rules
+nav-metricscope: Metric Scopes
+nav-metricstream: Metric Stream
+nav-metrictype: Metric Types
+nav-mib: MIB
+nav-mibpreference: MIB Preference
+nav-mimetype: MIME Types
+nav-modelinterface: Model Interfaces
+nav-modelmapping: Model Mapping
+nav-modelprotectionprofile: ModelProtection Profile
+nav-modeltemplate: Model Templates
+nav-monitor: Monitor
+nav-monmap: Monmap
+nav-networksegment: Network Segments
+nav-networksegmentprofile: Network Segment Profiles
+nav-notificationgroup: Notification Groups
+nav-numbercategory: Number Categories
+nav-objectconfigurationrule: Configuration Rules
+nav-objectdiagnosticconfig: Object Diagnostic Configs
+nav-objectdiscoveryrule: Object Discovered Rules
+nav-objectmodel: Object Models
+nav-objectnotification: Object Notification
+nav-objectnotify: Object Notifies
+nav-objectvalidationpolicy: Object Validation Policies
+nav-oidalias: OID Aliases
+nav-organisation: Organisations
+nav-outage: Outages
+nav-peer: Peers
+nav-peergroup: Peer Groups
+nav-peeringpoint: Peering Points
+nav-peerprofile: Peer Profiles
+nav-person: Persons
+nav-phonenumber: Phone Number
+nav-phonenumberprofile: Number Profiles
+nav-phonerange: Phone Ranges
+nav-phonerangeprofile: Range Profile
+nav-platform: Platforms
+nav-pool: Pools
+nav-prefixaccess: Prefix Access
+nav-prefixlistbuilder: Prefix List Builder
+nav-prefixprofile: Prefix Profiles
+nav-prefixtable: Prefix Tables
+nav-profile: Profiles
+nav-profilecheckrule: Profile Check Rules
+nav-project: Projects
+nav-protocol: Protocols
+nav-pyrule: PyRule
+nav-quiz: Quiz
+nav-reactionrule: Reaction Rule
+nav-remotesystem: Remote Systems
+nav-reportalarmcomments: Alarm Comments
+nav-reportalarmdetail: Alarm Detail
+nav-reportconfig: Report Config
+nav-reportifacestatus: Interface Status
+nav-reportlinkdetail: Link Detail
+nav-reportmaxmetrics: Load Metrics max
+nav-reportmetrics: Load Metrics
+nav-reportmovedmac: Moved MACs
+nav-reportobjectdetail: Object Detail
+nav-reportsubscription: Report Subscription
+nav-resourcegroup: Resource Groups
+nav-resourcepool: Resource Pool
+nav-resourcestate: Resource States
+nav-rir: RIRs
+nav-runcommands: Run Commands (On Group Edit option)
+nav-scale: Scale
+nav-search: Search
+nav-sensor: Sensor
+nav-sensorprofile: Sensor Profiles
+nav-service: Services
+nav-serviceprofile: Service Profiles
+nav-slaprobe: SLA Probes
+nav-slaprofile: SLA Profiles
+nav-spec: Specs
+nav-state: States
+nav-street: Streets
+nav-style: Styles
+nav-subscriber: Subscribers
+nav-subscriberprofile: Subscriber Profiles
+nav-supplier: Supplier
+nav-supplierprofile: Supplier Profiles
+nav-systemnotification: System Notifications
+nav-systemtemplate: System Templates
+nav-techdomain: Tech Domains
+nav-technology: Technologies
+nav-template: Templates
+nav-timepattern: Time Patterns
+nav-totaloutage: Total Outages
+nav-transition: Transitions
+nav-ttsystem: TT System
+nav-unknownmodel: Unknown Models
+nav-user: Users
+nav-useraccess: User Access
+nav-vendor: Vendors
+nav-vlan: VLAN
+nav-vlanfilter: VLAN Filters
+nav-vlanprofile: VLAN Profiles
+nav-vlantemplate: VLAN Templates
+nav-vpn: VPN
+nav-vpnprofile: VPN Profiles
+nav-vrf: VRF
+nav-vrfgroup: VRF Groups
+nav-wfmigration: Migrations
+nav-workflow: Workflow

@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import GENERIC_PROFILE
 from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
@@ -24,7 +25,7 @@ from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportDiscoveryTopologyProblemApplication(SimpleReport):
-    title = _("Discovery Topology Problems")
+    title = t("app-title-inv-reportdiscoveryproblem")
 
     def get_form(self):
         class ReportForm(forms.Form):

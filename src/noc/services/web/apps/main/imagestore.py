@@ -9,16 +9,16 @@
 from django.http import HttpRequest, HttpResponse
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mime import _R_CONTENT_TYPE
-from noc.core.translation import ugettext as _
 from noc.main.models.imagestore import ImageStore
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
 
 class ImageStoreApplication(ExtDocApplication):
-    title = _("Images")
+    title = t("app-title-imagestore")
     model = ImageStore
-    menu = [_("Setup"), _("Images")]
+    menu = [t("app-group-setup"), t("nav-imagestore")]
     query_fields = ["name__icontains"]
 
     def field_content_type(self, o: ImageStore):

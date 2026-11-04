@@ -21,6 +21,7 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
@@ -57,8 +58,8 @@ def get_column_width(name):
 
 
 class ReportMaxMetricsmaxDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Load Metrics max")
-    title = _("Load Metrics max")
+    menu = t("app-group-reports") + "|" + t("nav-reportmaxmetrics")
+    title = t("app-title-reportmaxmetrics")
 
     @api.get(
         r"^download/$",

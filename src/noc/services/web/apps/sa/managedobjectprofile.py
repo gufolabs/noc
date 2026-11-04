@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # sa.managedobjectprofile application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.pm.models.metrictype import MetricType
 from noc.sa.models.managedobjectprofile import ManagedObjectProfile
 from noc.services.web.base.extmodelapplication import ExtModelApplication
@@ -17,8 +17,8 @@ class ManagedObjectProfileApplication(ExtModelApplication):
     ManagedObjectProfile application
     """
 
-    title = _("Managed Object Profile")
-    menu = [_("Setup"), _("Managed Object Profiles")]
+    title = t("app-title-managedobjectprofile")
+    menu = [t("app-group-setup"), t("nav-managedobjectprofile")]
     model = ManagedObjectProfile
     query_condition = "icontains"
     query_fields = ["name", "description"]

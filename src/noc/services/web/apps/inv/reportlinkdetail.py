@@ -20,8 +20,8 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.platform import Platform
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -109,8 +109,8 @@ class ReportLinksDetail:
 
 
 class ReportLinkDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Link Detail")
-    title = _("Link Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportlinkdetail")
+    title = t("app-title-reportlinkdetail")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7

@@ -13,7 +13,7 @@ import re
 from django.http import HttpRequest, HttpResponse
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.kb.models.kbentry import KBEntry
 from noc.kb.models.kbentryattachment import KBEntryAttachment
 from noc.kb.models.kbentryhistory import KBEntryHistory
@@ -25,8 +25,8 @@ class KBEntryApplication(ExtModelApplication):
     AdministrativeDomain application
     """
 
-    title = _("Entries")
-    menu = [_("Setup"), _("Entries")]
+    title = t("app-title-kbentry")
+    menu = [t("app-group-setup"), t("nav-kbentry")]
     model = KBEntry
     file_fields_mask = re.compile(r"^(?P<fname>description|is_hidden)(?P<findex>\d+)")
 

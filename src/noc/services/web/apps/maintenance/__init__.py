@@ -1,11 +1,11 @@
 # ---------------------------------------------------------------------
 # Settings for "maintenance" module
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
-MODULE_NAME = _("Maintenance")
+MODULE_NAME = t("app-group-maintenance")

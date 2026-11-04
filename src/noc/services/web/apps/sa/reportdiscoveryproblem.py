@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Failed Scripts Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ from django import forms
 from pymongo import ReadPreference
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.core.translation import ugettext as _
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -112,7 +113,7 @@ class ReportForm(forms.Form):
 
 
 class ReportFilterApplication(SimpleReport):
-    title = _("Discovery Problem")
+    title = t("app-title-sa-reportdiscoveryproblem")
     form = ReportForm
 
     predefined_reports = {

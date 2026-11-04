@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # gis.division application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.gis.models.division import Division
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -16,8 +16,8 @@ class DivisionApplication(ExtDocApplication):
     Division application
     """
 
-    title = _("Division")
-    menu = [_("Setup"), _("Divisions")]
+    title = t("app-title-division")
+    menu = [t("app-group-setup"), t("nav-division")]
     model = Division
     parent_field = "parent"
     query_fields = ["name__icontains"]

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Rules by Profile Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,14 +9,14 @@
 import re
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import loader as profile_loader
-from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class Reportreportrulesbyprofile(SimpleReport):
-    title = _("Rules by Profile")
+    title = t("app-title-reportrulesbyprofile")
 
     def get_data(self, **kwargs):
         # profile -> (syslog, snmp, other)

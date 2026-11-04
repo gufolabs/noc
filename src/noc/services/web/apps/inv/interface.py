@@ -12,8 +12,8 @@ from mongoengine import Q
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.text import alnum_key, list_to_ranges
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.subinterface import SubInterface
@@ -38,8 +38,8 @@ class InterfaceApplication(ExtDocApplication):
     inv.interface application
     """
 
-    title = _("Interfaces")
-    menu = _("Interfaces")
+    title = t("app-title-interface")
+    menu = t("nav-interface")
     model = Interface
     query_fields = ["description__contains"]
 

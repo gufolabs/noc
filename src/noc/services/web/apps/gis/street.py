@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # gis.division application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.gis.models.division import Division
 from noc.gis.models.street import Street
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -17,8 +17,8 @@ class StreetApplication(ExtDocApplication):
     Street application
     """
 
-    title = _("Street")
-    menu = [_("Setup"), _("Streets")]
+    title = t("app-title-street")
+    menu = [t("app-group-setup"), t("nav-street")]
     model = Street
     parent_model = Division
     parent_field = "parent"
