@@ -25,14 +25,6 @@ forms:
         - warning
         - error
         - critical
-    language:
-      default: "en"
-      label: "Translation language"
-      type: list
-      options:
-        - "en"
-        - "ru"
-        - "pt_BR"
     theme:
       default: "noc"
       label: "NOC web theme"

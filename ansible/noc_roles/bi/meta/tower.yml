@@ -25,14 +25,6 @@ forms:
         - warning
         - error
         - critical
-    language:
-      default: "en"
-      label: "Translation language"
-      type: list
-      options:
-        - "en"
-        - "ru"
-        - "pt_BR"
     query_threads:
       default: 10
       label: "Concurrent query limit per process"

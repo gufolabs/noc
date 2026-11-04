@@ -9,7 +9,3 @@ Help service configuration
 ## branch
 
 {{ config_param("help.branch") }}
-
-## language
-
-{{ config_param("help.language") }}

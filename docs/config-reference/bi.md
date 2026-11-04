@@ -2,12 +2,6 @@
 
 [Bi](../services-reference/bi.md) service configuration
 
-## language
-
-Language BI interface
-
-{{ config_param("bi.language") }}
-
 ## query_threads
 
 {{ config_param("bi.query_threads") }}

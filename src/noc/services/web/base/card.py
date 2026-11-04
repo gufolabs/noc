@@ -100,7 +100,7 @@ class BaseAPI:
 
     def handler_index(self, request: Request):
         templates_dir = os.path.join(self.PREFIX, "ui", "card")
-        language = config.web.language
+        language = config.language
         templates = Jinja2Templates(directory=templates_dir)
         result = templates.TemplateResponse(
             "index.html",

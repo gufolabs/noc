@@ -64,7 +64,6 @@ if(httpRequest.status === 200){
     traceExtJSEvents: setup.traceExtJSEvents,
     helpUrl: setup.helpUrl,
     helpBranch: setup.helpBranch,
-    helpLanguage: setup.helpLanguage,
     timezone: setup.timezone,
     enable_remote_system_last_extract_info: setup.enable_remote_system_last_extract_info,
     enableHelp: setup.helpUrl && setup.helpUrl !== "",

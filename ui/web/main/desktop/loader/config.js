@@ -87,7 +87,6 @@ function _buildSettings(s){
     traceExtJSEvents: s.traceExtJSEvents,
     helpUrl: s.helpUrl,
     helpBranch: s.helpBranch,
-    helpLanguage: s.helpLanguage,
     timezone: s.timezone,
     enable_remote_system_last_extract_info: s.enable_remote_system_last_extract_info,
     enableHelp: s.helpUrl && s.helpUrl !== "",

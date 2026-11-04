@@ -63,7 +63,7 @@ class WebService(BaseService):
     def get_granian_options(self) -> dict[str, Any]:
         opts = super().get_granian_options().copy()
         ui_path = files("noc") / "ui"
-        index_path = ui_path / f"index.{config.web.theme}.{config.web.language}.html"
+        index_path = ui_path / f"index.{config.web.theme}.{config.language}.html"
         opts.update(
             {
                 # Granian checks mounts in order, so the exact index route goes first.

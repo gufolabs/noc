@@ -57,7 +57,7 @@ params:
   bi.alarms_archive_batch_limit:
     default: "10000"
   bi.alarms_archive_policy:
-    default: "{{doc[\"clear_timestamp\"].strftime(\"y%Yw%W\")}}"
+    default: '{{doc["clear_timestamp"].strftime("y%Yw%W")}}'
   bi.chunk_size:
     default: "500"
   bi.clean_delay_alarms:
@@ -75,8 +75,6 @@ params:
     default: "3600"
   bi.extract_window:
     default: "86400"
-  bi.language:
-    default: en
   bi.query_threads:
     default: "10"
   bi.reboot_interval:
@@ -414,8 +412,6 @@ params:
     default: https://docs.getnoc.com
   help.branch:
     default: microservices
-  help.language:
-    default: en
   home.enable_alarms:
     default: "True"
   home.enable_channels:
@@ -522,8 +518,6 @@ params:
   kafkasender.username: {}
   language:
     default: en
-  language_code:
-    default: en
   layout.ring_chain_edge:
     default: "150"
   layout.ring_chain_spacing:
@@ -574,8 +568,6 @@ params:
     default: HS256
   login.jwt_cookie_name:
     default: noc_jwt
-  login.language:
-    default: en
   login.max_failed_attempts: {}
   login.max_inactivity: {}
   login.methods:
@@ -995,8 +987,6 @@ params:
   web.api_row_limit: {}
   web.api_unlimited_row_limit:
     default: "1000"
-  web.alarmheat_tooltip_limit:
-    default: "5"
   web.enable_remote_system_last_extract_info: {}
   web.enable_report_history: {}
   web.events_windows:
@@ -1008,8 +998,6 @@ params:
   web.heatmap_zoom:
     default: "4"
   web.install_collection: {}
-  web.language:
-    default: en
   web.macdb_window:
     default: "345600"
   web.map_lat:

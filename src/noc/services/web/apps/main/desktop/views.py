@@ -134,7 +134,6 @@ class DesktopApplication(ExtApplication):
             "traceExtJSEvents": False,
             "helpUrl": config.help.base_url,
             "helpBranch": config.help.branch,
-            "helpLanguage": config.help.language,
             "timezone": str(config.timezone),
             "enable_remote_system_last_extract_info": config.web.enable_remote_system_last_extract_info,
             "theme": config.web.theme,
