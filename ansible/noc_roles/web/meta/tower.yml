@@ -44,7 +44,6 @@ forms:
       default: 10
       label: "Web threads"
       type: int
-
 services:
   web:
     level: global

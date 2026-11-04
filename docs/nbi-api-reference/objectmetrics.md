@@ -11,7 +11,7 @@ POST /api/nbi/objectmetrics
 
 Get metrics for one or more [Managed Objects](../concepts/managed-object/index.md).
 Maximal allowed time range is limited by
-[nbi.objectmetrics_max_interval](../config-reference/nbi.md#objectmetrics_max_interval)
+[web.objectmetrics_max_interval](../config-reference/web.md#objectmetrics_max_interval)
 configuration setting.
 
 <!-- prettier-ignore -->

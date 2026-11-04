@@ -17,7 +17,6 @@
 * [mib](mib.md)
 * [mrt](mrt.md)
 * [mx](mx.md)
-* [nbi](nbi.md)
 * [ping](ping.md)
 * [runner](runner.md)
 * [sae](sae.md)

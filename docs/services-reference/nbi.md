@@ -1,6 +1,6 @@
-# nbi service
+# NBI API
 
-NBI is short for `NorthBound Interface`, the common term
-for integration layer with upper-level system. The purpose of `nbi`
-service is to host [NBI API](../nbi-api-reference/index.md).
+NBI (`Northbound Interface`) provides the integration API for external systems.
+The endpoints are served by the [web service](web.md); see the
+[NBI API reference](../nbi-api-reference/index.md) for available operations.
 

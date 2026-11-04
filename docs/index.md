@@ -56,7 +56,7 @@ highlights:
     description: >
       Plays nice with others. NOC is a part of your infrastructure.
       ETL interface allows to import data from existing systems.
-      DataStream API and NBI interfaces provide services to other system.
+      DataStream and NBI APIs expose NOC data and operations to other systems.
     link: integration
   - title: Vendor-agnostic
     description: >

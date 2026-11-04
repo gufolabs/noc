@@ -111,7 +111,7 @@ This component is responsible for managing flows and provides the following metr
 
   - script - used by the Activator service to run scripts
   - query - used by the service BI
-  - max - use services Web,NBI
+  - max - use the web service
 
 ### Scheduler metrics
 

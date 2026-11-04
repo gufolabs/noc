@@ -38,18 +38,6 @@
   tags:
     - config
 
-- name: Setup nbi_whitelist_access
-  template:
-    src: allow_ip_nbi.conf.j2
-    dest: "{{ etc_prefix }}/nginx/allow_ip_nbi.conf"
-    owner: "{{ nginx_user }}"
-  notify: reload nginx
-  when:
-    - "'svc-nbi-exec' in groups"
-    - "groups['svc-nbi-exec'] | length > 0"
-  tags:
-    - config
-
 - name: place nginx ct template
   import_role:
     name: consul-template

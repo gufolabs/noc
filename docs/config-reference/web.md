@@ -45,6 +45,12 @@ before a RequestDataTooBig is raised.
 
 {{ config_param("web.max_threads") }}
 
+## objectmetrics_max_interval
+
+Maximum time range, in seconds, for the NBI objectmetrics API.
+
+{{ config_param("web.objectmetrics_max_interval") }}
+
 ## macdb_window
 
 {{ config_param("web.macdb_window") }}

@@ -23,9 +23,9 @@ params:
     default: "2048"
   api.http_version:
     choices:
-    - AUTO
-    - HTTP_1_1
-    - HTTP_2
+      - AUTO
+      - HTTP_1_1
+      - HTTP_2
     default: AUTO
   api.listen:
     default: auto:0
@@ -146,9 +146,9 @@ params:
     default: "True"
   clickhouse.encoding:
     choices:
-    - ""
-    - deflate
-    - gzip
+      - ""
+      - deflate
+      - gzip
   clickhouse.request_timeout:
     default: "3600"
   clickhouse.ro_addresses: {}
@@ -333,10 +333,10 @@ params:
     default: "60"
   etl.compression:
     choices:
-    - bz2
-    - gzip
-    - lzma
-    - plain
+      - bz2
+      - gzip
+      - lzma
+      - plain
     default: gzip
   features.consul_healthchecks:
     default: "True"
@@ -463,11 +463,11 @@ params:
   kafka.bootstrap_servers: {}
   kafka.compression_type:
     choices:
-    - gzip
-    - lz4
-    - none
-    - snappy
-    - zstd
+      - gzip
+      - lz4
+      - none
+      - snappy
+      - zstd
     default: lz4
   kafka.max_batch_size:
     default: "16384"
@@ -478,27 +478,27 @@ params:
     default: "3"
   kafka.sasl_mechanism:
     choices:
-    - GSSAPI
-    - PLAIN
-    - SCRAM-SHA-256
-    - SCRAM-SHA-512
+      - GSSAPI
+      - PLAIN
+      - SCRAM-SHA-256
+      - SCRAM-SHA-512
     default: PLAIN
   kafka.security_protocol:
     choices:
-    - PLAINTEXT
-    - SASL_PLAINTEXT
-    - SASL_SSL
-    - SSL
+      - PLAINTEXT
+      - SASL_PLAINTEXT
+      - SASL_SSL
+      - SSL
     default: PLAINTEXT
   kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
-    - gzip
-    - lz4
-    - none
-    - snappy
-    - zstd
+      - gzip
+      - lz4
+      - none
+      - snappy
+      - zstd
     default: none
   kafkasender.max_batch_size:
     default: "16384"
@@ -507,17 +507,17 @@ params:
   kafkasender.password: {}
   kafkasender.sasl_mechanism:
     choices:
-    - GSSAPI
-    - PLAIN
-    - SCRAM-SHA-256
-    - SCRAM-SHA-512
+      - GSSAPI
+      - PLAIN
+      - SCRAM-SHA-256
+      - SCRAM-SHA-512
     default: PLAIN
   kafkasender.security_protocol:
     choices:
-    - PLAINTEXT
-    - SASL_PLAINTEXT
-    - SASL_SSL
-    - SSL
+      - PLAINTEXT
+      - SASL_PLAINTEXT
+      - SASL_SSL
+      - SSL
     default: PLAINTEXT
   kafkasender.username: {}
   language:
@@ -549,9 +549,9 @@ params:
   liftbridge.addresses: {}
   liftbridge.compression_method:
     choices:
-    - ""
-    - lzma
-    - zlib
+      - ""
+      - lzma
+      - zlib
     default: zlib
   liftbridge.compression_threshold:
     default: "524288"
@@ -568,9 +568,9 @@ params:
     default: "604800"
   login.jwt_algorithm:
     choices:
-    - HS256
-    - HS384
-    - HS512
+      - HS256
+      - HS384
+      - HS512
     default: HS256
   login.jwt_cookie_name:
     default: noc_jwt
@@ -728,10 +728,6 @@ params:
   msgstream.submit.segment_max_age:
     default: "3600"
   msgstream.submit.segment_max_bytes: {}
-  nbi.max_threads:
-    default: "10"
-  nbi.objectmetrics_max_interval:
-    default: "10800"
   network_scan.purgatorium_ttl:
     default: "2419200"
   path.backup_dir:
@@ -999,6 +995,8 @@ params:
   web.api_row_limit: {}
   web.api_unlimited_row_limit:
     default: "1000"
+  web.alarmheat_tooltip_limit:
+    default: "5"
   web.enable_remote_system_last_extract_info: {}
   web.enable_report_history: {}
   web.events_windows:
@@ -1030,10 +1028,12 @@ params:
     default: "16777216"
   web.metric_request_interval:
     default: "3600"
+  web.objectmetrics_max_interval:
+    default: "10800"
   web.report_csv_delimiter:
     choices:
-    - ","
-    - ;
+      - ","
+      - ;
     default: ;
   web.theme:
     default: gray

@@ -1,17 +1,11 @@
-# [nbi] section
+# [nbi] section (deprecated)
 
-[Nbi](../services-reference/nbi.md) service configuration
+The `nbi` configuration prefix is deprecated. These values are rewritten to
+the corresponding `web` settings and will be removed in NOC 27. The rewrite
+also applies to `NOC_NBI_*` environment variables, which should be renamed to
+`NOC_WEB_*`.
 
-## max_threads
-
-NBI process' threadpool size. Roughly - amount of concurrent
-requests can be served by single `nbi<services-nbi>` instance.
-
-{{ config_param("nbi.max_threads") }}
-
-## objectmetrics_max_interval
-
-Maximal time span (in seconds) which can be requested via
-`NBI objectmetrics API<api-nbi-objectmetrics>`.
-
-{{ config_param("nbi.objectmetrics_max_interval") }}
+| Deprecated setting | Replacement |
+| --- | --- |
+| `nbi.max_threads` | [`web.max_threads`](web.md#max_threads) |
+| `nbi.objectmetrics_max_interval` | [`web.objectmetrics_max_interval`](web.md#objectmetrics_max_interval) |

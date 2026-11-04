@@ -58,8 +58,9 @@ Prefix field should be in a IP/net way.
 
 ![Edit API ACL](edit_api_acl.png)
 
-Also there is an opportunity to allow requests to API only from whitelist IPs.
-You can find this option in Tower, in `nbi`/`datastream` service respectively.
+Also there is an opportunity to allow DataStream API requests only from
+whitelisted IPs. You can find this option in the `datastream` service settings
+in Tower.
 
 ## Best Practices
 

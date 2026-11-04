@@ -621,10 +621,6 @@ class Config(BaseConfig):
 
     node = socket.gethostname()
 
-    class nbi(ConfigSection):
-        max_threads = IntParameter(default=10)
-        objectmetrics_max_interval = SecondsParameter(default="3h")
-
     class network_scan(ConfigSection):
         purgatorium_ttl = SecondsParameter(default="4w")
 
@@ -944,6 +940,7 @@ class Config(BaseConfig):
         enable_report_history = BooleanParameter(
             default=False, help="Enable Save Report Execution history"
         )
+        objectmetrics_max_interval = SecondsParameter(default="3h")
 
     class datasource(ConfigSection):
         chunk_size = IntParameter(default=1000)
@@ -1458,6 +1455,7 @@ config = Config(
             deprecation=RemovedInNOC27Warning,
         ),
         PrefixRewrite("ui", "web", deprecation=RemovedInNOC27Warning),
+        PrefixRewrite("nbi", "web", deprecation=RemovedInNOC27Warning),
         PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",
