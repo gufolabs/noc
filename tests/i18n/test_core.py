@@ -33,9 +33,7 @@ def write_yaml_catalog(base: Path, language: str, contents: str) -> Path:
     return path
 
 
-def test_catalog_uses_default_location(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_catalog_uses_default_location(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """The default catalog location is noc_base/i18n."""
     base = tmp_path / "project"
     write_json_catalog(base / "i18n", "en", {"hello": "Hello"})
