@@ -2,125 +2,72 @@ app-group-aaa: AAA
 app-group-bi: BI
 app-group-cm: Gerência de Configuração
 app-group-crm: CRM
-app-group-dev: Development
 app-group-dns: DNS
 app-group-fm: Gerência de Falhas
-app-group-gis: GIS
 app-group-inv: Inventário
 app-group-ip: IPAM
 app-group-kb: Base de Conhecimento
 app-group-main: Principal
 app-group-maintenance: Manutenção
 app-group-peer: Gerência de BGP
-app-group-phone: Phone
 app-group-pm: Gerência de Performance
 app-group-project: Gerência de Projeto
-app-group-reports: Reports
 app-group-sa: Ativação de Serviço
 app-group-setup: Configurar
 app-group-sla: SLA
 app-group-support: Suporte
 app-group-vc: Gerência de VC
-app-group-wf: Workflow
 app-title-account: Conta
 app-title-action: Ação
 app-title-actioncommands: Comando de Ação
 app-title-address: IP
-app-title-addressprofile: Address Profile
 app-title-addressrange: Intervalos de IP
 app-title-administrativedomain: Domínios Administrativos
-app-title-agent: Agent
-app-title-agentprofile: Agent Profile
 app-title-alarm: Alerta
 app-title-alarmclass: Classe de Alerta
 app-title-alarmclassconfig: Configuração de Classe de Alerta
-app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
 app-title-alarmescalation: Escalação de Alerta
-app-title-alarmrule: Alarm Rules
 app-title-alarmseverity: Criticidade de Alerta
 app-title-alarmtrigger: Gatilhos de Alerta
-app-title-allocationgroup: AllocationGroup
-app-title-apikey: API Key
 app-title-as: AS
-app-title-asprofile: AS Profile
 app-title-asset: Conjuntos de AS
 app-title-audittrail: Trilha de Auditoria
-app-title-authldapdomain: LDAP Domain
 app-title-authprofile: Perfil de Autenticação
 app-title-building: Prédio
 app-title-calculator: Calculadores
 app-title-capability: Capacidade
-app-title-capsprofile: Caps Profile
-app-title-card: Cards
-app-title-channel: Channels
-app-title-chpolicy: CHPolicy
 app-title-classificationrule: Regra de Classificação
 app-title-commandsnippet: Comando Snippet
 app-title-community: Comunidades
 app-title-communitytype: Tipos de Comunidade
-app-title-confdbquery: ConfDBQuery
-app-title-configurationparam: Configuration Param
-app-title-configurationscope: Configuration Scope
-app-title-configuredmap: Configured Map
 app-title-connectionrule: Regras de Conexão
 app-title-connectiontype: Tipos de Conexão
 app-title-coverage: Cobertura
-app-title-cpe: CPEs
-app-title-cpeprofile: CPE Profile
-app-title-crashinfo: Crashinfo
-app-title-credentialcheckrule: Credential Check Rule
-app-title-crontab: CronTab
 app-title-csv: Exportar/Importar de CSV
 app-title-customfield: Campos Personalizados
 app-title-customfieldenumgroup: Grupos Enumeráveis
-app-title-dashboard: Dashboard
-app-title-dashboardlayout: Dashboard Layout
-app-title-datastreamconfig: DataStream Config
 app-title-ddash: Dashboard Dinâmico
-app-title-dialplan: DialPlan
-app-title-discoveredobject: Discovered Object
 app-title-division: Divisão
 app-title-dnsserver: Servidor de DNS
 app-title-dnszone: Zona de DNS
 app-title-dnszoneprofile: Perfis de Zona
-app-title-endpoint: Endpoint
-app-title-escalationprofile: Escalation Profile
 app-title-event: Eventos
 app-title-eventclass: Classe de Evento
 app-title-eventtrigger: Gatilhos de Evento
-app-title-extstorage: Ext. Storage
-app-title-facade: Facades
-app-title-firmware: Firmware
 app-title-firmwarepolicy: Política de Firmware
 app-title-getnow: Buscar Agora
-app-title-glyph: Glyph
 app-title-group: Grupos
 app-title-groupaccess: Permissão de Grupo
-app-title-handler: Handler
 app-title-heatmap: Mapa de Calor
-app-title-home: Home
-app-title-ifdescpatterns: IfDesc Patterns
 app-title-ignoreeventrule: Ignorar Regras de Evento
 app-title-ignorepattern: Ignorar Padrões
-app-title-imagestore: Images
-app-title-interface: Interfaces
 app-title-interfaceprofile: Perfil de Interface
-app-title-interfacevalidationpolicy: Interface Validation Policy
 app-title-inv: Inventário
-app-title-inv-reportdiscoveryproblem: Discovery Topology Problems
 app-title-inv-reportobjectsummary: Resumo de Inventário Objeto
-app-title-ipam: Assigned Addresses
-app-title-job: Jobs
 app-title-jsonimport: Importar JSON
 app-title-kb: Base de Conhecimento
-app-title-kbentry: Entries
-app-title-kbentrytemplate: Templates
-app-title-l2domain: L2 Domain
-app-title-l2domainprofile: L2Domain Profile
-app-title-label: Label
 app-title-language: Idiomas
 app-title-layer: Camadas
-app-title-macblacklist: MAC Blacklist
 app-title-macdb: Banco de Dados de MAC
 app-title-maintainer: Mantenedores
 app-title-maintenance: Manutenção
@@ -128,62 +75,30 @@ app-title-maintenancetype: Tipo de Manutenção
 app-title-managedobject: Objetos Gerenciados
 app-title-managedobjectprofile: Perfil de Objeto Gerenciado
 app-title-map: Topologia de Rede
-app-title-measurementunits: MeasurementUnits
-app-title-messageroute: Message Route
-app-title-metricaction: Metric Action
-app-title-metricrule: Metric Rule
-app-title-metricscope: MetricScope
-app-title-metricstream: MetricStream
 app-title-metrictype: Tipo de Métrica
 app-title-mib: MIB
 app-title-mibpreference: Preferência de MIB
 app-title-mimetype: Tipos de MIME
 app-title-modelinterface: Modelo de Interface
 app-title-modelmapping: Modelo de Mapeamento
-app-title-modelprotectionprofile: ModelProtection Profile
-app-title-modeltemplate: Model Template
-app-title-monitor: Monitor
-app-title-monmap: Monmap
 app-title-networksegment: Segmento de Rede
-app-title-networksegmentprofile: Network Segment Profile
 app-title-notificationgroup: Grupo de Notificação
-app-title-numbercategory: Number Category
-app-title-objectconfigurationrule: Configuration Rules
-app-title-objectdiagnosticconfig: Object Diagnostic Config
-app-title-objectdiscoveryrule: Object Discovered Rules
 app-title-objectmodel: Modelos de Objeto
 app-title-objectnotification: Notificação de Objeto
 app-title-objectnotify: Notificações de Objeto
-app-title-objectvalidationpolicy: Object Validation Policy
 app-title-oidalias: Rótulo de OID
 app-title-organisation: Organizações
 app-title-outage: Interrupções
-app-title-peer: Peers
 app-title-peergroup: Grupos de Peers
-app-title-peeringpoint: Peering Points
-app-title-peerprofile: Peer Profile
 app-title-person: Pessoas/Papéis
-app-title-phonenumber: Phone Number
-app-title-phonenumberprofile: Number Profile
-app-title-phonerange: Phone Range
-app-title-phonerangeprofile: Phone Range Profile
 app-title-platform: Plataforma
-app-title-pool: Pool
 app-title-prefix: Prefixo
 app-title-prefixaccess: Permissão do Prefixo
 app-title-prefixlistbuilder: Construtor de Prefix List
-app-title-prefixprofile: Prefix Profile
 app-title-prefixtable: Tabela de Prefixo
 app-title-profile: Perfil
 app-title-profilecheckrule: Regra de Verificação de Perfil
 app-title-project: Projeto
-app-title-protocol: Protocol
-app-title-pyrule: PyRule
-app-title-quiz: Quiz
-app-title-reactionrule: Reaction Rules
-app-title-remotesystem: Remote System
-app-title-reportaddressfilter: Filter Address
-app-title-reportalarmcomments: Alarm Comments Detail
 app-title-reportalarmdetail: Detalhamento de Alerta
 app-title-reportallocated: Blocos Alocados
 app-title-reportavailability: Disponibilidade
@@ -191,67 +106,33 @@ app-title-reportclassificationquality: Qualidade de Classificação
 app-title-reportclassificationrule: Regras de Classificação
 app-title-reportcompare: Comparar Especificações
 app-title-reportcone: Análise de Cone
-app-title-reportconfig: Report Configs
 app-title-reportdbsummary: Resumo de banco de dados
 app-title-reportdiscovery: Resumo de Descoberta
-app-title-reportdiscoverycaps: Discovery Object Caps
-app-title-reportdiscoverypoison: Discovery ID cache poison
 app-title-reportduplicatedfqdns: FQDNs Duplicados
 app-title-reportescalations: Escalações
-app-title-reportexpanded: All Allocated Blocks
 app-title-reportexpiringdomains: Domínios Expirando
-app-title-reportfilter: Filter
 app-title-reportfree: Blocos Livres
 app-title-reporthierarchy: Hierarquias de Eventos e de Alertas
-app-title-reporthistory: History
-app-title-reportifacestatus: Interface Status
-app-title-reportipamsummary: IPAM Summary
-app-title-reportipusage: IP Usage
 app-title-reportlatestchanges: Últimas Modificações
-app-title-reportlinkdetail: Link Detail
 app-title-reportlocalrules: Regras de Classificação Local (JSON)
-app-title-reportmaxmetrics: Load Metrics max
-app-title-reportmetrics: Load Metrics
 app-title-reportmibs: MIBs Instaladas
 app-title-reportmissedmibs: MIBs Não Instaladas
 app-title-reportmissedp2p: Endereços de Links Perdidos
 app-title-reportmissedreverse: Zonas Reversas Perdidas
-app-title-reportmovedmac: Moved MACs
 app-title-reportnszonesummary: Resumo de Zona de NS
-app-title-reportobjectdetail: Object Detail
-app-title-reportobjectsserial: Managed Object Serial Number
 app-title-reportoutages: Interrupções
 app-title-reportoverlappedoids: OIDs de MIBs Sobrepostos
-app-title-reportoverview: Overview
-app-title-reportpartnumbers: Part Numbers
-app-title-reportpendinglinks: Pending Links
-app-title-reportreboots: Reboots
 app-title-reportrulesbyprofile: Regras por Perfil
 app-title-reportrulesetsummary: 'Resumo de Conjunto de Regras '
 app-title-reportstalediscovery: Descoberta Stale
-app-title-reportsubscription: Report Subscription
-app-title-reportsummary: Block Summary
 app-title-reporttaggedmodels: Modelos com tag
-app-title-reportttsystemstat: TT system statistics
 app-title-reportunknownsummary: Resumo de Modelos Desconhecidos
-app-title-reportvpnstatus: VPN Status
-app-title-resourcegroup: ResourceGroup
-app-title-resourcepool: ResourcePool
 app-title-resourcestate: Estados de Recurso
 app-title-rir: RIR
 app-title-runcommands: Rodar Comandos
-app-title-sa-reportdiscoveryproblem: Discovery Problem
 app-title-sa-reportobjectsummary: Resumo de Objetos Gerenciados
-app-title-scale: Scale
 app-title-search: Busca
-app-title-sensor: Sensor
-app-title-sensorprofile: SensorProfile
-app-title-service: Services
 app-title-serviceprofile: Perfil de Serviço
-app-title-slaprobe: SLA Probe
-app-title-slaprofile: SLA Profile
-app-title-spec: Spec
-app-title-state: States
 app-title-street: Rua
 app-title-style: Estilo
 app-title-subscriber: Assinante
@@ -260,13 +141,10 @@ app-title-supplier: Fornecedor
 app-title-supplierprofile: Perfil de Fornecedor
 app-title-systemnotification: Notificações de Sistema
 app-title-systemtemplate: Templates de Sistema
-app-title-techdomain: Tech Domain
 app-title-technology: Tecnologia
-app-title-template: Templates
 app-title-timepattern: Padrão de Tempo
 app-title-tools: Ferramentas
 app-title-totaloutage: Total de Interrupções
-app-title-transition: Transitions
 app-title-ttsystem: Sistema de TT
 app-title-unknownmodel: Modelos Desconhecidos
 app-title-user: Usuários
@@ -274,107 +152,54 @@ app-title-useraccess: Permissão de Usuário
 app-title-userprofile: Perfil de Usuário
 app-title-vendor: Fabricante
 app-title-vlan: VLAN
-app-title-vlanfilter: VLAN Filter
-app-title-vlanprofile: VLAN Profile
-app-title-vlantemplate: VLAN Template
 app-title-vpn: VPN
-app-title-vpnprofile: VPN Profiles
 app-title-vrf: VRF
 app-title-vrfgroup: Grupos de VRF
-app-title-wfmigration: WF Migration
-app-title-workflow: Workflows
 nav-account: Conta
 nav-action: Ações
 nav-actioncommands: Comandos de Ação
-nav-addressprofile: Address Profiles
 nav-addressrange: Intervalos de IP
 nav-administrativedomain: Domínios Administrativos
-nav-agent: Agent
-nav-agentprofile: Agent Profiles
 nav-alarm: Alertas
 nav-alarmclass: Classes de Alerta
 nav-alarmclassconfig: Configuração de Classe de Alerta
-nav-alarmdiagnosticconfig: Alarm Diagnostic
 nav-alarmescalation: Escalação de Alerta
-nav-alarmrule: Alarm Rules
 nav-alarmseverity: Criticidades de Alerta
 nav-alarmtrigger: Gatilhos de Alerta
-nav-allocationgroup: Allocation Groups
-nav-apikey: API Keys
-nav-as: ASes
-nav-asprofile: AS Profiles
 nav-asset: Conjuntos de AS
 nav-audittrail: Trilha de Auditoria
-nav-authldapdomain: LDAP Domains
 nav-authprofile: Perfis de Autenticação
 nav-building: Prédios
 nav-capability: Capacidades
-nav-capsprofile: Caps Profiles
-nav-card: Cards
-nav-channel: Channels
-nav-chpolicy: CH Policies
 nav-classificationrule: Regras de Classificação
 nav-commandsnippet: Comando Snippet
 nav-community: Comunidades
 nav-communitytype: Tipos de Comunidade
-nav-confdbquery: ConfDB Queries
-nav-configurationparam: Configuration Params
-nav-configurationscope: Configuration Scope
-nav-configuredmap: Configured Maps
 nav-connectionrule: Regras de Conexão
 nav-connectiontype: Tipos de Conexão
 nav-coverage: Cobertura
-nav-cpe: CPEs
-nav-cpeprofile: CPE Profiles
-nav-crashinfo: Crashinfo
-nav-credentialcheckrule: Credential Check Rules
-nav-crontab: CronTabs
 nav-customfield: Campos Personalizados
 nav-customfieldenumgroup: Grupos Enumeráveis
-nav-dashboard: Dashboard
-nav-dashboardlayout: Dashboard Layout
-nav-datastreamconfig: DataStream Config
-nav-dialplan: DialPlan
-nav-discoveredobject: Discovered Object
 nav-division: Divisões
 nav-dnsserver: Servidores de DNS
 nav-dnszone: Zonas
 nav-dnszoneprofile: Perfis de Zona
-nav-endpoint: Endpoints
-nav-escalationprofile: Escalation Profile
 nav-event: Eventos
 nav-eventclass: Classes de Evento
 nav-eventtrigger: Gatilhos de Evento
-nav-extstorage: Ext. Storages
-nav-facade: Facades
-nav-firmware: Firmware
 nav-firmwarepolicy: Política de Firmware
 nav-getnow: Buscar Agora
-nav-glyph: Glyphs
 nav-group: Grupos
 nav-groupaccess: Permissão de Grupo
-nav-handler: Handlers
 nav-heatmap: Mapa de Calor
-nav-ifdescpatterns: IfDesc Patterns
 nav-ignoreeventrule: Ignorar Regras de Evento
 nav-ignorepattern: Ignorar Padrões
-nav-imagestore: Images
-nav-interface: Interfaces
 nav-interfaceprofile: Perfis de Interface
-nav-interfacevalidationpolicy: Interface Validation Policies
 nav-inv: Inventário
-nav-ipam: Assigned Addresses
-nav-job: Jobs
 nav-jsonimport: Importar JSON
 nav-kb: Base de Conhecimento
-nav-kbentry: Entries
-nav-kbentrytemplate: Templates
-nav-l2domain: L2 Domain
-nav-l2domainprofile: L2Domain Profiles
-nav-label: Labels
 nav-language: Idiomas
 nav-layer: Camadas
-nav-macblacklist: MAC Blacklist
 nav-macdb: Banco de Dados de MAC
 nav-maintainer: Mantenedores
 nav-maintenance: Manutenção
@@ -382,84 +207,31 @@ nav-maintenancetype: Tipos de Manutenção
 nav-managedobject: Objetos Gerenciados
 nav-managedobjectprofile: Perfis de Objeto Gerenciado
 nav-map: Topologia de Rede
-nav-measurementunits: Measurement Units
-nav-messageroute: Message Routes
-nav-metricaction: Metric Actions
-nav-metricrule: Metric Rules
-nav-metricscope: Metric Scopes
-nav-metricstream: Metric Stream
 nav-metrictype: Tipos de Métrica
 nav-mib: MIB
 nav-mibpreference: Preferência de MIB
 nav-mimetype: Tipos de MIME
 nav-modelinterface: Modelos de Interface
 nav-modelmapping: Modelo de Mapeamento
-nav-modelprotectionprofile: ModelProtection Profile
-nav-modeltemplate: Model Templates
-nav-monitor: Monitor
-nav-monmap: Monmap
 nav-networksegment: Segmentos de Rede
-nav-networksegmentprofile: Network Segment Profiles
 nav-notificationgroup: Grupos de Notificação
-nav-numbercategory: Number Categories
-nav-objectconfigurationrule: Configuration Rules
-nav-objectdiagnosticconfig: Object Diagnostic Configs
-nav-objectdiscoveryrule: Object Discovered Rules
 nav-objectmodel: Modelos de Objeto
 nav-objectnotification: Notificação de Objeto
 nav-objectnotify: Notificações de Objeto
-nav-objectvalidationpolicy: Object Validation Policies
 nav-oidalias: Rótulo de OID
 nav-organisation: Organizações
 nav-outage: Interrupções
-nav-peer: Peers
 nav-peergroup: Grupos de Peers
-nav-peeringpoint: Peering Points
-nav-peerprofile: Peer Profiles
 nav-person: Pessoas
-nav-phonenumber: Phone Number
-nav-phonenumberprofile: Number Profiles
-nav-phonerange: Phone Ranges
-nav-phonerangeprofile: Range Profile
-nav-platform: Platforms
-nav-pool: Pools
 nav-prefixaccess: Permissão do Prefixo
 nav-prefixlistbuilder: Construtor de Prefix List
-nav-prefixprofile: Prefix Profiles
 nav-prefixtable: Tabelas de Prefixos
-nav-profile: Profiles
 nav-profilecheckrule: Regras de Verificação de Perfil
 nav-project: Projetos
-nav-protocol: Protocols
-nav-pyrule: PyRule
-nav-quiz: Quiz
-nav-reactionrule: Reaction Rule
-nav-remotesystem: Remote Systems
-nav-reportalarmcomments: Alarm Comments
 nav-reportalarmdetail: Detalhamento de Alerta
-nav-reportconfig: Report Config
-nav-reportifacestatus: Interface Status
-nav-reportlinkdetail: Link Detail
-nav-reportmaxmetrics: Load Metrics max
-nav-reportmetrics: Load Metrics
-nav-reportmovedmac: Moved MACs
-nav-reportobjectdetail: Object Detail
-nav-reportsubscription: Report Subscription
-nav-resourcegroup: Resource Groups
-nav-resourcepool: Resource Pool
 nav-resourcestate: Estados de Recurso
-nav-rir: RIRs
-nav-runcommands: Run Commands (On Group Edit option)
-nav-scale: Scale
 nav-search: Busca
-nav-sensor: Sensor
-nav-sensorprofile: Sensor Profiles
-nav-service: Services
 nav-serviceprofile: Perfis de Serviço
-nav-slaprobe: SLA Probes
-nav-slaprofile: SLA Profiles
-nav-spec: Specs
-nav-state: States
 nav-street: Ruas
 nav-style: Estilos
 nav-subscriber: Assinantes
@@ -468,24 +240,15 @@ nav-supplier: Fornecedor
 nav-supplierprofile: Perfis de Fornecedor
 nav-systemnotification: Notificações de Sistema
 nav-systemtemplate: Templates de Sistema
-nav-techdomain: Tech Domains
 nav-technology: Tecnologias
-nav-template: Templates
 nav-timepattern: Padrões de Tempo
 nav-totaloutage: Total de Interrupções
-nav-transition: Transitions
 nav-ttsystem: Sistema de TT
 nav-unknownmodel: Modelos Desconhecidos
 nav-user: Usuários
 nav-useraccess: Permissão de Usuário
 nav-vendor: Fabricantes
 nav-vlan: VLAN
-nav-vlanfilter: VLAN Filters
-nav-vlanprofile: VLAN Profiles
-nav-vlantemplate: VLAN Templates
 nav-vpn: VPN
-nav-vpnprofile: VPN Profiles
 nav-vrf: VRF
 nav-vrfgroup: Grupos de VRF
-nav-wfmigration: Migrations
-nav-workflow: Workflow

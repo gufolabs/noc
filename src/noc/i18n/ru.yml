@@ -26,39 +26,27 @@ app-title-account: Учетная запись
 app-title-action: Действие
 app-title-actioncommands: Действия через команду
 app-title-address: Адрес
-app-title-addressprofile: Address Profile
 app-title-addressrange: Диапазоны адресов
 app-title-administrativedomain: Зоны ответственности
 app-title-agent: Агент
-app-title-agentprofile: Agent Profile
 app-title-alarm: Авария
 app-title-alarmclass: Класс аварии
 app-title-alarmclassconfig: Настройки класса аварий
-app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
 app-title-alarmescalation: Эскалация
 app-title-alarmrule: Правила для авария
 app-title-alarmseverity: Серьезность
 app-title-alarmtrigger: Триггеры аварии
-app-title-allocationgroup: AllocationGroup
-app-title-apikey: API Key
 app-title-as: AS
-app-title-asprofile: AS Profile
 app-title-asset: Наборы AS
 app-title-audittrail: Аудит событий
-app-title-authldapdomain: LDAP Domain
 app-title-authprofile: Профиль авторизации
 app-title-building: Здание
 app-title-calculator: Калькуляторы
 app-title-capability: Свойство
-app-title-capsprofile: Caps Profile
 app-title-card: Карточки
 app-title-channel: Каналы
-app-title-chpolicy: CHPolicy
 app-title-classificationrule: Правило классификации
 app-title-commandsnippet: Сниппеты
-app-title-community: Communities
-app-title-communitytype: Community Types
-app-title-confdbquery: ConfDBQuery
 app-title-configurationparam: Параметр конфигуарации
 app-title-configurationscope: Область конфигурации
 app-title-configuredmap: Пользовательская карта
@@ -69,12 +57,9 @@ app-title-cpe: CPE
 app-title-cpeprofile: Профиль CPE
 app-title-crashinfo: Дампы
 app-title-credentialcheckrule: Правило проверки доступа
-app-title-crontab: CronTab
 app-title-csv: Импорт/экспорт CSV
 app-title-customfield: Свои поля
-app-title-customfieldenumgroup: Enum Groups
 app-title-dashboard: График
-app-title-dashboardlayout: Dashboard Layout
 app-title-datastreamconfig: Пользовательские DataStream
 app-title-ddash: Динамический экран
 app-title-dialplan: Номерной план
@@ -83,8 +68,6 @@ app-title-division: Подразделение
 app-title-dnsserver: Сервер DNS
 app-title-dnszone: Зона DNS
 app-title-dnszoneprofile: Профили зон
-app-title-endpoint: Endpoint
-app-title-escalationprofile: Escalation Profile
 app-title-event: События
 app-title-eventclass: Класс событий
 app-title-eventtrigger: Триггеры событий
@@ -93,10 +76,8 @@ app-title-facade: Фасады
 app-title-firmware: Прошивки
 app-title-firmwarepolicy: Политика версий прошивок
 app-title-getnow: Текущая информация
-app-title-glyph: Glyph
 app-title-group: Группы
 app-title-groupaccess: Права групп
-app-title-handler: Handler
 app-title-heatmap: Тепловая карта
 app-title-home: Главная
 app-title-ifdescpatterns: Маски для описания интерфейсов
@@ -105,7 +86,6 @@ app-title-ignorepattern: Шаблоны игнорирования
 app-title-imagestore: Изображения
 app-title-interface: Интерфейсы
 app-title-interfaceprofile: Профиль интерфейса
-app-title-interfacevalidationpolicy: Interface Validation Policy
 app-title-inv: Учет объектов
 app-title-inv-reportdiscoveryproblem: Отчёт по проблемам топологии
 app-title-inv-reportobjectsummary: Сводка по инвентаризации объектов
@@ -116,24 +96,18 @@ app-title-kb: База знаний
 app-title-kbentry: Записи
 app-title-kbentrytemplate: Шаблоны
 app-title-l2domain: Домен L2
-app-title-l2domainprofile: L2Domain Profile
 app-title-label: Метка
 app-title-language: Языки
 app-title-layer: Слои
 app-title-macblacklist: Чёрный список MACов
-app-title-macdb: MacDB
 app-title-maintainer: Ответственный
 app-title-maintenance: РНР
 app-title-maintenancetype: Тип РНР
 app-title-managedobject: Список объектов
 app-title-managedobjectprofile: Профиль объекта
 app-title-map: Карта сети
-app-title-measurementunits: MeasurementUnits
-app-title-messageroute: Message Route
 app-title-metricaction: Действия с метриками
 app-title-metricrule: Правило для метрик
-app-title-metricscope: MetricScope
-app-title-metricstream: MetricStream
 app-title-metrictype: Тип метрик
 app-title-mib: MIB
 app-title-mibpreference: Приоритет MIB
@@ -141,32 +115,23 @@ app-title-mimetype: Типы MIME
 app-title-modelinterface: Интерфейс модели
 app-title-modelmapping: Привязки моделей
 app-title-modelprotectionprofile: Профили защиты форм
-app-title-modeltemplate: Model Template
 app-title-monitor: Монитор опроса
 app-title-monmap: Карта объектов
 app-title-networksegment: Сегмент сети
-app-title-networksegmentprofile: Network Segment Profile
 app-title-notificationgroup: Группа уведомлений
-app-title-numbercategory: Number Category
 app-title-objectconfigurationrule: Правила конфигурации
-app-title-objectdiagnosticconfig: Object Diagnostic Config
 app-title-objectdiscoveryrule: Правила сканирования сети
 app-title-objectmodel: Модели объектов
 app-title-objectnotification: Уведомления
 app-title-objectnotify: Уведомления по объектам
-app-title-objectvalidationpolicy: Object Validation Policy
 app-title-oidalias: Синонимы (alias) OID
 app-title-organisation: Организации
 app-title-outage: Обстановка детально
 app-title-peer: Пиры
 app-title-peergroup: Группы пиров
-app-title-peeringpoint: Peering Points
 app-title-peerprofile: Профиль Пиров
-app-title-person: Persons/Roles
 app-title-phonenumber: Телефонный номер
-app-title-phonenumberprofile: Number Profile
 app-title-phonerange: Диапазон номеров
-app-title-phonerangeprofile: Phone Range Profile
 app-title-platform: Платформа
 app-title-pool: Пул
 app-title-prefix: Префикс
@@ -178,11 +143,7 @@ app-title-profile: Профиль
 app-title-profilecheckrule: Правило проверки профиля
 app-title-project: Проект
 app-title-protocol: Протокол
-app-title-pyrule: PyRule
 app-title-quiz: Анкеты
-app-title-reactionrule: Reaction Rules
-app-title-remotesystem: Remote System
-app-title-reportaddressfilter: Filter Address
 app-title-reportalarmcomments: Детали комментариев по авариям
 app-title-reportalarmdetail: Детали аварии
 app-title-reportallocated: Выделенные блоки
@@ -191,14 +152,12 @@ app-title-reportclassificationquality: Качество классификаци
 app-title-reportclassificationrule: Правила классификации
 app-title-reportcompare: Сравнить спецификации
 app-title-reportcone: Анализ конуса
-app-title-reportconfig: Report Configs
 app-title-reportdbsummary: Статус БД
 app-title-reportdiscovery: Сводка опроса
 app-title-reportdiscoverycaps: Опрошенные свойства оборудования
 app-title-reportdiscoverypoison: Дубликаты в кэше Идентификаторов
 app-title-reportduplicatedfqdns: Дубликаты FQDN
 app-title-reportescalations: Эскалации
-app-title-reportexpanded: All Allocated Blocks
 app-title-reportexpiringdomains: Просроченные домены
 app-title-reportfilter: Фильтр
 app-title-reportfree: Свободные блоки
@@ -222,7 +181,6 @@ app-title-reportobjectdetail: Детализация по объектам
 app-title-reportobjectsserial: Серийные номера
 app-title-reportoutages: Обстановка детально
 app-title-reportoverlappedoids: Пересекающиеся OID
-app-title-reportoverview: Overview
 app-title-reportpartnumbers: Модель
 app-title-reportpendinglinks: Неподтверждённые линки
 app-title-reportreboots: Перезагрузки
@@ -230,13 +188,9 @@ app-title-reportrulesbyprofile: Правила по профилю
 app-title-reportrulesetsummary: Сводка по набору правил
 app-title-reportstalediscovery: Зависший опрос
 app-title-reportsubscription: Подписка на отчёты
-app-title-reportsummary: Block Summary
-app-title-reporttaggedmodels: Tagged Models
 app-title-reportttsystemstat: Статистика по эскалациям
 app-title-reportunknownsummary: Сводка по неизвестным моделям
 app-title-reportvpnstatus: Состояние VPN
-app-title-resourcegroup: ResourceGroup
-app-title-resourcepool: ResourcePool
 app-title-resourcestate: Состояния ресурсов
 app-title-rir: Региональный регистратор (RIR)
 app-title-runcommands: Запуск команд
@@ -245,12 +199,8 @@ app-title-sa-reportobjectsummary: Сводка по объектам
 app-title-scale: Множители (ед. изм.)
 app-title-search: Глобальный Поиск
 app-title-sensor: Сенсор
-app-title-sensorprofile: SensorProfile
 app-title-service: Сервисы
 app-title-serviceprofile: Профиль сервиса
-app-title-slaprobe: SLA Probe
-app-title-slaprofile: SLA Profile
-app-title-spec: Spec
 app-title-state: Состояния
 app-title-street: Улица
 app-title-style: Стиль
@@ -275,13 +225,9 @@ app-title-userprofile: Профиль пользователя
 app-title-vendor: Производитель
 app-title-vlan: VLAN
 app-title-vlanfilter: Фильтр VLAN
-app-title-vlanprofile: VLAN Profile
-app-title-vlantemplate: VLAN Template
 app-title-vpn: VPN
-app-title-vpnprofile: VPN Profiles
 app-title-vrf: VRF
 app-title-vrfgroup: Группы VRF
-app-title-wfmigration: WF Migration
 app-title-workflow: Редактор процессов
 nav-account: Учетная запись
 nav-action: Действия
@@ -299,9 +245,7 @@ nav-alarmescalation: Эскалация
 nav-alarmrule: Правила для авария
 nav-alarmseverity: Серьезность аварии
 nav-alarmtrigger: Триггеры аварии
-nav-allocationgroup: Allocation Groups
 nav-apikey: Ключи доступа к API
-nav-as: ASes
 nav-asprofile: Профили AS
 nav-asset: Наборы AS
 nav-audittrail: Аудит событий
@@ -315,8 +259,6 @@ nav-channel: Каналы
 nav-chpolicy: Политики устаревания данных CliсkHouse
 nav-classificationrule: Правила классификации
 nav-commandsnippet: Сниппеты
-nav-community: Communities
-nav-communitytype: Community Types
 nav-confdbquery: Запросы к ConfDB
 nav-configurationparam: Параметры конфигурации
 nav-configurationscope: Область конфигурации
@@ -330,9 +272,7 @@ nav-crashinfo: Дампы
 nav-credentialcheckrule: Правила проверки доступа
 nav-crontab: Планировщик
 nav-customfield: Свои поля
-nav-customfieldenumgroup: Enum Groups
 nav-dashboard: График
-nav-dashboardlayout: Dashboard Layout
 nav-datastreamconfig: Пользовательские DataStream
 nav-dialplan: Номерной план
 nav-discoveredobject: Обнаруженные устройства
@@ -341,7 +281,6 @@ nav-dnsserver: Сервера DNS
 nav-dnszone: Зоны
 nav-dnszoneprofile: Профили зон
 nav-endpoint: Точки подключения
-nav-escalationprofile: Escalation Profile
 nav-event: События
 nav-eventclass: Классы событий
 nav-eventtrigger: Триггеры событий
@@ -375,7 +314,6 @@ nav-label: Метки
 nav-language: Языки
 nav-layer: Слои
 nav-macblacklist: Чёрный список MACов
-nav-macdb: Mac DB
 nav-maintainer: Ответственный
 nav-maintenance: РНР
 nav-maintenancetype: Типы РНР
@@ -414,9 +352,7 @@ nav-organisation: Организации
 nav-outage: Обстановка детально
 nav-peer: Пиры
 nav-peergroup: Группы пиров
-nav-peeringpoint: Peering Points
 nav-peerprofile: Профили Пиров
-nav-person: Persons
 nav-phonenumber: Телефонный номер
 nav-phonenumberprofile: Профиль номера
 nav-phonerange: Диапазоны номеров
@@ -431,9 +367,7 @@ nav-profile: Профили
 nav-profilecheckrule: Правила проверки профиля
 nav-project: Проекты
 nav-protocol: Протоколы
-nav-pyrule: PyRule
 nav-quiz: Анкеты
-nav-reactionrule: Reaction Rule
 nav-remotesystem: Внешние системы
 nav-reportalarmcomments: Комментарии аварий
 nav-reportalarmdetail: Детали аварии
@@ -448,8 +382,6 @@ nav-reportsubscription: Подписка на отчёты
 nav-resourcegroup: Группы ресурсов
 nav-resourcepool: Пулы ресурсов
 nav-resourcestate: Состояния ресурсов
-nav-rir: RIRs
-nav-runcommands: Run Commands (On Group Edit option)
 nav-scale: Множители (ед. изм.)
 nav-search: Глобальный Поиск
 nav-sensor: Сенсор
@@ -484,7 +416,6 @@ nav-vlanfilter: Фильтры VLAN
 nav-vlanprofile: Профили VLAN
 nav-vlantemplate: Шаблоны VLAN
 nav-vpn: VPN
-nav-vpnprofile: VPN Profiles
 nav-vrf: VRF
 nav-vrfgroup: Группы VRF
 nav-wfmigration: Миграции
