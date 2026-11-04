@@ -57,7 +57,7 @@ params:
   bi.alarms_archive_batch_limit:
     default: "10000"
   bi.alarms_archive_policy:
-    default: '{{doc["clear_timestamp"].strftime("y%Yw%W")}}'
+    default: "{{doc[\"clear_timestamp\"].strftime(\"y%Yw%W\")}}"
   bi.chunk_size:
     default: "500"
   bi.clean_delay_alarms:
@@ -986,6 +986,8 @@ params:
     default: "True"
   watchdog.failed_count:
     default: "6"
+  web.alarmheat_tooltip_limit:
+    default: "5"
   web.api_alarm_comments_limit:
     default: "10"
   web.api_arch_alarm_limit:
