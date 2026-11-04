@@ -45,8 +45,8 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
     def get_total_items(self, user: User, transforms: list[Callable] | None = None) -> int:
         qs = self.queryset(user)
         if transforms:
-            for t in transforms:
-                qs = t(qs)
+            for tt in transforms:
+                qs = tt(qs)
         return qs.count()
 
     def get_summary_items(
@@ -62,8 +62,8 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
             )
         qs = self.queryset(user)
         if transforms:
-            for t in transforms:
-                qs = t(qs)
+            for tt in transforms:
+                qs = tt(qs)
         return [
             SummaryItem(id=str(r["_id"]), label=str(r["_id"]), count=int(r["count"]))
             for r in qs.aggregate([{"$group": {"_id": f"${field}", "count": {"$sum": 1}}}])
@@ -81,8 +81,8 @@ class DocumentResourceAPI[T: Document](BaseResourceAPI[T]):
         qs = self.queryset(user)
         # Then apply transformations passed by query
         if transforms:
-            for t in transforms:
-                qs = t(qs)
+            for tt in transforms:
+                qs = tt(qs)
         # Then apply sorting order
         qs = qs.order_by(*tuple(sort))
         # Finally, limit to selected frame
