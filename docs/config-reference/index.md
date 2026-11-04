@@ -68,11 +68,10 @@ where `<path>` is the YAML file absolute path.
 `yaml` source yields empty config if file is not found or not accessible.
 
 See configuration reference for possible configuration variable names.
-i.e. _web.language_ written in YAML as:
+i.e. _language_ written in YAML as:
 
 ```yaml
-web:
-  language: en
+language: en
 ```
 
 ### env

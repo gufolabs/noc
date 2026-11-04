@@ -10,10 +10,6 @@
 
 {{ config_param("login.session_ttl") }}
 
-## language
-
-{{ config_param("login.language") }}
-
 ## restrict_to_group
 
 {{ config_param("login.restrict_to_group") }}

@@ -34,10 +34,6 @@ Hostname.
 
 {{ config_param("language") }}
 
-## language_code
-
-{{ config_param("language_code") }}
-
 ## thread_stack_size
 
 {{ config_param("thread_stack_size") }}

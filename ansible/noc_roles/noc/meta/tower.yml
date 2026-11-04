@@ -39,6 +39,14 @@ forms:
       label: Noc group
       description: System group
       type: str
+    language:
+      default: "en"
+      label: "Translation language"
+      type: list
+      options:
+        - "en"
+        - "ru"
+        - "pt_BR"
     py3_ver:
       label: Python3 version
       default: "3.10"

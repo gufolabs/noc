@@ -857,7 +857,7 @@ NOC.uiStyles = function(style, theme){
 //
 NOC.openHelp = function(topic){
   var url, win;
-  url = `${NOC.settings.helpUrl}/${NOC.settings.helpBranch}/${NOC.settings.helpLanguage}/go.html#${topic}`;
+  url = `${NOC.settings.helpUrl}/${NOC.settings.helpBranch}/${NOC.settings.language}/go.html#${topic}`;
   win = window.open(url, "_blank");
   win.focus();
 };

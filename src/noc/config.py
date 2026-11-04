@@ -201,7 +201,6 @@ class Config(BaseConfig):
         traceroute_tries = IntParameter(default=3)
 
     class bi(ConfigSection):
-        language = StringParameter(default="en", help="Language BI interface")
         query_threads = IntParameter(default=10)
         extract_delay_alarms = SecondsParameter(default="1h")
         clean_delay_alarms = SecondsParameter(default="1d")
@@ -509,7 +508,6 @@ class Config(BaseConfig):
         )
 
     language = StringParameter(default="en")
-    language_code = StringParameter(default="en")
 
     class layout(ConfigSection):
         ring_ring_edge = IntParameter(default=150)
@@ -542,7 +540,6 @@ class Config(BaseConfig):
     class login(ConfigSection):
         methods = StringParameter(default="local")
         session_ttl = SecondsParameter(default="7d")
-        language = StringParameter(default="en")
         restrict_to_group = StringParameter(default="")
         single_session_group = StringParameter(default="")
         mutual_exclusive_group = StringParameter(default="")
@@ -919,7 +916,6 @@ class Config(BaseConfig):
             default=10, help="Max Alarm comment count on UI Popup"
         )
         max_upload_size = IntParameter(default=16777216)
-        language = StringParameter(default="en")
         alarmheat_tooltip_limit = IntParameter(default=5)
         metric_request_interval = SecondsParameter(default="1h")
         install_collection = BooleanParameter(default=False)
@@ -1088,7 +1084,6 @@ class Config(BaseConfig):
     class help(ConfigSection):
         base_url = StringParameter(default="https://docs.getnoc.com")
         branch = StringParameter(default="microservices")
-        language = StringParameter(default="en")
 
     class tests(ConfigSection):
         # List of pyfilesystem URLs holding intial data
@@ -1443,7 +1438,12 @@ config = Config(
     rewrites=[
         NameRewrite("listen", "api.listen", deprecation=RemovedInNOC27Warning),
         NameRewrite("log_format", "logging.format", deprecation=RemovedInNOC27Warning),
-        NameRewrite("card.language", "web.language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("card.language", "language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("bi.language", "language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("web.language", "language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("login.language", "language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("help.language", "language", deprecation=RemovedInNOC27Warning),
+        NameRewrite("language_code", "language", deprecation=RemovedInNOC27Warning),
         NameRewrite(
             "card.alarmheat_tooltip_limit",
             "web.alarmheat_tooltip_limit",

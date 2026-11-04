@@ -41,7 +41,7 @@ DATABASES = {
 ATOMIC_REQUESTS = False
 
 TIME_ZONE = str(config.timezone)
-LANGUAGE_CODE = config.language_code
+LANGUAGE_CODE = config.language
 # Set up date and time formats
 DATE_FORMAT = config.date_time_formats.date_format
 TIME_FORMAT = config.date_time_formats.time_format
