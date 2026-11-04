@@ -239,7 +239,7 @@ class BaseService:
         # NOC modules
         from noc.core.translation import set_translation, ugettext
 
-        set_translation(self.name, config.language)
+        set_translation(self.name, config.language.value)
         if self.use_jinja:
             # Third-party modules
             from jinja2.defaults import DEFAULT_NAMESPACE

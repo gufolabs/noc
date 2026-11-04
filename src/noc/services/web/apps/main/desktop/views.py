@@ -57,8 +57,8 @@ class DesktopApplication(ExtApplication):
         Get language for request
         """
         if not request.user:
-            return config.language
-        return request.user.preferred_language or config.language
+            return config.language.value
+        return request.user.preferred_language or config.language.value
 
     @api.get("/index.html", url_name="desktop", access=True)
     def view_desktop(self, request: HttpRequest):

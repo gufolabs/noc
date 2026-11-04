@@ -103,7 +103,7 @@ class User(NOCModel):
     )
     # Custom profile
     preferred_language = models.CharField(
-        max_length=16, null=True, blank=True, default=config.language, choices=LANGUAGES
+        max_length=16, null=True, blank=True, default=config.language.value, choices=LANGUAGES
     )
     # Heatmap position
     heatmap_lon = models.FloatField(
