@@ -94,7 +94,7 @@ class ChangeLog:
                             "node_id": node_id,
                             "node_type": node_type,
                             "slot": self.slot,
-                            "state": orjson.dumps(state).decode("utf-8"),
+                            "state": orjson.dumps(state).decode(),
                         }
                     ],
                     key=hash_int(node_id),

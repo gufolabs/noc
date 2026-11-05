@@ -54,7 +54,7 @@ class Migration(BaseMigration):
                 SQL_ADD,
                 [
                     f"{{{m_id}}}",
-                    orjson.dumps({"start": mai["start"], "stop": mai["stop"]}).decode("utf-8"),
+                    orjson.dumps({"start": mai["start"], "stop": mai["stop"]}).decode(),
                     ao["objects"],
                 ],
             )

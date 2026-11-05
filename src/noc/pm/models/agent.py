@@ -85,7 +85,7 @@ def gen_key() -> str:
     while True:
         # Generate key
         seed = secrets.token_bytes(20)
-        key = base64.b32encode(seed).decode("utf-8")
+        key = base64.b32encode(seed).decode()
         # Check for uniqueness
         if not Agent.objects.filter(key=key).first():
             return key

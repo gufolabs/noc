@@ -58,6 +58,6 @@ class Migration(BaseMigration):
                     m["interval"] = box_collected_metrics[mop_id]
             self.db.execute(
                 """UPDATE sa_managedobjectprofile SET metrics = %s::jsonb WHERE id = %s""",
-                [orjson.dumps(metrics).decode("utf-8"), mop_id],
+                [orjson.dumps(metrics).decode(), mop_id],
             )
         # Insert interval jobs

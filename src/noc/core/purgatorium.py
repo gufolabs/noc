@@ -220,7 +220,7 @@ def register(
     if labels:
         data["labels"] = list(labels)
     if checks:
-        data["checks"] = [orjson.dumps(c).decode("utf-8") for c in checks]
+        data["checks"] = [orjson.dumps(c).decode() for c in checks]
     if service_groups:
         data["service_groups"] = [int(rg) for rg in service_groups]
     if clients_groups:

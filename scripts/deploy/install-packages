@@ -38,7 +38,7 @@ class NPkg:
         f = urlopen(url)
         data = f.read()
         if hasattr(data, "decode"):
-            data = data.decode("utf-8")
+            data = data.decode()
         version = data.splitlines()[0]
         return version
 

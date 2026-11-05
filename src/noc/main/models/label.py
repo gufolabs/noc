@@ -1475,7 +1475,7 @@ class Label(Document):
                 r.append(
                     {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
                 )
-        params = [orjson.dumps(r).decode("utf-8"), *params]
+        params = [orjson.dumps(r).decode(), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
 
@@ -1524,7 +1524,7 @@ class Label(Document):
                 r.append(
                     {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
                 )
-        params = [orjson.dumps(r).decode("utf-8"), *params]
+        params = [orjson.dumps(r).decode(), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
             yield from cursor

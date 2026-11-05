@@ -115,7 +115,7 @@ class Card:
         Calculate persistent hash for metric key
         """
         d = hashlib.blake2b(str(k).encode("utf-8")).digest()
-        return codecs.encode(d, "base_64")[:7].decode("utf-8")
+        return codecs.encode(d, "base_64")[:7].decode()
 
     @classmethod
     def iter_subscribed_nodes(cls, node) -> Iterable[BaseCDAGNode]:

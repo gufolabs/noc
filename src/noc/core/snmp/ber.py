@@ -68,7 +68,7 @@ class BERDecoder:
                 pt += f" application {tag_class}"
             raise ValueError(
                 f"Cannot find BER decoder for {pt} class {tag} (0x{tag:X}): "
-                f"{codecs.encode(value, 'hex').decode('utf-8')}"
+                f"{codecs.encode(value, 'hex').decode()}"
             )
 
     def parse_eoc(self, msg):

@@ -137,7 +137,7 @@ class ReportEngine:
                     "user": str(user),
                     "successfully": successfully,
                     "canceled": canceled,
-                    "params": orjson.dumps(params).decode("utf-8"),
+                    "params": orjson.dumps(params).decode(),
                     "error": error_text or "",
                 }
             ],

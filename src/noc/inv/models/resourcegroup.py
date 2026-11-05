@@ -644,7 +644,7 @@ class ResourceGroup(Document):
             if tech.service_model != model_id:
                 continue
             r += [{"rg": str(rg_id), "ml": list(sl.labels)} for sl in dsl]
-        params = [orjson.dumps(r).decode("utf-8")]
+        params = [orjson.dumps(r).decode()]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
             yield from cursor
@@ -697,7 +697,7 @@ class ResourceGroup(Document):
             r += [{"rg": str(rg_id), "ml": list(sl.labels)} for sl in dsl]
         if not r:
             return
-        params = [orjson.dumps(r).decode("utf-8")]
+        params = [orjson.dumps(r).decode()]
         if table_filter:
             params += [v[1] for v in table_filter]
         # print("Group", SQL_SYNC, params)
@@ -705,7 +705,7 @@ class ResourceGroup(Document):
             # Update groups
             cursor.execute(SQL_SYNC, params)
             # Clean
-            cursor.execute(SQL_UNSYNC, [orjson.dumps(r).decode("utf-8")])
+            cursor.execute(SQL_UNSYNC, [orjson.dumps(r).decode()])
 
     @property
     def resource_count(self) -> int:

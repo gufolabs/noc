@@ -81,7 +81,7 @@ class Migration(BaseMigration):
                             "_id": mr_id,
                             "change_id": change_id,
                             "hash": hashlib.sha256(data).hexdigest()[:16],
-                            "data": data.decode("utf-8"),
+                            "data": data.decode(),
                         }
                     )
                 )
