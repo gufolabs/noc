@@ -237,6 +237,7 @@ class BaseService:
 
     def setup_translation(self) -> None:
         # NOC modules
+        from noc.core.i18n import t
         from noc.core.translation import set_translation, ugettext
 
         set_translation(self.name, config.language.value)
@@ -246,6 +247,8 @@ class BaseService:
 
             if "_" not in DEFAULT_NAMESPACE:
                 DEFAULT_NAMESPACE["_"] = ugettext
+            if "t" not in DEFAULT_NAMESPACE:
+                DEFAULT_NAMESPACE["t"] = t
 
     def log_separator(self, symbol: str = "*", length: int = 72) -> None:
         """Log a separator string to visually split log"""
