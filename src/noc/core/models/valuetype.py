@@ -217,7 +217,7 @@ class ValueType(enum.Enum):
     @staticmethod
     def convert_from_array(value: Any) -> str:
         """Convert from strint to array"""
-        return f"{ARRAY_ANNEX}{ARRAY_DELIMITER.join([str(v) for v in value])}"
+        return f"{ARRAY_ANNEX}{ARRAY_DELIMITER.join(str(v) for v in value)}"
 
     @staticmethod
     def convert_to_array(value: str) -> list[str]:

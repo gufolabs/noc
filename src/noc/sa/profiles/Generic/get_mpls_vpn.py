@@ -37,7 +37,7 @@ class Script(BaseScript):
                 mib["MPLS-L3VPN-STD-MIB::mplsL3VpnVrfOperStatus"],
             ]
         ):
-            vrf_name = "".join([chr(int(x)) for x in conf_id.split(".")[1:]])
+            vrf_name = "".join(chr(int(x)) for x in conf_id.split(".")[1:])
             r[conf_id] = {
                 "type": "VRF",
                 "status": vrf_oper,

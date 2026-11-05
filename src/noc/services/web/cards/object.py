@@ -220,7 +220,7 @@ class ObjectCard(BaseCard):
                     AND managed_object IN ({})
                   GROUP BY managed_object
                   """.format(
-                ", ".join([f"argMax({f[1]}, ts) as {f[1]}" for f in fields]),
+                ", ".join(f"argMax({f[1]}, ts) as {f[1]}" for f in fields),
                 table,
                 from_date.date().isoformat(),
                 from_date.isoformat(sep=" "),

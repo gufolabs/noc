@@ -135,7 +135,7 @@ class TimePattern:
         if isinstance(tp, (list, tuple)):
             if not tp:
                 return "True"
-            return f"({' or '.join([cls.compile_to_python(p) for p in tp])})"
+            return f"({' or '.join(cls.compile_to_python(p) for p in tp)})"
         tp = tp.strip()
         if "|" in tp:
             day_pattern, time_pattern = tp.split("|")
@@ -143,12 +143,12 @@ class TimePattern:
             day_pattern = tp
             time_pattern = ""
         dpl = " or ".join(
-            [compile_pattern(DAY_PATTERNS, x.strip()) for x in day_pattern.split(",") if x]
+            compile_pattern(DAY_PATTERNS, x.strip()) for x in day_pattern.split(",") if x
         )
         tpl = " or ".join(
-            [compile_pattern(TIME_PATTERNS, x.strip()) for x in time_pattern.split(",") if x]
+            compile_pattern(TIME_PATTERNS, x.strip()) for x in time_pattern.split(",") if x
         )
-        x = " and ".join([f"({x})" for x in [dpl, tpl] if x])
+        x = " and ".join(f"({x})" for x in [dpl, tpl] if x)
         if not x:
             return "True"
         return x

@@ -41,7 +41,7 @@ class ReportMetrics(BaseReportColumn):
 
     @staticmethod
     def get_mo_filter(ids, use_dictionary=False):
-        return f"managed_object IN ({', '.join([str(c) for c in ids])})"
+        return f"managed_object IN ({', '.join(str(c) for c in ids)})"
 
     def get_custom_conditions(self):
         return self.CUSTOM_FILTER

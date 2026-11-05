@@ -40,8 +40,8 @@ class Script(BaseScript):
             if index not in index_map:
                 index_s = index.split(".")
                 index_map[index] = {
-                    "owner": "".join([chr(int(x)) for x in index_s[1 : int(index_s[0]) + 1]]),
-                    "test_name": "".join([chr(int(x)) for x in index_s[int(index_s[0]) + 2 :]]),
+                    "owner": "".join(chr(int(x)) for x in index_s[1 : int(index_s[0]) + 1]),
+                    "test_name": "".join(chr(int(x)) for x in index_s[int(index_s[0]) + 2 :]),
                 }
             probes[index] = {
                 "name": index_map[index]["test_name"],

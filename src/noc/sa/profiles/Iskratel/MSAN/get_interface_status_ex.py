@@ -40,7 +40,7 @@ class Script(BaseScript):
         base_oid_out = "1.3.6.1.2.1.10.251.1.5.2.1.1.6."
         oids = {}
         for templ_name in templates:
-            index = str(len(templ_name)) + "." + ".".join([str(ord(s)) for s in templ_name])
+            index = str(len(templ_name)) + "." + ".".join(str(ord(s)) for s in templ_name)
             oids[templ_name + "UP"] = base_oid_in + index
             oids[templ_name + "DOWN"] = base_oid_out + index
         if not oids:

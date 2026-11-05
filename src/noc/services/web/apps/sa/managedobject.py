@@ -108,62 +108,62 @@ class ManagedObjectApplication(ExtModelApplication):
         "-link_count": " cardinality(links) ",
         "profile": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'profile'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Profile.objects.filter().order_by("name").values_list("id")
                     )
-                ]
+                )
             )
         ),
         "-profile": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'profile'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Profile.objects.filter().order_by("-name").values_list("id")
                     )
-                ]
+                )
             )
         ),
         "platform": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'platform'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Platform.objects.filter().order_by("name").values_list("id")
                     )
-                ]
+                )
             )
         ),
         "-platform": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'platform'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Platform.objects.filter().order_by("-name").values_list("id")
                     )
-                ]
+                )
             )
         ),
         "version": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'version'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Firmware.objects.filter().order_by("version").values_list("id")
                     )
-                ]
+                )
             )
         ),
         "-version": "CASE {} END".format(
             " ".join(
-                [
+                (
                     f"WHEN {'version'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Firmware.objects.filter().order_by("-version").values_list("id")
                     )
-                ]
+                )
             )
         ),
     }

@@ -263,7 +263,7 @@ class Script(GetMetricsScript):
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.6527.3.1.2.79.1.2.3.1.1"):
             _, key = oid.split(".79.1.2.3.1.1.")
             key = key.split(".")
-            name_radius = "".join([chr(int(c)) for c in key])
+            name_radius = "".join(chr(int(c)) for c in key)
             self.set_metric(
                 id=("Radius | Policy | Request | Count", None),
                 labels=[f"noc::radius::{name_radius}"],
@@ -281,7 +281,7 @@ class Script(GetMetricsScript):
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.6527.3.1.2.79.1.2.3.1.2"):
             _, key = oid.split(".79.1.2.3.1.2.")
             key = key.split(".")
-            name_radius = "".join([chr(int(c)) for c in key])
+            name_radius = "".join(chr(int(c)) for c in key)
             self.set_metric(
                 id=("Radius | Policy | Response | Count", None),
                 labels=[f"noc::radius::{name_radius}"],

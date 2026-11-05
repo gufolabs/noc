@@ -518,7 +518,7 @@ class CHTableReportDataSource(ReportDataSource):
         return self.TABLE_NAME
 
     def get_object_filter(self, ids) -> str:
-        return f"{self.object_field} IN ({', '.join([str(c) for c in ids])})"
+        return f"{self.object_field} IN ({', '.join(str(c) for c in ids)})"
 
     group_intervals = {
         "HOUR": "toStartOfHour(toDateTime(ts))",

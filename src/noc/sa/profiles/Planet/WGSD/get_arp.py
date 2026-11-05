@@ -31,7 +31,7 @@ class Script(BaseScript):
             iface = self.snmp.get(
                 f"1.3.6.1.2.1.31.1.1.1.1.{int(v[1])}", cached=True
             )  # Vlan ID, not interface name!
-            mac = ":".join([f"{ord(c):02x}" for c in v[2]])
+            mac = ":".join(f"{ord(c):02x}" for c in v[2])
             r.append({"ip": v[3], "mac": mac, "interface": iface})
         return r
 

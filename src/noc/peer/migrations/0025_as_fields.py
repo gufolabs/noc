@@ -122,10 +122,10 @@ class Migration(BaseMigration):
         ):
             header_remarks = rpsl_header
             if header_remarks:
-                header_remarks = "\n".join([rx_remarks.sub("", x) for x in rpsl_header.split("\n")])
+                header_remarks = "\n".join(rx_remarks.sub("", x) for x in rpsl_header.split("\n"))
             footer_remarks = rpsl_footer
             if footer_remarks:
-                footer_remarks = "\n".join([rx_remarks.sub("", x) for x in rpsl_footer.split("\n")])
+                footer_remarks = "\n".join(rx_remarks.sub("", x) for x in rpsl_footer.split("\n"))
             self.db.execute(
                 "UPDATE peer_as SET header_remarks=%s,footer_remarks=%s WHERE id=%s",
                 [header_remarks, footer_remarks, id],

@@ -22,7 +22,7 @@ class Script(BaseScript):
 
         param = {"platform": "$sys_model", "hw_ver": "$hw_cver", "version": "$sw_ver"}
         # /cliget.cgi?cmd=$sys_model%;echo"%;$hw_cver%;echo"%;$sw_ver%;echo"
-        req = "%;".join(["%;".join((param[p], 'echo"')) for p in param])
+        req = "%;".join("%;".join((param[p], 'echo"')) for p in param)
 
         urlpath = baseURL + req + ";"
         self.logger.debug(f"URL path is: {urlpath}")

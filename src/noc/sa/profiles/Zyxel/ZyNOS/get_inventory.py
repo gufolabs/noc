@@ -19,7 +19,7 @@ class Script(BaseScript):
     keep_cli_session = False
 
     def remove_non_ascii(self, s, sub="?"):
-        return "".join([i if ord(i) < 128 else sub for i in s])
+        return "".join(i if ord(i) < 128 else sub for i in s)
 
     def execute(self):
         objects = []

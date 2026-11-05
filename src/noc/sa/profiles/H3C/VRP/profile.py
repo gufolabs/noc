@@ -36,7 +36,7 @@ class Profile(BaseProfile):
         p = f"ip ip-prefix {name} permit %s"
         if not strict:
             p += " le 32"
-        return f"undo ip ip-prefix {name}\n" + "\n".join([p % x.replace("/", " ") for x in pl])
+        return f"undo ip ip-prefix {name}\n" + "\n".join(p % x.replace("/", " ") for x in pl)
 
     rx_interface_name = re.compile(r"^(?P<type>Eth|[A-Z]+E|Vlan)(?P<number>[\d/]+)$")
 

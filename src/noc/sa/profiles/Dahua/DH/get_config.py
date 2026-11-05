@@ -31,7 +31,7 @@ class Script(BaseScript):
     def execute(self, **kwargs):
         res = self.http.get(
             "/cgi-bin/configManager.cgi?action=getConfig&{}".format(
-                "&".join(["{}={}".format("name", c) for c in self.config_sections])
+                "&".join("{}={}".format("name", c) for c in self.config_sections)
             )
         )
         ptz = ""

@@ -74,7 +74,7 @@ class UserProfileApplication(ExtApplication):
             subscription_settings.append(ss)
         return {
             "username": user.username,
-            "name": (" ".join([x for x in (user.first_name, user.last_name) if x])).strip(),
+            "name": (" ".join(x for x in (user.first_name, user.last_name) if x)).strip(),
             "email": user.email,
             "preferred_language": language or "en",
             "contacts": contacts,

@@ -80,7 +80,7 @@ class TTSystemStatDS(BaseDataSource):
         ts_start = time.mktime(start.timetuple())
         ts_end = time.mktime(end.timetuple())
         tt_systems = TTSystem.objects.filter().scalar("name")
-        tt_systems = ", ".join([f"'{x}'" for x in tt_systems])
+        tt_systems = ", ".join(f"'{x}'" for x in tt_systems)
         query = SQL % (tt_systems, start.date().isoformat(), ts_start, ts_end)
         ch = connection()
         mos_aa = {

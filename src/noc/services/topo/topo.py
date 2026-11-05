@@ -394,4 +394,4 @@ class Topo:
 
     @staticmethod
     def to_join(ids: Iterable[int]) -> str:
-        return ", ".join([str(x) for x in sorted(ids)])
+        return ", ".join(str(x) for x in sorted(ids))

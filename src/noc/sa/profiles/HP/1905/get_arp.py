@@ -28,7 +28,7 @@ class Script(BaseScript):
                     if not iface:
                         oid = "1.3.6.1.2.1.2.2.1.2." + v[1]
                         iface = self.snmp.get(oid, cached=True)
-                    mac = ":".join([f"{ord(c):02x}" for c in v[2]])
+                    mac = ":".join(f"{ord(c):02x}" for c in v[2])
                     ip = [f"{ord(c):02x}" for c in v[3]]
                     ip = ".".join(str(int(c, 16)) for c in ip)
                     r.append({"ip": ip, "mac": mac, "interface": iface})

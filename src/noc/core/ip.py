@@ -724,9 +724,9 @@ class IPv6(IP):
             h = r[:lp]
             t = r[lp + ll :]
             return IPv6(
-                f"{':'.join([f'{p:x}' for p in h])}::{':'.join([f'{p:x}' for p in t])}/{int(mask)}"
+                f"{':'.join(f'{p:x}' for p in h)}::{':'.join(f'{p:x}' for p in t)}/{int(mask)}"
             )
-        return IPv6(":".join([f"{p:x}" for p in r]) + f"/{int(mask)}")
+        return IPv6(":".join(f"{p:x}" for p in r) + f"/{int(mask)}")
 
     def __hash__(self) -> int:
         """Hash the IPv6 instance (by prefix string)."""
