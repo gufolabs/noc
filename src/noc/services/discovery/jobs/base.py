@@ -322,9 +322,7 @@ class MODiscoveryJob(PeriodicJob):
             stream=stream,
             partition=partition,
         )
-        self.logger.debug(
-            "Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode()
-        )
+        self.logger.debug("Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode())
         if not details and group_reference in active_problems:
             del active_problems[group_reference]
         else:
