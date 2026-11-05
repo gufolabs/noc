@@ -189,7 +189,7 @@ class TableColumn(ReportNode):
     def __init__(self, name, title=None, align=None, format=None, total=None, total_label=None):
         super().__init__(name=name)
         # self.name = name
-        self.title = title if title is None else name
+        self.title = title if title else name
         self.align = (
             {
                 "l": self.ALIGN_LEFT,
