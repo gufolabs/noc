@@ -28,7 +28,7 @@ class ReportClassificationQuality(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                t("header-empty"),
+                "",
                 TableColumn(t("header-classified"), format="integer", align="right"),
                 TableColumn(t("header-total"), format="integer", align="right"),
                 TableColumn(t("header-quality"), format="percent", align="right"),

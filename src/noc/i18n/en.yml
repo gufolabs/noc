@@ -357,7 +357,6 @@ header-duplex: Duplex
 header-duration: Duration
 header-duration-sec: DURATION_SEC
 header-duration-us: Duration (us)
-header-empty: ''
 header-end-of-ext-support: End of Ext. Support
 header-end-of-sale: End of Sale
 header-end-of-support: End of Support

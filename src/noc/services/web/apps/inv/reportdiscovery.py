@@ -67,7 +67,7 @@ class ReportDiscoveryApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                t("header-empty"),
+                "",
                 TableColumn(
                     t("header-count"),
                     align="right",

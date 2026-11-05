@@ -78,7 +78,7 @@ class ReportSummary(SimpleReport):
                 title=_("Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s")
                 % {"vrf": vrf.name, "afi": afi, "prefix": p.prefix},
                 columns=[
-                    t("header-empty"),
+                    "",
                     TableColumn(t("header-size"), format="numeric", align="right"),
                     TableColumn(t("header-percent"), format="percent", align="right"),
                 ],
