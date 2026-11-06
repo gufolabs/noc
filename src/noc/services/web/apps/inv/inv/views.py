@@ -18,6 +18,7 @@ from django.http import HttpRequest
 from mongoengine import ValidationError
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.inv.attach.container import attach as attach_to_container
 from noc.core.inv.attach.module import (
     ModulePosition,
@@ -75,8 +76,8 @@ class InvApplication(ExtApplication):
     inv.inv application
     """
 
-    title = _("Inventory")
-    menu = _("Inventory")
+    title = t("app-title-inv")
+    menu = t("nav-inv")
     glyph = "archive"
 
     MAX_SEARCH_LIMIT = 1000

@@ -1,0 +1,738 @@
+app-group-aaa: Пользователи и доступ
+app-group-bi: BI
+app-group-cm: Управление конфигурацией
+app-group-crm: Учёт клиентов (CRM)
+app-group-dev: Разработка
+app-group-dns: DNS
+app-group-fm: Управление авариями
+app-group-gis: ГИС
+app-group-inv: Учет объектов
+app-group-ip: IPAM
+app-group-kb: База знаний
+app-group-main: Основное
+app-group-maintenance: РНР
+app-group-peer: Управление ПИРами
+app-group-phone: Телефон
+app-group-pm: Управление производительности
+app-group-project: Управление проектами
+app-group-reports: Отчеты
+app-group-sa: Управление объектами
+app-group-setup: Настройка
+app-group-sla: SLA
+app-group-support: Поддержка
+app-group-vc: Управление VC
+app-group-wf: Редактор процессов
+app-title-account: Учетная запись
+app-title-action: Действие
+app-title-actioncommands: Действия через команду
+app-title-address: Адрес
+app-title-addressrange: Диапазоны адресов
+app-title-administrativedomain: Зоны ответственности
+app-title-agent: Агент
+app-title-alarm: Авария
+app-title-alarmclass: Класс аварии
+app-title-alarmclassconfig: Настройки класса аварий
+app-title-alarmescalation: Эскалация
+app-title-alarmrule: Правила для авария
+app-title-alarmseverity: Серьезность
+app-title-alarmtrigger: Триггеры аварии
+app-title-as: AS
+app-title-asset: Наборы AS
+app-title-audittrail: Аудит событий
+app-title-authprofile: Профиль авторизации
+app-title-building: Здание
+app-title-calculator: Калькуляторы
+app-title-capability: Свойство
+app-title-card: Карточки
+app-title-channel: Каналы
+app-title-classificationrule: Правило классификации
+app-title-commandsnippet: Сниппеты
+app-title-configurationparam: Параметр конфигуарации
+app-title-configurationscope: Область конфигурации
+app-title-configuredmap: Пользовательская карта
+app-title-connectionrule: Правила соединения
+app-title-connectiontype: Типы соединения
+app-title-coverage: Покрытие
+app-title-cpe: CPE
+app-title-cpeprofile: Профиль CPE
+app-title-crashinfo: Дампы
+app-title-credentialcheckrule: Правило проверки доступа
+app-title-csv: Импорт/экспорт CSV
+app-title-customfield: Свои поля
+app-title-dashboard: График
+app-title-datastreamconfig: Пользовательские DataStream
+app-title-ddash: Динамический экран
+app-title-dialplan: Номерной план
+app-title-discoveredobject: Обнаруженные устройства
+app-title-division: Подразделение
+app-title-dnsserver: Сервер DNS
+app-title-dnszone: Зона DNS
+app-title-dnszoneprofile: Профили зон
+app-title-event: События
+app-title-eventclass: Класс событий
+app-title-eventtrigger: Триггеры событий
+app-title-extstorage: Внеш. хранилище
+app-title-facade: Фасады
+app-title-firmware: Прошивки
+app-title-firmwarepolicy: Политика версий прошивок
+app-title-getnow: Текущая информация
+app-title-group: Группы
+app-title-groupaccess: Права групп
+app-title-heatmap: Тепловая карта
+app-title-home: Главная
+app-title-ifdescpatterns: Маски для описания интерфейсов
+app-title-ignoreeventrule: Правила игнорирования событий
+app-title-ignorepattern: Шаблоны игнорирования
+app-title-imagestore: Изображения
+app-title-interface: Интерфейсы
+app-title-interfaceprofile: Профиль интерфейса
+app-title-inv: Учет объектов
+app-title-inv-reportdiscoveryproblem: Отчёт по проблемам топологии
+app-title-inv-reportobjectsummary: Сводка по инвентаризации объектов
+app-title-ipam: Назначенные адреса
+app-title-job: Задачи (Job)
+app-title-jsonimport: Импорт JSON
+app-title-kb: База знаний
+app-title-kbentry: Записи
+app-title-kbentrytemplate: Шаблоны
+app-title-l2domain: Домен L2
+app-title-label: Метка
+app-title-language: Языки
+app-title-layer: Слои
+app-title-macblacklist: Чёрный список MACов
+app-title-maintainer: Ответственный
+app-title-maintenance: РНР
+app-title-maintenancetype: Тип РНР
+app-title-managedobject: Список объектов
+app-title-managedobjectprofile: Профиль объекта
+app-title-map: Карта сети
+app-title-metricaction: Действия с метриками
+app-title-metricrule: Правило для метрик
+app-title-metrictype: Тип метрик
+app-title-mib: MIB
+app-title-mibpreference: Приоритет MIB
+app-title-mimetype: Типы MIME
+app-title-modelinterface: Интерфейс модели
+app-title-modelmapping: Привязки моделей
+app-title-modelprotectionprofile: Профили защиты форм
+app-title-monitor: Монитор опроса
+app-title-monmap: Карта объектов
+app-title-networksegment: Сегмент сети
+app-title-notificationgroup: Группа уведомлений
+app-title-objectconfigurationrule: Правила конфигурации
+app-title-objectdiscoveryrule: Правила сканирования сети
+app-title-objectmodel: Модели объектов
+app-title-objectnotification: Уведомления
+app-title-objectnotify: Уведомления по объектам
+app-title-oidalias: Синонимы (alias) OID
+app-title-organisation: Организации
+app-title-outage: Обстановка детально
+app-title-peer: Пиры
+app-title-peergroup: Группы пиров
+app-title-peerprofile: Профиль Пиров
+app-title-phonenumber: Телефонный номер
+app-title-phonerange: Диапазон номеров
+app-title-platform: Платформа
+app-title-pool: Пул
+app-title-prefix: Префикс
+app-title-prefixaccess: Доступ к префиксам
+app-title-prefixlistbuilder: Построение списка префиксов
+app-title-prefixprofile: Профиль префикса
+app-title-prefixtable: Таблица префиксов
+app-title-profile: Профиль
+app-title-profilecheckrule: Правило проверки профиля
+app-title-project: Проект
+app-title-protocol: Протокол
+app-title-quiz: Анкеты
+app-title-reportalarmcomments: Детали комментариев по авариям
+app-title-reportalarmdetail: Детали аварии
+app-title-reportallocated: Выделенные блоки
+app-title-reportavailability: Доступность
+app-title-reportclassificationquality: Качество классификации
+app-title-reportclassificationrule: Правила классификации
+app-title-reportcompare: Сравнить спецификации
+app-title-reportcone: Анализ конуса
+app-title-reportdbsummary: Статус БД
+app-title-reportdiscovery: Сводка опроса
+app-title-reportdiscoverycaps: Опрошенные свойства оборудования
+app-title-reportdiscoverypoison: Дубликаты в кэше Идентификаторов
+app-title-reportduplicatedfqdns: Дубликаты FQDN
+app-title-reportescalations: Эскалации
+app-title-reportexpiringdomains: Просроченные домены
+app-title-reportfilter: Фильтр
+app-title-reportfree: Свободные блоки
+app-title-reporthierarchy: Иерархия событий и аварий
+app-title-reporthistory: История
+app-title-reportifacestatus: Статусы интерфейсов
+app-title-reportipamsummary: Сводка по IP адресам
+app-title-reportipusage: Использование IP адресов
+app-title-reportlatestchanges: Последние изменения
+app-title-reportlinkdetail: Детализация по линкам
+app-title-reportlocalrules: Локальные правила классификации
+app-title-reportmaxmetrics: Отчет по пиковой загрузке
+app-title-reportmetrics: Отчёт по метрикам
+app-title-reportmibs: Установленные MIB
+app-title-reportmissedmibs: Ошибочные MIB
+app-title-reportmissedp2p: Ошибки привязки адресов
+app-title-reportmissedreverse: Пропущенные реверсные зоны
+app-title-reportmovedmac: Перемещение MAC'ов
+app-title-reportnszonesummary: Сводка по зонам NS
+app-title-reportobjectdetail: Детализация по объектам
+app-title-reportobjectsserial: Серийные номера
+app-title-reportoutages: Обстановка детально
+app-title-reportoverlappedoids: Пересекающиеся OID
+app-title-reportpartnumbers: Модель
+app-title-reportpendinglinks: Неподтверждённые линки
+app-title-reportreboots: Перезагрузки
+app-title-reportrulesbyprofile: Правила по профилю
+app-title-reportrulesetsummary: Сводка по набору правил
+app-title-reportstalediscovery: Зависший опрос
+app-title-reportsubscription: Подписка на отчёты
+app-title-reportttsystemstat: Статистика по эскалациям
+app-title-reportunknownsummary: Сводка по неизвестным моделям
+app-title-reportvpnstatus: Состояние VPN
+app-title-resourcestate: Состояния ресурсов
+app-title-rir: Региональный регистратор (RIR)
+app-title-runcommands: Запуск команд
+app-title-sa-reportdiscoveryproblem: Отчёт по проблемам дискавери
+app-title-sa-reportobjectsummary: Сводка по объектам
+app-title-scale: Множители (ед. изм.)
+app-title-search: Глобальный Поиск
+app-title-sensor: Сенсор
+app-title-service: Сервисы
+app-title-serviceprofile: Профиль сервиса
+app-title-state: Состояния
+app-title-street: Улица
+app-title-style: Стиль
+app-title-subscriber: Абонент
+app-title-subscriberprofile: Профиль абонента
+app-title-supplier: Поставщик
+app-title-supplierprofile: Профиль поставщика
+app-title-systemnotification: Системные уведомления
+app-title-systemtemplate: Системные шаблоны
+app-title-techdomain: Домен
+app-title-technology: Технология
+app-title-template: Шаблоны
+app-title-timepattern: Маска времени
+app-title-tools: Инструменты
+app-title-totaloutage: Общая сводка
+app-title-transition: Переходы
+app-title-ttsystem: Система TT
+app-title-unknownmodel: Неизвестные модели
+app-title-user: Пользователи
+app-title-useraccess: Права пользователя
+app-title-userprofile: Профиль пользователя
+app-title-vendor: Производитель
+app-title-vlan: VLAN
+app-title-vlanfilter: Фильтр VLAN
+app-title-vpn: VPN
+app-title-vrf: VRF
+app-title-vrfgroup: Группы VRF
+app-title-workflow: Редактор процессов
+header-action: Действие
+header-address: Адрес
+header-adm-domain: З.О.
+header-admin: Админ
+header-admin-domain-610498: З.О.
+header-administrative-domain-07d5e8: З.О.
+header-administrative-domain-d113be: Зона ответственности
+header-affected-objects: Затронутое оборудование
+header-alarm: Авария
+header-alarm-class: Класс аварии
+header-alarm-from-ts: Время начала
+header-alarm-subject: Заголовок аварии
+header-alarm-to-ts: Время закрытия
+header-alarm-tt: Номер ТТ
+header-alarms: Аварии
+header-aliases: Псевдонимы
+header-allow-children: Разрешить наследников
+header-as: AS
+header-attachments: Вложения
+header-avail-389d90: Доступность
+header-availability: Доступность
+header-avg-load-in-mbps: Средняя загрузка входящий, Мбит/с
+header-avg-load-out-mbps: Средняя загрузка исходящий, Мбит/с
+header-body: Текст
+header-capabilities: Свойства
+header-category: Категория
+header-children: Потомок
+header-class: Класс
+header-client-model: Модель клиента
+header-comment: Комментарий
+header-comments: Комментарии
+header-connection: Связь
+header-consume-resources: Потреблённые ресурсы
+header-consumes-resources: Потребляет ресурсы
+header-contacts: Контакты
+header-container-address: Почтовый адрес объекта
+header-count-outages: Число периодов
+header-cpe: CPE
+header-date: Дата
+header-description: Описание
+header-detail: Ссылка на детализацию
+header-diagnostic: Диагностика
+header-dialplan: Номерной план
+header-direction: Направление проблемы
+header-discovery: Опрос
+header-dns-zone: Зона DNS
+header-domain: Домен
+header-downs: Простои
+header-downtime: Время простоя
+header-duplex: Дуплекс
+header-duration: Продолжительность
+header-duration-sec: Длительность (сек)
+header-end-of-ext-support: Конец расширенной поддержки
+header-end-of-sale: Конец продаж
+header-end-of-support: Конец поддержки
+header-enum: ENUM
+header-error: Ошибка
+header-error-code: Код ошибки
+header-error-text: Текст ошибки
+header-errors: Ошибки
+header-errors-in: Вх. ошибки
+header-errors-out: Исх. ошибки
+header-escalation: Эскалация
+header-escalation-error: Ошибка эскалации
+header-escalation-timestamp: Время эскалации
+header-escalation-ts: Время эскалации
+header-expired: Просрочен
+header-failed-request-count: Кол-во ошибочных запросов
+header-filter: Фильтр
+header-final-reason: Финальная диагностика
+header-firmware-policy: Политика версий прошивок
+header-fqdn: FQDN
+header-from-ts: Время начала
+header-group: Группа
+header-hostname: Имя хоста
+header-hw-revision: Версия прошивки
+header-id: ID
+header-iface-description: Описание интерфейса
+header-iface-name: Имя интерфейса
+header-iface-speed: Скорость интерфейса
+header-interface: Интерфейс
+header-interfaces: Интерфейсы
+header-ip: IP
+header-is-managed: управляемый
+header-job: Задача (Job)
+header-l2-domain: Домен L2
+header-l3: L3
+header-label: Метка
+header-labels: Метки
+header-last-changed: Последнее изменение
+header-last-success: Последний успех
+header-last-successful-discovery: Время последнего запуска
+header-load-in: Вх. загрузка
+header-load-out: Исх. загрузка
+header-local-description: Описание порта
+header-local-port: Локальный порт
+header-location-40c332: Адрес
+header-location-d219c6: Расположение
+header-log: История
+header-log-message: Текст комментария
+header-log-source: Автор комментария
+header-log-timestamp: Время комментария
+header-mac: MAC
+header-mac-vendor: MAC производителя
+header-maintenance-81e0be: РНР
+header-maintenance-94de30: РНР
+header-managed: Управляемый
+header-managed-object-62561c: Объекты управления
+header-managed-objects: Список объектов
+header-mask: Маска
+header-max-load-in-mbps: Максимальная загрузка входящий, Мбит/с
+header-max-load-in-time: Время максимальной нагрузки, входящий
+header-max-load-out-mbps: Максимальная загрузка исходящий, Мбит/с
+header-max-load-out-time: Время максимальной нагрузки, исходящий
+header-max-ms: макс. время (мс)
+header-mib: MIB
+header-model: Модель
+header-name: Имя адреса
+header-nested-groups: Вложенные группы
+header-number: Номер
+header-numbers: Номера
+header-object: Объект
+header-object-address: IP Адрес
+header-object-admdomain: З.О.
+header-object-hostname: Имя хоста
+header-object-name: Имя объекта
+header-object-platform: Платформа
+header-object-profile: Профиль
+header-object-project: Проект
+header-object-segment: Сегмент объекта
+header-object-version: Версия ПО
+header-objects-72a83a: Объекты
+header-objects-83ccf1: Объекты
+header-oid: OID
+header-oper: Опер
+header-p95-ms: 95% перцентиль (мс)
+header-paid-till: Оплачен до
+header-parent: Родитель
+header-part-number-0: Номер детали 0
+header-part-number-1: Номер детали 1
+header-part-number-2: Номер детали 2
+header-part-number-3: Номер детали 3
+header-percent: "%"
+header-phone-number: Телефонный номер
+header-phone-range: Диапазон номеров
+header-platform: Платформа
+header-pool: Пул
+header-port: Порт
+header-pre-reason: Предв. диагностика
+header-prefix: Префикс
+header-prefixes: Префиксы
+header-probable-causes: Возможная причина
+header-profile: Профиль
+header-project-f6f4da: Проект
+header-protocol: Протокол
+header-provide-resources: Предоставленные ресурсы
+header-provides-resources: Предоставляет ресурсы
+header-q1-ms: Квантиль (25%)
+header-q2-ms: Медиана (мс)
+header-q3-ms: Квантиль (75%)
+header-quantity: Количество
+header-range: Диапазон
+header-ranges: Диапазоны
+header-reason: Причина
+header-reboots: Перезагрузки
+header-recommended-actions: Рекомендованные действия
+header-redundancy: Резервирование
+header-remote-chassis: Соседний MAC адрес (по данным LLDP)
+header-remote-description-6d7f6e: Описание порта соседа
+header-remote-description-987a22: Описание соседа (по данным LLDP)
+header-remote-hostname: Имя хоста соседа  (по данным LLDP)
+header-remote-interface: Соседний интерфейс
+header-remote-object-d33f14: Сосед
+header-remote-object-e48a25: Соседнее устройство
+header-remote-port: Порт соседа
+header-request-count: Кол-во запросов
+header-revision: Ревизия
+header-root-id: ID первопричины
+header-rule: Правило
+header-segment-44986c: Сегмент
+header-serial: Серийный номер
+header-server: Имя сервера
+header-service: Сервис
+header-service-model: Модель сервиса
+header-services: Сервисы
+header-session: Сессия
+header-severity: Серьезность
+header-size: Размер
+header-source: Источник
+header-speed: Скорость
+header-stage: Этап
+header-start: Начало
+header-start-of-sale: Начало продаж
+header-state: Состояние
+header-status: Состояние
+header-stop: Окончание
+header-sub-interfaces: СабИнтерфейсы
+header-subject: Тема
+header-subscriber: Абонент
+header-subscribers-6f13df: Абоненты
+header-subscribers-97ec75: Задето абонентов
+header-success-request: Процент успешных
+header-success-request-count: Кол-во успешных запросов
+header-summary: Суммарно
+header-supplier: Поставщик
+header-sw-version: Версия ПО
+header-symptoms: Симптомы
+header-tags: Теги
+header-tech-contact: Контакт инженера
+header-tech-contact-phone: Телефон инженера
+header-technology: Технология
+header-terminator: Терминатор
+header-terms: Диапазон
+header-time-pattern: Маска времени
+header-timestamp: Время
+header-to-ts: Время закрытия
+header-total-in-mbyte: Суммарно входящего трафика, Мбайт
+header-total-out-mbyte: Суммарно исходящего трафика, Мбайт
+header-total-unavail-sec: Общее время недос. (сек)
+header-translation: Трансляции
+header-tt: Номер ТТ
+header-tt-id: Номер ТТ
+header-type: Вид работ
+header-uplink-avg-load-in-mbps: Средняя загрузка Uplink входящий, Мбит/с
+header-uplink-avg-load-out-mbps: Средняя загрузка Uplink исходящий, Мбит/с
+header-uplink-iface-description: Описание интерфейса Uplink
+header-uplink-iface-name: Имя интерфейса Uplink
+header-uplink-iface-speed: Скорость интерфейса Uplink
+header-uplink-max-load-in-mbps: Максимальная загрузка Uplink входящий, Мбит/с
+header-uplink-max-load-out-mbps: Максимальная загрузка Uplink исходящий, Мбит/с
+header-uplink-max-time-in: Время максимальной нагрузки Uplink, входящий
+header-uplink-max-time-out: Время максимальной нагрузки Uplink, исходящий
+header-uplink-total-in-mbyte: Суммарно входящего трафика Uplink, Мбайт
+header-uplink-total-out-mbyte: Суммарно исходящего трафика Uplink, Мбайт
+header-value: Значение
+header-vendor: Производитель
+header-version: Версия
+header-vlan-560367: VLAN
+header-vlan-translation: Трансляции ВЛАНов
+header-vpn: VPN
+header-vrf: VRF
+header-zone: Зона
+label-1-day: 1 день
+label-1-month: 1 месяц
+label-1-week: 1 неделя
+label-address-family: Семейство адресов
+label-administrative-domain: Зона ответственности
+label-as-number: Номер AS
+label-availability-last-day: Доступность (последний день)
+label-availability-last-month: Доступность (последний месяц)
+label-availability-last-week: Доступность (последняя неделя)
+label-by-administrative-domain: По З.О.
+label-by-administrative-domain-and-profile: По З.О. и профилю
+label-by-labels: По меткам
+label-by-platform: По платформе
+label-by-profile: По профилю
+label-by-version: По версии
+label-description: Описание
+label-dns: DNS
+label-duration: Продолжительность
+label-escalation-error-details: Детализация ошибок эскалации
+label-escalations-1-day: Эскалации (за 1 день)
+label-escalations-30-day: Эскалации (за 30 дней)
+label-escalations-7-days: Эскалации (за 7 дней)
+label-exclude-on-mac-black-list: Исключить строки из Чёрного списка MAC'ов
+label-failed-discovery-only: Исключить из вывода проблемы доступа
+label-filter-by-ping-status: Отфильтрвовать недоступные (не пингуются)
+label-filter-none-problems: Отфильтровать незаполненные проблемы
+label-filter-pending-links: Отфильтровать неподтверждённые линки
+label-fqdn: FQDN
+label-from-date: С
+label-in-days: Глубина (дней)
+label-interval: Интервал
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-managed-object: Объекты управления
+label-managed-object-search-for-config-only: Устройство (только для конфигурации)
+label-managed-objects-administrative-domain-for-config-only: З.О. (только для конфигурации)
+label-managed-objects-group-selector: Группа устройств (Селектор)
+label-managed-objects-pool: Пул объекта
+label-managed-objects-pools: Пул
+label-managed-objects-profile: Профиль объекта
+label-managed-objects-summary-domain: Сводка по объектам (по З.О.)
+label-managed-objects-summary-domain-profile: Сводка по объектам (по З.О. и профилю)
+label-managed-objects-summary-label: Сводка по объектам (по меткам)
+label-managed-objects-summary-platform: Сводка по объектам (по платформе)
+label-managed-objects-summary-profile: Сводка по объектам (по профилю)
+label-managed-objects-summary-version: Сводка по объектам (по версии)
+label-name: Имя адреса
+label-outages-1-day: Оперативная обстановка (за 1 день)
+label-outages-30-day: Оперативная обстановка (за 30 дней)
+label-outages-7-days: Оперативная обстановка (за 7 дней)
+label-pool: Пул
+label-prefix: Префикс
+label-profile: Профиль
+label-profile-check-only: Вывести только проблемы доступа
+label-range: Диапазон
+label-reboot-30-day: Перезагрузки (за 30 дней)
+label-reboots-1-day: Перезагрузки (за 1 день)
+label-reboots-7-days: Перезагрузки (за 7 дней)
+label-report-format: Формат отчёта
+label-report-type: Тип отчёта
+label-show-other-problems: Отобразить неклассифицированные проблемы
+label-show-problem-on-already-linked: Показать проблемы на слинкованных интерфейсах
+label-skip-full-available: Пропустить доступные за интервал
+label-skip-zero-access-port: Пропустить с неактивными портами доступа
+label-skip-zero-available: Пропустить недоступные за интервал
+label-statistics: Статистика
+label-to-date: По
+label-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
+label-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
+label-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
+label-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
+label-vrf: VRF
+label-zone: Зона
+nav-account: Учетная запись
+nav-action: Действия
+nav-actioncommands: Действия через команды
+nav-addressprofile: Профили адреса
+nav-addressrange: Диапазоны адресов
+nav-administrativedomain: Зоны ответственности
+nav-agent: Агент
+nav-agentprofile: Профиль Агента
+nav-alarm: Аварии
+nav-alarmclass: Классы аварий
+nav-alarmclassconfig: Настройки класса аварий
+nav-alarmdiagnosticconfig: Диагностики аварии
+nav-alarmescalation: Эскалация
+nav-alarmrule: Правила для авария
+nav-alarmseverity: Серьезность аварии
+nav-alarmtrigger: Триггеры аварии
+nav-apikey: Ключи доступа к API
+nav-asprofile: Профили AS
+nav-asset: Наборы AS
+nav-audittrail: Аудит событий
+nav-authldapdomain: LDAP Домены
+nav-authprofile: Профили авторизации
+nav-building: Здания
+nav-capability: Свойства
+nav-capsprofile: Профили сбора свойств
+nav-card: Карточки
+nav-channel: Каналы
+nav-chpolicy: Политики устаревания данных CliсkHouse
+nav-classificationrule: Правила классификации
+nav-commandsnippet: Сниппеты
+nav-confdbquery: Запросы к ConfDB
+nav-configurationparam: Параметры конфигурации
+nav-configurationscope: Область конфигурации
+nav-configuredmap: Пользовательские карты
+nav-connectionrule: Правила соединения
+nav-connectiontype: Типы соединения
+nav-coverage: Покрытие
+nav-cpe: CPE
+nav-cpeprofile: Профили CPE
+nav-crashinfo: Дампы
+nav-credentialcheckrule: Правила проверки доступа
+nav-crontab: Планировщик
+nav-csv: Импорт/экспорт CSV
+nav-customfield: Свои поля
+nav-dashboard: График
+nav-datastreamconfig: Пользовательские DataStream
+nav-dialplan: Номерной план
+nav-discoveredobject: Обнаруженные устройства
+nav-division: Подразделения
+nav-dnsserver: Сервера DNS
+nav-dnszone: Зоны
+nav-dnszoneprofile: Профили зон
+nav-endpoint: Точки подключения
+nav-event: События
+nav-eventclass: Классы событий
+nav-eventtrigger: Триггеры событий
+nav-extstorage: Внеш. хранилища
+nav-facade: Фасады
+nav-firmware: Прошивки
+nav-firmwarepolicy: Политика версий прошивок
+nav-getnow: Текущая информация
+nav-glyph: Иконки
+nav-group: Группы
+nav-groupaccess: Права групп
+nav-handler: Обработчики
+nav-heatmap: Тепловая карта
+nav-ifdescpatterns: Маски для описания интерфейсов
+nav-ignoreeventrule: Правила игнорирования событий
+nav-ignorepattern: Шаблоны игнорирования
+nav-imagestore: Изображения
+nav-interface: Интерфейсы
+nav-interfaceprofile: Профили интерфейсов
+nav-interfacevalidationpolicy: Политики валидации интерфейса
+nav-inv: Учет объектов
+nav-ipam: Назначенные адреса
+nav-job: Задачи (Job)
+nav-jsonimport: Импорт JSON
+nav-kb: База знаний
+nav-kbentry: Записи
+nav-kbentrytemplate: Шаблоны
+nav-l2domain: Домен L2
+nav-l2domainprofile: Профили L2 доменов
+nav-label: Метки
+nav-language: Языки
+nav-layer: Слои
+nav-macblacklist: Чёрный список MACов
+nav-maintainer: Ответственный
+nav-maintenance: РНР
+nav-maintenancetype: Типы РНР
+nav-managedobject: Список объектов
+nav-managedobjectprofile: Профили объектов
+nav-map: Карта сети
+nav-measurementunits: Единицы измерения
+nav-messageroute: Маршруты сообщений
+nav-metricaction: Действия с метриками
+nav-metricrule: Правила для метрик (пороги)
+nav-metricscope: Пространства метрик
+nav-metricstream: Настройки Отправки метрик
+nav-metrictype: Типы метрик
+nav-mib: MIB
+nav-mibpreference: Приоритет MIB
+nav-mimetype: Типы MIME
+nav-modelinterface: Интерфейсы моделей
+nav-modelmapping: Привязки моделей
+nav-modelprotectionprofile: Профили защиты форм
+nav-modeltemplate: Шаблоны Справочников
+nav-monitor: Монитор опроса
+nav-monmap: Карта объектов
+nav-networksegment: Сегменты сети
+nav-networksegmentprofile: Профили сегментов
+nav-notificationgroup: Группы уведомлений
+nav-numbercategory: Категории номера
+nav-objectconfigurationrule: Правила конфигурации
+nav-objectdiagnosticconfig: Настройки диагностики устройств
+nav-objectdiscoveryrule: Правила сканирования сети
+nav-objectmodel: Модели объектов
+nav-objectnotification: Уведомления
+nav-objectnotify: Уведомления по объектам
+nav-objectvalidationpolicy: Политики валидации объекта
+nav-oidalias: Синонимы (alias) OID
+nav-organisation: Организации
+nav-outage: Обстановка детально
+nav-peer: Пиры
+nav-peergroup: Группы пиров
+nav-peerprofile: Профили Пиров
+nav-phonenumber: Телефонный номер
+nav-phonenumberprofile: Профиль номера
+nav-phonerange: Диапазоны номеров
+nav-phonerangeprofile: Профиль диапазона
+nav-platform: Платформы
+nav-pool: Пулы
+nav-prefixaccess: Доступ к префиксам
+nav-prefixlistbuilder: Построение списка префиксов
+nav-prefixprofile: Профили префикса
+nav-prefixtable: Таблицы префиксов
+nav-profile: Профили
+nav-profilecheckrule: Правила проверки профиля
+nav-project: Проекты
+nav-protocol: Протоколы
+nav-quiz: Анкеты
+nav-remotesystem: Внешние системы
+nav-reportalarmcomments: Комментарии аварий
+nav-reportalarmdetail: Детали аварии
+nav-reportconfig: Настройки отчётов
+nav-reportifacestatus: Статусы интерфейсов
+nav-reportlinkdetail: Детализация по линкам
+nav-reportmaxmetrics: Отчет по пиковой загрузке
+nav-reportmetrics: Отчёт по метрикам
+nav-reportmovedmac: Перемещение MAC'ов
+nav-reportobjectdetail: Детализация по объектам
+nav-reportsubscription: Подписка на отчёты
+nav-resourcegroup: Группы ресурсов
+nav-resourcepool: Пулы ресурсов
+nav-resourcestate: Состояния ресурсов
+nav-scale: Множители (ед. изм.)
+nav-search: Глобальный Поиск
+nav-sensor: Сенсор
+nav-sensorprofile: Профили сенсора
+nav-service: Сервисы
+nav-serviceprofile: Профили сервиса
+nav-slaprobe: SLA Пробы
+nav-slaprofile: Профиль SLA
+nav-spec: Спецификации
+nav-state: Состояния
+nav-street: Улицы
+nav-style: Стили
+nav-subscriber: Абоненты
+nav-subscriberprofile: Профили абонентов
+nav-supplier: Поставщик
+nav-supplierprofile: Профили поставщиков
+nav-systemnotification: Системные уведомления
+nav-systemtemplate: Системные шаблоны
+nav-techdomain: Домены
+nav-technology: Технологии
+nav-template: Шаблоны
+nav-timepattern: Маски времени
+nav-totaloutage: Общая сводка
+nav-transition: Переходы
+nav-ttsystem: Система TT
+nav-unknownmodel: Неизвестные модели
+nav-user: Пользователи
+nav-useraccess: Права пользователя
+nav-vendor: Производители
+nav-vlan: VLAN
+nav-vlanfilter: Фильтры VLAN
+nav-vlanprofile: Профили VLAN
+nav-vlantemplate: Шаблоны VLAN
+nav-vpn: VPN
+nav-vrf: VRF
+nav-vrfgroup: Группы VRF
+nav-wfmigration: Миграции
+nav-workflow: Редактор процессов

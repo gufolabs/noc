@@ -11,7 +11,7 @@ from mongoengine.queryset import Q
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonerange import PhoneRange
 from noc.services.web.base.decorators.state import state_handler
@@ -24,8 +24,8 @@ class PhoneRangeApplication(ExtDocApplication):
     PhoneRange application
     """
 
-    title = "Phone Range"
-    menu = [_("Phone Ranges")]
+    title = t("app-title-phonerange")
+    menu = [t("nav-phonerange")]
     model = PhoneRange
     parent_model = PhoneRange
     parent_field = "parent"

@@ -11,7 +11,7 @@
         </tr>
         <tr><td>
             <table>
-                <tr><th>Name</th><th>Required</th><th>References</th></tr>
+                <tr><th>{{ t("header-name") }}</th><th>{{ t("header-required") }}</th><th>{{ t("header-references") }}</th></tr>
                 {% for name,required,rel in fields %}
                 <tr class="{%cycle 'row1' 'row2'%}"     >
                     <td>{{name}}</td>

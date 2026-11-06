@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # ip.addressrange application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_fqdn, is_ipv4, is_ipv6
 from noc.ip.models.addressrange import AddressRange
 from noc.services.web.base.extmodelapplication import ExtModelApplication
@@ -19,8 +19,8 @@ class AddressRangeApplication(ExtModelApplication):
     AddressRanges application
     """
 
-    title = "Address Ranges"
-    menu = [_("Setup"), _("Address Ranges")]
+    title = t("app-title-addressrange")
+    menu = [t("app-group-setup"), t("nav-addressrange")]
     model = AddressRange
     query_fields = ["name__icontains", "description__icontains"]
 

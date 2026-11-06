@@ -13,7 +13,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.capability import Capability
 from noc.main.models.doccategory import DocCategory
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -24,8 +24,8 @@ class CapabilityApplication(ExtDocApplication):
     Capability application
     """
 
-    title = _("Capability")
-    menu = [_("Setup"), _("Capabilities")]
+    title = t("app-title-capability")
+    menu = [t("app-group-setup"), t("nav-capability")]
     model = Capability
     query_fields = ["name", "description"]
     query_condition = "icontains"

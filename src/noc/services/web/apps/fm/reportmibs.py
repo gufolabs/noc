@@ -9,14 +9,14 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.mib import MIB
 from noc.fm.models.mibdata import MIBData
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportreportMIBs(SimpleReport):
-    title = _("Installed MIBs")
+    title = t("app-title-reportmibs")
 
     def get_data(self, request: HttpRequest, **kwargs):
         data = []  # Mib, Last Updated, Entries, Depends, Used by
@@ -34,11 +34,11 @@ class ReportreportMIBs(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                TableColumn("MIB", total_label="Total:"),
-                TableColumn("Last Updated", format="date"),
-                TableColumn("Entries", align="right", format="integer", total="sum"),
-                TableColumn("Depends on"),
-                TableColumn("Used by"),
+                TableColumn(t("header-mib"), total_label="Total:"),
+                TableColumn(t("header-last-updated"), format="date"),
+                TableColumn(t("header-entries"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-depends-on")),
+                TableColumn(t("header-used-by")),
             ],
             data=data,
             enumerate=True,

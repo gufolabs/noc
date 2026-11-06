@@ -14,11 +14,11 @@ from mongoengine.queryset import Q
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.middleware.tls import get_user
 from noc.core.models.inputsources import InputSource
 from noc.core.models.serviceinstanceconfig import InstanceType
 from noc.core.resource import from_resource
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4, is_mac, is_objectid
 from noc.inv.models.interface import Interface
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -50,8 +50,8 @@ class ServiceApplication(ExtDocApplication):
     Service application
     """
 
-    title = "Services"
-    menu = [_("Services")]
+    title = t("app-title-service")
+    menu = [t("nav-service")]
     model = Service
     parent_model = Service
     parent_field = "parent"

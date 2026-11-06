@@ -3,12 +3,12 @@
 </tbody>
 <tr>
     <th colspan="2">
-        {{ _("Phone Range") }}: {{ object.name }}
+        {{ t("header-phone-range") }}: {{ object.name }}
     </th>
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Dialplan") }}
+        {{ t("header-dialplan") }}
     </th>
     <td>
         <a href="/api/card/view/dialplan/{{ object.dialplan.id }}/">{{ object.dialplan.name }}</a>
@@ -22,7 +22,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("State") }}
+        {{ t("header-state") }}
     </th>
     <td>
         {{ object.state.name }}
@@ -30,7 +30,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Range") }}
+        {{ t("header-range") }}
     </th>
     <td>
         {{ object.from_number }} - {{ object.to_number }}
@@ -38,7 +38,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Numbers") }}
+        {{ t("header-numbers") }}
     </th>
     <td>
         {{ object.total_numbers }}
@@ -46,7 +46,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Profile") }}
+        {{ t("header-profile") }}
     </th>
     <td>
         {% if object.profile %}{{ object.profile.name }}{% endif %}
@@ -54,7 +54,7 @@
 </tr>
 <tr>
     <th scope="row" class="col-md-2">
-        {{ _("Project") }}
+        {{ t("header-project-f6f4da") }}
     </th>
     <td>
         {% if object.project %}{{ object.project.name }}{% endif %}
@@ -63,7 +63,7 @@
 
 <tr>
     <th scope="row">
-        {{ _("Description") }}
+        {{ t("header-description") }}
     </th>
     <td>
         {% if object.description %} {{ object.description }} {% endif %}
@@ -71,13 +71,13 @@
 </tr>
 {% if service_groups %}
     <tr>
-        <th scope="row">{{ _("Provides Resources") }}</th>
+        <th scope="row">{{ t("header-provides-resources") }}</th>
         <td>
             <table class="table table-condensed table-hover">
                 <thead>
-                    <th>{{ _("Group") }}</th>
-                    <th>{{ _("Technology") }}</th>
-                    <th>{{ _("Type") }}</th>
+                    <th>{{ t("header-group") }}</th>
+                    <th>{{ t("header-technology") }}</th>
+                    <th>{{ t("header-type") }}</th>
                 </thead>
                 <tbody>
                 {% for g in service_groups %}
@@ -94,13 +94,13 @@
 {% endif %}
 {% if client_groups %}
     <tr>
-        <th scope="row">{{ _("Consumes Resources") }}</th>
+        <th scope="row">{{ t("header-consumes-resources") }}</th>
         <td>
             <table class="table table-condensed table-hover">
                 <thead>
-                    <th>{{ _("Group") }}</th>
-                    <th>{{ _("Technology") }}</th>
-                    <th>{{ _("Type") }}</th>
+                    <th>{{ t("header-group") }}</th>
+                    <th>{{ t("header-technology") }}</th>
+                    <th>{{ t("header-type") }}</th>
                 </thead>
                 <tbody>
                 {% for g in client_groups %}
@@ -117,20 +117,20 @@
 {% endif %}
 <tr>
     <th scope="row">
-        {{ _("Ranges") }}
+        {{ t("header-ranges") }}
     </th>
     <td>
         <table>
             <thead>
                 <tr>
                     <th class="col-md-3">
-                        {{ _("Range") }}
+                        {{ t("header-range") }}
                     </th>
                     <th class="col-md-1">
-                        {{ _("Numbers") }}
+                        {{ t("header-numbers") }}
                     </th>
                     <th class="col-md-8">
-                        {{ _("Description") }}
+                        {{ t("header-description") }}
                     </th>
                 </tr>
             </thead>
@@ -150,23 +150,23 @@
 {% if numbers %}
 <tr>
     <th scope="row">
-        {{ _("Numbers") }}
+        {{ t("header-numbers") }}
     </th>
     <td>
         <table>
             <thead>
                 <tr>
                     <th class="col-md-2">
-                        {{ _("Number") }}
+                        {{ t("header-number") }}
                     </th>
                     <th class="col-md-1">
-                        {{ _("Status") }}
+                        {{ t("header-status") }}
                     </th>
                     <th class="col-md-1">
-                        {{ _("Category") }}
+                        {{ t("header-category") }}
                     </th>
                     <th class="col-md-8">
-                        {{ _("Description") }}
+                        {{ t("header-description") }}
                     </th>
                 </tr>
             </thead>

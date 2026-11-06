@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.interfaceprofile application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.main.models.label import MATCH_BADGES, MATCH_OPS
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -31,8 +31,8 @@ class InterfaceProfileApplication(ExtDocApplication):
     InterfaceProfile application
     """
 
-    title = _("Interface Profile")
-    menu = [_("Setup"), _("Interface Profiles")]
+    title = t("app-title-interfaceprofile")
+    menu = [t("app-group-setup"), t("nav-interfaceprofile")]
     model = InterfaceProfile
     query_condition = "icontains"
     query_fields = ["name", "description"]

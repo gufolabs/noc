@@ -20,6 +20,7 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.capability import Capability
 from noc.inv.models.discoveryid import DiscoveryID
@@ -102,8 +103,8 @@ class ReportAdPath:
 
 
 class ReportObjectDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Object Detail")
-    title = _("Object Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportobjectdetail")
+    title = t("app-title-reportobjectdetail")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7
@@ -225,29 +226,29 @@ class ReportObjectDetailApplication(ExtApplication):
         ]
 
         header_row = [
-            "ID",
-            "OBJECT_NAME",
-            "OBJECT_ADDRESS",
-            "OBJECT_HOSTNAME",
-            "OBJECT_STATUS",
-            "PROFILE_NAME",
-            "OBJECT_PROFILE",
-            "OBJECT_VENDOR",
-            "OBJECT_PLATFORM",
-            "OBJECT_HWVERSION",
-            "OBJECT_VERSION",
-            "OBJECT_BOOTPROM",
-            "OBJECT_SERIAL",
-            "OBJECT_ATTR_PATCH",
-            "AUTH_PROFILE",
-            "AVAIL",
-            "ADMIN_DOMAIN",
-            "CONTAINER",
-            "SEGMENT",
-            "PHYS_INTERFACE_COUNT",
-            "LINK_COUNT",
-            "LAST_CONFIG_TS",
-            "PROJECT",
+            t("header-id"),
+            t("header-object-name"),
+            t("header-object-address"),
+            t("header-object-hostname"),
+            t("header-object-status"),
+            t("header-profile-name"),
+            t("header-object-profile"),
+            t("header-object-vendor"),
+            t("header-object-platform"),
+            t("header-object-hwversion"),
+            t("header-object-version"),
+            t("header-object-bootprom"),
+            t("header-object-serial"),
+            t("header-object-attr-patch"),
+            t("header-auth-profile"),
+            t("header-avail-059853"),
+            t("header-admin-domain-2b0276"),
+            t("header-container"),
+            t("header-segment-aeb83a"),
+            t("header-phys-interface-count"),
+            t("header-link-count"),
+            t("header-last-config-ts"),
+            t("header-project-16eeaf"),
         ]
         # "DISCOVERY_PROBLEM"
         # "ADM_PATH

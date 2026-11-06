@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Rules by Profile Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,14 +9,14 @@
 import re
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import loader as profile_loader
-from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class Reportreportrulesbyprofile(SimpleReport):
-    title = _("Rules by Profile")
+    title = t("app-title-reportrulesbyprofile")
 
     def get_data(self, **kwargs):
         # profile -> (syslog, snmp, other)
@@ -46,11 +46,11 @@ class Reportreportrulesbyprofile(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Profile",
-                TableColumn("Syslog", align="right", format="integer", total="sum"),
-                TableColumn("SNMP Traps", align="right", format="integer", total="sum"),
-                TableColumn("Other", align="right", format="integer", total="sum"),
-                TableColumn("Total", align="right", format="integer", total="sum"),
+                t("header-profile"),
+                TableColumn(t("header-syslog"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-snmp-traps"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-other"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-total"), align="right", format="integer", total="sum"),
             ],
             data=data,
         )

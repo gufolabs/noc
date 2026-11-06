@@ -16,7 +16,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.clickhouse.connect import connection
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.archivedalarm import ArchivedAlarm
 from noc.fm.models.ttsystem import TTSystem
 from noc.sa.models.managedobject import ManagedObject
@@ -25,33 +25,38 @@ from noc.services.web.base.simplereport import PredefinedReport, SectionRow, Sim
 
 class ReportForm(forms.Form):
     repo_format = forms.ChoiceField(
-        label="Формат отчёта",
+        label=t("label-report-format"),
         widget=widgets.RadioSelect,
-        choices=((0, "Статистика"), (1, "Детализация ошибок эскалации")),
+        choices=((0, t("label-statistics")), (1, t("label-escalation-error-details"))),
         initial=0,
         required=False,
     )
     interval = forms.ChoiceField(
-        choices=[(0, _("Range")), (1, _("1 day")), (7, _("1 week")), (30, _("1 month"))],
-        label=_("Interval"),
+        choices=[
+            (0, t("label-range")),
+            (1, t("label-1-day")),
+            (7, t("label-1-week")),
+            (30, t("label-1-month")),
+        ],
+        label=t("label-interval"),
     )
     from_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("From Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-from-date"), required=False
     )
     to_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("To Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-to-date"), required=False
     )
 
 
 class ReportTTSystemStatApplication(SimpleReport):
-    title = _("TT system statistics")
+    title = t("app-title-reportttsystemstat")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(_("TTSystem Stat (1 day)"), {"interval": 1}),
-        "7d": PredefinedReport(_("TTSystem Stat (7 days)"), {"interval": 7}),
-        "30d": PredefinedReport(_("TTSystem Stat (30 day)"), {"interval": 30}),
+        "1d": PredefinedReport(t("label-ttsystem-stat-1-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("label-ttsystem-stat-7-days"), {"interval": 7}),
+        "30d": PredefinedReport(t("label-ttsystem-stat-30-day"), {"interval": 30}),
         "1d_errors": PredefinedReport(
-            _("TTSystem Errors (1 day)"), {"interval": 1, "repo_format": "1"}
+            t("label-ttsystem-errors-1-day"), {"interval": 1, "repo_format": "1"}
         ),
     }
 
@@ -81,27 +86,27 @@ class ReportTTSystemStatApplication(SimpleReport):
         else:
             to_date = from_date + dt.timedelta(days=1)
         columns = [
-            _("Server"),
-            _("Service"),
-            _("Request count"),
-            _("Success request count"),
-            _("Failed request count"),
-            _("Success request (%)"),
-            _("Q1 (ms)"),
-            _("Q2 (ms)"),
-            _("Q3 (ms)"),
-            _("p95 (ms)"),
-            _("max (ms)"),
+            t("header-server"),
+            t("header-service"),
+            t("header-request-count"),
+            t("header-success-request-count"),
+            t("header-failed-request-count"),
+            t("header-success-request"),
+            t("header-q1-ms"),
+            t("header-q2-ms"),
+            t("header-q3-ms"),
+            t("header-p95-ms"),
+            t("header-max-ms"),
         ]
         if repo_format == "1":
             columns = [
-                _("Timestamp"),
-                _("Server"),
-                _("Service"),
-                _("Managed Object"),
-                _("TT ID"),
-                _("Error code"),
-                _("Error text"),
+                t("header-timestamp"),
+                t("header-server"),
+                t("header-service"),
+                t("header-managed-object-62561c"),
+                t("header-tt-id"),
+                t("header-error-code"),
+                t("header-error-text"),
             ]
         ts_from_date = time.mktime(from_date.timetuple())
         ts_to_date = time.mktime(to_date.timetuple())

@@ -1,25 +1,25 @@
 # ---------------------------------------------------------------------
 # reportmissedp2p Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC Modules
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.vrf import VRF
 from noc.services.web.base.simplereport import SimpleReport
 
 
 class Reportreportmissedp2p(SimpleReport):
-    title = _("Missed Link Addresses")
+    title = t("app-title-reportmissedp2p")
 
     def get_data(self, **kwargs):
         vrf_id = VRF.get_global().id
         return self.from_query(
             title=self.title,
-            columns=[_("Prefix")],
+            columns=[t("header-prefix")],
             query="""
             SELECT prefix
             FROM   ip_prefix p

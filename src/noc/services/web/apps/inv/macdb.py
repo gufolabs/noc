@@ -18,8 +18,8 @@ from noc.bi.models.mac import MAC as MACHISTORY
 from noc.bi.models.macdb import MACDB
 from noc.config import config
 from noc.core.clickhouse.connect import connection
+from noc.core.i18n import t
 from noc.core.mac import MAC
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_mac
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.main.models.pool import Pool
@@ -33,8 +33,8 @@ class MACApplication(ExtApplication):
     MAC application
     """
 
-    title = _("MacDB")
-    menu = _("Mac DB")
+    title = t("app-title-macdb")
+    menu = t("nav-macdb")
 
     mac_search_re = re.compile(r"([\dABCDEF][\dABCDEF]:){3,6}", re.IGNORECASE)
     mac_search_re_inv = re.compile(r"(:[\dABCDEF][\dABCDEF]){2,6}", re.IGNORECASE)

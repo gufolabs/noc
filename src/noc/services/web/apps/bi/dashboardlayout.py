@@ -10,7 +10,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.bi.models.dashboardlayout import DashboardLayout
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
 
@@ -19,8 +19,8 @@ class DashboardLayoutApplication(ExtDocApplication):
     DashboardLayout application
     """
 
-    title = "Dashboard Layout"
-    menu = [_("Setup"), _("Dashboard Layout")]
+    title = t("app-title-dashboardlayout")
+    menu = [t("app-group-setup"), t("nav-dashboardlayout")]
     model = DashboardLayout
 
     @api.get("^(?P<id>[0-9a-f]{24})/json/$", access="read")

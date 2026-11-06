@@ -14,7 +14,7 @@ from django.db import connection
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.reboot import Reboot
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess
@@ -23,24 +23,29 @@ from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, T
 
 class ReportForm(forms.Form):
     interval = forms.ChoiceField(
-        choices=[(0, _("Range")), (1, _("1 day")), (7, _("1 week")), (30, _("1 month"))],
-        label=_("Inteval"),
+        choices=[
+            (0, t("label-range")),
+            (1, t("label-1-day")),
+            (7, t("label-1-week")),
+            (30, t("label-1-month")),
+        ],
+        label=t("label-interval"),
     )
     from_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("From Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-from-date"), required=False
     )
     to_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("To Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-to-date"), required=False
     )
 
 
 class ReportRebootsApplication(SimpleReport):
-    title = _("Reboots")
+    title = t("app-title-reportreboots")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(_("Reboots (1 day)"), {"interval": 1}),
-        "7d": PredefinedReport(_("Reboots (7 days)"), {"interval": 7}),
-        "30d": PredefinedReport(_("Reboot (30 day)"), {"interval": 30}),
+        "1d": PredefinedReport(t("label-reboots-1-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("label-reboots-7-days"), {"interval": 7}),
+        "30d": PredefinedReport(t("label-reboot-30-day"), {"interval": 30}),
     }
 
     def get_data(self, request: HttpRequest, interval, from_date=None, to_date=None, **kwargs):
@@ -101,9 +106,9 @@ class ReportRebootsApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Managed Object"),
-                _("Address"),
-                TableColumn(_("Reboots"), align="right", format="numeric", total="sum"),
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                TableColumn(t("header-reboots"), align="right", format="numeric", total="sum"),
             ],
             data=data,
             enumerate=True,

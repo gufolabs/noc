@@ -6,17 +6,17 @@
         </th>
     </tr>
     <tr>
-        <th scope="row">{{ _("Profile") }}</th>
+        <th scope="row">{{ t("header-profile") }}</th>
         <td>{{object.profile.name}}</td>
     <tr>
     {% if parent %}
     <tr>
-        <th scope="row">{{ _("Parent") }}</th>
+        <th scope="row">{{ t("header-parent") }}</th>
         <td><a href="/api/card/view/segment/{{ parent.id }}/">{{ parent.name }}</a></td>
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Redundancy") }}</th>
+        <th scope="row">{{ t("header-redundancy") }}</th>
         <td>
             {% if object.is_redundant %}
                 {% if object.lost_redundancy %}
@@ -31,13 +31,13 @@
     </tr>
     {% if children %}
     <tr>
-        <th scope="row">{{ _("Children") }}</th>
+        <th scope="row">{{ t("header-children") }}</th>
         <td>
             <table>
                 <thead>
                     <tr>
-                        <th class="col-sm-10">{{ _("Segment") }}</th>
-                        <th class="col-sm-2">{{ _("Summary") }}</th>
+                        <th class="col-sm-10">{{ t("header-segment-44986c") }}</th>
+                        <th class="col-sm-2">{{ t("header-summary") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,14 +64,14 @@
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Objects") }}</th>
+        <th scope="row">{{ t("header-objects-72a83a") }}</th>
         <td>
             <table class="table table-striped">
                 <thead>
-                    <th class="col-sm-6">{{ _("Name") }}</th>
-                    <th class="col-sm-2">{{ _("Address") }}</th>
-                    <th class="col-sm-2">{{ _("Model") }}</th>
-                    <th class="col-sm-2">{{ _("Summary") }}</th>
+                    <th class="col-sm-6">{{ t("header-name") }}</th>
+                    <th class="col-sm-2">{{ t("header-address") }}</th>
+                    <th class="col-sm-2">{{ t("header-model") }}</th>
+                    <th class="col-sm-2">{{ t("header-summary") }}</th>
                 </thead>
                 <tbody>
                 {% for o in managed_objects %}
@@ -94,14 +94,14 @@
     <tr>
     {% if object.vlan_border %}
     <tr>
-        <th scope="row">{{ _("VLAN Translation") }}</th>
+        <th scope="row">{{ t("header-vlan-translation") }}</th>
         <td>
         {% if object.vlan_translation %}
         <table class="table table-stripped">
             <thead>
-                <th class="col-sm-6">{{ _("Filter") }}</th>
-                <th class="col-sm-2">{{ _("Rule") }}</th>
-                <th class="col-sm-4">{{ _("Parent") }}</th>
+                <th class="col-sm-6">{{ t("header-filter") }}</th>
+                <th class="col-sm-2">{{ t("header-rule") }}</th>
+                <th class="col-sm-4">{{ t("header-parent") }}</th>
             </thead>
             <tbody>
                 {% for vt in object.vlan_translation %}
@@ -121,14 +121,14 @@
     {% endif %}
     {% if vlans %}
     <tr>
-        <th scope="row">{{ _("VLANs") }}</th>
+        <th scope="row">{{ t("header-vlans") }}</th>
         <td>
         <table class="table table-stripped">
             <thead>
-                <th class="col-sm-2">{{ _("VLAN") }}</th>
-                <th class="col-sm-4">{{ _("Name") }}</th>
-                <th class="col-sm-2">{{ _("State") }}</th>
-                <th class="col-sm-4">{{ _("Translation") }}</th>
+                <th class="col-sm-2">{{ t("header-vlan-560367") }}</th>
+                <th class="col-sm-4">{{ t("header-name") }}</th>
+                <th class="col-sm-2">{{ t("header-state") }}</th>
+                <th class="col-sm-4">{{ t("header-translation") }}</th>
             </thead>
             <tbody>
             {% for vlan in vlans %}

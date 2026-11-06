@@ -16,8 +16,8 @@ from django.http import HttpRequest
 # NOC modules
 from noc.aaa.models.permission import Permission
 from noc.core.colors import get_colors
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4, is_ipv4_prefix, is_ipv6, is_ipv6_prefix
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.prefixbookmark import PrefixBookmark
@@ -31,8 +31,8 @@ class IPAMApplication(ExtApplication):
     IPAM application
     """
 
-    title = _("Assigned Addresses")
-    menu = [_("Assigned Addresses")]
+    title = t("app-title-ipam")
+    menu = [t("nav-ipam")]
     extra_permissions = ["bind_vc", "rebase"]
     implied_permissions = {"rebase": ["ip:prefix:rebase"]}
 

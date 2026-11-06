@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # pm.metricrule application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2014 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import Label
 from noc.pm.models.metricrule import MetricRule
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -17,8 +17,8 @@ class MetricRuleApplication(ExtDocApplication):
     MetricType application
     """
 
-    title = _("Metric Rule")
-    menu = [_("Setup"), _("Metric Rules")]
+    title = t("app-title-metricrule")
+    menu = [t("app-group-setup"), t("nav-metricrule")]
     model = MetricRule
     query_condition = "icontains"
     query_fields = ["name", "description"]

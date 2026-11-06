@@ -11,7 +11,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrf import VRF
 from noc.main.models.customfield import CustomField
@@ -21,22 +21,22 @@ from noc.vc.models.vlan import VLAN
 
 
 class ReportFilterApplication(SimpleReport):
-    title = _("Filter")
+    title = t("app-title-reportfilter")
 
     def get_form(self):
         class RForm(forms.Form):
             vrf = forms.ModelChoiceField(
-                label=_("VRF"), required=False, queryset=VRF.objects.order_by("name")
+                label=t("label-vrf"), required=False, queryset=VRF.objects.order_by("name")
             )
             afi = forms.ChoiceField(
-                label=_("Address Family"),
+                label=t("label-address-family"),
                 required=False,
-                choices=[("", "All"), ("4", _("IPv4")), ("6", _("IPv6"))],
+                choices=[("", t("label-all")), ("4", t("label-ipv4")), ("6", t("label-ipv6"))],
             )
             asn = forms.ModelChoiceField(
-                label=_("AS Number"), required=False, queryset=AS.objects.order_by("asn")
+                label=t("label-as-number"), required=False, queryset=AS.objects.order_by("asn")
             )
-            description = forms.CharField(label=_("Description"), required=False)
+            description = forms.CharField(label=t("label-description"), required=False)
 
         self.customize_form(RForm, "ip_prefix", search=True)
         return RForm
@@ -65,14 +65,20 @@ class ReportFilterApplication(SimpleReport):
                     q[k + "__icontains"] = v
                 else:
                     q[k] = v
-        columns = ["VRF", "Prefix", "State", "AS", "VLAN"]
+        columns = [
+            t("header-vrf"),
+            t("header-prefix"),
+            t("header-state"),
+            t("header-as"),
+            t("header-vlan-560367"),
+        ]
         cf = CustomField.table_fields("ip_prefix")
         for f in cf:
             if f.type == "bool":
                 columns.append(TableColumn(f.label, format="bool"))
             else:
                 columns.append(f.label)
-        columns += ["Description", "Labels"]
+        columns += [t("header-description"), t("header-labels")]
 
         data = [
             get_row(p)

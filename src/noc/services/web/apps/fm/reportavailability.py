@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportavailability
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,8 +15,8 @@ from mongoengine.queryset.visitor import Q
 from pymongo import ReadPreference
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.fm.models.outage import Outage
 from noc.fm.models.reboot import Reboot
 from noc.inv.models.discoveryid import DiscoveryID
@@ -29,38 +29,29 @@ from noc.services.web.base.simplereport import PredefinedReport, SectionRow, Sim
 
 
 class ReportForm(forms.Form):
-    """
-    interval = forms.ChoiceField(choices=[
-        (0, _("Range")),
-        (1, _("last day")),
-        (7, _("last week")),
-        (30, _("last month"))
-    ], label=_("Inteval"))
-    """
-
     from_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("From Date"), required=True
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-from-date"), required=True
     )
     to_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("To Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-to-date"), required=False
     )
     adm_domain = forms.ModelChoiceField(
-        label=_("Administrative Domain"),
+        label=t("label-administrative-domain"),
         required=False,
         queryset=AdministrativeDomain.objects.order_by("name"),
     )
-    skip_avail = forms.BooleanField(label=_("Skip full available"), required=False)
-    skip_zero_avail = forms.BooleanField(label=_("Skip zero available"), required=False)
-    filter_zero_access = forms.BooleanField(label=_("Skip zero access port"), required=False)
+    skip_avail = forms.BooleanField(label=t("label-skip-full-available"), required=False)
+    skip_zero_avail = forms.BooleanField(label=t("label-skip-zero-available"), required=False)
+    filter_zero_access = forms.BooleanField(label=t("label-skip-zero-access-port"), required=False)
 
 
 class ReportAvailabilityApplication(SimpleReport):
-    title = _("Availability")
+    title = t("app-title-reportavailability")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(_("Availability (last day)"), {"interval": 1}),
-        "7d": PredefinedReport(_("Availability (last week)"), {"interval": 7}),
-        "30d": PredefinedReport(_("Availability (last month)"), {"interval": 30}),
+        "1d": PredefinedReport(t("label-availability-last-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("label-availability-last-week"), {"interval": 7}),
+        "30d": PredefinedReport(t("label-availability-last-month"), {"interval": 30}),
     }
 
     @staticmethod
@@ -211,17 +202,17 @@ class ReportAvailabilityApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Adm. Domain"),
-                _("Managed Object"),
-                _("Hostname"),
-                _("Address"),
-                _("Profile"),
+                t("header-adm-domain"),
+                t("header-managed-object-62561c"),
+                t("header-hostname"),
+                t("header-address"),
+                t("header-profile"),
                 # TableColumn(_("Avail"), align="right", format="percent"),
                 # TableColumn(_("Total avail (sec)"), align="right", format="numeric"),
-                _("Avail"),
-                _("Total unavail (sec)"),
-                _("Count outages"),
-                _("Reboots"),
+                t("header-avail-389d90"),
+                t("header-total-unavail-sec"),
+                t("header-count-outages"),
+                t("header-reboots"),
             ],
             data=r,
             enumerate=True,

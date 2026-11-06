@@ -1,26 +1,26 @@
 # ---------------------------------------------------------------------
 # ip.reportipamsummary
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2012 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportIPAMSummaryApplication(SimpleReport):
-    title = _("IPAM Summary")
+    title = t("app-title-reportipamsummary")
 
     def get_data(self, **kwargs):
         return self.from_query(
             title="IPAM Summary",
             columns=[
-                "VRF",
-                "RD",
-                TableColumn("Prefixes", align="right", format="integer", total="sum"),
-                TableColumn("Addresses", align="right", format="integer", total="sum"),
+                t("header-vrf"),
+                t("header-rd"),
+                TableColumn(t("header-prefixes"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-addresses"), align="right", format="integer", total="sum"),
             ],
             query="""
                 SELECT vrf.name, vrf.rd,

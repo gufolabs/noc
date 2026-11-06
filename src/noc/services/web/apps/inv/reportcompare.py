@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # inv.reportcompare
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.objectmodel import ObjectModel
 from noc.inv.models.vendor import Vendor
 from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 
 class ReportCompareApplication(SimpleReport):
-    title = _("Compare Specs")
+    title = t("app-title-reportcompare")
 
     def get_data(self, **kwargs):
         data = []
@@ -51,7 +51,14 @@ class ReportCompareApplication(SimpleReport):
 
         return self.from_dataset(
             title=self.title,
-            columns=["Model", "W", "H", "D", "RU", "Weight (kg)"],
+            columns=[
+                t("header-model"),
+                t("header-w"),
+                t("header-h"),
+                t("header-d"),
+                t("header-ru"),
+                t("header-weight-kg"),
+            ],
             data=data,
             enumerate=True,
         )

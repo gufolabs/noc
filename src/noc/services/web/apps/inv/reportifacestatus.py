@@ -21,8 +21,8 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.text import list_to_ranges
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -96,8 +96,8 @@ class ReportInterfaceStatus:
 
 
 class ReportInterfaceStatusApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Interface Status")
-    title = _("Interface Status")
+    menu = t("app-group-reports") + "|" + t("nav-reportifacestatus")
+    title = t("app-title-reportifacestatus")
 
     @api.get(
         "^download/$",
@@ -127,11 +127,11 @@ class ReportInterfaceStatusApplication(ExtApplication):
         def humanize_speed(speed):
             if not speed:
                 return "-"
-            for t, n in [(1000000, "G"), (1000, "M"), (1, "k")]:
-                if speed >= t:
-                    if speed // t * t == speed:
-                        return f"{int(speed // t)}{n}"
-                    return f"{float(speed) / t:.2f}{n}"
+            for threshold, n in [(1000000, "G"), (1000, "M"), (1, "k")]:
+                if speed >= threshold:
+                    if speed // threshold * threshold == speed:
+                        return f"{int(speed // threshold)}{n}"
+                    return f"{float(speed) / threshold:.2f}{n}"
             return str(speed)
 
         def row(row):
@@ -167,18 +167,18 @@ class ReportInterfaceStatusApplication(ExtApplication):
         ]
 
         header_row = [
-            "MANAGED_OBJECT",
-            "OBJECT_ADDRESS",
-            "OBJECT_MODEL",
-            "OBJECT_SOFTWARE",
-            "PORT_NAME",
-            "PORT_PROFILE_NAME",
-            "PORT_STATUS",
-            "LINK_STATUS",
-            "PORT_SPEED",
-            "PORT_DUPLEX",
-            "PORT_UNTAGGED_VLAN",
-            "PORT_TAGGED_VLANS",
+            t("header-managed-object-f070ef"),
+            t("header-object-address"),
+            t("header-object-model"),
+            t("header-object-software"),
+            t("header-port-name"),
+            t("header-port-profile-name"),
+            t("header-port-status"),
+            t("header-link-status"),
+            t("header-port-speed"),
+            t("header-port-duplex"),
+            t("header-port-untagged-vlan"),
+            t("header-port-tagged-vlans"),
         ]
 
         if columns:

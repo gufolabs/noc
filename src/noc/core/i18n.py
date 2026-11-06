@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # i18n utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import datetime as dt
 import json
 import yaml
+from collections.abc import Iterator
 from decimal import Decimal
 from pathlib import Path
 from threading import Lock
@@ -83,6 +84,18 @@ class MessageCatalog:
                 v = MessageFormat(pattern, locale=self._locale)
                 self._msg_formats[key] = v
         return v
+
+    def __iter__(self) -> Iterator[str]:
+        """Iterate over message keys.
+
+        Returns:
+            Iterator over message keys in the catalog.
+        """
+        if not self._loaded:
+            with self._lock:
+                if not self._loaded:
+                    self._load_patterns()
+        return iter(self._patterns)
 
     def _load_patterns(self) -> None:
         """Load message patterns with fallback to the default language.

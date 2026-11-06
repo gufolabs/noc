@@ -10,7 +10,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.fm.event import EventSource
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.ignorepattern import IgnorePattern
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -20,8 +20,8 @@ class IgnorePatternApplication(ExtDocApplication):
     IgnorePattern application
     """
 
-    title = _("Ignore Patterns")
-    menu = [_("Setup"), _("Ignore Patterns")]
+    title = t("app-title-ignorepattern")
+    menu = [t("app-group-setup"), t("nav-ignorepattern")]
     model = IgnorePattern
 
     @api.post("^from_event/(?P<event_id>[0-9a-f]{24})/$", access="create")

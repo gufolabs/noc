@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # phone.phonenumber application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonenumber import PhoneNumber
 from noc.services.web.base.decorators.state import state_handler
@@ -20,8 +20,8 @@ class PhoneNumberApplication(ExtDocApplication):
     PhoneNumber application
     """
 
-    title = "Phone Number"
-    menu = [_("Phone Number")]
+    title = t("app-title-phonenumber")
+    menu = [t("nav-phonenumber")]
     model = PhoneNumber
     query_fields = ["number__contains", "description__icontains"]
     resource_group_fields = [

@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # sa.credentialcheckrule application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.label import MATCH_BADGES, MATCH_OPS
 from noc.sa.models.credentialcheckrule import CredentialCheckRule
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -32,8 +32,8 @@ class CredentialCheckRuleApplication(ExtDocApplication):
     CredentialCheckRule application
     """
 
-    title = _("Credential Check Rule")
-    menu = [_("Setup"), _("Credential Check Rules")]
+    title = t("app-title-credentialcheckrule")
+    menu = [t("app-group-setup"), t("nav-credentialcheckrule")]
     model = CredentialCheckRule
     query_fields = ["name__icontains", "description__icontains"]
     default_ordering = ["preference", "_id"]

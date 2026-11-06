@@ -1,25 +1,25 @@
 # ---------------------------------------------------------------------
 # NS Zone Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class Reportreportnszonesummary(SimpleReport):
-    title = _("NS Zone Summary")
+    title = t("app-title-reportnszonesummary")
 
     def get_data(self, **kwargs):
         return self.from_query(
             title=self.title,
             columns=[
-                "NS",
-                TableColumn("Master", format="integer", align="right"),
-                TableColumn("Slave", format="integer", align="right"),
+                t("header-ns"),
+                TableColumn(t("header-master"), format="integer", align="right"),
+                TableColumn(t("header-slave"), format="integer", align="right"),
             ],
             query="""SELECT ns.name,
                     (

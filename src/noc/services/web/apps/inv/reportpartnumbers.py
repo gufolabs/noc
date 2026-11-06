@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # inv.reportpartnumbers
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.objectmodel import ObjectModel
 from noc.inv.models.vendor import Vendor
 from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 
 class ReportPartnumbersApplication(SimpleReport):
-    title = _("Part Numbers")
+    title = t("app-title-reportpartnumbers")
 
     def get_data(self, **kwargs):
         data = []
@@ -37,7 +37,18 @@ class ReportPartnumbersApplication(SimpleReport):
 
         return self.from_dataset(
             title=self.title,
-            columns=["0", "1", "2", "3", "0", "1", "2", "3", "Name", "Description"],
+            columns=[
+                t("header-part-number-0"),
+                t("header-part-number-1"),
+                t("header-part-number-2"),
+                t("header-part-number-3"),
+                t("header-part-number-0"),
+                t("header-part-number-1"),
+                t("header-part-number-2"),
+                t("header-part-number-3"),
+                t("header-name"),
+                t("header-description"),
+            ],
             data=data,
             enumerate=True,
         )

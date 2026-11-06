@@ -15,6 +15,7 @@ from django.http import HttpRequest
 from mongoengine.queryset.visitor import Q
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.fm.models.outage import Outage
 from noc.sa.models.managedobject import ManagedObject
@@ -25,28 +26,28 @@ from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, T
 class ReportForm(forms.Form):
     duration = forms.ChoiceField(
         choices=[
-            (0, _("Range")),
-            (86400, _("1 day")),
-            (7 * 86400, _("1 week")),
-            (30 * 86400, _("1 month")),
+            (0, t("label-range")),
+            (86400, t("label-1-day")),
+            (7 * 86400, t("label-1-week")),
+            (30 * 86400, t("label-1-month")),
         ],
-        label=_("Duration"),
+        label=t("label-duration"),
     )
     from_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("From Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-from-date"), required=False
     )
     to_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("To Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-to-date"), required=False
     )
 
 
 class ReportOutagesApplication(SimpleReport):
-    title = _("Outages")
+    title = t("app-title-reportoutages")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(_("Outages (1 day)"), {"duration": 86400}),
-        "7d": PredefinedReport(_("Outages (7 days)"), {"duration": 7 * 86400}),
-        "30d": PredefinedReport(_("Outages (30 day)"), {"duration": 30 * 86400}),
+        "1d": PredefinedReport(t("label-outages-1-day"), {"duration": 86400}),
+        "7d": PredefinedReport(t("label-outages-7-days"), {"duration": 7 * 86400}),
+        "30d": PredefinedReport(t("label-outages-30-day"), {"duration": 30 * 86400}),
     }
 
     def get_data(self, request: HttpRequest, duration, from_date=None, to_date=None, **kwargs):
@@ -124,15 +125,15 @@ class ReportOutagesApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Managed Object"),
-                _("Address"),
-                _("Profile"),
-                _("Platform"),
-                TableColumn(_("Managed"), align="right"),
-                TableColumn(_("Status"), align="right"),
-                TableColumn(_("Downtime"), align="right"),
-                TableColumn(_("Availability"), align="right", format="percent"),
-                TableColumn(_("Downs"), align="right", format="integer"),
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                t("header-profile"),
+                t("header-platform"),
+                TableColumn(t("header-managed"), align="right"),
+                TableColumn(t("header-status"), align="right"),
+                TableColumn(t("header-downtime"), align="right"),
+                TableColumn(t("header-availability"), align="right", format="percent"),
+                TableColumn(t("header-downs"), align="right", format="integer"),
             ],
             data=r,
             enumerate=True,

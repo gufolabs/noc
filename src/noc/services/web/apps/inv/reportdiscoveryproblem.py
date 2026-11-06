@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import GENERIC_PROFILE
 from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
@@ -24,12 +25,12 @@ from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportDiscoveryTopologyProblemApplication(SimpleReport):
-    title = _("Discovery Topology Problems")
+    title = t("app-title-inv-reportdiscoveryproblem")
 
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=_("Managed Objects Pools"),
+                label=t("label-managed-objects-pools"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -37,12 +38,12 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=_("Managed Objects Profile"),
+                label=t("label-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )
             available_only = forms.BooleanField(
-                label=_("Managed Objects Profile"),
+                label=t("label-managed-objects-profile"),
                 required=False,
             )
 
@@ -111,7 +112,14 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
         data = sorted(data)
         return self.from_dataset(
             title=self.title,
-            columns=["Name", "Address", "Profile", "Platform", "Segment", "Problem"],
+            columns=[
+                t("header-name"),
+                t("header-address"),
+                t("header-profile"),
+                t("header-platform"),
+                t("header-segment-44986c"),
+                t("header-problem"),
+            ],
             data=data,
             enumerate=True,
         )

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.interfaces.base import REStringParameter, StringParameter
 from noc.services.web.base.extapplication import ExtApplication, api
 from noc.support.cp import CPClient
@@ -20,8 +20,8 @@ class AccountApplication(ExtApplication):
     support.account application
     """
 
-    title = _("Account")
-    menu = [_("Setup"), _("Account")]
+    title = t("app-title-account")
+    menu = [t("app-group-setup"), t("nav-account")]
 
     @api.get(r"^$", access="launch")
     def api_get(self, request: HttpRequest):

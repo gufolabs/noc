@@ -1,17 +1,17 @@
 # ---------------------------------------------------------------------
 # fm.totaloutage
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extapplication import ExtApplication
 
 
 class HeatmapApplication(ExtApplication):
-    title = _("Heatmap")
-    menu = _("Heatmap")
+    title = t("app-title-heatmap")
+    menu = t("nav-heatmap")
     glyph = "globe"
     link = "/api/card/view/alarmheat/1/"

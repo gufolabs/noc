@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Free Blocks Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ from django import forms
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
@@ -21,9 +22,12 @@ from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportForm(forms.Form):
-    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4")), ("6", _("IPv6"))])
-    prefix = forms.CharField(label=_("Prefix"))
+    vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(
+        label=t("label-address-family"),
+        choices=[("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+    )
+    prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data.get("vrf")
@@ -42,14 +46,14 @@ class ReportForm(forms.Form):
 
 
 class FreeBlocksReport(SimpleReport):
-    title = _("Free Blocks")
+    title = t("app-title-reportfree")
     form = ReportForm
 
     def get_data(self, vrf, afi, prefix, **kwargs):
         p = IP.prefix(prefix.prefix)
         return self.from_dataset(
             title=_(f"Free blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
-            columns=["Free Blocks"],
+            columns=[t("header-free-blocks")],
             data=[
                 [smart_text(f)]
                 for f in p.iter_free([IP.prefix(c.prefix) for c in prefix.children_set.all()])

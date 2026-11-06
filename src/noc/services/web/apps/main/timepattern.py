@@ -12,7 +12,7 @@ import datetime as dt
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.timepattern import TimePattern
 from noc.main.models.timepatternterm import TimePatternTerm
 from noc.sa.interfaces.base import ListOfParameter, ModelParameter, StringParameter
@@ -25,8 +25,8 @@ class TimePatternApplication(ExtModelApplication):
     TimePattern application
     """
 
-    title = _("Time Pattern")
-    menu = [_("Setup"), _("Time Patterns")]
+    title = t("app-title-timepattern")
+    menu = [t("app-group-setup"), t("nav-timepattern")]
     model = TimePattern
     glyph = "clock-o"
 

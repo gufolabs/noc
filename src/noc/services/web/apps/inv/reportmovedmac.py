@@ -24,6 +24,7 @@ from django.http import HttpResponse
 # NOC modules
 from noc.config import config
 from noc.core.clickhouse.connect import connection
+from noc.core.i18n import t
 from noc.core.mac import MAC
 from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
@@ -119,8 +120,8 @@ rx_port_num = re.compile(r"\d+$")
 
 
 class ReportMovedMacApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Moved MACs")
-    title = _("Moved MACs")
+    menu = t("app-group-reports") + "|" + t("nav-reportmovedmac")
+    title = t("app-title-reportmovedmac")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7
@@ -205,18 +206,18 @@ class ReportMovedMacApplication(ExtApplication):
         ]
 
         header_row = [
-            "OBJECT_NAME",
-            "OBJECT_ADDRESS",
-            "OBJECT_ADM_DOMAIN",
-            "EVENT_TYPE",
-            "SN_CHANGED",
-            "VENDOR_MAC",
-            "MAC",
-            "MIGRATE_TS",
-            "FROM_IFACE_NAME",
-            "FROM_IFACE_DOWN",
-            "TO_IFACE_NAME",
-            "TO_IFACE_DOWN",
+            t("header-object-name"),
+            t("header-object-address"),
+            t("header-object-adm-domain"),
+            t("header-event-type"),
+            t("header-sn-changed"),
+            t("header-vendor-mac"),
+            t("header-mac"),
+            t("header-migrate-ts"),
+            t("header-from-iface-name"),
+            t("header-from-iface-down"),
+            t("header-to-iface-name"),
+            t("header-to-iface-down"),
         ]
         if columns:
             cmap = []

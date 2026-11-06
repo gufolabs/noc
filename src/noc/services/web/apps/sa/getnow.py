@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # sa.groupaccess application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 from noc.core.dateutils import humanize_distance
+from noc.core.i18n import t
 from noc.core.scheduler.job import Job
-from noc.core.translation import ugettext as _
 from noc.services.web.apps.sa.objectlist import ObjectListApplication
 
 
@@ -17,8 +17,8 @@ class GetNowApplication(ObjectListApplication):
     sa.getnow application
     """
 
-    title = _("Get Now")
-    menu = _("Get Now")
+    title = t("app-title-getnow")
+    menu = t("nav-getnow")
     icon = "icon_monitor"
 
     def instance_to_dict(self, mo, fields=None):

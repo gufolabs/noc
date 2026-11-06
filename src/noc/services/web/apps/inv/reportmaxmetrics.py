@@ -21,8 +21,8 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.platform import Platform
@@ -57,8 +57,8 @@ def get_column_width(name):
 
 
 class ReportMaxMetricsmaxDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Load Metrics max")
-    title = _("Load Metrics max")
+    menu = t("app-group-reports") + "|" + t("nav-reportmaxmetrics")
+    title = t("app-title-reportmaxmetrics")
 
     @api.get(
         r"^download/$",
@@ -193,35 +193,35 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
         ]
 
         header_row = [
-            "ID",
-            _("OBJECT_NAME"),
-            _("OBJECT_ADDRESS"),
-            _("OBJECT_PLATFORM"),
-            _("OBJECT_ADMDOMAIN"),
-            _("OBJECT_SEGMENT"),
-            _("CONTAINER_ADDRESS"),
-            _("IFACE_NAME"),
-            _("IFACE_DESCRIPTION"),
-            _("IFACE_SPEED"),
-            _("MAX_LOAD_IN, Mbps"),
-            _("MAX_LOAD_IN_TIME"),
-            _("MAX_LOAD_OUT, Mbps"),
-            _("MAX_LOAD_OUT_TIME"),
-            _("AVG_LOAD_IN, Mbps"),
-            _("AVG_LOAD_OUT, Mbps"),
-            _("TOTAL_IN, Mbyte"),
-            _("TOTAL_OUT, Mbyte"),
-            _("UPLINK_IFACE_NAME"),
-            _("UPLINK_IFACE_DESCRIPTION"),
-            _("UPLINK_IFACE_SPEED"),
-            _("UPLINK_MAX_LOAD_IN, Mbps"),
-            _("UPLINK_MAX_TIME_IN"),
-            _("UPLINK_MAX_LOAD_OUT, Mbps"),
-            _("UPLINK_MAX_TIME_OUT"),
-            _("UPLINK_AVG_LOAD_IN, Mbps"),
-            _("UPLINK_AVG_LOAD_OUT, Mbps"),
-            _("UPLINK_TOTAL_IN, Mbyte"),
-            _("UPLINK_TOTAL_OUT, Mbyte"),
+            t("header-id"),
+            t("header-object-name"),
+            t("header-object-address"),
+            t("header-object-platform"),
+            t("header-object-admdomain"),
+            t("header-object-segment"),
+            t("header-container-address"),
+            t("header-iface-name"),
+            t("header-iface-description"),
+            t("header-iface-speed"),
+            t("header-max-load-in-mbps"),
+            t("header-max-load-in-time"),
+            t("header-max-load-out-mbps"),
+            t("header-max-load-out-time"),
+            t("header-avg-load-in-mbps"),
+            t("header-avg-load-out-mbps"),
+            t("header-total-in-mbyte"),
+            t("header-total-out-mbyte"),
+            t("header-uplink-iface-name"),
+            t("header-uplink-iface-description"),
+            t("header-uplink-iface-speed"),
+            t("header-uplink-max-load-in-mbps"),
+            t("header-uplink-max-time-in"),
+            t("header-uplink-max-load-out-mbps"),
+            t("header-uplink-max-time-out"),
+            t("header-uplink-avg-load-in-mbps"),
+            t("header-uplink-avg-load-out-mbps"),
+            t("header-uplink-total-in-mbyte"),
+            t("header-uplink-total-out-mbyte"),
         ]
 
         if columns:

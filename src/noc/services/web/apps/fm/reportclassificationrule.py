@@ -13,18 +13,18 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import loader as profile_loader
-from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 
 class ReportForm(forms.Form):
-    profile = forms.ChoiceField(label=_("Profile"), choices=profile_loader.choices())
+    profile = forms.ChoiceField(label=t("label-profile"), choices=profile_loader.choices())
 
 
 class ReportClassificationRules(SimpleReport):
-    title = _("Classification Rules")
+    title = t("app-title-reportclassificationrule")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, profile):
@@ -44,4 +44,6 @@ class ReportClassificationRules(SimpleReport):
             data.append(["Event Class", r.event_class.name])
             for p in r.patterns:
                 data.append([p.key_re, p.value_re])
-        return self.from_dataset(title=self.title, columns=["Key RE", "Value RE"], data=data)
+        return self.from_dataset(
+            title=self.title, columns=[t("header-key-re"), t("header-value-re")], data=data
+        )

@@ -10,6 +10,7 @@ from django.db import connection
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrfgroup import VRFGroup
@@ -270,7 +271,7 @@ class GPrefixNode(PrefixNode):
 
 
 class ReportOverviewApplication(ReportApplication):
-    title = "Overview"
+    title = t("app-title-reportoverview")
 
     @staticmethod
     def get_ip_usage():

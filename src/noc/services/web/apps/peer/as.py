@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # AS Manager
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.peer.models.asn import AS
 from noc.services.web.base.extmodelapplication import ExtModelApplication
 from noc.services.web.base.repoinline import RepoInline
@@ -17,8 +17,8 @@ class ASApplication(ExtModelApplication):
     AS application
     """
 
-    title = _("AS")
-    menu = [_("ASes")]
+    title = t("app-title-as")
+    menu = [t("nav-as")]
     model = AS
 
     rpsl = RepoInline("rpsl")

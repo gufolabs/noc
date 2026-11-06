@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.main.models.pool import Pool
@@ -20,12 +21,12 @@ from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportDiscoveryCapsApplication(SimpleReport):
-    title = _("Discovery Object Caps")
+    title = t("app-title-reportdiscoverycaps")
 
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=_("Managed Objects Pool"),
+                label=t("label-managed-objects-pool"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -33,7 +34,7 @@ class ReportDiscoveryCapsApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=_("Managed Objects Profile"),
+                label=t("label-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )
@@ -56,7 +57,12 @@ class ReportDiscoveryCapsApplication(SimpleReport):
             )
         if obj_profile:
             mos = mos.filter(object_profile=obj_profile)
-        columns = (_("Managed Object"), _("Address"), _("Object"), _("Capabilities"))
+        columns = (
+            t("header-managed-object-62561c"),
+            t("header-address"),
+            t("header-object"),
+            t("header-capabilities"),
+        )
         for mo in mos:
             mo.get_caps()
             data.append((mo.name, mo.address, _("Main"), ";".join(mo.get_caps())))

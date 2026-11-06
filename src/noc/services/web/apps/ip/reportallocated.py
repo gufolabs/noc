@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Allocated Blocks Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ from django.db.models import Q
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
@@ -28,9 +29,12 @@ class ReportForm(forms.Form):
     Report form
     """
 
-    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4")), ("6", _("IPv6"))])
-    prefix = forms.CharField(label=_("Prefix"))
+    vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(
+        label=t("label-address-family"),
+        choices=[("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+    )
+    prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data["vrf"]
@@ -47,7 +51,7 @@ class ReportForm(forms.Form):
 
 
 class ReportAllocated(SimpleReport):
-    title = _("Allocated Blocks")
+    title = t("app-title-reportallocated")
     form = ReportForm
 
     def get_form(self):
@@ -68,10 +72,10 @@ class ReportAllocated(SimpleReport):
         cf = CustomField.table_fields("ip_prefix")
         cfn = {f.name: f for f in cf}
         # Prepare columns
-        columns = ["Prefix", "State", "VLAN"]
+        columns = [t("header-prefix"), t("header-state"), t("header-vlan-560367")]
         for f in cf:
             columns.append(f.label)
-        columns += ["Description", TableColumn(_("Tags"), format="tags")]
+        columns += [t("header-description"), TableColumn(t("header-tags"), format="tags")]
         # Prepare query
         q = Q()
         for k in kwargs:

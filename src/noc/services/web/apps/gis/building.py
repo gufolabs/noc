@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # gis.building application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.gis.models.address import Address
 from noc.gis.models.building import Building
 from noc.gis.models.division import Division
@@ -30,8 +30,8 @@ class BuildingApplication(ExtDocApplication):
     Building application
     """
 
-    title = _("Building")
-    menu = [_("Setup"), _("Buildings")]
+    title = t("app-title-building")
+    menu = [t("app-group-setup"), t("nav-building")]
     glyph = "building"
     model = Building
     parent_model = Division

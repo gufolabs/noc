@@ -1,18 +1,18 @@
 # ---------------------------------------------------------------------
 # inv.reportunknownsummary
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.unknownmodel import UnknownModel
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportUnknownModelsSummary(SimpleReport):
-    title = _("Unknown Models Summary")
+    title = t("app-title-reportunknownsummary")
 
     def get_data(self, **kwargs):
         data = {}  # vendor, part_no -> description, count
@@ -30,10 +30,10 @@ class ReportUnknownModelsSummary(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                "Vendor",
-                "Part No",
-                "Description",
-                TableColumn("Count", format="numeric", align="right", total="sum"),
+                t("header-vendor"),
+                t("header-part-no"),
+                t("header-description"),
+                TableColumn(t("header-count"), format="numeric", align="right", total="sum"),
             ],
             data=data,
         )

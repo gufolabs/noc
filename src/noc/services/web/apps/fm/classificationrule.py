@@ -14,7 +14,7 @@ from django.template import Context, Template
 
 # NOC modules
 from noc.core.fm.event import Event, EventSource
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.core.validators import is_objectid
 from noc.fm.models.eventclass import EventClass
 from noc.fm.models.eventclassificationrule import (
@@ -31,8 +31,8 @@ class EventClassificationRuleApplication(ExtDocApplication):
     EventClassificationRule application
     """
 
-    title = _("Classification Rule")
-    menu = [_("Setup"), _("Classification Rules")]
+    title = t("app-title-classificationrule")
+    menu = [t("app-group-setup"), t("nav-classificationrule")]
     model = EventClassificationRule
     parent_model = EventClassificationRuleCategory
     parent_field = "parent"

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ReportApplication implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,8 +9,8 @@
 import logging
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.middleware.tls import get_user
-from noc.core.translation import ugettext as _
 
 from .access import Permission
 from .application import Application, view
@@ -61,7 +61,7 @@ class ReportApplication(Application):
         """
 
     def get_menu(self):
-        return [_("Reports"), self.title]
+        return [t("app-group-reports"), self.title]
 
     @view(url=r"^$", url_name="view", access="view", menu=get_menu)
     def view_report(self, request, format="html"):
@@ -137,7 +137,7 @@ class ReportByConfigApplication(Application):
 
     @property
     def menu(self):
-        return [_("Reports"), self.title]
+        return [t("app-group-reports"), self.title]
 
     @classmethod
     def get_report_config(cls):

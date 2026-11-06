@@ -10,8 +10,8 @@ from django.db.models import Count
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.middleware.tls import get_user
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_objectid
 from noc.inv.models.networksegment import NetworkSegment
 from noc.sa.models.managedobject import ManagedObject
@@ -24,8 +24,8 @@ class NetworkSegmentApplication(ExtDocApplication):
     NetworkSegment application
     """
 
-    title = _("Network Segment")
-    menu = [_("Setup"), _("Network Segments")]
+    title = t("app-title-networksegment")
+    menu = [t("app-group-setup"), t("nav-networksegment")]
     model = NetworkSegment
     query_fields = ["name__icontains", "description__icontains"]
 

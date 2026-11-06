@@ -1,23 +1,26 @@
 # ---------------------------------------------------------------------
 # fm.reportoverlappedoids
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.mib import MIBData
 from noc.services.web.base.simplereport import SimpleReport
 
 
 class ReportOverlappedOIDsApplication(SimpleReport):
-    title = _("Overlapped MIB OIDs")
+    title = t("app-title-reportoverlappedoids")
 
     def get_data(self, **kwargs):
         data = [
             (o.oid, o.name, ", ".join(o.aliases)) for o in MIBData.objects.filter(aliases__ne=[])
         ]
         return self.from_dataset(
-            title=self.title, columns=["OID", "Chosen Name", "Aliases"], data=data, enumerate=True
+            title=self.title,
+            columns=[t("header-oid"), t("header-chosen-name"), t("header-aliases")],
+            data=data,
+            enumerate=True,
         )

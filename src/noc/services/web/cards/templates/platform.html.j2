@@ -7,41 +7,41 @@
     </tr>
     {% if object.aliases %}
     <tr>
-        <th scope="row">{{ _("Aliases") }}</th>
+        <th scope="row">{{ t("header-aliases") }}</th>
         <td>{{", ".join(object.aliases)}}</td>
     <tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Description") }}</th>
+        <th scope="row">{{ t("header-description") }}</th>
         <td>{{object.description}}</td>
     <tr>
     {% if object.start_of_sale %}
     <tr>
-        <th scope="row">{{ _("Start of Sale") }}</th>
+        <th scope="row">{{ t("header-start-of-sale") }}</th>
         <td>{{object.start_of_sale}}</td>
     <tr>
     {% endif %}
     {% if object.end_of_sale %}
     <tr>
-        <th scope="row">{{ _("End of Sale") }}</th>
+        <th scope="row">{{ t("header-end-of-sale") }}</th>
         <td>{{object.end_of_sale}}</td>
     <tr>
     {% endif %}
     {% if object.end_of_support %}
     <tr>
-        <th scope="row">{{ _("End of Support") }}</th>
+        <th scope="row">{{ t("header-end-of-support") }}</th>
         <td>{{object.end_of_support}}</td>
     <tr>
     {% endif %}
     {% if object.end_of_xsupport %}
     <tr>
-        <th scope="row">{{ _("End of Ext. Support") }}</th>
+        <th scope="row">{{ t("header-end-of-ext-support") }}</th>
         <td>{{object.end_of_xsupport}}</td>
     <tr>
     {% endif %}
     {% if object.snmp_sysobjectid %}
     <tr>
-        <th scope="row">{{ _("SNMP sysObjectId") }}</th>
+        <th scope="row">{{ t("header-snmp-sysobjectid") }}</th>
         <td>{{object.snmp_sysobjectid}}</td>
     <tr>
     {% endif %}

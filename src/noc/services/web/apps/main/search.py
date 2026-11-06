@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.textindex import TextIndex
 from noc.models import get_model
 from noc.sa.interfaces.base import UnicodeParameter
@@ -21,8 +21,8 @@ class SearchApplication(ExtApplication):
     main.search application
     """
 
-    title = _("Search")
-    menu = _("Search")
+    title = t("app-title-search")
+    menu = t("nav-search")
     glyph = "search noc-preview"
 
     @api.post("^$", access="launch", validate={"query": UnicodeParameter()})

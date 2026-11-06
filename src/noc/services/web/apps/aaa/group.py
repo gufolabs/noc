@@ -14,7 +14,7 @@ from django.http import HttpRequest, HttpResponse
 # NOC modules
 from noc.aaa.models.group import Group
 from noc.aaa.models.permission import Permission
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.site import site
 
@@ -26,8 +26,8 @@ class GroupsApplication(ExtModelApplication):
     Group application
     """
 
-    title = _("Groups")
-    menu = [_("Setup"), _("Groups")]
+    title = t("app-title-group")
+    menu = [t("app-group-setup"), t("nav-group")]
     glyph = "users"
     model = Group
     query_condition = "icontains"

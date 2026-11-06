@@ -2,14 +2,14 @@
 <tbody>
     <tr>
         <th colspan="2" class="{{ {True: 'success', False: 'danger'}[resolved] }}">
-            {{ _("TT") }}: {{ full_id }}
+            {{ t("header-tt") }}: {{ full_id }}
             <span class="pull-right">
                 {% if duration %}{{ duration }}{% endif %}({{ open_ts | timestamp}})
             </span>
         </th>
     </tr>
     <tr>
-        <th scope="row">{{ _("Stage") }}</th>
+        <th scope="row">{{ t("header-stage") }}</th>
         <td>
             {{ stage }}
             <span class="pull-right">
@@ -22,16 +22,16 @@
     </tr>
     {% if alarms %}
     <tr>
-        <th scope="row">{{ _("Alarms") }}</th>
+        <th scope="row">{{ t("header-alarms") }}</th>
         <td>
             <table class="table table-condensed">
                 <thead>
                     <tr>
-                        <th>{{ _("Timestamp") }}</th>
-                        <th>{{ _("Object") }}</th>
-                        <th>{{ _("Duration") }}</th>
-                        <th>{{ _("Subject") }}</th>
-                        <th>{{ _("Services") }}</th>
+                        <th>{{ t("header-timestamp") }}</th>
+                        <th>{{ t("header-object") }}</th>
+                        <th>{{ t("header-duration") }}</th>
+                        <th>{{ t("header-subject") }}</th>
+                        <th>{{ t("header-services") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,18 +51,18 @@
     {% endif %}
     {% if pre_reason %}
     <tr>
-        <th scope="row">{{ _("Pre Reason") }}</th>
+        <th scope="row">{{ t("header-pre-reason") }}</th>
         <td>{{ pre_reason }}</td>
     </tr>
     {% endif %}
     {% if final_reason %}
     <tr>
-        <th scope="row">{{ _("Final Reason") }}</th>
+        <th scope="row">{{ t("header-final-reason") }}</th>
         <td>{{ final_reason }}</td>
     </tr>
     {% endif %}
     <tr>
-        <th scope="row">{{ _("Description") }}</th>
+        <th scope="row">{{ t("header-description") }}</th>
         <td>
             <div class="panel panel-default">
                 {% if subject %}
@@ -78,7 +78,7 @@
     </tr>
     {% if comments %}
     <tr>
-        <th scope="row">{{ _("Comments") }}</th>
+        <th scope="row">{{ t("header-comments") }}</th>
         <td>
             {% for c in comments %}
                 <div class="panel panel-default">

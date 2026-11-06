@@ -2,15 +2,15 @@
 <tbody>
     <tr>
         <th colspan="2" class="{{ {"before": "warning", "progress": "danger", "complete": "success"}[status] }}">
-            {{ _("Time Pattern") }}: {{ object.name }}
+            {{ t("header-time-pattern") }}: {{ object.name }}
         </th>
     </tr>
     <tr>
-        <th scope="row" class="col-sm-1">{{ _("Description") }}</th>
+        <th scope="row" class="col-sm-1">{{ t("header-description") }}</th>
         <td>{{ object.description or "" }}</td>
     </tr>
     <tr>
-        <th scope="row">{{ _("Terms") }}</th>
+        <th scope="row">{{ t("header-terms") }}</th>
         <td>
             {% for t in terms %}
                 {{ t }}<br>

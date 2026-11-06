@@ -15,7 +15,7 @@ from django.http import HttpRequest
 # NOC modules
 from noc.core.clickhouse.connect import connection
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.models import get_model, get_object
 from noc.services.web.base.extapplication import ExtApplication, api
 
@@ -27,8 +27,8 @@ class AuditTrailApplication(ExtApplication):
     AuditTrails application
     """
 
-    title = _("Audit Trail")
-    menu = _("Audit Trail")
+    title = t("app-title-audittrail")
+    menu = t("nav-audittrail")
 
     def g_model(self, model_id):
         try:

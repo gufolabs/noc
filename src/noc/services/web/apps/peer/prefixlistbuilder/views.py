@@ -9,6 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.peer.models.peeringpoint import PeeringPoint
 from noc.peer.models.whoiscache import WhoisCache
@@ -23,8 +24,8 @@ class PrefixListBuilderApplication(ExtApplication):
     Interactive prefix list builder
     """
 
-    title = _("Prefix List Builder")
-    menu = _("Prefix List Builder")
+    title = t("app-title-prefixlistbuilder")
+    menu = t("nav-prefixlistbuilder")
 
     @api.get(
         r"^$",

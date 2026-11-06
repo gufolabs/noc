@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # cm.confdbquery application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
 from noc.cm.models.confdbquery import ConfDBQuery
 from noc.core.confdb.engine.base import Engine
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
 
@@ -17,8 +17,8 @@ class ConfDBQueryApplication(ExtDocApplication):
     ConfDBQuery application
     """
 
-    title = "ConfDBQuery"
-    menu = [_("Setup"), _("ConfDB Queries")]
+    title = t("app-title-confdbquery")
+    menu = [t("app-group-setup"), t("nav-confdbquery")]
     model = ConfDBQuery
     glyph = "file-code-o"
 

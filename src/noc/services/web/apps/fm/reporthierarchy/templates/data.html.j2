@@ -31,12 +31,12 @@ UL.rules, UL.rules LI {
 <table>
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Action</th>
-            <th>Vars</th>
-            <th>Disposition</th>
-            <th>Rules</th>
+            <th>{{ t("header-name") }}</th>
+            <th>{{ t("header-description") }}</th>
+            <th>{{ t("header-action") }}</th>
+            <th>{{ t("header-vars") }}</th>
+            <th>{{ t("header-disposition") }}</th>
+            <th>{{ t("header-rules") }}</th>
         </tr>
     </thead>
 {% set row = namespace(index=0) %}
@@ -83,13 +83,13 @@ UL.rules, UL.rules LI {
 <table>
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Unique</th>
-            <th>Discr.</th>
-            <th>User clearable</th>
-            <th>Vars</th>
-            <th>Root Cause</th>
+            <th>{{ t("header-name") }}</th>
+            <th>{{ t("header-description") }}</th>
+            <th>{{ t("header-unique") }}</th>
+            <th>{{ t("header-discr") }}</th>
+            <th>{{ t("header-user-clearable") }}</th>
+            <th>{{ t("header-vars") }}</th>
+            <th>{{ t("header-root-cause") }}</th>
         </tr>
     </thead>
 {% for level, a in alarm_classes %}

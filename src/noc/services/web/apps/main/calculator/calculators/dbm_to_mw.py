@@ -10,13 +10,16 @@ from django import forms
 
 # NOC modules
 from noc.core.convert.dbm import dbm2mw, mw2dbm
+from noc.core.i18n import t
 
 from .base import BaseCalculator
 
 
 class CalculatorForm(forms.Form):
     value = forms.DecimalField(required=True)
-    measure = forms.ChoiceField(required=True, choices=[("dbm", "dBm"), ("mw", "mW")])
+    measure = forms.ChoiceField(
+        required=True, choices=[("dbm", t("label-dbm")), ("mw", t("label-mw"))]
+    )
 
 
 class Calculator(BaseCalculator):

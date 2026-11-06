@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 #  fm.reportescalations
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.fm.models.archivedalarm import ArchivedAlarm
 from noc.sa.models.managedobject import ManagedObject
@@ -24,24 +24,29 @@ from noc.services.web.base.simplereport import PredefinedReport, SimpleReport
 
 class ReportForm(forms.Form):
     interval = forms.ChoiceField(
-        choices=[(0, _("Range")), (1, _("1 day")), (7, _("1 week")), (30, _("1 month"))],
-        label=_("Interval"),
+        choices=[
+            (0, t("label-range")),
+            (1, t("label-1-day")),
+            (7, t("label-1-week")),
+            (30, t("label-1-month")),
+        ],
+        label=t("label-interval"),
     )
     from_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("From Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-from-date"), required=False
     )
     to_date = forms.CharField(
-        widget=forms.TextInput(attrs={"type": "date"}), label=_("To Date"), required=False
+        widget=forms.TextInput(attrs={"type": "date"}), label=t("label-to-date"), required=False
     )
 
 
 class ReportEscalationsApplication(SimpleReport):
-    title = _("Escalations")
+    title = t("app-title-reportescalations")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(_("Escalations (1 day)"), {"interval": 1}),
-        "7d": PredefinedReport(_("Escalations (7 days)"), {"interval": 7}),
-        "30d": PredefinedReport(_("Escalations (30 day)"), {"interval": 30}),
+        "1d": PredefinedReport(t("label-escalations-1-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("label-escalations-7-days"), {"interval": 7}),
+        "30d": PredefinedReport(t("label-escalations-30-day"), {"interval": 30}),
     }
 
     def get_data(self, request: HttpRequest, interval, from_date=None, to_date=None, **kwargs):
@@ -84,15 +89,15 @@ class ReportEscalationsApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Timestamp"),
-                _("Escalation Timestamp"),
-                _("Managed Object"),
-                _("Address"),
-                _("Platform"),
-                _("Segment"),
-                _("TT"),
-                _("Objects"),
-                _("Subscribers"),
+                t("header-timestamp"),
+                t("header-escalation-timestamp"),
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                t("header-platform"),
+                t("header-segment-44986c"),
+                t("header-tt"),
+                t("header-objects-72a83a"),
+                t("header-subscribers-6f13df"),
             ],
             data=data,
             enumerate=True,

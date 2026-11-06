@@ -20,10 +20,10 @@ from jinja2.exceptions import TemplateError
 
 # NOC modules
 from noc.core.cache.decorator import cachedmethod
+from noc.core.i18n import t
 from noc.core.pm.utils import MetricProxy, get_interface_metrics
 from noc.core.text import alnum_key
 from noc.core.topology.base import loader
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_objectid
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.inv.models.cpe import CPE
@@ -52,8 +52,8 @@ class MapApplication(ExtApplication):
     inv.net application
     """
 
-    title = _("Network Map")
-    menu = _("Network Map")
+    title = t("app-title-map")
+    menu = t("nav-map")
     glyph = "globe"
 
     implied_permissions = {"launch": ["inv:networksegment:lookup"]}

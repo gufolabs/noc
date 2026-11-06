@@ -12,7 +12,7 @@ import uuid
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.support.models.crashinfo import Crashinfo
 
@@ -22,8 +22,8 @@ class CrashinfoApplication(ExtDocApplication):
     Crashinfo application
     """
 
-    title = _("Crashinfo")
-    menu = _("Crashinfo")
+    title = t("app-title-crashinfo")
+    menu = t("nav-crashinfo")
     model = Crashinfo
 
     @api.get(r"^(?P<id>\S+)/traceback/", access="read")

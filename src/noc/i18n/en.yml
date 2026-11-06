@@ -1,0 +1,967 @@
+app-group-aaa: AAA
+app-group-bi: BI
+app-group-cm: Configuration Management
+app-group-crm: CRM
+app-group-dev: Development
+app-group-dns: DNS
+app-group-fm: Fault Management
+app-group-gis: GIS
+app-group-inv: Inventory
+app-group-ip: IPAM
+app-group-kb: Knowledge Base
+app-group-main: Main
+app-group-maintenance: Maintenance
+app-group-peer: Peering Management
+app-group-phone: Phone
+app-group-pm: Performance Management
+app-group-project: Project Management
+app-group-reports: Reports
+app-group-sa: Service Activation
+app-group-setup: Setup
+app-group-sla: SLA
+app-group-support: Support
+app-group-vc: VC Management
+app-group-wf: Workflow
+app-title-account: Account
+app-title-action: Action
+app-title-actioncommands: Action Command
+app-title-address: Address
+app-title-addressprofile: Address Profile
+app-title-addressrange: Address Ranges
+app-title-administrativedomain: Administrative Domains
+app-title-agent: Agent
+app-title-agentprofile: Agent Profile
+app-title-alarm: Alarm
+app-title-alarmclass: Alarm Class
+app-title-alarmclassconfig: Alarm Class Config
+app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
+app-title-alarmescalation: Alarm Escalation
+app-title-alarmrule: Alarm Rules
+app-title-alarmseverity: Alarm Severity
+app-title-alarmtrigger: Alarm Triggers
+app-title-allocationgroup: AllocationGroup
+app-title-apikey: API Key
+app-title-as: AS
+app-title-asprofile: AS Profile
+app-title-asset: AS Sets
+app-title-audittrail: Audit Trail
+app-title-authldapdomain: LDAP Domain
+app-title-authprofile: Auth Profile
+app-title-building: Building
+app-title-calculator: Calculators
+app-title-capability: Capability
+app-title-capsprofile: Caps Profile
+app-title-card: Cards
+app-title-channel: Channels
+app-title-chpolicy: CHPolicy
+app-title-classificationrule: Classification Rule
+app-title-commandsnippet: Command Snippets
+app-title-community: Communities
+app-title-communitytype: Community Types
+app-title-confdbquery: ConfDBQuery
+app-title-configurationparam: Configuration Param
+app-title-configurationscope: Configuration Scope
+app-title-configuredmap: Configured Map
+app-title-connectionrule: Connection Rules
+app-title-connectiontype: Connection Types
+app-title-coverage: Coverage
+app-title-cpe: CPEs
+app-title-cpeprofile: CPE Profile
+app-title-crashinfo: Crashinfo
+app-title-credentialcheckrule: Credential Check Rule
+app-title-crontab: CronTab
+app-title-csv: CSV Export/Import
+app-title-customfield: Custom Fields
+app-title-customfieldenumgroup: Enum Groups
+app-title-dashboard: Dashboard
+app-title-dashboardlayout: Dashboard Layout
+app-title-datastreamconfig: DataStream Config
+app-title-ddash: Dynamic Dashboard
+app-title-dialplan: DialPlan
+app-title-discoveredobject: Discovered Object
+app-title-division: Division
+app-title-dnsserver: DNS Server
+app-title-dnszone: DNS Zone
+app-title-dnszoneprofile: Zone Profiles
+app-title-endpoint: Endpoint
+app-title-escalationprofile: Escalation Profile
+app-title-event: Events
+app-title-eventclass: Event Class
+app-title-eventtrigger: Event Triggers
+app-title-extstorage: Ext. Storage
+app-title-facade: Facades
+app-title-firmware: Firmware
+app-title-firmwarepolicy: Firmware Policy
+app-title-getnow: Get Now
+app-title-glyph: Glyph
+app-title-group: Groups
+app-title-groupaccess: Group Access
+app-title-handler: Handler
+app-title-heatmap: Heatmap
+app-title-home: Home
+app-title-ifdescpatterns: IfDesc Patterns
+app-title-ignoreeventrule: Ignore Event Rules
+app-title-ignorepattern: Ignore Patterns
+app-title-imagestore: Images
+app-title-interface: Interfaces
+app-title-interfaceprofile: Interface Profile
+app-title-interfacevalidationpolicy: Interface Validation Policy
+app-title-inv: Inventory
+app-title-inv-reportdiscoveryproblem: Discovery Topology Problems
+app-title-inv-reportobjectsummary: Inventory Object Summary
+app-title-ipam: Assigned Addresses
+app-title-job: Jobs
+app-title-jsonimport: JSON Import
+app-title-kb: Knowledge Base
+app-title-kbentry: Entries
+app-title-kbentrytemplate: Templates
+app-title-l2domain: L2 Domain
+app-title-l2domainprofile: L2Domain Profile
+app-title-label: Label
+app-title-language: Languages
+app-title-layer: Layers
+app-title-macblacklist: MAC Blacklist
+app-title-macdb: MacDB
+app-title-maintainer: Maintainers
+app-title-maintenance: Maintenance
+app-title-maintenancetype: Maintenance Type
+app-title-managedobject: Managed Objects
+app-title-managedobjectprofile: Managed Object Profile
+app-title-map: Network Map
+app-title-measurementunits: MeasurementUnits
+app-title-messageroute: Message Route
+app-title-metricaction: Metric Action
+app-title-metricrule: Metric Rule
+app-title-metricscope: MetricScope
+app-title-metricstream: MetricStream
+app-title-metrictype: Metric Type
+app-title-mib: MIB
+app-title-mibpreference: MIB Preference
+app-title-mimetype: MIME Types
+app-title-modelinterface: Model Interface
+app-title-modelmapping: Model Mapping
+app-title-modelprotectionprofile: ModelProtection Profile
+app-title-modeltemplate: Model Template
+app-title-monitor: Monitor
+app-title-monmap: Monmap
+app-title-networksegment: Network Segment
+app-title-networksegmentprofile: Network Segment Profile
+app-title-notificationgroup: Notification Group
+app-title-numbercategory: Number Category
+app-title-objectconfigurationrule: Configuration Rules
+app-title-objectdiagnosticconfig: Object Diagnostic Config
+app-title-objectdiscoveryrule: Object Discovered Rules
+app-title-objectmodel: Object Models
+app-title-objectnotification: Object Notification
+app-title-objectnotify: Object Notifies
+app-title-objectvalidationpolicy: Object Validation Policy
+app-title-oidalias: OID Aliases
+app-title-organisation: Organisations
+app-title-outage: Outages
+app-title-peer: Peers
+app-title-peergroup: Peer Groups
+app-title-peeringpoint: Peering Points
+app-title-peerprofile: Peer Profile
+app-title-person: Persons/Roles
+app-title-phonenumber: Phone Number
+app-title-phonenumberprofile: Number Profile
+app-title-phonerange: Phone Range
+app-title-phonerangeprofile: Phone Range Profile
+app-title-platform: Platform
+app-title-pool: Pool
+app-title-prefix: Prefix
+app-title-prefixaccess: Prefix Access
+app-title-prefixlistbuilder: Prefix List Builder
+app-title-prefixprofile: Prefix Profile
+app-title-prefixtable: Prefix Table
+app-title-profile: Profile
+app-title-profilecheckrule: Profile Check Rule
+app-title-project: Project
+app-title-protocol: Protocol
+app-title-pyrule: PyRule
+app-title-quiz: Quiz
+app-title-reactionrule: Reaction Rules
+app-title-remotesystem: Remote System
+app-title-reportaddressfilter: Filter Address
+app-title-reportalarmcomments: Alarm Comments Detail
+app-title-reportalarmdetail: Alarm Detail
+app-title-reportallocated: Allocated Blocks
+app-title-reportavailability: Availability
+app-title-reportclassificationquality: Classification Quality
+app-title-reportclassificationrule: Classification Rules
+app-title-reportcompare: Compare Specs
+app-title-reportcone: Cone Analysis
+app-title-reportconfig: Report Configs
+app-title-reportdbsummary: Database Summary
+app-title-reportdiscovery: Discovery Summary
+app-title-reportdiscoverycaps: Discovery Object Caps
+app-title-reportdiscoverypoison: Discovery ID cache poison
+app-title-reportduplicatedfqdns: Duplicated FQDNs
+app-title-reportescalations: Escalations
+app-title-reportexpanded: All Allocated Blocks
+app-title-reportexpiringdomains: Expiring Domains
+app-title-reportfilter: Filter
+app-title-reportfree: Free Blocks
+app-title-reporthierarchy: Events and Alarm Hierarchy
+app-title-reporthistory: History
+app-title-reportifacestatus: Interface Status
+app-title-reportipamsummary: IPAM Summary
+app-title-reportipusage: IP Usage
+app-title-reportlatestchanges: Latest Changes
+app-title-reportlinkdetail: Link Detail
+app-title-reportlocalrules: Local Classification Rules (JSON)
+app-title-reportmaxmetrics: Load Metrics max
+app-title-reportmetrics: Load Metrics
+app-title-reportmibs: Installed MIBs
+app-title-reportmissedmibs: Missed MIBs
+app-title-reportmissedp2p: Missed Link Addresses
+app-title-reportmissedreverse: Missed Reverse Zones
+app-title-reportmovedmac: Moved MACs
+app-title-reportnszonesummary: NS Zone Summary
+app-title-reportobjectdetail: Object Detail
+app-title-reportobjectsserial: Managed Object Serial Number
+app-title-reportoutages: Outages
+app-title-reportoverlappedoids: Overlapped MIB OIDs
+app-title-reportoverview: Overview
+app-title-reportpartnumbers: Part Numbers
+app-title-reportpendinglinks: Pending Links
+app-title-reportreboots: Reboots
+app-title-reportrulesbyprofile: Rules by Profile
+app-title-reportrulesetsummary: Ruleset Summary
+app-title-reportstalediscovery: Stale discovery
+app-title-reportsubscription: Report Subscription
+app-title-reportsummary: Block Summary
+app-title-reporttaggedmodels: Tagged Models
+app-title-reportttsystemstat: TT system statistics
+app-title-reportunknownsummary: Unknown Models Summary
+app-title-reportvpnstatus: VPN Status
+app-title-resourcegroup: ResourceGroup
+app-title-resourcepool: ResourcePool
+app-title-resourcestate: Resource States
+app-title-rir: RIR
+app-title-runcommands: Run Commands
+app-title-sa-reportdiscoveryproblem: Discovery Problem
+app-title-sa-reportobjectsummary: Managed Objects Summary
+app-title-scale: Scale
+app-title-search: Search
+app-title-sensor: Sensor
+app-title-sensorprofile: SensorProfile
+app-title-service: Services
+app-title-serviceprofile: Service Profile
+app-title-slaprobe: SLA Probe
+app-title-slaprofile: SLA Profile
+app-title-spec: Spec
+app-title-state: States
+app-title-street: Street
+app-title-style: Style
+app-title-subscriber: Subscriber
+app-title-subscriberprofile: Subscriber Profile
+app-title-supplier: Supplier
+app-title-supplierprofile: Supplier Profile
+app-title-systemnotification: System Notifications
+app-title-systemtemplate: System Templates
+app-title-techdomain: Tech Domain
+app-title-technology: Technology
+app-title-template: Templates
+app-title-timepattern: Time Pattern
+app-title-tools: Tools
+app-title-totaloutage: Total Outages
+app-title-transition: Transitions
+app-title-ttsystem: TT System
+app-title-unknownmodel: Unknown Models
+app-title-user: Users
+app-title-useraccess: User Access
+app-title-userprofile: User Profile
+app-title-vendor: Vendor
+app-title-vlan: VLAN
+app-title-vlanfilter: VLAN Filter
+app-title-vlanprofile: VLAN Profile
+app-title-vlantemplate: VLAN Template
+app-title-vpn: VPN
+app-title-vpnprofile: VPN Profiles
+app-title-vrf: VRF
+app-title-vrfgroup: VRF Groups
+app-title-wfmigration: WF Migration
+app-title-workflow: Workflows
+header-action: Action
+header-address: Address
+header-addresses: Addresses
+header-adm-domain: Adm. Domain
+header-admin: Admin
+header-admin-domain-2b0276: ADMIN_DOMAIN
+header-admin-domain-610498: Admin. Domain
+header-administrative-domain-07d5e8: Administrative domain
+header-administrative-domain-d113be: Administrative Domain
+header-affected-objects: Affected objects
+header-afi: AFI
+header-alarm: Alarm
+header-alarm-class: ALARM_CLASS
+header-alarm-from-ts: ALARM_FROM_TS
+header-alarm-subject: ALARM_SUBJECT
+header-alarm-to-ts: ALARM_TO_TS
+header-alarm-tt: ALARM_TT
+header-alarms: Alarms
+header-aliases: Aliases
+header-allocated-5cf7f4: allocated
+header-allocated-c249df: Allocated
+header-allow-children: Allow Children
+header-as: AS
+header-as-set: as-set
+header-asn: ASN
+header-attachments: Attachments
+header-auth-profile: AUTH_PROFILE
+header-avail-059853: AVAIL
+header-avail-389d90: Avail
+header-availability: Availability
+header-avg-load-in-mbps: AVG_LOAD_IN, Mbps
+header-avg-load-out-mbps: AVG_LOAD_OUT, Mbps
+header-body: Body
+header-builtin: Builtin
+header-capabilities: Capabilities
+header-category: Category
+header-children: Children
+header-chosen-name: Chosen Name
+header-class: Class
+header-classified: Classified
+header-client-model: Client Model
+header-comment: Comment
+header-comments: Comments
+header-cone-power: Cone Power
+header-connection: Connection
+header-consume-resources: Consume Resources
+header-consumes-resources: Consumes Resources
+header-contacts: Contacts
+header-container: CONTAINER
+header-container-address: CONTAINER_ADDRESS
+header-count: Count
+header-count-outages: Count outages
+header-cpe: CPE
+header-d: D
+header-date: Date
+header-deescalation-trace: Deescalation trace
+header-depends-on: Depends on
+header-description: Description
+header-detail: Detail
+header-device: Device
+header-diagnostic: Diagnostic
+header-dialplan: Dialplan
+header-direction: Direction
+header-discovery: Discovery
+header-discr: Discr.
+header-disposition: Disposition
+header-dns-zone: DNS Zone
+header-domain: Domain
+header-downs: Downs
+header-downtime: Downtime
+header-duplex: Duplex
+header-duration: Duration
+header-duration-sec: DURATION_SEC
+header-duration-us: Duration (us)
+header-end-of-ext-support: End of Ext. Support
+header-end-of-sale: End of Sale
+header-end-of-support: End of Support
+header-entries: Entries
+header-enum: ENUM
+header-error: Error
+header-error-code: Error code
+header-error-text: Error text
+header-errors: Errors
+header-errors-in: Errors In
+header-errors-out: Errors Out
+header-escalation: Escalation
+header-escalation-error: Escalation Error
+header-escalation-timestamp: Escalation Timestamp
+header-escalation-trace: Escalation trace
+header-escalation-ts: ESCALATION_TS
+header-event-type: EVENT_TYPE
+header-expired: Expired
+header-failed-request-count: Failed request count
+header-filter: Filter
+header-final-reason: Final Reason
+header-firmware-policy: Firmware Policy
+header-fqdn: FQDN
+header-free: Free
+header-free-blocks: Free Blocks
+header-from-iface-down: FROM_IFACE_DOWN
+header-from-iface-name: FROM_IFACE_NAME
+header-from-ts: FROM_TS
+header-graph: Graph
+header-group: Group
+header-h: H
+header-hostname: Hostname
+header-hw-revision: HW Revision
+header-id: ID
+header-iface-description: IFACE_DESCRIPTION
+header-iface-name: IFACE_NAME
+header-iface-speed: IFACE_SPEED
+header-import-filter: Import Filter
+header-interface: Interface
+header-interfaces: Interfaces
+header-ip: IP
+header-ip-free: IP Free
+header-ip-total: IP Total
+header-ip-used: IP Used
+header-is-affilated: Is affilated
+header-is-managed: is managed
+header-job: Job
+header-key-re: Key RE
+header-l2-domain: L2 Domain
+header-l3: L3
+header-label: Label
+header-labels: Labels
+header-last-changed: Last Changed
+header-last-config-ts: LAST_CONFIG_TS
+header-last-seen-17bff7: LAST_SEEN
+header-last-seen-20c226: Last Seen
+header-last-success: Last Success
+header-last-successful-discovery: Last successful discovery
+header-last-updated: Last Updated
+header-link-count: LINK_COUNT
+header-link-proto: LINK_PROTO
+header-link-status: LINK_STATUS
+header-load-in: Load In
+header-load-out: Load Out
+header-local: Local
+header-local-description: Local description
+header-local-id: Local Id
+header-local-port: Local port
+header-location-40c332: LOCATION
+header-location-d219c6: Location
+header-log: Log
+header-log-message: LOG_MESSAGE
+header-log-source: LOG_SOURCE
+header-log-timestamp: LOG_TIMESTAMP
+header-mac: MAC
+header-mac-vendor: MAC Vendor
+header-maintenance-81e0be: MAINTENANCE
+header-maintenance-94de30: Maintenance
+header-managed: Managed
+header-managed-object-62561c: Managed Object
+header-managed-object-f070ef: MANAGED_OBJECT
+header-managed-objects: Managed Objects
+header-mask: Mask
+header-master: Master
+header-max-load-in-mbps: MAX_LOAD_IN, Mbps
+header-max-load-in-time: MAX_LOAD_IN_TIME
+header-max-load-out-mbps: MAX_LOAD_OUT, Mbps
+header-max-load-out-time: MAX_LOAD_OUT_TIME
+header-max-ms: max (ms)
+header-mib: MIB
+header-migrate-ts: MIGRATE_TS
+header-model: Model
+header-modified: Modified
+header-modified-by: Modified by
+header-module: Module
+header-n: N
+header-name: Name
+header-nested-groups: Nested Groups
+header-ns: NS
+header-number: Number
+header-numbers: Numbers
+header-object: Object
+header-object-address: OBJECT_ADDRESS
+header-object-adm-domain: OBJECT_ADM_DOMAIN
+header-object-admdomain: OBJECT_ADMDOMAIN
+header-object-attr-patch: OBJECT_ATTR_PATCH
+header-object-bootprom: OBJECT_BOOTPROM
+header-object-hostname: OBJECT_HOSTNAME
+header-object-hwversion: OBJECT_HWVERSION
+header-object-model: OBJECT_MODEL
+header-object-name: OBJECT_NAME
+header-object-platform: OBJECT_PLATFORM
+header-object-profile: OBJECT_PROFILE
+header-object-project: OBJECT_PROJECT
+header-object-segment: OBJECT_SEGMENT
+header-object-serial: OBJECT_SERIAL
+header-object-software: OBJECT_SOFTWARE
+header-object-status: OBJECT_STATUS
+header-object-vendor: OBJECT_VENDOR
+header-object-version: OBJECT_VERSION
+header-object1-address: OBJECT1_ADDRESS
+header-object1-admin-domain: OBJECT1_ADMIN_DOMAIN
+header-object1-descr: OBJECT1_DESCR
+header-object1-iface: OBJECT1_IFACE
+header-object1-name: OBJECT1_NAME
+header-object1-platform: OBJECT1_PLATFORM
+header-object1-segment: OBJECT1_SEGMENT
+header-object1-speed: OBJECT1_SPEED
+header-object1-tags: OBJECT1_TAGS
+header-object2-address: OBJECT2_ADDRESS
+header-object2-admin-domain: OBJECT2_ADMIN_DOMAIN
+header-object2-descr: OBJECT2_DESCR
+header-object2-iface: OBJECT2_IFACE
+header-object2-name: OBJECT2_NAME
+header-object2-platform: OBJECT2_PLATFORM
+header-object2-segment: OBJECT2_SEGMENT
+header-object2-speed: OBJECT2_SPEED
+header-object2-tags: OBJECT2_TAGS
+header-objects-72a83a: Objects
+header-objects-83ccf1: OBJECTS
+header-oid: OID
+header-oper: Oper
+header-other: Other
+header-p95-ms: p95 (ms)
+header-pages: Pages
+header-paid-till: Paid Till
+header-parent: Parent
+header-part-no: Part No
+header-part-number-0: Part Number 0
+header-part-number-1: Part Number 1
+header-part-number-2: Part Number 2
+header-part-number-3: Part Number 3
+header-peer: Peer
+header-percent: "%"
+header-phone-number: Phone Number
+header-phone-range: Phone Range
+header-phys-interface-count: PHYS_INTERFACE_COUNT
+header-platform: Platform
+header-pool: Pool
+header-port: Port
+header-port-duplex: PORT_DUPLEX
+header-port-name: PORT_NAME
+header-port-profile-name: PORT_PROFILE_NAME
+header-port-speed: PORT_SPEED
+header-port-status: PORT_STATUS
+header-port-tagged-vlans: PORT_TAGGED_VLANS
+header-port-untagged-vlan: PORT_UNTAGGED_VLAN
+header-pre-reason: Pre Reason
+header-prefix: Prefix
+header-prefixes: Prefixes
+header-probable-causes: Probable Causes
+header-problem: Problem
+header-profile: Profile
+header-profile-name: PROFILE_NAME
+header-project-16eeaf: PROJECT
+header-project-f6f4da: Project
+header-protocol: Protocol
+header-provide-resources: Provide Resources
+header-provides-resources: Provides Resources
+header-q1-ms: Q1 (ms)
+header-q2-ms: Q2 (ms)
+header-q3-ms: Q3 (ms)
+header-quality: Quality
+header-quantity: Quantity
+header-range: Range
+header-ranges: Ranges
+header-rd: RD
+header-reason: Reason
+header-reboots: Reboots
+header-recommended-actions: Recommended Actions
+header-records: Records
+header-redundancy: Redundancy
+header-references: References
+header-remote-chassis: Remote Chassis
+header-remote-description-6d7f6e: Remote description
+header-remote-description-987a22: Remote Description
+header-remote-hostname: Remote Hostname
+header-remote-interface: Remote Interface
+header-remote-object-d33f14: Remote object
+header-remote-object-e48a25: Remote Object
+header-remote-port: Remote port
+header-request-count: Request count
+header-required: Required
+header-resource: Resource
+header-revision: Revision
+header-root-cause: Root Cause
+header-root-id: ROOT_ID
+header-ru: RU
+header-rule: Rule
+header-rules: Rules
+header-sample: Sample
+header-segment-44986c: Segment
+header-segment-aeb83a: SEGMENT
+header-serial: Serial
+header-server: Server
+header-service: Service
+header-service-model: Service Model
+header-services: Services
+header-session: Session
+header-severity: Severity
+header-single-client: Single Client
+header-single-service: Single Service
+header-size: Size
+header-size-usage: Size (Usage)
+header-slave: Slave
+header-sn-changed: SN_CHANGED
+header-snmp-sysobjectid: SNMP sysObjectId
+header-snmp-traps: SNMP Traps
+header-source: Source
+header-speed: Speed
+header-stage: Stage
+header-start: Start
+header-start-of-sale: Start of Sale
+header-state: State
+header-status: Status
+header-stop: Stop
+header-sub-interface: Sub.Interface
+header-sub-interfaces: Sub.Interfaces
+header-subject: Subject
+header-subscriber: Subscriber
+header-subscribers-6f13df: Subscribers
+header-subscribers-97ec75: SUBSCRIBERS
+header-success-request: Success request (%)
+header-success-request-count: Success request count
+header-summary: Summary
+header-supplier: Supplier
+header-sw-version: SW Version
+header-symptoms: Symptoms
+header-syslog: Syslog
+header-table: Table
+header-tablespace: Tablespace
+header-tagged: Tagged
+header-tags: Tags
+header-tech-contact: Tech Contact
+header-tech-contact-phone: Tech Contact Phone
+header-technology: Technology
+header-terminator: Terminator
+header-terms: Terms
+header-time: Time
+header-time-pattern: Time Pattern
+header-timestamp: Timestamp
+header-to-iface-down: TO_IFACE_DOWN
+header-to-iface-name: TO_IFACE_NAME
+header-to-ts: TO_TS
+header-total: Total
+header-total-in-mbyte: TOTAL_IN, Mbyte
+header-total-out-mbyte: TOTAL_OUT, Mbyte
+header-total-unavail-sec: Total unavail (sec)
+header-translation: Translation
+header-tt: TT
+header-tt-id: TT ID
+header-type: Type
+header-uniq-cone-power: Uniq. Cone Power
+header-unique: Unique
+header-untagged: Untagged
+header-uplink-avg-load-in-mbps: UPLINK_AVG_LOAD_IN, Mbps
+header-uplink-avg-load-out-mbps: UPLINK_AVG_LOAD_OUT, Mbps
+header-uplink-iface-description: UPLINK_IFACE_DESCRIPTION
+header-uplink-iface-name: UPLINK_IFACE_NAME
+header-uplink-iface-speed: UPLINK_IFACE_SPEED
+header-uplink-max-load-in-mbps: UPLINK_MAX_LOAD_IN, Mbps
+header-uplink-max-load-out-mbps: UPLINK_MAX_LOAD_OUT, Mbps
+header-uplink-max-time-in: UPLINK_MAX_TIME_IN
+header-uplink-max-time-out: UPLINK_MAX_TIME_OUT
+header-uplink-total-in-mbyte: UPLINK_TOTAL_IN, Mbyte
+header-uplink-total-out-mbyte: UPLINK_TOTAL_OUT, Mbyte
+header-url: URL
+header-usage: Usage
+header-used: "% Used"
+header-used-by: Used by
+header-user: User
+header-user-clearable: User clearable
+header-value: Value
+header-value-re: Value RE
+header-vars: Vars
+header-vendor: Vendor
+header-vendor-mac: VENDOR_MAC
+header-version: Version
+header-views: Views
+header-vlan-560367: VLAN
+header-vlan-6c174b: Vlan
+header-vlan-translation: VLAN Translation
+header-vlans: VLANs
+header-vpn: VPN
+header-vpn-id: VPN ID
+header-vrf: VRF
+header-w: W
+header-weight-kg: Weight (kg)
+header-zone: Zone
+label-1-day: 1 day
+label-1-month: 1 month
+label-1-week: 1 week
+label-address-family: Address Family
+label-administrative-domain: Administrative Domain
+label-all: All
+label-as-number: AS Number
+label-availability-last-day: Availability (last day)
+label-availability-last-month: Availability (last month)
+label-availability-last-week: Availability (last week)
+label-by-administrative-domain: By Administrative Domain
+label-by-administrative-domain-and-profile: By Administrative Domain and Profile
+label-by-labels: By Labels
+label-by-platform: By Platform
+label-by-profile: By Profile
+label-by-version: By Version
+label-cisco-ios-policer: Cisco IOS policer
+label-cisco-ios-rate-limit: Cisco IOS rate-limit
+label-config: config
+label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
+label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
+label-days: Days
+label-dbm: dBm
+label-description: Description
+label-dns: DNS
+label-duration: Duration
+label-escalation-error-details: Escalation Error Details
+label-escalations-1-day: Escalations (1 day)
+label-escalations-30-day: Escalations (30 day)
+label-escalations-7-days: Escalations (7 days)
+label-exclude-on-mac-black-list: Exclude on MAC Black List
+label-fail: Fail
+label-failed-discovery-only: Failed discovery only
+label-filter-by-ping-status: Filter by Ping status
+label-filter-none-problems: Filter None problems
+label-filter-pending-links: Filter Pending links
+label-fqdn: FQDN
+label-from-date: From Date
+label-in-days: In Days
+label-include-addresses: Include Addresses
+label-include-prefixes: Include Prefixes
+label-interval: Interval
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-juniper-junos-policer: Juniper JUNOS policer
+label-managed-object: Managed Object
+label-managed-object-search-for-config-only: Managed object search (for config only)
+label-managed-objects-administrative-domain-for-config-only: Managed Objects Administrative Domain (for config only)
+label-managed-objects-group-selector: Managed Objects Group (Selector)
+label-managed-objects-pool: Managed Objects Pool
+label-managed-objects-pools: Managed Objects Pools
+label-managed-objects-profile: Managed Objects Profile
+label-managed-objects-summary-domain: Managed Objects Summary (domain)
+label-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
+label-managed-objects-summary-label: Managed Objects Summary (label)
+label-managed-objects-summary-platform: Managed Objects Summary (platform)
+label-managed-objects-summary-profile: Managed Objects Summary (profile)
+label-managed-objects-summary-version: Managed Objects Summary (version)
+label-mw: mW
+label-name: Name
+label-ns: NS
+label-outages-1-day: Outages (1 day)
+label-outages-30-day: Outages (30 day)
+label-outages-7-days: Outages (7 days)
+label-pool: Pool
+label-prefix: Prefix
+label-profile: Profile
+label-profile-check-only: Profile check only
+label-range: Range
+label-reboot-30-day: Reboot (30 day)
+label-reboots-1-day: Reboots (1 day)
+label-reboots-7-days: Reboots (7 days)
+label-report-format: Report Format
+label-report-type: Report Type
+label-search-by-ip: Search by ip
+label-search-by-prefix: Search by prefix
+label-search-by-user: Search by user
+label-show-other-problems: Show other problems
+label-show-problem-on-already-linked: Show problem on already linked
+label-skip: Skip
+label-skip-full-available: Skip full available
+label-skip-zero-access-port: Skip zero access port
+label-skip-zero-available: Skip zero available
+label-statistics: Statistics
+label-to-date: To Date
+label-ttsystem-errors-1-day: TTSystem Errors (1 day)
+label-ttsystem-stat-1-day: TTSystem Stat (1 day)
+label-ttsystem-stat-30-day: TTSystem Stat (30 day)
+label-ttsystem-stat-7-days: TTSystem Stat (7 days)
+label-update: Update
+label-vrf: VRF
+label-zone: Zone
+nav-account: Account
+nav-action: Actions
+nav-actioncommands: Action Commands
+nav-addressprofile: Address Profiles
+nav-addressrange: Address Ranges
+nav-administrativedomain: Administrative Domains
+nav-agent: Agent
+nav-agentprofile: Agent Profiles
+nav-alarm: Alarms
+nav-alarmclass: Alarm Classes
+nav-alarmclassconfig: Alarm Class Config
+nav-alarmdiagnosticconfig: Alarm Diagnostic
+nav-alarmescalation: Alarm Escalation
+nav-alarmrule: Alarm Rules
+nav-alarmseverity: Alarm Severities
+nav-alarmtrigger: Alarm Triggers
+nav-allocationgroup: Allocation Groups
+nav-apikey: API Keys
+nav-as: ASes
+nav-asprofile: AS Profiles
+nav-asset: AS Sets
+nav-audittrail: Audit Trail
+nav-authldapdomain: LDAP Domains
+nav-authprofile: Auth Profiles
+nav-building: Buildings
+nav-capability: Capabilities
+nav-capsprofile: Caps Profiles
+nav-card: Cards
+nav-channel: Channels
+nav-chpolicy: CH Policies
+nav-classificationrule: Classification Rules
+nav-commandsnippet: Command Snippets
+nav-community: Communities
+nav-communitytype: Community Types
+nav-confdbquery: ConfDB Queries
+nav-configurationparam: Configuration Params
+nav-configurationscope: Configuration Scope
+nav-configuredmap: Configured Maps
+nav-connectionrule: Connection Rules
+nav-connectiontype: Connection Types
+nav-coverage: Coverage
+nav-cpe: CPEs
+nav-cpeprofile: CPE Profiles
+nav-crashinfo: Crashinfo
+nav-credentialcheckrule: Credential Check Rules
+nav-crontab: CronTabs
+nav-csv: CSV Export/Import
+nav-customfield: Custom Fields
+nav-customfieldenumgroup: Enum Groups
+nav-dashboard: Dashboard
+nav-dashboardlayout: Dashboard Layout
+nav-datastreamconfig: DataStream Config
+nav-dialplan: DialPlan
+nav-discoveredobject: Discovered Object
+nav-division: Divisions
+nav-dnsserver: DNS Servers
+nav-dnszone: Zones
+nav-dnszoneprofile: Zone Profiles
+nav-endpoint: Endpoints
+nav-escalationprofile: Escalation Profile
+nav-event: Events
+nav-eventclass: Event Classes
+nav-eventtrigger: Event Triggers
+nav-extstorage: Ext. Storages
+nav-facade: Facades
+nav-firmware: Firmware
+nav-firmwarepolicy: Firmware Policy
+nav-getnow: Get Now
+nav-glyph: Glyphs
+nav-group: Groups
+nav-groupaccess: Group Access
+nav-handler: Handlers
+nav-heatmap: Heatmap
+nav-ifdescpatterns: IfDesc Patterns
+nav-ignoreeventrule: Ignore Event Rules
+nav-ignorepattern: Ignore Patterns
+nav-imagestore: Images
+nav-interface: Interfaces
+nav-interfaceprofile: Interface Profiles
+nav-interfacevalidationpolicy: Interface Validation Policies
+nav-inv: Inventory
+nav-ipam: Assigned Addresses
+nav-job: Jobs
+nav-jsonimport: JSON Import
+nav-kb: Knowledge Base
+nav-kbentry: Entries
+nav-kbentrytemplate: Templates
+nav-l2domain: L2 Domain
+nav-l2domainprofile: L2Domain Profiles
+nav-label: Labels
+nav-language: Languages
+nav-layer: Layers
+nav-macblacklist: MAC Blacklist
+nav-macdb: Mac DB
+nav-maintainer: Maintainers
+nav-maintenance: Maintenance
+nav-maintenancetype: Maintenance Types
+nav-managedobject: Managed Objects
+nav-managedobjectprofile: Managed Object Profiles
+nav-map: Network Map
+nav-measurementunits: Measurement Units
+nav-messageroute: Message Routes
+nav-metricaction: Metric Actions
+nav-metricrule: Metric Rules
+nav-metricscope: Metric Scopes
+nav-metricstream: Metric Stream
+nav-metrictype: Metric Types
+nav-mib: MIB
+nav-mibpreference: MIB Preference
+nav-mimetype: MIME Types
+nav-modelinterface: Model Interfaces
+nav-modelmapping: Model Mapping
+nav-modelprotectionprofile: ModelProtection Profile
+nav-modeltemplate: Model Templates
+nav-monitor: Monitor
+nav-monmap: Monmap
+nav-networksegment: Network Segments
+nav-networksegmentprofile: Network Segment Profiles
+nav-notificationgroup: Notification Groups
+nav-numbercategory: Number Categories
+nav-objectconfigurationrule: Configuration Rules
+nav-objectdiagnosticconfig: Object Diagnostic Configs
+nav-objectdiscoveryrule: Object Discovered Rules
+nav-objectmodel: Object Models
+nav-objectnotification: Object Notification
+nav-objectnotify: Object Notifies
+nav-objectvalidationpolicy: Object Validation Policies
+nav-oidalias: OID Aliases
+nav-organisation: Organisations
+nav-outage: Outages
+nav-peer: Peers
+nav-peergroup: Peer Groups
+nav-peeringpoint: Peering Points
+nav-peerprofile: Peer Profiles
+nav-person: Persons
+nav-phonenumber: Phone Number
+nav-phonenumberprofile: Number Profiles
+nav-phonerange: Phone Ranges
+nav-phonerangeprofile: Range Profile
+nav-platform: Platforms
+nav-pool: Pools
+nav-prefixaccess: Prefix Access
+nav-prefixlistbuilder: Prefix List Builder
+nav-prefixprofile: Prefix Profiles
+nav-prefixtable: Prefix Tables
+nav-profile: Profiles
+nav-profilecheckrule: Profile Check Rules
+nav-project: Projects
+nav-protocol: Protocols
+nav-pyrule: PyRule
+nav-quiz: Quiz
+nav-reactionrule: Reaction Rule
+nav-remotesystem: Remote Systems
+nav-reportalarmcomments: Alarm Comments
+nav-reportalarmdetail: Alarm Detail
+nav-reportconfig: Report Config
+nav-reportifacestatus: Interface Status
+nav-reportlinkdetail: Link Detail
+nav-reportmaxmetrics: Load Metrics max
+nav-reportmetrics: Load Metrics
+nav-reportmovedmac: Moved MACs
+nav-reportobjectdetail: Object Detail
+nav-reportsubscription: Report Subscription
+nav-resourcegroup: Resource Groups
+nav-resourcepool: Resource Pool
+nav-resourcestate: Resource States
+nav-rir: RIRs
+nav-runcommands: Run Commands (On Group Edit option)
+nav-scale: Scale
+nav-search: Search
+nav-sensor: Sensor
+nav-sensorprofile: Sensor Profiles
+nav-service: Services
+nav-serviceprofile: Service Profiles
+nav-slaprobe: SLA Probes
+nav-slaprofile: SLA Profiles
+nav-spec: Specs
+nav-state: States
+nav-street: Streets
+nav-style: Styles
+nav-subscriber: Subscribers
+nav-subscriberprofile: Subscriber Profiles
+nav-supplier: Supplier
+nav-supplierprofile: Supplier Profiles
+nav-systemnotification: System Notifications
+nav-systemtemplate: System Templates
+nav-techdomain: Tech Domains
+nav-technology: Technologies
+nav-template: Templates
+nav-timepattern: Time Patterns
+nav-totaloutage: Total Outages
+nav-transition: Transitions
+nav-ttsystem: TT System
+nav-unknownmodel: Unknown Models
+nav-user: Users
+nav-useraccess: User Access
+nav-vendor: Vendors
+nav-vlan: VLAN
+nav-vlanfilter: VLAN Filters
+nav-vlanprofile: VLAN Profiles
+nav-vlantemplate: VLAN Templates
+nav-vpn: VPN
+nav-vpnprofile: VPN Profiles
+nav-vrf: VRF
+nav-vrfgroup: VRF Groups
+nav-wfmigration: Migrations
+nav-workflow: Workflow

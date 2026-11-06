@@ -14,8 +14,8 @@ from mongoengine import Q
 
 # NOC modules
 from noc.core.cache.decorator import cachedmethod
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.resourcepool import ResourcePool
 from noc.inv.models.subinterface import SubInterface
@@ -33,8 +33,8 @@ class VLANApplication(ExtDocApplication):
     VLAN application
     """
 
-    title = "VLAN"
-    menu = [_("VLAN")]
+    title = t("app-title-vlan")
+    menu = [t("nav-vlan")]
     model = VLAN
     query_fields = ["name", "description"]
     query_condition = "icontains"

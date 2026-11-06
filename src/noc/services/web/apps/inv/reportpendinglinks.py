@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscovery
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -16,8 +16,8 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.cache.base import cache
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
 from noc.inv.models.interface import Interface
 from noc.inv.models.interfaceprofile import InterfaceProfile
@@ -161,12 +161,12 @@ class ReportPendingLinks:
 
 
 class ReportDiscoveryTopologyProblemApplication(SimpleReport):
-    title = _("Pending Links")
+    title = t("app-title-reportpendinglinks")
 
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=_("Managed Objects Pools"),
+                label=t("label-managed-objects-pools"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -174,12 +174,12 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=_("Managed Objects Profile"),
+                label=t("label-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )
             show_already_linked = forms.BooleanField(
-                label=_("Show problem on already linked"), required=False
+                label=t("label-show-problem-on-already-linked"), required=False
             )
 
         return ReportForm
@@ -257,18 +257,18 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
         return self.from_dataset(
             title=self.title,
             columns=[
-                _("Managed Object"),
-                _("Address"),
-                _("Profile"),
-                _("Administrative domain"),
-                _("Interface"),
-                _("Direction"),
-                _("Remote Interface"),
-                _("Remote Object"),
-                _("Detail"),
-                _("Remote Hostname"),
-                _("Remote Description"),
-                _("Remote Chassis"),
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                t("header-profile"),
+                t("header-administrative-domain-07d5e8"),
+                t("header-interface"),
+                t("header-direction"),
+                t("header-remote-interface"),
+                t("header-remote-object-e48a25"),
+                t("header-detail"),
+                t("header-remote-hostname"),
+                t("header-remote-description-987a22"),
+                t("header-remote-chassis"),
                 # _("Discovery"), _("Error")
             ],
             data=data,

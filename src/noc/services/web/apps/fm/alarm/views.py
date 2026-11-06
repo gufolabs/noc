@@ -23,6 +23,7 @@ from noc.aaa.models.user import User
 from noc.config import config
 from noc.core.clickhouse.connect import connection
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.crm.models.subscriberprofile import SubscriberProfile
 from noc.fm.models.activealarm import ActiveAlarm, Effect
@@ -84,8 +85,8 @@ class AlarmApplication(ExtApplication):
     fm.alarm application
     """
 
-    title = _("Alarm")
-    menu = _("Alarms")
+    title = t("app-title-alarm")
+    menu = t("nav-alarm")
     glyph = "exclamation-triangle"
 
     implied_permissions = {"launch": ["sa:managedobject:alarm"]}

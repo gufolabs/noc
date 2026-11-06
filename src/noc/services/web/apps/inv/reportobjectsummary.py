@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # inv.reportobjectsummary
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.object import Object
 from noc.inv.models.objectmodel import ObjectModel
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportObjectSummaryApplication(SimpleReport):
-    title = _("Inventory Object Summary")
+    title = t("app-title-inv-reportobjectsummary")
 
     def get_data(self, **kwargs):
         self.model_name = {}  # oid -> name
@@ -39,7 +39,10 @@ class ReportObjectSummaryApplication(SimpleReport):
         )
         return self.from_dataset(
             title=self.title,
-            columns=["Model", TableColumn("Count", format="numeric", align="right", total="sum")],
+            columns=[
+                t("header-model"),
+                TableColumn(t("header-count"), format="numeric", align="right", total="sum"),
+            ],
             data=data,
             enumerate=True,
         )

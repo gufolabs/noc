@@ -9,6 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.translation import ugettext as _
 from noc.main.models.remotesystem import RemoteSystem
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -19,8 +20,8 @@ class RemoteSystemApplication(ExtDocApplication):
     RemoteSystem application
     """
 
-    title = "Remote System"
-    menu = [_("Setup"), _("Remote Systems")]
+    title = t("app-title-remotesystem")
+    menu = [t("app-group-setup"), t("nav-remotesystem")]
     model = RemoteSystem
 
     @api.get("^brief_lookup/$", access="lookup")

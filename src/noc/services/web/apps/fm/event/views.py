@@ -17,8 +17,8 @@ from noc.bi.models.events import Events
 from noc.config import config
 from noc.core.clickhouse.connect import connection
 from noc.core.fm.event import Event, EventSeverity, EventSource, MessageType, Target, Var
+from noc.core.i18n import t
 from noc.core.service.loader import get_service
-from noc.core.translation import ugettext as _
 from noc.fm.models.eventclass import EventClass
 from noc.inv.models.networksegment import NetworkSegment
 from noc.main.models.remotesystem import RemoteSystem
@@ -35,8 +35,8 @@ class EventApplication(ExtApplication):
     fm.event application
     """
 
-    title = _("Events")
-    menu = _("Events")
+    title = t("app-title-event")
+    menu = t("nav-event")
     icon = "icon_find"
     ignored_params = ["status", "_dc"]
 

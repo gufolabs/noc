@@ -1,0 +1,327 @@
+app-group-aaa: AAA
+app-group-bi: BI
+app-group-cm: Gerência de Configuração
+app-group-crm: CRM
+app-group-dns: DNS
+app-group-fm: Gerência de Falhas
+app-group-inv: Inventário
+app-group-ip: IPAM
+app-group-kb: Base de Conhecimento
+app-group-main: Principal
+app-group-maintenance: Manutenção
+app-group-peer: Gerência de BGP
+app-group-pm: Gerência de Performance
+app-group-project: Gerência de Projeto
+app-group-sa: Ativação de Serviço
+app-group-setup: Configurar
+app-group-sla: SLA
+app-group-support: Suporte
+app-group-vc: Gerência de VC
+app-title-account: Conta
+app-title-action: Ação
+app-title-actioncommands: Comando de Ação
+app-title-address: IP
+app-title-addressrange: Intervalos de IP
+app-title-administrativedomain: Domínios Administrativos
+app-title-alarm: Alerta
+app-title-alarmclass: Classe de Alerta
+app-title-alarmclassconfig: Configuração de Classe de Alerta
+app-title-alarmescalation: Escalação de Alerta
+app-title-alarmseverity: Criticidade de Alerta
+app-title-alarmtrigger: Gatilhos de Alerta
+app-title-as: AS
+app-title-asset: Conjuntos de AS
+app-title-audittrail: Trilha de Auditoria
+app-title-authprofile: Perfil de Autenticação
+app-title-building: Prédio
+app-title-calculator: Calculadores
+app-title-capability: Capacidade
+app-title-classificationrule: Regra de Classificação
+app-title-commandsnippet: Comando Snippet
+app-title-community: Comunidades
+app-title-communitytype: Tipos de Comunidade
+app-title-connectionrule: Regras de Conexão
+app-title-connectiontype: Tipos de Conexão
+app-title-coverage: Cobertura
+app-title-csv: Exportar/Importar de CSV
+app-title-customfield: Campos Personalizados
+app-title-customfieldenumgroup: Grupos Enumeráveis
+app-title-ddash: Dashboard Dinâmico
+app-title-division: Divisão
+app-title-dnsserver: Servidor de DNS
+app-title-dnszone: Zona de DNS
+app-title-dnszoneprofile: Perfis de Zona
+app-title-event: Eventos
+app-title-eventclass: Classe de Evento
+app-title-eventtrigger: Gatilhos de Evento
+app-title-firmwarepolicy: Política de Firmware
+app-title-getnow: Buscar Agora
+app-title-group: Grupos
+app-title-groupaccess: Permissão de Grupo
+app-title-heatmap: Mapa de Calor
+app-title-ignoreeventrule: Ignorar Regras de Evento
+app-title-ignorepattern: Ignorar Padrões
+app-title-interfaceprofile: Perfil de Interface
+app-title-inv: Inventário
+app-title-inv-reportobjectsummary: Resumo de Inventário Objeto
+app-title-jsonimport: Importar JSON
+app-title-kb: Base de Conhecimento
+app-title-language: Idiomas
+app-title-layer: Camadas
+app-title-macdb: Banco de Dados de MAC
+app-title-maintainer: Mantenedores
+app-title-maintenance: Manutenção
+app-title-maintenancetype: Tipo de Manutenção
+app-title-managedobject: Objetos Gerenciados
+app-title-managedobjectprofile: Perfil de Objeto Gerenciado
+app-title-map: Topologia de Rede
+app-title-metrictype: Tipo de Métrica
+app-title-mib: MIB
+app-title-mibpreference: Preferência de MIB
+app-title-mimetype: Tipos de MIME
+app-title-modelinterface: Modelo de Interface
+app-title-modelmapping: Modelo de Mapeamento
+app-title-networksegment: Segmento de Rede
+app-title-notificationgroup: Grupo de Notificação
+app-title-objectmodel: Modelos de Objeto
+app-title-objectnotification: Notificação de Objeto
+app-title-objectnotify: Notificações de Objeto
+app-title-oidalias: Rótulo de OID
+app-title-organisation: Organizações
+app-title-outage: Interrupções
+app-title-peergroup: Grupos de Peers
+app-title-person: Pessoas/Papéis
+app-title-platform: Plataforma
+app-title-prefix: Prefixo
+app-title-prefixaccess: Permissão do Prefixo
+app-title-prefixlistbuilder: Construtor de Prefix List
+app-title-prefixtable: Tabela de Prefixo
+app-title-profile: Perfil
+app-title-profilecheckrule: Regra de Verificação de Perfil
+app-title-project: Projeto
+app-title-reportalarmdetail: Detalhamento de Alerta
+app-title-reportallocated: Blocos Alocados
+app-title-reportavailability: Disponibilidade
+app-title-reportclassificationquality: Qualidade de Classificação
+app-title-reportclassificationrule: Regras de Classificação
+app-title-reportcompare: Comparar Especificações
+app-title-reportcone: Análise de Cone
+app-title-reportdbsummary: Resumo de banco de dados
+app-title-reportdiscovery: Resumo de Descoberta
+app-title-reportduplicatedfqdns: FQDNs Duplicados
+app-title-reportescalations: Escalações
+app-title-reportexpiringdomains: Domínios Expirando
+app-title-reportfree: Blocos Livres
+app-title-reporthierarchy: Hierarquias de Eventos e de Alertas
+app-title-reportlatestchanges: Últimas Modificações
+app-title-reportlocalrules: Regras de Classificação Local (JSON)
+app-title-reportmibs: MIBs Instaladas
+app-title-reportmissedmibs: MIBs Não Instaladas
+app-title-reportmissedp2p: Endereços de Links Perdidos
+app-title-reportmissedreverse: Zonas Reversas Perdidas
+app-title-reportnszonesummary: Resumo de Zona de NS
+app-title-reportoutages: Interrupções
+app-title-reportoverlappedoids: OIDs de MIBs Sobrepostos
+app-title-reportrulesbyprofile: Regras por Perfil
+app-title-reportrulesetsummary: 'Resumo de Conjunto de Regras '
+app-title-reportstalediscovery: Descoberta Stale
+app-title-reporttaggedmodels: Modelos com tag
+app-title-reportunknownsummary: Resumo de Modelos Desconhecidos
+app-title-resourcestate: Estados de Recurso
+app-title-rir: RIR
+app-title-runcommands: Rodar Comandos
+app-title-sa-reportobjectsummary: Resumo de Objetos Gerenciados
+app-title-search: Busca
+app-title-serviceprofile: Perfil de Serviço
+app-title-street: Rua
+app-title-style: Estilo
+app-title-subscriber: Assinante
+app-title-subscriberprofile: Perfil de Assinante
+app-title-supplier: Fornecedor
+app-title-supplierprofile: Perfil de Fornecedor
+app-title-systemnotification: Notificações de Sistema
+app-title-systemtemplate: Templates de Sistema
+app-title-technology: Tecnologia
+app-title-timepattern: Padrão de Tempo
+app-title-tools: Ferramentas
+app-title-totaloutage: Total de Interrupções
+app-title-ttsystem: Sistema de TT
+app-title-unknownmodel: Modelos Desconhecidos
+app-title-user: Usuários
+app-title-useraccess: Permissão de Usuário
+app-title-userprofile: Perfil de Usuário
+app-title-vendor: Fabricante
+app-title-vlan: VLAN
+app-title-vpn: VPN
+app-title-vrf: VRF
+app-title-vrfgroup: Grupos de VRF
+header-action: Ação
+header-address: IP
+header-administrative-domain-d113be: Domínio Administrativo
+header-alarm: Alerta
+header-alarms: Alertas
+header-as: AS
+header-availability: Disponibilidade
+header-capabilities: Capacidades
+header-comment: Comentário
+header-cpe: CPE
+header-description: Descrição
+header-dns-zone: Zona de DNS
+header-domain: Domínio
+header-enum: ENUM
+header-escalation-timestamp: Escalação de Timestamp
+header-expired: Expirado
+header-firmware-policy: Política de Firmware
+header-fqdn: FQDN
+header-id: ID
+header-ip: IP
+header-l3: L3
+header-last-changed: Última Modificação
+header-mac: MAC
+header-maintenance-94de30: Manutenção
+header-managed-object-62561c: Objeto Gerenciado
+header-managed-objects: Objetos Gerenciados
+header-mib: MIB
+header-oid: OID
+header-paid-till: Licenciado Até
+header-percent: '%'
+header-platform: Plataforma
+header-prefix: Prefixo
+header-profile: Perfil
+header-project-f6f4da: Projeto
+header-quantity: Quantidade
+header-range: Intervalo
+header-segment-44986c: Segmento
+header-size: Tamanho
+header-subscriber: Assinante
+header-subscribers-6f13df: Assinantes
+header-supplier: Fornecedor
+header-technology: Tecnologia
+header-time-pattern: Padrão de Tempo
+header-tt: TT
+header-vendor: Fabricante
+header-version: Versão
+header-vlan-560367: VLAN
+header-vpn: VPN
+header-vrf: VRF
+header-zone: Zona
+label-1-day: 1 dia
+label-1-month: 1 mês
+label-1-week: 1 semana
+label-address-family: Família de IP
+label-administrative-domain: Domínio Administrativo
+label-as-number: Número de AS
+label-by-administrative-domain: Por Domínio Administrativo
+label-by-administrative-domain-and-profile: Por Domínio Administrativo e Perfil
+label-by-platform: Por Plataforma
+label-by-profile: Por Perfil
+label-by-version: Por Versão
+label-description: Descrição
+label-dns: DNS
+label-fqdn: FQDN
+label-ipv4: IPv4
+label-ipv6: IPv6
+label-managed-object: Objeto Gerenciado
+label-prefix: Prefixo
+label-profile: Perfil
+label-range: Intervalo
+label-vrf: VRF
+label-zone: Zona
+nav-account: Conta
+nav-action: Ações
+nav-actioncommands: Comandos de Ação
+nav-addressrange: Intervalos de IP
+nav-administrativedomain: Domínios Administrativos
+nav-alarm: Alertas
+nav-alarmclass: Classes de Alerta
+nav-alarmclassconfig: Configuração de Classe de Alerta
+nav-alarmescalation: Escalação de Alerta
+nav-alarmseverity: Criticidades de Alerta
+nav-alarmtrigger: Gatilhos de Alerta
+nav-asset: Conjuntos de AS
+nav-audittrail: Trilha de Auditoria
+nav-authprofile: Perfis de Autenticação
+nav-building: Prédios
+nav-capability: Capacidades
+nav-classificationrule: Regras de Classificação
+nav-commandsnippet: Comando Snippet
+nav-community: Comunidades
+nav-communitytype: Tipos de Comunidade
+nav-connectionrule: Regras de Conexão
+nav-connectiontype: Tipos de Conexão
+nav-coverage: Cobertura
+nav-csv: Exportar/Importar de CSV
+nav-customfield: Campos Personalizados
+nav-customfieldenumgroup: Grupos Enumeráveis
+nav-division: Divisões
+nav-dnsserver: Servidores de DNS
+nav-dnszone: Zonas
+nav-dnszoneprofile: Perfis de Zona
+nav-event: Eventos
+nav-eventclass: Classes de Evento
+nav-eventtrigger: Gatilhos de Evento
+nav-firmwarepolicy: Política de Firmware
+nav-getnow: Buscar Agora
+nav-group: Grupos
+nav-groupaccess: Permissão de Grupo
+nav-heatmap: Mapa de Calor
+nav-ignoreeventrule: Ignorar Regras de Evento
+nav-ignorepattern: Ignorar Padrões
+nav-interfaceprofile: Perfis de Interface
+nav-inv: Inventário
+nav-jsonimport: Importar JSON
+nav-kb: Base de Conhecimento
+nav-language: Idiomas
+nav-layer: Camadas
+nav-macdb: Banco de Dados de MAC
+nav-maintainer: Mantenedores
+nav-maintenance: Manutenção
+nav-maintenancetype: Tipos de Manutenção
+nav-managedobject: Objetos Gerenciados
+nav-managedobjectprofile: Perfis de Objeto Gerenciado
+nav-map: Topologia de Rede
+nav-metrictype: Tipos de Métrica
+nav-mib: MIB
+nav-mibpreference: Preferência de MIB
+nav-mimetype: Tipos de MIME
+nav-modelinterface: Modelos de Interface
+nav-modelmapping: Modelo de Mapeamento
+nav-networksegment: Segmentos de Rede
+nav-notificationgroup: Grupos de Notificação
+nav-objectmodel: Modelos de Objeto
+nav-objectnotification: Notificação de Objeto
+nav-objectnotify: Notificações de Objeto
+nav-oidalias: Rótulo de OID
+nav-organisation: Organizações
+nav-outage: Interrupções
+nav-peergroup: Grupos de Peers
+nav-person: Pessoas
+nav-prefixaccess: Permissão do Prefixo
+nav-prefixlistbuilder: Construtor de Prefix List
+nav-prefixtable: Tabelas de Prefixos
+nav-profilecheckrule: Regras de Verificação de Perfil
+nav-project: Projetos
+nav-reportalarmdetail: Detalhamento de Alerta
+nav-resourcestate: Estados de Recurso
+nav-search: Busca
+nav-serviceprofile: Perfis de Serviço
+nav-street: Ruas
+nav-style: Estilos
+nav-subscriber: Assinantes
+nav-subscriberprofile: Perfis de Assinante
+nav-supplier: Fornecedor
+nav-supplierprofile: Perfis de Fornecedor
+nav-systemnotification: Notificações de Sistema
+nav-systemtemplate: Templates de Sistema
+nav-technology: Tecnologias
+nav-timepattern: Padrões de Tempo
+nav-totaloutage: Total de Interrupções
+nav-ttsystem: Sistema de TT
+nav-unknownmodel: Modelos Desconhecidos
+nav-user: Usuários
+nav-useraccess: Permissão de Usuário
+nav-vendor: Fabricantes
+nav-vlan: VLAN
+nav-vpn: VPN
+nav-vrf: VRF
+nav-vrfgroup: Grupos de VRF

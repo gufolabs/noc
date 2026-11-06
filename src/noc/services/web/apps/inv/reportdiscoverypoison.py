@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mac import MAC
 from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
@@ -21,16 +22,16 @@ from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 class ReportForm(forms.Form):
     pool = forms.ChoiceField(
-        label=_("Pool"),
+        label=t("label-pool"),
         required=False,
         initial=None,
         choices=[(x, x) for x in Pool.objects.order_by("name").scalar("name")] + [(None, "-")],
     )
-    filter_dup_macs = forms.BooleanField(label=_("Exclude on MAC Black List"), required=False)
+    filter_dup_macs = forms.BooleanField(label=t("label-exclude-on-mac-black-list"), required=False)
 
 
 class ReportDiscoveryIDPoisonApplication(SimpleReport):
-    title = _("Discovery ID cache poison")
+    title = t("app-title-reportdiscoverypoison")
     form = ReportForm
 
     def get_data(self, request: HttpRequest, pool=None, filter_dup_macs=False, **kwargs):
@@ -76,6 +77,12 @@ class ReportDiscoveryIDPoisonApplication(SimpleReport):
 
         return self.from_dataset(
             title=self.title,
-            columns=[_("Managed Object"), _("Address"), _("Profile"), _("Pool"), _("is managed")],
+            columns=[
+                t("header-managed-object-62561c"),
+                t("header-address"),
+                t("header-profile"),
+                t("header-pool"),
+                t("header-is-managed"),
+            ],
             data=data,
         )

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 
@@ -19,8 +19,8 @@ class AdministrativeDomainApplication(ExtModelApplication):
     AdministrativeDomain application
     """
 
-    title = _("Administrative Domains")
-    menu = [_("Setup"), _("Administrative Domains")]
+    title = t("app-title-administrativedomain")
+    menu = [t("app-group-setup"), t("nav-administrativedomain")]
     model = AdministrativeDomain
     query_fields = ["name__icontains", "description__icontains"]
     lookup_default = [{"has_children": False, "id": "Leave unchanged", "label": "Leave unchanged"}]

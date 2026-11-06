@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.vendor import Vendor
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -19,8 +19,8 @@ class VendorApplication(ExtDocApplication):
     Vendor application
     """
 
-    title = _("Vendor")
-    menu = [_("Setup"), _("Vendors")]
+    title = t("app-title-vendor")
+    menu = [t("app-group-setup"), t("nav-vendor")]
     model = Vendor
     query_fields = ["name__icontains", "code__icontains", "site__icontains"]
     default_ordering = ["name"]

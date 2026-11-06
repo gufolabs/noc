@@ -7,22 +7,22 @@
     </th>
 </tr>
 <tr>
-    <th scope="row" class="col-md-2">{{ _("Vendor") }}</th>
+    <th scope="row" class="col-md-2">{{ t("header-vendor") }}</th>
     <td>{{ object.vendor.name }}</td>
 </tr>
 <tr>
-    <th scope="row" class="col-md-2">{{ _("Profile") }}</th>
+    <th scope="row" class="col-md-2">{{ t("header-profile") }}</th>
     <td>{{ object.profile.name }}</td>
 </tr>
 {% if object.description %}
 <tr>
-    <th scope="row" class="col-md-2">{{ _("Description") }}</th>
+    <th scope="row" class="col-md-2">{{ t("header-description") }}</th>
     <td>{{ object.description }}</td>
 </tr>
 {% endif %}
 {% if object.download_url %}
 <tr>
-    <th scope="row" class="col-md-2">{{ _("URL") }}</th>
+    <th scope="row" class="col-md-2">{{ t("header-url") }}</th>
     <td><a href="{{ object.download_url }}">{{ object.download_url }}</a></td>
 </tr>
 {% endif %}

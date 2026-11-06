@@ -20,8 +20,8 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.comp import smart_text
+from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.platform import Platform
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -109,8 +109,8 @@ class ReportLinksDetail:
 
 
 class ReportLinkDetailApplication(ExtApplication):
-    menu = _("Reports") + "|" + _("Link Detail")
-    title = _("Link Detail")
+    menu = t("app-group-reports") + "|" + t("nav-reportlinkdetail")
+    title = t("app-title-reportlinkdetail")
 
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7
@@ -188,26 +188,26 @@ class ReportLinkDetailApplication(ExtApplication):
         ]
 
         header_row = [
-            "OBJECT1_ADMIN_DOMAIN",
-            "OBJECT1_NAME",
-            "OBJECT1_ADDRESS",
-            "OBJECT1_PLATFORM",
-            "OBJECT1_SEGMENT",
-            "OBJECT1_TAGS",
-            "OBJECT1_IFACE",
-            "OBJECT1_DESCR",
-            "OBJECT1_SPEED",
-            "OBJECT2_ADMIN_DOMAIN",
-            "OBJECT2_NAME",
-            "OBJECT2_ADDRESS",
-            "OBJECT2_PLATFORM",
-            "OBJECT2_SEGMENT",
-            "OBJECT2_TAGS",
-            "OBJECT2_IFACE",
-            "OBJECT2_DESCR",
-            "OBJECT2_SPEED",
-            "LINK_PROTO",
-            "LAST_SEEN",
+            t("header-object1-admin-domain"),
+            t("header-object1-name"),
+            t("header-object1-address"),
+            t("header-object1-platform"),
+            t("header-object1-segment"),
+            t("header-object1-tags"),
+            t("header-object1-iface"),
+            t("header-object1-descr"),
+            t("header-object1-speed"),
+            t("header-object2-admin-domain"),
+            t("header-object2-name"),
+            t("header-object2-address"),
+            t("header-object2-platform"),
+            t("header-object2-segment"),
+            t("header-object2-tags"),
+            t("header-object2-iface"),
+            t("header-object2-descr"),
+            t("header-object2-speed"),
+            t("header-link-proto"),
+            t("header-last-seen-17bff7"),
         ]
 
         if columns:

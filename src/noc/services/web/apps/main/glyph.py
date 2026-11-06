@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.main.models.glyph import Glyph
 from noc.services.web.base.extdocapplication import ExtDocApplication
 
@@ -16,8 +16,8 @@ class GlyphApplication(ExtDocApplication):
     Glyph application
     """
 
-    title = "Glyph"
-    menu = [_("Setup"), _("Glyphs")]
+    title = t("app-title-glyph")
+    menu = [t("app-group-setup"), t("nav-glyph")]
     model = Glyph
     glyph = "font-awesome"
     query_condition = "icontains"

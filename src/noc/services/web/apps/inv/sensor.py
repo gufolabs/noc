@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # inv.sensor application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.sensor import Sensor
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
@@ -18,8 +18,8 @@ class SensorApplication(ExtDocApplication):
     ResourceGroup application
     """
 
-    title = "Sensor"
-    menu = [_("Setup"), _("Sensor")]
+    title = t("app-title-sensor")
+    menu = [t("app-group-setup"), t("nav-sensor")]
     model = Sensor
     query_fields = ["label"]
     query_condition = "icontains"

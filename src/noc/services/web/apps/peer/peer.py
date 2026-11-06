@@ -9,8 +9,8 @@
 from django.http import HttpRequest
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_prefix
 from noc.peer.models.peer import Peer
 from noc.sa.interfaces.base import ListOfParameter, ModelParameter
@@ -25,8 +25,8 @@ class PeerApplication(ExtModelApplication):
     Peers application
     """
 
-    title = _("Peers")
-    menu = _("Peers")
+    title = t("app-title-peer")
+    menu = t("nav-peer")
     model = Peer
     query_fields = [
         "remote_asn__icontains",

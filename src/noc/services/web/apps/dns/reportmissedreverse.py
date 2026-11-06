@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # Missed Reverse Zones Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC Modules
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.vrf import VRF
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class Reportreportmissedreverse(SimpleReport):
-    title = _("Missed Reverse Zones")
+    title = t("app-title-reportmissedreverse")
 
     def get_data(self, **kwargs):
         def reverse_format(p):
@@ -25,7 +25,7 @@ class Reportreportmissedreverse(SimpleReport):
         vrf_id = VRF.get_global().id
         return self.from_query(
             title=self.title,
-            columns=["Prefix", TableColumn("Zone", format=reverse_format)],
+            columns=[t("header-prefix"), TableColumn(t("header-zone"), format=reverse_format)],
             query="""
                 SELECT prefix,prefix
                 FROM ip_prefix

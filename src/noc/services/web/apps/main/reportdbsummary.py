@@ -1,27 +1,27 @@
 # ---------------------------------------------------------------------
 # DB Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportreportDBSummary(SimpleReport):
-    title = _("Database Summary")
+    title = t("app-title-reportdbsummary")
 
     def get_data(self, **kwargs):
         return self.from_query(
             title=self.title,
             columns=[
-                "Table",
-                "Tablespace",
-                TableColumn("Pages", align="right", format="integer", total="sum"),
-                TableColumn("Records", align="right", format="integer", total="sum"),
-                TableColumn("Size", align="right", format="size", total="sum"),
+                t("header-table"),
+                t("header-tablespace"),
+                TableColumn(t("header-pages"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-records"), align="right", format="integer", total="sum"),
+                TableColumn(t("header-size"), align="right", format="size", total="sum"),
             ],
             query="""
             SELECT c.relname,t.spcname,c.relpages,c.reltuples,c.relpages*8192

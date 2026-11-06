@@ -10,7 +10,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.label import MATCH_BADGES, MATCH_OPS
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -34,8 +34,8 @@ class ResourceGroupApplication(ExtDocApplication):
     ResourceGroup application
     """
 
-    title = "ResourceGroup"
-    menu = [_("Resource Groups")]
+    title = t("app-title-resourcegroup")
+    menu = [t("nav-resourcegroup")]
     model = ResourceGroup
     glyph = "object-group"
     query_fields = ["name", "description"]

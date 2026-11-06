@@ -9,19 +9,19 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.ip.models.vrf import VRF
 from noc.services.web.base.simplereport import SimpleReport
 
 
 class Reportreportduplicatedfqdns(SimpleReport):
-    title = _("Duplicated FQDNs")
+    title = t("app-title-reportduplicatedfqdns")
 
     def get_data(self, request: HttpRequest, **kwargs):
         vrf_id = VRF.get_global().id
         return self.from_query(
             title=self.title,
-            columns=["FQDN", "AFI", "N", "Addresses"],
+            columns=[t("header-fqdn"), t("header-afi"), t("header-n"), t("header-addresses")],
             query="""
 SELECT fqdn, afi, COUNT(*),
     array_to_string(ARRAY(SELECT address

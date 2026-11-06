@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,6 +13,7 @@ import math
 from django import forms
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
 
 # Django Modules
@@ -26,9 +27,9 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportForm(forms.Form):
-    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4"))])
-    prefix = forms.CharField(label=_("Prefix"))
+    vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(label=t("label-address-family"), choices=[("4", t("label-ipv4"))])
+    prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data["vrf"]
@@ -45,7 +46,7 @@ class ReportForm(forms.Form):
 
 
 class ReportSummary(SimpleReport):
-    title = "Block Summary"
+    title = t("app-title-reportsummary")
     form = ReportForm
 
     def get_data(self, vrf, afi, prefix, **kwargs):
@@ -78,8 +79,8 @@ class ReportSummary(SimpleReport):
                 % {"vrf": vrf.name, "afi": afi, "prefix": p.prefix},
                 columns=[
                     "",
-                    TableColumn(_("Size"), format="numeric", align="right"),
-                    TableColumn(_("%"), format="percent", align="right"),
+                    TableColumn(t("header-size"), format="numeric", align="right"),
+                    TableColumn(t("header-percent"), format="percent", align="right"),
                 ],
                 data=data,
             )

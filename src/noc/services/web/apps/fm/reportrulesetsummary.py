@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Ruleset Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2011 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 from noc.core.collection.base import Collection
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.alarmclass import AlarmClass
 from noc.fm.models.eventclass import EventClass
 from noc.fm.models.eventclassificationrule import EventClassificationRule
@@ -15,7 +15,7 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 
 class ReportRulesetSummary(SimpleReport):
-    title = _("Ruleset Summary")
+    title = t("app-title-reportrulesetsummary")
 
     def get_data(self, **kwargs):
         def get_count(cn, m):
@@ -38,9 +38,9 @@ class ReportRulesetSummary(SimpleReport):
             title=self.title,
             columns=[
                 "",
-                TableColumn("Builtin", align="right", format="integer"),
-                TableColumn("Local", align="right", format="integer"),
-                TableColumn("Total", align="right", format="integer"),
+                TableColumn(t("header-builtin"), align="right", format="integer"),
+                TableColumn(t("header-local"), align="right", format="integer"),
+                TableColumn(t("header-total"), align="right", format="integer"),
             ],
             data=data,
         )
