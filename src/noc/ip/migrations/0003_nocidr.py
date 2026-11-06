@@ -13,14 +13,14 @@ from noc.core.model.fields import CIDRField
 class Migration(BaseMigration):
     def migrate(self) -> None:
         self.db.delete_column("ip_ipv4block", "prefix")
-        self.db.add_column("ip_ipv4block", "prefix", CIDRField("prefix", null=True))
+        self.db.add_column("ip_ipv4block", "prefix", CIDRField(null=True))
         self.db.execute("UPDATE ip_ipv4block SET prefix=prefix_cidr")
         self.db.delete_column("ip_ipv4block", "prefix_cidr")
         self.db.execute("ALTER TABLE ip_ipv4block ALTER prefix SET NOT NULL")
         self.db.execute("DROP TRIGGER t_ip_ipv4block_modify ON ip_ipv4block")
         self.db.execute("DROP FUNCTION f_trigger_ip_ipv4block()")
         self.db.delete_column("ip_ipv4blockaccess", "prefix")
-        self.db.add_column("ip_ipv4blockaccess", "prefix", CIDRField("prefix", null=True))
+        self.db.add_column("ip_ipv4blockaccess", "prefix", CIDRField(null=True))
         self.db.execute("UPDATE ip_ipv4blockaccess SET prefix=prefix_cidr")
         self.db.delete_column("ip_ipv4blockaccess", "prefix_cidr")
         self.db.execute("ALTER TABLE ip_ipv4blockaccess ALTER prefix SET NOT NULL")

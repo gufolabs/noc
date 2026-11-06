@@ -12,6 +12,4 @@ from noc.core.model.fields import TextArrayField
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "ip_ippool", "technologies", TextArrayField("Technologies", default=["IPoE"])
-        )
+        self.db.add_column("ip_ippool", "technologies", TextArrayField(default=["IPoE"]))

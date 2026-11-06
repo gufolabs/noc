@@ -17,17 +17,17 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_alarmtrigger",
             "handler",
-            models.CharField("Handler", max_length=128, null=True, blank=True),
+            models.CharField(max_length=128, null=True, blank=True),
         )
         self.db.add_column(
             "fm_alarmtrigger",
             "description",
-            models.CharField("Description", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         self.db.add_column(
             "fm_eventtrigger",
             "description",
-            models.CharField("Description", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         # Fill description
         rows = self.db.execute(

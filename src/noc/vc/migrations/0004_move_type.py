@@ -18,9 +18,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomain",
             "type",
-            models.ForeignKey(
-                VCType, verbose_name="type", blank=True, null=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(VCType, blank=True, null=True, on_delete=models.CASCADE),
         )
         # VLAN Type
         (vlan_type,) = self.db.execute("SELECT id FROM vc_vctype WHERE name=%s", ["802.1Q VLAN"])[0]

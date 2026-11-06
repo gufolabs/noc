@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Address model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,7 +26,6 @@ from noc.core.ip import IP
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
 from noc.core.model.fields import DocumentReferenceField, INETField, MACField
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_fqdn, is_ipv4, is_ipv6
 from noc.core.wf.decorator import workflow
 from noc.main.models.label import Label
@@ -51,70 +50,79 @@ FREE_ADDRESS_STATE = "Free"
 @workflow
 @on_delete_check(check=[("ip.Address", "ipv6_transition")])
 class Address(NOCModel):
+    """
+    Attributes:
+        fqdn: Full-qualified Domain Name
+        mac: MAC Address
+        auto_update_mac: Set to auto-update MAC field
+        managed_object: Set if address belongs to the Managed Object's interface
+        tt: Ticket #
+        allocated_till: Address temporary allocated till the date
+        allocated_user: Address temporary allocated till the date
+        afi: Address Family
+        address: Address
+        name: Name
+        subinterface: SubInterface
+        description: Description
+        source: Source
+        state_changed: State Changed
+        expired: Expired
+        last_seen: Last Seen
+        first_discovered: First Discovered
+        prefix: Prefix
+        vrf: VRF
+        project: Project
+    """
+
     class Meta:
-        verbose_name = _("Address")
-        verbose_name_plural = _("Addresses")
         db_table = "ip_address"
         app_label = "ip"
         unique_together = [("vrf", "afi", "address")]
 
-    prefix = models.ForeignKey("ip.Prefix", verbose_name=_("Prefix"), on_delete=models.CASCADE)
-    vrf: VRF = models.ForeignKey(
-        VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
-    )
-    afi: str = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
-    address: str = INETField(_("Address"))
+    prefix = models.ForeignKey("ip.Prefix", on_delete=models.CASCADE)
+    vrf: VRF = models.ForeignKey(VRF, default=VRF.get_global, on_delete=models.CASCADE)
+    afi: str = models.CharField(max_length=1, choices=AFI_CHOICES)
+    address: str = INETField()
     profile: AddressProfile = DocumentReferenceField(AddressProfile, null=False, blank=False)
-    name: str = models.CharField(_("Name"), max_length=255, null=False, blank=False)
+    name: str = models.CharField(max_length=255, null=False, blank=False)
     fqdn: str = models.CharField(
-        _("FQDN"),
         max_length=255,
-        help_text=_("Full-qualified Domain Name"),
         validators=[check_fqdn],
         null=True,
         blank=True,
     )
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="address_set",
     )
-    mac = MACField("MAC", null=True, blank=True, help_text=_("MAC Address"))
-    auto_update_mac = models.BooleanField(
-        "Auto Update MAC", default=False, help_text=_("Set to auto-update MAC field")
-    )
+    mac = MACField(null=True, blank=True)
+    auto_update_mac = models.BooleanField(default=False)
     managed_object = models.ForeignKey(
         ManagedObject,
-        verbose_name=_("Managed Object"),
         null=True,
         blank=True,
         related_name="address_set",
         on_delete=models.SET_NULL,
-        help_text=_("Set if address belongs to the Managed Object's interface"),
     )
-    subinterface = models.CharField("SubInterface", max_length=128, null=True, blank=True)
-    description: str = models.TextField(_("Description"), blank=True, null=True)
+    subinterface = models.CharField(max_length=128, null=True, blank=True)
+    description: str = models.TextField(blank=True, null=True)
     # Labels
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list
     )
-    tt = models.IntegerField(_("TT"), blank=True, null=True, help_text=_("Ticket #"))
+    tt = models.IntegerField(blank=True, null=True)
     state = DocumentReferenceField(State, null=True, blank=True)
     allocated_till = models.DateField(
-        _("Allocated till"),
         null=True,
         blank=True,
-        help_text=_("Address temporary allocated till the date"),
     )
     allocated_user = models.CharField(
-        _("Allocated User"),
         null=True,
         blank=True,
-        help_text=_("Address temporary allocated till the date"),
     )
     ipv6_transition = models.OneToOneField(
         "self",
@@ -125,7 +133,6 @@ class Address(NOCModel):
         on_delete=models.SET_NULL,
     )
     source = models.CharField(
-        "Source",
         max_length=1,
         choices=[
             ("M", "Manual"),
@@ -139,13 +146,13 @@ class Address(NOCModel):
         default="M",
     )
     # Last state change
-    state_changed = models.DateTimeField("State Changed", null=True, blank=True)
+    state_changed = models.DateTimeField(null=True, blank=True)
     # Timestamp expired
-    expired = models.DateTimeField("Expired", null=True, blank=True)
+    expired = models.DateTimeField(null=True, blank=True)
     # Timestamp of last seen
-    last_seen = models.DateTimeField("Last Seen", null=True, blank=True)
+    last_seen = models.DateTimeField(null=True, blank=True)
     # Timestamp of first discovery
-    first_discovered = models.DateTimeField("First Discovered", null=True, blank=True)
+    first_discovered = models.DateTimeField(null=True, blank=True)
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
     # Object id in remote system

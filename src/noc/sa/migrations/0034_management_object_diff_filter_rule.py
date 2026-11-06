@@ -20,7 +20,6 @@ class Migration(BaseMigration):
             "config_diff_filter_rule",
             models.ForeignKey(
                 PyRule,
-                verbose_name="Config Notification Filter pyRule",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

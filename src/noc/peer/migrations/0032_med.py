@@ -16,21 +16,17 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         # Adding field 'PeerGroup.local_pref'
         self.db.add_column(
-            "peer_peergroup", "local_pref", models.IntegerField("Local Pref", null=True, blank=True)
+            "peer_peergroup", "local_pref", models.IntegerField(null=True, blank=True)
         )
         # Adding field 'Peer.import_med'
-        self.db.add_column(
-            "peer_peer", "import_med", models.IntegerField("Local Pref", null=True, blank=True)
-        )
+        self.db.add_column("peer_peer", "import_med", models.IntegerField(null=True, blank=True))
         # Adding field 'PeerGroup.import_med'
         self.db.add_column(
-            "peer_peergroup", "import_med", models.IntegerField("Local Pref", null=True, blank=True)
+            "peer_peergroup", "import_med", models.IntegerField(null=True, blank=True)
         )
         # Adding field 'Peer.export_med'
-        self.db.add_column(
-            "peer_peer", "export_med", models.IntegerField("Local Pref", null=True, blank=True)
-        )
+        self.db.add_column("peer_peer", "export_med", models.IntegerField(null=True, blank=True))
         # Adding field 'PeerGroup.export_med'
         self.db.add_column(
-            "peer_peergroup", "export_med", models.IntegerField("Local Pref", null=True, blank=True)
+            "peer_peergroup", "export_med", models.IntegerField(null=True, blank=True)
         )

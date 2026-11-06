@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Diagnostic History model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,27 +16,39 @@ from noc.core.clickhouse.fields import (
     StringField,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class DiagnosticHistory(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        managed_object: Object Name
+        diagnostic: Diagnostic Reference
+        diagnostic_name: Diagnostic Name
+        from_state: From state
+        state: Current diagnostic state
+        reason: Changed Reason
+        data: Collected data (JSON)
+    """
+
     class Meta:
         db_table = "diagnostichistory"
         engine = MergeTree(
             "date", ("date", "diagnostic_name"), primary_keys=("date", "diagnostic_name")
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    diagnostic = ReferenceField(ObjectDiagnosticConfig, description=_("Diagnostic Reference"))
-    diagnostic_name = StringField(description=_("Diagnostic Name"), low_cardinality=True)
+    date = DateField()
+    ts = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    diagnostic = ReferenceField(ObjectDiagnosticConfig)
+    diagnostic_name = StringField(low_cardinality=True)
     # agent = ReferenceField(Agent, description=_("Object Name"))
     # service = ReferenceField(ManagedObject, description=_("Object Name"))
-    from_state = StringField(description=_("From state"), low_cardinality=True)
-    state = StringField(description=_("Current diagnostic state"), low_cardinality=True)
-    reason = StringField(description=_("Changed Reason"))
-    data = StringField(description=_("Collected data (JSON)"))
+    from_state = StringField(low_cardinality=True)
+    state = StringField(low_cardinality=True)
+    reason = StringField()
+    data = StringField()
 
     @classmethod
     def transform_query(cls, query, user):

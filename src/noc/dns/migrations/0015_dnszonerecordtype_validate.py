@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnszonerecordtype",
             "validation",
-            models.CharField("Validation", max_length=256, blank=True, null=True),
+            models.CharField(max_length=256, blank=True, null=True),
         )

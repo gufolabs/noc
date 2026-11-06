@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "max_scripts",
-            models.IntegerField("Max. Scripts", null=True, blank=True),
+            models.IntegerField(null=True, blank=True),
         )

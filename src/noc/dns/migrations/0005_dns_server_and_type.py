@@ -18,13 +18,13 @@ class Migration(BaseMigration):
         self.db.create_table(
             "dns_dnsserver",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
                 (
                     "description",
-                    models.CharField("Description", max_length=128, blank=True, null=True),
+                    models.CharField(max_length=128, blank=True, null=True),
                 ),
-                ("location", models.CharField("Location", max_length=128, blank=True, null=True)),
+                ("location", models.CharField(max_length=128, blank=True, null=True)),
             ),
         )
         # M2M field 'DNSZoneProfile.ns_servers'
@@ -35,7 +35,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "dns_dnszoneprofile_ns_servers",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "dnszoneprofile",
                     models.ForeignKey(DNSZoneProfile, null=False, on_delete=models.CASCADE),

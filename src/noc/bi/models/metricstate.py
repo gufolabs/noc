@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Metrics Log
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,17 +14,26 @@ from noc.core.clickhouse.fields import (
     StringField,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class MetricState(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Log Updated
+        node_id: Node Id
+        node_type: Node Type
+        slot: Slot number
+        state: Node state
+    """
+
     class Meta:
         db_table = "metricstate"
         engine = ReplacingMergeTree("date", ("node_id",))
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Log Updated"))
-    node_id = StringField(description=_("Node Id"))
-    node_type = StringField(description=_("Node Type"), low_cardinality=True)
-    slot = Int16Field(description=_("Slot number"))
-    state = StringField(description=_("Node state"))
+    date = DateField()
+    ts = DateTimeField()
+    node_id = StringField()
+    node_type = StringField(low_cardinality=True)
+    slot = Int16Field()
+    state = StringField()

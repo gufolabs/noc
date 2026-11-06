@@ -23,11 +23,11 @@ class Migration(BaseMigration):
         self.db.create_table(
             "cm_objectlocation",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
                 (
                     "description",
-                    models.CharField("Description", max_length=128, null=True, blank=True),
+                    models.CharField(max_length=128, null=True, blank=True),
                 ),
             ),
         )
@@ -66,13 +66,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "cm_objectaccess",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("type", models.CharField("Type", max_length=16, choices=OBJECT_TYPE_CHOICES)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("type", models.CharField(max_length=16, choices=OBJECT_TYPE_CHOICES)),
                 (
                     "category",
                     models.ForeignKey(
                         ObjectCategory,
-                        verbose_name="Category",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
@@ -82,13 +81,12 @@ class Migration(BaseMigration):
                     "location",
                     models.ForeignKey(
                         ObjectLocation,
-                        verbose_name="Location",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("user", models.ForeignKey(User, verbose_name=User, on_delete=models.CASCADE)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
             ),
         )
 
@@ -104,13 +102,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "cm_objectnotify",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("type", models.CharField("Type", max_length=16, choices=OBJECT_TYPE_CHOICES)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("type", models.CharField(max_length=16, choices=OBJECT_TYPE_CHOICES)),
                 (
                     "category",
                     models.ForeignKey(
                         ObjectCategory,
-                        verbose_name="Category",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
@@ -120,14 +117,13 @@ class Migration(BaseMigration):
                     "location",
                     models.ForeignKey(
                         ObjectLocation,
-                        verbose_name="Location",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("emails", models.CharField("Emails", max_length=128)),
-                ("notify_immediately", models.BooleanField("Notify Immediately")),
-                ("notify_delayed", models.BooleanField("Notify Delayed")),
+                ("emails", models.CharField(max_length=128)),
+                ("notify_immediately", models.BooleanField()),
+                ("notify_delayed", models.BooleanField()),
             ),
         )

@@ -32,8 +32,6 @@ id_lock = Lock()
 )
 class Group(NOCModel):
     class Meta:
-        verbose_name = "Group"
-        verbose_name_plural = "Groups"
         app_label = "aaa"
         # Point to django"s auth_user table
         db_table = "auth_group"

@@ -45,7 +45,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "autosegmentation_level_limit",
-            models.IntegerField("Level", default=999),
+            models.IntegerField(default=999),
         )
         self.db.add_column(
             "sa_managedobjectprofile",

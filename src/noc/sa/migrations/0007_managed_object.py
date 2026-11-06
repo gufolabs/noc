@@ -18,18 +18,18 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_administrativedomain",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
         # Model 'ObjectGroup'
         self.db.create_table(
             "sa_objectgroup",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
 
@@ -41,45 +41,44 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobject",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("is_managed", models.BooleanField("Is Managed?", default=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("is_managed", models.BooleanField(default=True)),
                 (
                     "administrative_domain",
                     models.ForeignKey(
                         AdministrativeDomain,
-                        verbose_name=AdministrativeDomain,
                         on_delete=models.CASCADE,
                     ),
                 ),
                 (
                     "activator",
-                    models.ForeignKey(Activator, verbose_name=Activator, on_delete=models.CASCADE),
+                    models.ForeignKey(Activator, on_delete=models.CASCADE),
                 ),
-                ("profile_name", models.CharField("Profile", max_length=128)),
-                ("scheme", models.IntegerField("Scheme")),
-                ("address", models.CharField("Address", max_length=64)),
-                ("port", models.PositiveIntegerField("Port", blank=True, null=True)),
-                ("user", models.CharField("User", max_length=32, blank=True, null=True)),
-                ("password", models.CharField("Password", max_length=32, blank=True, null=True)),
+                ("profile_name", models.CharField(max_length=128)),
+                ("scheme", models.IntegerField()),
+                ("address", models.CharField(max_length=64)),
+                ("port", models.PositiveIntegerField(blank=True, null=True)),
+                ("user", models.CharField(max_length=32, blank=True, null=True)),
+                ("password", models.CharField(max_length=32, blank=True, null=True)),
                 (
                     "super_password",
-                    models.CharField("Super Password", max_length=32, blank=True, null=True),
+                    models.CharField(max_length=32, blank=True, null=True),
                 ),
-                ("remote_path", models.CharField("Path", max_length=32, blank=True, null=True)),
+                ("remote_path", models.CharField(max_length=32, blank=True, null=True)),
                 (
                     "trap_source_ip",
-                    models.GenericIPAddressField("Trap Source IP", null=True, protocol="IPv4"),
+                    models.GenericIPAddressField(null=True, protocol="IPv4"),
                 ),
                 (
                     "trap_community",
-                    models.CharField("Trap Community", blank=True, null=True, max_length=64),
+                    models.CharField(blank=True, null=True, max_length=64),
                 ),
                 (
                     "is_configuration_managed",
-                    models.BooleanField("Is Configuration Managed?", default=True),
+                    models.BooleanField(default=True),
                 ),
-                ("repo_path", models.CharField("Repo Path", max_length=128, blank=True, null=True)),
+                ("repo_path", models.CharField(max_length=128, blank=True, null=True)),
             ),
         )
         # Mock Models
@@ -90,7 +89,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobject_groups",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "managedobject",
                     models.ForeignKey(ManagedObject, null=False, on_delete=models.CASCADE),
@@ -113,13 +112,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_useraccess",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("user", models.ForeignKey(User, verbose_name=User, on_delete=models.CASCADE)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
                 (
                     "administrative_domain",
                     models.ForeignKey(
                         AdministrativeDomain,
-                        verbose_name="Administrative Domain",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
@@ -129,7 +127,6 @@ class Migration(BaseMigration):
                     "group",
                     models.ForeignKey(
                         ObjectGroup,
-                        verbose_name="Group",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,

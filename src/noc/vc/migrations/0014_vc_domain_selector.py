@@ -22,7 +22,6 @@ class Migration(BaseMigration):
             "selector",
             models.ForeignKey(
                 ManagedObjectSelector,
-                verbose_name="Selector",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

@@ -17,10 +17,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_vrfgroup",
             "description",
-            models.CharField("Description", blank=True, null=True, max_length=128),
+            models.CharField(blank=True, null=True, max_length=128),
         )
         self.db.add_column(
             "ip_vrf",
             "description",
-            models.CharField("Description", blank=True, null=True, max_length=128),
+            models.CharField(blank=True, null=True, max_length=128),
         )

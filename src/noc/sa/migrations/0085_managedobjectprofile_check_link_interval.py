@@ -18,7 +18,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "check_link_interval",
-            models.CharField(
-                "check_link interval", max_length=256, blank=True, null=True, default=",60"
-            ),
+            models.CharField(max_length=256, blank=True, null=True, default=",60"),
         )

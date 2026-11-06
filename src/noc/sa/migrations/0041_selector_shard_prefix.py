@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "filter_prefix",
             models.ForeignKey(
                 PrefixTable,
-                verbose_name="Filter by Prefix Table",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,
@@ -34,7 +33,6 @@ class Migration(BaseMigration):
             "filter_shard",
             models.ForeignKey(
                 Shard,
-                verbose_name="Filter by shard",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

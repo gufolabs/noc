@@ -18,5 +18,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_userprofile",
             "preferred_language",
-            models.CharField("Preferred Language", max_length=16, null=True, blank=True),
+            models.CharField(max_length=16, null=True, blank=True),
         )

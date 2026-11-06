@@ -17,6 +17,6 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_maintainer",
             "password",
-            models.CharField("Password", max_length=64, null=True, blank=True),
+            models.CharField(max_length=64, null=True, blank=True),
         )
         self.db.delete_column("peer_maintainer", "auth")

@@ -18,10 +18,10 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_customfieldenumgroup",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
-                ("is_active", models.BooleanField("Is Active", default=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
         # CustomFieldEnumValue
@@ -32,16 +32,14 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_customfieldenumvalue",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "enum_group",
-                    models.ForeignKey(
-                        CustomFieldEnumGroup, verbose_name="Enum Group", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(CustomFieldEnumGroup, on_delete=models.CASCADE),
                 ),
-                ("is_active", models.BooleanField("Is Active", default=True)),
-                ("key", models.CharField("Key", max_length=256)),
-                ("value", models.CharField("Value", max_length=256)),
+                ("is_active", models.BooleanField(default=True)),
+                ("key", models.CharField(max_length=256)),
+                ("value", models.CharField(max_length=256)),
             ),
         )
         # CustomField.enum_group
@@ -50,7 +48,6 @@ class Migration(BaseMigration):
             "enum_group",
             models.ForeignKey(
                 CustomFieldEnumGroup,
-                verbose_name="Enum Group",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

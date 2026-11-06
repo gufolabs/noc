@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # AlarmTrigger
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,32 +18,38 @@ from noc.main.models.timepattern import TimePattern
 
 
 class AlarmTrigger(NOCModel):
+    """
+    Attributes:
+        name: Name
+        is_enabled: Is Enabled
+        description: Description
+        alarm_class_re: Alarm class RE
+        condition: Condition
+        handler: Handler
+        time_pattern: Time Pattern
+        notification_group: Notification Group
+        template: Template
+    """
+
     class Meta:
         db_table = "fm_alarmtrigger"
         app_label = "fm"
-        verbose_name = "Alarm Trigger"
-        verbose_name_plural = "Alarm Triggers"
 
-    name = models.CharField("Name", max_length=64, unique=True)
-    is_enabled = models.BooleanField("Is Enabled", default=True)
-    description = models.CharField("Description", max_length=256, null=True, blank=True)
-    alarm_class_re = models.CharField("Alarm class RE", max_length=256)
-    condition = models.CharField("Condition", max_length=256, default="True")
-    time_pattern = models.ForeignKey(
-        TimePattern, verbose_name="Time Pattern", null=True, blank=True, on_delete=models.CASCADE
-    )
+    name = models.CharField(max_length=64, unique=True)
+    is_enabled = models.BooleanField(default=True)
+    description = models.CharField(max_length=256, null=True, blank=True)
+    alarm_class_re = models.CharField(max_length=256)
+    condition = models.CharField(max_length=256, default="True")
+    time_pattern = models.ForeignKey(TimePattern, null=True, blank=True, on_delete=models.CASCADE)
     resource_group = DocumentReferenceField(ResourceGroup, null=True, blank=True)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name="Notification Group",
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
-    template = models.ForeignKey(
-        Template, verbose_name="Template", null=True, blank=True, on_delete=models.CASCADE
-    )
-    handler = models.CharField("Handler", max_length=128, null=True, blank=True)
+    template = models.ForeignKey(Template, null=True, blank=True, on_delete=models.CASCADE)
+    handler = models.CharField(max_length=128, null=True, blank=True)
 
     def __str__(self):
         return f"{self.alarm_class_re} <<<{self.condition}>>>"

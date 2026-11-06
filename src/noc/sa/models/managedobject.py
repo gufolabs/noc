@@ -468,36 +468,99 @@ class ManagedObjectManager(Manager):
 class ManagedObject(NOCModel):
     """
     Managed Object
+
+    Attributes:
+        name: Name
+        state_changed: State Changed
+        expired: Expired
+        last_seen: Last Seen
+        first_discovered: First Discovered
+        watcher_wait_ts: Watcher Wait Ts
+        description: Description
+        scheme: Scheme
+        address: Address
+        port: Port
+        user: User
+        password: Password
+        super_password: Super Password
+        remote_path: Path
+        trap_source_ip: Trap Source IP
+        syslog_source_ip: Syslog Source IP
+        trap_community: Trap Community
+        snmp_ro: RO Community
+        snmp_rw: RW Community
+        access_preference: Access Preference
+        fqdn: FQDN
+        address_resolution_policy: Address Resolution Policy
+        shape_overlay_position: S.O. Position
+        shape_overlay_form: S.O. Form
+        shape_title_template: Shape Name template
+        max_scripts: Max. Scripts
+        software_image: Software Image
+        mappings: Remote System Mapping Items
+        escalation_policy: Escalation Policy
+        box_discovery_running_policy: Box Running Policy
+        periodic_discovery_running_policy: Periodic Running Policy
+        box_discovery_alarm_policy: Box Discovery Alarm Policy
+        periodic_discovery_alarm_policy: Box Discovery Alarm Policy
+        box_discovery_telemetry_policy: Box Discovery Telemetry Policy
+        box_discovery_telemetry_sample: Box Discovery Telemetry Sample
+        periodic_discovery_telemetry_policy: Box Discovery Telemetry Policy
+        periodic_discovery_telemetry_sample: Box Discovery Telemetry Sample
+        cli_session_policy: CLI Session Policy
+        cli_privilege_policy: CLI Privilege Policy
+        config_policy: Config Policy
+        config_fetch_policy: Config Fetch Policy
+        interface_discovery_policy: Interface Discovery Policy
+        caps_discovery_policy: Caps Discovery Policy
+        vlan_discovery_policy: VLAN Discovery Policy
+        event_processing_policy: Event Processing Policy
+        syslog_archive_policy: SYSLOG Archive Policy
+        denied_firmware_policy: Firmware Policy
+        confdb_raw_policy: ConfDB Raw Policy
+        dynamic_classification_policy: Dynamic Classification Policy
+        caps: Caps Items
+        affected_maintenances: Maintenance Items
+        diagnostics: Diagnostic Items
+        snmp_security_level: SNMP protocol security
+        snmp_username: SNMP user name
+        snmp_auth_proto: Authentication protocol
+        snmp_auth_key: Authentication key
+        snmp_priv_proto: Privacy protocol
+        snmp_priv_key: Privacy key
+        snmp_ctx_name: Context name
+        administrative_domain: Administrative Domain
+        project: Project
+        object_profile: Object Profile
+        auth_profile: Auth Profile
+        vrf: VRF
+        controller: Controller
     """
 
     class Meta:
-        verbose_name = "Managed Object"
-        verbose_name_plural = "Managed Objects"
         db_table = "sa_managedobject"
         app_label = "sa"
 
-    name: str = CharField("Name", max_length=64, unique=True)
+    name: str = CharField(max_length=64, unique=True)
     container: Object | None = DocumentReferenceField(Object, null=True, blank=True)
     administrative_domain: AdministrativeDomain = CachedForeignKey(
-        AdministrativeDomain, verbose_name="Administrative Domain", on_delete=CASCADE
+        AdministrativeDomain, on_delete=CASCADE
     )
     segment: NetworkSegment = DocumentReferenceField(NetworkSegment, null=False, blank=False)
     pool: Pool = DocumentReferenceField(Pool, null=False, blank=False)
-    project = CachedForeignKey(
-        Project, verbose_name="Project", on_delete=CASCADE, null=True, blank=True
-    )
+    project = CachedForeignKey(Project, on_delete=CASCADE, null=True, blank=True)
     # Workflow
     state: State = DocumentReferenceField(State, null=True, blank=True)
     # Last state change
-    state_changed = DateTimeField("State Changed", null=True, blank=True)
+    state_changed = DateTimeField(null=True, blank=True)
     # Timestamp expired
-    expired = DateTimeField("Expired", null=True, blank=True)
+    expired = DateTimeField(null=True, blank=True)
     # Timestamp of last seen
-    last_seen = DateTimeField("Last Seen", null=True, blank=True)
+    last_seen = DateTimeField(null=True, blank=True)
     # Timestamp of first discovery
-    first_discovered = DateTimeField("First Discovered", null=True, blank=True)
+    first_discovered = DateTimeField(null=True, blank=True)
     # Last state change
-    watcher_wait_ts = DateTimeField("Watcher Wait Ts", null=True, blank=True)
+    watcher_wait_ts = DateTimeField(null=True, blank=True)
     # Optional pool to route FM events
     fm_pool = DocumentReferenceField(Pool, null=True, blank=True)
     profile: Profile = DocumentReferenceField(
@@ -512,21 +575,19 @@ class ManagedObject(NOCModel):
     # Firmware version to upgrade
     # Empty, when upgrade not scheduled
     next_version: Firmware | None = DocumentReferenceField(Firmware, null=True, blank=True)
-    object_profile: ManagedObjectProfile = CachedForeignKey(
-        ManagedObjectProfile, verbose_name="Object Profile", on_delete=CASCADE
-    )
-    description = CharField("Description", max_length=256, null=True, blank=True)
+    object_profile: ManagedObjectProfile = CachedForeignKey(ManagedObjectProfile, on_delete=CASCADE)
+    description = CharField(max_length=256, null=True, blank=True)
     # Access
     auth_profile: AuthProfile | None = CachedForeignKey(
-        AuthProfile, verbose_name="Auth Profile", null=True, blank=True, on_delete=CASCADE
+        AuthProfile, null=True, blank=True, on_delete=CASCADE
     )
-    scheme = IntegerField("Scheme", choices=SCHEME_CHOICES)
-    address: str = INETField("Address", null=True, blank=True)
-    port: int = IntegerField("Port", blank=True, null=True)
-    user: str | None = CharField("User", max_length=32, blank=True, null=True)
-    password: str | None = CharField("Password", max_length=32, blank=True, null=True)
-    super_password: str | None = CharField("Super Password", max_length=32, blank=True, null=True)
-    remote_path = CharField("Path", max_length=256, blank=True, null=True)
+    scheme = IntegerField(choices=SCHEME_CHOICES)
+    address: str = INETField(null=True, blank=True)
+    port: int = IntegerField(blank=True, null=True)
+    user: str | None = CharField(max_length=32, blank=True, null=True)
+    password: str | None = CharField(max_length=32, blank=True, null=True)
+    super_password: str | None = CharField(max_length=32, blank=True, null=True)
+    remote_path = CharField(max_length=256, blank=True, null=True)
     trap_source_type = CharField(
         max_length=1,
         choices=[
@@ -540,7 +601,7 @@ class ManagedObject(NOCModel):
         null=False,
         blank=False,
     )
-    trap_source_ip = INETField("Trap Source IP", null=True, blank=True, default=None)
+    trap_source_ip = INETField(null=True, blank=True, default=None)
     syslog_source_type = CharField(
         max_length=1,
         choices=[
@@ -554,13 +615,12 @@ class ManagedObject(NOCModel):
         null=False,
         blank=False,
     )
-    syslog_source_ip = INETField("Syslog Source IP", null=True, blank=True, default=None)
-    trap_community = CharField("Trap Community", blank=True, null=True, max_length=64)
-    snmp_ro: str | None = CharField("RO Community", blank=True, null=True, max_length=64)
-    snmp_rw: str | None = CharField("RW Community", blank=True, null=True, max_length=64)
+    syslog_source_ip = INETField(null=True, blank=True, default=None)
+    trap_community = CharField(blank=True, null=True, max_length=64)
+    snmp_ro: str | None = CharField(blank=True, null=True, max_length=64)
+    snmp_rw: str | None = CharField(blank=True, null=True, max_length=64)
     snmp_rate_limit: int = IntegerField(default=0)
     access_preference = CharField(
-        "Access Preference",
         max_length=8,
         choices=[
             ("P", "Profile"),
@@ -572,9 +632,8 @@ class ManagedObject(NOCModel):
         default="P",
     )
     # IPAM
-    fqdn: str = CharField("FQDN", max_length=256, null=True, blank=True)
+    fqdn: str = CharField(max_length=256, null=True, blank=True)
     address_resolution_policy = CharField(
-        "Address Resolution Policy",
         choices=[("P", "Profile"), ("D", "Disabled"), ("O", "Once"), ("E", "Enabled")],
         max_length=1,
         null=False,
@@ -585,50 +644,43 @@ class ManagedObject(NOCModel):
     # CM
     config = GridVCSField("config")
     # Default VRF
-    vrf = ForeignKey("ip.VRF", verbose_name="VRF", blank=True, null=True, on_delete=CASCADE)
+    vrf = ForeignKey("ip.VRF", blank=True, null=True, on_delete=CASCADE)
     # Reference to CPE
     cpe_id = DocumentReferenceField("inv.CPE", null=True, blank=True)
     # Reference to controller, when object is CPE
-    controller: ManagedObject = ForeignKey(
-        "self", verbose_name="Controller", blank=True, null=True, on_delete=CASCADE
-    )
+    controller: ManagedObject = ForeignKey("self", blank=True, null=True, on_delete=CASCADE)
     # Stencils
     glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = CharField(
-        "S.O. Position",
         max_length=2,
         choices=[(x.value, x.value) for x in ShapeOverlayPosition],
         null=True,
         blank=True,
     )
     shape_overlay_form = CharField(
-        "S.O. Form",
         max_length=1,
         choices=[(x.value, x.value) for x in ShapeOverlayForm],
         null=True,
         blank=True,
     )
-    shape_title_template = CharField("Shape Name template", max_length=256, blank=True, null=True)
+    shape_title_template = CharField(max_length=256, blank=True, null=True)
     time_pattern = ForeignKey(TimePattern, null=True, blank=True, on_delete=SET_NULL)
     # Config processing handlers
     config_filter_handler: Handler = DocumentReferenceField(Handler, null=True, blank=True)
     config_diff_filter_handler: Handler = DocumentReferenceField(Handler, null=True, blank=True)
     config_validation_handler: Handler = DocumentReferenceField(Handler, null=True, blank=True)
-    max_scripts = IntegerField(
-        "Max. Scripts", null=True, blank=True, help_text="Concurrent script session limits"
-    )
+    max_scripts = IntegerField(null=True, blank=True, help_text="Concurrent script session limits")
     # Latitude and longitude, copied from container
     x = FloatField(null=True, blank=True)
     y = FloatField(null=True, blank=True)
     default_zoom = IntegerField(null=True, blank=True)
     # Software characteristics
-    software_image = CharField("Software Image", max_length=255, null=True, blank=True)
+    software_image = CharField(max_length=255, null=True, blank=True)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
     mappings: list[MappingItem] | None = PydanticField(
-        "Remote System Mapping Items",
         schema=MappingItems,
         blank=True,
         null=True,
@@ -640,7 +692,6 @@ class ManagedObject(NOCModel):
     bi_id: int = BigIntegerField(unique=True)
     # Object alarms can be escalated
     escalation_policy: str = CharField(
-        "Escalation Policy",
         max_length=1,
         choices=[
             ("E", "Enable"),
@@ -652,7 +703,6 @@ class ManagedObject(NOCModel):
     )
     # Discovery running policy
     box_discovery_running_policy: str = CharField(
-        "Box Running Policy",
         choices=[
             ("P", "From Profile"),
             ("R", "Require Up"),
@@ -663,7 +713,6 @@ class ManagedObject(NOCModel):
         default="P",
     )
     periodic_discovery_running_policy = CharField(
-        "Periodic Running Policy",
         choices=[
             ("P", "From Profile"),
             ("R", "Require Up"),
@@ -675,32 +724,28 @@ class ManagedObject(NOCModel):
     )
     # Raise alarms on discovery problems
     box_discovery_alarm_policy = CharField(
-        "Box Discovery Alarm Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
         default="P",
     )
     periodic_discovery_alarm_policy = CharField(
-        "Box Discovery Alarm Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
         default="P",
     )
     # Telemetry settings
     box_discovery_telemetry_policy = CharField(
-        "Box Discovery Telemetry Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
         default="P",
     )
-    box_discovery_telemetry_sample = IntegerField("Box Discovery Telemetry Sample", default=0)
+    box_discovery_telemetry_sample = IntegerField(default=0)
     periodic_discovery_telemetry_policy = CharField(
-        "Box Discovery Telemetry Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
         default="P",
     )
-    periodic_discovery_telemetry_sample = IntegerField("Box Discovery Telemetry Sample", default=0)
+    periodic_discovery_telemetry_sample = IntegerField(default=0)
     # TT system for this object
     tt_system: TTSystem = DocumentReferenceField(TTSystem, null=True, blank=True)
     # TT system queue for this object
@@ -709,21 +754,18 @@ class ManagedObject(NOCModel):
     tt_system_id = CharField(max_length=64, null=True, blank=True)
     # CLI session policy
     cli_session_policy = CharField(
-        "CLI Session Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
         default="P",
     )
     # CLI privilege policy
     cli_privilege_policy = CharField(
-        "CLI Privilege Policy",
         max_length=1,
         choices=[("E", "Raise privileges"), ("D", "Do not raise"), ("P", "From Profile")],
         default="P",
     )
     # Config policy
     config_policy = CharField(
-        "Config Policy",
         max_length=1,
         choices=[
             ("P", "From Profile"),
@@ -735,14 +777,12 @@ class ManagedObject(NOCModel):
         default="P",
     )
     config_fetch_policy = CharField(
-        "Config Fetch Policy",
         max_length=1,
         choices=[("P", "From Profile"), ("s", "Startup"), ("r", "Running")],
         default="P",
     )
     # Interface discovery settings
     interface_discovery_policy = CharField(
-        "Interface Discovery Policy",
         max_length=1,
         choices=[
             ("P", "From Profile"),
@@ -755,7 +795,6 @@ class ManagedObject(NOCModel):
     )
     # Caps discovery settings
     caps_discovery_policy = CharField(
-        "Caps Discovery Policy",
         max_length=1,
         choices=[
             ("P", "From Profile"),
@@ -768,7 +807,6 @@ class ManagedObject(NOCModel):
     )
     # VLAN discovery settings
     vlan_discovery_policy = CharField(
-        "VLAN Discovery Policy",
         max_length=1,
         choices=[
             ("P", "From Profile"),
@@ -807,21 +845,18 @@ class ManagedObject(NOCModel):
         default="p",
     )
     event_processing_policy = CharField(
-        "Event Processing Policy",
         max_length=1,
         choices=[("P", "Profile"), ("E", "Process Events"), ("D", "Drop events")],
         default="P",
     )
     # Collect and archive syslog events
     syslog_archive_policy = CharField(
-        "SYSLOG Archive Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("P", "Profile")],
         default="P",
     )
     # Behavior on denied firmware detection
     denied_firmware_policy = CharField(
-        "Firmware Policy",
         max_length=1,
         choices=[
             ("P", "Profile"),
@@ -834,14 +869,12 @@ class ManagedObject(NOCModel):
     )
     # ConfDB settings
     confdb_raw_policy = CharField(
-        "ConfDB Raw Policy",
         max_length=1,
         choices=[("P", "Profile"), ("D", "Disable"), ("E", "Enable")],
         default="P",
     )
     # Dynamic Profile Classification
     dynamic_classification_policy = CharField(
-        "Dynamic Classification Policy",
         max_length=1,
         choices=[("P", "Profile"), ("D", "Disable"), ("R", "By Rule")],
         default="P",
@@ -864,7 +897,6 @@ class ManagedObject(NOCModel):
         CharField(max_length=250), blank=True, null=True, default=list
     )
     caps: list[dict[str, Any]] = PydanticField(
-        "Caps Items",
         schema=CapsItems,
         blank=True,
         null=True,
@@ -887,7 +919,6 @@ class ManagedObject(NOCModel):
     segment_path = ObjectIDArrayField(db_index=True, blank=True, null=True, default=list)
     container_path = ObjectIDArrayField(db_index=True, blank=True, null=True, default=list)
     affected_maintenances: dict[str, dict[str, str]] = PydanticField(
-        "Maintenance Items",
         schema=MaintenanceItems,
         blank=True,
         null=True,
@@ -896,7 +927,6 @@ class ManagedObject(NOCModel):
         # validators=[match_rules_validate],
     )
     diagnostics: dict[str, DiagnosticValue] = PydanticField(
-        "Diagnostic Items",
         schema=DiagnosticItems,
         blank=True,
         null=True,
@@ -906,7 +936,6 @@ class ManagedObject(NOCModel):
     effective_metric_discovery_interval = IntegerField(default=0, validators=[MinValueValidator(0)])
 
     snmp_security_level: str = CharField(
-        "SNMP protocol security",
         max_length=12,
         choices=[
             ("Community", "Community"),
@@ -916,24 +945,20 @@ class ManagedObject(NOCModel):
         ],
         default="Community",
     )
-    snmp_username: str | None = CharField("SNMP user name", max_length=32, null=True, blank=True)
+    snmp_username: str | None = CharField(max_length=32, null=True, blank=True)
     snmp_auth_proto: str = CharField(
-        "Authentication protocol",
         max_length=3,
         choices=[("MD5", "MD5"), ("SHA", "SHA")],
         default="MD5",
     )
-    snmp_auth_key: str | None = CharField(
-        "Authentication key", max_length=32, null=True, blank=True
-    )
+    snmp_auth_key: str | None = CharField(max_length=32, null=True, blank=True)
     snmp_priv_proto: str = CharField(
-        "Privacy protocol",
         max_length=3,
         choices=[("DES", "DES"), ("AES", "AES")],
         default="DES",
     )
-    snmp_priv_key: str | None = CharField("Privacy key", max_length=32, null=True, blank=True)
-    snmp_ctx_name: str | None = CharField("Context name", max_length=32, null=True, blank=True)
+    snmp_priv_key: str | None = CharField(max_length=32, null=True, blank=True)
+    snmp_ctx_name: str | None = CharField(max_length=32, null=True, blank=True)
 
     # Overridden objects manager
     objects = ManagedObjectManager()
@@ -3293,17 +3318,22 @@ class ManagedObject(NOCModel):
 
 @on_save
 class ManagedObjectAttribute(NOCModel):
+    """
+    Attributes:
+        key: Key
+        value: Value
+        managed_object: Managed Object
+    """
+
     class Meta:
-        verbose_name = "Managed Object Attribute"
-        verbose_name_plural = "Managed Object Attributes"
         db_table = "sa_managedobjectattribute"
         app_label = "sa"
         unique_together = [("managed_object", "key")]
         ordering = ["managed_object", "key"]
 
-    managed_object = ForeignKey(ManagedObject, verbose_name="Managed Object", on_delete=CASCADE)
-    key = CharField("Key", max_length=64)
-    value = CharField("Value", max_length=4096, blank=True, null=True)
+    managed_object = ForeignKey(ManagedObject, on_delete=CASCADE)
+    key = CharField(max_length=64)
+    value = CharField(max_length=4096, blank=True, null=True)
 
     def __str__(self):
         return f"{self.managed_object}: {self.key}"
@@ -3314,17 +3344,19 @@ class ManagedObjectAttribute(NOCModel):
 
 @on_save
 class ManagedObjectStatus(NOCModel):
+    """
+    Attributes:
+        last: Last update Time
+        managed_object: Managed Object
+    """
+
     class Meta:
-        verbose_name = "Managed Object Status"
-        verbose_name_plural = "Managed Object Status"
         db_table = "sa_objectstatus"
         app_label = "sa"
 
-    managed_object = ForeignKey(
-        ManagedObject, verbose_name="Managed Object", on_delete=CASCADE, unique=True
-    )
+    managed_object = ForeignKey(ManagedObject, on_delete=CASCADE, unique=True)
     status = BooleanField()
-    last = DateTimeField("Last update Time", auto_now_add=True)
+    last = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.managed_object}: {self.status}"
@@ -3471,9 +3503,16 @@ class ManagedObjectStatus(NOCModel):
 
 @on_save
 class ManagedObjectWatchers(NOCModel):
+    """
+    Attributes:
+        effect: Effect
+        key: Effect Key
+        after: Activate after time
+        remote_system: Effect Key
+        managed_object: Managed Object
+    """
+
     class Meta:
-        verbose_name = "Managed Object Watchers"
-        verbose_name_plural = "Managed Object Watchers"
         db_table = "sa_managedobjectwatchers"
         app_label = "sa"
         # For Maintenance
@@ -3489,24 +3528,22 @@ class ManagedObjectWatchers(NOCModel):
 
     managed_object = ForeignKey(
         ManagedObject,
-        verbose_name="Managed Object",
         unique=False,
         primary_key=False,
         on_delete=CASCADE,
     )
     effect = CharField(
-        "Effect",
         choices=ObjectEffect.choices,
         max_length=20,
         blank=False,
         null=False,
     )
-    key: str = CharField("Effect Key", max_length=64, blank=True, null=False)
+    key: str = CharField(max_length=64, blank=True, null=False)
     once: bool = BooleanField(default=True)
     wait_avail: bool = BooleanField(default=False)
-    after = DateTimeField("Activate after time", auto_now_add=False, blank=True, null=True)
+    after = DateTimeField(auto_now_add=False, blank=True, null=True)
     # Before Postgres 15 nulls not equals. It and unique constraints not worked for NULL value
-    remote_system = CharField("Effect Key", max_length=24, blank=True, null=False)
+    remote_system = CharField(max_length=24, blank=True, null=False)
     args: dict[str, Any] = JSONField(default=dict)
 
     @property

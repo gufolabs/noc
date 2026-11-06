@@ -20,15 +20,15 @@ class Migration(BaseMigration):
             self.db.add_column(
                 "sa_managedobjectprofile",
                 f"enable_{d}_discovery",
-                models.BooleanField("", default=True),
+                models.BooleanField(default=True),
             )
             self.db.add_column(
                 "sa_managedobjectprofile",
                 f"{d}_discovery_min_interval",
-                models.IntegerField("", default=600),
+                models.IntegerField(default=600),
             )
             self.db.add_column(
                 "sa_managedobjectprofile",
                 f"{d}_discovery_max_interval",
-                models.IntegerField("", default=86400),
+                models.IntegerField(default=86400),
             )

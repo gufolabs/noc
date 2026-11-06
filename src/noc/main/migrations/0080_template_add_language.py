@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_template",
             "language",
-            models.CharField("Language", max_length=16, null=True, blank=True),
+            models.CharField(max_length=16, null=True, blank=True),
         )

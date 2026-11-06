@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Prefix model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -31,7 +31,6 @@ from noc.core.ip import IP, IPv4
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
 from noc.core.model.fields import CachedForeignKey, CIDRField, DocumentReferenceField, PydanticField
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.core.wf.decorator import workflow
 from noc.inv.models.resourcepool import ResourcePool
@@ -75,11 +74,29 @@ PoolItems = RootModel[list[PoolItem]]
 class Prefix(NOCModel):
     """
     Allocated prefix
+
+    Attributes:
+        asn: Autonomous system granted with prefix
+        tt: Ticket #
+        allocated_till: Prefix temporary allocated till the date
+        afi: Address Family
+        prefix: Prefix
+        name: Name
+        description: Description
+        pools: Remote System Mapping Items
+        prefix_discovery_policy: Prefix Discovery Policy
+        address_discovery_policy: Address Discovery Policy
+        source: Source
+        state_changed: State Changed
+        expired: Expired
+        last_seen: Last Seen
+        first_discovered: First Discovered
+        parent: Parent
+        vrf: VRF
+        project: Project
     """
 
     class Meta:
-        verbose_name = _("Prefix")
-        verbose_name_plural = _("Prefixes")
         db_table = "ip_prefix"
         app_label = "ip"
         unique_together = [("vrf", "afi", "prefix")]
@@ -87,29 +104,23 @@ class Prefix(NOCModel):
     parent = models.ForeignKey(
         "self",
         related_name="children_set",
-        verbose_name=_("Parent"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
-    vrf: VRF = CachedForeignKey(
-        VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
-    )
-    afi: str = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
-    prefix: str = CIDRField(_("Prefix"))
-    name: str = models.CharField(_("Name"), max_length=255, null=True, blank=True)
+    vrf: VRF = CachedForeignKey(VRF, default=VRF.get_global, on_delete=models.CASCADE)
+    afi: str = models.CharField(max_length=1, choices=AFI_CHOICES)
+    prefix: str = CIDRField()
+    name: str = models.CharField(max_length=255, null=True, blank=True)
     profile: PrefixProfile = DocumentReferenceField(PrefixProfile, null=False, blank=False)
     asn: AS = CachedForeignKey(
         AS,
-        verbose_name=_("AS"),
-        help_text=_("Autonomous system granted with prefix"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
     project: Project = CachedForeignKey(
         Project,
-        verbose_name="Project",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -117,10 +128,9 @@ class Prefix(NOCModel):
     )
     # VLAN bound to prefix
     vlan: VLAN = DocumentReferenceField(VLAN, null=True, blank=True)
-    description: str = models.TextField(_("Description"), blank=True, null=True)
+    description: str = models.TextField(blank=True, null=True)
     # Pools
     pools: list[PoolItem] | None = PydanticField(
-        "Remote System Mapping Items",
         schema=PoolItems,
         blank=True,
         null=True,
@@ -131,13 +141,11 @@ class Prefix(NOCModel):
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list
     )
-    tt: int = models.IntegerField("TT", blank=True, null=True, help_text=_("Ticket #"))
+    tt: int = models.IntegerField(blank=True, null=True)
     state: State = DocumentReferenceField(State, null=True, blank=True)
     allocated_till = models.DateField(
-        _("Allocated till"),
         null=True,
         blank=True,
-        help_text=_("Prefix temporary allocated till the date"),
     )
     ipv6_transition = models.OneToOneField(
         "self",
@@ -148,7 +156,6 @@ class Prefix(NOCModel):
         on_delete=models.SET_NULL,
     )
     prefix_discovery_policy: str = models.CharField(
-        _("Prefix Discovery Policy"),
         max_length=1,
         choices=[("P", "Profile"), ("E", "Enable"), ("D", "Disable")],
         default="P",
@@ -156,7 +163,6 @@ class Prefix(NOCModel):
         null=False,
     )
     address_discovery_policy: str = models.CharField(
-        _("Address Discovery Policy"),
         max_length=1,
         choices=[("P", "Profile"), ("E", "Enable"), ("D", "Disable")],
         default="P",
@@ -167,7 +173,6 @@ class Prefix(NOCModel):
         AddressProfile, null=True, blank=True
     )
     source = models.CharField(
-        "Source",
         max_length=1,
         choices=[
             ("M", "Manual"),
@@ -181,13 +186,13 @@ class Prefix(NOCModel):
         default="M",
     )
     # Last state change
-    state_changed = models.DateTimeField("State Changed", null=True, blank=True)
+    state_changed = models.DateTimeField(null=True, blank=True)
     # Timestamp expired
-    expired = models.DateTimeField("Expired", null=True, blank=True)
+    expired = models.DateTimeField(null=True, blank=True)
     # Timestamp of last seen
-    last_seen = models.DateTimeField("Last Seen", null=True, blank=True)
+    last_seen = models.DateTimeField(null=True, blank=True)
     # Timestamp of first discovery
-    first_discovered = models.DateTimeField("First Discovered", null=True, blank=True)
+    first_discovered = models.DateTimeField(null=True, blank=True)
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
     # Object id in remote system

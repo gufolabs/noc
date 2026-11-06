@@ -17,9 +17,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_shard",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
-                ("is_active", models.BooleanField("Is Active", default=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )

@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "affected_maintenances",
-            models.JSONField("Maintenance Items", null=True, blank=True, default=lambda: "{}"),
+            models.JSONField(null=True, blank=True, default=lambda: "{}"),
         )

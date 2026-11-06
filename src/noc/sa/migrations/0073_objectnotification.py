@@ -25,22 +25,22 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_objectnotification",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("selector", models.ForeignKey(ManagedObjectSelector, on_delete=models.CASCADE)),
                 (
                     "notification_group",
                     models.ForeignKey(NotificationGroup, on_delete=models.CASCADE),
                 ),
                 # Events
-                ("config_changed", models.BooleanField("Config changed")),
-                ("alarm_risen", models.BooleanField("Alarm risen")),
-                ("alarm_cleared", models.BooleanField("Alarm cleared")),
-                ("alarm_commented", models.BooleanField("Alarm commented")),
-                ("new", models.BooleanField("New")),
-                ("deleted", models.BooleanField("Deleted")),
-                ("version_changed", models.BooleanField("Version changed")),
-                ("interface_changed", models.BooleanField("Interface changed")),
-                ("script_failed", models.BooleanField("Script failed")),
-                ("config_policy_violation", models.BooleanField("Config policy violation")),
+                ("config_changed", models.BooleanField()),
+                ("alarm_risen", models.BooleanField()),
+                ("alarm_cleared", models.BooleanField()),
+                ("alarm_commented", models.BooleanField()),
+                ("new", models.BooleanField()),
+                ("deleted", models.BooleanField()),
+                ("version_changed", models.BooleanField()),
+                ("interface_changed", models.BooleanField()),
+                ("script_failed", models.BooleanField()),
+                ("config_policy_violation", models.BooleanField()),
             ),
         )

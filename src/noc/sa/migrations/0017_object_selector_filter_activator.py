@@ -20,7 +20,6 @@ class Migration(BaseMigration):
             "filter_activator",
             models.ForeignKey(
                 Activator,
-                verbose_name="Filter by Activator",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

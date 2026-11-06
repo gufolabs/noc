@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_commandsnippet",
             "ignore_cli_errors",
-            models.BooleanField("Ignore CLI errors", default=False),
+            models.BooleanField(default=False),
         )

@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "box_discovery_running_policy",
             models.CharField(
-                "Box Running Policy",
                 choices=[("R", "Require Up"), ("r", "Require if enabled"), ("i", "Ignore")],
                 max_length=1,
                 default="R",
@@ -28,7 +27,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "periodic_discovery_running_policy",
             models.CharField(
-                "Periodic Running Policy",
                 choices=[("R", "Require Up"), ("r", "Require if enabled"), ("i", "Ignore")],
                 max_length=1,
                 default="R",
@@ -38,7 +36,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "box_discovery_running_policy",
             models.CharField(
-                "Box Running Policy",
                 choices=[
                     ("P", "From Profile"),
                     ("R", "Require Up"),
@@ -53,7 +50,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "periodic_discovery_running_policy",
             models.CharField(
-                "Periodic Running Policy",
                 choices=[
                     ("P", "From Profile"),
                     ("R", "Require Up"),

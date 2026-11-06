@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "peer_peer",
             "status",
             models.CharField(
-                "Status",
                 max_length=1,
                 default="A",
                 choices=[("P", "Planned"), ("A", "Active"), ("S", "Shutdown")],

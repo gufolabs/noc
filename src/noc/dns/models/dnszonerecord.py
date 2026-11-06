@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DNSZoneRecord model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -16,7 +16,6 @@ from django.db import models
 from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_init
-from noc.core.translation import ugettext as _
 from noc.main.models.label import Label
 
 from .dnszone import DNSZone
@@ -28,20 +27,26 @@ from .dnszone import DNSZone
 class DNSZoneRecord(NOCModel):
     """
     Zone RRs
+
+    Attributes:
+        name: Name
+        ttl: TTL
+        type: Type
+        priority: Priority
+        content: Content
+        zone: Zone
     """
 
     class Meta:
-        verbose_name = _("DNS Zone Record")
-        verbose_name_plural = _("DNS Zone Records")
         db_table = "dns_dnszonerecord"
         app_label = "dns"
 
-    zone: DNSZone = models.ForeignKey(DNSZone, verbose_name="Zone", on_delete=models.CASCADE)
-    name = models.CharField(_("Name"), max_length=64, blank=True, null=True)
-    ttl = models.IntegerField(_("TTL"), null=True, blank=True)
-    type = models.CharField(_("Type"), max_length=16)
-    priority = models.IntegerField(_("Priority"), null=True, blank=True)
-    content = models.CharField(_("Content"), max_length=65536)
+    zone: DNSZone = models.ForeignKey(DNSZone, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, blank=True, null=True)
+    ttl = models.IntegerField(null=True, blank=True)
+    type = models.CharField(max_length=16)
+    priority = models.IntegerField(null=True, blank=True)
+    content = models.CharField(max_length=65536)
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

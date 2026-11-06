@@ -21,20 +21,19 @@ class Migration(BaseMigration):
         self.db.create_table(
             "kb_kbentrytemplate",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
-                ("subject", models.CharField("Subject", max_length=256)),
-                ("body", models.TextField("Body")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                ("subject", models.CharField(max_length=256)),
+                ("body", models.TextField()),
                 (
                     "language",
                     models.ForeignKey(
                         Language,
-                        verbose_name=Language,
                         limit_choices_to={"is_active": True},
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("markup_language", models.CharField("Markup Language", max_length="16")),
+                ("markup_language", models.CharField(max_length="16")),
             ),
         )
         # Mock Models
@@ -47,7 +46,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "kb_kbentrytemplate_categories",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "kbentrytemplate",
                     models.ForeignKey(KBEntryTemplate, null=False, on_delete=models.CASCADE),

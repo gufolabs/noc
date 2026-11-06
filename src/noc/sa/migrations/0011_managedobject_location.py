@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "location",
-            models.CharField("Location", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )

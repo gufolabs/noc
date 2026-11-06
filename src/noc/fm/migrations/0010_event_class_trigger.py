@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventclass",
             "trigger",
-            models.CharField("Trigger", max_length=64, null=True, blank=True),
+            models.CharField(max_length=64, null=True, blank=True),
         )

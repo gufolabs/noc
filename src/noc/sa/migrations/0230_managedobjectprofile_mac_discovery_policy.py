@@ -30,7 +30,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "box_discovery_mac_filter_policy",
             models.CharField(
-                "Box MAC Collect Policy",
                 max_length=1,
                 choices=[("I", "Interface Profile"), ("A", "All")],
                 default="A",
@@ -45,7 +44,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "periodic_discovery_mac_filter_policy",
             models.CharField(
-                "Periodic MAC Collect Policy",
                 max_length=1,
                 choices=[("I", "Interface Profile"), ("A", "All")],
                 default="A",

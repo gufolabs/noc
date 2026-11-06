@@ -29,19 +29,17 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_organisation",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("organisation", models.CharField("Organisation", max_length=128, unique=True)),
-                ("org_name", models.CharField("Org. Name", max_length=128)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("organisation", models.CharField(max_length=128, unique=True)),
+                ("org_name", models.CharField(max_length=128)),
                 (
                     "org_type",
-                    models.CharField("Org. Type", max_length=64, choices=[("LIR", "LIR")]),
+                    models.CharField(max_length=64, choices=[("LIR", "LIR")]),
                 ),
-                ("address", models.TextField("Address")),
+                ("address", models.TextField()),
                 (
                     "mnt_ref",
-                    models.ForeignKey(
-                        Maintainer, verbose_name="Mnt. Ref", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(Maintainer, on_delete=models.CASCADE),
                 ),
             ),
         )
@@ -58,18 +56,14 @@ class Migration(BaseMigration):
             "organisation",
             models.ForeignKey(Organisation, null=True, blank=True, on_delete=models.CASCADE),
         )
-        self.db.add_column(
-            "peer_as", "header_remarks", models.TextField("Header Remarks", null=True, blank=True)
-        )
-        self.db.add_column(
-            "peer_as", "footer_remarks", models.TextField("Footer Remarks", null=True, blank=True)
-        )
+        self.db.add_column("peer_as", "header_remarks", models.TextField(null=True, blank=True))
+        self.db.add_column("peer_as", "footer_remarks", models.TextField(null=True, blank=True))
 
         # Adding ManyToManyField 'AS.maintainers'
         self.db.create_table(
             "peer_as_maintainers",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("as", models.ForeignKey(AS, null=False, on_delete=models.CASCADE)),
                 ("maintainer", models.ForeignKey(Maintainer, null=False, on_delete=models.CASCADE)),
             ),
@@ -79,7 +73,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_as_tech_contacts",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("as", models.ForeignKey(AS, null=False, on_delete=models.CASCADE)),
                 ("person", models.ForeignKey(Person, null=False, on_delete=models.CASCADE)),
             ),
@@ -89,7 +83,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_as_routes_maintainers",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("as", models.ForeignKey(AS, null=False, on_delete=models.CASCADE)),
                 ("maintainer", models.ForeignKey(Maintainer, null=False, on_delete=models.CASCADE)),
             ),
@@ -99,7 +93,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_as_administrative_contacts",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("as", models.ForeignKey(AS, null=False, on_delete=models.CASCADE)),
                 ("person", models.ForeignKey(Person, null=False, on_delete=models.CASCADE)),
             ),

@@ -17,17 +17,16 @@ class KBGlobalBookmark(NOCModel):
     """
     Global Bookmarks
     @todo: Replace with boolean flag in KBEntry
+
+    Attributes:
+        kb_entry: KBEntry
     """
 
     class Meta:
-        verbose_name = "KB Global Bookmark"
-        verbose_name_plural = "KB Global Bookmarks"
         app_label = "kb"
         db_table = "kb_kbglobalbookmark"
 
-    kb_entry = models.ForeignKey(
-        KBEntry, verbose_name="KBEntry", unique=True, on_delete=models.CASCADE
-    )
+    kb_entry = models.ForeignKey(KBEntry, unique=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.kb_entry)

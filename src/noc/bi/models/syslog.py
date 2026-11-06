@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Syslog model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,20 +16,29 @@ from noc.core.clickhouse.fields import (
     UInt8Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class Syslog(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        managed_object: Object Name
+        facility: Facility
+        severity: Severity
+        message: Syslog Message
+    """
+
     class Meta:
         db_table = "syslog"
         engine = MergeTree("date", ("managed_object", "ts"), primary_keys=("managed_object", "ts"))
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    facility = UInt8Field(description=_("Facility"))
-    severity = UInt8Field(description=_("Severity"))
-    message = StringField(description=_("Syslog Message"))
+    date = DateField()
+    ts = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    facility = UInt8Field()
+    severity = UInt8Field()
+    message = StringField()
 
     @classmethod
     def transform_query(cls, query, user):

@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "neighbor_cache_ttl",
-            models.IntegerField("Neighbor Cache TTL", default=0),
+            models.IntegerField(default=0),
         )

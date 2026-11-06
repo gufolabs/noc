@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CommandSnippet model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,7 +18,6 @@ from django.template import Context, Template
 from noc.aaa.models.permission import Permission
 from noc.core.model.base import NOCModel
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.label import Label
 
@@ -27,28 +26,38 @@ from noc.main.models.label import Label
 class CommandSnippet(NOCModel):
     """
     Command snippet
+
+    Attributes:
+        snippet: Code snippet template
+        name: Name
+        description: Description
+        change_configuration: Change configuration
+        is_enabled: Is Enabled?
+        timeout: Timeout (sec)
+        require_confirmation: Require Confirmation
+        ignore_cli_errors: Ignore CLI errors
+        permission_name: Permission Name
+        display_in_menu: Show in menu
     """
 
     class Meta:
-        verbose_name = _("Command Snippet")
-        verbose_name_plural = _("Command Snippets")
         db_table = "sa_commandsnippet"
         app_label = "sa"
         ordering = ["name"]
 
-    name = models.CharField(_("Name"), max_length=128, unique=True)
-    description = models.TextField(_("Description"))
-    snippet = models.TextField(_("Snippet"), help_text=_("Code snippet template"))
-    change_configuration = models.BooleanField(_("Change configuration"), default=False)
+    name = models.CharField(max_length=128, unique=True)
+    description = models.TextField()
+    snippet = models.TextField()
+    change_configuration = models.BooleanField(default=False)
     resource_group = DocumentReferenceField(ResourceGroup)
-    is_enabled = models.BooleanField(_("Is Enabled?"), default=True)
-    timeout = models.IntegerField(_("Timeout (sec)"), default=60)
-    require_confirmation = models.BooleanField(_("Require Confirmation"), default=False)
-    ignore_cli_errors = models.BooleanField(_("Ignore CLI errors"), default=False)
+    is_enabled = models.BooleanField(default=True)
+    timeout = models.IntegerField(default=60)
+    require_confirmation = models.BooleanField(default=False)
+    ignore_cli_errors = models.BooleanField(default=False)
     # Restrict access to snippet if set
     # effective permission name will be sa:runsnippet:<permission_name>
-    permission_name = models.CharField(_("Permission Name"), max_length=64, null=True, blank=True)
-    display_in_menu = models.BooleanField(_("Show in menu"), default=False)
+    permission_name = models.CharField(max_length=64, null=True, blank=True)
+    display_in_menu = models.BooleanField(default=False)
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # routing_neighbors table
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,21 +16,34 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class RoutingNeighbors(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        managed_object: Object Name
+        interface: Physical Interface
+        subinterface: Logical Interface
+        neighbor_address: Neighbor Address
+        neighbor_object: Neighbor Object
+        protocol: Protocol
+        bgp_local_as: BGP Local AS
+        bgp_remote_as: BGP Remogte AS
+    """
+
     class Meta:
         db_table = "routingneighbors"
         engine = MergeTree("date", ("managed_object", "ts"), primary_keys=("managed_object", "ts"))
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    interface = StringField(description=_("Physical Interface"))
-    subinterface = StringField(description=_("Logical Interface"))
-    neighbor_address = StringField(description=_("Neighbor Address"))
-    neighbor_object = ReferenceField(ManagedObject, description=_("Neighbor Object"))
-    protocol = StringField(description=_("Protocol"))
-    bgp_local_as = UInt64Field(description=_("BGP Local AS"))
-    bgp_remote_as = UInt64Field(description=_("BGP Remogte AS"))
+    date = DateField()
+    ts = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    interface = StringField()
+    subinterface = StringField()
+    neighbor_address = StringField()
+    neighbor_object = ReferenceField(ManagedObject)
+    protocol = StringField()
+    bgp_local_as = UInt64Field()
+    bgp_remote_as = UInt64Field()

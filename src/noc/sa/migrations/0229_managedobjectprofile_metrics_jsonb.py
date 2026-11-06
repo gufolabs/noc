@@ -31,7 +31,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "metrics",
-            models.JSONField("Metric Config Items", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )
         for mop_id in object_metric_map:
             self.db.execute(

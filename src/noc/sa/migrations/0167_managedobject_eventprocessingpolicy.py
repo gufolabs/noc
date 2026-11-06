@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "event_processing_policy",
             models.CharField(
-                "Event Processing Policy",
                 max_length=1,
                 choices=[("E", "Process Events"), ("D", "Drop events")],
                 default="E",
@@ -30,7 +29,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "event_processing_policy",
             models.CharField(
-                "Event Processing Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("E", "Process Events"), ("D", "Drop events")],
                 default="P",

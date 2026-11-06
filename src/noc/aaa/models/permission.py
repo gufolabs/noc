@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Permission database model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -31,18 +31,20 @@ class Permission(NOCModel):
 
     Populated by manage.py sync-perm
     @todo: Check name format
+
+    Attributes:
+        name: Name
+        implied: Implied
     """
 
     class Meta:
-        verbose_name = "Permission"
-        verbose_name_plural = "Permissions"
         db_table = "main_permission"
         app_label = "aaa"
 
     # module:app:permission
-    name = CharField("Name", max_length=128, unique=True)
+    name = CharField(max_length=128, unique=True)
     # comma-separated list of permissions
-    implied = CharField("Implied", max_length=256, null=True, blank=True)
+    implied = CharField(max_length=256, null=True, blank=True)
     users = ManyToManyField(User, related_name="permissions")
     groups = ManyToManyField(Group, related_name="permissions")
 

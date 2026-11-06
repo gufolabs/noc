@@ -18,5 +18,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnsserver",
             "ip",
-            models.GenericIPAddressField("IP", null=True, blank=True, protocol="IPv4"),
+            models.GenericIPAddressField(null=True, blank=True, protocol="IPv4"),
         )

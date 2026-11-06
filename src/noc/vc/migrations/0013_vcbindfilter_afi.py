@@ -17,7 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcbindfilter",
             "afi",
-            models.CharField(
-                "Address Family", max_length=1, choices=[("4", "IPv4"), ("6", "IPv6")], default="4"
-            ),
+            models.CharField(max_length=1, choices=[("4", "IPv4"), ("6", "IPv6")], default="4"),
         )

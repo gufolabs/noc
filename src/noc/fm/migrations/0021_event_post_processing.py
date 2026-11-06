@@ -23,22 +23,19 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventpostprocessingrule",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "event_class",
-                    models.ForeignKey(
-                        EventClass, verbose_name="Event Class", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(EventClass, on_delete=models.CASCADE),
                 ),
-                ("name", models.CharField("Name", max_length=64)),
-                ("preference", models.IntegerField("Preference", default=1000)),
-                ("is_active", models.BooleanField("Is Active", default=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
+                ("name", models.CharField(max_length=64)),
+                ("preference", models.IntegerField(default=1000)),
+                ("is_active", models.BooleanField(default=True)),
+                ("description", models.TextField(blank=True, null=True)),
                 (
                     "change_priority",
                     models.ForeignKey(
                         EventPriority,
-                        verbose_name="Change Priority to",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
@@ -48,7 +45,6 @@ class Migration(BaseMigration):
                     "change_category",
                     models.ForeignKey(
                         EventCategory,
-                        verbose_name="Change Category to",
                         blank=True,
                         null=True,
                         on_delete=models.CASCADE,
@@ -57,7 +53,6 @@ class Migration(BaseMigration):
                 (
                     "action",
                     models.CharField(
-                        "Action",
                         max_length=1,
                         choices=[("A", "Make Active"), ("C", "Close"), ("D", "Drop")],
                         default="A",
@@ -75,16 +70,15 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventpostprocessingre",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "rule",
                     models.ForeignKey(
                         EventPostProcessingRule,
-                        verbose_name="Event Post-Processing Rule",
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("var_re", models.CharField("Var RE", max_length=256)),
-                ("value_re", models.CharField("Value RE", max_length=256)),
+                ("var_re", models.CharField(max_length=256)),
+                ("value_re", models.CharField(max_length=256)),
             ),
         )

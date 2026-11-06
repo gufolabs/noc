@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "bgppeer_profile",
             models.ForeignKey(
                 PeerProfile,
-                verbose_name="PeerProfile",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,

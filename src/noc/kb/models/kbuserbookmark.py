@@ -17,17 +17,19 @@ from noc.kb.models.kbentry import KBEntry
 class KBUserBookmark(NOCModel):
     """
     User Bookmarks
+
+    Attributes:
+        user: User
+        kb_entry: KBEntry
     """
 
     class Meta:
-        verbose_name = "KB User Bookmark"
-        verbose_name_plural = "KB User Bookmarks"
         app_label = "kb"
         db_table = "kb_kbuserbookmark"
         unique_together = [("user", "kb_entry")]
 
-    user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
-    kb_entry = models.ForeignKey(KBEntry, verbose_name="KBEntry", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    kb_entry = models.ForeignKey(KBEntry, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user}: {self.kb_entry}"

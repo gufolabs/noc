@@ -27,7 +27,6 @@ class Migration(BaseMigration):
             "config_mirror_template",
             models.ForeignKey(
                 Template,
-                verbose_name="Config Mirror Template",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -37,7 +36,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "config_mirror_policy",
             models.CharField(
-                "Config Mirror Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
                 default="C",
@@ -47,7 +45,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "config_validation_policy",
             models.CharField(
-                "Config Validation Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
                 default="C",

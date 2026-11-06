@@ -17,10 +17,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "cm_objectcategory",
             "notify_immediately",
-            models.TextField("Notify Immediately", blank=True, null=True),
+            models.TextField(blank=True, null=True),
         )
         self.db.add_column(
             "cm_objectcategory",
             "notify_delayed",
-            models.TextField("Notify Delayed", blank=True, null=True),
+            models.TextField(blank=True, null=True),
         )

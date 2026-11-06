@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "confdb_raw_policy",
             models.CharField(
-                "ConfDB Raw Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("E", "Enable")],
                 default="D",
@@ -28,7 +27,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "confdb_raw_policy",
             models.CharField(
-                "ConfDB Raw Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("D", "Disable"), ("E", "Enable")],
                 default="P",

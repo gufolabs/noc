@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "ip_prefix",
             "enable_ip_discovery",
             models.CharField(
-                "Enable IP Discovery",
                 max_length=1,
                 choices=[("I", "Inherit"), ("E", "Enable"), ("D", "Disable")],
                 default="I",

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # AdministrativeDomain
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init, tree
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.main.models.label import Label
 from noc.main.models.pool import Pool
 from noc.main.models.remotesystem import RemoteSystem
@@ -58,20 +57,21 @@ _path_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 class AdministrativeDomain(NOCModel):
     """
     Administrative Domain
+
+    Attributes:
+        name: Name
+        description: Description
+        parent: Parent
     """
 
     class Meta:
-        verbose_name = _("Administrative Domain")
-        verbose_name_plural = _("Administrative Domains")
         db_table = "sa_administrativedomain"
         app_label = "sa"
         ordering = ["name"]
 
-    name = models.CharField(_("Name"), max_length=255, unique=True)
-    parent = models.ForeignKey(
-        "self", verbose_name="Parent", null=True, blank=True, on_delete=models.CASCADE
-    )
-    description = models.TextField(_("Description"), null=True, blank=True)
+    name = models.CharField(max_length=255, unique=True)
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True)
     default_pool = DocumentReferenceField(Pool, null=True, blank=True)
     # Biosegmentation settings
     bioseg_floating_name_template = models.ForeignKey(

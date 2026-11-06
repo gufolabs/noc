@@ -20,9 +20,7 @@ rx_empty = re.compile(r"[^a-zA-Z0-9\-_]+")
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "vc_vc", "name", models.CharField("Name", max_length=64, null=True, blank=True)
-        )
+        self.db.add_column("vc_vc", "name", models.CharField(max_length=64, null=True, blank=True))
         names = {}  # vc_domain_id -> names
         for vc_id, vc_domain_id, l1, description in self.db.execute(
             "SELECT id,vc_domain_id,l1,description FROM vc_vc"

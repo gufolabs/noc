@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "report_ping_rtt",
-            models.BooleanField("Report RTT", default=False),
+            models.BooleanField(default=False),
         )

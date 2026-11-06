@@ -26,7 +26,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "bgpeer_discovery_policy",
             models.CharField(
-                "BGP Peer Discovery Policy",
                 max_length=1,
                 choices=[
                     ("s", "Script"),
@@ -43,7 +42,6 @@ class Migration(BaseMigration):
             "bgppeer_profile",
             models.ForeignKey(
                 PeerProfile,
-                verbose_name="PeerProfile",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,

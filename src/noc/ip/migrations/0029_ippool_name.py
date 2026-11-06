@@ -14,6 +14,4 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "ip_ippool", "name", models.CharField("Pool Name", max_length=64, default="default")
-        )
+        self.db.add_column("ip_ippool", "name", models.CharField(max_length=64, default="default"))

@@ -19,10 +19,10 @@ class Migration(BaseMigration):
             "main_pyrule",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("name", models.CharField("Name", unique=True, max_length=64)),
-                ("interface", models.CharField("Interface", max_length=64)),
-                ("description", models.TextField("Description")),
-                ("text", models.TextField("Text")),
-                ("changed", models.DateTimeField("Changed", auto_now=True, auto_now_add=True)),
+                ("name", models.CharField(unique=True, max_length=64)),
+                ("interface", models.CharField(max_length=64)),
+                ("description", models.TextField()),
+                ("text", models.TextField()),
+                ("changed", models.DateTimeField(auto_now=True, auto_now_add=True)),
             ),
         )

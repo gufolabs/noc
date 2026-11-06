@@ -14,6 +14,4 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "sa_managedobjectprofile", "level", models.IntegerField("Level", default=25)
-        )
+        self.db.add_column("sa_managedobjectprofile", "level", models.IntegerField(default=25))

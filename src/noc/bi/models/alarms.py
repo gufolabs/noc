@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Alarms Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -34,7 +34,6 @@ from noc.core.clickhouse.fields import (
     UInt32Field,
 )
 from noc.core.clickhouse.model import Model, NestedModel
-from noc.core.translation import ugettext as _
 from noc.sa.models.administrativedomain import AdministrativeDomain as AdministrativeDomainM
 from noc.sa.models.useraccess import UserAccess
 
@@ -50,52 +49,92 @@ class Subscribers(NestedModel):
 
 
 class Alarms(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        close_ts: Close Time
+        duration: Duration
+        alarm_id: Id
+        root: Alarm Root
+        rca_type: RCA Type
+        alarm_class: Alarm Class
+        severity: Severity
+        reopens: Reopens
+        direct_services: Direct Services
+        direct_subscribers: Direct Subscribers
+        total_objects: Total Objects
+        total_services: Total Services
+        total_subscribers: Total Subscribers
+        escalation_ts: Escalation Time
+        escalation_tt: Number of Escalation
+        reboots: Qty of Reboots
+        managed_object: Object Name
+        pool: Pool Name
+        object_profile: Object Profile
+        ip: IP Address
+        profile: Profile
+        vendor: Vendor Name
+        platform: Platform
+        version: Version
+        administrative_domain: Admin. Domain
+        segment: Network Segment
+        container: Container
+        project: Project
+        x: Longitude
+        y: Latitude
+        services: Affected Services
+        subscribers: Affected Subscribers
+        ack_user: Manual acknowledgement user name
+        ack_ts: Manual acknowledgement timestamp
+    """
+
     class Meta:
         db_table = "alarms"
         engine = MergeTree(
             "date", ("ts", "managed_object", "alarm_class"), primary_keys=("ts", "managed_object")
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    close_ts = DateTimeField(description=_("Close Time"))
-    duration = Int32Field(description=_("Duration"))
-    alarm_id = StringField(description=_("Id"))
-    root = StringField(description=_("Alarm Root"))
-    rca_type = Int16Field(description=_("RCA Type"))
-    alarm_class = ReferenceField(AlarmClass, description=_("Alarm Class"))
-    severity = Int32Field(description=_("Severity"))
-    reopens = Int32Field(description=_("Reopens"))
-    direct_services = Int64Field(description=_("Direct Services"))
-    direct_subscribers = Int64Field(description=_("Direct Subscribers"))
-    total_objects = Int64Field(description=_("Total Objects"))
-    total_services = Int64Field(description=_("Total Services"))
-    total_subscribers = Int64Field(description=_("Total Subscribers"))
-    escalation_ts = DateTimeField(description=_("Escalation Time"))
-    escalation_tt = StringField(description=_("Number of Escalation"))
+    date = DateField()
+    ts = DateTimeField()
+    close_ts = DateTimeField()
+    duration = Int32Field()
+    alarm_id = StringField()
+    root = StringField()
+    rca_type = Int16Field()
+    alarm_class = ReferenceField(AlarmClass)
+    severity = Int32Field()
+    reopens = Int32Field()
+    direct_services = Int64Field()
+    direct_subscribers = Int64Field()
+    total_objects = Int64Field()
+    total_services = Int64Field()
+    total_subscribers = Int64Field()
+    escalation_ts = DateTimeField()
+    escalation_tt = StringField()
     # Amount of reboots during alarm
-    reboots = Int16Field(description=_("Qty of Reboots"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    pool = ReferenceField(Pool, description=_("Pool Name"))
-    object_profile = ReferenceField(ObjectProfile, description=_("Object Profile"))
-    ip = IPv4Field(description=_("IP Address"))
-    profile = ReferenceField(Profile, description=_("Profile"))
-    vendor = ReferenceField(Vendor, description=_("Vendor Name"))
-    platform = ReferenceField(Platform, description=_("Platform"))
-    version = ReferenceField(Version, description=_("Version"))
-    administrative_domain = ReferenceField(AdministrativeDomain, description=_("Admin. Domain"))
-    segment = ReferenceField(NetworkSegment, description=_("Network Segment"))
-    container = ReferenceField(Container, description=_("Container"))
-    project = ReferenceField(Project, description=_("Project"))
+    reboots = Int16Field()
+    managed_object = ReferenceField(ManagedObject)
+    pool = ReferenceField(Pool)
+    object_profile = ReferenceField(ObjectProfile)
+    ip = IPv4Field()
+    profile = ReferenceField(Profile)
+    vendor = ReferenceField(Vendor)
+    platform = ReferenceField(Platform)
+    version = ReferenceField(Version)
+    administrative_domain = ReferenceField(AdministrativeDomain)
+    segment = ReferenceField(NetworkSegment)
+    container = ReferenceField(Container)
+    project = ReferenceField(Project)
     # Coordinates
-    x = Float64Field(description=_("Longitude"))
-    y = Float64Field(description=_("Latitude"))
-    services = NestedField(Services, description=_("Affected Services"))
-    subscribers = NestedField(Subscribers, description=_("Affected Subscribers"))
+    x = Float64Field()
+    y = Float64Field()
+    services = NestedField(Services)
+    subscribers = NestedField(Subscribers)
     # location = StringField(description="Location")
     # Ack info
-    ack_user = StringField(description=_("Manual acknowledgement user name"))
-    ack_ts = DateTimeField(description=_("Manual acknowledgement timestamp"))
+    ack_user = StringField()
+    ack_ts = DateTimeField()
 
     @classmethod
     def transform_query(cls, query, user):

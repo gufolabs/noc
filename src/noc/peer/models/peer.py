@@ -54,23 +54,48 @@ logger = logging.getLogger(__name__)
 class Peer(NOCModel):
     """
     BGP Peering session
+
+    Attributes:
+        state_changed: State Changed
+        expired: Expired
+        last_seen: Last Seen
+        first_discovered: First Discovered
+        oper_status_change: Oper Status Last Changed
+        local_ip: Local IP
+        local_backup_ip: Local Backup IP
+        remote_asn: Remote AS
+        remote_ip: Remote IP
+        remote_backup_ip: Remote Backup IP
+        import_filter: Import filter
+        local_pref: Local Pref
+        import_med: Import MED
+        export_med: Export MED
+        export_filter: Export filter
+        description: Description
+        rpsl_remark: RPSL Remark
+        tt: TT
+        communities: Import Communities
+        max_prefixes: Max. Prefixes
+        import_filter_name: Import Filter Name
+        export_filter_name: Export Filter Name
+        profile: Peer Profile
+        project: Project
+        managed_object: Managed Object
+        peering_point: Peering Point
+        local_asn: Local AS
     """
 
     class Meta:
-        verbose_name = "Peer"
-        verbose_name_plural = "Peers"
         db_table = "peer_peer"
         app_label = "peer"
 
     profile: PeerProfile = ForeignKey(
         PeerProfile,
-        verbose_name="Peer Profile",
         on_delete=CASCADE,
         default=PeerProfile.get_default_profile,
     )
     project = ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         related_name="peer_set",
@@ -78,7 +103,6 @@ class Peer(NOCModel):
     )
     managed_object = ForeignKey(
         "sa.ManagedObject",
-        verbose_name="Managed Object",
         null=True,
         blank=True,
         on_delete=SET_NULL,
@@ -87,13 +111,13 @@ class Peer(NOCModel):
     # Workflow
     state: State = DocumentReferenceField(State, null=True, blank=True)
     # Last state change
-    state_changed = DateTimeField("State Changed", null=True, blank=True)
+    state_changed = DateTimeField(null=True, blank=True)
     # Timestamp expired
-    expired = DateTimeField("Expired", null=True, blank=True)
+    expired = DateTimeField(null=True, blank=True)
     # Timestamp of last seen
-    last_seen = DateTimeField("Last Seen", null=True, blank=True)
+    last_seen = DateTimeField(null=True, blank=True)
     # Timestamp of first discovery
-    first_discovered = DateTimeField("First Discovered", null=True, blank=True)
+    first_discovered = DateTimeField(null=True, blank=True)
     oper_status: int | None = IntegerField(
         choices=[
             (1, "idle"),
@@ -105,39 +129,35 @@ class Peer(NOCModel):
         ],
         null=True,
     )
-    oper_status_change = DateTimeField("Oper Status Last Changed", null=True, blank=True)
+    oper_status_change = DateTimeField(null=True, blank=True)
     # RPSL Settings
     peering_point: PeeringPoint | None = ForeignKey(
-        PeeringPoint, verbose_name="Peering Point", on_delete=CASCADE, null=True, blank=True
+        PeeringPoint, on_delete=CASCADE, null=True, blank=True
     )
-    local_asn: AS = ForeignKey(AS, verbose_name="Local AS", on_delete=CASCADE)
-    local_ip = INETField("Local IP", null=True, blank=True)
-    local_backup_ip = INETField("Local Backup IP", null=True, blank=True)
-    remote_asn = BigIntegerField("Remote AS", null=True, blank=True)
-    remote_ip = INETField("Remote IP")
-    remote_backup_ip = INETField("Remote Backup IP", null=True, blank=True)
-    import_filter = CharField("Import filter", max_length=64, default="any")
+    local_asn: AS = ForeignKey(AS, on_delete=CASCADE)
+    local_ip = INETField(null=True, blank=True)
+    local_backup_ip = INETField(null=True, blank=True)
+    remote_asn = BigIntegerField(null=True, blank=True)
+    remote_ip = INETField()
+    remote_backup_ip = INETField(null=True, blank=True)
+    import_filter = CharField(max_length=64, default="any")
     # Override PeerProfile.local_pref
-    local_pref: int | None = IntegerField("Local Pref", null=True, blank=True)
+    local_pref: int | None = IntegerField(null=True, blank=True)
     # Override PeerProfile.import_med
-    import_med: int | None = IntegerField("Import MED", blank=True, null=True)
+    import_med: int | None = IntegerField(blank=True, null=True)
     # Override PeerGroup.export_med
-    export_med: int | None = IntegerField("Export MED", blank=True, null=True)
-    export_filter = CharField("Export filter", max_length=64, default="any")
-    description = TextField("Description", null=True, blank=True)
+    export_med: int | None = IntegerField(blank=True, null=True)
+    export_filter = CharField(max_length=64, default="any")
+    description = TextField(null=True, blank=True)
     # Peer remark to be shown in RPSL
-    rpsl_remark = CharField("RPSL Remark", max_length=64, null=True, blank=True)
-    tt = IntegerField("TT", blank=True, null=True)
+    rpsl_remark = CharField(max_length=64, null=True, blank=True)
+    tt = IntegerField(blank=True, null=True)
     # In addition to PeerProfile.communities
     # and PeeringProfile.communities
-    communities = CharField("Import Communities", max_length=128, blank=True, null=True)
-    max_prefixes = IntegerField("Max. Prefixes", default=100)
-    import_filter_name: str | None = CharField(
-        "Import Filter Name", max_length=64, blank=True, null=True
-    )
-    export_filter_name: str | None = CharField(
-        "Export Filter Name", max_length=64, blank=True, null=True
-    )
+    communities = CharField(max_length=128, blank=True, null=True)
+    max_prefixes = IntegerField(default=100)
+    import_filter_name: str | None = CharField(max_length=64, blank=True, null=True)
+    export_filter_name: str | None = CharField(max_length=64, blank=True, null=True)
     labels = ArrayField(CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(CharField(max_length=250), blank=True, null=True, default=list)
 

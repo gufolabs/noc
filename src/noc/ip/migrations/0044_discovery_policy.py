@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "ip_prefix",
             "prefix_discovery_policy",
             models.CharField(
-                "Prefix Discovery Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("E", "Enable"), ("D", "Disable")],
                 default="P",
@@ -31,7 +30,6 @@ class Migration(BaseMigration):
             "ip_prefix",
             "address_discovery_policy",
             models.CharField(
-                "Address Discovery Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("E", "Enable"), ("D", "Disable")],
                 default="P",

@@ -21,12 +21,10 @@ class Migration(BaseMigration):
         self.db.create_table(
             "kb_kbglobalbookmark",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "kb_entry",
-                    models.ForeignKey(
-                        KBEntry, verbose_name=KBEntry, unique=True, on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(KBEntry, unique=True, on_delete=models.CASCADE),
                 ),
             ),
         )
@@ -39,11 +37,11 @@ class Migration(BaseMigration):
         self.db.create_table(
             "kb_kbuserbookmark",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("user", models.ForeignKey(User, verbose_name=User, on_delete=models.CASCADE)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
                 (
                     "kb_entry",
-                    models.ForeignKey(KBEntry, verbose_name=KBEntry, on_delete=models.CASCADE),
+                    models.ForeignKey(KBEntry, on_delete=models.CASCADE),
                 ),
             ),
         )

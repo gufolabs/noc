@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DisposeLog Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -20,10 +20,24 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class DisposeLog(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        event_id: Event ID
+        alarm_id: Alarm ID
+        op: Operation
+        managed_object: Object Name
+        event_class: Event Class
+        alarm_class: Alarm Class
+        message: Event Message
+        target: Target
+        reopens: Reopens
+    """
+
     class Meta:
         db_table = "disposelog"
         engine = MergeTree(
@@ -33,15 +47,15 @@ class DisposeLog(Model):
             partition_function="toYYYYMMDD(ts)",
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    event_id = StringField(description=_("Event ID"))
-    alarm_id = StringField(description=_("Alarm ID"))
-    op = StringField(description=_("Operation"), low_cardinality=True)  # raise, clear, drop, ignore
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    event_class = ReferenceField(EventClass, description=_("Event Class"))
-    alarm_class = ReferenceField(AlarmClass, description=_("Alarm Class"))
-    message = StringField(description=_("Event Message"))
-    target = MapField(StringField(), description=_("Target"))
+    date = DateField()
+    ts = DateTimeField()
+    event_id = StringField()
+    alarm_id = StringField()
+    op = StringField(low_cardinality=True)  # raise, clear, drop, ignore
+    managed_object = ReferenceField(ManagedObject)
+    event_class = ReferenceField(EventClass)
+    alarm_class = ReferenceField(AlarmClass)
+    message = StringField()
+    target = MapField(StringField())
     target_reference = UInt64Field(description="Target reference")
-    reopens = UInt32Field(description=_("Reopens"))
+    reopens = UInt32Field()

@@ -17,7 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnsserver",
             "autozones_path",
-            models.CharField(
-                "Autozones path", max_length=256, blank=True, null=True, default="autozones"
-            ),
+            models.CharField(max_length=256, blank=True, null=True, default="autozones"),
         )

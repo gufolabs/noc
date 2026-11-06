@@ -17,15 +17,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_caps_discovery",
-            models.BooleanField("Enable caps discovery", default=True),
+            models.BooleanField(default=True),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "caps_discovery_min_interval",
-            models.IntegerField("Min. caps discovery interval", default=600),
+            models.IntegerField(default=600),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "caps_discovery_max_interval",
-            models.IntegerField("Max. caps discovery interval", default=86400),
+            models.IntegerField(default=86400),
         )

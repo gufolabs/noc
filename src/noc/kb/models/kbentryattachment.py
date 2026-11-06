@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # KBEntryAttachment model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -17,20 +17,25 @@ from noc.main.models.databasestorage import database_storage
 class KBEntryAttachment(NOCModel):
     """
     Attachments
+
+    Attributes:
+        name: Name
+        description: Description
+        is_hidden: Is Hidden
+        file: File
+        kb_entry: KB Entry
     """
 
     class Meta:
-        verbose_name = "KB Entry Attachment"
-        verbose_name_plural = "KB Entry Attachments"
         app_label = "kb"
         db_table = "kb_kbentryattachment"
         unique_together = [("kb_entry", "name")]
 
-    kb_entry = models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE)
-    name = models.CharField("Name", max_length=256)
-    description = models.CharField("Description", max_length=256, null=True, blank=True)
-    is_hidden = models.BooleanField("Is Hidden", default=False)
-    file = models.FileField("File", upload_to=KBEntry.upload_to, storage=database_storage)
+    kb_entry = models.ForeignKey(KBEntry, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
+    description = models.CharField(max_length=256, null=True, blank=True)
+    is_hidden = models.BooleanField(default=False)
+    file = models.FileField(upload_to=KBEntry.upload_to, storage=database_storage)
 
     def __str__(self):
         return f"{int(self.kb_entry.id)}: {self.name}"

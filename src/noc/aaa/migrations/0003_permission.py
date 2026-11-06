@@ -21,8 +21,8 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_permission",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
             ),
         )
         Permission = self.db.mock_model(model_name="Permission", db_table="main_permission")
@@ -32,7 +32,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_permission_groups",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("permission", models.ForeignKey(Permission, null=False, on_delete=models.CASCADE)),
                 ("group", models.ForeignKey(Group, null=False, on_delete=models.CASCADE)),
             ),
@@ -43,7 +43,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_permission_users",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("permission", models.ForeignKey(Permission, null=False, on_delete=models.CASCADE)),
                 ("user", models.ForeignKey(User, null=False, on_delete=models.CASCADE)),
             ),

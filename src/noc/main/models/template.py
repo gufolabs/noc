@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Template model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -60,11 +60,19 @@ def template_validator(value):
     ]
 )
 class Template(NOCModel):
+    """
+    Attributes:
+        name: Name
+        subject: Subject
+        body: Body
+        is_system: SystemTemplate
+        message_type: MessageType
+        context_data: ContextTestData
+    """
+
     class Meta:
         app_label = "main"
         db_table = "main_template"
-        verbose_name = "Template"
-        verbose_name_plural = "Templates"
         ordering = ["name"]
 
     _json_collection = {
@@ -73,18 +81,18 @@ class Template(NOCModel):
         "json_unique_fields": ["name"],
     }
 
-    name = models.CharField("Name", unique=True, max_length=128)
-    subject = models.TextField("Subject", validators=[template_validator])
-    body = models.TextField("Body", validators=[template_validator], null=True, blank=True)
+    name = models.CharField(unique=True, max_length=128)
+    subject = models.TextField(validators=[template_validator])
+    body = models.TextField(validators=[template_validator], null=True, blank=True)
     uuid = models.UUIDField()
-    is_system: bool = models.BooleanField("SystemTemplate", default=False)
+    is_system: bool = models.BooleanField(default=False)
     message_type = models.TextField(
-        "MessageType", choices=[(m.value, m.name) for m in MessageType], null=True, blank=True
+        choices=[(m.value, m.name) for m in MessageType], null=True, blank=True
     )
     language = models.CharField(
         max_length=16, null=True, blank=True, default="en", choices=LANGUAGES
     )
-    context_data: str = models.TextField("ContextTestData", blank=True, null=True)
+    context_data: str = models.TextField(blank=True, null=True)
     # ? RU
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)

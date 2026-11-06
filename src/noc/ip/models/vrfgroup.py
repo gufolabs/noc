@@ -21,20 +21,20 @@ from noc.main.models.label import Label
 class VRFGroup(NOCModel):
     """
     Group of VRFs with common properties
+
+    Attributes:
+        name: Unique VRF Group name
+        address_constraint: Address Constraint
+        description: Description
     """
 
     class Meta:
-        verbose_name = _("VRF Group")
-        verbose_name_plural = _("VRF Groups")
         db_table = "ip_vrfgroup"
         app_label = "ip"
         ordering = ["name"]
 
-    name = models.CharField(
-        _("VRF Group"), unique=True, max_length=64, help_text=_("Unique VRF Group name")
-    )
+    name = models.CharField(unique=True, max_length=64)
     address_constraint = models.CharField(
-        _("Address Constraint"),
         max_length=1,
         choices=[
             ("V", _("Addresses are unique per VRF")),
@@ -42,7 +42,7 @@ class VRFGroup(NOCModel):
         ],
         default="V",
     )
-    description = models.TextField(_("Description"), blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     # Labels
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(

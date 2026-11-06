@@ -18,11 +18,11 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "shape_title_template",
-            models.CharField("Shape Title template", max_length=256, blank=True, null=True),
+            models.CharField(max_length=256, blank=True, null=True),
         )
         # ManagedObject
         self.db.add_column(
             "sa_managedobject",
             "shape_title_template",
-            models.CharField("Shape Title template", max_length=256, blank=True, null=True),
+            models.CharField(max_length=256, blank=True, null=True),
         )

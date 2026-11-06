@@ -28,18 +28,17 @@ class Migration(BaseMigration):
                 ("id", models.AutoField(primary_key=True)),
                 (
                     "vc_domain",
-                    models.ForeignKey(VCDomain, verbose_name="VC Domain", on_delete=models.CASCADE),
+                    models.ForeignKey(VCDomain, on_delete=models.CASCADE),
                 ),
                 (
                     "selector",
                     models.ForeignKey(
                         ManagedObjectSelector,
-                        verbose_name="Managed Object Selector",
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("key", models.CharField("Key", max_length=64)),
-                ("value", models.CharField("Value", max_length=256)),
+                ("key", models.CharField(max_length=64)),
+                ("value", models.CharField(max_length=256)),
             ),
         )
 
@@ -51,5 +50,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomain",
             "enable_provisioning",
-            models.BooleanField("Enable Provisioning", default=False),
+            models.BooleanField(default=False),
         )

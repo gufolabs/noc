@@ -27,7 +27,6 @@ class Migration(BaseMigration):
                     models.ForeignKey(
                         Language,
                         null=True,
-                        verbose_name="Preferred Language",
                         blank=True,
                         on_delete=models.CASCADE,
                     ),
@@ -43,17 +42,13 @@ class Migration(BaseMigration):
             (
                 (
                     "user_profile",
-                    models.ForeignKey(
-                        UserProfile, verbose_name="User Profile", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(UserProfile, on_delete=models.CASCADE),
                 ),
-                ("notification_method", models.CharField("Method", max_length=16)),
-                ("params", models.CharField("Params", max_length=256)),
+                ("notification_method", models.CharField(max_length=16)),
+                ("params", models.CharField(max_length=256)),
                 (
                     "time_pattern",
-                    models.ForeignKey(
-                        TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(TimePattern, on_delete=models.CASCADE),
                 ),
                 ("id", models.AutoField(primary_key=True)),
             ),

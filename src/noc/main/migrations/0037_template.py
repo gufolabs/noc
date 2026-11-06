@@ -17,10 +17,10 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_template",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", unique=True, max_length=128)),
-                ("subject", models.TextField("Subject")),
-                ("body", models.TextField("Body")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(unique=True, max_length=128)),
+                ("subject", models.TextField()),
+                ("body", models.TextField()),
             ),
         )
 
@@ -29,12 +29,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_systemtemplate",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
                 (
                     "template",
-                    models.ForeignKey(Template, verbose_name="Template", on_delete=models.CASCADE),
+                    models.ForeignKey(Template, on_delete=models.CASCADE),
                 ),
             ),
         )

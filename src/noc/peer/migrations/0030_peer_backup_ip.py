@@ -13,10 +13,6 @@ from noc.core.model.fields import INETField
 class Migration(BaseMigration):
     def migrate(self) -> None:
         # Adding field 'Peer.remote_backup_ip'
-        self.db.add_column(
-            "peer_peer", "remote_backup_ip", INETField("Remote Backup IP", null=True, blank=True)
-        )
+        self.db.add_column("peer_peer", "remote_backup_ip", INETField(null=True, blank=True))
         # Adding field 'Peer.local_backup_ip'
-        self.db.add_column(
-            "peer_peer", "local_backup_ip", INETField("Local Backup IP", null=True, blank=True)
-        )
+        self.db.add_column("peer_peer", "local_backup_ip", INETField(null=True, blank=True))

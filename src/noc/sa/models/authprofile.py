@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # AuthProfile
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ from noc.core.cache.base import cache
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_save
 from noc.core.model.fields import DocumentReferenceField, PydanticField
-from noc.core.translation import ugettext as _
 from noc.main.models.handler import Handler
 from noc.main.models.label import Label
 from noc.main.models.remotesystem import RemoteSystem
@@ -58,17 +57,35 @@ MatchRules = RootModel[list[MatchRule | None]]
 @bi_sync
 @on_delete_check(check=[("sa.ManagedObject", "auth_profile")])
 class AuthProfile(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+        type: Name
+        user: User
+        password: Password
+        super_password: Super Password
+        snmp_ro: RO Community
+        snmp_rw: RW Community
+        dynamic_classification_policy: Dynamic Classification Policy
+        match_rules: Match Dynamic Rules
+        snmp_security_level: SNMP protocol security
+        snmp_username: SNMP user name
+        snmp_auth_proto: Authentication protocol
+        snmp_auth_key: Authentication key
+        snmp_priv_proto: Privacy protocol
+        snmp_priv_key: Privacy key
+        snmp_ctx_name: Context name
+    """
+
     class Meta:
-        verbose_name = "Auth Profile"
-        verbose_name_plural = "Auth Profiles"
         db_table = "sa_authprofile"
         app_label = "sa"
         ordering = ["name"]
 
-    name = models.CharField("Name", max_length=64, unique=True)
-    description = models.TextField("Description", null=True, blank=True)
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(null=True, blank=True)
     type = models.CharField(
-        "Name",
         max_length=1,
         choices=[
             ("G", "Local Group"),
@@ -77,11 +94,11 @@ class AuthProfile(NOCModel):
             ("L", "LDAP"),
         ],
     )
-    user = models.CharField("User", max_length=32, blank=True, null=True)
-    password = models.CharField("Password", max_length=32, blank=True, null=True)
-    super_password = models.CharField("Super Password", max_length=32, blank=True, null=True)
-    snmp_ro = models.CharField("RO Community", blank=True, null=True, max_length=64)
-    snmp_rw = models.CharField("RW Community", blank=True, null=True, max_length=64)
+    user = models.CharField(max_length=32, blank=True, null=True)
+    password = models.CharField(max_length=32, blank=True, null=True)
+    super_password = models.CharField(max_length=32, blank=True, null=True)
+    snmp_ro = models.CharField(blank=True, null=True, max_length=64)
+    snmp_rw = models.CharField(blank=True, null=True, max_length=64)
     # Allow to suggest credential by credential rules
     enable_suggest_by_rule: bool = models.BooleanField(default=True)
     # Auth Profile credential preferred on local
@@ -96,13 +113,11 @@ class AuthProfile(NOCModel):
     #
     # Dynamic Profile Classification
     dynamic_classification_policy = models.CharField(
-        _("Dynamic Classification Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("R", "By Rule"), ("U", "By Username/SNMP RO")],
         default="R",
     )
     match_rules = PydanticField(
-        _("Match Dynamic Rules"),
         schema=MatchRules,
         blank=True,
         null=True,
@@ -117,7 +132,6 @@ class AuthProfile(NOCModel):
     )
 
     snmp_security_level = models.CharField(
-        _("SNMP protocol security"),
         max_length=12,
         choices=[
             ("Community", "Community"),
@@ -127,22 +141,20 @@ class AuthProfile(NOCModel):
         ],
         default="Community",
     )
-    snmp_username = models.CharField("SNMP user name", max_length=32, null=True, blank=True)
+    snmp_username = models.CharField(max_length=32, null=True, blank=True)
     snmp_auth_proto = models.CharField(
-        _("Authentication protocol"),
         max_length=3,
         choices=[("MD5", "MD5"), ("SHA", "SHA")],
         default="MD5",
     )
-    snmp_auth_key = models.CharField("Authentication key", max_length=32, null=True, blank=True)
+    snmp_auth_key = models.CharField(max_length=32, null=True, blank=True)
     snmp_priv_proto = models.CharField(
-        _("Privacy protocol"),
         max_length=3,
         choices=[("DES", "DES"), ("AES", "AES")],
         default="DES",
     )
-    snmp_priv_key = models.CharField("Privacy key", max_length=32, null=True, blank=True)
-    snmp_ctx_name = models.CharField("Context name", max_length=32, null=True, blank=True)
+    snmp_priv_key = models.CharField(max_length=32, null=True, blank=True)
+    snmp_ctx_name = models.CharField(max_length=32, null=True, blank=True)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 

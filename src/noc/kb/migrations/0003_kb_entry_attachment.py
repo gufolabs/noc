@@ -21,18 +21,18 @@ class Migration(BaseMigration):
         self.db.create_table(
             "kb_kbentryattachment",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "kb_entry",
-                    models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE),
+                    models.ForeignKey(KBEntry, on_delete=models.CASCADE),
                 ),
-                ("name", models.CharField("Name", max_length=256)),
+                ("name", models.CharField(max_length=256)),
                 (
                     "description",
-                    models.CharField("Description", max_length=256, null=True, blank=True),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
-                ("is_hidden", models.BooleanField("Is Hidden", default=False)),
-                ("file", models.FileField("File")),
+                ("is_hidden", models.BooleanField(default=False)),
+                ("file", models.FileField()),
             ),
         )
         self.db.create_index("kb_kbentryattachment", ["kb_entry_id", "name"], unique=True)

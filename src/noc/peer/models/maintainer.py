@@ -22,18 +22,26 @@ from .rir import RIR
 @on_delete_check(check=[("peer.Organisation", "mnt_ref")])
 @on_save
 class Maintainer(NOCModel):
+    """
+    Attributes:
+        maintainer: mntner
+        description: description
+        password: Password
+        extra: extra
+        rir: RIR
+        admins: admin-c
+    """
+
     class Meta:
-        verbose_name = "Maintainer"
-        verbose_name_plural = "Maintainers"
         db_table = "peer_maintainer"
         app_label = "peer"
 
-    maintainer = models.CharField("mntner", max_length=64, unique=True)
-    description = models.CharField("description", max_length=64)
-    password = models.CharField("Password", max_length=64, null=True, blank=True)
-    rir = models.ForeignKey(RIR, verbose_name="RIR", on_delete=models.CASCADE)
-    admins = models.ManyToManyField(Person, verbose_name="admin-c")
-    extra = models.TextField("extra", blank=True, null=True)
+    maintainer = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=64)
+    password = models.CharField(max_length=64, null=True, blank=True)
+    rir = models.ForeignKey(RIR, on_delete=models.CASCADE)
+    admins = models.ManyToManyField(Person)
+    extra = models.TextField(blank=True, null=True)
     rpsl = GridVCSField("rpsl_maintainer")
 
     def __str__(self):

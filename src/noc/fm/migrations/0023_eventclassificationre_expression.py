@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventclassificationre",
             "is_expression",
-            models.BooleanField("Is Expression", default=False),
+            models.BooleanField(default=False),
         )

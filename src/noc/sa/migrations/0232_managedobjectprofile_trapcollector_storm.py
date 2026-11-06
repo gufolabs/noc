@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "trapcollector_storm_policy",
             models.CharField(
-                "Trapcollector Storm Policy",
                 max_length=1,
                 choices=[
                     ("D", "Disabled"),

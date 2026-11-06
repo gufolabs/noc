@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Database models for main module
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -19,19 +19,19 @@ from noc.core.validators import check_extension, check_mimetype
 class MIMEType(NOCModel):
     """
     MIME Type mapping
+
+    Attributes:
+        extension: Extension
+        mime_type: MIME Type
     """
 
     class Meta:
         app_label = "main"
         db_table = "main_mimetype"
-        verbose_name = "MIME Type"
-        verbose_name_plural = "MIME Types"
         ordering = ["extension"]
 
-    extension = models.CharField(
-        "Extension", max_length=32, unique=True, validators=[check_extension]
-    )
-    mime_type = models.CharField("MIME Type", max_length=63, validators=[check_mimetype])
+    extension = models.CharField(max_length=32, unique=True, validators=[check_extension])
+    mime_type = models.CharField(max_length=63, validators=[check_mimetype])
 
     def __str__(self):
         return f"{self.extension} -> {self.mime_type}"

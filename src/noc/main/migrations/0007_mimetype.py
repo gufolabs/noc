@@ -18,8 +18,8 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_mimetype",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("extension", models.CharField("Extension", max_length=32, unique=True)),
-                ("mime_type", models.CharField("MIME Type", max_length=63)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("extension", models.CharField(max_length=32, unique=True)),
+                ("mime_type", models.CharField(max_length=63)),
             ),
         )

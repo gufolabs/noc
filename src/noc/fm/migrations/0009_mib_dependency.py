@@ -21,13 +21,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_mibdependency",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("mib", models.ForeignKey(MIB, verbose_name=MIB, on_delete=models.CASCADE)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("mib", models.ForeignKey(MIB, on_delete=models.CASCADE)),
                 (
                     "requires_mib",
                     models.ForeignKey(
                         MIB,
-                        verbose_name="Requires MIB",
                         related_name="requiredbymib_set",
                         on_delete=models.CASCADE,
                     ),

@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self) -> None:
         self.db.add_column(
-            "peer_as", "as_name", models.CharField("AS Name", max_length=64, null=True, blank=True)
+            "peer_as", "as_name", models.CharField(max_length=64, null=True, blank=True)
         )
         Maintainer = self.db.mock_model(model_name="Maintainer", db_table="peer_maintainer")
         self.db.add_column(
@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "routes_maintainer",
             models.ForeignKey(
                 Maintainer,
-                verbose_name="Routes Maintainer",
                 null=True,
                 blank=True,
                 related_name="routes_maintainer",

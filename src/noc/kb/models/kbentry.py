@@ -34,26 +34,27 @@ from noc.services.web.apps.kb.parsers.base import kb_parser_loader
 class KBEntry(NOCModel):
     """
     KB Entry
+
+    Attributes:
+        subject: Subject
+        body: Body
+        markup_language: Markup Language
+        language: Language
     """
 
     class Meta:
-        verbose_name = "KB Entry"
-        verbose_name_plural = "KB Entries"
         app_label = "kb"
         db_table = "kb_kbentry"
         ordering = ("id",)
 
-    subject = models.CharField("Subject", max_length=256)
-    body = models.TextField("Body")
+    subject = models.CharField(max_length=256)
+    body = models.TextField()
     language = models.ForeignKey(
         Language,
-        verbose_name="Language",
         limit_choices_to={"is_active": True},
         on_delete=models.CASCADE,
     )
-    markup_language = models.CharField(
-        "Markup Language", max_length=16, choices=[(x, x) for x in kb_parser_loader]
-    )
+    markup_language = models.CharField(max_length=16, choices=[(x, x) for x in kb_parser_loader])
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

@@ -23,14 +23,12 @@ class Migration(BaseMigration):
                 ("id", models.AutoField(primary_key=True)),
                 (
                     "peering_point",
-                    models.ForeignKey(
-                        PeeringPoint, verbose_name="Peering Point", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(PeeringPoint, on_delete=models.CASCADE),
                 ),
-                ("name", models.CharField("Name", max_length=64)),
-                ("data", InetArrayField("Data")),
-                ("strict", models.BooleanField("Strict")),
-                ("changed", models.DateTimeField("Changed", auto_now=True, auto_now_add=True)),
-                ("pushed", models.DateTimeField("Pushed", null=True, blank=True)),
+                ("name", models.CharField(max_length=64)),
+                ("data", InetArrayField()),
+                ("strict", models.BooleanField()),
+                ("changed", models.DateTimeField(auto_now=True, auto_now_add=True)),
+                ("pushed", models.DateTimeField(null=True, blank=True)),
             ),
         )

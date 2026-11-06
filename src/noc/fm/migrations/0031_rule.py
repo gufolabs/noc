@@ -20,15 +20,11 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventclass",
             "rule",
-            models.ForeignKey(
-                PyRule, verbose_name="pyRule", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(PyRule, null=True, blank=True, on_delete=models.CASCADE),
         )
         self.db.add_column(
             "fm_eventpostprocessingrule",
             "rule",
-            models.ForeignKey(
-                PyRule, verbose_name="pyRule", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(PyRule, null=True, blank=True, on_delete=models.CASCADE),
         )
         self.db.delete_column("fm_eventclass", "trigger")

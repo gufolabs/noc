@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "ping_interval",
-            models.IntegerField("Ping interval", default=60),
+            models.IntegerField(default=60),
         )

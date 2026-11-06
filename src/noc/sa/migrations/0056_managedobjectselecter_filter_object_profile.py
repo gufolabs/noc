@@ -22,7 +22,6 @@ class Migration(BaseMigration):
             "filter_object_profile",
             models.ForeignKey(
                 ManagedObjectProfile,
-                verbose_name="Filter by Object Profile",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

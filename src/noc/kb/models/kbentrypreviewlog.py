@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # KBEntryPreviewLog
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -17,14 +17,17 @@ from noc.kb.models.kbentry import KBEntry
 class KBEntryPreviewLog(NOCModel):
     """
     Preview Log
+
+    Attributes:
+        timestamp: Timestamp
+        kb_entry: KB Entry
+        user: User
     """
 
     class Meta:
-        verbose_name = "KB Entry Preview Log"
-        verbose_name_plural = "KB Entry Preview Log"
         app_label = "kb"
         db_table = "kb_kbentrypreviewlog"
 
-    kb_entry = models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE)
-    timestamp = models.DateTimeField("Timestamp", auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
+    kb_entry = models.ForeignKey(KBEntry, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "ip_prefix",
             "source",
             models.CharField(
-                "Source",
                 max_length=1,
                 choices=[("M", "Manual"), ("i", "Interface"), ("n", "Neighbor")],
                 null=False,
@@ -30,7 +29,6 @@ class Migration(BaseMigration):
             "ip_address",
             "source",
             models.CharField(
-                "Source",
                 max_length=1,
                 choices=[
                     ("M", "Manual"),
@@ -46,5 +44,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_address",
             "subinterface",
-            models.CharField("SubInterface", max_length=128, null=True, blank=True),
+            models.CharField(max_length=128, null=True, blank=True),
         )

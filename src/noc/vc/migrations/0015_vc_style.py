@@ -21,14 +21,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomain",
             "style",
-            models.ForeignKey(
-                Style, verbose_name="Style", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(Style, null=True, blank=True, on_delete=models.CASCADE),
         )
         self.db.add_column(
             "vc_vc",
             "style",
-            models.ForeignKey(
-                Style, verbose_name="Style", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(Style, null=True, blank=True, on_delete=models.CASCADE),
         )

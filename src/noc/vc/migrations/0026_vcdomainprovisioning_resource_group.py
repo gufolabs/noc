@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomainprovisioningconfig",
             "resource_group",
-            models.CharField("Resource Group", max_length=64, null=True, blank=True),
+            models.CharField(max_length=64, null=True, blank=True),
         )

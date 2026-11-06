@@ -15,10 +15,10 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self) -> None:
         self.db.add_column(
-            "sa_managedobjectprofile", "sync_ipam", models.BooleanField("Sync. IPAM", default=False)
+            "sa_managedobjectprofile", "sync_ipam", models.BooleanField(default=False)
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "fqdn_template",
-            models.TextField("FQDN template", null=True, blank=True),
+            models.TextField(null=True, blank=True),
         )

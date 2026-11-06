@@ -15,8 +15,6 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self) -> None:
         self.db.add_column(
-            "dns_dnszonerecord", "priority", models.IntegerField("Priority", null=True, blank=True)
+            "dns_dnszonerecord", "priority", models.IntegerField(null=True, blank=True)
         )
-        self.db.add_column(
-            "dns_dnszonerecord", "ttl", models.IntegerField("TTL", null=True, blank=True)
-        )
+        self.db.add_column("dns_dnszonerecord", "ttl", models.IntegerField(null=True, blank=True))

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # VRF model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -24,7 +24,6 @@ from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.core.validators import check_rd
 from noc.core.vpn import get_vpn_id
 from noc.core.wf.decorator import workflow
@@ -61,48 +60,52 @@ id_lock = Lock()
 class VRF(NOCModel):
     """
     VRF
+
+    Attributes:
+        name: Unique VRF Name
+        rd: Route Distinguisher in form of ASN:N or IP:N
+        vpn_id: RFC2685 compatible VPN ID
+        afi_ipv4: Enable IPv4 Address Family
+        afi_ipv6: Enable IPv6 Address Family
+        tt: Ticket #
+        allocated_till: VRF temporary allocated till the date
+        description: Description
+        source: Source
+        state_changed: State Changed
+        expired: Expired
+        last_seen: Last Seen
+        first_discovered: First Discovered
+        vrf_group: VRF Group
+        project: Project
     """
 
     class Meta:
-        verbose_name = _("VRF")
-        verbose_name_plural = _("VRFs")
         db_table = "ip_vrf"
         app_label = "ip"
         ordering = ["name"]
 
-    name = models.CharField(_("VRF"), unique=True, max_length=64, help_text=_("Unique VRF Name"))
+    name = models.CharField(unique=True, max_length=64)
     profile: VPNProfile = DocumentReferenceField(VPNProfile)
-    vrf_group = models.ForeignKey(
-        VRFGroup, verbose_name=_("VRF Group"), null=True, blank=True, on_delete=models.CASCADE
-    )
+    vrf_group = models.ForeignKey(VRFGroup, null=True, blank=True, on_delete=models.CASCADE)
     rd = models.CharField(
-        _("RD"),
         max_length=21,
         validators=[check_rd],
         null=True,
         blank=True,
-        help_text=_("Route Distinguisher in form of ASN:N or IP:N"),
     )
     # RFC2685-compatible VPN id
-    vpn_id = models.CharField(
-        _("VPN ID"), max_length=15, help_text=_("RFC2685 compatible VPN ID"), unique=True
-    )
-    afi_ipv4 = models.BooleanField(
-        _("IPv4"), default=True, help_text=_("Enable IPv4 Address Family")
-    )
-    afi_ipv6 = models.BooleanField(
-        _("IPv6"), default=False, help_text=_("Enable IPv6 Address Family")
-    )
+    vpn_id = models.CharField(max_length=15, unique=True)
+    afi_ipv4 = models.BooleanField(default=True)
+    afi_ipv6 = models.BooleanField(default=False)
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         on_delete=models.CASCADE,
         related_name="vrf_set",
     )
-    description = models.TextField(_("Description"), blank=True, null=True)
-    tt = models.IntegerField(_("TT"), blank=True, null=True, help_text=_("Ticket #"))
+    description = models.TextField(blank=True, null=True)
+    tt = models.IntegerField(blank=True, null=True)
     # Labels
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
@@ -110,13 +113,10 @@ class VRF(NOCModel):
     )
     state = DocumentReferenceField(State, null=True, blank=True)
     allocated_till = models.DateField(
-        _("Allocated till"),
         null=True,
         blank=True,
-        help_text=_("VRF temporary allocated till the date"),
     )
     source = models.CharField(
-        "Source",
         max_length=1,
         choices=[("M", "Manual"), ("i", "Interface"), ("m", "MPLS"), ("c", "ConfDB")],
         null=False,
@@ -124,13 +124,13 @@ class VRF(NOCModel):
         default="M",
     )
     # Last state change
-    state_changed = models.DateTimeField("State Changed", null=True, blank=True)
+    state_changed = models.DateTimeField(null=True, blank=True)
     # Timestamp expired
-    expired = models.DateTimeField("Expired", null=True, blank=True)
+    expired = models.DateTimeField(null=True, blank=True)
     # Timestamp of last seen
-    last_seen = models.DateTimeField("Last Seen", null=True, blank=True)
+    last_seen = models.DateTimeField(null=True, blank=True)
     # Timestamp of first discovery
-    first_discovered = models.DateTimeField("First Discovered", null=True, blank=True)
+    first_discovered = models.DateTimeField(null=True, blank=True)
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
     # Object id in remote system

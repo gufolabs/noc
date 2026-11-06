@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # MAC Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -26,7 +26,6 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class MAC(Model):
@@ -53,6 +52,18 @@ class MAC(Model):
       date >= ?
       AND mac = ?
       AND uni = 1;
+
+    Attributes:
+        date: Date
+        ts: Created
+        managed_object: Object Name
+        mac: MAC
+        interface: Interface
+        interface_profile: Interface Profile
+        segment: Network Segment
+        vlan: VLAN
+        is_uni: Is UNI
+        from_event: Row deployed from event
     """
 
     class Meta:
@@ -61,16 +72,16 @@ class MAC(Model):
             "date", ("date", "managed_object"), primary_keys=("date", "managed_object")
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    mac = UInt64Field(description=_("MAC"))
-    interface = StringField(description=_("Interface"))
-    interface_profile = ReferenceField(InterfaceProfile, description=_("Interface Profile"))
-    segment = ReferenceField(NetworkSegment, description=_("Network Segment"))
-    vlan = UInt16Field(description=_("VLAN"))
-    is_uni = UInt8Field(description=_("Is UNI"))
-    from_event = UInt8Field(description=_("Row deployed from event"))
+    date = DateField()
+    ts = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    mac = UInt64Field()
+    interface = StringField()
+    interface_profile = ReferenceField(InterfaceProfile)
+    segment = ReferenceField(NetworkSegment)
+    vlan = UInt16Field()
+    is_uni = UInt8Field()
+    from_event = UInt8Field()
 
     def mac_filter(
         self, query: dict[str, Any], offset: int = 0, limit: int = 400, convert_mac: bool = False

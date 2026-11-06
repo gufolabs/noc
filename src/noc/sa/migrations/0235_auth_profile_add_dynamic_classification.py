@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_authprofile",
             "dynamic_classification_policy",
             models.CharField(
-                "Dynamic Classification Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("R", "By Rule"), ("U", "By Username/SNMP RO")],
                 default="R",
@@ -27,5 +26,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_authprofile",
             "match_rules",
-            models.JSONField("Match Dynamic Rules", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )

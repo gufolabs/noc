@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self) -> None:
         self.db.add_column(
-            "ip_address", "name", models.CharField("Name", max_length=255, null=True, blank=True)
+            "ip_address", "name", models.CharField(max_length=255, null=True, blank=True)
         )
         self.db.execute("UPDATE ip_address SET name = fqdn")
         self.db.execute("ALTER TABLE ip_address ALTER name SET NOT NULL")

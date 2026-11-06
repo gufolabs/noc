@@ -14,15 +14,11 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "main_template", "is_system", models.BooleanField("SystemTemplate", default=False)
-        )
-        self.db.add_column(
-            "main_template", "message_type", models.TextField("MessageType", blank=True, null=True)
-        )
+        self.db.add_column("main_template", "is_system", models.BooleanField(default=False))
+        self.db.add_column("main_template", "message_type", models.TextField(blank=True, null=True))
         self.db.add_column(
             "main_template",
             "context_data",
-            models.TextField("ContextTestData", blank=True, null=True),
+            models.TextField(blank=True, null=True),
         )
         self.db.execute("ALTER TABLE main_template ALTER COLUMN body DROP NOT NULL")

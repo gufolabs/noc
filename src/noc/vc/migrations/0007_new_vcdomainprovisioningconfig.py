@@ -30,12 +30,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomainprovisioningconfig",
             "is_enabled",
-            models.BooleanField("Is Enabled", default=True),
+            models.BooleanField(default=True),
         )
         self.db.add_column(
             "vc_vcdomainprovisioningconfig",
             "tagged_ports",
-            models.CharField("Tagged Ports", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         NotificationGroup = self.db.mock_model(
             model_name="NotificationGroup", db_table="main_notificationgroup"
@@ -45,7 +45,6 @@ class Migration(BaseMigration):
             "notification_group",
             models.ForeignKey(
                 NotificationGroup,
-                verbose_name="Notification Group",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

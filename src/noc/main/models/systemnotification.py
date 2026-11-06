@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SystemNotification
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,18 +17,19 @@ from .notificationgroup import NotificationGroup
 class SystemNotification(NOCModel):
     """
     System Notifications
+
+    Attributes:
+        name: Name
+        notification_group: Notification Group
     """
 
     class Meta:
         app_label = "main"
         db_table = "main_systemnotification"
-        verbose_name = "System Notification"
-        verbose_name_plural = "System Notifications"
 
-    name = models.CharField("Name", max_length=64, unique=True)
+    name = models.CharField(max_length=64, unique=True)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name="Notification Group",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

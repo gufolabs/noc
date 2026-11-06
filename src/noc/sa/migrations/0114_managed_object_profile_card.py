@@ -17,7 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "card",
-            models.CharField(
-                "Card name", max_length=256, blank=True, null=True, default="managedobject"
-            ),
+            models.CharField(max_length=256, blank=True, null=True, default="managedobject"),
         )

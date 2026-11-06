@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "config_fetch_policy",
             models.CharField(
-                "Config Fetch Policy",
                 max_length=1,
                 choices=[("s", "Startup"), ("r", "Running")],
                 default="r",
@@ -28,7 +27,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "config_fetch_policy",
             models.CharField(
-                "Config Fetch Policy",
                 max_length=1,
                 choices=[("P", "From Profile"), ("s", "Startup"), ("r", "Running")],
                 default="P",

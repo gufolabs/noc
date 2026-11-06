@@ -19,11 +19,11 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_reducetask",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("start_time", models.DateTimeField("Start Time")),
-                ("stop_time", models.DateTimeField("Stop Time")),
-                ("reduce_script", models.CharField("Script", max_length=256)),
-                ("script_params", PickledField("Params", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("start_time", models.DateTimeField()),
+                ("stop_time", models.DateTimeField()),
+                ("reduce_script", models.CharField(max_length=256)),
+                ("script_params", PickledField(null=True, blank=True)),
             ),
         )
 
@@ -35,25 +35,22 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_maptask",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "task",
-                    models.ForeignKey(ReduceTask, verbose_name="Task", on_delete=models.CASCADE),
+                    models.ForeignKey(ReduceTask, on_delete=models.CASCADE),
                 ),
                 (
                     "managed_object",
-                    models.ForeignKey(
-                        ManagedObject, verbose_name="Managed Object", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(ManagedObject, on_delete=models.CASCADE),
                 ),
-                ("map_script", models.CharField("Script", max_length=256)),
-                ("script_params", PickledField("Params", null=True, blank=True)),
-                ("next_try", models.DateTimeField("Next Try")),
-                ("retries_left", models.IntegerField("Retries Left", default=1)),
+                ("map_script", models.CharField(max_length=256)),
+                ("script_params", PickledField(null=True, blank=True)),
+                ("next_try", models.DateTimeField()),
+                ("retries_left", models.IntegerField(default=1)),
                 (
                     "status",
                     models.CharField(
-                        "Status",
                         max_length=1,
                         choices=[
                             ("W", "Wait"),
@@ -64,6 +61,6 @@ class Migration(BaseMigration):
                         default="W",
                     ),
                 ),
-                ("script_result", PickledField("Result", null=True, blank=True)),
+                ("script_result", PickledField(null=True, blank=True)),
             ),
         )

@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "fm_eventclassificationrule",
             "action",
             models.CharField(
-                "Action",
                 max_length=1,
                 choices=[("A", "Make Active"), ("C", "Close"), ("D", "Drop")],
                 default="A",

@@ -19,7 +19,7 @@ class Migration(BaseMigration):
             "peer_whoisdatabase",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
             ),
         )
         WhoisDatabase = self.db.mock_model(
@@ -33,14 +33,12 @@ class Migration(BaseMigration):
                 ("id", models.AutoField(primary_key=True)),
                 (
                     "whois_database",
-                    models.ForeignKey(
-                        WhoisDatabase, verbose_name="Whois Database", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(WhoisDatabase, on_delete=models.CASCADE),
                 ),
-                ("url", models.CharField("Object", max_length=256)),
-                ("direction", models.CharField("Direction", max_length=1)),
-                ("key", models.CharField("Key", max_length=32)),
-                ("value", models.CharField("Value", max_length=32)),
+                ("url", models.CharField(max_length=256)),
+                ("direction", models.CharField(max_length=1)),
+                ("key", models.CharField(max_length=32)),
+                ("value", models.CharField(max_length=32)),
             ),
         )
         WhoisLookup = self.db.mock_model(model_name="WhoisLookup", db_table="peer_whoislookup")
@@ -52,12 +50,10 @@ class Migration(BaseMigration):
                 ("id", models.AutoField(primary_key=True)),
                 (
                     "lookup",
-                    models.ForeignKey(
-                        WhoisLookup, verbose_name="Whois Lookup", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(WhoisLookup, on_delete=models.CASCADE),
                 ),
-                ("key", models.CharField("Key", max_length=64)),
-                ("value", models.TextField("Value")),
+                ("key", models.CharField(max_length=64)),
+                ("value", models.TextField()),
             ),
         )
 

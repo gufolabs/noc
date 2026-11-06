@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "ip_vrf",
             "source",
             models.CharField(
-                "Source",
                 max_length=1,
                 choices=[("M", "Manual"), ("i", "Interface"), ("m", "MPLS")],
                 null=False,

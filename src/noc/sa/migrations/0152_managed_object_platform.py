@@ -109,7 +109,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "software_image",
-            models.CharField("Software Image", max_length=255, null=True, blank=True),
+            models.CharField(max_length=255, null=True, blank=True),
         )
         platforms_uniq = set()  # Uniq platform name
         for profile, vendor, platform, version in data:

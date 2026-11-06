@@ -27,17 +27,14 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobjectwatchers",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=False, auto_created=True)),
+                ("id", models.AutoField(primary_key=False, auto_created=True)),
                 (
                     "managed_object",
-                    models.ForeignKey(
-                        ManagedObject, verbose_name="Managed Object", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(ManagedObject, on_delete=models.CASCADE),
                 ),
                 (
                     "effect",
                     models.CharField(
-                        "Effect",
                         choices=ObjectEffect.choices,
                         max_length=20,
                         blank=False,
@@ -46,28 +43,22 @@ class Migration(BaseMigration):
                 ),
                 (
                     "key",
-                    models.CharField(
-                        "Effect Key", max_length=64, null=False, blank=True, default=""
-                    ),
+                    models.CharField(max_length=64, null=False, blank=True, default=""),
                 ),
-                ("once", models.BooleanField("Activate once", default=True)),
-                ("wait_avail", models.BooleanField("Activate if Avail", default=False)),
+                ("once", models.BooleanField(default=True)),
+                ("wait_avail", models.BooleanField(default=False)),
                 (
                     "after",
-                    models.DateTimeField(
-                        "Activate after time", auto_now_add=False, null=True, blank=True
-                    ),
+                    models.DateTimeField(auto_now_add=False, null=True, blank=True),
                 ),
                 (
                     "args",
-                    models.JSONField("Activate once", null=True, blank=True, default=lambda: "{}"),
+                    models.JSONField(null=True, blank=True, default=lambda: "{}"),
                 ),
                 # Before Postgres 15 nulls not equals. It and unique constraints not worked for NULL value
                 (
                     "remote_system",
-                    models.CharField(
-                        "Remote System", max_length=24, null=False, blank=True, default=""
-                    ),
+                    models.CharField(max_length=24, null=False, blank=True, default=""),
                 ),
             ),
         )
@@ -80,6 +71,6 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "watcher_wait_ts",
-            models.DateTimeField("Last Seen", blank=True, null=True),
+            models.DateTimeField(blank=True, null=True),
         )
         self.db.create_index("sa_managedobject", ["watcher_wait_ts"], unique=False)

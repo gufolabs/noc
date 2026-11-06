@@ -24,7 +24,6 @@ class Migration(BaseMigration):
             "notification_group",
             models.ForeignKey(
                 NotificationGroup,
-                verbose_name="Notification Group",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

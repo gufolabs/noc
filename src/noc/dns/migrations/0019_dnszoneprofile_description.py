@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnszoneprofile",
             "description",
-            models.TextField("Description", blank=True, null=True),
+            models.TextField(blank=True, null=True),
         )

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DatabaseStorage
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,18 +18,22 @@ from noc.core.model.fields import BinaryField
 class DatabaseStorage(NOCModel):
     """
     Database Storage
+
+    Attributes:
+        name: Name
+        data: Data
+        size: Size
+        mtime: MTime
     """
 
     class Meta:
         app_label = "main"
         db_table = "main_databasestorage"
-        verbose_name = "Database Storage"
-        verbose_name_plural = "Database Storage"
 
-    name = models.CharField("Name", max_length=256, unique=True)
-    data = BinaryField("Data")
-    size = models.IntegerField("Size")
-    mtime = models.DateTimeField("MTime")
+    name = models.CharField(max_length=256, unique=True)
+    data = BinaryField()
+    size = models.IntegerField()
+    mtime = models.DateTimeField()
 
     # Options for DatabaseStorage
 

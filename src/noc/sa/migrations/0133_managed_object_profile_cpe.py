@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "cpe_segment_policy",
             models.CharField(
-                "CPE Segment Policy",
                 max_length=1,
                 choices=[("C", "From controller"), ("L", "From linked object")],
                 default="C",
@@ -32,5 +31,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "cpe_cooldown",
-            models.IntegerField("CPE cooldown, days", default=0),
+            models.IntegerField(default=0),
         )

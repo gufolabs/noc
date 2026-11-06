@@ -18,15 +18,12 @@ class Migration(BaseMigration):
         AdministrativeDomain = self.db.mock_model(
             model_name="AdministrativeDomain", db_table="sa_administrativedomain"
         )
-        self.db.add_column(
-            "sa_administrativedomain", "tags", TagsField("Tags", null=True, blank=True)
-        )
+        self.db.add_column("sa_administrativedomain", "tags", TagsField(null=True, blank=True))
         self.db.add_column(
             "sa_administrativedomain",
             "parent",
             models.ForeignKey(
                 AdministrativeDomain,
-                verbose_name="Parent",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

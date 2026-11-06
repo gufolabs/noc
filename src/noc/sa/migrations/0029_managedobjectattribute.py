@@ -20,15 +20,13 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobjectattribute",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "managed_object",
-                    models.ForeignKey(
-                        ManagedObject, verbose_name="Managed Object", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(ManagedObject, on_delete=models.CASCADE),
                 ),
-                ("key", models.CharField("Key", max_length=64)),
-                ("value", models.CharField("Value", max_length=4096, blank=True, null=True)),
+                ("key", models.CharField(max_length=64)),
+                ("value", models.CharField(max_length=4096, blank=True, null=True)),
             ),
         )
         self.db.create_index("sa_managedobjectattribute", ["managed_object_id", "key"], unique=True)

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObjectProfile
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -176,19 +176,84 @@ rule_lock = Lock()
     clean_lazy_labels="managedobjectprofile",
 )
 class ManagedObjectProfile(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+        level: Level
+        shape_overlay_position: S.O. Position
+        shape_overlay_form: S.O. Form
+        shape_title_template: Shape Title template
+        name_template: Name template
+        fqdn_suffix: FQDN suffix
+        address_resolution_policy: Address Resolution Policy
+        enable_ping: Enable ping check
+        ping_interval: Ping interval
+        ping_policy: Ping check policy
+        ping_size: Ping packet size
+        ping_count: Ping packets count
+        ping_timeout_ms: Ping timeout (ms)
+        report_ping_rtt: Report RTT
+        report_ping_attempts: Report Attempts
+        ping_time_expr_policy: Policy Off Hours
+        weight: Alarm weight
+        card: Card name
+        card_title_template: Card title template
+        box_discovery_running_policy: Box Running Policy
+        box_discovery_param_data_conflict_resolve_policy: Box ParamData Conflict Resolve Policy
+        periodic_discovery_running_policy: Periodic Running Policy
+        periodic_discovery_mac_filter_policy: Periodic MAC Collect Policy
+        periodic_discovery_cpestatus_policy: CPE Status Policy
+        access_preference: Access Preference
+        autosegmentation_level_limit: Level
+        escalation_policy: Escalation Policy
+        box_discovery_alarm_policy: Box Discovery Alarm Policy
+        periodic_discovery_alarm_policy: Periodic Discovery Alarm Policy
+        box_discovery_fatal_alarm_weight: Box Fatal Alarm Weight
+        box_discovery_alarm_weight: Box Alarm Weight
+        periodic_discovery_fatal_alarm_weight: Box Fatal Alarm Weight
+        periodic_discovery_alarm_weight: Periodic Alarm Weight
+        box_discovery_telemetry_sample: Box Discovery Telemetry Sample
+        periodic_discovery_telemetry_sample: Box Discovery Telemetry Sample
+        cli_session_policy: CLI Session Policy
+        cli_privilege_policy: CLI Privilege Policy
+        event_processing_policy: Event Processing Policy
+        syslog_archive_policy: SYSLOG Archive Policy
+        neighbor_cache_ttl: Neighbor Cache TTL
+        vlan_interface_discovery: VLAN Interface Discovery Policy
+        vlan_vlandb_discovery: VLAN DB Discovery Policy
+        config_policy: Config Policy
+        config_fetch_policy: Config Fetch Policy
+        config_mirror_policy: Config Mirror Policy
+        config_validation_policy: Config Validation Policy
+        interface_discovery_policy: Interface Discovery Policy
+        caps_discovery_policy: Caps Discovery Policy
+        vlan_discovery_policy: VLAN Discovery Policy
+        bgpeer_discovery_policy: BGP Peer Discovery Policy
+        new_platform_creation_policy: New Platform Creation Policy
+        denied_firmware_policy: Firmware Policy
+        beef_policy: Beef Policy
+        confdb_raw_policy: ConfDB Raw Policy
+        metrics: Metric Config Items
+        dynamic_classification_policy: Dynamic Classification Policy
+        match_rules: Match Dynamic Rules
+        trapcollector_storm_policy: Trapcollector Storm Policy
+        style: Style
+        bgppeer_profile: PeerProfile
+        config_download_template: Config Mirror Template
+        config_mirror_template: Config Mirror Template
+        beef_path_template: Beef Path Template
+    """
+
     class Meta:
-        verbose_name = _("Managed Object Profile")
-        verbose_name_plural = _("Managed Object Profiles")
         db_table = "sa_managedobjectprofile"
         app_label = "sa"
         ordering = ["name"]
 
-    name = models.CharField(_("Name"), max_length=64, unique=True)
-    description = models.TextField(_("Description"), blank=True, null=True)
-    level = models.IntegerField(_("Level"), default=25)
-    style = models.ForeignKey(
-        Style, verbose_name=_("Style"), blank=True, null=True, on_delete=models.CASCADE
-    )
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(blank=True, null=True)
+    level = models.IntegerField(default=25)
+    style = models.ForeignKey(Style, blank=True, null=True, on_delete=models.CASCADE)
     # Workflow
     workflow: Workflow = DocumentReferenceField(
         Workflow,
@@ -200,30 +265,25 @@ class ManagedObjectProfile(NOCModel):
     glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = models.CharField(
-        "S.O. Position",
         max_length=2,
         choices=[(x.value, x.value) for x in ShapeOverlayPosition],
         null=True,
         blank=True,
     )
     shape_overlay_form = models.CharField(
-        "S.O. Form",
         max_length=1,
         choices=[(x.value, x.value) for x in ShapeOverlayForm],
         null=True,
         blank=True,
     )
-    shape_title_template = models.CharField(
-        _("Shape Title template"), max_length=256, blank=True, null=True
-    )
+    shape_title_template = models.CharField(max_length=256, blank=True, null=True)
     # Name restrictions
     # Regular expression to check name format
-    name_template = models.CharField(_("Name template"), max_length=256, blank=True, null=True)
+    name_template = models.CharField(max_length=256, blank=True, null=True)
     # Suffix for ManagedObject's FQDN
-    fqdn_suffix = models.CharField(_("FQDN suffix"), max_length=256, null=True, blank=True)
+    fqdn_suffix = models.CharField(max_length=256, null=True, blank=True)
     # Policy for MO address resolution from FQDN
     address_resolution_policy = models.CharField(
-        _("Address Resolution Policy"),
         choices=[("D", "Disabled"), ("O", "Once"), ("E", "Enabled")],
         max_length=1,
         null=False,
@@ -234,32 +294,27 @@ class ManagedObjectProfile(NOCModel):
     resolver_handler = DocumentReferenceField(Handler, null=True, blank=True)
     # @todo: Name validation function
     # FM settings
-    enable_ping = models.BooleanField(_("Enable ping check"), default=True)
-    ping_interval = models.IntegerField(_("Ping interval"), default=60)
+    enable_ping = models.BooleanField(default=True)
+    ping_interval = models.IntegerField(default=60)
     ping_policy = models.CharField(
-        _("Ping check policy"),
         max_length=1,
         choices=[("f", "First Success"), ("a", "All Successes")],
         default="f",
     )
-    ping_size = models.IntegerField(_("Ping packet size"), default=64)
-    ping_count = models.IntegerField(_("Ping packets count"), default=3)
-    ping_timeout_ms = models.IntegerField(_("Ping timeout (ms)"), default=1000)
-    report_ping_rtt = models.BooleanField(_("Report RTT"), default=False)
-    report_ping_attempts = models.BooleanField(_("Report Attempts"), default=False)
+    ping_size = models.IntegerField(default=64)
+    ping_count = models.IntegerField(default=3)
+    ping_timeout_ms = models.IntegerField(default=1000)
+    report_ping_rtt = models.BooleanField(default=False)
+    report_ping_attempts = models.BooleanField(default=False)
     ping_time_expr_policy = models.CharField(
-        _("Policy Off Hours"),
         choices=[("D", _("Disable ping")), ("E", _("Enable ping but dont follow status"))],
         max_length=1,
         default="D",
     )
     # Additional alarm weight
-    weight = models.IntegerField("Alarm weight", default=0)
-    card = models.CharField(
-        _("Card name"), max_length=256, blank=True, null=True, default="managedobject"
-    )
+    weight = models.IntegerField(default=0)
+    card = models.CharField(max_length=256, blank=True, null=True, default="managedobject")
     card_title_template = models.CharField(
-        _("Card title template"),
         max_length=256,
         default="{{ object.object_profile.name }}: {{ object.name }}",
     )
@@ -272,7 +327,6 @@ class ManagedObjectProfile(NOCModel):
     box_discovery_failed_interval = models.IntegerField(default=10800)
     # Running policy for box discovery
     box_discovery_running_policy = models.CharField(
-        _("Box Running Policy"),
         choices=[("R", _("Require Up")), ("r", _("Require if enabled")), ("i", _("Ignore"))],
         max_length=1,
         default="R",
@@ -365,7 +419,6 @@ class ManagedObjectProfile(NOCModel):
     enable_box_discovery_param_data = models.BooleanField(default=False)
     # Resovle conflict when discovery diff value from object
     box_discovery_param_data_conflict_resolve_policy = models.CharField(
-        _("Box ParamData Conflict Resolve Policy"),
         max_length=1,
         choices=[("M", "Manual"), ("D", "Prefer Discovery"), ("O", "Prefer Object")],
         default="O",
@@ -376,7 +429,6 @@ class ManagedObjectProfile(NOCModel):
     # Periodic discovery repeat interval
     periodic_discovery_interval = models.IntegerField(default=300)
     periodic_discovery_running_policy = models.CharField(
-        _("Periodic Running Policy"),
         choices=[("R", _("Require Up")), ("r", _("Require if enabled")), ("i", _("Ignore"))],
         max_length=1,
         default="R",
@@ -392,7 +444,6 @@ class ManagedObjectProfile(NOCModel):
     periodic_discovery_mac_interval = models.IntegerField(default=0)
     # A - Collect all MAC addresses, I - Collect MAC allowed by Interface Profile
     periodic_discovery_mac_filter_policy = models.CharField(
-        _("Periodic MAC Collect Policy"),
         max_length=1,
         choices=[("I", "Interface Profile"), ("A", "All")],
         default="A",
@@ -408,7 +459,6 @@ class ManagedObjectProfile(NOCModel):
     periodic_discovery_cpestatus_interval = models.IntegerField(default=0)
     # CPE status discovery settings
     periodic_discovery_cpestatus_policy = models.CharField(
-        _("CPE Status Policy"),
         max_length=1,
         choices=[("S", "Status Only"), ("F", "Full")],
         default="S",
@@ -422,7 +472,6 @@ class ManagedObjectProfile(NOCModel):
     clear_links_on_serial_change = models.BooleanField(default=False)
     hk_handler = DocumentReferenceField(Handler, null=True, blank=True)
     access_preference = models.CharField(
-        "Access Preference",
         max_length=8,
         choices=[("S", "SNMP Only"), ("C", "CLI Only"), ("SC", "SNMP, CLI"), ("CS", "CLI, SNMP")],
         default="CS",
@@ -455,7 +504,7 @@ class ManagedObjectProfile(NOCModel):
     # Objects can be autosegmented by *o* and *i* policy
     # only if their level below *autosegmentation_level_limit*
     # 0 - disable
-    autosegmentation_level_limit = models.IntegerField(_("Level"), default=0)
+    autosegmentation_level_limit = models.IntegerField(default=0)
     # Jinja2 tempplate for segment name
     # object and interface context variables are exist
     autosegmentation_segment_name = models.CharField(max_length=255, default="{{object.name}}")
@@ -474,68 +523,55 @@ class ManagedObjectProfile(NOCModel):
     )
     # Object alarms can be escalated
     escalation_policy = models.CharField(
-        "Escalation Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable"), ("R", "Escalate as Depended")],
         default="E",
     )
     # Raise alarms on discovery problems
     box_discovery_alarm_policy = models.CharField(
-        "Box Discovery Alarm Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable")],
         default="E",
     )
     periodic_discovery_alarm_policy = models.CharField(
-        "Periodic Discovery Alarm Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable")],
         default="E",
     )
-    box_discovery_fatal_alarm_weight = models.IntegerField("Box Fatal Alarm Weight", default=10)
-    box_discovery_alarm_weight = models.IntegerField("Box Alarm Weight", default=1)
-    periodic_discovery_fatal_alarm_weight = models.IntegerField(
-        "Box Fatal Alarm Weight", default=10
-    )
-    periodic_discovery_alarm_weight = models.IntegerField("Periodic Alarm Weight", default=1)
+    box_discovery_fatal_alarm_weight = models.IntegerField(default=10)
+    box_discovery_alarm_weight = models.IntegerField(default=1)
+    periodic_discovery_fatal_alarm_weight = models.IntegerField(default=10)
+    periodic_discovery_alarm_weight = models.IntegerField(default=1)
     # Telemetry
-    box_discovery_telemetry_sample = models.IntegerField(
-        "Box Discovery Telemetry Sample", default=0
-    )
-    periodic_discovery_telemetry_sample = models.IntegerField(
-        "Box Discovery Telemetry Sample", default=0
-    )
+    box_discovery_telemetry_sample = models.IntegerField(default=0)
+    periodic_discovery_telemetry_sample = models.IntegerField(default=0)
     # CLI Sessions
     cli_session_policy = models.CharField(
-        "CLI Session Policy", max_length=1, choices=[("E", "Enable"), ("D", "Disable")], default="E"
+        max_length=1, choices=[("E", "Enable"), ("D", "Disable")], default="E"
     )
     # CLI privilege policy
     cli_privilege_policy = models.CharField(
-        "CLI Privilege Policy",
         max_length=1,
         choices=[("E", "Raise privileges"), ("D", "Do not raise")],
         default="E",
     )
     # Event processing policy
     event_processing_policy = models.CharField(
-        "Event Processing Policy",
         max_length=1,
         choices=[("E", "Process Events"), ("D", "Drop events")],
         default="E",
     )
     # Collect and archive syslog events
     syslog_archive_policy = models.CharField(
-        "SYSLOG Archive Policy",
         max_length=1,
         choices=[("E", "Enable"), ("D", "Disable")],
         default="D",
     )
     # Cache protocol neighbors up to *neighbor_cache_ttl* seconds
     # 0 - disable cache
-    neighbor_cache_ttl = models.IntegerField("Neighbor Cache TTL", default=0)
+    neighbor_cache_ttl = models.IntegerField(default=0)
     # VLAN Discovery
     vlan_interface_discovery = models.CharField(
-        "VLAN Interface Discovery Policy",
         max_length=1,
         choices=[
             ("D", "Disable"),
@@ -546,7 +582,6 @@ class ManagedObjectProfile(NOCModel):
         default="D",
     )
     vlan_vlandb_discovery = models.CharField(
-        "VLAN DB Discovery Policy",
         max_length=1,
         choices=[
             ("D", "Disable"),
@@ -572,11 +607,10 @@ class ManagedObjectProfile(NOCModel):
     address_profile_confdb = DocumentReferenceField(AddressProfile, null=True, blank=True)
     # BGP Peer discovery profiles
     bgppeer_profile: PeerProfile | None = models.ForeignKey(
-        PeerProfile, verbose_name=_("PeerProfile"), blank=True, null=True, on_delete=models.CASCADE
+        PeerProfile, blank=True, null=True, on_delete=models.CASCADE
     )
     # Config policy
     config_policy = models.CharField(
-        _("Config Policy"),
         max_length=1,
         choices=[
             ("s", "Script"),
@@ -589,14 +623,12 @@ class ManagedObjectProfile(NOCModel):
     config_download_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     config_download_template = models.ForeignKey(
         Template,
-        verbose_name=_("Config Mirror Template"),
         blank=True,
         null=True,
         related_name="config_download_objects_set",
         on_delete=models.CASCADE,
     )
     config_fetch_policy = models.CharField(
-        _("Config Fetch Policy"),
         max_length=1,
         choices=[("s", "Startup"), ("r", "Running")],
         default="r",
@@ -605,21 +637,18 @@ class ManagedObjectProfile(NOCModel):
     config_mirror_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     config_mirror_template = models.ForeignKey(
         Template,
-        verbose_name=_("Config Mirror Template"),
         blank=True,
         null=True,
         related_name="config_mirror_objects_set",
         on_delete=models.CASCADE,
     )
     config_mirror_policy = models.CharField(
-        _("Config Mirror Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
         default="C",
     )
     # Config validation settings
     config_validation_policy = models.CharField(
-        _("Config Validation Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
         default="C",
@@ -627,7 +656,6 @@ class ManagedObjectProfile(NOCModel):
     object_validation_policy = DocumentReferenceField(ObjectValidationPolicy, null=True, blank=True)
     # Interface discovery settings
     interface_discovery_policy = models.CharField(
-        _("Interface Discovery Policy"),
         max_length=1,
         choices=[
             ("s", "Script"),
@@ -639,7 +667,6 @@ class ManagedObjectProfile(NOCModel):
     )
     # Caps discovery settings
     caps_discovery_policy = models.CharField(
-        _("Caps Discovery Policy"),
         max_length=1,
         choices=[
             ("s", "Script"),
@@ -651,7 +678,6 @@ class ManagedObjectProfile(NOCModel):
     )
     # VLAN discovery settings
     vlan_discovery_policy = models.CharField(
-        _("VLAN Discovery Policy"),
         max_length=1,
         choices=[
             ("s", "Script"),
@@ -662,7 +688,6 @@ class ManagedObjectProfile(NOCModel):
         default="s",
     )
     bgpeer_discovery_policy = models.CharField(
-        _("BGP Peer Discovery Policy"),
         max_length=1,
         choices=[
             ("s", "Script"),
@@ -674,14 +699,12 @@ class ManagedObjectProfile(NOCModel):
     )
     # Behaviour on new platform detection in version check
     new_platform_creation_policy = models.CharField(
-        _("New Platform Creation Policy"),
         max_length=1,
         choices=[("C", "Create"), ("A", "Alarm")],
         default="C",
     )
     # Behavior on denied firmware detection
     denied_firmware_policy = models.CharField(
-        _("Firmware Policy"),
         max_length=1,
         choices=[
             ("I", "Ignore"),
@@ -695,21 +718,18 @@ class ManagedObjectProfile(NOCModel):
     beef_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     beef_path_template = models.ForeignKey(
         Template,
-        verbose_name=_("Beef Path Template"),
         blank=True,
         null=True,
         related_name="beef_objects_set",
         on_delete=models.CASCADE,
     )
     beef_policy = models.CharField(
-        _("Beef Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
         default="D",
     )
     # ConfDB policies
     confdb_raw_policy = models.CharField(
-        _("ConfDB Raw Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("E", "Enable")],
         default="D",
@@ -728,7 +748,6 @@ class ManagedObjectProfile(NOCModel):
     snmp_rate_limit = models.IntegerField(default=0)
     metrics_default_interval = models.IntegerField(default=300, validators=[MinValueValidator(0)])
     metrics: list[ModelMetricConfigItem] = PydanticField(
-        "Metric Config Items",
         schema=MetricConfigItems,
         blank=True,
         null=True,
@@ -739,13 +758,11 @@ class ManagedObjectProfile(NOCModel):
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     # Dynamic Profile Classification
     dynamic_classification_policy = models.CharField(
-        _("Dynamic Classification Policy"),
         max_length=1,
         choices=[("D", "Disable"), ("R", "By Rule")],
         default="R",
     )
     match_rules: list[MatchRule] = PydanticField(
-        _("Match Dynamic Rules"),
         schema=MatchRules,
         blank=True,
         null=True,
@@ -755,7 +772,6 @@ class ManagedObjectProfile(NOCModel):
     )
     # Trapcollector Storm Policy
     trapcollector_storm_policy = models.CharField(
-        _("Trapcollector Storm Policy"),
         max_length=1,
         choices=[
             ("D", "Disabled"),

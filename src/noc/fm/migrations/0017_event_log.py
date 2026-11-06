@@ -23,17 +23,17 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventlog",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("event", models.ForeignKey(Event, verbose_name=Event, on_delete=models.CASCADE)),
-                ("timestamp", models.DateTimeField("Timestamp")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("event", models.ForeignKey(Event, on_delete=models.CASCADE)),
+                ("timestamp", models.DateTimeField()),
                 (
                     "from_status",
-                    models.CharField("From Status", max_length=1, choices=EVENT_STATUS_CHOICES),
+                    models.CharField(max_length=1, choices=EVENT_STATUS_CHOICES),
                 ),
                 (
                     "to_status",
-                    models.CharField("To Status", max_length=1, choices=EVENT_STATUS_CHOICES),
+                    models.CharField(max_length=1, choices=EVENT_STATUS_CHOICES),
                 ),
-                ("message", models.TextField("Message")),
+                ("message", models.TextField()),
             ),
         )

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Organisation model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -19,22 +19,29 @@ ORG_TYPE_CHOICES = [(x, x) for x in ("IANA", "RIR", "NIR", "LIR", "OTHER")]
 
 @on_delete_check(check=[("peer.AS", "organisation")])
 class Organisation(NOCModel):
+    """
+    Attributes:
+        organisation: Organisation
+        org_name: Org. Name
+        org_type: Org. Type
+        address: Address
+        mnt_ref: Mnt. Ref
+    """
+
     class Meta:
-        verbose_name = "Organisation"
-        verbose_name_plural = "Organisations"
         db_table = "peer_organisation"
         app_label = "peer"
 
     # NIC Handle
-    organisation = models.CharField("Organisation", max_length=128, unique=True)
+    organisation = models.CharField(max_length=128, unique=True)
     # org-name:
-    org_name = models.CharField("Org. Name", max_length=128)
+    org_name = models.CharField(max_length=128)
     # org-type
-    org_type = models.CharField("Org. Type", max_length=64, choices=ORG_TYPE_CHOICES)
+    org_type = models.CharField(max_length=64, choices=ORG_TYPE_CHOICES)
     # address: will be prepended automatically for each line
-    address = models.TextField("Address")
+    address = models.TextField()
     # mnt-ref
-    mnt_ref = models.ForeignKey(Maintainer, verbose_name="Mnt. Ref", on_delete=models.CASCADE)
+    mnt_ref = models.ForeignKey(Maintainer, on_delete=models.CASCADE)
 
     def __str__(self):
         return f" {self.organisation} ({self.org_name})"

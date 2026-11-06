@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DNSZoneProfile model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -21,7 +21,6 @@ from noc.config import config
 from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
-from noc.core.translation import ugettext as _
 from noc.main.models.notificationgroup import NotificationGroup
 
 from .dnsserver import DNSServer
@@ -36,36 +35,40 @@ class DNSZoneProfile(NOCModel):
     """
     DNS Zone profile is a set of common parameters, shared between zones.
 
+    Attributes:
+        notification_group: Notification group to use when zone group is not set
+        name: Name
+        zone_soa: SOA
+        zone_contact: Contact
+        zone_refresh: Refresh
+        zone_retry: Retry
+        zone_expire: Expire
+        zone_ttl: TTL
+        description: Description
+        masters: Masters
+        slaves: Slaves
     """
 
     class Meta:
-        verbose_name = _("DNS Zone Profile")
-        verbose_name_plural = _("DNS Zone Profiles")
         db_table = "dns_dnszoneprofile"
         app_label = "dns"
 
-    name = models.CharField(_("Name"), max_length=32, unique=True)
-    masters = models.ManyToManyField(
-        DNSServer, verbose_name=_("Masters"), related_name="masters", blank=True
-    )
-    slaves = models.ManyToManyField(
-        DNSServer, verbose_name=_("Slaves"), related_name="slaves", blank=True
-    )
-    zone_soa = models.CharField(_("SOA"), max_length=64)
-    zone_contact = models.CharField(_("Contact"), max_length=64)
-    zone_refresh = models.IntegerField(_("Refresh"), default=3600)
-    zone_retry = models.IntegerField(_("Retry"), default=900)
-    zone_expire = models.IntegerField(_("Expire"), default=86400)
-    zone_ttl = models.IntegerField(_("TTL"), default=3600)
+    name = models.CharField(max_length=32, unique=True)
+    masters = models.ManyToManyField(DNSServer, related_name="masters", blank=True)
+    slaves = models.ManyToManyField(DNSServer, related_name="slaves", blank=True)
+    zone_soa = models.CharField(max_length=64)
+    zone_contact = models.CharField(max_length=64)
+    zone_refresh = models.IntegerField(default=3600)
+    zone_retry = models.IntegerField(default=900)
+    zone_expire = models.IntegerField(default=86400)
+    zone_ttl = models.IntegerField(default=3600)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name=_("Notification Group"),
         null=True,
         blank=True,
-        help_text=_("Notification group to use when zone group is not set"),
         on_delete=models.CASCADE,
     )
-    description = models.TextField(_("Description"), blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)

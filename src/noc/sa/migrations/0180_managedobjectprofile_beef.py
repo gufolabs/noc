@@ -27,7 +27,6 @@ class Migration(BaseMigration):
             "beef_path_template",
             models.ForeignKey(
                 Template,
-                verbose_name="Config Mirror Template",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -37,7 +36,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "beef_policy",
             models.CharField(
-                "Beef Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("A", "Always"), ("C", "Change")],
                 default="D",
