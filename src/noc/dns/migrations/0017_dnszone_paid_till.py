@@ -14,6 +14,4 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "dns_dnszone", "paid_till", models.DateField("Paid Tille", null=True, blank=True)
-        )
+        self.db.add_column("dns_dnszone", "paid_till", models.DateField(null=True, blank=True))

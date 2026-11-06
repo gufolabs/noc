@@ -14,6 +14,4 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "main_customfield", "is_hidden", models.BooleanField("Is Hidden", default=False)
-        )
+        self.db.add_column("main_customfield", "is_hidden", models.BooleanField(default=False))

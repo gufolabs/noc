@@ -29,11 +29,10 @@ class Person(NOCModel):
         fax_no: fax-no
         email: email
         extra: extra
+        rir: RIR
     """
 
     class Meta:
-        verbose_name = "Person"
-        verbose_name_plural = "Persons"
         db_table = "peer_person"
         app_label = "peer"
 
@@ -44,7 +43,7 @@ class Person(NOCModel):
     phone = models.TextField()
     fax_no = models.TextField(blank=True, null=True)
     email = models.TextField()
-    rir = models.ForeignKey(RIR, verbose_name="RIR", on_delete=models.CASCADE)
+    rir = models.ForeignKey(RIR, on_delete=models.CASCADE)
     extra = models.TextField(blank=True, null=True)
     rpsl = GridVCSField("rpsl_person")
 

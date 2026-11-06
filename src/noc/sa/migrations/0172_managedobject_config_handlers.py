@@ -25,17 +25,17 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "config_filter_handler",
-            models.CharField("Config Filter pyRule", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "config_diff_filter_handler",
-            models.CharField("Config Diff Filter Handler", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "config_validation_handler",
-            models.CharField("Config Validation Handler", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         pmap = {}  # Check use one pyrule on some function
         # Migrate existing pyrules

@@ -32,8 +32,6 @@ class Language(NOCModel):
     class Meta:
         app_label = "main"
         db_table = "main_language"
-        verbose_name = "Language"
-        verbose_name_plural = "Languages"
         ordering = ["name"]
 
     name = models.CharField(max_length=32, unique=True)

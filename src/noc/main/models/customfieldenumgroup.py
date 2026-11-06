@@ -27,8 +27,6 @@ class CustomFieldEnumGroup(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Enum Group"
-        verbose_name_plural = "Enum Groups"
         db_table = "main_customfieldenumgroup"
         app_label = "main"
 

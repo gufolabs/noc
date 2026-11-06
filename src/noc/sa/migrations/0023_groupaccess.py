@@ -23,12 +23,11 @@ class Migration(BaseMigration):
             "sa_groupaccess",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("group", models.ForeignKey(Group, verbose_name="Group", on_delete=models.CASCADE)),
+                ("group", models.ForeignKey(Group, on_delete=models.CASCADE)),
                 (
                     "selector",
                     models.ForeignKey(
                         ManagedObjectSelector,
-                        verbose_name="Object Selector",
                         on_delete=models.CASCADE,
                     ),
                 ),

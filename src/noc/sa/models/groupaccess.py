@@ -11,20 +11,22 @@ from django.db import models
 # NOC modules
 from noc.aaa.models.group import Group
 from noc.core.model.base import NOCModel
-from noc.core.translation import ugettext as _
 
 from .administrativedomain import AdministrativeDomain
 
 
 class GroupAccess(NOCModel):
+    """
+    Attributes:
+        group: Group
+    """
+
     class Meta:
-        verbose_name = _("Group Access")
-        verbose_name_plural = _("Group Access")
         db_table = "sa_groupaccess"
         app_label = "sa"
         ordering = ["group"]
 
-    group = models.ForeignKey(Group, verbose_name=_("Group"), on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     administrative_domain = models.ForeignKey(
         AdministrativeDomain, null=True, blank=True, on_delete=models.CASCADE
     )

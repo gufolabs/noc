@@ -55,8 +55,6 @@ class PeerProfile(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Peer Profile"
-        verbose_name_plural = "Peer Profiles"
         db_table = "peer_peerprofile"
         app_label = "peer"
 

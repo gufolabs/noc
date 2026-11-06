@@ -29,8 +29,6 @@ class DatabaseStorage(NOCModel):
     class Meta:
         app_label = "main"
         db_table = "main_databasestorage"
-        verbose_name = "Database Storage"
-        verbose_name_plural = "Database Storage"
 
     name = models.CharField(max_length=256, unique=True)
     data = BinaryField()

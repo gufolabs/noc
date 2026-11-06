@@ -529,24 +529,26 @@ class ManagedObject(NOCModel):
         snmp_priv_proto: Privacy protocol
         snmp_priv_key: Privacy key
         snmp_ctx_name: Context name
+        administrative_domain: Administrative Domain
+        project: Project
+        object_profile: Object Profile
+        auth_profile: Auth Profile
+        vrf: VRF
+        controller: Controller
     """
 
     class Meta:
-        verbose_name = "Managed Object"
-        verbose_name_plural = "Managed Objects"
         db_table = "sa_managedobject"
         app_label = "sa"
 
     name: str = CharField(max_length=64, unique=True)
     container: Object | None = DocumentReferenceField(Object, null=True, blank=True)
     administrative_domain: AdministrativeDomain = CachedForeignKey(
-        AdministrativeDomain, verbose_name="Administrative Domain", on_delete=CASCADE
+        AdministrativeDomain, on_delete=CASCADE
     )
     segment: NetworkSegment = DocumentReferenceField(NetworkSegment, null=False, blank=False)
     pool: Pool = DocumentReferenceField(Pool, null=False, blank=False)
-    project = CachedForeignKey(
-        Project, verbose_name="Project", on_delete=CASCADE, null=True, blank=True
-    )
+    project = CachedForeignKey(Project, on_delete=CASCADE, null=True, blank=True)
     # Workflow
     state: State = DocumentReferenceField(State, null=True, blank=True)
     # Last state change
@@ -573,13 +575,11 @@ class ManagedObject(NOCModel):
     # Firmware version to upgrade
     # Empty, when upgrade not scheduled
     next_version: Firmware | None = DocumentReferenceField(Firmware, null=True, blank=True)
-    object_profile: ManagedObjectProfile = CachedForeignKey(
-        ManagedObjectProfile, verbose_name="Object Profile", on_delete=CASCADE
-    )
+    object_profile: ManagedObjectProfile = CachedForeignKey(ManagedObjectProfile, on_delete=CASCADE)
     description = CharField(max_length=256, null=True, blank=True)
     # Access
     auth_profile: AuthProfile | None = CachedForeignKey(
-        AuthProfile, verbose_name="Auth Profile", null=True, blank=True, on_delete=CASCADE
+        AuthProfile, null=True, blank=True, on_delete=CASCADE
     )
     scheme = IntegerField(choices=SCHEME_CHOICES)
     address: str = INETField(null=True, blank=True)
@@ -644,13 +644,11 @@ class ManagedObject(NOCModel):
     # CM
     config = GridVCSField("config")
     # Default VRF
-    vrf = ForeignKey("ip.VRF", verbose_name="VRF", blank=True, null=True, on_delete=CASCADE)
+    vrf = ForeignKey("ip.VRF", blank=True, null=True, on_delete=CASCADE)
     # Reference to CPE
     cpe_id = DocumentReferenceField("inv.CPE", null=True, blank=True)
     # Reference to controller, when object is CPE
-    controller: ManagedObject = ForeignKey(
-        "self", verbose_name="Controller", blank=True, null=True, on_delete=CASCADE
-    )
+    controller: ManagedObject = ForeignKey("self", blank=True, null=True, on_delete=CASCADE)
     # Stencils
     glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
@@ -3324,17 +3322,16 @@ class ManagedObjectAttribute(NOCModel):
     Attributes:
         key: Key
         value: Value
+        managed_object: Managed Object
     """
 
     class Meta:
-        verbose_name = "Managed Object Attribute"
-        verbose_name_plural = "Managed Object Attributes"
         db_table = "sa_managedobjectattribute"
         app_label = "sa"
         unique_together = [("managed_object", "key")]
         ordering = ["managed_object", "key"]
 
-    managed_object = ForeignKey(ManagedObject, verbose_name="Managed Object", on_delete=CASCADE)
+    managed_object = ForeignKey(ManagedObject, on_delete=CASCADE)
     key = CharField(max_length=64)
     value = CharField(max_length=4096, blank=True, null=True)
 
@@ -3350,17 +3347,14 @@ class ManagedObjectStatus(NOCModel):
     """
     Attributes:
         last: Last update Time
+        managed_object: Managed Object
     """
 
     class Meta:
-        verbose_name = "Managed Object Status"
-        verbose_name_plural = "Managed Object Status"
         db_table = "sa_objectstatus"
         app_label = "sa"
 
-    managed_object = ForeignKey(
-        ManagedObject, verbose_name="Managed Object", on_delete=CASCADE, unique=True
-    )
+    managed_object = ForeignKey(ManagedObject, on_delete=CASCADE, unique=True)
     status = BooleanField()
     last = DateTimeField(auto_now_add=True)
 
@@ -3515,11 +3509,10 @@ class ManagedObjectWatchers(NOCModel):
         key: Effect Key
         after: Activate after time
         remote_system: Effect Key
+        managed_object: Managed Object
     """
 
     class Meta:
-        verbose_name = "Managed Object Watchers"
-        verbose_name_plural = "Managed Object Watchers"
         db_table = "sa_managedobjectwatchers"
         app_label = "sa"
         # For Maintenance
@@ -3535,7 +3528,6 @@ class ManagedObjectWatchers(NOCModel):
 
     managed_object = ForeignKey(
         ManagedObject,
-        verbose_name="Managed Object",
         unique=False,
         primary_key=False,
         on_delete=CASCADE,

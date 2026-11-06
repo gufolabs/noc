@@ -29,8 +29,6 @@ class VRFGroup(NOCModel):
     """
 
     class Meta:
-        verbose_name = _("VRF Group")
-        verbose_name_plural = _("VRF Groups")
         db_table = "ip_vrfgroup"
         app_label = "ip"
         ordering = ["name"]

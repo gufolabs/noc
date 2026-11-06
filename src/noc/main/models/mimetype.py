@@ -28,8 +28,6 @@ class MIMEType(NOCModel):
     class Meta:
         app_label = "main"
         db_table = "main_mimetype"
-        verbose_name = "MIME Type"
-        verbose_name_plural = "MIME Types"
         ordering = ["extension"]
 
     extension = models.CharField(max_length=32, unique=True, validators=[check_extension])

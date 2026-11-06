@@ -20,7 +20,6 @@ class Migration(BaseMigration):
             "config_filter_rule",
             models.ForeignKey(
                 PyRule,
-                verbose_name="Config Filter pyRule",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,
@@ -31,7 +30,6 @@ class Migration(BaseMigration):
             "config_validation_rule",
             models.ForeignKey(
                 PyRule,
-                verbose_name="Config Validation pyRule",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

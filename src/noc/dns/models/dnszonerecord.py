@@ -16,7 +16,6 @@ from django.db import models
 from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_init
-from noc.core.translation import ugettext as _
 from noc.main.models.label import Label
 
 from .dnszone import DNSZone
@@ -35,15 +34,14 @@ class DNSZoneRecord(NOCModel):
         type: Type
         priority: Priority
         content: Content
+        zone: Zone
     """
 
     class Meta:
-        verbose_name = _("DNS Zone Record")
-        verbose_name_plural = _("DNS Zone Records")
         db_table = "dns_dnszonerecord"
         app_label = "dns"
 
-    zone: DNSZone = models.ForeignKey(DNSZone, verbose_name="Zone", on_delete=models.CASCADE)
+    zone: DNSZone = models.ForeignKey(DNSZone, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, blank=True, null=True)
     ttl = models.IntegerField(null=True, blank=True)
     type = models.CharField(max_length=16)

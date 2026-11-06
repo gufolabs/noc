@@ -44,17 +44,17 @@ class AddressRange(NOCModel):
         to_address: To address
         description: Description
         action: Action
+        vrf: VRF
     """
 
     class Meta:
-        verbose_name = _("Address Range")
         db_table = "ip_addressrange"
         app_label = "ip"
         unique_together = [("vrf", "afi", "from_address", "to_address")]
 
     name = models.CharField(max_length=64, unique=True)
     is_active = models.BooleanField(default=True)
-    vrf = models.ForeignKey(VRF, verbose_name=_("VRF"), on_delete=models.CASCADE)
+    vrf = models.ForeignKey(VRF, on_delete=models.CASCADE)
     afi = models.CharField(max_length=1, choices=AFI_CHOICES)
     from_address = CIDRField()
     to_address = CIDRField()

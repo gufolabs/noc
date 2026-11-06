@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "cli_privilege_policy",
             models.CharField(
-                "CLI Privilege Policy",
                 max_length=1,
                 choices=[("E", "Raise privileges"), ("D", "Do not raise")],
                 default="E",
@@ -30,7 +29,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "cli_privilege_policy",
             models.CharField(
-                "CLI Privilege Policy",
                 max_length=1,
                 choices=[("P", "From Profile"), ("E", "Raise privileges"), ("D", "Do not raise")],
                 default="P",

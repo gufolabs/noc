@@ -21,8 +21,8 @@ class Migration(BaseMigration):
             "pm_timeseries",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("name", models.CharField("Name", unique=True, max_length=128)),
-                ("is_enabled", models.BooleanField("Is Enabled?", default=True)),
+                ("name", models.CharField(unique=True, max_length=128)),
+                ("is_enabled", models.BooleanField(default=True)),
             ),
         )
 
@@ -34,12 +34,10 @@ class Migration(BaseMigration):
                 ("id", models.AutoField(primary_key=True)),
                 (
                     "time_series",
-                    models.ForeignKey(
-                        TimeSeries, verbose_name="Time Series", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(TimeSeries, on_delete=models.CASCADE),
                 ),
-                ("timestamp", models.IntegerField("Timestamp")),
-                ("value", models.FloatField("Value", null=True, blank=True)),
+                ("timestamp", models.IntegerField()),
+                ("value", models.FloatField(null=True, blank=True)),
             ),
         )
         self.db.create_index("pm_timeseriesdata", ["timestamp"], unique=False)
@@ -48,7 +46,7 @@ class Migration(BaseMigration):
             "pm_chart",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("name", models.CharField("Name", unique=True, max_length=128)),
+                ("name", models.CharField(unique=True, max_length=128)),
             ),
         )
 
@@ -56,7 +54,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "pm_chart_time_series",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("chart", models.ForeignKey(Chart, null=False, on_delete=models.CASCADE)),
                 ("timeseries", models.ForeignKey(TimeSeries, null=False, on_delete=models.CASCADE)),
             ),

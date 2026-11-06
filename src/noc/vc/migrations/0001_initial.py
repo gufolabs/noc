@@ -18,9 +18,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "vc_vcdomain",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
             ),
         )
 
@@ -31,15 +31,15 @@ class Migration(BaseMigration):
         self.db.create_table(
             "vc_vc",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "vc_domain",
-                    models.ForeignKey(VCDomain, verbose_name="VC Domain", on_delete=models.CASCADE),
+                    models.ForeignKey(VCDomain, on_delete=models.CASCADE),
                 ),
-                ("type", models.CharField("Type", max_length=1)),
-                ("l1", models.IntegerField("Label 1")),
-                ("l2", models.IntegerField("Label 2", default=0)),
-                ("description", models.CharField("Description", max_length=256)),
+                ("type", models.CharField(max_length=1)),
+                ("l1", models.IntegerField()),
+                ("l2", models.IntegerField(default=0)),
+                ("description", models.CharField(max_length=256)),
             ),
         )
         self.db.create_index("vc_vc", ["vc_domain_id", "type", "l1", "l2"], unique=True)

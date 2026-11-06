@@ -18,7 +18,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomainprovisioningconfig",
             "vc_filter",
-            models.ForeignKey(
-                VCFilter, verbose_name="VC Filter", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(VCFilter, null=True, blank=True, on_delete=models.CASCADE),
         )

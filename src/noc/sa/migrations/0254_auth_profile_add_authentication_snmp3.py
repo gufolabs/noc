@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_authprofile",
             "snmp_security_level",
             models.CharField(
-                "SNMP protocol security",
                 max_length=12,
                 choices=[
                     ("Community", "Community"),
@@ -33,13 +32,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_authprofile",
             "snmp_username",
-            models.CharField("SNMP user name", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_authprofile",
             "snmp_auth_proto",
             models.CharField(
-                "Authentication protocol",
                 max_length=3,
                 choices=[("MD5", "MD5"), ("SHA", "SHA")],
                 default="MD5",
@@ -48,13 +46,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_authprofile",
             "snmp_auth_key",
-            models.CharField("Authentication key", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_authprofile",
             "snmp_priv_proto",
             models.CharField(
-                "Privacy protocol",
                 max_length=3,
                 choices=[("DES", "DES"), ("AES", "AES")],
                 default="DES",
@@ -63,12 +60,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_authprofile",
             "snmp_priv_key",
-            models.CharField("Privacy key", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_authprofile",
             "snmp_ctx_name",
-            models.CharField("Context name", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
 
         # Update managedobjects
@@ -76,7 +73,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "snmp_security_level",
             models.CharField(
-                "SNMP protocol security",
                 max_length=12,
                 choices=[
                     ("Community", "Community"),
@@ -90,13 +86,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "snmp_username",
-            models.CharField("SNMP user name", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "snmp_auth_proto",
             models.CharField(
-                "Authentication protocol",
                 max_length=3,
                 choices=[("MD5", "MD5"), ("SHA", "SHA")],
                 default="MD5",
@@ -105,13 +100,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "snmp_auth_key",
-            models.CharField("Authentication key", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "snmp_priv_proto",
             models.CharField(
-                "Privacy protocol",
                 max_length=3,
                 choices=[("DES", "DES"), ("AES", "AES")],
                 default="DES",
@@ -120,10 +114,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "snmp_priv_key",
-            models.CharField("Privacy key", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "snmp_ctx_name",
-            models.CharField("Context name", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )

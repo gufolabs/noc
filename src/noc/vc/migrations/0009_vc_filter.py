@@ -19,9 +19,9 @@ class Migration(BaseMigration):
             "vc_vcfilter",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("name", models.CharField("Name", unique=True, max_length=64)),
-                ("expression", models.CharField("Expression", max_length=256)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("name", models.CharField(unique=True, max_length=64)),
+                ("expression", models.CharField(max_length=256)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
         # Add "Any VLAN filter"

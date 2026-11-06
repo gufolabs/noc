@@ -22,18 +22,16 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_schedule",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("periodic_name", models.CharField("Periodic Task", max_length=64)),
-                ("is_enabled", models.BooleanField("Enabled?", default=False)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("periodic_name", models.CharField(max_length=64)),
+                ("is_enabled", models.BooleanField(default=False)),
                 (
                     "time_pattern",
-                    models.ForeignKey(
-                        TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(TimePattern, on_delete=models.CASCADE),
                 ),
-                ("run_every", models.PositiveIntegerField("Run Every (secs)", default=86400)),
-                ("timeout", models.PositiveIntegerField("Timeout (secs)", null=True, blank=True)),
-                ("last_run", models.DateTimeField("Last Run", blank=True, null=True)),
-                ("last_status", models.BooleanField("Last Status", default=True)),
+                ("run_every", models.PositiveIntegerField(default=86400)),
+                ("timeout", models.PositiveIntegerField(null=True, blank=True)),
+                ("last_run", models.DateTimeField(blank=True, null=True)),
+                ("last_status", models.BooleanField(default=True)),
             ),
         )

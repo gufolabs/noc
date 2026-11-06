@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.execute("DELETE FROM sa_maptask")
         self.db.execute("DELETE FROM sa_reducetask")
         self.db.execute("COMMIT")
-        self.db.add_column("sa_reducetask", "script", models.TextField("Script"))
+        self.db.add_column("sa_reducetask", "script", models.TextField())
         self.db.delete_column("sa_reducetask", "reduce_script")

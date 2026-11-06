@@ -25,7 +25,6 @@ class Migration(BaseMigration):
             "config_download_template",
             models.ForeignKey(
                 Template,
-                verbose_name="Config download Template",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -35,7 +34,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "config_policy",
             models.CharField(
-                "Config download Policy",
                 max_length=1,
                 choices=[
                     ("s", "Script"),
@@ -50,7 +48,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "config_policy",
             models.CharField(
-                "Config download Policy",
                 max_length=1,
                 choices=[
                     ("P", "Profile"),

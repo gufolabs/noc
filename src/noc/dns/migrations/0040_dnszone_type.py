@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "dns_dnszone",
             "type",
             models.CharField(
-                "Type",
                 max_length=1,
                 null=False,
                 blank=False,

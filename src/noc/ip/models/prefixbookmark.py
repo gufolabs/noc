@@ -15,7 +15,6 @@ from django.db.models import Q
 # NOC modules
 from noc.aaa.models.user import User
 from noc.core.model.base import NOCModel
-from noc.core.translation import ugettext as _
 
 from .prefix import Prefix
 
@@ -23,17 +22,19 @@ from .prefix import Prefix
 class PrefixBookmark(NOCModel):
     """
     User Bookmarks
+
+    Attributes:
+        user: User
+        prefix: Prefix
     """
 
     class Meta:
-        verbose_name = _("Prefix Bookmark")
-        verbose_name_plural = _("Prefix Bookmarks")
         db_table = "ip_prefixbookmark"
         app_label = "ip"
         unique_together = [("user", "prefix")]
 
-    user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
-    prefix = models.ForeignKey(Prefix, verbose_name="Prefix", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    prefix = models.ForeignKey(Prefix, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Bookmark at {self.prefix} for {self.user.username}"

@@ -17,7 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_person",
             "type",
-            models.CharField(
-                "type", max_length=1, default="P", choices=[("P", "Person"), ("R", "Role")]
-            ),
+            models.CharField(max_length=1, default="P", choices=[("P", "Person"), ("R", "Role")]),
         )

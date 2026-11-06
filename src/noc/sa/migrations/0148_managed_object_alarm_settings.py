@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "box_discovery_alarm_policy",
             models.CharField(
-                "Box Discovery Alarm Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable")],
                 default="E",
@@ -29,7 +28,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "periodic_discovery_alarm_policy",
             models.CharField(
-                "Periodic Discovery Alarm Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable")],
                 default="E",
@@ -38,25 +36,25 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "box_discovery_fatal_alarm_weight",
-            models.IntegerField("Box Fatal Alarm Weight", default=10),
+            models.IntegerField(default=10),
         )
 
         self.db.add_column(
             "sa_managedobjectprofile",
             "box_discovery_alarm_weight",
-            models.IntegerField("Box Alarm Weight", default=1),
+            models.IntegerField(default=1),
         )
 
         self.db.add_column(
             "sa_managedobjectprofile",
             "periodic_discovery_fatal_alarm_weight",
-            models.IntegerField("Box Fatal Alarm Weight", default=10),
+            models.IntegerField(default=10),
         )
 
         self.db.add_column(
             "sa_managedobjectprofile",
             "periodic_discovery_alarm_weight",
-            models.IntegerField("Periodic Alarm Weight", default=1),
+            models.IntegerField(default=1),
         )
 
         # Object settings
@@ -64,7 +62,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "box_discovery_alarm_policy",
             models.CharField(
-                "Box Discovery Alarm Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
                 default="P",
@@ -74,7 +71,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "periodic_discovery_alarm_policy",
             models.CharField(
-                "Periodic Discovery Alarm Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
                 default="P",

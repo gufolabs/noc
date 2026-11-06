@@ -33,8 +33,6 @@ class PrefixTable(NOCModel):
     """
 
     class Meta:
-        verbose_name = _("Prefix Table")
-        verbose_name_plural = _("Prefix Tables")
         db_table = "main_prefixtable"
         app_label = "main"
         ordering = ["name"]
@@ -88,17 +86,16 @@ class PrefixTablePrefix(NOCModel):
     Attributes:
         afi: Address Family
         prefix: Prefix
+        table: Prefix Table
     """
 
     class Meta:
-        verbose_name = _("Prefix")
-        verbose_name_plural = _("Prefixes")
         app_label = "main"
         db_table = "main_prefixtableprefix"
         unique_together = [("table", "afi", "prefix")]
         ordering = ["table", "afi", "prefix"]
 
-    table = models.ForeignKey(PrefixTable, verbose_name=_("Prefix Table"), on_delete=models.CASCADE)
+    table = models.ForeignKey(PrefixTable, on_delete=models.CASCADE)
     afi = models.CharField(max_length=1, choices=[("4", _("IPv4")), ("6", _("IPv6"))])
     prefix = CIDRField()
 

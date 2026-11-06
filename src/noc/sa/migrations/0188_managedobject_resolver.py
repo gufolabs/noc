@@ -21,13 +21,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "fqdn_suffix",
-            models.CharField("FQDN suffix", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "address_resolution_policy",
             models.CharField(
-                "Address Resolution Policy",
                 choices=[("D", "Disabled"), ("O", "Once"), ("E", "Enabled")],
                 max_length=1,
                 null=False,
@@ -44,13 +43,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "fqdn",
-            models.CharField("FQDN", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )
         self.db.add_column(
             "sa_managedobject",
             "address_resolution_policy",
             models.CharField(
-                "Address Resolution Policy",
                 choices=[("P", "Profile"), ("D", "Disabled"), ("O", "Once"), ("E", "Enabled")],
                 max_length=1,
                 null=False,

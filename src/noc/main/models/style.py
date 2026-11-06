@@ -63,8 +63,6 @@ class Style(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Style"
-        verbose_name_plural = "Styles"
         ordering = ["name"]
         app_label = "main"
         db_table = "main_style"

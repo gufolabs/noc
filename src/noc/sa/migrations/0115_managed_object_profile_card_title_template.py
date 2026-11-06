@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "card_title_template",
             models.CharField(
-                "Card title template",
                 max_length=256,
                 default="{{ object.object_profile.name }}: {{ object.name }}",
             ),

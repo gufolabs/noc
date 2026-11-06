@@ -20,18 +20,17 @@ class SystemTemplate(NOCModel):
     Attributes:
         name: Name
         description: Description
+        template: Template
     """
 
     class Meta:
         app_label = "main"
         db_table = "main_systemtemplate"
-        verbose_name = "System template"
-        verbose_name_plural = "System templates"
         ordering = ["name"]
 
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(null=True, blank=True)
-    template = models.ForeignKey(Template, verbose_name="Template", on_delete=models.CASCADE)
+    template = models.ForeignKey(Template, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

@@ -50,7 +50,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "interface_discovery_policy",
             models.CharField(
-                "Interface Discovery Policy",
                 max_length=1,
                 choices=[
                     ("s", "Script"),
@@ -65,7 +64,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "caps_discovery_policy",
             models.CharField(
-                "Caps Discovery Policy",
                 max_length=1,
                 choices=[
                     ("s", "Script"),
@@ -80,7 +78,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "vlan_discovery_policy",
             models.CharField(
-                "VLAN Discovery Policy",
                 max_length=1,
                 choices=[
                     ("s", "Script"),
@@ -95,7 +92,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "interface_discovery_policy",
             models.CharField(
-                "Interface Discovery Policy",
                 max_length=1,
                 choices=[
                     ("P", "From Profile"),
@@ -111,7 +107,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "caps_discovery_policy",
             models.CharField(
-                "Caps Discovery Policy",
                 max_length=1,
                 choices=[
                     ("P", "From Profile"),
@@ -127,7 +122,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "vlan_discovery_policy",
             models.CharField(
-                "VLAN Discovery Policy",
                 max_length=1,
                 choices=[
                     ("P", "From Profile"),

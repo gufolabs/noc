@@ -32,7 +32,6 @@ class Migration(BaseMigration):
             "maintainer",
             models.ForeignKey(
                 Maintainer,
-                verbose_name="Maintainer",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

@@ -14,7 +14,7 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         # Create temporary tags fields
         self.db.add_column(
-            "sa_managedobjectselector", "tmp_filter_tags", TagsField("Tags", null=True, blank=True)
+            "sa_managedobjectselector", "tmp_filter_tags", TagsField(null=True, blank=True)
         )
         # Migrate data
         self.db.execute(

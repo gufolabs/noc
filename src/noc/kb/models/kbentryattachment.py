@@ -23,16 +23,15 @@ class KBEntryAttachment(NOCModel):
         description: Description
         is_hidden: Is Hidden
         file: File
+        kb_entry: KB Entry
     """
 
     class Meta:
-        verbose_name = "KB Entry Attachment"
-        verbose_name_plural = "KB Entry Attachments"
         app_label = "kb"
         db_table = "kb_kbentryattachment"
         unique_together = [("kb_entry", "name")]
 
-    kb_entry = models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE)
+    kb_entry = models.ForeignKey(KBEntry, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     description = models.CharField(max_length=256, null=True, blank=True)
     is_hidden = models.BooleanField(default=False)

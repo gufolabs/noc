@@ -21,9 +21,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventrepeat",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("event", models.ForeignKey(Event, verbose_name="Event", on_delete=models.CASCADE)),
-                ("timestamp", models.DateTimeField("Timestamp")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("event", models.ForeignKey(Event, on_delete=models.CASCADE)),
+                ("timestamp", models.DateTimeField()),
             ),
         )
         # Mock Models
@@ -33,16 +33,14 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventclassvar",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "event_class",
-                    models.ForeignKey(
-                        EventClass, verbose_name="Event Class", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(EventClass, on_delete=models.CASCADE),
                 ),
-                ("name", models.CharField("Name", max_length=64)),
-                ("required", models.BooleanField("Required", default=True)),
-                ("repeat_suppression", models.BooleanField("Repeat Suppression", default=False)),
+                ("name", models.CharField(max_length=64)),
+                ("required", models.BooleanField(default=True)),
+                ("repeat_suppression", models.BooleanField(default=False)),
             ),
         )
         self.db.create_index("fm_eventclassvar", ["event_class_id", "name"], unique=True)
@@ -50,12 +48,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventclass",
             "repeat_suppression",
-            models.BooleanField("Repeat Suppression", default=False),
+            models.BooleanField(default=False),
         )
         self.db.add_column(
             "fm_eventclass",
             "repeat_suppression_interval",
-            models.IntegerField("Repeat Suppression interval (secs)", default=3600),
+            models.IntegerField(default=3600),
         )
         # Migrate variables
         for id, vars in self.db.execute("SELECT id,variables FROM fm_eventclass"):

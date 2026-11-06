@@ -17,10 +17,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventpriority",
             "font_color",
-            models.CharField("Font Color", max_length=32, blank=True, null=True),
+            models.CharField(max_length=32, blank=True, null=True),
         )
         self.db.add_column(
             "fm_eventpriority",
             "background_color",
-            models.CharField("Background Color", max_length=32, blank=True, null=True),
+            models.CharField(max_length=32, blank=True, null=True),
         )

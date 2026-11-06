@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectselector",
             "filter_managed",
-            models.NullBooleanField("Filter by Is Managed", null=True, blank=True, default=True),
+            models.NullBooleanField(null=True, blank=True, default=True),
         )

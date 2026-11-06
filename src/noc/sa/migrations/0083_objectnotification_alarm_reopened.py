@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_objectnotification",
             "alarm_reopened",
-            models.BooleanField("Alarm reopened", default=False),
+            models.BooleanField(default=False),
         )

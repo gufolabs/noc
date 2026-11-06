@@ -26,7 +26,6 @@ from noc.core.ip import IP
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
 from noc.core.model.fields import DocumentReferenceField, INETField, MACField
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_fqdn, is_ipv4, is_ipv6
 from noc.core.wf.decorator import workflow
 from noc.main.models.label import Label
@@ -70,19 +69,18 @@ class Address(NOCModel):
         expired: Expired
         last_seen: Last Seen
         first_discovered: First Discovered
+        prefix: Prefix
+        vrf: VRF
+        project: Project
     """
 
     class Meta:
-        verbose_name = _("Address")
-        verbose_name_plural = _("Addresses")
         db_table = "ip_address"
         app_label = "ip"
         unique_together = [("vrf", "afi", "address")]
 
-    prefix = models.ForeignKey("ip.Prefix", verbose_name=_("Prefix"), on_delete=models.CASCADE)
-    vrf: VRF = models.ForeignKey(
-        VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
-    )
+    prefix = models.ForeignKey("ip.Prefix", on_delete=models.CASCADE)
+    vrf: VRF = models.ForeignKey(VRF, default=VRF.get_global, on_delete=models.CASCADE)
     afi: str = models.CharField(max_length=1, choices=AFI_CHOICES)
     address: str = INETField()
     profile: AddressProfile = DocumentReferenceField(AddressProfile, null=False, blank=False)
@@ -95,7 +93,6 @@ class Address(NOCModel):
     )
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -105,7 +102,6 @@ class Address(NOCModel):
     auto_update_mac = models.BooleanField(default=False)
     managed_object = models.ForeignKey(
         ManagedObject,
-        verbose_name=_("Managed Object"),
         null=True,
         blank=True,
         related_name="address_set",

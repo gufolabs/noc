@@ -18,11 +18,11 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_mib",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
-                ("last_updated", models.DateTimeField("Last Updated")),
-                ("uploaded", models.DateTimeField("Uploaded")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("last_updated", models.DateTimeField()),
+                ("uploaded", models.DateTimeField()),
             ),
         )
 
@@ -33,10 +33,10 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_mibdata",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("mib", models.ForeignKey(MIB, verbose_name=MIB, on_delete=models.CASCADE)),
-                ("oid", models.CharField("OID", max_length=128, unique=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("mib", models.ForeignKey(MIB, on_delete=models.CASCADE)),
+                ("oid", models.CharField(max_length=128, unique=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
             ),
         )

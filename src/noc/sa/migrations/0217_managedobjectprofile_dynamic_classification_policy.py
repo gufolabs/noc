@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "dynamic_classification_policy",
             models.CharField(
-                "Dynamic Classification Policy",
                 max_length=1,
                 choices=[("D", "Disable"), ("R", "By Rule")],
                 default="R",
@@ -28,7 +27,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "dynamic_classification_policy",
             models.CharField(
-                "Dynamic Classification Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("D", "Disable"), ("R", "By Rule")],
                 default="P",

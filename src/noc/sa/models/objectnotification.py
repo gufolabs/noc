@@ -15,7 +15,6 @@ from django.template import Context, Template
 # NOC modules
 from noc.core.model.base import NOCModel
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.notificationgroup import NotificationGroup
 
@@ -89,17 +88,15 @@ class ObjectNotification(NOCModel):
         interface_changed: Interface changed
         script_failed: Script failed
         config_policy_violation: Config policy violation
+        notification_group: Notification Group
     """
 
     class Meta:
-        verbose_name = _("Managed Object Notification")
         db_table = "sa_objectnotification"
         app_label = "sa"
 
     resource_group = DocumentReferenceField(ResourceGroup)
-    notification_group = models.ForeignKey(
-        NotificationGroup, verbose_name=_("Notification Group"), on_delete=models.CASCADE
-    )
+    notification_group = models.ForeignKey(NotificationGroup, on_delete=models.CASCADE)
     # Events
     config_changed = models.BooleanField(default=False)
     alarm_risen = models.BooleanField(default=False)

@@ -24,7 +24,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "dns_dnszoneprofile_masters",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "dnszoneprofile",
                     models.ForeignKey(DNSZoneProfile, null=False, on_delete=models.CASCADE),
@@ -42,7 +42,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "dns_dnszoneprofile_slaves",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "dnszoneprofile",
                     models.ForeignKey(DNSZoneProfile, null=False, on_delete=models.CASCADE),

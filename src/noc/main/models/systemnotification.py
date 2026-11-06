@@ -20,18 +20,16 @@ class SystemNotification(NOCModel):
 
     Attributes:
         name: Name
+        notification_group: Notification Group
     """
 
     class Meta:
         app_label = "main"
         db_table = "main_systemnotification"
-        verbose_name = "System Notification"
-        verbose_name_plural = "System Notifications"
 
     name = models.CharField(max_length=64, unique=True)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name="Notification Group",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

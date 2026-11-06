@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_permission",
             "implied",
-            models.CharField("Implied", max_length=256, null=True, blank=True),
+            models.CharField(max_length=256, null=True, blank=True),
         )

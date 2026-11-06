@@ -78,23 +78,24 @@ class Peer(NOCModel):
         max_prefixes: Max. Prefixes
         import_filter_name: Import Filter Name
         export_filter_name: Export Filter Name
+        profile: Peer Profile
+        project: Project
+        managed_object: Managed Object
+        peering_point: Peering Point
+        local_asn: Local AS
     """
 
     class Meta:
-        verbose_name = "Peer"
-        verbose_name_plural = "Peers"
         db_table = "peer_peer"
         app_label = "peer"
 
     profile: PeerProfile = ForeignKey(
         PeerProfile,
-        verbose_name="Peer Profile",
         on_delete=CASCADE,
         default=PeerProfile.get_default_profile,
     )
     project = ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         related_name="peer_set",
@@ -102,7 +103,6 @@ class Peer(NOCModel):
     )
     managed_object = ForeignKey(
         "sa.ManagedObject",
-        verbose_name="Managed Object",
         null=True,
         blank=True,
         on_delete=SET_NULL,
@@ -132,9 +132,9 @@ class Peer(NOCModel):
     oper_status_change = DateTimeField(null=True, blank=True)
     # RPSL Settings
     peering_point: PeeringPoint | None = ForeignKey(
-        PeeringPoint, verbose_name="Peering Point", on_delete=CASCADE, null=True, blank=True
+        PeeringPoint, on_delete=CASCADE, null=True, blank=True
     )
-    local_asn: AS = ForeignKey(AS, verbose_name="Local AS", on_delete=CASCADE)
+    local_asn: AS = ForeignKey(AS, on_delete=CASCADE)
     local_ip = INETField(null=True, blank=True)
     local_backup_ip = INETField(null=True, blank=True)
     remote_asn = BigIntegerField(null=True, blank=True)

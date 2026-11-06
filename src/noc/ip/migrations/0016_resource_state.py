@@ -23,21 +23,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_vrf",
             "state",
-            models.ForeignKey(
-                ResourceState, verbose_name="State", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(ResourceState, null=True, blank=True, on_delete=models.CASCADE),
         )
         self.db.add_column(
             "ip_prefix",
             "state",
-            models.ForeignKey(
-                ResourceState, verbose_name="State", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(ResourceState, null=True, blank=True, on_delete=models.CASCADE),
         )
         self.db.add_column(
             "ip_address",
             "state",
-            models.ForeignKey(
-                ResourceState, verbose_name="State", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(ResourceState, null=True, blank=True, on_delete=models.CASCADE),
         )

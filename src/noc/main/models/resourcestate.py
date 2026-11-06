@@ -21,8 +21,6 @@ class ResourceState(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Resource State"
-        verbose_name_plural = "Resource States"
         ordering = ["name"]
         app_label = "main"
         db_table = "main_resourcestate"

@@ -37,7 +37,7 @@ class Migration(BaseMigration):
             "sa_authprofile", "remote_id", models.CharField(max_length=64, null=True, blank=True)
         )
         self.db.add_column("sa_authprofile", "bi_id", models.IntegerField(null=True, blank=True))
-        self.db.add_column("sa_authprofile", "tags", TagsField("Tags", null=True, blank=True))
+        self.db.add_column("sa_authprofile", "tags", TagsField(null=True, blank=True))
         # ManagedObject
         self.db.add_column(
             "sa_managedobject",
@@ -52,7 +52,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "escalation_policy",
             models.CharField(
-                "Escalation Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable"), ("P", "From Profile")],
                 default="P",
@@ -84,7 +83,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "escalation_policy",
             models.CharField(
-                "Escalation Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable")],
                 default="E",

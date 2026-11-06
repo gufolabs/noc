@@ -31,7 +31,6 @@ from noc.core.ip import IP, IPv4
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
 from noc.core.model.fields import CachedForeignKey, CIDRField, DocumentReferenceField, PydanticField
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.core.wf.decorator import workflow
 from noc.inv.models.resourcepool import ResourcePool
@@ -92,11 +91,12 @@ class Prefix(NOCModel):
         expired: Expired
         last_seen: Last Seen
         first_discovered: First Discovered
+        parent: Parent
+        vrf: VRF
+        project: Project
     """
 
     class Meta:
-        verbose_name = _("Prefix")
-        verbose_name_plural = _("Prefixes")
         db_table = "ip_prefix"
         app_label = "ip"
         unique_together = [("vrf", "afi", "prefix")]
@@ -104,28 +104,23 @@ class Prefix(NOCModel):
     parent = models.ForeignKey(
         "self",
         related_name="children_set",
-        verbose_name=_("Parent"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
-    vrf: VRF = CachedForeignKey(
-        VRF, verbose_name=_("VRF"), default=VRF.get_global, on_delete=models.CASCADE
-    )
+    vrf: VRF = CachedForeignKey(VRF, default=VRF.get_global, on_delete=models.CASCADE)
     afi: str = models.CharField(max_length=1, choices=AFI_CHOICES)
     prefix: str = CIDRField()
     name: str = models.CharField(max_length=255, null=True, blank=True)
     profile: PrefixProfile = DocumentReferenceField(PrefixProfile, null=False, blank=False)
     asn: AS = CachedForeignKey(
         AS,
-        verbose_name=_("AS"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,
     )
     project: Project = CachedForeignKey(
         Project,
-        verbose_name="Project",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

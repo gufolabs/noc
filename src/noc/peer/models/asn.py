@@ -51,11 +51,16 @@ class AS(NOCModel):
         description: Description
         header_remarks: Header Remarks
         footer_remarks: Footer Remarks
+        project: Project
+        organisation: Organisation
+        administrative_contacts: admin-c
+        tech_contacts: tech-c
+        maintainers: Maintainers
+        routes_maintainers: Routes Maintainers
+        rir: RIR
     """
 
     class Meta:
-        verbose_name = "AS"
-        verbose_name_plural = "ASes"
         db_table = "peer_as"
         app_label = "peer"
 
@@ -67,7 +72,6 @@ class AS(NOCModel):
     )
     project: Project | None = models.ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         related_name="as_set",
@@ -76,24 +80,22 @@ class AS(NOCModel):
     # RPSL descr field
     description = models.TextField(null=True, blank=True)
     organisation: Organisation | None = models.ForeignKey(
-        Organisation, verbose_name="Organisation", null=True, blank=True, on_delete=models.CASCADE
+        Organisation, null=True, blank=True, on_delete=models.CASCADE
     )
     administrative_contacts = models.ManyToManyField(
         Person,
-        verbose_name="admin-c",
         related_name="as_administrative_contacts",
         null=True,
         blank=True,
     )
     tech_contacts = models.ManyToManyField(
-        Person, verbose_name="tech-c", related_name="as_tech_contacts", null=True, blank=True
+        Person, related_name="as_tech_contacts", null=True, blank=True
     )
     maintainers = models.ManyToManyField(
-        Maintainer, verbose_name="Maintainers", related_name="as_maintainers", null=True, blank=True
+        Maintainer, related_name="as_maintainers", null=True, blank=True
     )
     routes_maintainers = models.ManyToManyField(
         Maintainer,
-        verbose_name="Routes Maintainers",
         related_name="as_route_maintainers",
         null=True,
         blank=True,
@@ -102,9 +104,7 @@ class AS(NOCModel):
     header_remarks = models.TextField(null=True, blank=True)
     # remarks: will be prepended automatically
     footer_remarks = models.TextField(null=True, blank=True)
-    rir = models.ForeignKey(
-        RIR, null=True, blank=True, verbose_name="RIR", on_delete=models.CASCADE
-    )
+    rir = models.ForeignKey(RIR, null=True, blank=True, on_delete=models.CASCADE)
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

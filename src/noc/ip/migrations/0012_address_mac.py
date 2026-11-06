@@ -18,7 +18,7 @@ class Migration(BaseMigration):
 
     def migrate(self) -> None:
         ManagedObject = self.db.mock_model(model_name="ManagedObject", db_table="sa_managedobject")
-        self.db.add_column("ip_ipv4address", "mac", MACField("MAC", null=True, blank=True))
+        self.db.add_column("ip_ipv4address", "mac", MACField(null=True, blank=True))
         self.db.add_column(
             "ip_ipv4address",
             "managed_object",
@@ -27,5 +27,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_ipv4address",
             "auto_update_mac",
-            models.BooleanField("Auto Update MAC", default=False),
+            models.BooleanField(default=False),
         )

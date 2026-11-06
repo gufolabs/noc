@@ -33,13 +33,13 @@ class Migration(BaseMigration):
         self.db.create_table(
             "vc_vctype",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
-                ("min_labels", models.IntegerField("Min. Labels", default=1)),
-                ("label1_min", models.IntegerField("Label1 min")),
-                ("label1_max", models.IntegerField("Label1 max")),
-                ("label2_min", models.IntegerField("Label2 min", null=True, blank=True)),
-                ("label2_max", models.IntegerField("Label2 max", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
+                ("min_labels", models.IntegerField(default=1)),
+                ("label1_min", models.IntegerField()),
+                ("label1_max", models.IntegerField()),
+                ("label2_min", models.IntegerField(null=True, blank=True)),
+                ("label2_max", models.IntegerField(null=True, blank=True)),
             ),
         )
 
@@ -51,15 +51,15 @@ class Migration(BaseMigration):
         self.db.create_table(
             "vc_vc",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "vc_domain",
-                    models.ForeignKey(VCDomain, verbose_name="VC Domain", on_delete=models.CASCADE),
+                    models.ForeignKey(VCDomain, on_delete=models.CASCADE),
                 ),
-                ("type", models.ForeignKey(VCType, verbose_name="type", on_delete=models.CASCADE)),
-                ("l1", models.IntegerField("Label 1")),
-                ("l2", models.IntegerField("Label 2", default=0)),
-                ("description", models.CharField("Description", max_length=256)),
+                ("type", models.ForeignKey(VCType, on_delete=models.CASCADE)),
+                ("l1", models.IntegerField()),
+                ("l2", models.IntegerField(default=0)),
+                ("description", models.CharField(max_length=256)),
             ),
         )
         self.db.create_index("vc_vc", ["vc_domain_id", "type_id", "l1", "l2"], unique=True)

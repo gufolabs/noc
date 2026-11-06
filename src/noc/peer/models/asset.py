@@ -30,18 +30,16 @@ class ASSet(NOCModel):
         members: Members
         rpsl_header: RPSL Header
         rpsl_footer: RPSL Footer
+        project: Project
     """
 
     class Meta:
-        verbose_name = "ASSet"
-        verbose_name_plural = "ASSets"
         db_table = "peer_asset"
         app_label = "peer"
 
     name = models.CharField(max_length=32, unique=True)
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         related_name="asset_set",

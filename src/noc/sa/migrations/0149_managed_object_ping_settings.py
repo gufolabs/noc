@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "ping_policy",
             models.CharField(
-                "Ping check policy",
                 max_length=1,
                 choices=[("f", "First Success"), ("a", "All Successes")],
                 default="f",
@@ -28,15 +27,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "ping_size",
-            models.IntegerField("Ping packet size", default=64),
+            models.IntegerField(default=64),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "ping_count",
-            models.IntegerField("Ping packets count", default=3),
+            models.IntegerField(default=3),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "ping_timeout_ms",
-            models.IntegerField("Ping timeout (ms)", default=1000),
+            models.IntegerField(default=1000),
         )

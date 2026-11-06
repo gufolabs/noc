@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peer",
             "rpsl_remark",
-            models.CharField("RPSL Remark", max_length=64, null=True, blank=True),
+            models.CharField(max_length=64, null=True, blank=True),
         )

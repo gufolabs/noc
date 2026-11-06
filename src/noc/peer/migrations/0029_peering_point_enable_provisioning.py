@@ -20,14 +20,13 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peeringpoint",
             "enable_prefix_list_provisioning",
-            models.BooleanField("Enable Prefix-List Provisioning", default=False),
+            models.BooleanField(default=False),
         )
         self.db.add_column(
             "peer_peeringpoint",
             "prefix_list_notification_group",
             models.ForeignKey(
                 NotificationGroup,
-                verbose_name="Prefix List Notification Group",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_maptask",
             "script_timeout",
-            models.IntegerField("Script timeout", null=True, blank=True),
+            models.IntegerField(null=True, blank=True),
         )

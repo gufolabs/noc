@@ -25,14 +25,14 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_peerprofile",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
-                ("description", models.CharField("Description", max_length=64)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
+                ("description", models.CharField(max_length=64)),
                 ("workflow", DocumentReferenceField("wf.Workflow", null=False, blank=False)),
-                ("max_prefixes", models.IntegerField("Max. Prefixes", default=100)),
+                ("max_prefixes", models.IntegerField(default=100)),
                 (
                     "data",
-                    models.JSONField("Data", null=True, blank=True, default=lambda: "[]"),
+                    models.JSONField(null=True, blank=True, default=lambda: "[]"),
                 ),
                 (
                     "status_discovery",

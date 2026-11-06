@@ -73,8 +73,6 @@ class Template(NOCModel):
     class Meta:
         app_label = "main"
         db_table = "main_template"
-        verbose_name = "Template"
-        verbose_name_plural = "Templates"
         ordering = ["name"]
 
     _json_collection = {

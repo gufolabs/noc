@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "fm_eventclassificationrule",
             "drop_event",
-            models.BooleanField("Drop Event", default=False),
+            models.BooleanField(default=False),
         )

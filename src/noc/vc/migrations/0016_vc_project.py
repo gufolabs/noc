@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vc",
             "project",
-            models.CharField("Project ID", max_length=256, null=True, blank=True, db_index=True),
+            models.CharField(max_length=256, null=True, blank=True, db_index=True),
         )

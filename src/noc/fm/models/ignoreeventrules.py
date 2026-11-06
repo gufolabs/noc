@@ -25,8 +25,6 @@ class IgnoreEventRules(NOCModel):
     class Meta:
         app_label = "fm"
         db_table = "fm_ignoreeventrules"
-        verbose_name = "Ignore Event Rule"
-        verbose_name_plural = "Ignore Event Rules"
         unique_together = [("left_re", "right_re")]
 
     name = models.CharField(max_length=64, unique=True)

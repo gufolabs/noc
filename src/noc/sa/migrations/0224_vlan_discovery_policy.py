@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "vlan_vlandb_discovery",
             models.CharField(
-                "VLAN DB Discovery Policy",
                 max_length=1,
                 choices=[
                     ("D", "Disable"),
@@ -32,7 +31,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "vlan_interface_discovery",
             models.CharField(
-                "VLAN Interface Discovery Policy",
                 max_length=1,
                 choices=[
                     ("D", "Disable"),

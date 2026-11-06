@@ -32,12 +32,11 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_notificationgroupusersubscription",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "notification_group",
                     models.ForeignKey(
                         NotificationGroup,
-                        verbose_name="Notification Group",
                         on_delete=models.CASCADE,
                     ),
                 ),
@@ -45,21 +44,20 @@ class Migration(BaseMigration):
                     "time_pattern",
                     models.ForeignKey(
                         TimePattern,
-                        verbose_name="Time Pattern",
                         on_delete=models.CASCADE,
                         null=True,
                         blank=True,
                     ),
                 ),
-                ("user", models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
                 (
                     "expired_at",
-                    models.DateTimeField("Expired Subscription After", null=True, blank=True),
+                    models.DateTimeField(null=True, blank=True),
                 ),
-                ("suppress", models.BooleanField("Deactivate Subscription", default=False)),
+                ("suppress", models.BooleanField(default=False)),
                 (
                     "watch",
-                    models.CharField("Watch key", max_length=100, null=True, blank=True),
+                    models.CharField(max_length=100, null=True, blank=True),
                 ),
                 ("remote_system", DocumentReferenceField("self", null=True, blank=True)),
             ),
@@ -85,24 +83,22 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_notificationgroup",
             "message_register_policy",
-            models.CharField("Name", max_length=1, default="d"),
+            models.CharField(max_length=1, default="d"),
         )
         self.db.add_column(
             "main_notificationgroup",
             "message_types",
-            models.JSONField("Notification Contacts", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )
         self.db.add_column(
             "main_notificationgroup",
             "static_members",
-            models.JSONField("Notification Contacts", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )
         self.db.add_column(
             "main_notificationgroup",
             "subscription_settings",
-            models.JSONField(
-                "Notification Subscriptions", null=True, blank=True, default=lambda: "[]"
-            ),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )
         self.db.add_column(
             "main_notificationgroup",
@@ -115,7 +111,6 @@ class Migration(BaseMigration):
             "main_notificationgroup",
             "conditions",
             models.JSONField(
-                "Condition for match Notification Group",
                 null=True,
                 blank=True,
                 default=lambda: "[]",

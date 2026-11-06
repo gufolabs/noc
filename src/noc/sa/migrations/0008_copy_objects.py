@@ -128,7 +128,6 @@ class Migration(BaseMigration):
             "administrative_domain",
             models.ForeignKey(
                 AdministrativeDomain,
-                verbose_name="Administrative Domain",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -137,9 +136,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "cm_objectnotify",
             "group",
-            models.ForeignKey(
-                ObjectGroup, verbose_name="Group", blank=True, null=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(ObjectGroup, blank=True, null=True, on_delete=models.CASCADE),
         )
         for id, category_id, location_id in self.db.execute(
             "SELECT id,category_id,location_id FROM cm_objectnotify"

@@ -17,15 +17,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peer",
             "import_filter_name",
-            models.CharField("Import Filter Name", max_length=64, blank=True, null=True),
+            models.CharField(max_length=64, blank=True, null=True),
         )
         self.db.add_column(
             "peer_peer",
             "export_filter_name",
-            models.CharField("Export Filter Name", max_length=64, blank=True, null=True),
+            models.CharField(max_length=64, blank=True, null=True),
         )
         self.db.add_column(
             "peer_peeringpoint",
             "provision_rcmd",
-            models.CharField("Provisioning URL", max_length=128, blank=True, null=True),
+            models.CharField(max_length=128, blank=True, null=True),
         )

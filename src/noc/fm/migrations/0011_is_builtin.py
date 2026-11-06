@@ -14,11 +14,9 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "fm_eventclass", "is_builtin", models.BooleanField("Is Builtin", default=False)
-        )
+        self.db.add_column("fm_eventclass", "is_builtin", models.BooleanField(default=False))
         self.db.add_column(
             "fm_eventclassificationrule",
             "is_builtin",
-            models.BooleanField("Is Builtin", default=False),
+            models.BooleanField(default=False),
         )

@@ -17,15 +17,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_id_discovery",
-            models.BooleanField("Enable ID discovery", default=True),
+            models.BooleanField(default=True),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "id_discovery_min_interval",
-            models.IntegerField("Min. ID discovery interval", default=600),
+            models.IntegerField(default=600),
         )
         self.db.add_column(
             "sa_managedobjectprofile",
             "id_discovery_max_interval",
-            models.IntegerField("Max. ID discovery interval", default=86400),
+            models.IntegerField(default=86400),
         )

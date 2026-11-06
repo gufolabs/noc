@@ -22,18 +22,16 @@ class CustomFieldEnumValue(NOCModel):
         is_active: Is Active
         key: Key
         value: Value
+        enum_group: Enum Group
     """
 
     class Meta:
-        verbose_name = "Enum Group Value"
-        verbose_name_plural = "Enum Group Values"
         db_table = "main_customfieldenumvalue"
         app_label = "main"
         unique_together = [("enum_group", "key")]
 
     enum_group = models.ForeignKey(
         CustomFieldEnumGroup,
-        verbose_name="Enum Group",
         related_name="enumvalue_set",
         on_delete=models.CASCADE,
     )

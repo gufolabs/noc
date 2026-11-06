@@ -28,7 +28,6 @@ from noc.core.ip import IPv6
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
 from noc.core.rpsl import rpsl_format
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4, is_ipv6
 from noc.main.models.label import Label
 from noc.main.models.notificationgroup import NotificationGroup
@@ -62,11 +61,11 @@ class DNSZone(NOCModel):
         is_auto_generated: Auto generated?
         serial: Serial
         paid_till: Paid Till
+        project: Project
+        profile: Profile
     """
 
     class Meta:
-        verbose_name = _("DNS Zone")
-        verbose_name_plural = _("DNS Zones")
         ordering = ["name"]
         db_table = "dns_dnszone"
         app_label = "dns"
@@ -86,7 +85,6 @@ class DNSZone(NOCModel):
     description = models.CharField(null=True, blank=True, max_length=64)
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         related_name="dnszone_set",
@@ -95,10 +93,9 @@ class DNSZone(NOCModel):
     # @todo: Rename to is_provisioned
     is_auto_generated = models.BooleanField(default=False)
     serial = models.IntegerField(default=0)
-    profile = models.ForeignKey(DNSZoneProfile, verbose_name=_("Profile"), on_delete=models.CASCADE)
+    profile = models.ForeignKey(DNSZoneProfile, on_delete=models.CASCADE)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name=_("Notification Group"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,

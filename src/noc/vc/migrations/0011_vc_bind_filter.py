@@ -24,16 +24,16 @@ class Migration(BaseMigration):
         self.db.create_table(
             "vc_vcbindfilter",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "vc_domain",
-                    models.ForeignKey(VCDomain, verbose_name="VC Domain", on_delete=models.CASCADE),
+                    models.ForeignKey(VCDomain, on_delete=models.CASCADE),
                 ),
-                ("vrf", models.ForeignKey(VRF, verbose_name="VRF", on_delete=models.CASCADE)),
-                ("prefix", CIDRField("Prefix")),
+                ("vrf", models.ForeignKey(VRF, on_delete=models.CASCADE)),
+                ("prefix", CIDRField()),
                 (
                     "vc_filter",
-                    models.ForeignKey(VCFilter, verbose_name="VC Filter", on_delete=models.CASCADE),
+                    models.ForeignKey(VCFilter, on_delete=models.CASCADE),
                 ),
             ),
         )
@@ -42,5 +42,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "vc_vcdomain",
             "enable_vc_bind_filter",
-            models.BooleanField("Enable VC Bind filter", default=False),
+            models.BooleanField(default=False),
         )

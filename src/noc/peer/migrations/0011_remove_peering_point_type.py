@@ -18,12 +18,12 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peeringpoint",
             "profile_name",
-            models.CharField("Profile", max_length=128, null=True),
+            models.CharField(max_length=128, null=True),
         )
         self.db.add_column(
             "peer_lgquerycommand",
             "profile_name",
-            models.CharField("Profile", max_length=128, null=True),
+            models.CharField(max_length=128, null=True),
         )
 
         for id, n in self.db.execute("SELECT id,name FROM peer_peeringpointtype"):

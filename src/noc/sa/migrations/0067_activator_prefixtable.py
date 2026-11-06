@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "prefix_table",
             models.ForeignKey(
                 PrefixTable,
-                verbose_name="Prefix Table",
                 null=True,
                 blank=True,
                 on_delete=models.CASCADE,

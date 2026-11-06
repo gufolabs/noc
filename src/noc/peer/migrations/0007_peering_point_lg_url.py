@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peeringpoint",
             "lg_rcmd",
-            models.CharField("LG RCMD Url", max_length=128, blank=True, null=True),
+            models.CharField(max_length=128, blank=True, null=True),
         )

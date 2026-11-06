@@ -22,8 +22,6 @@ class CommunityType(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Community Type"
-        verbose_name_plural = "Community Types"
         db_table = "peer_communitytype"
         app_label = "peer"
 

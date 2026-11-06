@@ -27,7 +27,7 @@ class Migration(BaseMigration):
             self.db.add_column(
                 f"cm_{ot}",
                 "last_modified",
-                models.DateTimeField("Last Modified", blank=True, null=True),
+                models.DateTimeField(blank=True, null=True),
             )
             if repo_root:
                 repo = os.path.join(repo_root, TYPES[ot])

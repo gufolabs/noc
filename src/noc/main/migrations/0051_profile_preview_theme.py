@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_userprofile",
             "preview_theme",
-            models.CharField("Preview Theme", max_length=32, null=True, blank=True),
+            models.CharField(max_length=32, null=True, blank=True),
         )

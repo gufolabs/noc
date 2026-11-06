@@ -24,7 +24,6 @@ from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.core.validators import check_rd
 from noc.core.vpn import get_vpn_id
 from noc.core.wf.decorator import workflow
@@ -76,20 +75,18 @@ class VRF(NOCModel):
         expired: Expired
         last_seen: Last Seen
         first_discovered: First Discovered
+        vrf_group: VRF Group
+        project: Project
     """
 
     class Meta:
-        verbose_name = _("VRF")
-        verbose_name_plural = _("VRFs")
         db_table = "ip_vrf"
         app_label = "ip"
         ordering = ["name"]
 
     name = models.CharField(unique=True, max_length=64)
     profile: VPNProfile = DocumentReferenceField(VPNProfile)
-    vrf_group = models.ForeignKey(
-        VRFGroup, verbose_name=_("VRF Group"), null=True, blank=True, on_delete=models.CASCADE
-    )
+    vrf_group = models.ForeignKey(VRFGroup, null=True, blank=True, on_delete=models.CASCADE)
     rd = models.CharField(
         max_length=21,
         validators=[check_rd],
@@ -102,7 +99,6 @@ class VRF(NOCModel):
     afi_ipv6 = models.BooleanField(default=False)
     project = models.ForeignKey(
         Project,
-        verbose_name="Project",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

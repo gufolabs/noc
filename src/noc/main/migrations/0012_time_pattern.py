@@ -18,9 +18,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_timepattern",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
 
@@ -31,14 +31,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_timepatternterm",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "time_pattern",
-                    models.ForeignKey(
-                        TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(TimePattern, on_delete=models.CASCADE),
                 ),
-                ("term", models.CharField("Term", max_length=256)),
+                ("term", models.CharField(max_length=256)),
             ),
         )
         self.db.create_index("main_timepatternterm", ["time_pattern_id", "term"], unique=True)

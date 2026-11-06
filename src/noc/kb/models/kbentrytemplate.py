@@ -28,11 +28,10 @@ class KBEntryTemplate(NOCModel):
         body: Body
         markup_language: Markup Language
         tags: Tags
+        language: Language
     """
 
     class Meta:
-        verbose_name = "KB Entry Template"
-        verbose_name_plural = "KB Entry Templates"
         app_label = "kb"
         db_table = "kb_kbentrytemplate"
         ordering = ("id",)
@@ -42,7 +41,6 @@ class KBEntryTemplate(NOCModel):
     body = models.TextField()
     language = models.ForeignKey(
         Language,
-        verbose_name="Language",
         limit_choices_to={"is_active": True},
         on_delete=models.CASCADE,
     )

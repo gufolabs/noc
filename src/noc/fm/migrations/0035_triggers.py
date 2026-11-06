@@ -33,16 +33,15 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventtrigger",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("is_enabled", models.BooleanField("Is Enabled", default=True)),
-                ("event_class_re", models.CharField("Event class RE", max_length=256)),
-                ("condition", models.CharField("Condition", max_length=256, default="True")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("is_enabled", models.BooleanField(default=True)),
+                ("event_class_re", models.CharField(max_length=256)),
+                ("condition", models.CharField(max_length=256, default="True")),
                 (
                     "time_pattern",
                     models.ForeignKey(
                         TimePattern,
-                        verbose_name="Time Pattern",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -52,7 +51,6 @@ class Migration(BaseMigration):
                     "selector",
                     models.ForeignKey(
                         ManagedObjectSelector,
-                        verbose_name="Managed Object Selector",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -62,7 +60,6 @@ class Migration(BaseMigration):
                     "notification_group",
                     models.ForeignKey(
                         NotificationGroup,
-                        verbose_name="Notification Group",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -72,7 +69,6 @@ class Migration(BaseMigration):
                     "template",
                     models.ForeignKey(
                         Template,
-                        verbose_name="Template",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -82,7 +78,6 @@ class Migration(BaseMigration):
                     "pyrule",
                     models.ForeignKey(
                         PyRule,
-                        verbose_name="pyRule",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -94,16 +89,15 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_alarmtrigger",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("is_enabled", models.BooleanField("Is Enabled", default=True)),
-                ("alarm_class_re", models.CharField("Alarm class RE", max_length=256)),
-                ("condition", models.CharField("Condition", max_length=256, default="True")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("is_enabled", models.BooleanField(default=True)),
+                ("alarm_class_re", models.CharField(max_length=256)),
+                ("condition", models.CharField(max_length=256, default="True")),
                 (
                     "time_pattern",
                     models.ForeignKey(
                         TimePattern,
-                        verbose_name="Time Pattern",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -113,7 +107,6 @@ class Migration(BaseMigration):
                     "selector",
                     models.ForeignKey(
                         ManagedObjectSelector,
-                        verbose_name="Managed Object Selector",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -123,7 +116,6 @@ class Migration(BaseMigration):
                     "notification_group",
                     models.ForeignKey(
                         NotificationGroup,
-                        verbose_name="Notification Group",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -133,7 +125,6 @@ class Migration(BaseMigration):
                     "template",
                     models.ForeignKey(
                         Template,
-                        verbose_name="Template",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -143,7 +134,6 @@ class Migration(BaseMigration):
                     "pyrule",
                     models.ForeignKey(
                         PyRule,
-                        verbose_name="pyRule",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,

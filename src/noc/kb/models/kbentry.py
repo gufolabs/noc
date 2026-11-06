@@ -39,11 +39,10 @@ class KBEntry(NOCModel):
         subject: Subject
         body: Body
         markup_language: Markup Language
+        language: Language
     """
 
     class Meta:
-        verbose_name = "KB Entry"
-        verbose_name_plural = "KB Entries"
         app_label = "kb"
         db_table = "kb_kbentry"
         ordering = ("id",)
@@ -52,7 +51,6 @@ class KBEntry(NOCModel):
     body = models.TextField()
     language = models.ForeignKey(
         Language,
-        verbose_name="Language",
         limit_choices_to={"is_active": True},
         on_delete=models.CASCADE,
     )

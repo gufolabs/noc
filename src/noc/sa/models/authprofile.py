@@ -79,8 +79,6 @@ class AuthProfile(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Auth Profile"
-        verbose_name_plural = "Auth Profiles"
         db_table = "sa_authprofile"
         app_label = "sa"
         ordering = ["name"]

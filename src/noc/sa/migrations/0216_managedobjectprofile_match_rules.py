@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "match_rules",
-            models.JSONField("Match Dynamic Rules", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )

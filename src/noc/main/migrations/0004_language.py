@@ -18,9 +18,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_language",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
-                ("native_name", models.CharField("Native Name", max_length=32)),
-                ("is_active", models.BooleanField("Is Active", default=False)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
+                ("native_name", models.CharField(max_length=32)),
+                ("is_active", models.BooleanField(default=False)),
             ),
         )

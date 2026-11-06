@@ -25,11 +25,10 @@ class Organisation(NOCModel):
         org_name: Org. Name
         org_type: Org. Type
         address: Address
+        mnt_ref: Mnt. Ref
     """
 
     class Meta:
-        verbose_name = "Organisation"
-        verbose_name_plural = "Organisations"
         db_table = "peer_organisation"
         app_label = "peer"
 
@@ -42,7 +41,7 @@ class Organisation(NOCModel):
     # address: will be prepended automatically for each line
     address = models.TextField()
     # mnt-ref
-    mnt_ref = models.ForeignKey(Maintainer, verbose_name="Mnt. Ref", on_delete=models.CASCADE)
+    mnt_ref = models.ForeignKey(Maintainer, on_delete=models.CASCADE)
 
     def __str__(self):
         return f" {self.organisation} ({self.org_name})"

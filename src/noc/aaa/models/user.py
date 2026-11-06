@@ -72,8 +72,6 @@ class User(NOCModel):
     """
 
     class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
         app_label = "aaa"
         # Point to django"s auth_user table
         db_table = "auth_user"

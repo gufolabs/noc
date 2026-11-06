@@ -17,9 +17,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "project_project",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("code", models.CharField("Code", max_length=256, unique=True)),
-                ("name", models.CharField("Name", max_length=256)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("code", models.CharField(max_length=256, unique=True)),
+                ("name", models.CharField(max_length=256)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )

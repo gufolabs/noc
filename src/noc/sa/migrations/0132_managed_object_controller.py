@@ -21,7 +21,6 @@ class Migration(BaseMigration):
             "controller",
             models.ForeignKey(
                 ManagedObject,
-                verbose_name="Controller",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -30,5 +29,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "last_seen",
-            models.DateTimeField("Last Seen", blank=True, null=True),
+            models.DateTimeField(blank=True, null=True),
         )

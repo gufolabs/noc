@@ -14,8 +14,6 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column(
-            "sa_managedobjectprofile", "weight", models.IntegerField("Alarm weight", default=0)
-        )
+        self.db.add_column("sa_managedobjectprofile", "weight", models.IntegerField(default=0))
         self.db.delete_column("sa_managedobjectprofile", "check_link_interval")
         self.db.delete_column("sa_managedobjectprofile", "down_severity")

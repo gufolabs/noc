@@ -16,7 +16,7 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         # Create temporary tags fields
         for m in self.TAG_MODELS:
-            self.db.add_column(m, "tmp_tags", TagsField("Tags", null=True, blank=True))
+            self.db.add_column(m, "tmp_tags", TagsField(null=True, blank=True))
         # Migrate data
         for m in self.TAG_MODELS:
             self.db.execute(

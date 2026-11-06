@@ -17,7 +17,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_activator",
             "to_ip",
-            models.GenericIPAddressField("To IP", null=True, blank=True, protocol="IPv4"),
+            models.GenericIPAddressField(null=True, blank=True, protocol="IPv4"),
         )
         self.db.execute("UPDATE sa_activator SET to_ip=ip")
         self.db.execute("ALTER TABLE sa_activator ALTER to_ip SET NOT NULL")

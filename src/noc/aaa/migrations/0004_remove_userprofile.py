@@ -21,19 +21,11 @@ class Migration(BaseMigration):
         self.db.add_column(
             "auth_user",
             "preferred_language",
-            models.CharField(
-                "Preferred Language", max_length=16, null=True, blank=True, default=LANGUAGE_CODE
-            ),
+            models.CharField(max_length=16, null=True, blank=True, default=LANGUAGE_CODE),
         )
-        self.db.add_column(
-            "auth_user", "heatmap_lon", models.FloatField("Longitude", blank=True, null=True)
-        )
-        self.db.add_column(
-            "auth_user", "heatmap_lat", models.FloatField("Latitude", blank=True, null=True)
-        )
-        self.db.add_column(
-            "auth_user", "heatmap_zoom", models.IntegerField("Zoom", blank=True, null=True)
-        )
+        self.db.add_column("auth_user", "heatmap_lon", models.FloatField(blank=True, null=True))
+        self.db.add_column("auth_user", "heatmap_lat", models.FloatField(blank=True, null=True))
+        self.db.add_column("auth_user", "heatmap_zoom", models.IntegerField(blank=True, null=True))
         # UserContacts
         User = self.db.mock_model(model_name="User", db_table="auth_user")
         TimePattern = self.db.mock_model(model_name="TimePattern", db_table="main_timepattern")
@@ -41,14 +33,12 @@ class Migration(BaseMigration):
             "aaa_usercontact",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("user", models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)),
-                ("notification_method", models.CharField("Method", max_length=16)),
-                ("params", models.CharField("Params", max_length=256)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
+                ("notification_method", models.CharField(max_length=16)),
+                ("params", models.CharField(max_length=256)),
                 (
                     "time_pattern",
-                    models.ForeignKey(
-                        TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(TimePattern, on_delete=models.CASCADE),
                 ),
             ),
         )

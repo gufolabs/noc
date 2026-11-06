@@ -18,7 +18,6 @@ from django.template import Context, Template
 from noc.aaa.models.permission import Permission
 from noc.core.model.base import NOCModel
 from noc.core.model.fields import DocumentReferenceField
-from noc.core.translation import ugettext as _
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.label import Label
 
@@ -42,8 +41,6 @@ class CommandSnippet(NOCModel):
     """
 
     class Meta:
-        verbose_name = _("Command Snippet")
-        verbose_name_plural = _("Command Snippets")
         db_table = "sa_commandsnippet"
         app_label = "sa"
         ordering = ["name"]

@@ -201,8 +201,6 @@ class NotificationGroup(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Notification Group"
-        verbose_name_plural = "Notification Groups"
         app_label = "main"
         db_table = "main_notificationgroup"
         ordering = ["name"]
@@ -863,22 +861,21 @@ class NotificationGroupUserSettings(NOCModel):
         method: Method
         expired_at: Expired Subscription After
         suppress: Deactivate Subscription
+        notification_group: Notification Group
+        time_pattern: Time Pattern
+        user: User
     """
 
     class Meta:
-        verbose_name = "Notification Group User Subscription"
-        verbose_name_plural = "Notification Group Users"
         app_label = "main"
         db_table = "main_notificationgroupusersettings"
         unique_together = [("notification_group_id", "user_id")]
 
-    notification_group: NotificationGroup = ForeignKey(
-        NotificationGroup, verbose_name="Notification Group", on_delete=CASCADE
-    )
+    notification_group: NotificationGroup = ForeignKey(NotificationGroup, on_delete=CASCADE)
     time_pattern: TimePattern | None = ForeignKey(
-        TimePattern, verbose_name="Time Pattern", on_delete=CASCADE, null=True, blank=True
+        TimePattern, on_delete=CASCADE, null=True, blank=True
     )
-    user: User = ForeignKey(User, verbose_name="User", on_delete=CASCADE)
+    user: User = ForeignKey(User, on_delete=CASCADE)
     method = CharField(max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES)
     policy = CharField(
         max_length=1,
@@ -921,16 +918,17 @@ class NotificationGroupUserSettings(NOCModel):
 
 
 class NotificationGroupSubscription(NOCModel):
+    """
+    Attributes:
+        notification_group: Notification Group
+    """
+
     class Meta:
-        verbose_name = "Notification Group Watch Subscription"
-        verbose_name_plural = "Notification Group Users"
         app_label = "main"
         db_table = "main_notificationgroupsubscription"
         unique_together = [("notification_group_id", "model_id", "instance_id", "remote_system")]
 
-    notification_group: NotificationGroup = ForeignKey(
-        NotificationGroup, verbose_name="Notification Group", on_delete=CASCADE
-    )
+    notification_group: NotificationGroup = ForeignKey(NotificationGroup, on_delete=CASCADE)
     # On Group
     model_id = CharField(max_length=50)
     instance_id = CharField(max_length=100)

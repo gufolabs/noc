@@ -20,18 +20,16 @@ class Migration(BaseMigration):
             "ip_ipv4addressrange",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("vrf", models.ForeignKey(VRF, verbose_name="VRF", on_delete=models.CASCADE)),
-                ("name", models.CharField("Name", max_length=64)),
-                ("from_ip", models.GenericIPAddressField("From IP", protocol="IPv4")),
-                ("to_ip", models.GenericIPAddressField("To Address", protocol="IPv4")),
-                ("description", models.TextField("Description", null=True, blank=True)),
-                ("is_locked", models.BooleanField("Range is locked", default=False)),
-                ("fqdn_action", models.CharField("FQDN Action", default="N", max_length=1)),
+                ("vrf", models.ForeignKey(VRF, on_delete=models.CASCADE)),
+                ("name", models.CharField(max_length=64)),
+                ("from_ip", models.GenericIPAddressField(protocol="IPv4")),
+                ("to_ip", models.GenericIPAddressField(protocol="IPv4")),
+                ("description", models.TextField(null=True, blank=True)),
+                ("is_locked", models.BooleanField(default=False)),
+                ("fqdn_action", models.CharField(default="N", max_length=1)),
                 (
                     "fqdn_action_parameter",
-                    models.CharField(
-                        "FQDN Action Parameter", max_length=128, null=True, blank=True
-                    ),
+                    models.CharField(max_length=128, null=True, blank=True),
                 ),
             ),
         )

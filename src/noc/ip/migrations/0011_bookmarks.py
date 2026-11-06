@@ -21,10 +21,10 @@ class Migration(BaseMigration):
             "ip_ipv4blockbookmark",
             (
                 ("id", models.AutoField(primary_key=True)),
-                ("user", models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)),
+                ("user", models.ForeignKey(User, on_delete=models.CASCADE)),
                 (
                     "prefix",
-                    models.ForeignKey(IPv4Block, verbose_name="Prefix", on_delete=models.CASCADE),
+                    models.ForeignKey(IPv4Block, on_delete=models.CASCADE),
                 ),
             ),
         )

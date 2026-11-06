@@ -20,7 +20,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_ipv4block",
             "vc",
-            models.ForeignKey(
-                VC, verbose_name="VC", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(VC, null=True, blank=True, on_delete=models.CASCADE),
         )

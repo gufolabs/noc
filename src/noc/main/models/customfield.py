@@ -47,11 +47,10 @@ class CustomField(NOCModel):
         is_searchable: Is Searchable
         is_filtered: Is Filtered
         is_hidden: Is Hidden
+        enum_group: Enum Group
     """
 
     class Meta:
-        verbose_name = "Custom Field"
-        verbose_name_plural = "Custom Fields"
         db_table = "main_customfield"
         app_label = "main"
         unique_together = [("table", "name")]
@@ -86,7 +85,6 @@ class CustomField(NOCModel):
     # Is enumeration?
     enum_group = models.ForeignKey(
         CustomFieldEnumGroup,
-        verbose_name="Enum Group",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

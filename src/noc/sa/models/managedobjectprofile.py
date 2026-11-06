@@ -238,11 +238,14 @@ class ManagedObjectProfile(NOCModel):
         dynamic_classification_policy: Dynamic Classification Policy
         match_rules: Match Dynamic Rules
         trapcollector_storm_policy: Trapcollector Storm Policy
+        style: Style
+        bgppeer_profile: PeerProfile
+        config_download_template: Config Mirror Template
+        config_mirror_template: Config Mirror Template
+        beef_path_template: Beef Path Template
     """
 
     class Meta:
-        verbose_name = _("Managed Object Profile")
-        verbose_name_plural = _("Managed Object Profiles")
         db_table = "sa_managedobjectprofile"
         app_label = "sa"
         ordering = ["name"]
@@ -250,9 +253,7 @@ class ManagedObjectProfile(NOCModel):
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(blank=True, null=True)
     level = models.IntegerField(default=25)
-    style = models.ForeignKey(
-        Style, verbose_name=_("Style"), blank=True, null=True, on_delete=models.CASCADE
-    )
+    style = models.ForeignKey(Style, blank=True, null=True, on_delete=models.CASCADE)
     # Workflow
     workflow: Workflow = DocumentReferenceField(
         Workflow,
@@ -606,7 +607,7 @@ class ManagedObjectProfile(NOCModel):
     address_profile_confdb = DocumentReferenceField(AddressProfile, null=True, blank=True)
     # BGP Peer discovery profiles
     bgppeer_profile: PeerProfile | None = models.ForeignKey(
-        PeerProfile, verbose_name=_("PeerProfile"), blank=True, null=True, on_delete=models.CASCADE
+        PeerProfile, blank=True, null=True, on_delete=models.CASCADE
     )
     # Config policy
     config_policy = models.CharField(
@@ -622,7 +623,6 @@ class ManagedObjectProfile(NOCModel):
     config_download_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     config_download_template = models.ForeignKey(
         Template,
-        verbose_name=_("Config Mirror Template"),
         blank=True,
         null=True,
         related_name="config_download_objects_set",
@@ -637,7 +637,6 @@ class ManagedObjectProfile(NOCModel):
     config_mirror_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     config_mirror_template = models.ForeignKey(
         Template,
-        verbose_name=_("Config Mirror Template"),
         blank=True,
         null=True,
         related_name="config_mirror_objects_set",
@@ -719,7 +718,6 @@ class ManagedObjectProfile(NOCModel):
     beef_storage = DocumentReferenceField(ExtStorage, null=True, blank=True)
     beef_path_template = models.ForeignKey(
         Template,
-        verbose_name=_("Beef Path Template"),
         blank=True,
         null=True,
         related_name="beef_objects_set",

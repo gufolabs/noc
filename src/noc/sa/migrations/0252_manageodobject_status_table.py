@@ -26,7 +26,6 @@ class Migration(BaseMigration):
                     "managed_object",
                     models.OneToOneField(
                         ManagedObject,
-                        verbose_name="Managed Object Reference",
                         unique=True,
                         primary_key=True,
                         on_delete=models.CASCADE,
@@ -34,11 +33,9 @@ class Migration(BaseMigration):
                 ),
                 (
                     "last",
-                    models.DateTimeField(
-                        "Last update Time", auto_now_add=True, null=True, blank=True
-                    ),
+                    models.DateTimeField(auto_now_add=True, null=True, blank=True),
                 ),
-                ("status", models.BooleanField("Status")),
+                ("status", models.BooleanField()),
             ),
         )
         # Migration ObjectStatus

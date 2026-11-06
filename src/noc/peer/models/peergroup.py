@@ -27,8 +27,6 @@ class PeerGroup(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Peer Group"
-        verbose_name_plural = "Peer Groups"
         db_table = "peer_peergroup"
         app_label = "peer"
 

@@ -19,7 +19,6 @@ from noc.core.model.decorator import on_init
 from noc.core.model.fields import INETField
 
 # Third-party modules modules
-from noc.core.translation import ugettext as _
 
 
 @on_init
@@ -39,8 +38,6 @@ class DNSServer(NOCModel):
     """
 
     class Meta:
-        verbose_name = _("DNS Server")
-        verbose_name_plural = _("DNS Servers")
         db_table = "dns_dnsserver"
         app_label = "dns"
 

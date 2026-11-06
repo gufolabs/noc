@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "access_preference",
             models.CharField(
-                "Access Preference",
                 max_length=8,
                 choices=[
                     ("S", "SNMP Only"),
@@ -35,7 +34,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "access_preference",
             models.CharField(
-                "Access Preference",
                 max_length=8,
                 choices=[
                     ("P", "Profile"),

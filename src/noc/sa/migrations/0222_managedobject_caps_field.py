@@ -32,7 +32,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "caps",
-            models.JSONField("Caps Items", null=True, blank=True, default=lambda: "[]"),
+            models.JSONField(null=True, blank=True, default=lambda: "[]"),
         )
         caps_map = {}
         objects_map = defaultdict(set)

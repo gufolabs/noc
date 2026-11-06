@@ -27,5 +27,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobjectprofile",
             "hk_handler",
-            models.CharField("Housekeeping Handler", max_length=255, null=True, blank=True),
+            models.CharField(max_length=255, null=True, blank=True),
         )

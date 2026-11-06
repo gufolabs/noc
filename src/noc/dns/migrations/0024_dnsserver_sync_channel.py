@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnsserver",
             "sync_channel",
-            models.CharField("Sync channel", max_length=64, blank=True, null=True),
+            models.CharField(max_length=64, blank=True, null=True),
         )

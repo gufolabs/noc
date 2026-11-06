@@ -12,4 +12,4 @@ from noc.core.model.fields import TagsField
 
 class Migration(BaseMigration):
     def migrate(self) -> None:
-        self.db.add_column("sa_terminationgroup", "tags", TagsField("Tags", null=True, blank=True))
+        self.db.add_column("sa_terminationgroup", "tags", TagsField(null=True, blank=True))

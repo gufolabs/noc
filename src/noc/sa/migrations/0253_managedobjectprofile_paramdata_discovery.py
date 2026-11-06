@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "box_discovery_param_data_conflict_resolve_policy",
             models.CharField(
-                "CPE discovery mode (full or status only)",
                 max_length=1,
                 choices=[("M", "Manual"), ("D", "Prefer Discovery"), ("O", "Prefer Object")],
                 default="O",

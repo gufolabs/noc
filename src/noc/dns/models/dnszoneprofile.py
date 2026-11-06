@@ -21,7 +21,6 @@ from noc.config import config
 from noc.core.change.decorator import change
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init
-from noc.core.translation import ugettext as _
 from noc.main.models.notificationgroup import NotificationGroup
 
 from .dnsserver import DNSServer
@@ -46,21 +45,17 @@ class DNSZoneProfile(NOCModel):
         zone_expire: Expire
         zone_ttl: TTL
         description: Description
+        masters: Masters
+        slaves: Slaves
     """
 
     class Meta:
-        verbose_name = _("DNS Zone Profile")
-        verbose_name_plural = _("DNS Zone Profiles")
         db_table = "dns_dnszoneprofile"
         app_label = "dns"
 
     name = models.CharField(max_length=32, unique=True)
-    masters = models.ManyToManyField(
-        DNSServer, verbose_name=_("Masters"), related_name="masters", blank=True
-    )
-    slaves = models.ManyToManyField(
-        DNSServer, verbose_name=_("Slaves"), related_name="slaves", blank=True
-    )
+    masters = models.ManyToManyField(DNSServer, related_name="masters", blank=True)
+    slaves = models.ManyToManyField(DNSServer, related_name="slaves", blank=True)
     zone_soa = models.CharField(max_length=64)
     zone_contact = models.CharField(max_length=64)
     zone_refresh = models.IntegerField(default=3600)
@@ -69,7 +64,6 @@ class DNSZoneProfile(NOCModel):
     zone_ttl = models.IntegerField(default=3600)
     notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name=_("Notification Group"),
         null=True,
         blank=True,
         on_delete=models.CASCADE,

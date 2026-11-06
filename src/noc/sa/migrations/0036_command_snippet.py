@@ -24,24 +24,23 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_commandsnippet",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
-                ("description", models.TextField("Description")),
-                ("snippet", models.TextField("Snippet")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                ("description", models.TextField()),
+                ("snippet", models.TextField()),
                 (
                     "change_configuration",
-                    models.BooleanField("Change configuration", default=False),
+                    models.BooleanField(default=False),
                 ),
                 (
                     "selector",
                     models.ForeignKey(
                         ManagedObjectSelector,
-                        verbose_name="Object Selector",
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("is_enabled", models.BooleanField("Is Enabled?", default=True)),
-                ("timeout", models.IntegerField("Timeout", default=60)),
-                ("tags", AutoCompleteTagsField("Tags", null=True, blank=True)),
+                ("is_enabled", models.BooleanField(default=True)),
+                ("timeout", models.IntegerField(default=60)),
+                ("tags", AutoCompleteTagsField(null=True, blank=True)),
             ),
         )

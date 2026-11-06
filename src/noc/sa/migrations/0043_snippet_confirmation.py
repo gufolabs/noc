@@ -19,5 +19,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_commandsnippet",
             "require_confirmation",
-            models.BooleanField("Require Confirmation", default=False),
+            models.BooleanField(default=False),
         )

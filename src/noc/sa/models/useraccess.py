@@ -15,21 +15,23 @@ from django.db.models import Q
 # NOC modules
 from noc.aaa.models.user import User
 from noc.core.model.base import NOCModel
-from noc.core.translation import ugettext as _
 
 from .administrativedomain import AdministrativeDomain
 from .groupaccess import GroupAccess
 
 
 class UserAccess(NOCModel):
+    """
+    Attributes:
+        user: User
+    """
+
     class Meta:
-        verbose_name = _("User Access")
-        verbose_name_plural = _("User Access")
         db_table = "sa_useraccess"
         app_label = "sa"
         ordering = ["user"]
 
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     administrative_domain = models.ForeignKey(
         AdministrativeDomain, null=True, blank=True, on_delete=models.CASCADE
     )

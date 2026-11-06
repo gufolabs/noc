@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "diagnostics",
-            models.JSONField("Diagnostic check items", null=True, blank=True, default=lambda: "{}"),
+            models.JSONField(null=True, blank=True, default=lambda: "{}"),
         )

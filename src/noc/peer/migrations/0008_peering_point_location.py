@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "peer_peeringpoint",
             "location",
-            models.CharField("Location", max_length=64, blank=True, null=True),
+            models.CharField(max_length=64, blank=True, null=True),
         )

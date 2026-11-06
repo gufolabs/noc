@@ -18,8 +18,8 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_lgquerytype",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=32, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
             ),
         )
 
@@ -33,22 +33,19 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_lgquerycommand",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "peering_point_type",
                     models.ForeignKey(
                         PeeringPointType,
-                        verbose_name="Peering Point Type",
                         on_delete=models.CASCADE,
                     ),
                 ),
                 (
                     "query_type",
-                    models.ForeignKey(
-                        LGQueryType, verbose_name="LG Query Type", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(LGQueryType, on_delete=models.CASCADE),
                 ),
-                ("command", models.CharField("Command", max_length=128)),
+                ("command", models.CharField(max_length=128)),
             ),
         )
         self.db.create_index(

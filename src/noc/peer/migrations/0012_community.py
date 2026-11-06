@@ -19,8 +19,8 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_communitytype",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Description", max_length=32, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=32, unique=True)),
             ),
         )
 
@@ -33,12 +33,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "peer_community",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("community", models.CharField("Community", max_length=20, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("community", models.CharField(max_length=20, unique=True)),
                 (
                     "type",
-                    models.ForeignKey(CommunityType, verbose_name="Type", on_delete=models.CASCADE),
+                    models.ForeignKey(CommunityType, on_delete=models.CASCADE),
                 ),
-                ("description", models.CharField("Description", max_length=64)),
+                ("description", models.CharField(max_length=64)),
             ),
         )

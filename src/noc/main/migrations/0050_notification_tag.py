@@ -17,5 +17,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "main_notification",
             "tag",
-            models.CharField("Tag", max_length=256, db_index=True, null=True, blank=True),
+            models.CharField(max_length=256, db_index=True, null=True, blank=True),
         )

@@ -23,7 +23,6 @@ class Migration(BaseMigration):
             "cpe_profile",
             models.ForeignKey(
                 ManagedObjectProfile,
-                verbose_name="Object Profile",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,
@@ -34,7 +33,6 @@ class Migration(BaseMigration):
             "cpe_auth_profile",
             models.ForeignKey(
                 AuthProfile,
-                verbose_name="Object Profile",
                 blank=True,
                 null=True,
                 on_delete=models.CASCADE,

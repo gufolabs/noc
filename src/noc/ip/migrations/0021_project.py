@@ -17,15 +17,15 @@ class Migration(BaseMigration):
         self.db.add_column(
             "ip_vrf",
             "project",
-            models.CharField("Project ID", max_length=256, null=True, blank=True, db_index=True),
+            models.CharField(max_length=256, null=True, blank=True, db_index=True),
         )
         self.db.add_column(
             "ip_prefix",
             "project",
-            models.CharField("Project ID", max_length=256, null=True, blank=True, db_index=True),
+            models.CharField(max_length=256, null=True, blank=True, db_index=True),
         )
         self.db.add_column(
             "ip_address",
             "project",
-            models.CharField("Project ID", max_length=256, null=True, blank=True, db_index=True),
+            models.CharField(max_length=256, null=True, blank=True, db_index=True),
         )

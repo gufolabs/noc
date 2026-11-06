@@ -28,17 +28,16 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_notificationgroupsubscription",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "notification_group",
                     models.ForeignKey(
                         NotificationGroup,
-                        verbose_name="Notification Group",
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("model_id", models.CharField("Name", max_length=50)),
-                ("instance_id", models.CharField("Name", max_length=100)),
+                ("model_id", models.CharField(max_length=50)),
+                ("instance_id", models.CharField(max_length=100)),
                 (
                     "watchers",
                     ArrayField(

@@ -20,7 +20,7 @@ class Migration(BaseMigration):
             self.db.add_column(
                 "peer_peeringpoint",
                 "local_as",
-                models.ForeignKey(AS, verbose_name="Local AS", blank=True, null=True),
+                models.ForeignKey(AS, blank=True, null=True),
             )
             as_id = self.db.execute("SELECT MIN(id) FROM peer_as")[0][0]
             self.db.execute("UPDATE peer_peeringpoint SET local_as_id=%s", [as_id])
@@ -29,8 +29,6 @@ class Migration(BaseMigration):
             self.db.add_column(
                 "peer_peeringpoint",
                 "local_as",
-                models.ForeignKey(AS, verbose_name="Local AS", on_delete=models.CASCADE),
+                models.ForeignKey(AS, on_delete=models.CASCADE),
             )
-        self.db.add_column(
-            "peer_peer", "masklen", models.PositiveIntegerField("Masklen", default=30)
-        )
+        self.db.add_column("peer_peer", "masklen", models.PositiveIntegerField(default=30))

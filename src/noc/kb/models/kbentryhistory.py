@@ -21,16 +21,16 @@ class KBEntryHistory(NOCModel):
     Attributes:
         timestamp: Timestamp
         diff: Diff
+        kb_entry: KB Entry
+        user: User
     """
 
     class Meta:
-        verbose_name = "KB Entry History"
-        verbose_name_plural = "KB Entry Histories"
         app_label = "kb"
         db_table = "kb_kbentryhistory"
         ordering = ("kb_entry", "timestamp")
 
-    kb_entry = models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE)
+    kb_entry = models.ForeignKey(KBEntry, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     diff = models.TextField()

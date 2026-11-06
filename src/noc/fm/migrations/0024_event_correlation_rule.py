@@ -20,18 +20,17 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventcorrelationrule",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
-                ("is_builtin", models.BooleanField("Is Builtin", default=False)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
+                ("is_builtin", models.BooleanField(default=False)),
                 (
                     "rule_type",
-                    models.CharField("Rule Type", max_length=32, choices=[("Pair", "Pair")]),
+                    models.CharField(max_length=32, choices=[("Pair", "Pair")]),
                 ),
                 (
                     "action",
                     models.CharField(
-                        "Action",
                         max_length=1,
                         choices=[
                             ("C", "Close"),
@@ -41,8 +40,8 @@ class Migration(BaseMigration):
                         ],
                     ),
                 ),
-                ("same_object", models.BooleanField("Same Object", default=True)),
-                ("window", models.IntegerField("Window (sec)", default=0)),
+                ("same_object", models.BooleanField(default=True)),
+                ("window", models.IntegerField(default=0)),
             ),
         )
 
@@ -56,18 +55,14 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventcorrelationmatchedclass",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "rule",
-                    models.ForeignKey(
-                        EventCorrelationRule, verbose_name="Rule", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(EventCorrelationRule, on_delete=models.CASCADE),
                 ),
                 (
                     "event_class",
-                    models.ForeignKey(
-                        EventClass, verbose_name="Event Class", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(EventClass, on_delete=models.CASCADE),
                 ),
             ),
         )
@@ -84,14 +79,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventcorrelationmatchedvar",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "rule",
-                    models.ForeignKey(
-                        EventCorrelationRule, verbose_name="Rule", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(EventCorrelationRule, on_delete=models.CASCADE),
                 ),
-                ("var", models.CharField("Variable Name", max_length=256)),
+                ("var", models.CharField(max_length=256)),
             ),
         )
         self.db.create_index("fm_eventcorrelationmatchedvar", ["rule_id", "var"], unique=True)

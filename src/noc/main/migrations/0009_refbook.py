@@ -21,26 +21,26 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_refbook",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=128, unique=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=128, unique=True)),
                 (
                     "language",
-                    models.ForeignKey(Language, verbose_name=Language, on_delete=models.CASCADE),
+                    models.ForeignKey(Language, on_delete=models.CASCADE),
                 ),
-                ("description", models.TextField("Description", blank=True, null=True)),
-                ("is_enabled", models.BooleanField("Is Enabled", default=False)),
-                ("is_builtin", models.BooleanField("Is Builtin", default=False)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("is_enabled", models.BooleanField(default=False)),
+                ("is_builtin", models.BooleanField(default=False)),
                 (
                     "downloader",
-                    models.CharField("Downloader", max_length=64, blank=True, null=True),
+                    models.CharField(max_length=64, blank=True, null=True),
                 ),
                 (
                     "download_url",
-                    models.CharField("Download URL", max_length=256, null=True, blank=True),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
-                ("last_updated", models.DateTimeField("Last Updated", blank=True, null=True)),
-                ("next_update", models.DateTimeField("Next Update", blank=True, null=True)),
-                ("refresh_interval", models.IntegerField("Refresh Interval (days)", default=0)),
+                ("last_updated", models.DateTimeField(blank=True, null=True)),
+                ("next_update", models.DateTimeField(blank=True, null=True)),
+                ("refresh_interval", models.IntegerField(default=0)),
             ),
         )
 
@@ -51,18 +51,18 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_refbookfield",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "ref_book",
-                    models.ForeignKey(RefBook, verbose_name="Ref Book", on_delete=models.CASCADE),
+                    models.ForeignKey(RefBook, on_delete=models.CASCADE),
                 ),
-                ("name", models.CharField("Name", max_length="64")),
-                ("order", models.IntegerField("Order")),
-                ("is_required", models.BooleanField("Is Required", default=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
+                ("name", models.CharField(max_length="64")),
+                ("order", models.IntegerField()),
+                ("is_required", models.BooleanField(default=True)),
+                ("description", models.TextField(blank=True, null=True)),
                 (
                     "search_method",
-                    models.CharField("Search Method", max_length=64, blank=True, null=True),
+                    models.CharField(max_length=64, blank=True, null=True),
                 ),
             ),
         )
@@ -78,17 +78,17 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_refbookdata",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "ref_book",
-                    models.ForeignKey(RefBook, verbose_name="Ref Book", on_delete=models.CASCADE),
+                    models.ForeignKey(RefBook, on_delete=models.CASCADE),
                 ),
-                ("record_id", models.IntegerField("ID")),
+                ("record_id", models.IntegerField()),
                 (
                     "field",
-                    models.ForeignKey(RefBookField, verbose_name="Field", on_delete=models.CASCADE),
+                    models.ForeignKey(RefBookField, on_delete=models.CASCADE),
                 ),
-                ("value", models.TextField("Value", null=True, blank=True)),
+                ("value", models.TextField(null=True, blank=True)),
             ),
         )
         self.db.create_index(

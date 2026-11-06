@@ -18,9 +18,9 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_terminationgroup",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(null=True, blank=True)),
             ),
         )
         TerminationGroup = self.db.mock_model(
@@ -32,7 +32,6 @@ class Migration(BaseMigration):
             "termination_group",
             models.ForeignKey(
                 TerminationGroup,
-                verbose_name="Termination Group",
                 blank=True,
                 null=True,
                 related_name="termination_set",
@@ -44,7 +43,6 @@ class Migration(BaseMigration):
             "service_terminator",
             models.ForeignKey(
                 TerminationGroup,
-                verbose_name="Service Terminator",
                 blank=True,
                 null=True,
                 related_name="access_set",
@@ -57,7 +55,6 @@ class Migration(BaseMigration):
             "filter_termination_group",
             models.ForeignKey(
                 TerminationGroup,
-                verbose_name="Filter by termination group",
                 null=True,
                 blank=True,
                 related_name="selector_termination_group_set",
@@ -69,7 +66,6 @@ class Migration(BaseMigration):
             "filter_service_terminator",
             models.ForeignKey(
                 TerminationGroup,
-                verbose_name="Filter by service terminator",
                 null=True,
                 blank=True,
                 related_name="selector_service_terminator_set",

@@ -28,18 +28,18 @@ class PeeringPoint(NOCModel):
         router_id: Router-ID
         communities: Import Communities
         enable_prefix_list_provisioning: Enable Prefix-List Provisioning
+        local_as: Local AS
+        prefix_list_notification_group: Prefix List Notification Group
     """
 
     class Meta:
-        verbose_name = "Peering Point"
-        verbose_name_plural = "Peering Points"
         db_table = "peer_peeringpoint"
         app_label = "peer"
 
     # @todo: Replace with managed object
     hostname = models.CharField(max_length=64, unique=True)
     location = models.CharField(max_length=64, blank=True, null=True)
-    local_as = models.ForeignKey(AS, verbose_name="Local AS", on_delete=models.CASCADE)
+    local_as = models.ForeignKey(AS, on_delete=models.CASCADE)
     router_id = models.GenericIPAddressField(unique=True, protocol="IPv4")
     # @todo: Replace with managed object
     profile = DocumentReferenceField(Profile, null=False, blank=False)
@@ -47,7 +47,6 @@ class PeeringPoint(NOCModel):
     enable_prefix_list_provisioning = models.BooleanField(default=False)
     prefix_list_notification_group = models.ForeignKey(
         NotificationGroup,
-        verbose_name="Prefix List Notification Group",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

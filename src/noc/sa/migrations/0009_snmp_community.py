@@ -17,10 +17,10 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_managedobject",
             "snmp_ro",
-            models.CharField("RO Community", blank=True, null=True, max_length=64),
+            models.CharField(blank=True, null=True, max_length=64),
         )
         self.db.add_column(
             "sa_managedobject",
             "snmp_rw",
-            models.CharField("RW Community", blank=True, null=True, max_length=64),
+            models.CharField(blank=True, null=True, max_length=64),
         )

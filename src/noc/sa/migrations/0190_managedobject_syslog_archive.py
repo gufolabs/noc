@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "syslog_archive_policy",
             models.CharField(
-                "SYSLOG Archive Policy",
                 max_length=1,
                 choices=[("E", "Enable"), ("D", "Disable")],
                 default="D",
@@ -30,7 +29,6 @@ class Migration(BaseMigration):
             "sa_managedobject",
             "syslog_archive_policy",
             models.CharField(
-                "SYSLOG Archive Policy",
                 max_length=1,
                 choices=[("P", "Profile"), ("E", "Enable"), ("D", "Disable")],
                 default="P",

@@ -19,7 +19,6 @@ class Migration(BaseMigration):
             "ip_prefix",
             "pools",
             models.JSONField(
-                "Remote System mappings",
                 null=True,
                 blank=True,
                 default=lambda: "[]",
@@ -34,7 +33,6 @@ class Migration(BaseMigration):
             "ip_address",
             "allocated_user",
             models.CharField(
-                "Allocated User",
                 max_length=256,
                 null=True,
                 blank=True,

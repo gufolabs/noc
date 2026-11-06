@@ -29,7 +29,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "auth_user",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("username", models.CharField(max_length=75, unique=True)),
                 ("first_name", models.CharField(max_length=75, blank=True)),
                 ("last_name", models.CharField(max_length=75, blank=True)),
@@ -44,7 +44,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "auth_group",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("name", models.CharField(max_length=80, unique=True)),
             ),
         )
@@ -55,7 +55,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "auth_user_groups",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 ("user", models.ForeignKey(User, null=False, on_delete=models.CASCADE)),
                 ("group", models.ForeignKey(Group, null=False, on_delete=models.CASCADE)),
             ),

@@ -18,18 +18,17 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_task",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("task_id", models.IntegerField("Task", unique=True)),
-                ("start_time", models.DateTimeField("Start Time", auto_now_add=True)),
-                ("end_time", models.DateTimeField("End Time")),
-                ("profile_name", models.CharField("Profile", max_length=64)),
-                ("stream_url", models.CharField("Stream URL", max_length=128)),
-                ("action", models.CharField("Action", max_length=64)),
-                ("args", models.TextField("Args")),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("task_id", models.IntegerField(unique=True)),
+                ("start_time", models.DateTimeField(auto_now_add=True)),
+                ("end_time", models.DateTimeField()),
+                ("profile_name", models.CharField(max_length=64)),
+                ("stream_url", models.CharField(max_length=128)),
+                ("action", models.CharField(max_length=64)),
+                ("args", models.TextField()),
                 (
                     "status",
                     models.CharField(
-                        "Status",
                         max_length=1,
                         choices=[
                             ("n", "New"),
@@ -39,6 +38,6 @@ class Migration(BaseMigration):
                         ],
                     ),
                 ),
-                ("out", models.TextField("Out")),
+                ("out", models.TextField()),
             ),
         )

@@ -17,7 +17,7 @@ class Migration(BaseMigration):
         self.db.add_column(
             "dns_dnsserver",
             "provisioning",
-            models.CharField("Provisioning", max_length=128, blank=True, null=True),
+            models.CharField(max_length=128, blank=True, null=True),
         )
         self.db.execute(
             "UPDATE dns_dnsserver SET provisioning=%s", ["%(rsync)s -av --delete * /tmp/dns"]

@@ -63,8 +63,6 @@ class Project(NOCModel):
     """
 
     class Meta:
-        verbose_name = "Project"
-        verbose_name_plural = "Projects"
         app_label = "project"
         db_table = "project_project"
 

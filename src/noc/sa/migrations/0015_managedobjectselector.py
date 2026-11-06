@@ -23,32 +23,27 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobjectselector",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
-                ("name", models.CharField("Name", max_length=64, unique=True)),
-                ("description", models.TextField("Description", blank=True, null=True)),
-                ("is_enabled", models.BooleanField("Is Enabled", default=True)),
-                ("filter_id", models.IntegerField("Filter by ID", null=True, blank=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
+                ("name", models.CharField(max_length=64, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("is_enabled", models.BooleanField(default=True)),
+                ("filter_id", models.IntegerField(null=True, blank=True)),
                 (
                     "filter_name",
-                    models.CharField(
-                        "Filter by Name (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "filter_profile",
-                    models.CharField("Filter by Profile", max_length=64, null=True, blank=True),
+                    models.CharField(max_length=64, null=True, blank=True),
                 ),
                 (
                     "filter_address",
-                    models.CharField(
-                        "Filter by Address (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "filter_administrative_domain",
                     models.ForeignKey(
                         AdministrativeDomain,
-                        verbose_name="Filter by Administrative Domain",
                         null=True,
                         blank=True,
                         on_delete=models.CASCADE,
@@ -56,32 +51,23 @@ class Migration(BaseMigration):
                 ),
                 (
                     "filter_user",
-                    models.CharField(
-                        "Filter by User (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "filter_remote_path",
-                    models.CharField(
-                        "Filter by Remote Path (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "filter_description",
-                    models.CharField(
-                        "Filter by Description (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "filter_repo_path",
-                    models.CharField(
-                        "Filter by Repo Path (REGEXP)", max_length=256, null=True, blank=True
-                    ),
+                    models.CharField(max_length=256, null=True, blank=True),
                 ),
                 (
                     "source_combine_method",
                     models.CharField(
-                        "Source Combine Method",
                         max_length=1,
                         default="O",
                         choices=[("A", "AND"), ("O", "OR")],
@@ -99,7 +85,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobjectselector_filter_groups",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "managedobjectselector",
                     models.ForeignKey(ManagedObjectSelector, null=False, on_delete=models.CASCADE),
@@ -117,7 +103,7 @@ class Migration(BaseMigration):
         self.db.create_table(
             "sa_managedobjectselector_sources",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "from_managedobjectselector",
                     models.ForeignKey(ManagedObjectSelector, null=False, on_delete=models.CASCADE),

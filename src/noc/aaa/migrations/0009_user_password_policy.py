@@ -18,17 +18,17 @@ class Migration(BaseMigration):
         self.db.add_column(
             "auth_user",
             "change_at",
-            models.DateTimeField("Change password at", blank=True, null=True),
+            models.DateTimeField(blank=True, null=True),
         )
         self.db.add_column(
             "auth_user",
             "valid_from",
-            models.DateTimeField("Password valid from", blank=True, null=True),
+            models.DateTimeField(blank=True, null=True),
         )
         self.db.add_column(
             "auth_user",
             "valid_until",
-            models.DateTimeField("Password valid until", blank=True, null=True),
+            models.DateTimeField(blank=True, null=True),
         )
         self.db.add_column(
             "auth_user",

@@ -21,19 +21,17 @@ class UserContact(NOCModel):
     Attributes:
         notification_method: Method
         params: Params
+        user: User
+        time_pattern: Time Pattern
     """
 
     class Meta:
-        verbose_name = "User Profile Contact"
-        verbose_name_plural = "User Profile Contacts"
         unique_together = [("user", "time_pattern", "notification_method", "params")]
         app_label = "aaa"
         db_table = "aaa_usercontact"
 
-    user: User = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
-    time_pattern = models.ForeignKey(
-        TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
-    )
+    user: User = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_pattern = models.ForeignKey(TimePattern, on_delete=models.CASCADE)
     notification_method = models.CharField(max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES)
     params = models.CharField(max_length=256)
 

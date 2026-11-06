@@ -18,7 +18,6 @@ class Migration(BaseMigration):
             "sa_managedobjectprofile",
             "ping_time_expr_policy",
             models.CharField(
-                "Ping Time Expr Policy",
                 choices=[("D", "Disable ping"), ("E", "Enable ping but dont follow status")],
                 max_length=1,
                 default="D",

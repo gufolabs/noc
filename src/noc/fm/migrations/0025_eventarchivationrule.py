@@ -21,21 +21,19 @@ class Migration(BaseMigration):
         self.db.create_table(
             "fm_eventarchivationrule",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "event_class",
                     models.ForeignKey(
                         EventClass,
-                        verbose_name="Event Class",
                         unique=True,
                         on_delete=models.CASCADE,
                     ),
                 ),
-                ("ttl", models.IntegerField("Time To Live")),
+                ("ttl", models.IntegerField()),
                 (
                     "ttl_measure",
                     models.CharField(
-                        "Measure",
                         choices=[("s", "Seconds"), ("m", "Minutes"), ("h", "Hours"), ("d", "Days")],
                         default="h",
                         max_length=1,
@@ -43,7 +41,7 @@ class Migration(BaseMigration):
                 ),
                 (
                     "action",
-                    models.CharField("Action", choices=[("D", "Drop")], default="D", max_length=1),
+                    models.CharField(choices=[("D", "Drop")], default="D", max_length=1),
                 ),
             ),
         )

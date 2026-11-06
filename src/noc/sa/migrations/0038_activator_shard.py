@@ -21,7 +21,5 @@ class Migration(BaseMigration):
         self.db.add_column(
             "sa_activator",
             "shard",
-            models.ForeignKey(
-                Shard, verbose_name="Shard", null=True, blank=True, on_delete=models.CASCADE
-            ),
+            models.ForeignKey(Shard, null=True, blank=True, on_delete=models.CASCADE),
         )

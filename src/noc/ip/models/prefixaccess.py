@@ -18,7 +18,6 @@ from noc.aaa.models.user import User
 from noc.core.model.base import NOCModel
 from noc.core.model.fields import CIDRField
 from noc.core.model.sql import SQL
-from noc.core.translation import ugettext as _
 from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix
 
 from .afi import AFI_CHOICES
@@ -32,18 +31,18 @@ class PrefixAccess(NOCModel):
         prefix: Prefix
         can_view: Can View
         can_change: Can Change
+        user: User
+        vrf: VRF
     """
 
     class Meta:
-        verbose_name = _("Prefix Access")
-        verbose_name_plural = _("Prefix Access")
         db_table = "ip_prefixaccess"
         app_label = "ip"
         unique_together = [("user", "vrf", "afi", "prefix")]
         ordering = ["user", "vrf", "afi", "prefix"]
 
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
-    vrf = models.ForeignKey(VRF, verbose_name=_("VRF"), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vrf = models.ForeignKey(VRF, on_delete=models.CASCADE)
     afi = models.CharField(max_length=1, choices=AFI_CHOICES)
     prefix = CIDRField()
     can_view = models.BooleanField(default=False)

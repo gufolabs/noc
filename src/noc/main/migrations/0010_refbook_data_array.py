@@ -24,12 +24,12 @@ class Migration(BaseMigration):
         self.db.create_table(
             "main_refbookdata",
             (
-                ("id", models.AutoField(verbose_name="ID", primary_key=True, auto_created=True)),
+                ("id", models.AutoField(primary_key=True, auto_created=True)),
                 (
                     "ref_book",
-                    models.ForeignKey(RefBook, verbose_name="Ref Book", on_delete=models.CASCADE),
+                    models.ForeignKey(RefBook, on_delete=models.CASCADE),
                 ),
-                ("value", TextArrayField("Value")),
+                ("value", TextArrayField()),
             ),
         )
 

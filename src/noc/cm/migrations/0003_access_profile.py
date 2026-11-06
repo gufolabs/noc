@@ -21,35 +21,31 @@ class Migration(BaseMigration):
         self.db.add_column(
             "cm_object",
             "scheme",
-            models.IntegerField(
-                "Scheme", blank=True, null=True, choices=[(0, "telnet"), (1, "ssh")]
-            ),
+            models.IntegerField(blank=True, null=True, choices=[(0, "telnet"), (1, "ssh")]),
         )
         self.db.add_column(
             "cm_object",
             "address",
-            models.CharField("Address", max_length=64, blank=True, null=True),
+            models.CharField(max_length=64, blank=True, null=True),
         )
+        self.db.add_column("cm_object", "port", models.PositiveIntegerField(blank=True, null=True))
         self.db.add_column(
-            "cm_object", "port", models.PositiveIntegerField("Port", blank=True, null=True)
-        )
-        self.db.add_column(
-            "cm_object", "user", models.CharField("User", max_length=32, blank=True, null=True)
+            "cm_object", "user", models.CharField(max_length=32, blank=True, null=True)
         )
         self.db.add_column(
             "cm_object",
             "password",
-            models.CharField("Password", max_length=32, blank=True, null=True),
+            models.CharField(max_length=32, blank=True, null=True),
         )
         self.db.add_column(
             "cm_object",
             "super_password",
-            models.CharField("Super Password", max_length=32, blank=True, null=True),
+            models.CharField(max_length=32, blank=True, null=True),
         )
         self.db.add_column(
             "cm_object",
             "remote_path",
-            models.CharField("Path", max_length=32, blank=True, null=True),
+            models.CharField(max_length=32, blank=True, null=True),
         )
         for id, url in self.db.execute(
             "SELECT id,stream_url FROM cm_object WHERE stream_url!='ssh://u:p@localhost/'"
