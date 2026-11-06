@@ -34,7 +34,6 @@ from django.template import loader
 from django.utils.timezone import get_current_timezone
 
 # NOC modules
-from noc import settings
 from noc.config import config
 from noc.core.feature import Feature
 from noc.core.forms import NOCForm
@@ -111,10 +110,7 @@ class Application(metaclass=ApplicationBase):
     # new_permission -> old_permission
     diverged_permissions = {}  # permission -> base permission
     link = None  # Open link in another tab instead of application
-
     Form = NOCForm  # Shortcut for form class
-    config = settings.config  # @fixme remove
-
     app_alias = None  # Django 1.5 application aliases
     require_feature: Feature | None = None  # Feature required for application
 
