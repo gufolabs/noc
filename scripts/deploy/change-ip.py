@@ -71,7 +71,7 @@ def take_postgresql_version():
             shell=True,
             check=False,
         )
-        return str(sp.stdout.decode("utf-8")).rstrip("\n")
+        return str(sp.stdout.decode()).rstrip("\n")
     if distr_family == "rpm":
         sp = subprocess.run(
             ["yum list installed postgresql* | grep -Po 'postgresql\\K\\d*(?=-server)'"],
@@ -79,7 +79,7 @@ def take_postgresql_version():
             shell=True,
             check=False,
         )
-        ver = str(sp.stdout.decode("utf-8")).rstrip("\n")
+        ver = str(sp.stdout.decode()).rstrip("\n")
         if ver == "96":
             return "9.6"
         return ver

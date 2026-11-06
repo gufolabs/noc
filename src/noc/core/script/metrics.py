@@ -121,5 +121,5 @@ def fix_range(l_left, l_right, over_value=0):
 def convert_float(value):
     """Convert absolute and total values to percent"""
     if isinstance(value, bytes):
-        value = value.decode("utf-8")
+        value = value.decode()
     return float(value)

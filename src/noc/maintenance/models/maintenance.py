@@ -502,7 +502,7 @@ def update_affected_objects(maintenance_id, start: dt.datetime, stop: dt.datetim
         cursor.execute(
             SQL_ADD,
             [
-                orjson.dumps({str(maintenance_id): affected_data}).decode("utf-8"),
+                orjson.dumps({str(maintenance_id): affected_data}).decode(),
                 list(affected),
             ],
         )

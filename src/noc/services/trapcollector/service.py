@@ -203,11 +203,11 @@ class TrapCollectorService(BaseService):
                             {
                                 "oid": oid,
                                 "value": value,
-                                "value_raw": base64.b64encode(value_raw).decode("utf-8"),
+                                "value_raw": base64.b64encode(value_raw).decode(),
                             }
                             for oid, value, value_raw in raw_varbinds
                         ],
-                        "raw_pdu": base64.b64encode(raw_pdu).decode("utf-8"),
+                        "raw_pdu": base64.b64encode(raw_pdu).decode(),
                     },
                 }
             ),

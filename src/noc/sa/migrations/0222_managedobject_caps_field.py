@@ -55,5 +55,5 @@ class Migration(BaseMigration):
                 continue
             self.db.execute(
                 """UPDATE sa_managedobject SET caps = %s::jsonb WHERE id = ANY(%s::int[])""",
-                [caps_map[hh].decode("utf-8"), list(objects_map[hh])],
+                [caps_map[hh].decode(), list(objects_map[hh])],
             )

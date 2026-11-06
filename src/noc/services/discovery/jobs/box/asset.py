@@ -1075,7 +1075,7 @@ class AssetCheck(DiscoveryCheck):
         for k in sorted(x for x in self.ctx if not x.startswith("N")):
             seed += [k, str(self.ctx[k])]
         h = hashlib.sha256(smart_bytes(":".join(seed)))
-        return f"NOC{base64.b32encode(h.digest())[:7].decode('utf-8')}"
+        return f"NOC{base64.b32encode(h.digest())[:7].decode()}"
 
     @staticmethod
     def get_name(

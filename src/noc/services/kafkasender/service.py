@@ -148,7 +148,7 @@ class KafkaSenderService(BaseService):
         if partitions is None:
             return None
         if isinstance(partitions, bytes):
-            partitions = [partition.strip() for partition in partitions.decode("utf-8").split(",")]
+            partitions = [partition.strip() for partition in partitions.decode().split(",")]
 
         if len(partitions) == 1:
             return partitions[0].encode("utf-8")

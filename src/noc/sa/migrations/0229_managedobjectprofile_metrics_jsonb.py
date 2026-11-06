@@ -36,5 +36,5 @@ class Migration(BaseMigration):
         for mop_id in object_metric_map:
             self.db.execute(
                 """UPDATE sa_managedobjectprofile SET metrics = %s::jsonb WHERE id = %s""",
-                [object_metric_map[mop_id].decode("utf-8"), mop_id],
+                [object_metric_map[mop_id].decode(), mop_id],
             )

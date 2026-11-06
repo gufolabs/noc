@@ -18,7 +18,7 @@ from .monitor import SpanCursor
 class DatabaseOperations(PGDatabaseOperations):
     def adapt_json_value(self, value, encoder):
         def dumps(obj):
-            return orjson.dumps(obj).decode("utf-8")
+            return orjson.dumps(obj).decode()
 
         return Jsonb(value, dumps=dumps)
 

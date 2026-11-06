@@ -457,7 +457,7 @@ class DiagnosticHub:
         if update:
             self.logger.debug("Update diagnostics: %s", [x.diagnostic for x in update])
             diags = {d.diagnostic: d.model_dump(exclude={"config"}) for d in update}
-            params.append(orjson.dumps(diags, default=json_default).decode("utf-8"))
+            params.append(orjson.dumps(diags, default=json_default).decode())
             query_set += " || %s::jsonb"
         if not params:
             return
@@ -582,7 +582,7 @@ class DiagnosticHub:
                 partition=partition,
             )
             # self.logger.debug(
-            #    "Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode("utf-8")
+            #    "Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode()
             # )
 
     def register_diagnostic_change(

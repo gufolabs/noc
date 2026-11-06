@@ -68,9 +68,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
                 stream=stream,
                 partition=partition,
             )
-            self.logger.debug(
-                "Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode("utf-8")
-            )
+            self.logger.debug("Dispose: %s", orjson.dumps(msg, option=orjson.OPT_INDENT_2).decode())
 
     def handler(self):
         def get_interface(name) -> Interface | None:

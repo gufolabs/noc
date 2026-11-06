@@ -42,7 +42,7 @@ class Migration(BaseMigration):
                     "diagnostic": "PROC_ALARM",
                 },
             }
-        ).decode("utf-8")
+        ).decode()
 
     def migrate(self) -> None:
         # Create new ManagedObject.state

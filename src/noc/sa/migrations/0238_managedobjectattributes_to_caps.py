@@ -107,7 +107,7 @@ class Migration(BaseMigration):
             )
         caps = []
         for mo_id, data in mo_caps.items():
-            caps.append((mo_id, orjson.dumps(data).decode("utf-8")))
+            caps.append((mo_id, orjson.dumps(data).decode()))
         cursor = connection.cursor()
         #                 SET mo.caps = mo.caps || c.caps::jsonb
         execute_values(
