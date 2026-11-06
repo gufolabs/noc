@@ -18,6 +18,13 @@ class Changes(Model):
     """
     Attributes:
         change_id: Id
+        timestamp: Timestamp
+        user: User
+        model_name: Model Name
+        object_id: Object ID
+        object_name: Object Name
+        op: Operation
+        changes: Changes Details
     """
 
     class Meta:
@@ -25,13 +32,13 @@ class Changes(Model):
         engine = MergeTree("timestamp", ("user", "model_name"))
 
     change_id = StringField()
-    timestamp = DateTimeField(description="Timestamp")
-    user = StringField(description="User")
-    model_name = StringField(description="Model Name")
-    object_id = StringField(description="Object ID")
-    object_name = StringField(description="Object Name")
-    op = StringField(description="Operation")
-    changes = StringField(description="Changes Details")
+    timestamp = DateTimeField()
+    user = StringField()
+    model_name = StringField()
+    object_id = StringField()
+    object_name = StringField()
+    op = StringField()
+    changes = StringField()
 
     @classmethod
     def transform_query(cls, query, user):

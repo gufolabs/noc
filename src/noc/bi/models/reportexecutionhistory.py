@@ -18,21 +18,37 @@ from noc.core.clickhouse.model import Model
 
 
 class ReportExecutionHistory(Model):
+    """
+    Attributes:
+        start: Start execution time
+        end: End execution time
+        duration: Execute duration
+        report: Report UUID
+        name: Report Name
+        code: Report Code
+        user: Requesting User
+        output_document: Link to output document
+        successfully: Successful execute
+        canceled: Report was cancelled
+        params: Report Params
+        error: Execution error
+    """
+
     class Meta:
         db_table = "reportexecutionhistory"
         engine = MergeTree("date", ("date", "report"))
 
     date = DateField()
-    start = DateTimeField(description="Start execution time")
-    end = DateTimeField(description="End execution time")
-    duration = UInt32Field(description="Execute duration")
-    report = StringField(description="Report UUID")
-    name = StringField(description="Report Name")
-    code = StringField(description="Report Code")
-    user = StringField(description="Requesting User")
-    output_document = StringField(description="Link to output document")
-    successfully = BooleanField(description="Successful execute")
-    canceled = BooleanField(description="Report was cancelled")
-    params = StringField(description="Report Params")
-    error = StringField(description="Execution error")
+    start = DateTimeField()
+    end = DateTimeField()
+    duration = UInt32Field()
+    report = StringField()
+    name = StringField()
+    code = StringField()
+    user = StringField()
+    output_document = StringField()
+    successfully = BooleanField()
+    canceled = BooleanField()
+    params = StringField()
+    error = StringField()
     process_id = StringField("Process endpoint")

@@ -36,6 +36,7 @@ class Span(Model):
         error_text: Error text
         in_label: Input arguments
         out_label: Output results
+        in_headers: Call headers
     """
 
     class Meta:
@@ -58,7 +59,7 @@ class Span(Model):
     sample = Int32Field()
     error_code = UInt32Field()
     error_text = StringField()
-    in_headers = MapField(StringField(), description="Call headers")
+    in_headers = MapField(StringField())
     in_label = StringField()
     out_label = StringField()
 

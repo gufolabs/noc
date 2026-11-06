@@ -36,6 +36,7 @@ class DisposeLog(Model):
         message: Event Message
         target: Target
         reopens: Reopens
+        target_reference: Target reference
     """
 
     class Meta:
@@ -57,5 +58,5 @@ class DisposeLog(Model):
     alarm_class = ReferenceField(AlarmClass)
     message = StringField()
     target = MapField(StringField())
-    target_reference = UInt64Field(description="Target reference")
+    target_reference = UInt64Field()
     reopens = UInt32Field()

@@ -29,6 +29,9 @@ class MACDB(ViewModel):
         managed_object: Object Name
         interface_profile: Interface Profile
         segment: Network Segment
+        last_seen: Last Seen mac
+        interface: Interface
+        vlan: Vlan Number
     """
 
     class Meta:
@@ -47,7 +50,6 @@ class MACDB(ViewModel):
         "ts",
         DateTimeField(),
         ArgMax(),
-        description="Last Seen mac",
     )
     mac = UInt64Field()
     managed_object = ReferenceField(ManagedObject)
@@ -55,7 +57,6 @@ class MACDB(ViewModel):
         "interface",
         StringField(),
         ArgMax(),
-        description="Interface",
     )
     interface_profile = AggregatedField(
         "interface_profile",
@@ -71,5 +72,4 @@ class MACDB(ViewModel):
         "vlan",
         UInt16Field(),
         ArgMax(),
-        description="Vlan Number",
     )
