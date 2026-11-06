@@ -94,6 +94,7 @@ class ManagedObject(Model):
         n_stp_topo_changes: STP Topology Changes by period
         serials: Serial Numbers
         tags: Tags
+        location: Geo location
     """
 
     class Meta:
@@ -107,7 +108,7 @@ class ManagedObject(Model):
     administrative_domain = ReferenceField(AdministrativeDomain)
     segment = ReferenceField(NetworkSegment)
     container = ReferenceField(Container)
-    location = StringField(description="Geo location")
+    location = StringField()
     level = UInt16Field()
     # Project
     project = ReferenceField(Project)

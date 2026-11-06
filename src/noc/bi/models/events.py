@@ -66,6 +66,12 @@ class Events(Model):
         administrative_domain: Admin. Domain
         segment: Network Segment
         container: Container
+        data: All data on JSON
+        severity: EventSeverity
+        result_action: Result action for event
+        error_message: Error message
+        remote_system: Remote System
+        remote_id: Event Id on Remote System
     """
 
     class Meta:
@@ -86,18 +92,18 @@ class Events(Model):
     event_class = ReferenceField(EventClass)
     # Data
     labels = ArrayField(StringField())
-    data = StringField(description="All data on JSON")
+    data = StringField()
     message = StringField()
     # Calculated data
     raw_vars = MapField(StringField())  # For old query
     resolved_vars = MapField(StringField())
     vars = MapField(StringField())
     snmp_trap_oid = StringField()
-    severity = Int8Field(description="EventSeverity")
-    result_action = StringField(description="Result action for event")
-    error_message = StringField(description="Error message")
-    remote_system = ReferenceField(RemoteSystem, description="Remote System")
-    remote_id = StringField(description="Event Id on Remote System")
+    severity = Int8Field()
+    result_action = StringField()
+    error_message = StringField()
+    remote_system = ReferenceField(RemoteSystem)
+    remote_id = StringField()
     # Target data
     target = MapField(StringField())
     target_name = StringField()

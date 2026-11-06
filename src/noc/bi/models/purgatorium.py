@@ -39,6 +39,14 @@ class Purgatorium(Model):
         service_groups: Service Groups Ids
         clients_groups: Client Groups Ids
         remote_system: Remote System
+        ip: IP Address
+        router_id: Router ID IP Address, user for origin
+        description: Description
+        chassis_id: Chassis ID
+        hostname: Hostname Discovery
+        uptime: Host Uptime
+        is_delete: Address was removed from RemoteSystem
+        remote_id: Remote System Id
     """
 
     class Meta:
@@ -51,10 +59,10 @@ class Purgatorium(Model):
     date = DateField()
     ts = DateTimeField()
     # Require fields
-    ip = IPv4Field(description="IP Address")
+    ip = IPv4Field()
     pool = ReferenceField(Pool)
     source = StringField(low_cardinality=True)
-    router_id = IPv4Field(description="Router ID IP Address, user for origin")
+    router_id = IPv4Field()
     # network-scan
     # neighbors
     # syslog-source
@@ -62,11 +70,11 @@ class Purgatorium(Model):
     # manual
     # etl
     # Network-Scan, Neighbor fields
-    description = StringField(description="Description")
-    chassis_id = StringField(description="Chassis ID")
-    hostname = StringField(description="Hostname Discovery")
+    description = StringField()
+    chassis_id = StringField()
+    hostname = StringField()
     refs = ArrayField(StringField())
-    uptime = UInt64Field(description="Host Uptime")
+    uptime = UInt64Field()
     border = ReferenceField(ManagedObject)
     # Set for records on RemoteSystem
     data = MapField(StringField())
@@ -82,13 +90,13 @@ class Purgatorium(Model):
         low_cardinality=False,
     )
     # http, telegraf HTTP and port 3000, regex - status: avail & access & app (regex)
-    is_delete = BooleanField(description="Address was removed from RemoteSystem", default=False)
+    is_delete = BooleanField(default=False)
     # Labels List
     labels = ArrayField(StringField())
     service_groups = ArrayField(UInt64Field())
     clients_groups = ArrayField(UInt64Field())
     remote_system = ReferenceField(RemoteSystem)
-    remote_id = StringField(description="Remote System Id")
+    remote_id = StringField()
     # Maybe fields for detect hints
     # available_ports - detect open TCP port
     # maybe_agent

@@ -40,6 +40,10 @@ class CheckHistory(Model):
         managed_object: Running for object
         service: Object Name
         remote_system: Remote System
+        args: Running Argument
+        address: Destination IP Address
+        error: Error text
+        error_code: Error code
     """
 
     class Meta:
@@ -52,15 +56,15 @@ class CheckHistory(Model):
     status = BooleanField()
     key = StringField()
     ttl = UInt32Field()
-    args = MapField(StringField(), description="Running Argument")
+    args = MapField(StringField())
     port = UInt16Field()
-    address = IPv4Field(description="Destination IP Address")
+    address = IPv4Field()
     source = StringField(low_cardinality=True)
     script = StringField(low_cardinality=True)
     skipped = BooleanField()
     # Error
-    error = StringField(description="Error text")
-    error_code = StringField(description="Error code")
+    error = StringField()
+    error_code = StringField()
     is_available = BooleanField()
     is_access = BooleanField()
     data = StringField()

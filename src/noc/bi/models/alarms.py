@@ -39,13 +39,25 @@ from noc.sa.models.useraccess import UserAccess
 
 
 class Services(NestedModel):
-    profile = StringField(description="Profile Name")
-    summary = UInt32Field(description="Summary")
+    """
+    Attributes:
+        profile: Profile Name
+        summary: Summary
+    """
+
+    profile = StringField()
+    summary = UInt32Field()
 
 
 class Subscribers(NestedModel):
-    profile = StringField(description="Profile Name")
-    summary = UInt32Field(description="Summary")
+    """
+    Attributes:
+        profile: Profile Name
+        summary: Summary
+    """
+
+    profile = StringField()
+    summary = UInt32Field()
 
 
 class Alarms(Model):
