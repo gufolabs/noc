@@ -29,10 +29,9 @@ _SENTINEL = object()
 
 
 class MessageCatalog:
-    """Thread-safe, lazy-loaded catalog of ICU MessageFormat messages.
+    """Thread-safe catalog of ICU MessageFormat messages.
 
     Loads translations for the requested language with fallback to English.
-    Message patterns are compiled lazily and cached on first access.
 
     Args:
         language: Language identifier used to select the translation catalog.
@@ -40,18 +39,17 @@ class MessageCatalog:
             the project's i18n directory.
     """
 
-    FALLBACK_LANGUAGE = "en"
+    FALLBACK_LANGUAGE = Language.EN
 
     def __init__(self, language: Language, locale_base: Path | None = None) -> None:
-        self._language = language.value
+        self._language = language
         self._base = locale_base or config.noc_base / "i18n"
-        self._locale = Locale(self._language)
+        self._locale = Locale(self._language.value)
         self._loaded = False
-        self._patterns: dict[str, str] = {}
-        self._msg_formats: dict[str, MessageFormat | None] = {}
+        self._messages: dict[str, MessageFormat | str] = {}
         self._lock = Lock()
 
-    def __getitem__(self, key: str) -> MessageFormat:
+    def __getitem__(self, key: str) -> MessageFormat | str:
         """Get a compiled message format by key.
 
         The message is compiled and cached on first access.
@@ -65,25 +63,11 @@ class MessageCatalog:
         Raises:
             KeyError: If the message key is not found.
         """
-        v = self._msg_formats.get(key, _SENTINEL)
-        if v is None:
-            raise KeyError(f"{key} is not found")
-        if v is _SENTINEL:
+        if not self._loaded:
             with self._lock:
-                v = self._msg_formats.get(key, _SENTINEL)
-                if v is not _SENTINEL:
-                    if v is None:
-                        raise KeyError(f"{key} is not found")
-                    return v
                 if not self._loaded:
                     self._load_patterns()
-                pattern = self._patterns.get(key, _SENTINEL)
-                if pattern is _SENTINEL:
-                    self._msg_formats[key] = None
-                    raise KeyError(f"{key} is not found")
-                v = MessageFormat(pattern, locale=self._locale)
-                self._msg_formats[key] = v
-        return v
+        return self._messages[key]
 
     def __iter__(self) -> Iterator[str]:
         """Iterate over message keys.
@@ -95,7 +79,7 @@ class MessageCatalog:
             with self._lock:
                 if not self._loaded:
                     self._load_patterns()
-        return iter(self._patterns)
+        return iter(self._messages)
 
     def _load_patterns(self) -> None:
         """Load message patterns with fallback to the default language.
@@ -103,15 +87,21 @@ class MessageCatalog:
         Patterns from the requested language override patterns from the
         fallback language.
         """
+
+        def q(s: str) -> MessageFormat | str:
+            if "{" in s:
+                return MessageFormat(s, self._locale)
+            return s
+
         if self._language != self.FALLBACK_LANGUAGE:
             patterns = self._get_patterns(self.FALLBACK_LANGUAGE)
         else:
             patterns = {}
         patterns.update(self._get_patterns(self._language))
-        self._patterns = patterns
+        self._messages = {k: q(v) for k, v in patterns.items()}
         self._loaded = True
 
-    def _get_patterns(self, language: str) -> dict[str, str]:
+    def _get_patterns(self, language: Language) -> dict[str, str]:
         """Load message patterns for a language.
 
         Looks for a JSON catalog first, then falls back to YAML.
@@ -125,7 +115,7 @@ class MessageCatalog:
         Raises:
             RuntimeError: If no supported catalog file is found.
         """
-        path = self._base / language
+        path = self._base / language.value
         json_path = path.with_suffix(".json")
         if json_path.exists():
             return self._get_json_patterns(json_path)
@@ -176,6 +166,8 @@ def t(key: str, **kwargs: MessageArg) -> str:
         KeyError: If the message key is not found in the catalog.
     """
     fmt = catalog[key]
+    if isinstance(fmt, str):
+        return fmt
     return fmt.format(kwargs)
 
 
