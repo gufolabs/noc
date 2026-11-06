@@ -238,15 +238,12 @@ class BaseService:
     def setup_translation(self) -> None:
         # NOC modules
         from noc.core.i18n import t
-        from noc.core.translation import set_translation, ugettext
 
-        set_translation(self.name, config.language.value)
         if self.use_jinja:
             # Third-party modules
             from jinja2.defaults import DEFAULT_NAMESPACE
 
-            if "_" not in DEFAULT_NAMESPACE:
-                DEFAULT_NAMESPACE["_"] = ugettext
+            DEFAULT_NAMESPACE.pop("_", None)
             if "t" not in DEFAULT_NAMESPACE:
                 DEFAULT_NAMESPACE["t"] = t
 

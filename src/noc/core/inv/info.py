@@ -14,7 +14,7 @@ from typing import Any
 # NOC modules
 from noc.core.feature import Feature
 from noc.core.glyph import Glyph
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.fm.models.activealarm import ActiveAlarm, PathCode
 from noc.inv.models.channel import Channel
 from noc.inv.models.object import Object
@@ -175,7 +175,7 @@ def _info_for_object(resource: str) -> Info | None:
         buttons=[
             Button(
                 glyph=Glyph.ARROW_RIGHT,
-                hint=_("Go to object"),
+                hint=t("help-go-to-object"),
                 action=ButtonAction.GO,
                 scope=GoScope.OBJECT,
                 args=str(obj.id),
@@ -205,7 +205,7 @@ def _info_for_channel(resource: str) -> Info | None:
         buttons=[
             Button(
                 glyph=Glyph.ARROW_RIGHT,
-                hint=_("Go to channel"),
+                hint=t("help-go-to-channel"),
                 action=ButtonAction.GO,
                 scope=GoScope.CHANNEL,
                 args=str(ch.id),

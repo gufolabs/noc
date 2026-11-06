@@ -10,8 +10,8 @@
 from collections.abc import AsyncIterable, Iterable
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.mac import MAC
-from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
 from noc.inv.models.macblacklist import MACBlacklist
 from noc.main.models.pool import Pool
@@ -73,9 +73,9 @@ class DiscoveryIDCachePoisonDS(BaseDataSource):
             )
             if len(data) > 0:
                 if data[0]["address"] == data[1]["address"]:
-                    reason = _("Duplicate MO")
+                    reason = t("msg-duplicate-managed-object")
                 elif data[0]["is_managed"] != data[1]["is_managed"]:
-                    reason = _("MO is move")
+                    reason = t("msg-managed-object-was-moved")
             if reason == "Other" and MACBlacklist.is_banned_mac(row["macs"][0], is_duplicated=True):
                 on_blacklist = True
             if filter_dup_macs and on_blacklist:

@@ -24,7 +24,6 @@ from noc.config import config
 from noc.core.clickhouse.connect import connection
 from noc.core.comp import smart_text
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.crm.models.subscriberprofile import SubscriberProfile
 from noc.fm.models.activealarm import ActiveAlarm, Effect
 from noc.fm.models.activeevent import ActiveEvent
@@ -774,7 +773,7 @@ class AlarmApplication(ExtApplication):
             success += 1
         if success:
             return {"status": True}
-        return {"status": False, "message": _("Failed to clear alarms")}
+        return {"status": False, "message": t("msg-failed-to-clear-alarms")}
 
     @api.post(
         r"^(?P<id>[a-z0-9]{24})/set_root/",
@@ -1030,8 +1029,8 @@ class AlarmApplication(ExtApplication):
     def api_profile_lookup(self, request: HttpRequest):
         r = []
         for model, short_type, field_id in (
-            (ServiceProfile, _("Service"), "total_services"),
-            (SubscriberProfile, _("Subscribers"), "total_subscribers"),
+            (ServiceProfile, t("header-service"), "total_services"),
+            (SubscriberProfile, t("header-subscribers"), "total_subscribers"),
         ):
             # "%s|%s" % (field_id,
             r += [

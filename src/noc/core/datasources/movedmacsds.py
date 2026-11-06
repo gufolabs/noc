@@ -17,8 +17,8 @@ from typing import Any
 # NOC modules
 from noc.config import config
 from noc.core.clickhouse.connect import connection
+from noc.core.i18n import t
 from noc.core.mac import MAC
-from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.macvendor import MACVendor
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -167,19 +167,23 @@ class MovedMACsDS(BaseDataSource):
             if exclude_serial_change and mo_bi_id in serials_changed:
                 continue
             iface_from, iface_to, migrate = get_interface(ifaces)
-            event_type = _("Migrate")
+            event_type = t("label-migrate")
             if (
                 rx_port_num.search(iface_from).group() == rx_port_num.search(iface_to).group()
                 and iface_from != iface_to
             ):
-                event_type = _("Migrate (Device Changed)")
+                event_type = t("label-migrate-device-changed")
             mo = ManagedObject.get_by_bi_id(mo_bi_id)
             if not mo:
                 continue
             yield num, "managed_object_id", mo.id
             yield num, "managed_object_bi_id", str(mo_bi_id)
             yield num, "event_type", event_type
-            yield num, "sn_changed", _("Yes") if mo_bi_id in serials_changed else _("No")
+            yield (
+                num,
+                "sn_changed",
+                t("status-yes") if mo_bi_id in serials_changed else t("status-no"),
+            )
             yield num, "vendor_mac", MACVendor.get_vendor(mac)
             yield num, "mac", mac
             yield num, "migrate_ts", dt.datetime.fromtimestamp(migrate[1]).isoformat(sep=" ")

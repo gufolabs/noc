@@ -19,7 +19,7 @@ from django.utils.dateformat import DateFormat
 from noc.config import config
 from noc.core.comp import smart_text
 from noc.core.html import tags_list
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 from .reportapplication import ReportApplication
 
@@ -473,7 +473,7 @@ class TableSection(ReportSection):
                 "<input type='hidden' name='data' id='csv_data'>",
                 "<input class='button' disabled type='button' value='CSV' onclick='getData(\".report-table\", \",\");'>",
                 "<input class='button' disabled type='button' value='"
-                + _("Print")
+                + t("btn-print")
                 + "'onclick='window.print()'>",
                 "<input class='button' disabled type='button' value='PDF' onclick='getPDFReport(\".report-table\")'>",
                 "<input class='button' disabled type='button' value='SSV' onclick='getData(\".report-table\", \";\");'>",

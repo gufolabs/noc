@@ -31,7 +31,6 @@ from noc.core.pm.utils import get_interface_metrics
 from noc.core.scheduler.job import Job
 from noc.core.script.loader import loader as script_loader
 from noc.core.text import alnum_key
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_objectid
 from noc.core.wf.interaction import Interaction
 from noc.fm.models.activealarm import ActiveAlarm
@@ -257,7 +256,7 @@ class ManagedObjectApplication(ExtModelApplication):
                 continue
             if x["id"] in alarms:
                 x["oper_state"] = "degraded"
-                x["oper_state__label"] = _("Warning")
+                x["oper_state__label"] = t("status-warning")
         return data
 
     # def bulk_field_link_count(self, data):
@@ -307,13 +306,13 @@ class ManagedObjectApplication(ExtModelApplication):
         """
         if not o.is_managed or not o.object_profile.enable_ping:
             ostate = "disabled"
-            ostate_label = _("Disable")
+            ostate_label = t("status-disable")
         elif not o.get_status():
             ostate = "failed"
-            ostate_label = _("Down")
+            ostate_label = t("status-down")
         else:
             ostate = "full"
-            ostate_label = _("Up")
+            ostate_label = t("status-up")
         return {
             "id": o.id,
             "name": o.name,
@@ -1269,7 +1268,7 @@ class ManagedObjectApplication(ExtModelApplication):
         r = [
             {
                 "id": str(o.id),
-                "label": _("Topology Neighbors"),
+                "label": t("label-topology-neighbors"),
                 "is_default": False,
                 "args": ["objectlevelneighbor", str(o.id), o.id],
             }
@@ -1278,7 +1277,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r.append(
                 {
                     "id": str(o.segment.id),
-                    "label": _("Segment: ") + str(o.segment.name),
+                    "label": t("label-segment-name", name=o.segment.name or ""),
                     "is_default": True,
                     "args": ["segment", str(o.segment.id), o.id],
                 }
@@ -1287,7 +1286,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r.append(
                 {
                     "id": str(o.container.id),
-                    "label": _("Container: ") + str(o.container.name),
+                    "label": t("label-container-name", name=o.container.name or ""),
                     "is_default": False,
                     "args": ["objectcontainer", str(o.container.id), o.id],
                 }

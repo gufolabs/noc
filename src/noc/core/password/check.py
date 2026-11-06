@@ -7,7 +7,7 @@
 
 # NOC modules
 from noc.config import config
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 from .hasher import check_password
 
@@ -59,7 +59,7 @@ def _check_len(password: str, limit: int | None) -> None:
     if limit is None:
         limit = config.login.min_password_len
     if len(password) < limit:
-        msg = _("Password too short. Must be %d characters or longer") % limit
+        msg = t("msg-password-too-short", count=limit)
         raise ValueError(msg)
 
 
@@ -71,7 +71,7 @@ def _check_uppercase(password: str, limit: int | None) -> None:
         return
     n = sum(1 for c in password if c.isupper())
     if n < limit:
-        msg = _("Password must have at least %d upper-case letters") % limit
+        msg = t("msg-password-min-uppercase", count=limit)
         raise ValueError(msg)
 
 
@@ -83,7 +83,7 @@ def _check_lowercase(password: str, limit: int | None) -> None:
         return
     n = sum(1 for c in password if c.islower())
     if n < limit:
-        msg = _("Password must have at least %d lower-case letters") % limit
+        msg = t("msg-password-min-lowercase", count=limit)
         raise ValueError(msg)
 
 
@@ -95,7 +95,7 @@ def _check_numbers(password: str, limit: int | None) -> None:
         return
     n = sum(1 for c in password if c.isdigit())
     if n < limit:
-        msg = _("Password must have at least %d numbers") % limit
+        msg = t("msg-password-min-numbers", count=limit)
         raise ValueError(msg)
 
 
@@ -107,7 +107,7 @@ def _check_specials(password: str, limit: int | None) -> None:
         return
     n = sum(1 for c in password if not c.isalnum())
     if n < limit:
-        msg = _("Password must have at least %d special symbols") % limit
+        msg = t("msg-password-min-specials", count=limit)
         raise ValueError(msg)
 
 
@@ -117,5 +117,5 @@ def _check_history(password: str, history: list[str] | None) -> None:
         return
     for h in history:
         if check_password(password, h):
-            msg = _("Password is already used")
+            msg = t("msg-password-is-already-used")
             raise ValueError(msg)

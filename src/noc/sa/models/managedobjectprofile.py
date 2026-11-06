@@ -46,6 +46,7 @@ from noc.core.diagnostic.hub import (
     DiagnosticHub,
 )
 from noc.core.diagnostic.types import CtxItem, DiagnosticConfig, DiagnosticState
+from noc.core.i18n import t
 from noc.core.matcher import build_matcher
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check, on_init, on_save
@@ -54,7 +55,6 @@ from noc.core.scheduler.job import Job
 from noc.core.script.scheme import SSH, SNMPCredential
 from noc.core.script.scheme import Protocol as CredProtocol
 from noc.core.topology.types import ShapeOverlayForm, ShapeOverlayPosition
-from noc.core.translation import ugettext as _
 from noc.core.wf.interaction import Interaction
 from noc.inv.models.ifdescpatterns import IfDescPatterns
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -307,7 +307,10 @@ class ManagedObjectProfile(NOCModel):
     report_ping_rtt = models.BooleanField(default=False)
     report_ping_attempts = models.BooleanField(default=False)
     ping_time_expr_policy = models.CharField(
-        choices=[("D", _("Disable ping")), ("E", _("Enable ping but dont follow status"))],
+        choices=[
+            ("D", t("choice-disable-ping")),
+            ("E", t("choice-enable-ping-but-dont-follow-status")),
+        ],
         max_length=1,
         default="D",
     )
@@ -327,7 +330,11 @@ class ManagedObjectProfile(NOCModel):
     box_discovery_failed_interval = models.IntegerField(default=10800)
     # Running policy for box discovery
     box_discovery_running_policy = models.CharField(
-        choices=[("R", _("Require Up")), ("r", _("Require if enabled")), ("i", _("Ignore"))],
+        choices=[
+            ("R", t("choice-require-up")),
+            ("r", t("choice-require-if-enabled")),
+            ("i", t("choice-ignore")),
+        ],
         max_length=1,
         default="R",
     )
@@ -429,7 +436,11 @@ class ManagedObjectProfile(NOCModel):
     # Periodic discovery repeat interval
     periodic_discovery_interval = models.IntegerField(default=300)
     periodic_discovery_running_policy = models.CharField(
-        choices=[("R", _("Require Up")), ("r", _("Require if enabled")), ("i", _("Ignore"))],
+        choices=[
+            ("R", t("choice-require-up")),
+            ("r", t("choice-require-if-enabled")),
+            ("i", t("choice-ignore")),
+        ],
         max_length=1,
         default="R",
     )

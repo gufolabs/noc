@@ -19,12 +19,12 @@ from noc.sa.models.useraccess import UserAccess
 from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, TableColumn
 
 report_types = [
-    ("profile", t("label-by-profile")),
-    ("domain", t("label-by-administrative-domain")),
-    ("domain-profile", t("label-by-administrative-domain-and-profile")),
-    ("label", t("label-by-labels")),
-    ("platform", t("label-by-platform")),
-    ("version", t("label-by-version")),
+    ("profile", t("choice-by-profile")),
+    ("domain", t("choice-by-administrative-domain")),
+    ("domain-profile", t("choice-by-administrative-domain-and-profile")),
+    ("label", t("choice-by-labels")),
+    ("platform", t("choice-by-platform")),
+    ("version", t("choice-by-version")),
 ]
 
 fp_map = {
@@ -44,22 +44,22 @@ class ReportObjectsSummary(SimpleReport):
     form = ReportForm
     predefined_reports = {
         "profile": PredefinedReport(
-            t("label-managed-objects-summary-profile"), {"report_type": "profile"}
+            t("title-managed-objects-summary-profile"), {"report_type": "profile"}
         ),
         "domain": PredefinedReport(
-            t("label-managed-objects-summary-domain"), {"report_type": "domain"}
+            t("title-managed-objects-summary-domain"), {"report_type": "domain"}
         ),
         "domain-profile": PredefinedReport(
-            t("label-managed-objects-summary-domain-profile"), {"report_type": "domain-profile"}
+            t("title-managed-objects-summary-domain-profile"), {"report_type": "domain-profile"}
         ),
         "label": PredefinedReport(
-            t("label-managed-objects-summary-label"), {"report_type": "label"}
+            t("title-managed-objects-summary-label"), {"report_type": "label"}
         ),
         "platform": PredefinedReport(
-            t("label-managed-objects-summary-platform"), {"report_type": "platform"}
+            t("title-managed-objects-summary-platform"), {"report_type": "platform"}
         ),
         "version": PredefinedReport(
-            t("label-managed-objects-summary-version"), {"report_type": "version"}
+            t("title-managed-objects-summary-version"), {"report_type": "version"}
         ),
     }
 

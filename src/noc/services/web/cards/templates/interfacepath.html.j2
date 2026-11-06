@@ -232,40 +232,40 @@
 {% else %}
 {% for path in paths %}
 <div class="path">
-    <h4 class="header">{{ _("Alternative path") }} {{ loop.index }}</h4>
+    <h4 class="header">{{ t("label-alternative-path") }} {{ loop.index }}</h4>
     <div class="ruler">
-        <div class="object">{{ _("Object Name") }}<br/>{{ _("IP Address") }}</div>
-        <div class="hw-data">{{ _("Platform Name") }}<br/>{{ _("Soft Version") }}</div>
+        <div class="object">{{ t("label-object-name") }}<br/>{{ t("label-ip-address") }}</div>
+        <div class="hw-data">{{ t("label-platform-name") }}<br/>{{ t("label-soft-version") }}</div>
         <div class="link-set">
             <div class="center h-border-b">1</div>
             <div class="level">
-                <div class="x2 center">{{ _("Interface") }}</div>
+                <div class="x2 center">{{ t("label-interface") }}</div>
                 <div class="x2">
-                    <div class="center h-border-l h-border-b">{{ _("State") }}</div>
+                    <div class="center h-border-l h-border-b">{{ t("label-state") }}</div>
                     <div class="level">
-                        <div class="x1 center h-border-l">{{ _("Speed") }}</div>
-                        <div class="x1 center h-border-l">{{ _("Duplex") }}</div>
+                        <div class="x1 center h-border-l">{{ t("label-speed") }}</div>
+                        <div class="x1 center h-border-l">{{ t("label-duplex") }}</div>
                     </div>
                 </div>
                 <div class="x2">
-                    <div class="center h-border-l h-border-b">{{ _("Utilization") }}</div>
+                    <div class="center h-border-l h-border-b">{{ t("label-utilization") }}</div>
                     <div class="level">
-                        <div class="x1 center h-border-l">{{ _("In") }}</div>
-                        <div class="x1 center hh-border-l">{{ _("Out") }}</div>
+                        <div class="x1 center h-border-l">{{ t("label-in") }}</div>
+                        <div class="x1 center hh-border-l">{{ t("label-out") }}</div>
                     </div>
                 </div>
                 <div class="x2">
-                  <div class="center h-border-l h-border-b">{{ _("Packets") }}</div>
+                  <div class="center h-border-l h-border-b">{{ t("label-packets") }}</div>
                   <div class="level">
-                    <div class="x1 center h-border-l">{{ _("In") }}</div>
-                    <div class="x1 center h-border-l">{{ _("Out") }}</div>
+                    <div class="x1 center h-border-l">{{ t("label-in") }}</div>
+                    <div class="x1 center h-border-l">{{ t("label-out") }}</div>
                   </div>
                 </div>
                 <div class="x2">
-                  <div class="center h-border-l h-border-b">{{ _("Errors") }}</div>
+                  <div class="center h-border-l h-border-b">{{ t("label-errors") }}</div>
                   <div class="level">
-                    <div class="x1 center h-border-l">{{ _("In") }}</div>
-                    <div class="x1 center h-border-l">{{ _("Out") }}</div>
+                    <div class="x1 center h-border-l">{{ t("label-in") }}</div>
+                    <div class="x1 center h-border-l">{{ t("label-out") }}</div>
                   </div>
                 </div>
             </div>

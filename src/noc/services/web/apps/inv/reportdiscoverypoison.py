@@ -12,7 +12,6 @@ from django.http import HttpRequest
 # NOC modules
 from noc.core.i18n import t
 from noc.core.mac import MAC
-from noc.core.translation import ugettext as _
 from noc.inv.models.discoveryid import DiscoveryID
 from noc.inv.models.macblacklist import MACBlacklist
 from noc.main.models.pool import Pool
@@ -62,9 +61,9 @@ class ReportDiscoveryIDPoisonApplication(SimpleReport):
                 data_c.append((mo.name, mo.address, mo.profile.name, mo.pool.name, mo.is_managed))
             if len(data_c) > 0:
                 if data_c[0][1] == data_c[1][1]:
-                    reason = _("Duplicate MO")
+                    reason = t("msg-duplicate-managed-object")
                 elif data_c[0][4] != data_c[1][4]:
-                    reason = _("MO is move")
+                    reason = t("msg-managed-object-was-moved")
             if pool and pool not in pool_c:
                 continue
             if reason == "Other" and MACBlacklist.is_banned_mac(f["macs"][0], is_duplicated=True):

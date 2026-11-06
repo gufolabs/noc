@@ -16,10 +16,10 @@ from django.template import Context, Template
 # NOC modules
 from noc.config import config
 from noc.core.change.decorator import change
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.model.base import NOCModel
 from noc.core.model.fields import CIDRField
-from noc.core.translation import ugettext as _
 from noc.core.validators import check_ipv4, check_ipv6
 from noc.main.models.label import Label
 
@@ -65,9 +65,9 @@ class AddressRange(NOCModel):
     action = models.CharField(
         max_length=1,
         choices=[
-            ("N", _("Do nothing")),
-            ("G", _("Generate FQDNs")),
-            ("D", _("Partial reverse zone delegation")),
+            ("N", t("choice-do-nothing")),
+            ("G", t("choice-generate-fqdns")),
+            ("D", t("choice-partial-reverse-zone-delegation")),
         ],
         default="N",
     )

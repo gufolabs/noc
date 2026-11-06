@@ -31,7 +31,7 @@ class ReportFilterApplication(SimpleReport):
             afi = forms.ChoiceField(
                 label=t("label-address-family"),
                 required=False,
-                choices=[("", t("label-all")), ("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+                choices=[("", t("choice-all")), ("4", t("choice-ipv4")), ("6", t("choice-ipv6"))],
             )
             managed_object = forms.CharField(label=t("label-managed-object"), required=False)
             description = forms.CharField(label=t("label-description"), required=False)

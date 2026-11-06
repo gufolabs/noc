@@ -10,7 +10,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.main.models.remotesystem import RemoteSystem
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
 
@@ -33,7 +32,7 @@ class RemoteSystemApplication(ExtDocApplication):
                 "last_successful_load": (
                     rs.last_successful_load.strftime("%Y-%m-%d %H:%M")
                     if rs.last_successful_load
-                    else _("never")
+                    else t("msg-never")
                 ),
             }
             for rs in RemoteSystem.objects.filter()

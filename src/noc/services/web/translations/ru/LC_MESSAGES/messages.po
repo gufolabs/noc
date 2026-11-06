@@ -87,10 +87,6 @@ msgstr ""
 msgid "Never"
 msgstr "никогда"
 
-#: core/inv/info.py
-msgid "Go to object"
-msgstr "Соседнее устройство"
-
 #: core/password/check.py
 #, python-format
 msgid "Password too short. Must be %d characters or longer"
@@ -119,28 +115,6 @@ msgstr "Пароль должен содержать хотя бы %d спец. 
 #: core/password/check.py
 msgid "Password is already used"
 msgstr "Пароль уже используется"
-
-#: core/topology/map/objectcontainer.py
-msgid "Object Containers Map"
-msgstr "Локация (место)"
-
-#: core/topology/map/objectgroup.py
-msgid "Object Group Schemas"
-msgstr "Схемы групп объектов"
-
-#: core/topology/map/objectlevelneighbor.py
-msgid "Object Level Neighbor Schemas"
-msgstr "Схемы соседей объекта"
-
-#: core/topology/map/segment.py
-msgid "Network Segment Schemas"
-msgstr "Схемы сегментов сети"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Dashboard"
-msgstr "График"
 
 #: services/web/apps/cm/reportlatestchanges/views.py
 msgid "Use name, network (ex 10.0.0.0/8) or MAC"
@@ -181,14 +155,6 @@ msgstr "Оплачен до"
 #: services/web/apps/ip/reportsummary/views.py
 msgid "Prefix"
 msgstr "Префикс"
-
-#: services/web/apps/fm/alarm/views.py services/web/apps/main/home/views.py
-msgid "Alarms"
-msgstr "Аварии"
-
-#: services/web/apps/fm/alarm/views.py
-msgid "Failed to clear alarms"
-msgstr "Ошибка при закрытии аварий"
 
 #: services/web/apps/fm/alarm/views.py
 #: services/web/apps/fm/reportttsystemstat/views.py
@@ -348,18 +314,6 @@ msgstr "Политика версий прошивок"
 msgid "Interface Profile"
 msgstr "Профиль интерфейса"
 
-#: services/web/apps/inv/inv/plugins/metric.py
-msgid "OK"
-msgstr ""
-
-#: services/web/apps/inv/inv/views.py
-msgid "ManagedObject Container: "
-msgstr "Локация (место)"
-
-#: services/web/apps/inv/inv/views.py
-msgid "Configured Map Container: "
-msgstr ""
-
 #: services/web/apps/inv/networksegment/views.py
 msgid "Network Segment"
 msgstr "Сегмент сети"
@@ -513,29 +467,9 @@ msgstr "Требуется VRF"
 msgid "Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s"
 msgstr "Сводка для VRF %(vrf)s (IPv%(afi)s): %(prefix)s"
 
-#: services/web/apps/ip/tools/views.py
-msgid "Permission denied"
-msgstr "Доступ запрещён"
-
-#: services/web/apps/ip/tools/views.py
-msgid "Name server IP address. NS must have zone transfer enabled for NOC host"
-msgstr "IP-адрес сервера имён. Сервер должен позволять передачу зоны хостам NOC"
-
-#: services/web/apps/ip/tools/views.py
-msgid "DNS Zone name to transfer"
-msgstr ""
-
-#: services/web/apps/ip/tools/views.py
-msgid "Permission denined"
-msgstr "Доступ запрещён"
-
 #: services/web/apps/ip/vrfgroup/views.py
 msgid "VRF Groups"
 msgstr "Группы VRF"
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "CIR(bps). K, M and G suffixes can be used"
-msgstr "CIR(bps). Можно использовать множители K, M и G"
 
 #: services/web/apps/main/calculator/calculators/cir2cbr.py
 msgid ""
@@ -544,55 +478,11 @@ msgid ""
 msgstr ""
 
 #: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "Integer is required"
-msgstr "Требуется Целочисленное значение"
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "CIR/CAR(bps) to Burst-rate"
-msgstr ""
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
 msgid ""
 "Recommended way for policy-map values calculating is: normal-burst-bytes"
 "=bits-per-second*Tc/8.Recommended way for rate-limit values calculating "
 "is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
 msgstr ""
-
-#: services/web/apps/main/home/views.py
-msgid "Welcome to "
-msgstr "Добро пожаловать"
-
-#: services/web/apps/main/home/views.py
-msgid "Community"
-msgstr "Комментарий"
-
-#: services/web/apps/main/home/views.py
-msgid "Inventory summary"
-msgstr "Сводка по инвентаризации объектов"
-
-#: services/web/apps/main/home/views.py
-msgid "Total objects"
-msgstr "Всего объектов"
-
-#: services/web/apps/main/home/views.py
-msgid "Points of presence"
-msgstr ""
-
-#: services/web/apps/main/home/views.py
-msgid "Racks"
-msgstr ""
-
-#: services/web/apps/main/home/views.py
-msgid "Chassis"
-msgstr "Шасси"
-
-#: services/web/apps/main/home/views.py
-msgid "Managed Object Summary"
-msgstr "Сводка по объектам"
-
-#: services/web/apps/main/home/views.py
-msgid "Total Alarms"
-msgstr "Всего Аварий"
 
 #: services/web/apps/main/label/views.py
 msgid "Labels"
@@ -629,30 +519,6 @@ msgstr "РНР"
 
 #: services/web/apps/peer/as/views.py
 msgid "AS"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "AS-SET members cache is empty. Please update Whois Cache"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Origin routes cache is empty. Please update Whois Cache"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Unknown AS-SET"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Cannot resolve AS-SET prefixes"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Prefix-list generator is not implemented for this profile"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Prefix List built"
 msgstr ""
 
 #: services/web/apps/project/project/views.py
@@ -755,10 +621,6 @@ msgstr "Права пользователя"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: services/web/cards/base.py
-msgid "N/A"
-msgstr "Н/Д"
-
 #: services/web/cards/templates/address.html.j2
 #: services/web/cards/templates/interfacepath.html.j2
 #: services/web/cards/templates/phonenumber.html.j2
@@ -777,17 +639,6 @@ msgstr "Источник"
 #: services/web/cards/templates/alarm.html.j2
 msgid "Severity"
 msgstr "Серьезность"
-
-#: services/web/cards/templates/alarm.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Location"
-msgstr "Расположение"
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Temporary unavailable"
-msgstr "Временно недоступна"
 
 #: services/web/cards/templates/alarm.html.j2
 #: services/web/cards/templates/maintenance.html.j2
@@ -817,102 +668,12 @@ msgstr "Дата"
 msgid "Contacts"
 msgstr "Контакты"
 
-#: services/web/cards/templates/alarmheat.html.j2
-#: services/web/cards/templates/monmap.html.j2 services/web/cards/templates/path.html.j2
-msgid "Loading ..."
-msgstr "Загрузка ..."
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Alternative path"
-msgstr "Альтернативный путь"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Object Name"
-msgstr "Имя"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "IP Address"
-msgstr "IP адрес"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Platform Name"
-msgstr "Модель"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Soft Version"
-msgstr "Версия ПО"
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Speed"
-msgstr "Скорость"
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Duplex"
-msgstr "Дуплекс"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Utilization"
-msgstr "Загрузка"
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "In"
-msgstr "Вх."
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Out"
-msgstr "Исх."
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Packets"
-msgstr "Пакеты"
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Errors"
-msgstr "Ошибки"
-
 #: services/web/cards/templates/maintenance.html.j2
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/object.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Model"
 msgstr "Модель"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Container"
-msgstr "Контейнер"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Lost redundancy"
-msgstr "Потеря резерва"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Redundant"
-msgstr "Есть резерв"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "No redundancy"
-msgstr "Нет резерва"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Graphics"
-msgstr "Графики"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Profile SA"
-msgstr "Профиль SA"
 
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/platform.html.j2
@@ -927,24 +688,9 @@ msgid "End of Support"
 msgstr "Конец поддержки"
 
 #: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Recommended"
-msgstr "Рекомендовано"
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Service Range"
-msgstr "Время обслуживания"
-
-#: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/subscribersession.html.j2
 msgid "MAC"
 msgstr "MAC"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Provides Resources"
-msgstr "Предоставляет ресурсы"
 
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/phonenumber.html.j2
@@ -953,80 +699,10 @@ msgstr "Предоставляет ресурсы"
 msgid "Group"
 msgstr "Группа"
 
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Static"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Dynamic"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Consumes Resources"
-msgstr "Потребляет ресурсы"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-msgid "Metrics"
-msgstr "Метрики"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Neighbors"
-msgstr "Соседи"
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "LinkGraph"
-msgstr "График связи"
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Load Chart"
-msgstr "График загр."
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Open SFP"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Run VPN Trace"
-msgstr ""
-
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/segment.html.j2
-msgid "Children"
-msgstr "Потомок"
-
-#: services/web/cards/templates/outage.html.j2
-msgid "Outages Summary"
-msgstr "Оперативная обстановка"
-
 #: services/web/cards/templates/resourcegroup.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Parent"
 msgstr "Родитель"
-
-#: services/web/cards/templates/segment.html.j2
-msgid "No VLAN propagation"
-msgstr ""
-
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Object Metrics"
-msgstr "Метрики"
-
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Sensors"
-msgstr "Сенсоры"
-
-#: services/web/cards/templates/totaloutage.html.j2
-msgid "No outages detected"
-msgstr "Аварий не зафиксировано"
 
 #: services/web/cards/templates/vrf.html.j2
 msgid "RD"
@@ -1039,4 +715,3 @@ msgstr ""
 #: services/web/cards/templates/vrf.html.j2
 msgid "Prefixes"
 msgstr "Префиксы"
-

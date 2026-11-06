@@ -19,7 +19,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from noc.core.comp import smart_bytes
 from noc.core.datasources.base import BaseDataSource, data_source_loader
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.sa.interfaces.base import IntParameter, ObjectIdParameter, StringParameter
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.sa.models.useraccess import UserAccess
@@ -167,7 +166,7 @@ class ReportAlarmDetailApplication(ExtApplication):
             fd = dt.datetime.strptime(from_date, "%d.%m.%Y")
             td = dt.datetime.strptime(to_date, "%d.%m.%Y") + dt.timedelta(days=1)
         else:
-            return HttpResponseBadRequest(_("One params - FROM_DATE/TO_DATE or IDS required"))
+            return HttpResponseBadRequest(t("msg-one-params-from-date-to-date-or-ids-required"))
         d_filters["start"] = fd
         d_filters["end"] = td
         for name, values in [
@@ -196,8 +195,8 @@ class ReportAlarmDetailApplication(ExtApplication):
             o_format = "csv_zip"
             if td - fd > dt.timedelta(days=390):
                 return HttpResponseBadRequest(
-                    _(
-                        "Report more than 1 year not allowed. If nedeed - request it from Administrator"
+                    t(
+                        "label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator"
                     )
                 )
             report: BaseDataSource = data_source_loader.get(report_ds)
@@ -206,7 +205,9 @@ class ReportAlarmDetailApplication(ExtApplication):
             report_ds = "reportdsalarms"
             report: BaseDataSource = data_source_loader.get(report_ds)
         if not report:
-            return HttpResponseNotFound(_(f"Report DataSource {report_ds} Not found"))
+            return HttpResponseNotFound(
+                t("msg-report-data-source-not-found", data_source=report_ds)
+            )
 
         data = report.query_sync(fields=out_columns, **d_filters)
         filename = f"alarms_detail_report_{dt.datetime.now().strftime('%Y%m%d')}"

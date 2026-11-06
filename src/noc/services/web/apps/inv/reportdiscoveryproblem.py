@@ -12,7 +12,6 @@ from django.http import HttpRequest
 # NOC modules
 from noc.core.i18n import t
 from noc.core.profile.loader import GENERIC_PROFILE
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.inv.models.networksegment import NetworkSegment
@@ -30,7 +29,7 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=t("label-managed-objects-pools"),
+                label=t("header-managed-objects-pools"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -38,12 +37,12 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=t("label-managed-objects-profile"),
+                label=t("header-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )
             available_only = forms.BooleanField(
-                label=t("label-managed-objects-profile"),
+                label=t("header-managed-objects-profile"),
                 required=False,
             )
 
@@ -71,21 +70,21 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
         # Get all managed objects with generic profile
         for mo in mos:
             if mos[mo][2] == GENERIC_PROFILE:
-                problems[mo] = _("Profile check failed")
+                problems[mo] = t("msg-profile-check-failed")
         # Get all managed objects without interfaces
         if_mo = {
             x["_id"]: x.get("managed_object")
             for x in Interface._get_collection().find({}, {"_id": 1, "managed_object": 1})
         }
         for mo in mos_set - set(problems) - set(if_mo.values()):
-            problems[mo] = _("No interfaces")
+            problems[mo] = t("msg-no-interfaces")
         # Get all managed objects without links
         linked_mos = set()
         for d in Link._get_collection().find({}):
             for i in d["interfaces"]:
                 linked_mos.add(if_mo.get(i))
         for mo in mos_set - set(problems) - linked_mos:
-            problems[mo] = _("No links")
+            problems[mo] = t("msg-no-links")
         # Get all managed objects without uplinks
         uplinks = {}
         for mo_id, mo_uplinks in ManagedObject.objects.filter().values_list("id", "uplinks"):
@@ -93,7 +92,7 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
             if nu:
                 uplinks[mo_id] = nu
         for mo in mos_set - set(problems) - set(uplinks):
-            problems[mo] = _("No uplinks")
+            problems[mo] = t("msg-no-uplinks")
         data = []
         for mo_id in problems:
             if mo_id not in mos:

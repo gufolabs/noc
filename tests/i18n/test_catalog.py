@@ -10,6 +10,7 @@ from pathlib import Path
 
 # Third-party modules
 import pytest
+import yaml
 
 # NOC modules
 from noc.config import Language
@@ -44,3 +45,15 @@ def test_catalog_equality(language: Language, en_catalog: MessageCatalog) -> Non
     lang_keys = set(catalog)
     assert lang_keys
     assert en_keys == lang_keys
+
+
+@pytest.mark.parametrize("language", list(Language))
+def test_catalog_keys_are_sorted_alphabetically(language: Language) -> None:
+    """Every YAML message catalog keeps its keys in alphabetical order."""
+    path = I18N_PATH / f"{language.value}.yml"
+    with path.open(encoding="utf-8") as fp:
+        catalog = yaml.safe_load(fp)
+    source_keys = [line.partition(":")[0] for line in path.read_text().splitlines() if line]
+
+    assert source_keys == sorted(source_keys), f"Keys in {path} must be sorted alphabetically"
+    assert len(source_keys) == len(catalog), f"Keys in {path} must be unique"

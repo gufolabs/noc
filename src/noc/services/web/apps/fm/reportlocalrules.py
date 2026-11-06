@@ -14,7 +14,6 @@ from noc.core.collection.base import Collection
 from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.text import indent
-from noc.core.translation import ugettext as _
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.services.web.base.reportapplication import ReportApplication
 
@@ -30,6 +29,6 @@ class ReportClassificationRules(ReportApplication):
             if rr.uuid and smart_text(rr.uuid) not in builtins
         ]
         if not b_data:
-            return "<pre>" + _("No local rules") + "</pre>"
+            return "<pre>" + t("msg-no-local-rules") + "</pre>"
         r = ["[", ",\n".join(b_data), "]", ""]
         return "<pre>" + escape("\n".join(r)) + "</pre>"
