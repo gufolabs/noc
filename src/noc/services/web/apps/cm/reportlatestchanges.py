@@ -16,7 +16,6 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.dns.models.dnszone import DNSZone
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.sa.models.managedobject import ManagedObject
@@ -28,18 +27,18 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 class ReportForm(forms.Form):
     repo = forms.ChoiceField(
         label=t("label-report-type"),
-        choices=[("config", t("label-config")), ("dnszone", t("label-dns"))],
+        choices=[("config", t("choice-config")), ("dnszone", t("choice-dns"))],
     )
     days = forms.IntegerField(label=t("label-in-days"), min_value=1)
     adm_domain = forms.ModelChoiceField(
-        label=t("label-managed-objects-administrative-domain-for-config-only"),
+        label=t("header-managed-objects-administrative-domain-for-config-only"),
         required=False,
         queryset=AdministrativeDomain.objects.order_by("name"),
     )
     managed_object = forms.CharField(
         label=t("label-managed-object-search-for-config-only"),
         required=False,
-        help_text=_("Use name, network (ex 10.0.0.0/8) or MAC"),
+        help_text=t("help-use-name-network-ex-10-0-0-0-8-or-mac"),
     )
 
 

@@ -12,7 +12,7 @@ tags:
 
 В основе API лежит доработанный [Django](https://www.djangoproject.com) базовая директория - `<noc_base>/services/web` 
 приложения расположены в директории `apps`, разбиты согласно **модулям** НОКа.
-В директории `translations` расположены файлы перевода.
+Python-строки интерфейса переводятся функцией `noc.core.i18n.t()` по YAML-ключам из `src/noc/i18n`. В директории `translations` находятся gettext-каталоги JavaScript. Подробности приведены в руководстве [по локализации интерфейса](../../language-translation-howto/index.md).
 
 ```
 └── web
@@ -103,11 +103,11 @@ services/web/apps/sa/
 ```python
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 
 class KeyOutageApplication(ExtApplication):
-    title = _("Cards")
+    title = t("app-title-card")
     menu = "Оперативная обстановка"
     glyph = "bolt"
     link = "/api/card/view/projectoutage/%s/?refresh=100"
@@ -132,7 +132,7 @@ class KeyOutageApplication(ExtApplication):
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.core.comp import smart_text
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 
 class AdministrativeDomainApplication(ExtModelApplication):
@@ -140,7 +140,7 @@ class AdministrativeDomainApplication(ExtModelApplication):
     AdministrativeDomain application
     """
 
-    title = _("Administrative Domains")
+    title = t("app-title-administrativedomain")
     menu = [_("Setup"), _("Administrative Domains")]
     model = AdministrativeDomain
     query_fields = ["name__icontains", "description__icontains"]

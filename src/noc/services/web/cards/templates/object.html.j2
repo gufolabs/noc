@@ -25,7 +25,7 @@
 <div class="line"></div>
 <div class="row">
     <div class="col-sm-2">
-        <b>{{ _("Name") }}</b>
+        <b>{{ t("label-name") }}</b>
     </div>
     <div class="col-sm-6">
         {{ object.name }}
@@ -36,7 +36,7 @@
 <div class="line"></div>
 <div class="row">
     <div class="col-sm-2">
-        <b>{{ _("Model") }}</b>
+        <b>{{ t("label-model") }}</b>
     </div>
     <div class="col-sm-6">
         {{ object.model.name }}
@@ -47,7 +47,7 @@
 <div class="line"></div>
 <div class="row">
     <div class="col-sm-2">
-        <b>{{ _("Location") }}</b>
+        <b>{{ t("label-location") }}</b>
     </div>
     <div class="col-sm-10">
         {{ location }}
@@ -58,10 +58,10 @@
 <div class="line"></div>
 <div class="row">
     <div class="col-sm-2">
-        <b>{{ _("Dashboard") }}</b>
+        <b>{{ t("label-dashboard") }}</b>
     </div>
     <div class="col-sm-10">
-        <a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=container&id={{ object.id }}&orgId=1&from=now-6h&to=now&refresh=15m&var-bi_id=All"><i class="fa fa-dashboard"></i> - {{ _("Graphics") }}</a>
+        <a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=container&id={{ object.id }}&orgId=1&from=now-6h&to=now&refresh=15m&var-bi_id=All"><i class="fa fa-dashboard"></i> - {{ t("label-graphics") }}</a>
     </div>
 </div>
 
@@ -69,7 +69,7 @@
 <div class="line"></div>
 <div class="row">
     <div class="col-sm-2">
-        <b>{{ _("Contacts") }}</b>
+        <b>{{ t("label-contacts") }}</b>
     </div>
 </div>
 <table class="table table-condensed table-hover">
@@ -97,7 +97,7 @@
 {%- if children -%}
 <div class="row">
     <div class="col-sm-12">
-        <b>{{ _("Children") }}</b>
+        <b>{{ t("label-children") }}</b>
         <table class="table table-condensed table-hover">
             <tbody>
                 {%- for o in children -%}
@@ -105,12 +105,12 @@
                     <td>
                         <a href="/api/card/view/managedobject/{{ o.id }}/">{{ o.name }}</a>
                         <div class="line"></div>
-                        <b>{{ _("Dashboard") }}:&nbsp;</b><a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=mo&id={{ o.id }}"><i class="fa fa-dashboard"></i> - {{ _("Graphics") }}</a>
+                        <b>{{ t("label-dashboard") }}:&nbsp;</b><a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=mo&id={{ o.id }}"><i class="fa fa-dashboard"></i> - {{ t("label-graphics") }}</a>
                     </td>
                     <td>
                         {# Display metrics information #}
                             {%- if o.metrics -%}
-                                <b>{{ _("Metrics") }}:</b>
+                                <b>{{ t("label-metrics") }}:</b>
                                 <table class="table table-condensed table-hover">
                                     <thead>
                                         <tr>
@@ -135,7 +135,7 @@
                     <td>
                         {# Display alarm data #}
                             {%- if o.alarms -%}
-                                <b>{{ _("Alarms") }}:</b>
+                                <b>{{ t("label-alarms") }}:</b>
                                 <table class="table table-condensed table-hover">
                                     <thead>
                                         <tr>

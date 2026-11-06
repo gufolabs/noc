@@ -21,7 +21,6 @@ from django.http import HttpResponse
 # NOC modules
 from noc.core.datasources.base import data_source_loader
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.platform import Platform
@@ -239,7 +238,7 @@ class ReportMetricsDetailApplication(ExtApplication):
                 {"name": "maxMerge(load_out_max)", "value": [0], "op": "!="},
             ]
         if not object_data:
-            return HttpResponse(_("Not object found for set Report Param."), status=200)
+            return HttpResponse(t("msg-not-object-found-for-set-report-param"), status=200)
         data = report(
             fields=fields,
             allobjectids=False,

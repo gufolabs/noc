@@ -166,7 +166,7 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=t("label-managed-objects-pools"),
+                label=t("header-managed-objects-pools"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -174,7 +174,7 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=t("label-managed-objects-profile"),
+                label=t("header-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )

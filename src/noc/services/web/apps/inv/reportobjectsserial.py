@@ -24,7 +24,7 @@ from noc.services.web.base.simplereport import SimpleReport
 
 class ReportForm(forms.Form):
     resource_group = forms.ChoiceField(
-        label=t("label-managed-objects-group-selector"),
+        label=t("header-managed-objects-group-selector"),
         required=True,
         help_text="Group for choice",
         choices=list(ResourceGroup.objects.order_by("name").scalar("id", "name")),

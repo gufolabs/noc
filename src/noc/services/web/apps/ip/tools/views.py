@@ -20,7 +20,6 @@ from django.http import HttpRequest, HttpResponse
 from noc.core.forms import NOCForm
 from noc.core.i18n import t
 from noc.core.ip import IP, IPv4, IPv6
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4, is_ipv6
 from noc.ip.models.address import Address
 
@@ -52,7 +51,7 @@ class ToolsAppplication(Application):
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
         prefix = self.get_object_or_404(Prefix, vrf=vrf, afi=afi, prefix=prefix)
         if not prefix.can_change(request.user):
-            return self.response_forbidden(_("Permission denied"))
+            return self.response_forbidden(t("msg-permission-denied"))
         return self.render(
             request,
             "index.html",
@@ -82,7 +81,7 @@ class ToolsAppplication(Application):
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
         prefix = self.get_object_or_404(Prefix, vrf=vrf, afi=afi, prefix=prefix)
         if not prefix.can_change(request.user):
-            return self.response_forbidden(_("Permission denied"))
+            return self.response_forbidden(t("msg-permission-denied"))
         out = StringIO()
         writer = csv.writer(out)
         writer.writerow(["address", "name", "fqdn", "mac", "description", "tt", "tags"])
@@ -99,9 +98,11 @@ class ToolsAppplication(Application):
 
         ns = forms.CharField(
             label=t("label-ns"),
-            help_text=_("Name server IP address. NS must have zone transfer enabled for NOC host"),
+            help_text=t(
+                "help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host"
+            ),
         )
-        zone = forms.CharField(label=t("label-zone"), help_text=_("DNS Zone name to transfer"))
+        zone = forms.CharField(label=t("label-zone"), help_text=t("help-dns-zone-name-to-transfer"))
 
     @api.post(
         r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",
@@ -169,7 +170,7 @@ class ToolsAppplication(Application):
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
         prefix = self.get_object_or_404(Prefix, vrf=vrf, afi=afi, prefix=prefix)
         if not prefix.can_change(request.user):
-            return self.response_forbidden(_("Permission denined"))
+            return self.response_forbidden(t("msg-permission-denined"))
         body = orjson.loads(request.body)
         if not is_ipv4(body["ns"]) and not is_ipv6(body["ns"]):
             try:
@@ -203,8 +204,6 @@ class ToolsAppplication(Application):
         if data:
             create, change = upload_axfr(data, body["zone"])
             return HttpResponse(
-                _(
-                    f"Created: {create} and Changed: {change} IP addresses uploaded via zone transfer."
-                )
+                t("msg-zone-transfer-upload-results", created=create, changed=change)
             )
         return HttpResponse("No DNS Zone", status=404)

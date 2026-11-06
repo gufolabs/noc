@@ -10,7 +10,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.unknownmodel import UnknownModel
 from noc.sa.interfaces.base import DocumentParameter, ListOfParameter
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
@@ -40,4 +39,4 @@ class UnknownModelApplication(ExtDocApplication):
             self.logger.debug("Delete '%s'", o)
             o.delete()
 
-        return _("Cleaned")
+        return t("status-cleaned")

@@ -18,7 +18,6 @@ from jinja2 import Environment, Template
 from noc.config import config
 from noc.core.i18n import t
 from noc.core.perf import metrics
-from noc.core.translation import ugettext as _
 from noc.sa.models.useraccess import UserAccess
 from noc.services.web.base.card import get_card_template_path
 
@@ -238,7 +237,7 @@ class BaseCard:
             container = object.container
         if not container:
             metrics["error", ("type", "no_such_container")] += 1
-            return _("N/A")
+            return t("label-n-a")
         path = []
         c = container
         while c:
@@ -253,7 +252,7 @@ class BaseCard:
                 c = Object.get_by_id(c.id)
         if not path:
             metrics["error", ("type", "no_such_path")] += 1
-            return _("N/A")
+            return t("label-n-a")
         return ", ".join(reversed(path))
 
     @classmethod

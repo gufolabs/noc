@@ -31,7 +31,6 @@ from noc.core.clickhouse.model import Model
 from noc.core.comp import smart_bytes
 from noc.core.perf import metrics
 from noc.core.service.jsonrpcapi import JSONRPCAPI, APIError, api, executor
-from noc.core.translation import ugettext as _
 from noc.pm.models.metricscope import MetricScope
 from noc.pm.models.metrictype import MetricType
 from noc.sa.interfaces.base import DictListParameter, DictParameter, IntParameter, StringParameter
@@ -164,7 +163,7 @@ class BIAPI(JSONRPCAPI):
                 r["fields"].append(
                     {
                         "name": f.name,
-                        "description": _(f.description or ""),
+                        "description": f.description or "",
                         "type": f.get_displayed_type(),
                         "is_agg": f.is_agg,
                         "dict": d,

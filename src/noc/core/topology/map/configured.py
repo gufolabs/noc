@@ -14,9 +14,9 @@ from typing import Any
 from bson import ObjectId
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import BackgroundImage, Layout, MapItem, MapMeta, PathItem
-from noc.core.translation import ugettext as _
 from noc.inv.models.configuredmap import ConfiguredMap
 from noc.inv.models.cpe import CPE
 from noc.inv.models.interface import Interface
@@ -28,7 +28,7 @@ from noc.sa.models.managedobject import ManagedObject
 
 class ConfiguredTopology(TopologyBase):
     name = "configured"
-    header = _("Configured Map")
+    header = t("title-configured-map")
 
     NORMALIZE_POSITION = False
     ISOLATED_WIDTH = 600

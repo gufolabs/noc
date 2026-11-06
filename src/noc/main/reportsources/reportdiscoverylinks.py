@@ -12,10 +12,10 @@ import polars as pl
 
 # NOC modules
 from noc.core.datasources.base import data_source_loader
+from noc.core.i18n import t
 from noc.core.reporter.band import Band, DataSet
 from noc.core.reporter.reportsource import ReportSource
 from noc.core.reporter.types import BandFormat, ColumnFormat
-from noc.core.translation import ugettext as _
 from noc.main.models.pool import Pool
 from noc.main.models.report import Report
 
@@ -24,11 +24,11 @@ class ReportDiscoveryLinks(ReportSource):
     name = "reportdiscoverylinks"
 
     checks = [  # pp, title, condition
-        ("status = False", _("All polling"), "1.1"),  # 2is1.6is1.9a2
+        ("status = False", t("msg-all-polling"), "1.1"),  # 2is1.6is1.9a2
         ("status = False", "0", "1.1"),  # 2is1.6is1.9a2.3hs0
         ("status = False", "1", "1.1"),  # 2is1.6is1.3hs2
         ("status = False", "2", "1.1"),  # 2is1.6is1.3hs3
-        ("status = False", _("More 3"), "1.1"),  # 2is1.6is1.3hs4
+        ("status = False", t("msg-more-3"), "1.1"),  # 2is1.6is1.3hs4
     ]
 
     def get_formats(self) -> dict[str, BandFormat]:
@@ -37,10 +37,10 @@ class ReportDiscoveryLinks(ReportSource):
             "pool": BandFormat(
                 title_template="{{ name }}",
                 columns=[
-                    ColumnFormat(name="links_count", title=_("Links count")),
-                    ColumnFormat(name="mo_count", title=_("MO Count")),
-                    ColumnFormat(name="percent_at_all", title=_("Percent at All")),
-                    ColumnFormat(name="detail", title=_("Detail"), format_type="url"),
+                    ColumnFormat(name="links_count", title=t("header-links-count")),
+                    ColumnFormat(name="mo_count", title=t("header-mo-count")),
+                    ColumnFormat(name="percent_at_all", title=t("header-percent-at-all")),
+                    ColumnFormat(name="detail", title=t("header-detail"), format_type="url"),
                 ],
             ),
         }

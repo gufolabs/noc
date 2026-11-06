@@ -10,7 +10,7 @@ import bisect
 import datetime as dt
 
 # NOC modules
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 
 def humanize_timedelta(delta):
@@ -21,44 +21,44 @@ def humanize_timedelta(delta):
     s = delta.seconds
     if not d:
         if s < 30:
-            return _("less than a minute")
+            return t("msg-duration-less-than-minute")
         if s < 90:  # 1:30
-            return _("1 minute")
+            return t("msg-duration-minutes", count=1)
         if s < 2670:  # 44:30
-            return _("%d minutes") % round(float(s) / 60.0)
+            return t("msg-duration-minutes", count=round(float(s) / 60.0))
         if s < 5370:  # 1:29:30
-            return _("about 1 hour")
+            return t("msg-duration-about-hours", count=1)
         if s < 86370:  # 24:59:30
-            return _("about %d hours") % round(float(s) / 3600.0)
-        return _("1 day")
+            return t("msg-duration-about-hours", count=round(float(s) / 3600.0))
+        return t("msg-duration-days", count=1)
     if d == 1 and s < 84600:  # 1D23:59:30
-        return _("1 day")
+        return t("msg-duration-days", count=1)
     if d < 30 and s < 84600:  # 29D23:59:30
-        return _("%d days") % round((float(d) * 86400.0 + s) / 86400)
+        return t("msg-duration-days", count=round((float(d) * 86400.0 + s) / 86400))
     if d < 60 and s < 84600:  # 59D23:59:30
-        return _("about 1 month")
+        return t("msg-duration-about-month")
     if d < 365:
-        return _("%d months") % round(float(d) / 30)
+        return t("msg-duration-months", count=round(float(d) / 30))
     if d < 446:  # 1Y 3M
-        return _("about 1 year")
+        return t("msg-duration-about-year")
     if d < 626:  # 1Y 9M
-        return _("over 1 year")
+        return t("msg-duration-over-year")
     if d < 730:  # 2Y
-        return _("almost 2 years")
+        return t("msg-duration-almost-two-years")
     n = d // 365
     dd = d - n * 356
     if dd < 446:
-        return _("about %d years") % n
+        return t("msg-duration-about-years", count=n)
     if dd < 626:
-        return _("over %d years") % n
-    return _("almost %d years") % (n + 1)
+        return t("msg-duration-over-years", count=n)
+    return t("msg-duration-almost-years", count=n + 1)
 
 
 def humanize_distance(d):
     try:
         dist = humanize_timedelta(dt.datetime.now() - d)
     except TypeError:
-        dist = _("Never")
+        dist = t("msg-duration-never")
     return dist
 
 

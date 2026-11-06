@@ -12,7 +12,6 @@ from mongoengine.queryset import Q
 # NOC modules
 from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_ipv4_prefix
 from noc.main.models.modeltemplate import ModelTemplate
 from noc.sa.interfaces.base import (
@@ -141,7 +140,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
         r = [
             {
                 "id": str(1),
-                "label": _("From Rule"),
+                "label": t("label-from-rule"),
                 "is_default": True,
                 "args": {"action": "sync_records", "template": None},
             }
@@ -150,7 +149,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
             r.append(
                 {
                     "id": str(tmpl.id),
-                    "label": _(tmpl.name),
+                    "label": tmpl.name,
                     "is_default": False,
                     "args": {"action": "sync_records", "template": str(tmpl.id)},
                 }

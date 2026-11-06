@@ -12,7 +12,6 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
-from noc.core.translation import ugettext as _
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
@@ -86,17 +85,17 @@ class ReportDiscoveryProblem:
 
 class ReportForm(forms.Form):
     pool = forms.ChoiceField(
-        label=t("label-managed-objects-pool"),
+        label=t("header-managed-objects-pool"),
         required=False,
         choices=[*list(Pool.objects.order_by("name").scalar("id", "name")), (None, "-" * 9)],
     )
     obj_profile = forms.ModelChoiceField(
-        label=t("label-managed-objects-profile"),
+        label=t("header-managed-objects-profile"),
         required=False,
         queryset=ManagedObjectProfile.objects.order_by("name"),
     )
     resource_group = forms.ChoiceField(
-        label=t("label-managed-objects-group-selector"),
+        label=t("header-managed-objects-group-selector"),
         required=False,
         help_text="Group for choice",
         choices=[
@@ -106,7 +105,7 @@ class ReportForm(forms.Form):
     )
     avail_status = forms.BooleanField(label=t("label-filter-by-ping-status"), required=False)
     profile_check_only = forms.BooleanField(label=t("label-profile-check-only"), required=False)
-    failed_scripts_only = forms.BooleanField(label=t("label-failed-discovery-only"), required=False)
+    failed_scripts_only = forms.BooleanField(label=t("status-failed-discovery-only"), required=False)
     filter_pending_links = forms.BooleanField(label=t("label-filter-pending-links"), required=False)
     filter_none_objects = forms.BooleanField(label=t("label-filter-none-problems"), required=False)
     filter_view_other = forms.BooleanField(label=t("label-show-other-problems"), required=False)
@@ -117,7 +116,7 @@ class ReportFilterApplication(SimpleReport):
     form = ReportForm
 
     predefined_reports = {
-        pname: PredefinedReport(_("Problem Discovery (pool)") + f": {pname}", {"pool": str(pid)})
+        pname: PredefinedReport(t("title-problem-discovery-pool", pool=pname), {"pool": str(pid)})
         for pid, pname in ([*list(Pool.objects.order_by("name").scalar("id", "name")), ("", "ALL")])
     }
 
@@ -209,7 +208,7 @@ class ReportFilterApplication(SimpleReport):
                         mo.address,
                         mo.profile.name,
                         mo.administrative_domain.name,
-                        _("Yes") if mo.get_status() else _("No"),
+                        t("status-yes") if mo.get_status() else t("status-no"),
                         discovery["st"].strftime("%d.%m.%Y %H:%M") if "st" in discovery else "",
                         method,
                         problem,

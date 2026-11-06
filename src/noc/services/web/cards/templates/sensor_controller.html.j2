@@ -30,7 +30,7 @@
             {% if maintenance %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Maintenance") }}</b>
+                    <b>{{ t("label-maintenance") }}</b>
                 </div>
                 <div class="col-sm-10">
                     <table>
@@ -58,7 +58,7 @@
             {% if container_path %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Container") }}</b>
+                    <b>{{ t("label-container-3") }}</b>
                 </div>
                 <div class="col-sm-8">
                     {% for o in container_path %}
@@ -71,7 +71,7 @@
             {% endif %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Location") }}</b>
+                    <b>{{ t("label-location") }}</b>
                 </div>
                 <div class="col-sm-10">
                     {{ object | object_location }}
@@ -81,7 +81,7 @@
             <div class="line"></div>
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Project") }}</b>
+                    <b>{{ t("label-project") }}</b>
                 </div>
                 <div class="col-sm-10">
                     <a href="/api/card/view/project/{{ object.project.id }}/">{{ object.project }}</a>
@@ -91,19 +91,19 @@
             <div class="line"></div>
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Segment") }}</b>
+                    <b>{{ t("label-segment-3") }}</b>
                 </div>
                 <div class="col-sm-3">
                     {% if segment %}
                     <a href="/api/card/view/segment/{{ segment.id }}/">
                     {% if segment.is_redundant %}
                         {% if segment.lost_redundancy %}
-                            <i class="fa fa-exclamation-triangle" title="{{ _("Lost redundancy") }}"></i>
+                            <i class="fa fa-exclamation-triangle" title="{{ t("status-lost-redundancy") }}"></i>
                         {% else %}
-                            <i class="fa fa-check" title="{{ _("Redundant") }}"></i>
+                            <i class="fa fa-check" title="{{ t("status-redundant") }}"></i>
                         {% endif %}
                     {% else %}
-                        <i class="fa fa-times" title="{{ _("No redundancy") }}"></i>
+                        <i class="fa fa-times" title="{{ t("status-no-redundancy") }}"></i>
                     {% endif %}
                     {{ segment.name }}
                     </a>
@@ -111,13 +111,13 @@
                 </div>
                 <div class="col-sm-2">
                     <!-- Redundancy-->
-                    {{ {"R": _("Redundant"), "L": _("Lost redundancy"), "N": _("No redundancy") }[redundancy] }}
+                    {{ {"R": t("status-redundant"), "L": t("status-lost-redundancy"), "N": t("status-no-redundancy") }[redundancy] }}
                 </div>
             </div> <!-- row-->
             <div class="line"></div>
             <div class="row">
                 <div class="col-sm-2">
-                    <b>{{ _("Administrative Domain") }}</b>
+                    <b>{{ t("label-administrative-domain") }}</b>
                 </div>
                 <div class="col-sm-3">
                     {{ object.administrative_domain.name }}
@@ -127,7 +127,7 @@
             {% if object.time_pattern %}
             <div class="row">
                 <div class="col-sm-1">
-                    <small><b>{{ _("Time Pattern") }}</b></small>
+                    <small><b>{{ t("label-time-pattern") }}</b></small>
                 </div>
                 <div class="col-sm-3">
                     <a href="/api/card/view/timepattern/{{ object.time_pattern.id }}/">{{ object.time_pattern.name }}</a>
@@ -141,29 +141,29 @@
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <b>{{ _("IP") }}</b>
-                                    </br><b>{{ _("Dashboard") }}</b>
-                                    </br><b>{{ _("Description") }}</b>
+                                    <b>{{ t("label-ip") }}</b>
+                                    </br><b>{{ t("label-dashboard") }}</b>
+                                    </br><b>{{ t("label-description") }}</b>
                                 </div>
                                 <div class="col-sm-8">
                                     {{ address }} {{ object | object_console }}</br>
-                                    <a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=mo&id={{ object.id }}"><i class="fa fa-dashboard"></i> - {{ _("Graphics") }}</a></br>
+                                    <a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=mo&id={{ object.id }}"><i class="fa fa-dashboard"></i> - {{ t("label-graphics") }}</a></br>
                                     {% if description %}{{ description }}{% endif %}
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <b>{{ _("Profile SA") }}</b>    {{ object.profile }}<br>
+                            <b>{{ t("label-profile-sa") }}</b>    {{ object.profile }}<br>
                             {% if platform != "Unknown" %}
                                 <a href="/api/card/view/platform/{{ object.platform.id }}/">{{ platform }}</a>
                                 {% if platform %}
-                                    {% if object.platform.is_end_of_sale %}<br><i class="fa fa-exclamation-triangle"></i> {{ _("End of Sale") }}{% endif %}
-                                    {% if object.platform.is_end_of_support %}<br><i class="fa fa-exclamation-triangle"></i> {{ _("End of Support") }}{% endif %}
+                                    {% if object.platform.is_end_of_sale %}<br><i class="fa fa-exclamation-triangle"></i> {{ t("label-end-of-sale") }}{% endif %}
+                                    {% if object.platform.is_end_of_support %}<br><i class="fa fa-exclamation-triangle"></i> {{ t("label-end-of-support") }}{% endif %}
                                 {% endif %}
                                 {% if version %}
                                     </br>Version: <a href="/api/card/view/firmware/{{ object.version.id }}/">{{ version }}</a>
                                     {% if firmware_recommended and firmware_recommended.version != version %}
-                                        ({{ _("Recommended") }}: {{ firmware_recommended.version }})
+                                        ({{ t("label-recommended") }}: {{ firmware_recommended.version }})
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
@@ -180,7 +180,7 @@
             {% if links %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Neighbors") }}</b>
+                    <b>{{ t("label-neighbors") }}</b>
                 </div>
                 <div class="col-sm-11">
                     <table class="table table-condensed table-hover table-bordered">
@@ -204,7 +204,7 @@
                                         {{ i.name }}
                                         {% if not loop.first %}, {% endif %}
                                     {% endfor %}
-                                    <div><a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=link&id={{ l.id }}&refresh=15m&orgId=1">{{ _("LinkGraph") }}</a></div>
+                                    <div><a target="_blank" href="/ui/grafana/dashboard/script/noc.js?dashboard=link&id={{ l.id }}&refresh=15m&orgId=1">{{ t("label-linkgraph") }}</a></div>
                                 </td>
                                 <td>
                                     <div><a href="/api/card/view/managedobject/{{ l["remote_object"].id }}/">
@@ -238,7 +238,7 @@
             {% endif %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("TT") }}</b>
+                    <b>{{ t("label-tt") }}</b>
                 </div>
                 <div class="col-sm-10">
                     N/A
@@ -248,7 +248,7 @@
             {% if alarms %}
             <div class="row">
                 <div class="col-sm-1">
-                    <b>{{ _("Alarms") }}</b>
+                    <b>{{ t("label-alarms") }}</b>
                 </div>
                 <div class="col-sm-10">
                     <table class="table table-condensed">
@@ -285,7 +285,7 @@
             {% if metrics %}
             <div class="row">
                 <div class="col-se-1">
-                    <b>{{ _("Object Metrics") }}</b>
+                    <b>{{ t("label-object-metrics") }}</b>
                 </div>
                 <div class="col-sm-12">
                     <div class="panel-group">
@@ -330,7 +330,7 @@
             {% if sensors %}
             <div class="row">
                 <div class="col-se-1">
-                    <b>{{ _("Sensors") }}</b>
+                    <b>{{ t("label-sensors") }}</b>
                 </div>
                 <div class="col-sm-12">
                     <div class="panel-group">

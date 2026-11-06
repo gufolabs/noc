@@ -14,10 +14,10 @@ from collections.abc import Iterable
 from bson import ObjectId
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import MapItem, PathItem
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.sa.models.managedobject import ManagedObject
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class L2DomainTopology(TopologyBase):
     name = "l2domain"
-    header = _("L2 Domains")
+    header = t("title-l2-domains")
 
     def __init__(self, l2domain, **settings) -> None:
         self.l2domain = L2Domain.get_by_id(l2domain)

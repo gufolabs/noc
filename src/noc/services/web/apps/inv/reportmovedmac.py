@@ -26,7 +26,6 @@ from noc.config import config
 from noc.core.clickhouse.connect import connection
 from noc.core.i18n import t
 from noc.core.mac import MAC
-from noc.core.translation import ugettext as _
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.macvendor import MACVendor
 from noc.inv.models.networksegment import NetworkSegment
@@ -280,12 +279,12 @@ class ReportMovedMacApplication(ExtApplication):
             if exclude_serial_change and int(mo) in serials_changed:
                 continue
             iface_from, iface_to, migrate = get_interface(ifaces)
-            event_type = _("Migrate")
+            event_type = t("label-migrate")
             if (
                 rx_port_num.search(iface_from).group() == rx_port_num.search(iface_to).group()
                 and iface_from != iface_to
             ):
-                event_type = _("Migrate (Device Changed)")
+                event_type = t("label-migrate-device-changed")
             r.append(
                 translate_row(
                     [
@@ -293,7 +292,7 @@ class ReportMovedMacApplication(ExtApplication):
                         mo_address,
                         mo_adm_domain,
                         event_type,
-                        _("Yes") if int(mo) in serials_changed else _("No"),
+                        t("status-yes") if int(mo) in serials_changed else t("status-no"),
                         MACVendor.get_vendor(mac),
                         mac,
                         dt.datetime.fromtimestamp(migrate[1]).isoformat(sep=" "),  # TS

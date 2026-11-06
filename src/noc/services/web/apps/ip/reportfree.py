@@ -12,7 +12,6 @@ from django import forms
 from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.ip import IP
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrf import VRF
@@ -25,14 +24,14 @@ class ReportForm(forms.Form):
     vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
     afi = forms.ChoiceField(
         label=t("label-address-family"),
-        choices=[("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+        choices=[("4", t("choice-ipv4")), ("6", t("choice-ipv6"))],
     )
     prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
         vrf = self.cleaned_data.get("vrf")
         if not vrf:
-            raise ValidationError(_("VRF Required"))
+            raise ValidationError(t("msg-vrf-required"))
         afi = self.cleaned_data["afi"]
         prefix = self.cleaned_data.get("prefix", "").strip()
         if afi == "4":
@@ -42,7 +41,7 @@ class ReportForm(forms.Form):
         try:
             return Prefix.objects.get(vrf=vrf, afi=afi, prefix=prefix)
         except Prefix.DoesNotExist:
-            raise ValidationError(_("Prefix not found"))
+            raise ValidationError(t("msg-prefix-not-found"))
 
 
 class FreeBlocksReport(SimpleReport):
@@ -52,7 +51,7 @@ class FreeBlocksReport(SimpleReport):
     def get_data(self, vrf, afi, prefix, **kwargs):
         p = IP.prefix(prefix.prefix)
         return self.from_dataset(
-            title=_(f"Free blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
+            title=t("title-free-blocks-in-vrf", vrf=vrf.name, afi=afi, prefix=prefix.prefix),
             columns=[t("header-free-blocks")],
             data=[
                 [smart_text(f)]
