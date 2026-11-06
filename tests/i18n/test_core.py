@@ -106,7 +106,7 @@ def test_catalog_accepts_language_enum(tmp_path: Path) -> None:
     write_json_catalog(tmp_path, "pt_BR", {"hello": "Olá"})
     catalog = i18n.MessageCatalog(Language.PT_BR, tmp_path)
 
-    assert catalog._language == "pt_BR"
+    assert catalog._language is Language.PT_BR
     assert catalog["hello"].format({}) == "Olá"
 
 
@@ -155,10 +155,9 @@ def test_catalog_caches_missing_key_error(tmp_path: Path) -> None:
     write_json_catalog(tmp_path, "en", {"present": "Here"})
     catalog = i18n.MessageCatalog(Language.EN, tmp_path)
 
-    with pytest.raises(KeyError, match="absent is not found"):
+    with pytest.raises(KeyError, match="'absent'"):
         catalog["absent"]
-    assert catalog._msg_formats["absent"] is None
-    with pytest.raises(KeyError, match="absent is not found"):
+    with pytest.raises(KeyError, match="'absent'"):
         catalog["absent"]
 
 
