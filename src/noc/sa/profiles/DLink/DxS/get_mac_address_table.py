@@ -50,7 +50,7 @@ class Script(BaseScript):
             ]
         ):
             if v[0]:
-                m = ":".join([f"{int(c):02x}" for c in v[0].split(".")])
+                m = ":".join(f"{int(c):02x}" for c in v[0].split("."))
                 m = m[m.index(":") + 1 :]
                 if mac is not None and m != mac:
                     continue

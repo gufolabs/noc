@@ -156,7 +156,7 @@ class Script(BaseScript):
                 else:
                     ifname = old_port
                 # Normalize ifname from "01/01" to "1/1"
-                ifname = "/".join([str(int(x)) for x in ifname.split("/")])
+                ifname = "/".join(str(int(x)) for x in ifname.split("/"))
                 subname = f"{ifname}/{match.group('sub')}"
                 for i in interfaces:
                     if i["name"] == ifname:

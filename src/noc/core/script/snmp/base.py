@@ -518,7 +518,7 @@ class SNMP:
             index.update(t)
         # Yield result
         for i in sorted(index):
-            yield [".".join([str(x) for x in i])] + [t.get(i) for t in tables]
+            yield [".".join(str(x) for x in i)] + [t.get(i) for t in tables]
 
     def join(self, oids, community_suffix=None, cached=False, join="left"):
         """Query list of tables, merge by oid index

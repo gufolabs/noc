@@ -56,7 +56,7 @@ class Script(BaseScript):
         interfaces = []
         c = self.cli("show interfaces status", cached=True)
         # ESR-12V ver.1.0.9 produce random empty lines
-        c = "\n".join([s for s in c.split("\n") if s])
+        c = "\n".join(s for s in c.split("\n") if s)
         for line in parse_table(c, allow_wrap=True):
             # In some cases may be over 5 columns
             ifname = line[0]

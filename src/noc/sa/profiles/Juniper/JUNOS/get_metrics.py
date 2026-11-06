@@ -171,7 +171,7 @@ class Script(GetMetricsScript):
                 # ifindex, traffic_class = index.split(".", 1)
                 # if ifindex not in ifaces:
                 #    continue
-                traffic_class = "".join([chr(int(x)) for x in index.split(".")[1:]])
+                traffic_class = "".join(chr(int(x)) for x in index.split(".")[1:])
                 ts = self.get_ts()
                 for metric, value in [
                     ("Interface | CBQOS | Octets | Out | Delta", out_octets),

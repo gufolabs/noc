@@ -69,7 +69,7 @@ def render_tc_octetstring(value, format: bytes | str) -> str:
                     rr += [chr(v) for v in value[:size]]
                     value = value[size:]
                 elif fmt == "t":
-                    s = "".join([chr(v) for v in value[:size]])
+                    s = "".join(chr(v) for v in value[:size])
                     value = value[size:]
                     rr.append(smart_text(s, errors="ignore"))
                 else:

@@ -195,7 +195,7 @@ class LoadMetricsDS(BaseDataSource):
                 "from": int(ts_from_date * 1000),
                 "to": int(ts_to_date * 1000),
             }
-            params_all = "&".join([f"{k}={v}" for k, v in params.items()])
+            params_all = "&".join((f"{k}={v}" for k, v in params.items()))
             return f"{path}?{params_all}"
 
         def value_to_float(v):

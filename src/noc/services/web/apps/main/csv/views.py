@@ -75,9 +75,9 @@ class CSVApplication(Application):
 
     def address_in_network(self, ip, net):
         """Is an address in a network"""
-        ipaddr = int("".join([f"{int(x):02x}" for x in ip.split(".")]), 16)
+        ipaddr = int("".join(f"{int(x):02x}" for x in ip.split(".")), 16)
         netstr, bits = net.split("/")
-        netaddr = int("".join([f"{int(x):02x}" for x in netstr.split(".")]), 16)
+        netaddr = int("".join(f"{int(x):02x}" for x in netstr.split(".")), 16)
         mask = (0xFFFFFFFF << (32 - int(bits))) & 0xFFFFFFFF
         return (ipaddr & mask) == (netaddr & mask)
 

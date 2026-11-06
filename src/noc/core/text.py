@@ -810,13 +810,13 @@ def parse_table_header(v: Sequence[str]) -> dict[int, str]:
         if set(head[-1]) == {" "} and lines != empty_header:
             head = array(head)
             # Transpone list header string
-            header[num] = " ".join(["".join(s).strip() for s in head.transpose().tolist()])
+            header[num] = " ".join("".join(s).strip() for s in head.transpose().tolist())
             header[num] = header[num].strip()
             head = []
         head.append(lines)
     # last column
     head = array(head)
-    header[num] = " ".join(["".join(s).strip(" -") for s in head.transpose().tolist()])
+    header[num] = " ".join("".join(s).strip(" -") for s in head.transpose().tolist())
     header[num] = header[num].strip()
     return header
 

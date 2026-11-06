@@ -82,12 +82,12 @@ class Profile(BaseProfile):
             if set(head[-1]) == {" "} and lines != empty_header:
                 head = np.array(head)
                 # Transpone list header string
-                header[num] = " ".join(["".join(s).strip() for s in head.transpose().tolist()])
+                header[num] = " ".join("".join(s).strip() for s in head.transpose().tolist())
                 head = []
             head.append(lines)
         # last column
         head = np.array(head)
-        header[num] = " ".join(["".join(s).strip(" -") for s in head.transpose().tolist()])
+        header[num] = " ".join("".join(s).strip(" -") for s in head.transpose().tolist())
         return header
 
     def parse_table_struct(

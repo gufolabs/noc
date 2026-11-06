@@ -105,14 +105,14 @@ class Report(ReportNode):
         Return HTML code for report
         :return:
         """
-        return "\n".join([s.to_html(include_buttons=include_buttons) for s in self.sections])
+        return "\n".join(s.to_html(include_buttons=include_buttons) for s in self.sections)
 
     def to_csv(self, delimiter=","):
         """
         Return CSV for report
         :return:
         """
-        return "\n".join([x for x in [s.to_csv(delimiter=delimiter) for s in self.sections] if x])
+        return "\n".join(x for x in [s.to_csv(delimiter=delimiter) for s in self.sections] if x)
 
 
 class ReportSection(ReportNode):
@@ -248,7 +248,7 @@ class TableColumn(ReportNode):
                 attrs["align"] = "right"
             elif self.align & self.H_ALIGN_MASK == self.ALIGN_CENTER:
                 attrs["align"] = "center"
-        return " " + " ".join([f"{k}='{self.quote(v)}'" for k, v in attrs.items()])
+        return " " + " ".join((f"{k}='{self.quote(v)}'" for k, v in attrs.items()))
 
     def format_html(self, s):
         """

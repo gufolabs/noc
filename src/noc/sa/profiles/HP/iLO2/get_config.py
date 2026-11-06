@@ -50,6 +50,6 @@ class Script(BaseScript):
         for dir, args in self.walk("/map1"):
             if not args:
                 continue
-            r.append(f"set {dir} {' '.join([f'{k}={v}' for k, v in args])}")
+            r.append(f"set {dir} {' '.join((f'{k}={v}' for k, v in args))}")
         config = "\n".join(sorted(r))
         return self.cleaned_config(config)

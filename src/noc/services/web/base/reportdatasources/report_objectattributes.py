@@ -36,7 +36,7 @@ class ReportObjectAttributes(BaseReportColumn):
 
         query1 = base_select % ", ".join(tuple(s))
         query2 = " ".join(
-            [value_select % (al, al.replace(" ", "_"), al.replace(" ", "_")) for al in attr_list]
+            value_select % (al, al.replace(" ", "_"), al.replace(" ", "_")) for al in attr_list
         )
         query = query1 + query2 + " ORDER BY saa.managed_object_id"
         cursor.execute(query)

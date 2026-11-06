@@ -28,7 +28,7 @@ class ReportreportMIBs(SimpleReport):
                     m.last_updated,
                     ec,
                     ", ".join(m.depends_on),
-                    ", ".join([x.name for x in m.depended_by]),
+                    ", ".join(x.name for x in m.depended_by),
                 ]
             )
         return self.from_dataset(

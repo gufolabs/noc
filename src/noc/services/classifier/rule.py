@@ -80,7 +80,7 @@ class VarTransformRule:
     def oid_to_str(v: str):
         """Fix N.c1. .. .cN into "c1..cN" string"""
         x = [int(c) for c in v.split(".")]
-        return "".join([chr(c) for c in x[1 : x[0] + 1]])
+        return "".join(chr(c) for c in x[1 : x[0] + 1])
 
 
 @dataclass(frozen=True, slots=True)

@@ -634,7 +634,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
 
     def hexstring_to_mac(self, s):
         """Convert a 6-octet string to MAC address"""
-        return ":".join([f"{ord(x):02X}" for x in s])
+        return ":".join(f"{ord(x):02X}" for x in s)
 
     @property
     def root(self):

@@ -165,4 +165,4 @@ class Script(BaseScript):
             vs[oid] = role[r]
         if vs and len(vs) > 1:
             caps["Stack | Members"] = len(vs)
-            caps["Stack | Member Ids"] = " | ".join([str(v) for v in vs])
+            caps["Stack | Member Ids"] = " | ".join(str(v) for v in vs)

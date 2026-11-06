@@ -93,9 +93,9 @@ class Profile(BaseProfile):
         is_ipv6 = False
         if len(key) > 40:
             is_ipv6 = True
-            pool = "".join([chr(int(c)) for c in key[1:-19]])
+            pool = "".join(chr(int(c)) for c in key[1:-19])
         else:
-            pool = "".join([chr(int(c)) for c in key[1:-7]])
+            pool = "".join(chr(int(c)) for c in key[1:-7])
         for s in self.repl_simv:
             pool = pool.replace(s, ":")
         pool_mask = key[-1:][0]

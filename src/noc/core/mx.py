@@ -165,7 +165,7 @@ class MessageMeta(enum.Enum):
         if self.config.is_list:
             if not isinstance(value, list):
                 value = [value]
-            return MX_H_VALUE_SPLITTER.join([str(x) for x in value]).encode()
+            return MX_H_VALUE_SPLITTER.join(str(x) for x in value).encode()
         return str(value).encode()
 
 

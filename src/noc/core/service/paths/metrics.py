@@ -47,7 +47,7 @@ async def metrics():
         if hasattr(value, "iter_prom_metrics"):
             out += list(value.iter_prom_metrics(cleared_name, local_labels))
         else:
-            out_labels = ",".join([f'{i.lower()}="{local_labels[i]}"' for i in local_labels])
+            out_labels = ",".join(f'{i.lower()}="{local_labels[i]}"' for i in local_labels)
             out.append(f"# TYPE {cleared_name} untyped")
             out.append(f"{cleared_name}{{{out_labels}}} {value}")
     return PlainTextResponse(
