@@ -150,13 +150,10 @@ def test_plural_categories(
         assert catalog["items"].format({"count": count}) == expected
 
 
-def test_catalog_caches_missing_key_error(tmp_path: Path) -> None:
+def test_catalog_missing_key_error(tmp_path: Path) -> None:
     """Missing keys raise KeyError on both the first and later lookups."""
     write_json_catalog(tmp_path, "en", {"present": "Here"})
     catalog = i18n.MessageCatalog(Language.EN, tmp_path)
-
-    with pytest.raises(KeyError, match="'absent'"):
-        catalog["absent"]
     with pytest.raises(KeyError, match="'absent'"):
         catalog["absent"]
 

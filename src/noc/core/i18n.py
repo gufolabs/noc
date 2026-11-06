@@ -29,10 +29,9 @@ _SENTINEL = object()
 
 
 class MessageCatalog:
-    """Thread-safe, lazy-loaded catalog of ICU MessageFormat messages.
+    """Thread-safe catalog of ICU MessageFormat messages.
 
     Loads translations for the requested language with fallback to English.
-    Message patterns are compiled lazily and cached on first access.
 
     Args:
         language: Language identifier used to select the translation catalog.
