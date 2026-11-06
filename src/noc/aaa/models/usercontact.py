@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # UserContact model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -17,6 +17,12 @@ from .user import User
 
 
 class UserContact(NOCModel):
+    """
+    Attributes:
+        notification_method: Method
+        params: Params
+    """
+
     class Meta:
         verbose_name = "User Profile Contact"
         verbose_name_plural = "User Profile Contacts"
@@ -28,10 +34,8 @@ class UserContact(NOCModel):
     time_pattern = models.ForeignKey(
         TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
     )
-    notification_method = models.CharField(
-        "Method", max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES
-    )
-    params = models.CharField("Params", max_length=256)
+    notification_method = models.CharField(max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES)
+    params = models.CharField(max_length=256)
 
     def __str__(self):
         return f"{self.user.username} {self.time_pattern.name if self.time_pattern else ''} {self.notification_method}"

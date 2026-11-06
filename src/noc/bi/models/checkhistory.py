@@ -22,36 +22,52 @@ from noc.core.clickhouse.fields import (
     UInt32Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class CheckHistory(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        check_name: Check Name
+        status: Check Result status
+        key: Check Key
+        ttl: Check actual time (in seconds)
+        port: TCP/UDP Port
+        source: Source
+        script: Diagnostic Name
+        data: Collected data (JSON)
+        managed_object: Running for object
+        service: Object Name
+        remote_system: Remote System
+    """
+
     class Meta:
         db_table = "checkhistory"
         engine = MergeTree("date", ("date", "check_name"), primary_keys=("date", "check_name"))
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    check_name = StringField(description=_("Check Name"), low_cardinality=True)
-    status = BooleanField(description=_("Check Result status"))
-    key = StringField(description=_("Check Key"))
-    ttl = UInt32Field(description=_("Check actual time (in seconds)"))
+    date = DateField()
+    ts = DateTimeField()
+    check_name = StringField(low_cardinality=True)
+    status = BooleanField()
+    key = StringField()
+    ttl = UInt32Field()
     args = MapField(StringField(), description="Running Argument")
-    port = UInt16Field(description=_("TCP/UDP Port"))
+    port = UInt16Field()
     address = IPv4Field(description="Destination IP Address")
-    source = StringField(description=_("Source"), low_cardinality=True)
-    script = StringField(description=_("Diagnostic Name"), low_cardinality=True)
+    source = StringField(low_cardinality=True)
+    script = StringField(low_cardinality=True)
     skipped = BooleanField()
     # Error
     error = StringField(description="Error text")
     error_code = StringField(description="Error code")
     is_available = BooleanField()
     is_access = BooleanField()
-    data = StringField(description=_("Collected data (JSON)"))
-    managed_object = ReferenceField(ManagedObject, description=_("Running for object"))
-    service = ReferenceField(Service, description=_("Object Name"))
+    data = StringField()
+    managed_object = ReferenceField(ManagedObject)
+    service = ReferenceField(Service)
     # agent = ReferenceField(Agent, description=_("Object Name"))
-    remote_system = ReferenceField(RemoteSystem, description=_("Remote System"))
+    remote_system = ReferenceField(RemoteSystem)
 
     @classmethod
     def transform_query(cls, query, user):

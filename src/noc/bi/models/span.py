@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Span Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,10 +17,27 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class Span(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        ctx: Span context
+        id: Span id
+        parent: Span parent
+        server: Called service
+        service: Called function
+        client: Caller service
+        duration: Duration (us)
+        sample: Sampling rate
+        error_code: Error code
+        error_text: Error text
+        in_label: Input arguments
+        out_label: Output results
+    """
+
     class Meta:
         db_table = "span"
         engine = MergeTree(
@@ -29,21 +46,21 @@ class Span(Model):
             primary_keys=("server", "service", "ts", "in_label"),
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    ctx = UInt64Field(description=_("Span context"))
-    id = UInt64Field(description=_("Span id"))
-    parent = UInt64Field(description=_("Span parent"))
-    server = StringField(description=_("Called service"))
-    service = StringField(description=_("Called function"))
-    client = StringField(description=_("Caller service"))
-    duration = UInt64Field(description=_("Duration (us)"))
-    sample = Int32Field(description=_("Sampling rate"))
-    error_code = UInt32Field(description=_("Error code"))
-    error_text = StringField(description=_("Error text"))
+    date = DateField()
+    ts = DateTimeField()
+    ctx = UInt64Field()
+    id = UInt64Field()
+    parent = UInt64Field()
+    server = StringField()
+    service = StringField()
+    client = StringField()
+    duration = UInt64Field()
+    sample = Int32Field()
+    error_code = UInt32Field()
+    error_text = StringField()
     in_headers = MapField(StringField(), description="Call headers")
-    in_label = StringField(description=_("Input arguments"))
-    out_label = StringField(description=_("Output results"))
+    in_label = StringField()
+    out_label = StringField()
 
     @classmethod
     def transform_query(cls, query, user):

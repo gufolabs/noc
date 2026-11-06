@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # AS model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -44,15 +44,24 @@ id_lock = Lock()
 )
 @on_save
 class AS(NOCModel):
+    """
+    Attributes:
+        asn: ASN
+        as_name: AS Name
+        description: Description
+        header_remarks: Header Remarks
+        footer_remarks: Footer Remarks
+    """
+
     class Meta:
         verbose_name = "AS"
         verbose_name_plural = "ASes"
         db_table = "peer_as"
         app_label = "peer"
 
-    asn = models.BigIntegerField("ASN", unique=True)
+    asn = models.BigIntegerField(unique=True)
     # as-name RPSL Field
-    as_name = models.CharField("AS Name", max_length=64, null=True, blank=True)
+    as_name = models.CharField(max_length=64, null=True, blank=True)
     profile: ASProfile = DocumentReferenceField(
         ASProfile, null=False, blank=False, default=ASProfile.get_default_profile
     )
@@ -65,7 +74,7 @@ class AS(NOCModel):
         on_delete=models.CASCADE,
     )
     # RPSL descr field
-    description = models.TextField("Description", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     organisation: Organisation | None = models.ForeignKey(
         Organisation, verbose_name="Organisation", null=True, blank=True, on_delete=models.CASCADE
     )
@@ -90,9 +99,9 @@ class AS(NOCModel):
         blank=True,
     )
     # remarks: will be prepended automatically
-    header_remarks = models.TextField("Header Remarks", null=True, blank=True)
+    header_remarks = models.TextField(null=True, blank=True)
     # remarks: will be prepended automatically
-    footer_remarks = models.TextField("Footer Remarks", null=True, blank=True)
+    footer_remarks = models.TextField(null=True, blank=True)
     rir = models.ForeignKey(
         RIR, null=True, blank=True, verbose_name="RIR", on_delete=models.CASCADE
     )

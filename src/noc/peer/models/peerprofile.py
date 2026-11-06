@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Peer Profile model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -46,14 +46,22 @@ DataItems = RootModel[list[ModelDataItem]]
 @change
 @on_delete_check(check=[("peer.Peer", "profile"), ("sa.ManagedObjectProfile", "bgppeer_profile")])
 class PeerProfile(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+        max_prefixes: Max. Prefixes
+        data: Data Items
+    """
+
     class Meta:
         verbose_name = "Peer Profile"
         verbose_name_plural = "Peer Profiles"
         db_table = "peer_peerprofile"
         app_label = "peer"
 
-    name = CharField("Name", max_length=32, unique=True)
-    description = CharField("Description", max_length=64)
+    name = CharField(max_length=32, unique=True)
+    description = CharField(max_length=64)
     # Allow Type ?
     workflow: Workflow = DocumentReferenceField(
         Workflow,
@@ -61,9 +69,8 @@ class PeerProfile(NOCModel):
         blank=False,
         default=partial(Workflow.get_default_workflow, "peer.Peer"),
     )
-    max_prefixes = IntegerField("Max. Prefixes", default=100)
+    max_prefixes = IntegerField(default=100)
     data: list[dict[str, str]] = PydanticField(
-        "Data Items",
         schema=DataItems,
         blank=True,
         null=True,

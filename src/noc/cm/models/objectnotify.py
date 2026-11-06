@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Object notifications
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,13 +18,20 @@ OBJECT_TYPE_CHOICES = [(x, x) for x in OBJECT_TYPES if x != "config"]
 
 
 class ObjectNotify(NOCModel):
+    """
+    Attributes:
+        type: Type
+        notify_immediately: Notify Immediately
+        notify_delayed: Notify Delayed
+    """
+
     class Meta:
         app_label = "cm"
         db_table = "cm_objectnotify"
         verbose_name = "Object Notify"
         verbose_name_plural = "Object Notifies"
 
-    type = models.CharField("Type", max_length=16, choices=OBJECT_TYPE_CHOICES)
+    type = models.CharField(max_length=16, choices=OBJECT_TYPE_CHOICES)
     administrative_domain = models.ForeignKey(
         AdministrativeDomain,
         verbose_name="Administrative Domain",
@@ -32,8 +39,8 @@ class ObjectNotify(NOCModel):
         null=True,
         on_delete=models.CASCADE,
     )
-    notify_immediately = models.BooleanField("Notify Immediately", default=False)
-    notify_delayed = models.BooleanField("Notify Delayed", default=False)
+    notify_immediately = models.BooleanField(default=False)
+    notify_delayed = models.BooleanField(default=False)
     notification_group = models.ForeignKey(
         NotificationGroup, verbose_name="Notification Group", on_delete=models.CASCADE
     )

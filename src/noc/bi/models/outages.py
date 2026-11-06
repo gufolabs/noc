@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Outages model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,25 +16,35 @@ from noc.core.clickhouse.fields import (
     ReferenceField,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 from noc.sa.models.administrativedomain import AdministrativeDomain as AdministrativeDomainM
 from noc.sa.models.useraccess import UserAccess
 
 
 class Outages(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Register
+        managed_object: Object Name
+        start: Start Outage
+        stop: End Outage
+        final_register: End Outage Register
+        administrative_domain: Admin. Domain
+    """
+
     class Meta:
         db_table = "outages"
         engine = MergeTree(
             "date", ("start", "managed_object"), primary_keys=("start", "managed_object")
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Register"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    start = DateTimeField(description=_("Start Outage"))
-    stop = DateTimeField(description=_("End Outage"))  # None for active outages
-    final_register = BooleanField(description=_("End Outage Register"))
-    administrative_domain = ReferenceField(AdministrativeDomain, description=_("Admin. Domain"))
+    date = DateField()
+    ts = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    start = DateTimeField()
+    stop = DateTimeField()  # None for active outages
+    final_register = BooleanField()
+    administrative_domain = ReferenceField(AdministrativeDomain)
 
     @classmethod
     def transform_query(cls, query, user):

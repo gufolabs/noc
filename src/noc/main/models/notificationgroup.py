@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # NotificationGroup model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -190,6 +190,14 @@ MessageTypes = RootModel[list[MessageTypeItem]]
 class NotificationGroup(NOCModel):
     """
     Notification Groups
+
+    Attributes:
+        name: Name
+        description: Description
+        message_types: Message Type Settings
+        static_members: Notification Contacts
+        subscription_settings: Subscription Settings
+        conditions: Condition for match Notification Group
     """
 
     class Meta:
@@ -205,9 +213,9 @@ class NotificationGroup(NOCModel):
         "json_unique_fields": ["name"],
     }
 
-    name: str = CharField("Name", max_length=64, unique=True)
+    name: str = CharField(max_length=64, unique=True)
     uuid = UUIDField()
-    description = TextField("Description", null=True, blank=True)
+    description = TextField(null=True, blank=True)
     message_register_policy = CharField(
         max_length=1,
         choices=[
@@ -220,21 +228,18 @@ class NotificationGroup(NOCModel):
         blank=False,
     )
     message_types: list[MessageTypeItem] = PydanticField(
-        "Message Type Settings",
         schema=MessageTypes,
         blank=True,
         null=True,
         default=list,
     )
     static_members: list[StaticMember] | None = PydanticField(
-        "Notification Contacts",
         schema=StaticMembers,
         blank=True,
         null=True,
         default=list,
     )
     subscription_settings: list[SubscriptionSettingItem] | None = PydanticField(
-        "Subscription Settings",
         schema=SubscriptionSettings,
         blank=True,
         null=True,
@@ -243,7 +248,6 @@ class NotificationGroup(NOCModel):
     # subscribed = ArrayField(CharField(max_length=100))
     subscription_to: list[str] = ArrayField(CharField(max_length=100), blank=True, null=True)
     conditions: list[SubscriptionConditionItem] | None = PydanticField(
-        "Condition for match Notification Group",
         schema=SubscriptionConditions,
         blank=True,
         null=True,
@@ -854,6 +858,13 @@ class NotificationGroup(NOCModel):
 
 
 class NotificationGroupUserSettings(NOCModel):
+    """
+    Attributes:
+        method: Method
+        expired_at: Expired Subscription After
+        suppress: Deactivate Subscription
+    """
+
     class Meta:
         verbose_name = "Notification Group User Subscription"
         verbose_name_plural = "Notification Group Users"
@@ -868,7 +879,7 @@ class NotificationGroupUserSettings(NOCModel):
         TimePattern, verbose_name="Time Pattern", on_delete=CASCADE, null=True, blank=True
     )
     user: User = ForeignKey(User, verbose_name="User", on_delete=CASCADE)
-    method = CharField("Method", max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES)
+    method = CharField(max_length=16, choices=USER_NOTIFICATION_METHOD_CHOICES)
     policy = CharField(
         max_length=1,
         choices=[
@@ -882,8 +893,8 @@ class NotificationGroupUserSettings(NOCModel):
         blank=False,
     )
     title_tag: str = CharField(max_length=30, blank=True)
-    expired_at: dt.datetime | None = DateTimeField("Expired Subscription After", auto_now_add=False)
-    suppress = BooleanField("Deactivate Subscription", default=False)
+    expired_at: dt.datetime | None = DateTimeField(auto_now_add=False)
+    suppress = BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}@{self.notification_group.name}: {self.time_pattern.name if self.time_pattern else ''}"

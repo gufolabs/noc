@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Project models
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -53,6 +53,13 @@ id_lock = Lock()
 class Project(NOCModel):
     """
     Projects are used to track investment projects expenses and profits
+
+    Attributes:
+        code: Code
+        name: Name
+        description: Description
+        shape_overlay_position: S.O. Position
+        shape_overlay_form: S.O. Form
     """
 
     class Meta:
@@ -61,19 +68,17 @@ class Project(NOCModel):
         app_label = "project"
         db_table = "project_project"
 
-    code = models.CharField("Code", max_length=256, unique=True)
-    name = models.CharField("Name", max_length=256)
-    description = models.TextField("Description", null=True, blank=True)
+    code = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256)
+    description = models.TextField(null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = models.CharField(
-        "S.O. Position",
         max_length=2,
         choices=[(x.value, x.value) for x in ShapeOverlayPosition],
         null=True,
         blank=True,
     )
     shape_overlay_form = models.CharField(
-        "S.O. Form",
         max_length=1,
         choices=[(x.value, x.value) for x in ShapeOverlayForm],
         null=True,

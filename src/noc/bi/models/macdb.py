@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # MACDB Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -20,10 +20,17 @@ from noc.core.clickhouse.fields import (
 )
 from noc.core.clickhouse.functions import ArgMax
 from noc.core.clickhouse.model import ViewModel
-from noc.core.translation import ugettext as _
 
 
 class MACDB(ViewModel):
+    """
+    Attributes:
+        mac: MAC
+        managed_object: Object Name
+        interface_profile: Interface Profile
+        segment: Network Segment
+    """
+
     class Meta:
         db_table = "macdb"
         view_table_source = "raw_mac"
@@ -42,8 +49,8 @@ class MACDB(ViewModel):
         ArgMax(),
         description="Last Seen mac",
     )
-    mac = UInt64Field(description=_("MAC"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
+    mac = UInt64Field()
+    managed_object = ReferenceField(ManagedObject)
     interface = AggregatedField(
         "interface",
         StringField(),
@@ -54,13 +61,11 @@ class MACDB(ViewModel):
         "interface_profile",
         ReferenceField(InterfaceProfile),
         ArgMax(),
-        description=_("Interface Profile"),
     )
     segment = AggregatedField(
         "segment",
         ReferenceField(NetworkSegment),
         ArgMax(),
-        description=_("Network Segment"),
     )
     vlan = AggregatedField(
         "vlan",

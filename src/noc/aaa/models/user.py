@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # User model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -56,6 +56,21 @@ logger = logging.getLogger(__name__)
     ]
 )
 class User(NOCModel):
+    """
+    Attributes:
+        username: Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.
+        is_active: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        is_superuser: Designates that this user has all permissions without explicitly assigning them.
+        groups: The groups this user belongs to. A user will get all permissions granted to each of his/her group.
+        heatmap_lon: Longitude
+        heatmap_lat: Latitude
+        heatmap_zoom: Zoom
+        last_login: Last Login
+        change_at: Change password at
+        valid_from: Password valid from
+        valid_until: Password valid until
+    """
+
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
@@ -67,7 +82,6 @@ class User(NOCModel):
     username = models.CharField(
         max_length=75,
         unique=True,
-        help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
         validators=[
             validators.RegexValidator(r"^[\w.@+-]+$", _("Enter a valid username."), "invalid")
         ],
@@ -78,26 +92,14 @@ class User(NOCModel):
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(
         default=True,
-        help_text=_(
-            "Designates whether this user should be treated as "
-            "active. Unselect this instead of deleting accounts."
-        ),
     )
     is_superuser = models.BooleanField(
         default=False,
-        help_text=_(
-            "Designates that this user has all permissions without explicitly assigning them."
-        ),
     )
     date_joined = models.DateTimeField(default=dt.datetime.now)
     groups = models.ManyToManyField(
         Group,
         blank=True,
-        help_text=_(
-            "The groups this user belongs to. A user will "
-            "get all permissions granted to each of "
-            "his/her group."
-        ),
         related_name="user_set",
         related_query_name="user",
     )
@@ -106,21 +108,15 @@ class User(NOCModel):
         max_length=16, null=True, blank=True, default=config.language.value, choices=LANGUAGES
     )
     # Heatmap position
-    heatmap_lon = models.FloatField(
-        "Longitude", blank=True, null=True, default=config.web.heatmap_lon
-    )
-    heatmap_lat = models.FloatField(
-        "Latitude", blank=True, null=True, default=config.web.heatmap_lat
-    )
-    heatmap_zoom = models.IntegerField(
-        "Zoom", blank=True, null=True, default=config.web.heatmap_zoom
-    )
+    heatmap_lon = models.FloatField(blank=True, null=True, default=config.web.heatmap_lon)
+    heatmap_lat = models.FloatField(blank=True, null=True, default=config.web.heatmap_lat)
+    heatmap_zoom = models.IntegerField(blank=True, null=True, default=config.web.heatmap_zoom)
     # Last login (Populated by login service)
-    last_login = models.DateTimeField("Last Login", blank=True, null=True)
+    last_login = models.DateTimeField(blank=True, null=True)
     # Password policy
-    change_at = models.DateTimeField("Change password at", blank=True, null=True)
-    valid_from = models.DateTimeField("Password valid from", blank=True, null=True)
-    valid_until = models.DateTimeField("Password valid until", blank=True, null=True)
+    change_at = models.DateTimeField(blank=True, null=True)
+    valid_from = models.DateTimeField(blank=True, null=True)
+    valid_until = models.DateTimeField(blank=True, null=True)
     password_history = ArrayField(models.CharField(max_length=128), blank=True, null=True)
     # Account blocking logic
     blocked_till = models.DateTimeField(blank=True, null=True)

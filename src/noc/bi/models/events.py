@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Events Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,12 +33,41 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 from noc.sa.models.administrativedomain import AdministrativeDomain as AdministrativeDomainM
 from noc.sa.models.useraccess import UserAccess
 
 
 class Events(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Register
+        start_ts: Created
+        event_id: Id
+        source: Event Source
+        event_class: Event Class
+        labels: Labels
+        message: Syslog Message
+        raw_vars: Raw Variables
+        resolved_vars: Resolved Variables
+        vars: Vars
+        snmp_trap_oid: snmp Trap OID
+        target: Target
+        target_name: Target Name
+        target_reference: Target Reference
+        pool: Pool Name
+        ip: IP Address
+        managed_object: Object Name
+        services: Services List
+        profile: Profile
+        vendor: Vendor Name
+        platform: Platform
+        version: Version
+        administrative_domain: Admin. Domain
+        segment: Network Segment
+        container: Container
+    """
+
     class Meta:
         db_table = "events"
         engine = MergeTree(
@@ -48,44 +77,44 @@ class Events(Model):
             partition_function="toYYYYMMDD(ts)",
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Register"))
-    start_ts = DateTimeField(description=_("Created"))
+    date = DateField()
+    ts = DateTimeField()
+    start_ts = DateTimeField()
     # Event Classification
-    event_id = StringField(description=_("Id"))
-    source = StringField(description=_("Event Source"), low_cardinality=True)
-    event_class = ReferenceField(EventClass, description=_("Event Class"))
+    event_id = StringField()
+    source = StringField(low_cardinality=True)
+    event_class = ReferenceField(EventClass)
     # Data
-    labels = ArrayField(StringField(), description=_("Labels"))
+    labels = ArrayField(StringField())
     data = StringField(description="All data on JSON")
-    message = StringField(description=_("Syslog Message"))
+    message = StringField()
     # Calculated data
-    raw_vars = MapField(StringField(), description=_("Raw Variables"))  # For old query
-    resolved_vars = MapField(StringField(), description=_("Resolved Variables"))
-    vars = MapField(StringField(), description=_("Vars"))
-    snmp_trap_oid = StringField(description=_("snmp Trap OID"))
+    raw_vars = MapField(StringField())  # For old query
+    resolved_vars = MapField(StringField())
+    vars = MapField(StringField())
+    snmp_trap_oid = StringField()
     severity = Int8Field(description="EventSeverity")
     result_action = StringField(description="Result action for event")
     error_message = StringField(description="Error message")
     remote_system = ReferenceField(RemoteSystem, description="Remote System")
     remote_id = StringField(description="Event Id on Remote System")
     # Target data
-    target = MapField(StringField(), description=_("Target"))
-    target_name = StringField(description=_("Target Name"))
-    target_reference = UInt64Field(description=_("Target Reference"))
-    pool = ReferenceField(Pool, description=_("Pool Name"))
-    ip = IPv4Field(description=_("IP Address"))
+    target = MapField(StringField())
+    target_name = StringField()
+    target_reference = UInt64Field()
+    pool = ReferenceField(Pool)
+    ip = IPv4Field()
     # Resolver target
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    services = ArrayField(ReferenceField(Service), description=_("Services List"))
+    managed_object = ReferenceField(ManagedObject)
+    services = ArrayField(ReferenceField(Service))
     # Agent
-    profile = ReferenceField(Profile, description=_("Profile"))
-    vendor = ReferenceField(Vendor, description=_("Vendor Name"))
-    platform = ReferenceField(Platform, description=_("Platform"))
-    version = ReferenceField(Version, description=_("Version"))
-    administrative_domain = ReferenceField(AdministrativeDomain, description=_("Admin. Domain"))
-    segment = ReferenceField(NetworkSegment, description=_("Network Segment"))
-    container = ReferenceField(Container, description=_("Container"))
+    profile = ReferenceField(Profile)
+    vendor = ReferenceField(Vendor)
+    platform = ReferenceField(Platform)
+    version = ReferenceField(Version)
+    administrative_domain = ReferenceField(AdministrativeDomain)
+    segment = ReferenceField(NetworkSegment)
+    container = ReferenceField(Container)
 
     @classmethod
     def transform_query(cls, query, user):

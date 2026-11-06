@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ResourceState model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,6 +15,11 @@ from noc.core.model.decorator import on_delete_check
 
 @on_delete_check(check=[("main.ResourceState", "step_to")])
 class ResourceState(NOCModel):
+    """
+    Attributes:
+        name: Name
+    """
+
     class Meta:
         verbose_name = "Resource State"
         verbose_name_plural = "Resource States"
@@ -22,7 +27,7 @@ class ResourceState(NOCModel):
         app_label = "main"
         db_table = "main_resourcestate"
 
-    name = models.CharField("Name", max_length=32, unique=True)
+    name = models.CharField(max_length=32, unique=True)
     description = models.TextField(null=True, blank=True)
     # State is available for selection
     is_active = models.BooleanField(default=True)

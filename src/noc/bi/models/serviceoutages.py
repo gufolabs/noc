@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ServiceOutages model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,10 +18,17 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class ServiceOutages(Model):
+    """
+    Attributes:
+        start: Start Outage
+        stop: End Outage
+        final_register: End Outage Register (Service admin state to non-production)
+        administrative_domain: Admin. Domain
+    """
+
     class Meta:
         db_table = "serviceoutages"
         engine = MergeTree("date", ("date", "service"))
@@ -33,15 +40,13 @@ class ServiceOutages(Model):
     service_id = StringField(description="Service Object ID")
 
     # Outage
-    start = DateTimeField(description=_("Start Outage"))
-    stop = DateTimeField(description=_("End Outage"))
+    start = DateTimeField()
+    stop = DateTimeField()
 
     from_status = UInt8Field(description="Oper Status on start interval")
     to_status = UInt8Field(description="Oper Status on end interval")
     affected = StringField(description="Factors Affected to Service Status")
     in_maintenance = UInt8Field(description="Service In Maintenance State")
 
-    final_register = BooleanField(
-        description=_("End Outage Register (Service admin state to non-production)")
-    )
-    administrative_domain = ReferenceField(AdministrativeDomain, description=_("Admin. Domain"))
+    final_register = BooleanField()
+    administrative_domain = ReferenceField(AdministrativeDomain)

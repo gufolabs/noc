@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Person models
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -19,23 +19,33 @@ from .rir import RIR
 
 @on_save
 class Person(NOCModel):
+    """
+    Attributes:
+        nic_hdl: nic-hdl
+        person: person
+        type: type
+        address: address
+        phone: phone
+        fax_no: fax-no
+        email: email
+        extra: extra
+    """
+
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Persons"
         db_table = "peer_person"
         app_label = "peer"
 
-    nic_hdl = models.CharField("nic-hdl", max_length=64, unique=True)
-    person = models.CharField("person", max_length=128)
-    type = models.CharField(
-        "type", max_length=1, default="P", choices=[("P", "Person"), ("R", "Role")]
-    )
-    address = models.TextField("address")
-    phone = models.TextField("phone")
-    fax_no = models.TextField("fax-no", blank=True, null=True)
-    email = models.TextField("email")
+    nic_hdl = models.CharField(max_length=64, unique=True)
+    person = models.CharField(max_length=128)
+    type = models.CharField(max_length=1, default="P", choices=[("P", "Person"), ("R", "Role")])
+    address = models.TextField()
+    phone = models.TextField()
+    fax_no = models.TextField(blank=True, null=True)
+    email = models.TextField()
     rir = models.ForeignKey(RIR, verbose_name="RIR", on_delete=models.CASCADE)
-    extra = models.TextField("extra", blank=True, null=True)
+    extra = models.TextField(blank=True, null=True)
     rpsl = GridVCSField("rpsl_person")
 
     def __str__(self):

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DNSZone
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -53,6 +53,15 @@ ZONE_REVERSE_IPV6 = "6"
 class DNSZone(NOCModel):
     """
     DNS Zone
+
+    Attributes:
+        notification_group: Notification group to use when zone changed
+        name: Domain
+        type: Type
+        description: Description
+        is_auto_generated: Auto generated?
+        serial: Serial
+        paid_till: Paid Till
     """
 
     class Meta:
@@ -62,9 +71,8 @@ class DNSZone(NOCModel):
         db_table = "dns_dnszone"
         app_label = "dns"
 
-    name = models.CharField(_("Domain"), max_length=256, unique=True)
+    name = models.CharField(max_length=256, unique=True)
     type = models.CharField(
-        _("Type"),
         max_length=1,
         null=False,
         blank=False,
@@ -75,7 +83,7 @@ class DNSZone(NOCModel):
             (ZONE_REVERSE_IPV6, "Reverse IPv6"),
         ],
     )
-    description = models.CharField(_("Description"), null=True, blank=True, max_length=64)
+    description = models.CharField(null=True, blank=True, max_length=64)
     project = models.ForeignKey(
         Project,
         verbose_name="Project",
@@ -85,18 +93,17 @@ class DNSZone(NOCModel):
         on_delete=models.CASCADE,
     )
     # @todo: Rename to is_provisioned
-    is_auto_generated = models.BooleanField(_("Auto generated?"), default=False)
-    serial = models.IntegerField(_("Serial"), default=0)
+    is_auto_generated = models.BooleanField(default=False)
+    serial = models.IntegerField(default=0)
     profile = models.ForeignKey(DNSZoneProfile, verbose_name=_("Profile"), on_delete=models.CASCADE)
     notification_group = models.ForeignKey(
         NotificationGroup,
         verbose_name=_("Notification Group"),
         null=True,
         blank=True,
-        help_text=_("Notification group to use when zone changed"),
         on_delete=models.CASCADE,
     )
-    paid_till = models.DateField(_("Paid Till"), null=True, blank=True)
+    paid_till = models.DateField(null=True, blank=True)
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

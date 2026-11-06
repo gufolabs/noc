@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # AddressRange model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -30,26 +30,39 @@ from .vrf import VRF
 @Label.model
 @change
 class AddressRange(NOCModel):
+    """
+    Attributes:
+        is_locked: Check to deny address creation or editing within the range
+        fqdn_template: Template to generate FQDNs when 'Action' set to 'Generate FQDNs'
+        reverse_nses: Comma-separated list of NSes to partial reverse zone delegation when 'Action' set to 'Partial reverse zone delegation
+        tt: Ticket #
+        allocated_till: VRF temporary allocated till the date
+        name: Name
+        is_active: Is Active
+        afi: Address Family
+        from_address: From Address
+        to_address: To address
+        description: Description
+        action: Action
+    """
+
     class Meta:
         verbose_name = _("Address Range")
         db_table = "ip_addressrange"
         app_label = "ip"
         unique_together = [("vrf", "afi", "from_address", "to_address")]
 
-    name = models.CharField(_("Name"), max_length=64, unique=True)
-    is_active = models.BooleanField(_("Is Active"), default=True)
+    name = models.CharField(max_length=64, unique=True)
+    is_active = models.BooleanField(default=True)
     vrf = models.ForeignKey(VRF, verbose_name=_("VRF"), on_delete=models.CASCADE)
-    afi = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
-    from_address = CIDRField(_("From Address"))
-    to_address = CIDRField(_("To address"))
-    description = models.TextField(_("Description"), blank=True, null=True)
+    afi = models.CharField(max_length=1, choices=AFI_CHOICES)
+    from_address = CIDRField()
+    to_address = CIDRField()
+    description = models.TextField(blank=True, null=True)
     is_locked = models.BooleanField(
-        _("Is Locked"),
         default=False,
-        help_text=_("Check to deny address creation or editing within the range"),
     )
     action = models.CharField(
-        _("Action"),
         max_length=1,
         choices=[
             ("N", _("Do nothing")),
@@ -59,33 +72,24 @@ class AddressRange(NOCModel):
         default="N",
     )
     fqdn_template = models.CharField(
-        _("FQDN Template"),
         max_length=255,
         null=True,
         blank=True,
-        help_text=_("Template to generate FQDNs when 'Action' set to 'Generate FQDNs'"),
     )
     reverse_nses = models.CharField(
-        _("Reverse NSes"),
         max_length=255,
         null=True,
         blank=True,
-        help_text=_(
-            "Comma-separated list of NSes to partial reverse zone delegation when "
-            "'Action' set to 'Partial reverse zone delegation"
-        ),
     )
     # Labels
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list
     )
-    tt = models.IntegerField("TT", blank=True, null=True, help_text=_("Ticket #"))
+    tt = models.IntegerField(blank=True, null=True)
     allocated_till = models.DateField(
-        _("Allocated till"),
         null=True,
         blank=True,
-        help_text=_("VRF temporary allocated till the date"),
     )
 
     def __str__(self):

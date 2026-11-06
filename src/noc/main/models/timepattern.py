@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # TimePattern database model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -39,6 +39,10 @@ id_lock = Lock()
 class TimePattern(NOCModel):
     """
     Time Patterns
+
+    Attributes:
+        name: Name
+        description: Description
     """
 
     class Meta:
@@ -47,8 +51,8 @@ class TimePattern(NOCModel):
         db_table = "main_timepattern"
         app_label = "main"
 
-    name = models.CharField("Name", max_length=64, unique=True)
-    description = models.TextField("Description", null=True, blank=True)
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(null=True, blank=True)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _code_cache = cachetools.TTLCache(1000, ttl=60)

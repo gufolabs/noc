@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # TimePatternTerm database model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ from .timepattern import TimePattern
 class TimePatternTerm(NOCModel):
     """
     Time pattern terms
+
+    Attributes:
+        term: Term
     """
 
     class Meta:
@@ -37,7 +40,7 @@ class TimePatternTerm(NOCModel):
     time_pattern = models.ForeignKey(
         TimePattern, verbose_name="Time Pattern", on_delete=models.CASCADE
     )
-    term = models.CharField("Term", max_length=256)
+    term = models.CharField(max_length=256)
 
     def __str__(self):
         return f"{self.time_pattern.name}: {self.term}"

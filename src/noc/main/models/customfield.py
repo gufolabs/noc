@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # CustomField model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -33,6 +33,20 @@ id_lock = threading.Lock()
 class CustomField(NOCModel):
     """
     Custom field description
+
+    Attributes:
+        table: Table
+        name: Name
+        is_active: Is Active
+        label: Label
+        type: Type
+        description: Description
+        max_length: Max. Length
+        regexp: Regexp
+        is_indexed: Is Indexed
+        is_searchable: Is Searchable
+        is_filtered: Is Filtered
+        is_hidden: Is Hidden
     """
 
     class Meta:
@@ -42,12 +56,11 @@ class CustomField(NOCModel):
         app_label = "main"
         unique_together = [("table", "name")]
 
-    table = models.CharField("Table", max_length=64)
-    name = models.CharField("Name", max_length=64)
-    is_active = models.BooleanField("Is Active", default=True)
-    label = models.CharField("Label", max_length=128)
+    table = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    is_active = models.BooleanField(default=True)
+    label = models.CharField(max_length=128)
     type = models.CharField(
-        "Type",
         max_length=64,
         choices=[
             ("str", "String"),
@@ -57,19 +70,19 @@ class CustomField(NOCModel):
             ("datetime", "Date&Time"),
         ],
     )
-    description = models.TextField("Description", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     # Applicable only for "str" type
-    max_length = models.IntegerField("Max. Length", default=0)
-    regexp = models.CharField("Regexp", max_length=256, null=True, blank=True)
+    max_length = models.IntegerField(default=0)
+    regexp = models.CharField(max_length=256, null=True, blank=True)
     # Create database index on field
-    is_indexed = models.BooleanField("Is Indexed", default=False)
+    is_indexed = models.BooleanField(default=False)
     # Include into the applications search fields
-    is_searchable = models.BooleanField("Is Searchable", default=False)
+    is_searchable = models.BooleanField(default=False)
     # Create grid filter
     # Show comboboxes in search criteria
-    is_filtered = models.BooleanField("Is Filtered", default=False)
+    is_filtered = models.BooleanField(default=False)
     # Field is excluded from forms
-    is_hidden = models.BooleanField("Is Hidden", default=False)
+    is_hidden = models.BooleanField(default=False)
     # Is enumeration?
     enum_group = models.ForeignKey(
         CustomFieldEnumGroup,

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Reboots model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,33 +25,52 @@ from noc.core.clickhouse.fields import (
     ReferenceField,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 from noc.sa.models.administrativedomain import AdministrativeDomain as AdministrativeDomainM
 from noc.sa.models.useraccess import UserAccess
 
 
 class Reboots(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Created
+        last: Last register
+        managed_object: Object Name
+        pool: Pool Name
+        ip: IP Address
+        profile: Profile
+        object_profile: Object Profile
+        vendor: Vendor Name
+        platform: Platform
+        version: Version
+        administrative_domain: Admin. Domain
+        segment: Network Segment
+        container: Container
+        x: Longitude
+        y: Latitude
+    """
+
     class Meta:
         db_table = "reboots"
         engine = MergeTree("date", ("ts", "managed_object"), primary_keys=("ts", "managed_object"))
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Created"))
-    last = DateTimeField(description=_("Last register"))
-    managed_object = ReferenceField(ManagedObject, description=_("Object Name"))
-    pool = ReferenceField(Pool, description=_("Pool Name"))
-    ip = IPv4Field(description=_("IP Address"))
-    profile = ReferenceField(Profile, description=_("Profile"))
-    object_profile = ReferenceField(ObjectProfile, description=_("Object Profile"))
-    vendor = ReferenceField(Vendor, description=_("Vendor Name"))
-    platform = ReferenceField(Platform, description=_("Platform"))
-    version = ReferenceField(Version, description=_("Version"))
-    administrative_domain = ReferenceField(AdministrativeDomain, description=_("Admin. Domain"))
-    segment = ReferenceField(NetworkSegment, description=_("Network Segment"))
-    container = ReferenceField(Container, description=_("Container"))
+    date = DateField()
+    ts = DateTimeField()
+    last = DateTimeField()
+    managed_object = ReferenceField(ManagedObject)
+    pool = ReferenceField(Pool)
+    ip = IPv4Field()
+    profile = ReferenceField(Profile)
+    object_profile = ReferenceField(ObjectProfile)
+    vendor = ReferenceField(Vendor)
+    platform = ReferenceField(Platform)
+    version = ReferenceField(Version)
+    administrative_domain = ReferenceField(AdministrativeDomain)
+    segment = ReferenceField(NetworkSegment)
+    container = ReferenceField(Container)
     # Coordinates
-    x = Float64Field(description=_("Longitude"))
-    y = Float64Field(description=_("Latitude"))
+    x = Float64Field()
+    y = Float64Field()
 
     @classmethod
     def transform_query(cls, query, user):

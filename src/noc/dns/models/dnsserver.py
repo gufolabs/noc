@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DNSServer model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -31,6 +31,11 @@ class DNSServer(NOCModel):
     :param name: Unique DNS server name (usually, FQDN)
     :param ip: Server's IP address
     :param description: Optional description
+
+    Attributes:
+        name: Name
+        ip: IP
+        description: Description
     """
 
     class Meta:
@@ -39,9 +44,9 @@ class DNSServer(NOCModel):
         db_table = "dns_dnsserver"
         app_label = "dns"
 
-    name = models.CharField(_("Name"), max_length=64, unique=True)
-    ip = INETField(_("IP"), null=True, blank=True)
-    description = models.CharField(_("Description"), max_length=128, blank=True, null=True)
+    name = models.CharField(max_length=64, unique=True)
+    ip = INETField(null=True, blank=True)
+    description = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return self.name

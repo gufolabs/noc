@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Template model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ from .template import Template
 
 
 class SystemTemplate(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+    """
+
     class Meta:
         app_label = "main"
         db_table = "main_systemtemplate"
@@ -23,8 +29,8 @@ class SystemTemplate(NOCModel):
         verbose_name_plural = "System templates"
         ordering = ["name"]
 
-    name = models.CharField("Name", max_length=64, unique=True)
-    description = models.TextField("Description", null=True, blank=True)
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(null=True, blank=True)
     template = models.ForeignKey(Template, verbose_name="Template", on_delete=models.CASCADE)
 
     def __str__(self):

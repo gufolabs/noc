@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ASSet model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -23,13 +23,22 @@ from noc.project.models.project import Project
 @Label.model
 @on_save
 class ASSet(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+        members: Members
+        rpsl_header: RPSL Header
+        rpsl_footer: RPSL Footer
+    """
+
     class Meta:
         verbose_name = "ASSet"
         verbose_name_plural = "ASSets"
         db_table = "peer_asset"
         app_label = "peer"
 
-    name = models.CharField("Name", max_length=32, unique=True)
+    name = models.CharField(max_length=32, unique=True)
     project = models.ForeignKey(
         Project,
         verbose_name="Project",
@@ -38,10 +47,10 @@ class ASSet(NOCModel):
         related_name="asset_set",
         on_delete=models.CASCADE,
     )
-    description = models.CharField("Description", max_length=64)
-    members = models.TextField("Members", null=True, blank=True)
-    rpsl_header = models.TextField("RPSL Header", null=True, blank=True)
-    rpsl_footer = models.TextField("RPSL Footer", null=True, blank=True)
+    description = models.CharField(max_length=64)
+    members = models.TextField(null=True, blank=True)
+    rpsl_header = models.TextField(null=True, blank=True)
+    rpsl_footer = models.TextField(null=True, blank=True)
     labels = ArrayField(models.CharField(max_length=250), blank=True, null=True, default=list)
     effective_labels = ArrayField(
         models.CharField(max_length=250), blank=True, null=True, default=list

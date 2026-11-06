@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # PrefixAccess model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,6 +26,14 @@ from .vrf import VRF
 
 
 class PrefixAccess(NOCModel):
+    """
+    Attributes:
+        afi: Address Family
+        prefix: Prefix
+        can_view: Can View
+        can_change: Can Change
+    """
+
     class Meta:
         verbose_name = _("Prefix Access")
         verbose_name_plural = _("Prefix Access")
@@ -36,10 +44,10 @@ class PrefixAccess(NOCModel):
 
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     vrf = models.ForeignKey(VRF, verbose_name=_("VRF"), on_delete=models.CASCADE)
-    afi = models.CharField(_("Address Family"), max_length=1, choices=AFI_CHOICES)
-    prefix = CIDRField(_("Prefix"))
-    can_view = models.BooleanField(_("Can View"), default=False)
-    can_change = models.BooleanField(_("Can Change"), default=False)
+    afi = models.CharField(max_length=1, choices=AFI_CHOICES)
+    prefix = CIDRField()
+    can_view = models.BooleanField(default=False)
+    can_change = models.BooleanField(default=False)
 
     def __str__(self):
         perms = []

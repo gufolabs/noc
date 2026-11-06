@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Prefix Table models
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,6 +26,12 @@ from noc.core.translation import ugettext as _
     clean_lazy_labels="prefixfilter",
 )
 class PrefixTable(NOCModel):
+    """
+    Attributes:
+        name: Name
+        description: Description
+    """
+
     class Meta:
         verbose_name = _("Prefix Table")
         verbose_name_plural = _("Prefix Tables")
@@ -33,8 +39,8 @@ class PrefixTable(NOCModel):
         app_label = "main"
         ordering = ["name"]
 
-    name = models.CharField(_("Name"), max_length=128, unique=True)
-    description = models.TextField(_("Description"), null=True, blank=True)
+    name = models.CharField(max_length=128, unique=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -78,6 +84,12 @@ class PrefixTable(NOCModel):
 
 
 class PrefixTablePrefix(NOCModel):
+    """
+    Attributes:
+        afi: Address Family
+        prefix: Prefix
+    """
+
     class Meta:
         verbose_name = _("Prefix")
         verbose_name_plural = _("Prefixes")
@@ -87,10 +99,8 @@ class PrefixTablePrefix(NOCModel):
         ordering = ["table", "afi", "prefix"]
 
     table = models.ForeignKey(PrefixTable, verbose_name=_("Prefix Table"), on_delete=models.CASCADE)
-    afi = models.CharField(
-        _("Address Family"), max_length=1, choices=[("4", _("IPv4")), ("6", _("IPv6"))]
-    )
-    prefix = CIDRField(_("Prefix"))
+    afi = models.CharField(max_length=1, choices=[("4", _("IPv4")), ("6", _("IPv6"))])
+    prefix = CIDRField()
 
     def __str__(self):
         return f"{self.table.name} {self.prefix}"

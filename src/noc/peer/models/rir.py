@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # RIR model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -30,6 +30,10 @@ RIPE_SYNCUPDATES_URL = "https://syncupdates.db.ripe.net"
 class RIR(NOCModel):
     """
     Regional internet registries
+
+    Attributes:
+        name: Name
+        whois: Whois
     """
 
     class Meta:
@@ -39,8 +43,8 @@ class RIR(NOCModel):
         app_label = "peer"
         ordering = ["name"]
 
-    name = models.CharField("Name", max_length=64, unique=True)
-    whois = models.CharField("Whois", max_length=64, blank=True, null=True)
+    name = models.CharField(max_length=64, unique=True)
+    whois = models.CharField(max_length=64, blank=True, null=True)
 
     def __str__(self):
         return self.name

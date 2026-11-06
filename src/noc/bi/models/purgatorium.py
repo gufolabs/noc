@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Purgatorium
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,10 +23,24 @@ from noc.core.clickhouse.fields import (
     UInt64Field,
 )
 from noc.core.clickhouse.model import Model
-from noc.core.translation import ugettext as _
 
 
 class Purgatorium(Model):
+    """
+    Attributes:
+        date: Date
+        ts: Registered Record
+        pool: Pool Name
+        refs: Unique reference for deduplicate records
+        border: Object Name
+        data: Vars
+        caps: Capabilities
+        labels: Tags
+        service_groups: Service Groups Ids
+        clients_groups: Client Groups Ids
+        remote_system: Remote System
+    """
+
     class Meta:
         db_table = "purgatorium"
         engine = ReplacingMergeTree(
@@ -34,11 +48,11 @@ class Purgatorium(Model):
             ("pool", "ip", "source", "remote_system"),
         )
 
-    date = DateField(description=_("Date"))
-    ts = DateTimeField(description=_("Registered Record"))
+    date = DateField()
+    ts = DateTimeField()
     # Require fields
     ip = IPv4Field(description="IP Address")
-    pool = ReferenceField(Pool, description=_("Pool Name"))
+    pool = ReferenceField(Pool)
     source = StringField(low_cardinality=True)
     router_id = IPv4Field(description="Router ID IP Address, user for origin")
     # network-scan
@@ -51,12 +65,12 @@ class Purgatorium(Model):
     description = StringField(description="Description")
     chassis_id = StringField(description="Chassis ID")
     hostname = StringField(description="Hostname Discovery")
-    refs = ArrayField(StringField(), description=_("Unique reference for deduplicate records"))
+    refs = ArrayField(StringField())
     uptime = UInt64Field(description="Host Uptime")
-    border = ReferenceField(ManagedObject, description=_("Object Name"))
+    border = ReferenceField(ManagedObject)
     # Set for records on RemoteSystem
-    data = MapField(StringField(), description=_("Vars"))
-    caps = MapField(StringField(), description=_("Capabilities"))
+    data = MapField(StringField())
+    caps = MapField(StringField())
     # Json Field  {check: str PING, avail: True/False, access: None, error: None, port}
     checks = ArrayField(StringField())
     success_checks = MaterializedField(
@@ -70,10 +84,10 @@ class Purgatorium(Model):
     # http, telegraf HTTP and port 3000, regex - status: avail & access & app (regex)
     is_delete = BooleanField(description="Address was removed from RemoteSystem", default=False)
     # Labels List
-    labels = ArrayField(StringField(), description=_("Tags"))
-    service_groups = ArrayField(UInt64Field(), description=_("Service Groups Ids"))
-    clients_groups = ArrayField(UInt64Field(), description=_("Client Groups Ids"))
-    remote_system = ReferenceField(RemoteSystem, description=_("Remote System"))
+    labels = ArrayField(StringField())
+    service_groups = ArrayField(UInt64Field())
+    clients_groups = ArrayField(UInt64Field())
+    remote_system = ReferenceField(RemoteSystem)
     remote_id = StringField(description="Remote System Id")
     # Maybe fields for detect hints
     # available_ports - detect open TCP port

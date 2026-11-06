@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # KBEntryHistory model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -17,6 +17,10 @@ from noc.kb.models.kbentry import KBEntry
 class KBEntryHistory(NOCModel):
     """
     Modification History
+
+    Attributes:
+        timestamp: Timestamp
+        diff: Diff
     """
 
     class Meta:
@@ -27,6 +31,6 @@ class KBEntryHistory(NOCModel):
         ordering = ("kb_entry", "timestamp")
 
     kb_entry = models.ForeignKey(KBEntry, verbose_name="KB Entry", on_delete=models.CASCADE)
-    timestamp = models.DateTimeField("Timestamp", auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
-    diff = models.TextField("Diff")
+    diff = models.TextField()
