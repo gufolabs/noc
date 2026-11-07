@@ -79,7 +79,7 @@ class ErrContext:
     [
         ("", 0, None),
         ("", None, None),
-        ("a", 2, "Password too short. Must be 2 characters or longer"),
+        ("a", 2, "Password too short. Must be at least 2 characters"),
         ("aa", 2, None),
     ],
 )
@@ -166,11 +166,11 @@ def test_check_history(password: str, history: list[str] | None, err: str | None
     ("password", "config", "err"),
     [
         ("", {}, None),
-        ("1", {"min_password_len": 2}, "Password too short. Must be 2 characters or longer"),
+        ("1", {"min_password_len": 2}, "Password too short. Must be at least 2 characters"),
         (
             "1",
             {"min_password_len": 2, "min_password_uppercase": 2},
-            "Password too short. Must be 2 characters or longer",
+            "Password too short. Must be at least 2 characters",
         ),
         ("12", {"min_password_len": 2}, None),
         (
