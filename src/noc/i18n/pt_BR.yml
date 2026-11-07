@@ -156,7 +156,6 @@ app-title-vpn: VPN
 app-title-vrf: VRF
 app-title-vrfgroup: Grupos de VRF
 choice-1-day: 1 dia
-choice-1-day-2: "1 dia"
 choice-1-month: 1 mês
 choice-1-week: 1 semana
 choice-by-administrative-domain: Por Domínio Administrativo
