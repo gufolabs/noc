@@ -94,12 +94,6 @@ msgstr ""
 msgid "Never"
 msgstr "Servidor de DNS"
 
-# | msgid "Managed Object"
-#: core/inv/info.py
-#, fuzzy
-msgid "Go to object"
-msgstr "Objeto Gerenciado"
-
 #: core/password/check.py
 #, python-format
 msgid "Password too short. Must be %d characters or longer"
@@ -128,27 +122,6 @@ msgstr ""
 #: core/password/check.py
 msgid "Password is already used"
 msgstr ""
-
-# | msgid "Managed Object"
-# | msgid "ManagedObject Container: "
-#: core/topology/map/objectcontainer.py
-#, fuzzy
-msgid "Object Containers Map"
-msgstr "Objeto Gerenciado"
-
-#: core/topology/map/objectgroup.py
-msgid "Object Group Schemas"
-msgstr ""
-
-#: core/topology/map/objectlevelneighbor.py
-msgid "Object Level Neighbor Schemas"
-msgstr ""
-
-# | msgid "Network Segments"
-#: core/topology/map/segment.py
-#, fuzzy
-msgid "Network Segment Schemas"
-msgstr "Segmentos de Rede"
 
 #: services/web/apps/bi/dashboard/views.py
 msgid "Dashboard"
@@ -193,16 +166,6 @@ msgstr "Licenciado Até"
 #: services/web/apps/ip/reportsummary/views.py
 msgid "Prefix"
 msgstr "Prefixo"
-
-#: services/web/apps/fm/alarm/views.py services/web/apps/main/home/views.py
-msgid "Alarms"
-msgstr "Alertas"
-
-# | msgid "Failed to change credentials"
-#: services/web/apps/fm/alarm/views.py
-#, fuzzy
-msgid "Failed to clear alarms"
-msgstr "Falha ao modificar credenciais"
 
 #: services/web/apps/fm/alarm/views.py
 #: services/web/apps/fm/reportttsystemstat/views.py
@@ -363,20 +326,6 @@ msgstr "Política de Firmware"
 msgid "Interface Profile"
 msgstr "Perfil de Interface"
 
-#: services/web/apps/inv/inv/plugins/metric.py
-msgid "OK"
-msgstr ""
-
-# | msgid "Managed Object"
-#: services/web/apps/inv/inv/views.py
-#, fuzzy
-msgid "ManagedObject Container: "
-msgstr "Objeto Gerenciado"
-
-#: services/web/apps/inv/inv/views.py
-msgid "Configured Map Container: "
-msgstr ""
-
 #: services/web/apps/inv/networksegment/views.py
 msgid "Network Segment"
 msgstr "Segmento de Rede"
@@ -532,31 +481,9 @@ msgstr "VRF Requerida"
 msgid "Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s"
 msgstr "Resumo para a VRF %(vrf)s (IPv%(afi)s), %(prefix)svrf"
 
-#: services/web/apps/ip/tools/views.py
-msgid "Permission denied"
-msgstr "Permissão negada"
-
-#: services/web/apps/ip/tools/views.py
-msgid "Name server IP address. NS must have zone transfer enabled for NOC host"
-msgstr ""
-"Endereço IP do servidor de nomes. NS deve ter uma zona de transferência "
-"habilitada para o NOC"
-
-#: services/web/apps/ip/tools/views.py
-msgid "DNS Zone name to transfer"
-msgstr "Nome da Zona de DNS a transferir"
-
-#: services/web/apps/ip/tools/views.py
-msgid "Permission denined"
-msgstr "Permissão negada"
-
 #: services/web/apps/ip/vrfgroup/views.py
 msgid "VRF Groups"
 msgstr "Grupos de VRF"
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "CIR(bps). K, M and G suffixes can be used"
-msgstr "Sufixos CIR(bps). K, M e G podem ser usados"
 
 #: services/web/apps/main/calculator/calculators/cir2cbr.py
 msgid ""
@@ -565,14 +492,6 @@ msgid ""
 msgstr ""
 "Valores usuais são: Tc=1.5 para rate-limit e Tc=0.25 para política (0.25 "
 "é o padrão)"
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "Integer is required"
-msgstr "Inteiro requerido"
-
-#: services/web/apps/main/calculator/calculators/cir2cbr.py
-msgid "CIR/CAR(bps) to Burst-rate"
-msgstr "CIR/CAR(bps) para Burst-rate"
 
 #: services/web/apps/main/calculator/calculators/cir2cbr.py
 msgid ""
@@ -584,54 +503,6 @@ msgstr ""
 "normal-burst-bytes=bits-per-second*Tc/8. Modo recomendado para a taxa-"
 "limite de valores de cálculo é: burst-normal=bits-per-second*Tc/8, burst-"
 "max=2*burst-normal"
-
-# | msgid "Welcome"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Welcome to "
-msgstr "Bem vindo!"
-
-# | msgid "Communities"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Community"
-msgstr "Comunidades"
-
-# | msgid "Inventory Object Summary"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Inventory summary"
-msgstr "Resumo de Inventário Objeto"
-
-# | msgid "Total Outages"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Total objects"
-msgstr "Total de Interrupções"
-
-#: services/web/apps/main/home/views.py
-msgid "Points of presence"
-msgstr ""
-
-#: services/web/apps/main/home/views.py
-msgid "Racks"
-msgstr ""
-
-#: services/web/apps/main/home/views.py
-msgid "Chassis"
-msgstr ""
-
-# | msgid "Managed Objects Summary"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Managed Object Summary"
-msgstr "Resumo de Objetos Gerenciados"
-
-# | msgid "Alarms"
-#: services/web/apps/main/home/views.py
-#, fuzzy
-msgid "Total Alarms"
-msgstr "Alertas"
 
 #: services/web/apps/main/label/views.py
 msgid "Labels"
@@ -668,30 +539,6 @@ msgstr "Manutenção"
 
 #: services/web/apps/peer/as/views.py
 msgid "AS"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "AS-SET members cache is empty. Please update Whois Cache"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Origin routes cache is empty. Please update Whois Cache"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Unknown AS-SET"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Cannot resolve AS-SET prefixes"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Prefix-list generator is not implemented for this profile"
-msgstr ""
-
-#: services/web/apps/peer/prefixlistbuilder/views.py
-msgid "Prefix List built"
 msgstr ""
 
 #: services/web/apps/project/project/views.py
@@ -802,10 +649,6 @@ msgstr "Permissão de Usuário"
 msgid "VLAN"
 msgstr ""
 
-#: services/web/cards/base.py
-msgid "N/A"
-msgstr ""
-
 #: services/web/cards/templates/address.html.j2
 #: services/web/cards/templates/interfacepath.html.j2
 #: services/web/cards/templates/phonenumber.html.j2
@@ -823,17 +666,6 @@ msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
 msgid "Severity"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Location"
-msgstr ""
-
-#: services/web/cards/templates/alarm.html.j2
-msgid "Temporary unavailable"
 msgstr ""
 
 #: services/web/cards/templates/alarm.html.j2
@@ -864,101 +696,11 @@ msgstr ""
 msgid "Contacts"
 msgstr ""
 
-#: services/web/cards/templates/alarmheat.html.j2
-#: services/web/cards/templates/monmap.html.j2 services/web/cards/templates/path.html.j2
-msgid "Loading ..."
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Alternative path"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Object Name"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "IP Address"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Platform Name"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Soft Version"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Speed"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Duplex"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Utilization"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "In"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Out"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-msgid "Packets"
-msgstr ""
-
-#: services/web/cards/templates/interfacepath.html.j2
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Errors"
-msgstr ""
-
 #: services/web/cards/templates/maintenance.html.j2
 #: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/object.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Model"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Container"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Lost redundancy"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Redundant"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/segment.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "No redundancy"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Graphics"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Profile SA"
 msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
@@ -974,23 +716,8 @@ msgid "End of Support"
 msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Recommended"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Service Range"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
 #: services/web/cards/templates/subscribersession.html.j2
 msgid "MAC"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Provides Resources"
 msgstr ""
 
 #: services/web/cards/templates/managedobject.html.j2
@@ -1000,79 +727,9 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Static"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Dynamic"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/phonenumber.html.j2
-#: services/web/cards/templates/phonerange.html.j2
-msgid "Consumes Resources"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/object.html.j2
-msgid "Metrics"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Neighbors"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "LinkGraph"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Load Chart"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Open SFP"
-msgstr ""
-
-#: services/web/cards/templates/managedobject.html.j2
-msgid "Run VPN Trace"
-msgstr ""
-
-#: services/web/cards/templates/object.html.j2
-#: services/web/cards/templates/segment.html.j2
-msgid "Children"
-msgstr ""
-
-#: services/web/cards/templates/outage.html.j2
-msgid "Outages Summary"
-msgstr ""
-
 #: services/web/cards/templates/resourcegroup.html.j2
 #: services/web/cards/templates/segment.html.j2
 msgid "Parent"
-msgstr ""
-
-#: services/web/cards/templates/segment.html.j2
-msgid "No VLAN propagation"
-msgstr ""
-
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Object Metrics"
-msgstr ""
-
-#: services/web/cards/templates/sensor_controller.html.j2
-msgid "Sensors"
-msgstr ""
-
-#: services/web/cards/templates/totaloutage.html.j2
-msgid "No outages detected"
 msgstr ""
 
 #: services/web/cards/templates/vrf.html.j2
@@ -1086,4 +743,3 @@ msgstr ""
 #: services/web/cards/templates/vrf.html.j2
 msgid "Prefixes"
 msgstr ""
-

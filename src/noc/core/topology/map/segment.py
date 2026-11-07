@@ -19,11 +19,11 @@ from bson import ObjectId
 # NOC modules
 from noc.aaa.models.user import User
 from noc.core.graph.nexthop import iter_next_hops
+from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import MapItem, MapMeta, PathItem, Portal
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.inv.models.networksegment import NetworkSegment
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 class SegmentTopology(TopologyBase):
     name = "segment"
-    header = _("Network Segment Schemas")
+    header = t("title-network-segment-schemas")
     CAPS: set[str] = {"Network | STP"}
     PARAMS = {"segment"}
 

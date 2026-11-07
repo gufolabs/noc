@@ -1,168 +1,91 @@
-# User Interface Localization Howto
+---
+tags:
+  - how-to
+---
+# How to Localize the NOC Interface
 
-The NOC platform supports user interface localization into various languages. Currently, the following services support localization:
+Set the global `language` parameter to choose the interface language. NOC supports `en`, `ru`, and `pt_BR`; restart the affected services after changing the parameter. See the [`language` configuration reference](../config-reference/global.md#language).
 
-* Web, including cards
-* Login
+## Add or Update Python Translations
 
-Language selection is done in the service settings through the Tower interface:
+Python translations use stable keys in YAML catalogs. The files are `src/noc/i18n/en.yml`, `src/noc/i18n/ru.yml`, and `src/noc/i18n/pt_BR.yml`.
 
-![Language settings for Web service](tower_service_web_lang.png)
+1. Add the key and English text to `en.yml`.
+2. Add the same key and translated text to each language catalog you are updating. A missing key falls back to English.
+3. Keep the keys in alphabetical order. The catalog tests check this order.
+4. Use the key from Python with `t()`:
 
-After changing the language, you need to deploy with the following options enabled:
+   ```python
+   from noc.core.i18n import t
 
-* **Install Everything**
+   error = t("msg-prefix-not-found")
+   ```
 
-or
+Use a key prefix that describes the text's purpose and context:
 
-* **Update config** and **Restart gentle**
+| Prefix | Use |
+| --- | --- |
+| `btn-` | Button text, such as `btn-print` |
+| `msg-` | User-facing messages and errors |
+| `label-` | Form field labels and field headings in cards |
+| `help-` | Help text and tooltips |
+| `choice-` | Values in a choice list |
+| `header-` | Report and table column headings |
+| `title-` | Titles that are not application titles |
+| `status-` | State and status values |
+| `app-title-`, `app-group-`, `nav-` | Application titles, menu groups, and navigation labels |
 
-## Translation Structure
+Card templates use the same function without an import:
 
-Localization files are located in the following directories:
-
-* `services/web/translations` - translations for the web interface and cards
-* `services/login/translations` - translations for Login
-
-The name of the translation directory must be specified in the respective service settings.  
-To create your own translations, you can place additional folders next to the main ones.
-
-To work with localization, install the development dependencies:
-
-```shell
-pip install .[dev]
+{% raw %}
+```jinja
+<b>{{ t("label-name") }}</b>
 ```
+{% endraw %}
 
-## Localization Steps
+Pass values as named arguments. Use ICU plural patterns when a message changes with a count; do not build a sentence by joining a translation and a number.
 
-The localization process includes three main steps:
-
-1. Marking translatable phrases in the source code.
-2. Extracting and updating translation dictionaries.
-3. Compiling translations.
-
-If you need to change an existing translation, you can skip ahead to the section
-[creating or updating the translation dictionary](#creating-or-updating-the-translation-dictionary)
-
-### Marking Translatable Phrases
-
-Translatable phrases must be marked in the source code.  
-Depending on the file language, different approaches apply:
-
-**Python**
-
-Import the function:
+{% raw %}
+```yaml
+msg-item-count: "{count, plural, one {# item} other {# items}}"
+```
+{% endraw %}
 
 ```python
-from noc.core.translation import ugettext as _
+t("msg-item-count", count=item_count)
 ```
 
-Wrap the translatable string:
+For Russian, include the `one`, `few`, `many`, and `other` plural forms. Use the ICU MessageFormat syntax in every language catalog.
 
-```python
-_("Text to translate")
-```
+## Translate JavaScript Strings
 
-Example:
-
-![Preparing strings for translation - Python](python_report_lang_prepare.png)
-![Prepared strings - Python](python_report_lang.png)
-
-**JavaScript**
-
-Use the `__()` function:
+JavaScript continues to use `__()` and gettext catalogs. For example:
 
 ```javascript
-__("Text to translate")
+__("Save")
 ```
 
-Example:
-
-![Preparing strings for translation - JavaScript](javascript_report_lang_prepare.png)
-
-After marking the strings, commit the changes:
+Extract and update the Web catalog after changing JavaScript strings:
 
 ```bash
-git commit
+./noc translation extract web
+./noc translation update web
 ```
 
-!!! warning
-
-    the `translation extract` command will not work unless changes are committed.
-
-### Creating or Updating the Translation Dictionary
-
-Extract strings and update the dictionary using the commands:
+Edit `src/noc/services/web/translations/<language>/LC_MESSAGES/messages_js.po`, then compile it:
 
 ```bash
-./noc translation extract <service>
-./noc translation update <service>
+./noc translation compile web
 ```
 
-The `<service>` parameter is optional.  
-If omitted, the operation will apply to all services.
+Compilation writes the JavaScript JSON catalog to `ui/web/translations/<language>.json`. The `translation` commands apply to the gettext catalogs; they do not extract Python `t()` keys. New JavaScript source files must be tracked by Git before extraction because the command scans `git ls-files`.
 
-![Extracting phrases](extract_translation_phrases.png)
-![Updating dictionary](update_translation_phrases.png)
+## Validate Catalogs
 
-After executing the commands, a `.po` file with translatable strings will be created or updated. Example paths:
-
-- `translations/ru/LC_MESSAGES/messages.po` — for Python
-- `translations/ru/LC_MESSAGES/messages_js.po` — for JavaScript
-
-You can edit the file in any text editor or in [PoEdit](https://poedit.net/).
+Run the catalog tests after editing YAML translations:
 
 ```bash
-./noc translation edit <service> <lang>
+./scripts/run-dev pytest tests/i18n/test_catalog.py
 ```
 
-— runs the built-in editor (if available on the node).
-
-!!! warning
-    
-    Make sure you are editing the dictionary for the correct service. You can ignore other services if they haven’t received new strings.
-
-### Compiling Translated Text
-
-After editing, compile the translations:
-
-```bash
-./noc translation compile <service>
-```
-
-![Compiling translation](compile_translation_phrases.png)
-
-After compilation, restart the relevant service (web or login).
-
-### Publishing the Translation
-
-If you need to submit the translation along with other changes, provide the following three files for each modified service:
-
-- `.po` — dictionary
-- `.mo` — compiled dictionary
-- `messages_js.json` — JavaScript translation
-
-![Translation files](translate_files.png)
-
-!!! warning
-    
-    Submit only the changed files.  
-    Do not include files where only the date was changed.
-
-## Troubleshooting
-
-**Problem**
-
-Error when running `./noc translation extract`:
-
-```
-ImportError: No module named babel.util
-```
-
-**Solution**
-
-Install development dependencies:
-
-```bash
-pip install .[dev]
-```
+The tests check that each configured catalog loads, contains the same keys as English, and keeps its keys alphabetically sorted.

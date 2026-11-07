@@ -155,6 +155,18 @@ app-title-vlan: VLAN
 app-title-vpn: VPN
 app-title-vrf: VRF
 app-title-vrfgroup: Grupos de VRF
+choice-1-day: 1 dia
+choice-1-month: 1 mês
+choice-1-week: 1 semana
+choice-by-administrative-domain: Por Domínio Administrativo
+choice-by-administrative-domain-and-profile: Por Domínio Administrativo e Perfil
+choice-by-platform: Por Plataforma
+choice-by-profile: Por Perfil
+choice-by-version: Por Versão
+choice-dns: DNS
+choice-ipv4: IPv4
+choice-ipv6: IPv6
+choice-range: Intervalo
 header-action: Ação
 header-address: IP
 header-administrative-domain-d113be: Domínio Administrativo
@@ -185,6 +197,7 @@ header-mib: MIB
 header-oid: OID
 header-paid-till: Licenciado Até
 header-percent: '%'
+header-percentage: "Percentual"
 header-platform: Plataforma
 header-prefix: Prefixo
 header-profile: Perfil
@@ -194,6 +207,7 @@ header-range: Intervalo
 header-segment-44986c: Segmento
 header-size: Tamanho
 header-subscriber: Assinante
+header-subscribers: "Assinantes"
 header-subscribers-6f13df: Assinantes
 header-supplier: Fornecedor
 header-technology: Tecnologia
@@ -205,28 +219,64 @@ header-vlan-560367: VLAN
 header-vpn: VPN
 header-vrf: VRF
 header-zone: Zona
-label-1-day: 1 dia
-label-1-month: 1 mês
-label-1-week: 1 semana
+help-cir-bps-k-m-and-g-suffixes-can-be-used: "Sufixos CIR(bps). K, M e G podem ser usados"
+help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default: "Valores usuais são: Tc=1.5 para rate-limit e Tc=0.25 para política (0.25 é o padrão)"
+help-dns-zone-name-to-transfer: "Nome da Zona de DNS a transferir"
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "Endereço IP do servidor de nomes. NS deve ter uma zona de transferência habilitada para o NOC"
 label-address-family: Família de IP
 label-administrative-domain: Domínio Administrativo
+label-alarms: "Alertas"
 label-as-number: Número de AS
-label-by-administrative-domain: Por Domínio Administrativo
-label-by-administrative-domain-and-profile: Por Domínio Administrativo e Perfil
-label-by-platform: Por Plataforma
-label-by-profile: Por Perfil
-label-by-version: Por Versão
+label-configured-map-container: "Contêiner do mapa configurado: {name}"
+label-container-name: "Contêiner: {name}"
 label-description: Descrição
-label-dns: DNS
 label-fqdn: FQDN
-label-ipv4: IPv4
-label-ipv6: IPv6
+label-inventory: "Inventário"
+label-maintenance: "Manutenção"
 label-managed-object: Objeto Gerenciado
+label-managed-object-container: "Contêiner do objeto gerenciado: {name}"
 label-prefix: Prefixo
 label-profile: Perfil
-label-range: Intervalo
+label-project: "Projeto"
+label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Modo recomendado para o cálculo de valores de políticas de mapa é: normal-burst-bytes=bits-per-second*Tc/8. Modo recomendado para a taxa-limite de valores de cálculo é: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
+label-segment-2: "Segmento"
+label-segment-3: "Segmento"
+label-segment-name: "Segmento: {name}"
+label-service: "Serviço"
+label-service-range: "Intervalo de serviço"
+label-time-pattern: "Padrão de Tempo"
 label-vrf: VRF
 label-zone: Zona
+msg-duration-about-hours: "{count, plural, one {cerca de # hora} other {cerca de # horas}}"
+msg-duration-about-month: "cerca de 1 mês"
+msg-duration-about-year: "cerca de 1 ano"
+msg-duration-about-years: "{count, plural, one {cerca de # ano} other {cerca de # anos}}"
+msg-duration-almost-two-years: "quase 2 anos"
+msg-duration-almost-years: "{count, plural, one {quase # ano} other {quase # anos}}"
+msg-duration-days: "{count, plural, one {# dia} other {# dias}}"
+msg-duration-less-than-minute: "menos de um minuto"
+msg-duration-minutes: "{count, plural, one {# minuto} other {# minutos}}"
+msg-duration-months: "{count, plural, one {# mês} other {# meses}}"
+msg-duration-never: "Nunca"
+msg-duration-over-year: "mais de 1 ano"
+msg-duration-over-years: "{count, plural, one {mais de # ano} other {mais de # anos}}"
+msg-integer-is-required: "Inteiro requerido"
+msg-main: "Principal"
+msg-no-interfaces: "Nenhuma interface"
+msg-no-links: "Nenhum link"
+msg-no-uplinks: "Nenhum uplink"
+msg-password-min-lowercase: "A senha deve conter pelo menos {count} letras minúsculas"
+msg-password-min-numbers: "A senha deve conter pelo menos {count} números"
+msg-password-min-specials: "A senha deve conter pelo menos {count} símbolos especiais"
+msg-password-min-uppercase: "A senha deve conter pelo menos {count} letras maiúsculas"
+msg-password-too-short: "A senha é muito curta. Deve ter pelo menos {count} caracteres"
+msg-permission-denied: "Permissão negada"
+msg-permission-denined: "Permissão negada"
+msg-prefix-not-found: "Prefixo não encontrado"
+msg-profile-check-failed: "Falha na verificação de perfil"
+msg-report-data-source-not-found: "Fonte de dados do relatório {data_source} não encontrada"
+msg-vrf-required: "VRF Requerida"
+msg-zone-transfer-upload-results: "Endereços IP enviados por transferência de zona: {created} criados e {changed} alterados."
 nav-account: Conta
 nav-action: Ações
 nav-actioncommands: Comandos de Ação
@@ -325,3 +375,9 @@ nav-vlan: VLAN
 nav-vpn: VPN
 nav-vrf: VRF
 nav-vrfgroup: Grupos de VRF
+status-cleaned: "Apagado"
+title-all-allocated-blocks-in-vrf: "Todos os blocos alocados em VRF {vrf} (IPv{afi}), {prefix}"
+title-allocated-blocks-in-vrf: "Blocos alocados em VRF {vrf} (IPv{afi}), {prefix}"
+title-cir-car-bps-to-burst-rate: "CIR/CAR(bps) para Burst-rate"
+title-free-blocks-in-vrf: "Blocos livres em VRF {vrf} (IPv{afi}), {prefix}"
+title-summary-for-vrf: "Resumo da VRF {vrf} (IPv{afi}): {prefix}"

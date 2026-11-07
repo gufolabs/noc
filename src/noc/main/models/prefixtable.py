@@ -12,13 +12,13 @@ from collections.abc import Iterable
 from django.db import models
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.ip import IP
 
 # NOC Modules
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
 from noc.core.model.fields import CIDRField
-from noc.core.translation import ugettext as _
 
 
 @on_delete_check(
@@ -96,7 +96,7 @@ class PrefixTablePrefix(NOCModel):
         ordering = ["table", "afi", "prefix"]
 
     table = models.ForeignKey(PrefixTable, on_delete=models.CASCADE)
-    afi = models.CharField(max_length=1, choices=[("4", _("IPv4")), ("6", _("IPv6"))])
+    afi = models.CharField(max_length=1, choices=[("4", t("choice-ipv4")), ("6", t("choice-ipv6"))])
     prefix = CIDRField()
 
     def __str__(self):

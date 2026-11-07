@@ -283,10 +283,44 @@ app-title-vrf: VRF
 app-title-vrfgroup: VRF Groups
 app-title-wfmigration: WF Migration
 app-title-workflow: Workflows
+btn-print: "Print"
+choice-1-day: "1 day"
+choice-1-month: 1 month
+choice-1-week: 1 week
+choice-addresses-unique-per-vrf: "Addresses are unique per VRF"
+choice-addresses-unique-per-vrf-group: "Addresses are unique per VRF Group"
+choice-all: All
+choice-by-administrative-domain: By Administrative Domain
+choice-by-administrative-domain-and-profile: By Administrative Domain and Profile
+choice-by-labels: By Labels
+choice-by-platform: By Platform
+choice-by-profile: By Profile
+choice-by-version: By Version
+choice-cisco-ios-policer: Cisco IOS policer
+choice-cisco-ios-rate-limit: Cisco IOS rate-limit
+choice-config: config
+choice-dbm: dBm
+choice-disable-ping: "Disable ping"
+choice-dns: DNS
+choice-do-nothing: "Do nothing"
+choice-enable-ping-but-dont-follow-status: "Enable ping but dont follow status"
+choice-escalation-error-details: Escalation Error Details
+choice-generate-fqdns: "Generate FQDNs"
+choice-ignore: "Ignore"
+choice-ipv4: IPv4
+choice-ipv6: IPv6
+choice-juniper-junos-policer: Juniper JUNOS policer
+choice-mw: mW
+choice-partial-reverse-zone-delegation: "Partial reverse zone delegation"
+choice-range: Range
+choice-require-if-enabled: "Require if enabled"
+choice-require-up: "Require Up"
+choice-statistics: Statistics
 header-action: Action
 header-address: Address
 header-addresses: Addresses
 header-adm-domain: Adm. Domain
+header-adm-path1: "ADM_PATH1"
 header-admin: Admin
 header-admin-domain-2b0276: ADMIN_DOMAIN
 header-admin-domain-610498: Admin. Domain
@@ -319,6 +353,7 @@ header-body: Body
 header-builtin: Builtin
 header-capabilities: Capabilities
 header-category: Category
+header-chassis: "Chassis"
 header-children: Children
 header-chosen-name: Chosen Name
 header-class: Class
@@ -419,6 +454,7 @@ header-last-updated: Last Updated
 header-link-count: LINK_COUNT
 header-link-proto: LINK_PROTO
 header-link-status: LINK_STATUS
+header-links-count: "Links count"
 header-load-in: Load In
 header-load-out: Load Out
 header-local: Local
@@ -439,6 +475,11 @@ header-managed: Managed
 header-managed-object-62561c: Managed Object
 header-managed-object-f070ef: MANAGED_OBJECT
 header-managed-objects: Managed Objects
+header-managed-objects-administrative-domain-for-config-only: Managed Objects Administrative Domain (for config only)
+header-managed-objects-group-selector: Managed Objects Group (Selector)
+header-managed-objects-pool: Managed Objects Pool
+header-managed-objects-pools: Managed Objects Pools
+header-managed-objects-profile: Managed Objects Profile
 header-mask: Mask
 header-master: Master
 header-max-load-in-mbps: MAX_LOAD_IN, Mbps
@@ -448,6 +489,7 @@ header-max-load-out-time: MAX_LOAD_OUT_TIME
 header-max-ms: max (ms)
 header-mib: MIB
 header-migrate-ts: MIGRATE_TS
+header-mo-count: "MO Count"
 header-model: Model
 header-modified: Modified
 header-modified-by: Modified by
@@ -466,6 +508,7 @@ header-object-attr-patch: OBJECT_ATTR_PATCH
 header-object-bootprom: OBJECT_BOOTPROM
 header-object-hostname: OBJECT_HOSTNAME
 header-object-hwversion: OBJECT_HWVERSION
+header-object-labels: "OBJECT_LABELS"
 header-object-model: OBJECT_MODEL
 header-object-name: OBJECT_NAME
 header-object-platform: OBJECT_PLATFORM
@@ -511,10 +554,13 @@ header-part-number-2: Part Number 2
 header-part-number-3: Part Number 3
 header-peer: Peer
 header-percent: "%"
+header-percent-at-all: "Percent at All"
+header-percentage: "Percent"
 header-phone-number: Phone Number
 header-phone-range: Phone Range
 header-phys-interface-count: PHYS_INTERFACE_COUNT
 header-platform: Platform
+header-points-of-presence: "Points of presence"
 header-pool: Pool
 header-port: Port
 header-port-duplex: PORT_DUPLEX
@@ -524,6 +570,7 @@ header-port-speed: PORT_SPEED
 header-port-status: PORT_STATUS
 header-port-tagged-vlans: PORT_TAGGED_VLANS
 header-port-untagged-vlan: PORT_UNTAGGED_VLAN
+header-pp: "PP"
 header-pre-reason: Pre Reason
 header-prefix: Prefix
 header-prefixes: Prefixes
@@ -541,6 +588,7 @@ header-q2-ms: Q2 (ms)
 header-q3-ms: Q3 (ms)
 header-quality: Quality
 header-quantity: Quantity
+header-racks: "Racks"
 header-range: Range
 header-ranges: Ranges
 header-rd: RD
@@ -597,6 +645,7 @@ header-sub-interface: Sub.Interface
 header-sub-interfaces: Sub.Interfaces
 header-subject: Subject
 header-subscriber: Subscriber
+header-subscribers: "Subscribers"
 header-subscribers-6f13df: Subscribers
 header-subscribers-97ec75: SUBSCRIBERS
 header-success-request: Success request (%)
@@ -623,6 +672,7 @@ header-to-iface-name: TO_IFACE_NAME
 header-to-ts: TO_TS
 header-total: Total
 header-total-in-mbyte: TOTAL_IN, Mbyte
+header-total-objects: "Total objects"
 header-total-out-mbyte: TOTAL_OUT, Mbyte
 header-total-unavail-sec: Total unavail (sec)
 header-translation: Translation
@@ -666,98 +716,179 @@ header-vrf: VRF
 header-w: W
 header-weight-kg: Weight (kg)
 header-zone: Zone
-label-1-day: 1 day
-label-1-month: 1 month
-label-1-week: 1 week
+help-cir-bps-k-m-and-g-suffixes-can-be-used: "CIR(bps). K, M and G suffixes can be used"
+help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default: "Common values are: Tc=1.5 for rate-limit and Tc=0.25 for policing (0.25 is default)"
+help-dns-zone-name-to-transfer: "DNS Zone name to transfer"
+help-go-to-channel: "Go to channel"
+help-go-to-object: "Go to object"
+help-load-chart: "Load Chart"
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "Name server IP address. NS must have zone transfer enabled for NOC host"
+help-open-sfp: "Open SFP"
+help-run-vpn-trace: "Run VPN Trace"
+help-use-name-network-ex-10-0-0-0-8-or-mac: "Use name, network (ex 10.0.0.0/8) or MAC"
 label-address-family: Address Family
 label-administrative-domain: Administrative Domain
-label-all: All
+label-alarms: "Alarms"
+label-alternative-path: "Alternative path"
 label-as-number: AS Number
-label-availability-last-day: Availability (last day)
-label-availability-last-month: Availability (last month)
-label-availability-last-week: Availability (last week)
-label-by-administrative-domain: By Administrative Domain
-label-by-administrative-domain-and-profile: By Administrative Domain and Profile
-label-by-labels: By Labels
-label-by-platform: By Platform
-label-by-profile: By Profile
-label-by-version: By Version
-label-cisco-ios-policer: Cisco IOS policer
-label-cisco-ios-rate-limit: Cisco IOS rate-limit
-label-config: config
+label-children: "Children"
+label-configured-map-container: "Configured Map Container: "
+label-consumes-resources: "Consumes Resources"
+label-contacts: "Contacts"
+label-container: "Container: "
+label-container-2: "Container"
+label-container-3: "Container"
+label-container-name: "Container: {name}"
+label-dashboard: "Dashboard"
 label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
 label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
 label-days: Days
-label-dbm: dBm
 label-description: Description
-label-dns: DNS
+label-duplex: "Duplex"
 label-duration: Duration
-label-escalation-error-details: Escalation Error Details
-label-escalations-1-day: Escalations (1 day)
-label-escalations-30-day: Escalations (30 day)
-label-escalations-7-days: Escalations (7 days)
+label-dynamic: "Dynamic"
+label-end-of-sale: "End of Sale"
+label-end-of-support: "End of Support"
+label-errors: "Errors"
 label-exclude-on-mac-black-list: Exclude on MAC Black List
-label-fail: Fail
-label-failed-discovery-only: Failed discovery only
 label-filter-by-ping-status: Filter by Ping status
 label-filter-none-problems: Filter None problems
 label-filter-pending-links: Filter Pending links
 label-fqdn: FQDN
 label-from-date: From Date
+label-from-rule: "From Rule"
+label-graphics: "Graphics"
+label-hostname: "Hostname"
+label-in: "In"
 label-in-days: In Days
 label-include-addresses: Include Addresses
 label-include-prefixes: Include Prefixes
+label-interface: "Interface"
 label-interval: Interval
-label-ipv4: IPv4
-label-ipv6: IPv6
-label-juniper-junos-policer: Juniper JUNOS policer
+label-inventory: "Inventory"
+label-ip: "IP"
+label-ip-address: "IP Address"
+label-linkgraph: "LinkGraph"
+label-loading: "Loading ..."
+label-location: "Location"
+label-mac: "MAC"
+label-maintenance: "Maintenance"
 label-managed-object: Managed Object
+label-managed-object-container: "ManagedObject Container: {name}"
 label-managed-object-search-for-config-only: Managed object search (for config only)
-label-managed-objects-administrative-domain-for-config-only: Managed Objects Administrative Domain (for config only)
-label-managed-objects-group-selector: Managed Objects Group (Selector)
-label-managed-objects-pool: Managed Objects Pool
-label-managed-objects-pools: Managed Objects Pools
-label-managed-objects-profile: Managed Objects Profile
-label-managed-objects-summary-domain: Managed Objects Summary (domain)
-label-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
-label-managed-objects-summary-label: Managed Objects Summary (label)
-label-managed-objects-summary-platform: Managed Objects Summary (platform)
-label-managed-objects-summary-profile: Managed Objects Summary (profile)
-label-managed-objects-summary-version: Managed Objects Summary (version)
-label-mw: mW
+label-managedobject-container: "ManagedObject Container: "
+label-metrics: "Metrics"
+label-migrate: "Migrate"
+label-migrate-device-changed: "Migrate (Device Changed)"
+label-model: "Model"
+label-n-a: "N/A"
 label-name: Name
+label-neighbors: "Neighbors"
 label-ns: NS
-label-outages-1-day: Outages (1 day)
-label-outages-30-day: Outages (30 day)
-label-outages-7-days: Outages (7 days)
+label-object-metrics: "Object Metrics"
+label-object-name: "Object Name"
+label-out: "Out"
+label-outages-summary: "Outages Summary"
+label-packets: "Packets"
+label-platform-name: "Platform Name"
 label-pool: Pool
 label-prefix: Prefix
 label-profile: Profile
 label-profile-check-only: Profile check only
-label-range: Range
-label-reboot-30-day: Reboot (30 day)
-label-reboots-1-day: Reboots (1 day)
-label-reboots-7-days: Reboots (7 days)
+label-profile-sa: "Profile SA"
+label-project: "Project"
+label-provides-resources: "Provides Resources"
+label-recommended: "Recommended"
+label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Recommended way for policy-map values calculating is: normal-burst-bytes=bits-per-second*Tc/8.Recommended way for rate-limit values calculating is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
 label-report-format: Report Format
+label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: "Report more than 1 year not allowed. If nedeed - request it from Administrator"
 label-report-type: Report Type
 label-search-by-ip: Search by ip
 label-search-by-prefix: Search by prefix
 label-search-by-user: Search by user
+label-segment: "Segment: "
+label-segment-2: "Segment"
+label-segment-3: "Segment"
+label-segment-name: "Segment: {name}"
+label-sensors: "Sensors"
+label-service: "Service"
+label-service-range: "Service Range"
 label-show-other-problems: Show other problems
 label-show-problem-on-already-linked: Show problem on already linked
-label-skip: Skip
-label-skip-full-available: Skip full available
-label-skip-zero-access-port: Skip zero access port
-label-skip-zero-available: Skip zero available
-label-statistics: Statistics
+label-soft-version: "Soft Version"
+label-speed: "Speed"
+label-state: "State"
+label-static: "Static"
+label-time-pattern: "Time Pattern"
 label-to-date: To Date
-label-ttsystem-errors-1-day: TTSystem Errors (1 day)
-label-ttsystem-stat-1-day: TTSystem Stat (1 day)
-label-ttsystem-stat-30-day: TTSystem Stat (30 day)
-label-ttsystem-stat-7-days: TTSystem Stat (7 days)
-label-update: Update
+label-topology-neighbors: "Topology Neighbors"
+label-tt: "TT"
+label-utilization: "Utilization"
 label-vrf: VRF
 label-zone: Zone
+msg-all-polling: "All polling"
+msg-as-set-members-cache-is-empty-please-update-whois-cache: "AS-SET members cache is empty. Please update Whois Cache"
+msg-cannot-resolve-as-set-prefixes: "Cannot resolve AS-SET prefixes"
+msg-duplicate-managed-object: "Duplicate MO"
+msg-duration-about-hours: "{count, plural, one {about # hour} other {about # hours}}"
+msg-duration-about-month: "about 1 month"
+msg-duration-about-year: "about 1 year"
+msg-duration-about-years: "{count, plural, one {about # year} other {about # years}}"
+msg-duration-almost-two-years: "almost 2 years"
+msg-duration-almost-years: "{count, plural, one {almost # year} other {almost # years}}"
+msg-duration-days: "{count, plural, one {# day} other {# days}}"
+msg-duration-less-than-minute: "less than a minute"
+msg-duration-minutes: "{count, plural, one {# minute} other {# minutes}}"
+msg-duration-months: "{count, plural, one {# month} other {# months}}"
+msg-duration-never: "Never"
+msg-duration-over-year: "over 1 year"
+msg-duration-over-years: "{count, plural, one {over # year} other {over # years}}"
+msg-enter-a-valid-username: "Enter a valid username."
+msg-failed-to-clear-alarms: "Failed to clear alarms"
+msg-integer-is-required: "Integer is required"
+msg-invalid-password: "Invalid password"
+msg-is-managed: "Is Managed"
+msg-is-managed-object-type-defined: "Is Managed, object type defined"
+msg-is-managed-object-type-defined-bad-cli-credential: "Is Managed, object type defined bad CLI Credential"
+msg-is-managed-object-type-undefined: "Is Managed, object type undefined"
+msg-is-managed-object-type-undefined-bad-snmp-credential: "Is Managed, object type undefined bad SNMP Credential"
+msg-is-managed-object-type-undefined-for-various-reasons: "Is Managed, object type undefined for various reasons"
+msg-is-managed-object-type-undefined-has-ping-response: "Is Managed, object type undefined has ping response"
+msg-is-managed-object-type-undefined-not-ping-response: "Is Managed, object type undefined not ping response"
+msg-is-monitoring-object-type-undefined-only-availability-check: "Is monitoring, object type undefined, only availability check"
+msg-main: "Main"
+msg-managed-object-was-moved: "MO is move"
+msg-more-3: "More 3"
+msg-never: "never"
+msg-no-interfaces: "No interfaces"
+msg-no-links: "No links"
+msg-no-local-rules: "No local rules"
+msg-no-outages-detected: "No outages detected"
+msg-no-uplinks: "No uplinks"
+msg-no-vlan-propagation: "No VLAN propagation"
+msg-not-managed: "Not Managed"
+msg-not-object-found-for-set-report-param: "Not object found for set Report Param."
+msg-one-params-from-date-to-date-or-ids-required: "One params - FROM_DATE/TO_DATE or IDS required"
+msg-origin-routes-cache-is-empty-please-update-whois-cache: "Origin routes cache is empty. Please update Whois Cache"
+msg-password-is-already-used: "Password is already used"
+msg-password-min-lowercase: "Password must have at least {count} lower-case letters"
+msg-password-min-numbers: "Password must have at least {count} numbers"
+msg-password-min-specials: "Password must have at least {count} special symbols"
+msg-password-min-uppercase: "Password must have at least {count} upper-case letters"
+msg-password-too-short: "Password too short. Must be at least {count} characters"
+msg-permission-denied: "Permission denied"
+msg-permission-denined: "Permission denined"
+msg-prefix-list-built: "Prefix List built"
+msg-prefix-list-generator-is-not-implemented-for-this-profile: "Prefix-list generator is not implemented for this profile"
+msg-prefix-not-found: "Prefix not found"
+msg-profile-check-failed: "Profile check failed"
+msg-report-data-source-not-found: "Report data source {data_source} not found"
+msg-temporary-unavailable: "Temporary unavailable"
+msg-unknown-as-set: "Unknown AS-SET"
+msg-user-account-is-blocked: "User account is blocked"
+msg-user-does-not-exists: "User does not exists"
+msg-vrf-required: "VRF Required"
+msg-zone-transfer-upload-results: "Created: {created} and changed: {changed} IP addresses uploaded via zone transfer."
 nav-account: Account
 nav-action: Actions
 nav-actioncommands: Action Commands
@@ -965,3 +1096,62 @@ nav-vrf: VRF
 nav-vrfgroup: VRF Groups
 nav-wfmigration: Migrations
 nav-workflow: Workflow
+status-cleaned: "Cleaned"
+status-disable: "Disable"
+status-down: "Down"
+status-fail: Fail
+status-failed-discovery-only: Failed discovery only
+status-lost-redundancy: "Lost redundancy"
+status-no: "No"
+status-no-redundancy: "No redundancy"
+status-ok: "OK"
+status-redundant: "Redundant"
+status-skip: Skip
+status-skip-full-available: Skip full available
+status-skip-zero-access-port: Skip zero access port
+status-skip-zero-available: Skip zero available
+status-unknown: "Unknown"
+status-up: "Up"
+status-update: Update
+status-warning: "Warning"
+status-yes: "Yes"
+title-all-allocated-blocks-in-vrf: "All allocated blocks in VRF {vrf} (IPv{afi}), {prefix}"
+title-allocated-blocks-in-vrf: "Allocated blocks in VRF {vrf} (IPv{afi}), {prefix}"
+title-availability-last-day: Availability (last day)
+title-availability-last-month: Availability (last month)
+title-availability-last-week: Availability (last week)
+title-channels: "Channels"
+title-cir-car-bps-to-burst-rate: "CIR/CAR(bps) to Burst-rate"
+title-community: "Community"
+title-configured-map: "Configured Map"
+title-escalations-1-day: Escalations (1 day)
+title-escalations-30-day: Escalations (30 day)
+title-escalations-7-days: Escalations (7 days)
+title-free-blocks-in-vrf: "Free blocks in VRF {vrf} (IPv{afi}), {prefix}"
+title-inventory-summary: "Inventory summary"
+title-l2-domains: "L2 Domains"
+title-managed-object-summary: "Managed Object Summary"
+title-managed-objects-summary-domain: Managed Objects Summary (domain)
+title-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
+title-managed-objects-summary-label: Managed Objects Summary (label)
+title-managed-objects-summary-platform: Managed Objects Summary (platform)
+title-managed-objects-summary-profile: Managed Objects Summary (profile)
+title-managed-objects-summary-version: Managed Objects Summary (version)
+title-network-segment-schemas: "Network Segment Schemas"
+title-object-containers-map: "Object Containers Map"
+title-object-group-schemas: "Object Group Schemas"
+title-object-level-neighbor-schemas: "Object Level Neighbor Schemas"
+title-outages-1-day: Outages (1 day)
+title-outages-30-day: Outages (30 day)
+title-outages-7-days: Outages (7 days)
+title-problem-discovery-pool: "Problem Discovery (pool)"
+title-reboot-30-day: Reboot (30 day)
+title-reboots-1-day: Reboots (1 day)
+title-reboots-7-days: Reboots (7 days)
+title-summary-for-vrf: "Summary for VRF {vrf} (IPv{afi}): {prefix}"
+title-total-alarms: "Total Alarms"
+title-ttsystem-errors-1-day: TTSystem Errors (1 day)
+title-ttsystem-stat-1-day: TTSystem Stat (1 day)
+title-ttsystem-stat-30-day: TTSystem Stat (30 day)
+title-ttsystem-stat-7-days: TTSystem Stat (7 days)
+title-welcome: "Welcome to "

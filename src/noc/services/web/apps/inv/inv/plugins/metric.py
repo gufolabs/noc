@@ -16,7 +16,7 @@ from django.http import HttpRequest
 # NOC modules
 from noc.cm.models.configurationparam import ConfigurationParam
 from noc.core.clickhouse.connect import connection
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 from noc.inv.models.sensor import Sensor
 from noc.pm.models.metrictype import MetricType
 from noc.sa.interfaces.base import DictListParameter, FloatParameter, StringParameter
@@ -229,7 +229,7 @@ class MetricPlugin(InvPlugin):
                     "max_value": max_value,
                     "relative_position": position,
                     "oper_state": "ok",
-                    "oper_state__label": _("OK"),
+                    "oper_state__label": t("status-ok"),
                     # "description": s.description,
                     # disabled, ok, warning (degraded), critical
                     "thresholds": thresholds,
@@ -259,8 +259,8 @@ class MetricPlugin(InvPlugin):
 
     def api_set_metric_threshold(self, request: HttpRequest, id, sid, thresholds):
         s = self.app.get_object_or_404(Sensor, id=sid)
-        for t in thresholds:
-            param, scope = t["name"].split("@", 1)
+        for threshold in thresholds:
+            param, scope = threshold["name"].split("@", 1)
             param = ConfigurationParam.get_by_code(param)
             print("Set Threshold", param, f"Sensor::{s.local_id}", t["value"])
             if t["value"] != s.object.get_cfg_data(param, scope=scope):

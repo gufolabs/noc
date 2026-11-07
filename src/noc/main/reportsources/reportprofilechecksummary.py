@@ -12,10 +12,10 @@ import polars as pl
 
 # NOC modules
 from noc.core.datasources.base import data_source_loader
+from noc.core.i18n import t
 from noc.core.reporter.band import Band
 from noc.core.reporter.reportsource import ReportSource
 from noc.core.reporter.types import BandFormat, ColumnFormat
-from noc.core.translation import ugettext as _
 from noc.main.models.pool import Pool
 from noc.main.models.report import Report
 
@@ -24,47 +24,47 @@ class ReportProfileCheckSummary(ReportSource):
     name = "reportprofilechecksummary"
 
     checks = [  # pp, title, condition
-        ("status = False", _("Not Managed"), "1.1"),  # 1is1
-        ("status = True and enable_ping = True", _("Is Managed"), "1.2"),  # 2is1
+        ("status = False", t("msg-not-managed"), "1.1"),  # 1is1
+        ("status = True and enable_ping = True", t("msg-is-managed"), "1.2"),  # 2is1
         (
             "status = True and enable_ping = True and enable_box = True",
-            _("Is Managed, object type defined"),
+            t("msg-is-managed-object-type-defined"),
             "1.2.1",
         ),  # 2is1.6is1.3isp0
         (
             "status = True and enable_ping = True and enable_box = True and trouble_profile = False and trouble_snmp = False and trouble_cli = True",
-            _("Is Managed, object type defined bad CLI Credential"),
+            t("msg-is-managed-object-type-defined-bad-cli-credential"),
             "1.2.1.1",
         ),  # 2is1.6is1.3isp0.2isp1
         (
             "status = True and enable_ping = True and enable_box = True and (trouble_profile = True or trouble_snmp = True)",
-            _("Is Managed, object type undefined"),
+            t("msg-is-managed-object-type-undefined"),
             "1.2.2",
         ),  # 2is1.6is1.3isp1
         (
             "status = True and enable_ping = True and enable_box = True and avail='no' and (trouble_profile = True or trouble_snmp = True)",
-            _("Is Managed, object type undefined not ping response"),
+            t("msg-is-managed-object-type-undefined-not-ping-response"),
             "1.2.2.1",
         ),  # 2is1.6is1.3isp1.3is1
         (
             "status = True and enable_ping = True and enable_box = True and avail='yes' and (trouble_profile = True or trouble_snmp = True)",
-            _("Is Managed, object type undefined has ping response"),
+            t("msg-is-managed-object-type-undefined-has-ping-response"),
             "1.2.2.2",
         ),  # 2is1.6is1.3isp1.3is2
         (
             "status = True and enable_ping = True and enable_box = True and avail='yes' and trouble_profile = True and trouble_snmp = True",
-            _("Is Managed, object type undefined bad SNMP Credential"),
+            t("msg-is-managed-object-type-undefined-bad-snmp-credential"),
             "1.2.2.2.1",
         ),  # 2is1.6is1.3isp1.3is2.1isp1
         (
             "status = True and enable_ping = True and enable_box = True and avail='yes' and trouble_profile = True and trouble_snmp = False",
-            _("Is Managed, object type undefined for various reasons"),
+            t("msg-is-managed-object-type-undefined-for-various-reasons"),
             "1.2.2.2.2",
         ),  # 2is1.6is1.3isp1.3is2.1isp0
         # (_("Is Managed, object type Profile is not know"), "2is1.6is1.9a1.3is2.4isp1"),
         (
             "status = True and enable_ping = False and enable_box = False",
-            _("Is monitoring, object type undefined, only availability check"),
+            t("msg-is-monitoring-object-type-undefined-only-availability-check"),
             "1.2.3",
         ),  # 2is1.6is2
     ]
@@ -74,11 +74,11 @@ class ReportProfileCheckSummary(ReportSource):
             "header": BandFormat(
                 title_template="Profile Check Summary",
                 columns=[
-                    ColumnFormat(name="pp", title=_("PP")),
-                    ColumnFormat(name="status", title=_("Status")),
-                    ColumnFormat(name="quantity", title=_("Quantity")),
-                    ColumnFormat(name="percent", title=_("Percent")),
-                    ColumnFormat(name="detail", title=_("Detail"), format_type="url"),
+                    ColumnFormat(name="pp", title=t("header-pp")),
+                    ColumnFormat(name="status", title=t("header-status")),
+                    ColumnFormat(name="quantity", title=t("header-quantity")),
+                    ColumnFormat(name="percent", title=t("header-percentage")),
+                    ColumnFormat(name="detail", title=t("header-detail"), format_type="url"),
                 ],
             ),
             "pool": BandFormat(title_template="{{ name }}"),

@@ -11,7 +11,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
@@ -26,7 +25,7 @@ class ReportDiscoveryCapsApplication(SimpleReport):
     def get_form(self):
         class ReportForm(forms.Form):
             pool = forms.ChoiceField(
-                label=t("label-managed-objects-pool"),
+                label=t("header-managed-objects-pool"),
                 required=True,
                 choices=[
                     *list(Pool.objects.order_by("name").scalar("id", "name")),
@@ -34,7 +33,7 @@ class ReportDiscoveryCapsApplication(SimpleReport):
                 ],
             )
             obj_profile = forms.ModelChoiceField(
-                label=t("label-managed-objects-profile"),
+                label=t("header-managed-objects-profile"),
                 required=False,
                 queryset=ManagedObjectProfile.objects.order_by("name"),
             )
@@ -65,7 +64,7 @@ class ReportDiscoveryCapsApplication(SimpleReport):
         )
         for mo in mos:
             mo.get_caps()
-            data.append((mo.name, mo.address, _("Main"), ";".join(mo.get_caps())))
+            data.append((mo.name, mo.address, t("msg-main"), ";".join(mo.get_caps())))
             for i in Interface.objects.filter(managed_object=mo):
                 if i.type == "SVI":
                     continue

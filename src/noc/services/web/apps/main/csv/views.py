@@ -66,9 +66,9 @@ class CSVApplication(Application):
         file = forms.FileField()
         resolve = forms.ChoiceField(
             choices=[
-                (IR_FAIL, t("label-fail")),
-                (IR_SKIP, t("label-skip")),
-                (IR_UPDATE, t("label-update")),
+                (IR_FAIL, t("status-fail")),
+                (IR_SKIP, t("status-skip")),
+                (IR_UPDATE, t("status-update")),
             ]
         )
         referer = forms.CharField(widget=forms.HiddenInput)

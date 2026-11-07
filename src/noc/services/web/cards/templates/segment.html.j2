@@ -20,12 +20,12 @@
         <td>
             {% if object.is_redundant %}
                 {% if object.lost_redundancy %}
-                    <i class="fa fa-exclamation-triangle"></i>{{ _("Lost redundancy") }}
+                    <i class="fa fa-exclamation-triangle"></i>{{ t("status-lost-redundancy") }}
                 {% else %}
-                    <i class="fa fa-check"></i>{{ _("Redundant") }}
+                    <i class="fa fa-check"></i>{{ t("status-redundant") }}
                 {% endif %}
             {% else %}
-                <i class="fa fa-times"></i>{{ _("No redundancy") }}
+                <i class="fa fa-times"></i>{{ t("status-no-redundancy") }}
             {% endif %}
         </td>
     </tr>
@@ -46,12 +46,12 @@
                     <td><a href="/api/card/view/segment/{{ c.id }}/">
                         {% if c.object.is_redundant %}
                             {% if c.object.lost_redundancy %}
-                                <i class="fa fa-exclamation-triangle" title="{{ _("Lost redundancy") }}"></i>
+                                <i class="fa fa-exclamation-triangle" title="{{ t("status-lost-redundancy") }}"></i>
                             {% else %}
-                                <i class="fa fa-check" title="{{ _("Redundant") }}"></i>
+                                <i class="fa fa-check" title="{{ t("status-redundant") }}"></i>
                             {% endif %}
                         {% else %}
-                            <i class="fa fa-times" title="{{ _("No redundancy") }}"></i>
+                            <i class="fa fa-times" title="{{ t("status-no-redundancy") }}"></i>
                         {% endif %}
                         {{ c.name }}</a>
                     </td>
@@ -114,7 +114,7 @@
             </tbody>
         </table>
         {% else %}
-        {{ _("No VLAN propagation") }}
+        {{ t("msg-no-vlan-propagation") }}
         {% endif %}
         <td>
     </tr>

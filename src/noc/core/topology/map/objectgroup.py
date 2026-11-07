@@ -14,10 +14,10 @@ from collections.abc import Iterable
 from bson import ObjectId
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import MapItem, PathItem
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class ObjectGroupTopology(TopologyBase):
     name = "objectgroup"
-    header = _("Object Group Schemas")
+    header = t("title-object-group-schemas")
 
     PARAMS = {"resource_group"}
 

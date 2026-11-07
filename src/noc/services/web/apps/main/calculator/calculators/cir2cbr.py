@@ -11,7 +11,6 @@ from django.utils.safestring import mark_safe
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 
 from .base import BaseCalculator
 
@@ -20,19 +19,19 @@ from .base import BaseCalculator
 # Calculator form
 #
 class CalculatorForm(forms.Form):
-    value = forms.CharField(help_text=_("CIR(bps). K, M and G suffixes can be used"))
+    value = forms.CharField(help_text=t("help-cir-bps-k-m-and-g-suffixes-can-be-used"))
     Tc = forms.DecimalField(
         initial="0.25",
-        help_text=_(
-            "Common values are: Tc=1.5 for rate-limit and Tc=0.25 for policing (0.25 is default)"
+        help_text=t(
+            "help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default"
         ),
     )
     calculation = forms.ChoiceField(
         required=True,
         choices=[
-            ("ios_policy", t("label-cisco-ios-policer")),
-            ("ios_rate", t("label-cisco-ios-rate-limit")),
-            ("junos_policy", t("label-juniper-junos-policer")),
+            ("ios_policy", t("choice-cisco-ios-policer")),
+            ("ios_rate", t("choice-cisco-ios-rate-limit")),
+            ("junos_policy", t("choice-juniper-junos-policer")),
         ],
     )
 
@@ -50,7 +49,7 @@ class CalculatorForm(forms.Form):
         try:
             value = int(value)
         except ValueError:
-            raise forms.ValidationError(_("Integer is required"))
+            raise forms.ValidationError(t("msg-integer-is-required"))
         return value * mp
 
 
@@ -58,12 +57,9 @@ class Calculator(BaseCalculator):
     """Calculator"""
 
     name = "CIR2CBR"
-    title = _("CIR/CAR(bps) to Burst-rate")
-    description = _(
-        "Recommended way for policy-map values calculating is: "
-        "normal-burst-bytes=bits-per-second*Tc/8."
-        "Recommended way for rate-limit values calculating is: "
-        "burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
+    title = t("title-cir-car-bps-to-burst-rate")
+    description = t(
+        "label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal"
     )
     form_class = CalculatorForm
     # Templates

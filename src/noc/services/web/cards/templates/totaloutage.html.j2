@@ -16,7 +16,7 @@
 </style>
 <div class="summary">
 {% if is_clear %}
-{{ _("No outages detected") }}
+{{ t("msg-no-outages-detected") }}
 {% else %}
 {{ summary | glyph_summary }}
 {% endif %}

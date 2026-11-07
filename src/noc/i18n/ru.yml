@@ -229,6 +229,21 @@ app-title-vpn: VPN
 app-title-vrf: VRF
 app-title-vrfgroup: Группы VRF
 app-title-workflow: Редактор процессов
+choice-1-day: 1 день
+choice-1-month: 1 месяц
+choice-1-week: 1 неделя
+choice-by-administrative-domain: По З.О.
+choice-by-administrative-domain-and-profile: По З.О. и профилю
+choice-by-labels: По меткам
+choice-by-platform: По платформе
+choice-by-profile: По профилю
+choice-by-version: По версии
+choice-dns: DNS
+choice-escalation-error-details: Детализация ошибок эскалации
+choice-ipv4: IPv4
+choice-ipv6: IPv6
+choice-range: Диапазон
+choice-statistics: Статистика
 header-action: Действие
 header-address: Адрес
 header-adm-domain: З.О.
@@ -255,6 +270,7 @@ header-avg-load-out-mbps: Средняя загрузка исходящий, М
 header-body: Текст
 header-capabilities: Свойства
 header-category: Категория
+header-chassis: "Шасси"
 header-children: Потомок
 header-class: Класс
 header-client-model: Модель клиента
@@ -338,6 +354,11 @@ header-maintenance-94de30: РНР
 header-managed: Управляемый
 header-managed-object-62561c: Объекты управления
 header-managed-objects: Список объектов
+header-managed-objects-administrative-domain-for-config-only: З.О. (только для конфигурации)
+header-managed-objects-group-selector: Группа устройств (Селектор)
+header-managed-objects-pool: Пул объекта
+header-managed-objects-pools: Пул
+header-managed-objects-profile: Профиль объекта
 header-mask: Маска
 header-max-load-in-mbps: Максимальная загрузка входящий, Мбит/с
 header-max-load-in-time: Время максимальной нагрузки, входящий
@@ -354,6 +375,7 @@ header-object: Объект
 header-object-address: IP Адрес
 header-object-admdomain: З.О.
 header-object-hostname: Имя хоста
+header-object-labels: "Метки"
 header-object-name: Имя объекта
 header-object-platform: Платформа
 header-object-profile: Профиль
@@ -372,6 +394,7 @@ header-part-number-1: Номер детали 1
 header-part-number-2: Номер детали 2
 header-part-number-3: Номер детали 3
 header-percent: "%"
+header-percentage: "Процент"
 header-phone-number: Телефонный номер
 header-phone-range: Диапазон номеров
 header-platform: Платформа
@@ -428,6 +451,7 @@ header-stop: Окончание
 header-sub-interfaces: СабИнтерфейсы
 header-subject: Тема
 header-subscriber: Абонент
+header-subscribers: "Абоненты"
 header-subscribers-6f13df: Абоненты
 header-subscribers-97ec75: Задето абонентов
 header-success-request: Процент успешных
@@ -446,6 +470,7 @@ header-time-pattern: Маска времени
 header-timestamp: Время
 header-to-ts: Время закрытия
 header-total-in-mbyte: Суммарно входящего трафика, Мбайт
+header-total-objects: "Всего объектов"
 header-total-out-mbyte: Суммарно исходящего трафика, Мбайт
 header-total-unavail-sec: Общее время недос. (сек)
 header-translation: Трансляции
@@ -471,79 +496,138 @@ header-vlan-translation: Трансляции ВЛАНов
 header-vpn: VPN
 header-vrf: VRF
 header-zone: Зона
-label-1-day: 1 день
-label-1-month: 1 месяц
-label-1-week: 1 неделя
+help-cir-bps-k-m-and-g-suffixes-can-be-used: "CIR(bps). Можно использовать множители K, M и G"
+help-go-to-object: "Соседнее устройство"
+help-load-chart: "График загр."
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "IP-адрес сервера имён. Сервер должен позволять передачу зоны хостам NOC"
+help-use-name-network-ex-10-0-0-0-8-or-mac: "Задайте Имя, сеть (н-р 10.0.0.0/8) или MAC адрес"
 label-address-family: Семейство адресов
 label-administrative-domain: Зона ответственности
+label-alarms: "Аварии"
+label-alternative-path: "Альтернативный путь"
 label-as-number: Номер AS
-label-availability-last-day: Доступность (последний день)
-label-availability-last-month: Доступность (последний месяц)
-label-availability-last-week: Доступность (последняя неделя)
-label-by-administrative-domain: По З.О.
-label-by-administrative-domain-and-profile: По З.О. и профилю
-label-by-labels: По меткам
-label-by-platform: По платформе
-label-by-profile: По профилю
-label-by-version: По версии
+label-children: "Потомок"
+label-configured-map-container: "Контейнер пользовательской карты: {name}"
+label-consumes-resources: "Потребляет ресурсы"
+label-contacts: "Контакты"
+label-container: "Локация (PoP)"
+label-container-2: "Контейнер"
+label-container-3: "Контейнер"
+label-container-name: "Контейнер: {name}"
+label-dashboard: "График"
 label-description: Описание
-label-dns: DNS
+label-duplex: "Дуплекс"
 label-duration: Продолжительность
-label-escalation-error-details: Детализация ошибок эскалации
-label-escalations-1-day: Эскалации (за 1 день)
-label-escalations-30-day: Эскалации (за 30 дней)
-label-escalations-7-days: Эскалации (за 7 дней)
+label-end-of-sale: "Конец продаж"
+label-end-of-support: "Конец поддержки"
+label-errors: "Ошибки"
 label-exclude-on-mac-black-list: Исключить строки из Чёрного списка MAC'ов
-label-failed-discovery-only: Исключить из вывода проблемы доступа
 label-filter-by-ping-status: Отфильтрвовать недоступные (не пингуются)
 label-filter-none-problems: Отфильтровать незаполненные проблемы
 label-filter-pending-links: Отфильтровать неподтверждённые линки
 label-fqdn: FQDN
 label-from-date: С
+label-from-rule: "Из Правила"
+label-graphics: "Графики"
+label-hostname: "Имя хоста"
+label-in: "Вх."
 label-in-days: Глубина (дней)
+label-interface: "Интерфейс"
 label-interval: Интервал
-label-ipv4: IPv4
-label-ipv6: IPv6
+label-inventory: "Учет объектов"
+label-ip: "IP"
+label-ip-address: "IP адрес"
+label-linkgraph: "График связи"
+label-loading: "Загрузка ..."
+label-location: "Расположение"
+label-mac: "MAC"
+label-maintenance: "РНР"
 label-managed-object: Объекты управления
+label-managed-object-container: "Контейнер объекта управления: {name}"
 label-managed-object-search-for-config-only: Устройство (только для конфигурации)
-label-managed-objects-administrative-domain-for-config-only: З.О. (только для конфигурации)
-label-managed-objects-group-selector: Группа устройств (Селектор)
-label-managed-objects-pool: Пул объекта
-label-managed-objects-pools: Пул
-label-managed-objects-profile: Профиль объекта
-label-managed-objects-summary-domain: Сводка по объектам (по З.О.)
-label-managed-objects-summary-domain-profile: Сводка по объектам (по З.О. и профилю)
-label-managed-objects-summary-label: Сводка по объектам (по меткам)
-label-managed-objects-summary-platform: Сводка по объектам (по платформе)
-label-managed-objects-summary-profile: Сводка по объектам (по профилю)
-label-managed-objects-summary-version: Сводка по объектам (по версии)
+label-managedobject-container: "Локация (место)"
+label-metrics: "Метрики"
+label-migrate: "Переместился"
+label-migrate-device-changed: "Переместился (со сменой устройства)"
+label-model: "Модель"
+label-n-a: "Н/Д"
 label-name: Имя адреса
-label-outages-1-day: Оперативная обстановка (за 1 день)
-label-outages-30-day: Оперативная обстановка (за 30 дней)
-label-outages-7-days: Оперативная обстановка (за 7 дней)
+label-neighbors: "Соседи"
+label-object-metrics: "Метрики"
+label-object-name: "Имя"
+label-out: "Исх."
+label-outages-summary: "Оперативная обстановка"
+label-packets: "Пакеты"
+label-platform-name: "Модель"
 label-pool: Пул
 label-prefix: Префикс
 label-profile: Профиль
 label-profile-check-only: Вывести только проблемы доступа
-label-range: Диапазон
-label-reboot-30-day: Перезагрузки (за 30 дней)
-label-reboots-1-day: Перезагрузки (за 1 день)
-label-reboots-7-days: Перезагрузки (за 7 дней)
+label-profile-sa: "Профиль SA"
+label-project: "Проект"
+label-provides-resources: "Предоставляет ресурсы"
+label-recommended: "Рекомендовано"
 label-report-format: Формат отчёта
+label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: "Диапазон больше одного года не доступен для выгрузки. Если необходимо - обратитесь к администратору системы"
 label-report-type: Тип отчёта
+label-segment: "Сегмент:"
+label-segment-2: "Сегмент"
+label-segment-3: "Сегмент"
+label-segment-name: "Сегмент: {name}"
+label-sensors: "Сенсоры"
+label-service: "Сервис"
+label-service-range: "Время обслуживания"
 label-show-other-problems: Отобразить неклассифицированные проблемы
 label-show-problem-on-already-linked: Показать проблемы на слинкованных интерфейсах
-label-skip-full-available: Пропустить доступные за интервал
-label-skip-zero-access-port: Пропустить с неактивными портами доступа
-label-skip-zero-available: Пропустить недоступные за интервал
-label-statistics: Статистика
+label-soft-version: "Версия ПО"
+label-speed: "Скорость"
+label-state: "Состояние"
+label-time-pattern: "Маска времени"
 label-to-date: По
-label-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
-label-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
-label-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
-label-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
+label-topology-neighbors: "Соседи по топологии"
+label-tt: "Номер ТТ"
+label-utilization: "Загрузка"
 label-vrf: VRF
 label-zone: Зона
+msg-duplicate-managed-object: "Дублирование объекта"
+msg-duration-about-hours: "{count, plural, one {около # часа} few {около # часов} many {около # часов} other {около # часа}}"
+msg-duration-about-month: "около 1 месяца"
+msg-duration-about-year: "около 1 года"
+msg-duration-about-years: "{count, plural, one {около # года} few {около # лет} many {около # лет} other {около # года}}"
+msg-duration-almost-two-years: "почти 2 года"
+msg-duration-almost-years: "{count, plural, one {почти # год} few {почти # года} many {почти # лет} other {почти # года}}"
+msg-duration-days: "{count, plural, one {# день} few {# дня} many {# дней} other {# дня}}"
+msg-duration-less-than-minute: "меньше минуты"
+msg-duration-minutes: "{count, plural, one {# минута} few {# минуты} many {# минут} other {# минуты}}"
+msg-duration-months: "{count, plural, one {# месяц} few {# месяца} many {# месяцев} other {# месяца}}"
+msg-duration-never: "Никогда"
+msg-duration-over-year: "более 1 года"
+msg-duration-over-years: "{count, plural, one {более # года} few {более # лет} many {более # лет} other {более # года}}"
+msg-failed-to-clear-alarms: "Ошибка при закрытии аварий"
+msg-integer-is-required: "Требуется Целочисленное значение"
+msg-main: "Основное"
+msg-managed-object-was-moved: "Объект был перемещён"
+msg-never: "никогда"
+msg-no-interfaces: "Нет интерфейсов"
+msg-no-links: "Нет линков"
+msg-no-local-rules: "Нет правил"
+msg-no-outages-detected: "Аварий не зафиксировано"
+msg-no-uplinks: "Нет аплинков"
+msg-one-params-from-date-to-date-or-ids-required: "Для отчёта требуется задать дату или список аварий"
+msg-password-is-already-used: "Пароль уже используется"
+msg-password-min-lowercase: "Пароль должен содержать не менее {count} строчных букв"
+msg-password-min-numbers: "Пароль должен содержать не менее {count} цифр"
+msg-password-min-specials: "Пароль должен содержать не менее {count} специальных символов"
+msg-password-min-uppercase: "Пароль должен содержать не менее {count} заглавных букв"
+msg-password-too-short: "Пароль слишком короткий. Минимальная длина — {count} символов"
+msg-permission-denied: "Доступ запрещён"
+msg-permission-denined: "Доступ запрещён"
+msg-prefix-not-found: "Префикс не найден"
+msg-profile-check-failed: "Профиль не определён"
+msg-report-data-source-not-found: "Источник данных отчёта {data_source} не найден"
+msg-temporary-unavailable: "Временно недоступна"
+msg-vrf-required: "Требуется VRF"
+msg-zone-transfer-upload-results: "Загружено IP-адресов при передаче зоны: создано — {created}, изменено — {changed}."
 nav-account: Учетная запись
 nav-action: Действия
 nav-actioncommands: Действия через команды
@@ -736,3 +820,55 @@ nav-vrf: VRF
 nav-vrfgroup: Группы VRF
 nav-wfmigration: Миграции
 nav-workflow: Редактор процессов
+status-cleaned: "Очищено"
+status-disable: "Отключён"
+status-down: "Недоступен"
+status-failed-discovery-only: Исключить из вывода проблемы доступа
+status-lost-redundancy: "Потеря резерва"
+status-no: "Нет"
+status-no-redundancy: "Нет резерва"
+status-redundant: "Есть резерв"
+status-skip-full-available: Пропустить доступные за интервал
+status-skip-zero-access-port: Пропустить с неактивными портами доступа
+status-skip-zero-available: Пропустить недоступные за интервал
+status-up: "ОК"
+status-warning: "Авария"
+status-yes: "Да"
+title-all-allocated-blocks-in-vrf: "Все выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}"
+title-allocated-blocks-in-vrf: "Выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}"
+title-availability-last-day: Доступность (последний день)
+title-availability-last-month: Доступность (последний месяц)
+title-availability-last-week: Доступность (последняя неделя)
+title-channels: "Каналы"
+title-community: "Комментарий"
+title-configured-map: "Пользовательская карта"
+title-escalations-1-day: Эскалации (за 1 день)
+title-escalations-30-day: Эскалации (за 30 дней)
+title-escalations-7-days: Эскалации (за 7 дней)
+title-free-blocks-in-vrf: "Свободные блоки в VRF {vrf} (IPv{afi}), {prefix}"
+title-inventory-summary: "Сводка по инвентаризации объектов"
+title-managed-object-summary: "Сводка по объектам"
+title-managed-objects-summary-domain: Сводка по объектам (по З.О.)
+title-managed-objects-summary-domain-profile: Сводка по объектам (по З.О. и профилю)
+title-managed-objects-summary-label: Сводка по объектам (по меткам)
+title-managed-objects-summary-platform: Сводка по объектам (по платформе)
+title-managed-objects-summary-profile: Сводка по объектам (по профилю)
+title-managed-objects-summary-version: Сводка по объектам (по версии)
+title-network-segment-schemas: "Схемы сегментов сети"
+title-object-containers-map: "Локация (место)"
+title-object-group-schemas: "Схемы групп объектов"
+title-object-level-neighbor-schemas: "Схемы соседей объекта"
+title-outages-1-day: Оперативная обстановка (за 1 день)
+title-outages-30-day: Оперативная обстановка (за 30 дней)
+title-outages-7-days: Оперативная обстановка (за 7 дней)
+title-problem-discovery-pool: "Проблемы опроса (по пулу)"
+title-reboot-30-day: Перезагрузки (за 30 дней)
+title-reboots-1-day: Перезагрузки (за 1 день)
+title-reboots-7-days: Перезагрузки (за 7 дней)
+title-summary-for-vrf: "Сводка для VRF {vrf} (IPv{afi}): {prefix}"
+title-total-alarms: "Всего Аварий"
+title-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
+title-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
+title-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
+title-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
+title-welcome: "Добро пожаловать"

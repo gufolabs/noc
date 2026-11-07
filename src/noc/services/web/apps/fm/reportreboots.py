@@ -24,10 +24,10 @@ from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, T
 class ReportForm(forms.Form):
     interval = forms.ChoiceField(
         choices=[
-            (0, t("label-range")),
-            (1, t("label-1-day")),
-            (7, t("label-1-week")),
-            (30, t("label-1-month")),
+            (0, t("choice-range")),
+            (1, t("choice-1-day")),
+            (7, t("choice-1-week")),
+            (30, t("choice-1-month")),
         ],
         label=t("label-interval"),
     )
@@ -43,9 +43,9 @@ class ReportRebootsApplication(SimpleReport):
     title = t("app-title-reportreboots")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(t("label-reboots-1-day"), {"interval": 1}),
-        "7d": PredefinedReport(t("label-reboots-7-days"), {"interval": 7}),
-        "30d": PredefinedReport(t("label-reboot-30-day"), {"interval": 30}),
+        "1d": PredefinedReport(t("title-reboots-1-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("title-reboots-7-days"), {"interval": 7}),
+        "30d": PredefinedReport(t("title-reboot-30-day"), {"interval": 30}),
     }
 
     def get_data(self, request: HttpRequest, interval, from_date=None, to_date=None, **kwargs):

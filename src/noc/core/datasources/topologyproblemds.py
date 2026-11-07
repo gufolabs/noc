@@ -9,8 +9,8 @@
 from collections.abc import AsyncIterable, Iterable
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.profile.loader import GENERIC_PROFILE as GENERIC_PROFILE_NAME
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.main.models.pool import Pool
@@ -62,21 +62,21 @@ class TopologyProblemDS(BaseDataSource):
             if mo.id not in mos_set:
                 continue
             if mo.profile == GENERIC_PROFILE:
-                problems[mo.id] = _("Profile check failed")
+                problems[mo.id] = t("msg-profile-check-failed")
         # Get all managed objects without interfaces
         if_mo = {
             iface["_id"]: iface.get("managed_object")
             for iface in Interface._get_collection().find({}, {"_id": 1, "managed_object": 1})
         }
         for mo_id in mos_set - set(problems) - set(if_mo.values()):
-            problems[mo_id] = _("No interfaces")
+            problems[mo_id] = t("msg-no-interfaces")
         # Get all managed objects without links
         linked_mos = set()
         for d in Link._get_collection().find({}):
             for i in d["interfaces"]:
                 linked_mos.add(if_mo.get(i))
         for mo_id in mos_set - set(problems) - linked_mos:
-            problems[mo_id] = _("No links")
+            problems[mo_id] = t("msg-no-links")
         # Get all managed objects without uplinks
         uplinks = {}
         for mo_id, mo_uplinks in ManagedObject.objects.filter().values_list("id", "uplinks"):
@@ -84,7 +84,7 @@ class TopologyProblemDS(BaseDataSource):
             if nu:
                 uplinks[mo_id] = nu
         for mo_id in mos_set - set(problems) - set(uplinks):
-            problems[mo_id] = _("No uplinks")
+            problems[mo_id] = t("msg-no-uplinks")
         num = 1
         for mo_id, problem in problems.items():
             yield num, "managed_object_id", mo_id

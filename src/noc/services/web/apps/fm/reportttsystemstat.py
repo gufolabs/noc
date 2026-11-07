@@ -27,16 +27,16 @@ class ReportForm(forms.Form):
     repo_format = forms.ChoiceField(
         label=t("label-report-format"),
         widget=widgets.RadioSelect,
-        choices=((0, t("label-statistics")), (1, t("label-escalation-error-details"))),
+        choices=((0, t("choice-statistics")), (1, t("choice-escalation-error-details"))),
         initial=0,
         required=False,
     )
     interval = forms.ChoiceField(
         choices=[
-            (0, t("label-range")),
-            (1, t("label-1-day")),
-            (7, t("label-1-week")),
-            (30, t("label-1-month")),
+            (0, t("choice-range")),
+            (1, t("choice-1-day")),
+            (7, t("choice-1-week")),
+            (30, t("choice-1-month")),
         ],
         label=t("label-interval"),
     )
@@ -52,11 +52,11 @@ class ReportTTSystemStatApplication(SimpleReport):
     title = t("app-title-reportttsystemstat")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(t("label-ttsystem-stat-1-day"), {"interval": 1}),
-        "7d": PredefinedReport(t("label-ttsystem-stat-7-days"), {"interval": 7}),
-        "30d": PredefinedReport(t("label-ttsystem-stat-30-day"), {"interval": 30}),
+        "1d": PredefinedReport(t("title-ttsystem-stat-1-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("title-ttsystem-stat-7-days"), {"interval": 7}),
+        "30d": PredefinedReport(t("title-ttsystem-stat-30-day"), {"interval": 30}),
         "1d_errors": PredefinedReport(
-            t("label-ttsystem-errors-1-day"), {"interval": 1, "repo_format": "1"}
+            t("title-ttsystem-errors-1-day"), {"interval": 1, "repo_format": "1"}
         ),
     }
 
