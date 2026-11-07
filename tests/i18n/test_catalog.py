@@ -53,7 +53,9 @@ def test_catalog_keys_are_sorted_alphabetically(language: Language) -> None:
     path = I18N_PATH / f"{language.value}.yml"
     with path.open(encoding="utf-8") as fp:
         catalog = yaml.safe_load(fp)
-    source_keys = [line.partition(":")[0] for line in path.read_text().splitlines() if line]
+    source_keys = [
+        line.partition(":")[0] for line in path.read_text(encoding="utf-8").splitlines() if line
+    ]
 
     assert source_keys == sorted(source_keys), f"Keys in {path} must be sorted alphabetically"
     assert len(source_keys) == len(catalog), f"Keys in {path} must be unique"

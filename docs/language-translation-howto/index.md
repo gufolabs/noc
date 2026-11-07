@@ -37,15 +37,19 @@ Use a key prefix that describes the text's purpose and context:
 
 Card templates use the same function without an import:
 
+{% raw %}
 ```jinja
 <b>{{ t("label-name") }}</b>
 ```
+{% endraw %}
 
 Pass values as named arguments. Use ICU plural patterns when a message changes with a count; do not build a sentence by joining a translation and a number.
 
+{% raw %}
 ```yaml
 msg-item-count: "{count, plural, one {# item} other {# items}}"
 ```
+{% endraw %}
 
 ```python
 t("msg-item-count", count=item_count)

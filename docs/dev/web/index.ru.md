@@ -141,7 +141,7 @@ class AdministrativeDomainApplication(ExtModelApplication):
     """
 
     title = t("app-title-administrativedomain")
-    menu = [_("Setup"), _("Administrative Domains")]
+    menu = [t("app-group-setup"), t("nav-administrativedomain")]
     model = AdministrativeDomain
     query_fields = ["name__icontains", "description__icontains"]
     lookup_default = [{"has_children": False, "id": "Leave unchanged", "label": "Leave unchanged"}]
@@ -189,27 +189,25 @@ class AdministrativeDomainApplication(ExtModelApplication):
 
 ```python
 from noc.services.web.base.simplereport import SimpleReport, PredefinedReport, TableColumn
-from noc.core.translation import ugettext as _
+from noc.core.i18n import t
 
 
 class ReportFilterApplication(SimpleReport):
-    title = _("Managed Object Profile Check Summary")
-    predefined_reports = {
-        "default": PredefinedReport(_("Managed Object Profile Check Summary"), {})
-    }
+    title = t("app-title-reportsummary")
+    predefined_reports = {"default": PredefinedReport(t("app-title-reportsummary"), {})}
 
     def get_data(self, request, report_type=None, **kwargs):
 
         ...
 
-        data = [("1.2.2.2.2.2", _("Is Managed, objects not processed yet"), 0, "")]
-        # columns = ["ID", "Value", "Percent", TableColumn(_("Detail"), format="url")]
+        data = [("1.2.2.2.2.2", t("msg-is-managed-object-type-defined"), 0, "")]
+        # columns = ["ID", "Value", "Percent", TableColumn(t("header-detail"), format="url")]
         columns = [
-            _("PP"),
-            _("Status"),
-            _("Quantity"),
-            _("Percent"),
-            TableColumn(_("Detail"), format="url"),
+            t("header-pp"),
+            t("header-status"),
+            t("header-quantity"),
+            t("header-percentage"),
+            TableColumn(t("header-detail"), format="url"),
         ]
 
         return self.from_dataset(title=self.title, columns=columns, data=data)

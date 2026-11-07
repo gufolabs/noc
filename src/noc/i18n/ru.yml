@@ -230,7 +230,6 @@ app-title-vrf: VRF
 app-title-vrfgroup: Группы VRF
 app-title-workflow: Редактор процессов
 choice-1-day: 1 день
-choice-1-day-2: "1 день"
 choice-1-month: 1 месяц
 choice-1-week: 1 неделя
 choice-by-administrative-domain: По З.О.
@@ -502,9 +501,6 @@ help-go-to-object: "Соседнее устройство"
 help-load-chart: "График загр."
 help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "IP-адрес сервера имён. Сервер должен позволять передачу зоны хостам NOC"
 help-use-name-network-ex-10-0-0-0-8-or-mac: "Задайте Имя, сеть (н-р 10.0.0.0/8) или MAC адрес"
-label-1-minute: "1 минута"
-label-about-1-month: "примерно 1 месяц"
-label-about-1-year: "примерно 1 год"
 label-address-family: Семейство адресов
 label-administrative-domain: Зона ответственности
 label-alarms: "Аварии"
@@ -557,7 +553,6 @@ label-model: "Модель"
 label-n-a: "Н/Д"
 label-name: Имя адреса
 label-neighbors: "Соседи"
-label-never: "никогда"
 label-object-metrics: "Метрики"
 label-object-name: "Имя"
 label-out: "Исх."
