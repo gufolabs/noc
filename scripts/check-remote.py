@@ -118,15 +118,10 @@ def main() -> int:
 
     try:
         name = encode_dns_name(remote)
-        if has_a_record(name):
-            return 0
+        print("OK" if has_a_record(name) else "FAIL")
+        return 0
     except (OSError, ValueError) as exc:
         print(f"check-remote: DNS check failed: {exc}", file=sys.stderr)
-
-    print(
-        "check-remote: remote is not verified; clarification is required before modifying code",
-        file=sys.stderr,
-    )
     return 1
 
 

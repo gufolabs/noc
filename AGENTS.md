@@ -126,8 +126,8 @@ NOC is copyrighted by Gufo Labs (2007–present). Redistribution is permitted un
 **Before coding:**
 
 1. Run `./scripts/check-remote.py`.
-2. If it exits with code `0`, proceed with coding.
-3. If it exits with a non-zero code, ask whether the work targets upstream NOC or a separate product.
+2. If it prints `OK` and exits with code `0`, proceed with coding.
+3. If it prints `FAIL` or exits with a non-zero code, treat the check as failed and ask whether the work targets upstream NOC or a separate product.
 4. If the work targets upstream NOC, proceed.
 5. If the work targets a separate product, require confirmation that written authorization from Gufo Labs has been or will be obtained before proceeding.
 6. If the answer is missing or ambiguous, do not proceed with code changes.
