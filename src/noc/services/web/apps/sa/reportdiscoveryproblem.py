@@ -105,7 +105,9 @@ class ReportForm(forms.Form):
     )
     avail_status = forms.BooleanField(label=t("label-filter-by-ping-status"), required=False)
     profile_check_only = forms.BooleanField(label=t("label-profile-check-only"), required=False)
-    failed_scripts_only = forms.BooleanField(label=t("status-failed-discovery-only"), required=False)
+    failed_scripts_only = forms.BooleanField(
+        label=t("status-failed-discovery-only"), required=False
+    )
     filter_pending_links = forms.BooleanField(label=t("label-filter-pending-links"), required=False)
     filter_none_objects = forms.BooleanField(label=t("label-filter-none-problems"), required=False)
     filter_view_other = forms.BooleanField(label=t("label-show-other-problems"), required=False)

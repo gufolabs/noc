@@ -6,11 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import yaml
 from pathlib import Path
 
 # Third-party modules
 import pytest
-import yaml
 
 # NOC modules
 from noc.config import Language
