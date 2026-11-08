@@ -20,7 +20,7 @@ import pymongo
 from bson import ObjectId
 
 # NOC modules
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_text
 from noc.core.mongo.connection import get_db
 
 from .revision import Revision
@@ -68,7 +68,7 @@ class GridVCS:
         """
         delta = bsdiff4.diff(src, dst)
         if len(delta) >= len(dst):
-            return self.T_FILE, smart_bytes(dst)
+            return self.T_FILE, dst.encode()
         return self.T_BSDIFF4, delta
 
     @classmethod
@@ -182,7 +182,7 @@ class GridVCS:
         # Save new version
         ts = ts or dt.datetime.now()
         self.fs.put(
-            self.compress(smart_bytes(data), self.DEFAULT_COMPRESS),
+            self.compress(data.encode(), self.DEFAULT_COMPRESS),
             object=object,
             ts=ts,
             ft=self.T_FILE,

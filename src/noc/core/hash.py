@@ -14,8 +14,6 @@ from bson import ObjectId
 from siphash24 import siphash24
 
 # NOC modules
-from noc.core.comp import smart_text
-
 SIPHASH_SEED = b"\x00" * 16
 hash_fmt = struct.Struct("!q")
 
@@ -32,7 +30,7 @@ def hash_str(value: str | ObjectId | int) -> bytes:
     Returns:
         Raw hash digest as bytes.
     """
-    return siphash24(smart_text(value).encode(), key=SIPHASH_SEED).digest()
+    return siphash24(str(value).encode(), key=SIPHASH_SEED).digest()
 
 
 def hash_int(value: str | ObjectId | int) -> int:

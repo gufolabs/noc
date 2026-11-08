@@ -16,7 +16,6 @@ from starlette.responses import JSONResponse
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes
 from noc.core.service.deps.service import get_service
 
 from ..auth import authenticate, get_jwt_token, get_user_from_jwt, register_last_login
@@ -96,7 +95,7 @@ async def token(
                 },
                 status_code=HTTPStatus.BAD_REQUEST,
             )
-        auth_data = codecs.decode(smart_bytes(data), "base64").decode()
+        auth_data = codecs.decode(data.encode(), "base64").decode()
         if ":" not in auth_data:
             return JSONResponse(
                 content={

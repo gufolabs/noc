@@ -16,7 +16,6 @@ import orjson
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes
 from noc.core.msgstream.message import Message
 
 # import time
@@ -56,7 +55,7 @@ class LoginService(BaseService):
             "ts": ts.isoformat(),
             "expired": exp.isoformat(),
         }
-        self.publish(smart_bytes(orjson.dumps(msg)), "revokedtokens", 0)
+        self.publish(orjson.dumps(msg), "revokedtokens", 0)
         while token not in self.revoked_tokens:
             async with self.revoked_cond:
                 await self.revoked_cond.wait()

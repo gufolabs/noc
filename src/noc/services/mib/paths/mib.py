@@ -18,7 +18,6 @@ from fastapi import APIRouter
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text
 from noc.core.error import ERR_MIB_MISSED, ERR_MIB_NOT_FOUND, ERR_MIB_TOOL_MISSED
 from noc.core.fileutils import safe_rewrite, temporary_file
 from noc.core.service.jsonrpcapi import JSONRPCAPI, api
@@ -101,38 +100,38 @@ class MIBAPI(JSONRPCAPI):
             for line in f:
                 match = self.rx_module_not_found.search(line.strip())
                 if match:
-                    self.logger.error("Required MIB missed: %s", smart_text(match.group(1)))
+                    self.logger.error("Required MIB missed: %s", match.group(1))
                     return {
                         "status": False,
-                        "msg": f"Required MIB missed: {smart_text(match.group(1))}",
+                        "msg": f"Required MIB missed: {match.group(1)}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_macro_not_imported.search(line.strip())
                 if match:
                     self.logger.error(
                         "Macro '%s' (%s) has not been imported",
-                        smart_text(match.group(1)),
-                        smart_text(match.group(2)),
+                        match.group(1),
+                        match.group(2),
                     )
                     # return {
                     #     "status": False,
                     #     "msg": "Macro '%s' (%s) has not been imported" % (
-                    #         smart_text(match.group(1)), smart_text(match.group(2))),
+                    #         match.group(1), match.group(2)),
                     #     "code": ERR_MIB_MISSED,
                     # }
                 match = self.rx_illegal_subtype.search(line.strip())
                 if match:
                     return {
                         "status": False,
-                        "msg": f"Illegal subtype: {smart_text(match.group(1))}",
+                        "msg": f"Illegal subtype: {match.group(1)}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_object_identifier_unknown.search(line.strip())
                 if match:
-                    self.logger.warning(f"Object Identifier unknown: {smart_text(match.group(1))}")
+                    self.logger.warning(f"Object Identifier unknown: {match.group(1)}")
                     # return {
                     #     "status": False,
-                    #     "msg": "Object Identifier unknown: %s" % smart_text(match.group(1)),
+                    #     "msg": "Object Identifier unknown: %s" % match.group(1),
                     #     "code": ERR_MIB_MISSED,
                     # }
             self.logger.debug("Convert MIB to python module and load")
@@ -143,7 +142,7 @@ class MIBAPI(JSONRPCAPI):
                     env=self.SMI_ENV,
                 )
                 with open(py_path) as f:
-                    p_data = smart_text(f.read(), encoding="ascii", errors="ignore").encode()
+                    p_data = f.read().encode()
                 with open(py_path, "wb") as f:
                     f.write(p_data)
                 m = SourceFileLoader("mib", py_path).load_module()
