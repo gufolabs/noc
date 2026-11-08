@@ -26,18 +26,18 @@ Ext.define("NOC.vc.vlanprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 100,
           renderer: NOC.render.Lookup("workflow"),
         },
         {
-          text: __("Provisioning"),
+          text: t("header-provisioning"),
           dataIndex: "enable_provisioning",
           width: 50,
           renderer: NOC.render.Bool,
@@ -48,43 +48,43 @@ Ext.define("NOC.vc.vlanprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
           name: "enable_provisioning",
           xtype: "checkbox",
-          boxLabel: __("Enable Provisioning"),
+          boxLabel: t("label-enable-provisioning"),
         },
         {
           name: "role",
           xtype: "main.ref.vlanrole.LookupField",
-          fieldLabel: __("Role"),
+          fieldLabel: t("header-role"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -93,20 +93,20 @@ Ext.define("NOC.vc.vlanprofile.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -115,7 +115,7 @@ Ext.define("NOC.vc.vlanprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": "vc.VLANProfile",

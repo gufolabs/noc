@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.commutation.CommutationPanel");
 
 Ext.define("NOC.inv.inv.plugins.commutation.CommutationPanel", {
   extend: "NOC.inv.inv.plugins.VizSchemePluginAbstract",
-  title: __("Commutation"),
+  title: t("app-title-commutation"),
   itemId: "commutationPanel",
   scrollable: false,
   viewModel: {
@@ -18,24 +18,24 @@ Ext.define("NOC.inv.inv.plugins.commutation.CommutationPanel", {
   },
   gridColumns: [
     {
-      text: __("Local Object"),
+      text: t("header-local-object"),
       dataIndex: "local_object",
       renderer: NOC.render.Lookup("local_object"),
       flex: 1,
     },
     {
-      text: __("Local Name"),
+      text: t("header-local-name"),
       dataIndex: "local_name",
       width: 100,
     },
     {
-      text: __("Remote Object"),
+      text: t("header-remote-object-e48a25"),
       dataIndex: "remote_object",
       flex: 1,
       renderer: NOC.render.Lookup("remote_object"),
     },
     {
-      text: __("Remote Name"),
+      text: t("header-remote-name"),
       dataIndex: "remote_name",
       width: 100,
     },

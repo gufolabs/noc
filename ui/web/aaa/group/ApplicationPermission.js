@@ -44,12 +44,12 @@ Ext.define("NOC.aaa.group.ApplicationPermission", {
   tools: [
     {
       type: "plus",
-      tooltip: __("Set all permissions"),
+      tooltip: t("help-set-all-permissions"),
       callback: "setAllPermission",
     },
     {
       type: "refresh",
-      tooltip: __("Reset title permissions"),
+      tooltip: t("help-reset-title-permissions"),
       callback: "resetPermission",
     },
     {
@@ -86,7 +86,7 @@ Ext.define("NOC.aaa.group.ApplicationPermission", {
       });
     });
     this.setData(data);
-    NOC.msg.complete(__("Permissions were reset"));
+    NOC.msg.complete(t("msg-permissions-were-reset"));
   },
   setAllPermission: function(){
     var data = this.getData();
@@ -96,7 +96,7 @@ Ext.define("NOC.aaa.group.ApplicationPermission", {
       });
     });
     this.setData(data);
-    NOC.msg.complete(__("Permissions were set"));
+    NOC.msg.complete(t("msg-permissions-were-set"));
   },
   togglePanel: function(panel){
     var tool = panel.query("[itemId=expandTool]")[0];

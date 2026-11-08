@@ -43,7 +43,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "vrf",
           xtype: "ip.vrf.LookupField",
-          fieldLabel: __("VRF"),
+          fieldLabel: t("header-vrf"),
           allowBlank: false,
           uiStyle: "large",
           readOnly: true,
@@ -51,7 +51,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "address",
           xtype: "textfield",
-          fieldLabel: __("Address"),
+          fieldLabel: t("app-title-address"),
           allowBlank: false,
           uiStyle: "large",
           bind: {
@@ -61,14 +61,14 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "fqdn",
           xtype: "textfield",
-          fieldLabel: __("FQDN"),
+          fieldLabel: t("label-fqdn"),
           allowBlank: true,
           uiStyle: "large",
           regex: /(?=^.{1,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)/,
@@ -76,32 +76,32 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "mac",
           xtype: "textfield",
-          fieldLabel: __("MAC"),
+          fieldLabel: t("header-mac"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "profile",
           xtype: "ip.addressprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "afi",
           xtype: "displayfield",
-          fieldLabel: __("Address Family"),
+          fieldLabel: t("label-address-family"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["ip.Address"],
@@ -110,14 +110,14 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "tt",
           xtype: "numberfield",
-          fieldLabel: __("TT"),
+          fieldLabel: t("label-tt"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
           bind: {
             disabled: "{isNew}",
@@ -127,20 +127,20 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
           name: "allocated_till",
           xtype: "datefield",
           startDay: 1,
-          fieldLabel: __("Allocated till"),
+          fieldLabel: t("label-allocated-till"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -149,20 +149,20 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
             {
               name: "remote_system__label",
               xtype: "displayfield",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "displayfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -171,7 +171,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Discovery"),
+          title: t("header-discovery"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -180,19 +180,19 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
             {
               name: "first_discovered",
               xtype: "displayfield",
-              fieldLabel: __("Discovered"),
+              fieldLabel: t("label-discovered"),
               allowBlank: true,
             },
             {
               name: "last_seen",
               xtype: "displayfield",
-              fieldLabel: __("Last Seen"),
+              fieldLabel: t("header-last-seen-20c226"),
               allowBlank: true,
             },
             {
               name: "expired",
               xtype: "displayfield",
-              fieldLabel: __("Expired"),
+              fieldLabel: t("header-expired"),
               allowBlank: true,
             },
           ],
@@ -200,7 +200,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -209,13 +209,13 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
             {
               name: "managed_object",
               xtype: "sa.managedobject.LookupField",
-              fieldLabel: __("Managed Object"),
+              fieldLabel: t("header-managed-object-62561c"),
               allowBlank: true,
             },
             {
               name: "subinterface",
               xtype: "textfield",
-              fieldLabel: __("Interface"),
+              fieldLabel: t("header-interface"),
               allowBlank: true,
             },
           ],
@@ -223,30 +223,30 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         {
           name: "source",
           xtype: "displayfield",
-          fieldLabel: __("Source"),
+          fieldLabel: t("header-source"),
           allowBlank: true,
         },
         // {
         //     name: "direct_permissions",
         //     xtype: "gridfield",
-        //     fieldLabel: __("Permissions"),
+        //     fieldLabel: t("Permissions"),
         //     columns: [
         //         {
-        //             text: __("User"),
+        //             text: t("User"),
         //             dataIndex: "user",
         //             editor: "main.user.LookupField",
         //             renderer: NOC.render.Lookup("user"),
         //             width: 100
         //         },
         //         {
-        //             text: __("Group"),
+        //             text: t("Group"),
         //             dataIndex: "group",
         //             editor: "main.group.LookupField",
         //             renderer: NOC.render.Lookup("group"),
         //             width: 150
         //         },
         //         {
-        //             text: __("Permission"),
+        //             text: t("Permission"),
         //             dataIndex: "permission",
         //             editor: {
         //                 xtype: "combobox",
@@ -280,7 +280,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
   //
   save: function(data){
     var me = this;
-    me.mask(__("Saving ..."));
+    me.mask(t("msg-saving-3"));
     NOC.api.requestLegacy({
       url: me.restUrl + (me.currentAddressId ? me.currentAddressId + "/" : ""),
       method: me.currentAddressId ? "PUT" : "POST",
@@ -288,7 +288,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
       jsonData: data,
       success: function(){
         me.unmask();
-        NOC.msg.complete(__("Saved"));
+        NOC.msg.complete(t("msg-saved-2"));
         me.close();
       },
       failure: function(response){
@@ -328,11 +328,11 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         var data = Ext.decode(response.responseText);
         me.deleteButton.setDisabled(false);
         me.getViewModel().set("isNew", false);
-        me.setTitle(__("Change address"));
+        me.setTitle(t("msg-change-address"));
         me.setValues(data)
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     })
   },
@@ -363,11 +363,11 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
         }
         me.getViewModel().set("isNew", true);
         me.deleteButton.setDisabled(true);
-        me.setTitle(__("Create new address"));
+        me.setTitle(t("msg-create-new-address"));
         me.setValues(values)
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     })
   },
@@ -386,8 +386,8 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
     var me = this;
 
     Ext.Msg.show({
-      title: __("Delete address?"),
-      msg: __("Do you wish to delete address? This operation cannot be undone!"),
+      title: t("app-title-delete-address"),
+      msg: t("msg-do-you-wish-to-delete-address-this-operation-cannot-be-undone"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -406,11 +406,11 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
       method: "DELETE",
       scope: me,
       success: function(){
-        NOC.info(__("Deleted"));
+        NOC.info(t("msg-deleted-2"));
         me.onClose()
       },
       failure: function(response){
-        NOC.error(__("Failed to delete: ") + response.responseText)
+        NOC.error(t("msg-failed-to-delete-value0", {value0: response.responseText}))
       },
     })
   },

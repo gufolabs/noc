@@ -9,7 +9,7 @@ Ext.define("NOC.core.IntegrationField", {
   extend: "Ext.form.FieldSet",
   xtype: "noc.integrationfield",
   layout: "hbox",
-  title: __("Integration"),
+  title: t("app-title-integration"),
   defaults: {
     padding: 4,
     labelAlign: "left",
@@ -18,14 +18,14 @@ Ext.define("NOC.core.IntegrationField", {
     {
       name: "remote_system",
       xtype: "main.remotesystem.LookupField",
-      fieldLabel: __("Remote System"),
+      fieldLabel: t("app-title-remotesystem"),
       labelWidth: 150,
       allowBlank: true,
     },
     {
       name: "remote_id",
       xtype: "textfield",
-      fieldLabel: __("Remote ID"),
+      fieldLabel: t("label-remote-id"),
       labelWidth: 175,
       width: 330,
       allowBlank: true,
@@ -33,7 +33,7 @@ Ext.define("NOC.core.IntegrationField", {
     {
       name: "bi_id",
       xtype: "displayfield",
-      fieldLabel: __("BI ID"),
+      fieldLabel: t("label-bi-id"),
       labelWidth: 50,
       allowBlank: true,
       uiStyle: "medium",

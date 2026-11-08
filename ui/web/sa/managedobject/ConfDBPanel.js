@@ -21,7 +21,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
 
     me.currentObject = null;
     me.defaultRoot = {
-      text: __("."),
+      text: t("header-text"),
       expanded: true,
       children: [],
     };
@@ -34,7 +34,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
     });
     me.searchField = Ext.create({
       xtype: "textfield",
-      emptyText: __("Search ..."),
+      emptyText: t("label-search"),
       flex: 2,
       enableKeyEvents: true,
       anchor: "100%",
@@ -67,13 +67,13 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
     });
     // Buttons
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
     });
     me.queryButton = Ext.create("Ext.button.Button", {
-      text: __("Query"),
+      text: t("label-query"),
       glyph: NOC.glyph.search_plus,
       enableToggle: true,
       scope: me,
@@ -81,26 +81,26 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
     });
     me.cleanupButton = Ext.create({
       xtype: "checkbox",
-      boxLabel: __("Cleanup"),
+      boxLabel: t("label-cleanup"),
       scope: me,
       checked: true,
       handler: me.onRefresh,
     });
     me.runButton = Ext.create("Ext.button.Button", {
-      text: __("Run"),
+      text: t("btn-run"),
       glyph: NOC.glyph.play,
       disabled: true,
       scope: me,
       handler: me.runQuery,
     });
     me.closeQueryButton = Ext.create("Ext.button.Button", {
-      tooltip: __("Close Query"),
+      tooltip: t("help-close-query"),
       glyph: NOC.glyph.times,
       scope: me,
       handler: me.onCloseQuery,
     });
     me.helpButton = Ext.create("Ext.button.Button", {
-      tooltip: __("Help"),
+      tooltip: t("app-title-help"),
       glyph: NOC.glyph.question,
       scope: me,
       handler: me.onHelp,
@@ -160,7 +160,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
               me.queryField.setValue(data.source);
             },
             failure: function(){
-              NOC.error(__("Failed to load data"));
+              NOC.error(t("msg-failed-to-load-data"));
             },
           })
         },
@@ -252,7 +252,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
         me.confDBTree.unmask()
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
         me.confDBPTree.unmask()
       },
     });
@@ -307,7 +307,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
       Ext.resumeLayouts(true);
     } catch(e){
       console.error(e);
-      NOC.error(__("Invalid regular expression"));
+      NOC.error(t("msg-invalid-regular-expression"));
     }
   },
   //
@@ -350,7 +350,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
   //
   runQuery: function(){
     var me = this, query = {dump: true};
-    me.mask(__("Querying ..."));
+    me.mask(t("msg-querying"));
     query["cleanup"] = me.cleanupButton.value;
     query["query"] = Ext.String.trim(
       me.queryField.getValue(),
@@ -378,7 +378,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Query failure"))
+        NOC.error(t("msg-query-failure"))
       },
       callback: function(){
         me.unmask();
@@ -388,7 +388,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
   //
   setMatched: function(count){
     var me = this;
-    me.matchField.setValue(__("Matched") + ":&nbsp;" + count);
+    me.matchField.setValue(t("msg-matched-nbsp-value0", {value0: count}));
   },
   //
   createResultPanel: function(data){
@@ -419,16 +419,16 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
           fields: keys,
           data: data,
         },
-        emptyText: __("No data found"),
+        emptyText: t("label-no-data-found"),
         tbar: [
           {
             xtype: "displayfield",
-            value: __("Result"),
+            value: t("header-result"),
           },
           "->",
           {
             xtype: "displayfield",
-            value: __("Total") + ":&nbsp;" + data.length,
+            value: t("msg-total-nbsp-value0", {value0: data.length}),
           }],
       });
     }

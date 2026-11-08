@@ -31,7 +31,7 @@ Ext.define("NOC.cm.confdbquery.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 350,
         },
@@ -41,7 +41,7 @@ Ext.define("NOC.cm.confdbquery.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           labelAlign: "top",
           allowBlank: false,
           uiStyle: "large",
@@ -49,32 +49,32 @@ Ext.define("NOC.cm.confdbquery.Application", {
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           labelAlign: "top",
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           labelAlign: "top",
           allowBlank: true,
         },
         {
           name: "params",
           xtype: "gridfield",
-          fieldLabel: __("Parameters"),
+          fieldLabel: t("label-parameters"),
           labelAlign: "top",
           columns: [
             {
               dataIndex: "name",
-              text: __("Name"),
+              text: t("header-name"),
               editor: "textfield",
               width: 150,
             },
             {
               dataIndex: "type",
-              text: __("Type"),
+              text: t("header-type"),
               width: 70,
               editor: {
                 xtype: "combobox",
@@ -88,13 +88,13 @@ Ext.define("NOC.cm.confdbquery.Application", {
             },
             {
               dataIndex: "default",
-              text: __("Default"),
+              text: t("header-default"),
               editor: "textfield",
               width: 200,
             },
             {
               dataIndex: "description",
-              text: __("Description"),
+              text: t("label-description"),
               editor: "textfield",
               flex: 1,
             },
@@ -102,7 +102,7 @@ Ext.define("NOC.cm.confdbquery.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Allow"),
+          title: t("app-title-allow"),
           layout: "hbox",
           defaults: {
             padding: 4,
@@ -111,22 +111,22 @@ Ext.define("NOC.cm.confdbquery.Application", {
             {
               name: "allow_object_filter",
               xtype: "checkbox",
-              boxLabel: __("Object Filter"),
+              boxLabel: t("label-object-filter"),
             },
             {
               name: "allow_object_validation",
               xtype: "checkbox",
-              boxLabel: __("Object Validation"),
+              boxLabel: t("label-object-validation"),
             },
             {
               name: "allow_interface_filter",
               xtype: "checkbox",
-              boxLabel: __("Interface Filter"),
+              boxLabel: t("label-interface-filter"),
             },
             {
               name: "allow_interface_validation",
               xtype: "checkbox",
-              boxLabel: __("Interface Validation"),
+              boxLabel: t("label-interface-validation"),
             },
           ],
         },
@@ -138,7 +138,7 @@ Ext.define("NOC.cm.confdbquery.Application", {
         {
           name: "source",
           xtype: "codeviewer",
-          fieldLabel: __("Source"),
+          fieldLabel: t("header-source"),
           labelAlign: "top",
           allowBlank: false,
           height: 400,
@@ -151,9 +151,9 @@ Ext.define("NOC.cm.confdbquery.Application", {
 
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

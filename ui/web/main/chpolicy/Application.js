@@ -18,36 +18,36 @@ Ext.define("NOC.main.chpolicy.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Table"),
+          text: t("header-table"),
           dataIndex: "table",
           width: 200,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("TTL"),
+          text: t("header-ttl"),
           dataIndex: "ttl",
           width: 100,
           renderer: function(v){
             if(v && v > 0){
               return v
             }
-            return __("Disabled")
+            return t("msg-disabled")
           },
         },
         {
-          text: __("Rows"),
+          text: t("header-rows"),
           dataIndex: "rows",
           width: 100,
           renderer: NOC.render.Size,
           align: "right",
         },
         {
-          text: __("Size"),
+          text: t("header-size"),
           dataIndex: "size",
           width: 100,
           renderer: NOC.render.Size,
@@ -58,19 +58,19 @@ Ext.define("NOC.main.chpolicy.Application", {
         {
           name: "table",
           xtype: "textfield",
-          fieldLabel: __("Table"),
+          fieldLabel: t("header-table"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "ttl",
           xtype: "numberfield",
-          fieldLabel: __("TTL (days)"),
+          fieldLabel: t("label-ttl-days"),
           allowBlank: false,
           minValue: 0,
           uiStyle: "small",
@@ -81,7 +81,7 @@ Ext.define("NOC.main.chpolicy.Application", {
   },
   filters: [
     {
-      title: __("By Active"),
+      title: t("app-title-by-active"),
       name: "is_active",
       ftype: "boolean",
     },

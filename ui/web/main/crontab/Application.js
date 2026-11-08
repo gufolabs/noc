@@ -19,23 +19,23 @@ Ext.define("NOC.main.crontab.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("CronTab"),
+          text: t("app-title-crontab"),
           dataIndex: "crontab_expression",
           width: 200,
         },
         {
-          text: __("Handler"),
+          text: t("app-title-handler"),
           dataIndex: "handler",
           flex: 1,
         },
@@ -45,25 +45,25 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "handler",
           xtype: "textfield",
-          fieldLabel: __("Handler"),
+          fieldLabel: t("app-title-handler"),
           allowBlank: false,
           uiStyle: "medium",
           // vtype: "handler"
@@ -71,7 +71,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "seconds_expr",
           xtype: "textfield",
-          fieldLabel: __("Seconds Expr."),
+          fieldLabel: t("label-seconds-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "0",
@@ -79,7 +79,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "minutes_expr",
           xtype: "textfield",
-          fieldLabel: __("Minutes Expr."),
+          fieldLabel: t("label-minutes-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -87,7 +87,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "hours_expr",
           xtype: "textfield",
-          fieldLabel: __("Hours Expr."),
+          fieldLabel: t("label-hours-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -95,7 +95,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "days_expr",
           xtype: "textfield",
-          fieldLabel: __("Days Expr."),
+          fieldLabel: t("label-days-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -103,7 +103,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "months_expr",
           xtype: "textfield",
-          fieldLabel: __("Months Expr."),
+          fieldLabel: t("label-months-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -111,7 +111,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "weekdays_expr",
           xtype: "textfield",
-          fieldLabel: __("Weekdays Expr."),
+          fieldLabel: t("label-weekdays-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -119,7 +119,7 @@ Ext.define("NOC.main.crontab.Application", {
         {
           name: "years_expr",
           xtype: "textfield",
-          fieldLabel: __("Years Expr."),
+          fieldLabel: t("label-years-expr"),
           allowBlank: true,
           uiStyle: "medium",
           emptyText: "*",
@@ -130,7 +130,7 @@ Ext.define("NOC.main.crontab.Application", {
   },
   filters: [
     {
-      title: __("By Active"),
+      title: t("app-title-by-active"),
       name: "is_active",
       ftype: "boolean",
     },

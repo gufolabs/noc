@@ -20,24 +20,24 @@ Ext.define("NOC.phone.numbercategory.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Order"),
+          text: t("header-order"),
           dataIndex: "order",
           width: 50,
           align: "right",
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -47,54 +47,54 @@ Ext.define("NOC.phone.numbercategory.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Is Active"),
+          boxLabel: t("header-is-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: false,
         },
         {
           name: "order",
           xtype: "numberfield",
-          fieldLabel: __("Order"),
+          fieldLabel: t("header-order"),
           uiStyle: "small",
         },
         {
           name: "rules",
           xtype: "gridfield",
-          fieldLabel: __("Rules"),
+          fieldLabel: t("header-rules"),
           columns: [
             {
-              text: __("DialPlan"),
+              text: t("app-title-dialplan"),
               dataIndex: "dialplan",
               width: 100,
               renderer: NOC.render.Lookup("dialplan"),
               editor: "phone.dialplan.LookupField",
             },
             {
-              text: __("Mask"),
+              text: t("header-mask"),
               dataIndex: "mask",
               width: 200,
               editor: "textfield",
             },
             {
-              text: __("Is Active"),
+              text: t("header-is-active"),
               dataIndex: "is_active",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
               editor: "textfield",

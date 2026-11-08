@@ -52,49 +52,49 @@ Ext.define("NOC.inv.map.MapPanel", {
     me.nodeMenu = Ext.create("Ext.menu.Menu", {
       items: [
         {
-          text: __("Topology Neighbors"),
+          text: t("label-topology-neighbors"),
           glyph: NOC.glyph.map_o,
           scope: me,
           handler: me.onNodeMenuViewMap,
           menuOn: ["managedobject"],
         },
         {
-          text: __("View Card"),
+          text: t("btn-view-card"),
           glyph: NOC.glyph.eye,
           scope: me,
           handler: me.onNodeMenuViewCard,
           menuOn: ["managedobject"],
         },
         {
-          text: __("Object Settings"),
+          text: t("btn-object-settings"),
           glyph: NOC.glyph.pencil,
           scope: me,
           handler: me.onNodeMenuEdit,
           menuOn: ["managedobject"],
         },
         {
-          text: __("Show dashboard"),
+          text: t("btn-show-dashboard-2"),
           glyph: NOC.glyph.line_chart,
           scope: me,
           handler: me.onNodeMenuDashboard,
           menuOn: ["managedobject", "link"],
         },
         {
-          text: __("To maintaince mode"),
+          text: t("btn-to-maintaince-mode"),
           glyph: NOC.glyph.plus,
           scope: me,
           handler: me.onNodeMenuMaintainceMode,
           menuOn: "managedobject",
         },
         {
-          text: __("Create new maintaince"),
+          text: t("help-create-new-maintaince"),
           glyph: NOC.glyph.wrench,
           scope: me,
           handler: me.onNodeMenuNewMaintaince,
           menuOn: "managedobject",
         },
         {
-          text: __("Add to group"),
+          text: t("btn-add-to-group"),
           glyph: NOC.glyph.shopping_basket,
           scope: me,
           handler: me.onNodeMenuAddToBasket,
@@ -105,7 +105,7 @@ Ext.define("NOC.inv.map.MapPanel", {
     me.segmentMenu = Ext.create("Ext.menu.Menu", {
       items: [
         {
-          text: __("Add all objects to group"),
+          text: t("btn-add-all-objects-to-group"),
           glyph: NOC.glyph.shopping_basket,
           scope: me,
           handler: me.onSegmentMenuAddToBasket,
@@ -150,7 +150,7 @@ Ext.define("NOC.inv.map.MapPanel", {
       url += "?force=spring";
     }
     me.segmentId = segmentId;
-    me.mask(__("Map loading ..."));
+    me.mask(t("msg-map-loading"));
     NOC.api.requestLegacy({
       url: url,
       method: "GET",
@@ -164,7 +164,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
       callback: function(){
         me.unmask();
@@ -326,12 +326,12 @@ Ext.define("NOC.inv.map.MapPanel", {
       jsonData: r,
       scope: me,
       success: function(){
-        NOC.info(__("Map has been saved"));
+        NOC.info(t("msg-map-has-been-saved"));
         me.isDirty = false;
         me.app.saveButton.setDisabled(true);
       },
       failure: function(){
-        NOC.error(__("Failed to save data"));
+        NOC.error(t("msg-failed-to-save-data"));
       },
     });
   },
@@ -350,7 +350,7 @@ Ext.define("NOC.inv.map.MapPanel", {
       this.generateIcon(true,
                         state ? "stop-circle-o" : "circle",
                         state ? "grey" : NOC.colors.yes,
-                        state ? __("suspend") : __("online"),
+                        state ? t("msg-suspend") : t("msg-online"),
       ));
   },
 
@@ -388,7 +388,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         this.renderer.applyObjectStatuses(data);
       },
       failure: function(){
-        NOC.error(__("Objects statuses failure!"));
+        NOC.error(t("msg-objects-statuses-failure"));
       },
     });
   },
@@ -404,7 +404,7 @@ Ext.define("NOC.inv.map.MapPanel", {
 
     me.updatedPollingTaskId = Ext.TaskManager.start({
       run: function(counter){
-        var text = (counter - 1) * interval + " " + __("sec");
+        var text = t("msg-value0-sec", {value0: (counter - 1) * interval});
         this.fireEvent("updateTick", text);
       },
       interval: interval * 1000,
@@ -496,7 +496,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         me.loadSegment(me.generator, me.segmentId, forceSpring);
       },
       failure: function(){
-        NOC.error(__("Failed to reset layout"));
+        NOC.error(t("msg-failed-to-reset-layout"));
       },
     });
   },
@@ -538,7 +538,7 @@ Ext.define("NOC.inv.map.MapPanel", {
     let object = Number(this.nodeMenuObject),
       object__label = this.renderer.topoMap.data.elements.getById(this.nodeMenuObject).data.name;
 
-    NOC.run("NOC.inv.map.Maintenance", __("Add To Maintenance"), {
+    NOC.run("NOC.inv.map.Maintenance", t("btn-add-to-maintenance"), {
       args: [
         {mode: "Object"},
         [
@@ -559,7 +559,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         object__label: item.get("object__label"),
       });
     });
-    NOC.run("NOC.inv.map.Maintenance", __("Add To Maintenance"), {
+    NOC.run("NOC.inv.map.Maintenance", t("btn-add-to-maintenance"), {
       args: [{mode: "Object"}, elements],
     });
   },
@@ -567,7 +567,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   newMaintaince: function(objects){
     var args = {
       direct_objects: objects,
-      subject: __("created from map at ") + Ext.Date.format(new Date(), "d.m.Y H:i P"),
+      subject: t("msg-created-from-map-at-value0", {value0: Ext.Date.format(new Date(), "d.m.Y H:i P")}),
       contacts: NOC.email ? NOC.email : NOC.username,
       start_date: Ext.Date.format(new Date(), "d.m.Y"),
       start_time: Ext.Date.format(new Date(), "H:i"),
@@ -644,7 +644,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         store.add(object);
       },
       failure: function(){
-        NOC.msg.failed(__("Failed to get object data"));
+        NOC.msg.failed(t("msg-failed-to-get-object-data"));
       },
     });
   },
@@ -679,7 +679,7 @@ Ext.define("NOC.inv.map.MapPanel", {
         me.renderer.setStpRoots(data.roots);
       },
       failure: function(){
-        NOC.msg.failed(__("Failed to get STP status"));
+        NOC.msg.failed(t("msg-failed-to-get-stp-status"));
       },
     });
   },

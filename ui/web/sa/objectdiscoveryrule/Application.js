@@ -38,40 +38,40 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
           align: "left",
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 50,
           align: "left",
         },
         {
-          text: __("Pref."),
+          text: t("header-pref-2"),
           // tooltip: "Preference", - broken in ExtJS 5.1
           dataIndex: "preference",
           width: 50,
           align: "right",
         },
         {
-          text: __("Default Action"),
+          text: t("header-default-action"),
           dataIndex: "default_action",
           width: 100,
           align: "left",
         },
         {
-          text: __("IP Scan Discovery"),
+          text: t("header-ip-scan-discovery"),
           dataIndex: "enable_ip_scan_discovery",
           renderer: NOC.render.Bool,
           width: 100,
@@ -83,38 +83,38 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
           defaultValue: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "large",
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
           uiStyle: "large",
-          fieldLabel: __("WorkFlow"),
+          fieldLabel: t("label-workflow"),
           allowBlank: true,
         },
         {
           name: "preference",
           xtype: "numberfield",
-          fieldLabel: __("Preference"),
+          fieldLabel: t("label-preference"),
           allowBlank: true,
           uiStyle: "small",
           defaultValue: 70,
@@ -122,16 +122,16 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "network_ranges",
           xtype: "gridfield",
-          fieldLabel: __("Network Ranges"),
+          fieldLabel: t("label-network-ranges"),
           columns: [
             {
-              text: __("Network"),
+              text: t("header-network"),
               dataIndex: "network",
               editor: "textfield",
               width: 250,
             },
             {
-              text: __("Pool"),
+              text: t("label-pool"),
               dataIndex: "pool",
               width: 200,
               editor: {
@@ -140,7 +140,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
               renderer: NOC.render.Lookup("pool"),
             },
             {
-              text: __("Exclude"),
+              text: t("label-exclude"),
               dataIndex: "exclude",
               editor: "checkbox",
               renderer: NOC.render.Bool,
@@ -151,25 +151,25 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "sources",
           xtype: "gridfield",
-          fieldLabel: __("Sources"),
+          fieldLabel: t("label-sources"),
           columns: [
             {
-              text: __("Source"),
+              text: t("header-source"),
               dataIndex: "source",
               width: 150,
               sortable: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["etl", __("ETL")],
-                  ["network-scan", __("Network Scan")],
-                  ["neighbor", __("Device Neighbors")],
-                  ["manual", __("Manual")],
+                  ["etl", t("btn-etl")],
+                  ["network-scan", t("msg-network-scan")],
+                  ["neighbor", t("msg-device-neighbors")],
+                  ["manual", t("app-title-manual")],
                 ],
               },
             },
             {
-              text: __("Remote System"),
+              text: t("app-title-remotesystem"),
               dataIndex: "remote_system",
               width: 200,
               sortable: false,
@@ -179,7 +179,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
               renderer: NOC.render.Lookup("remote_system"),
             },
             {
-              text: __("Update Last Seen"),
+              text: t("header-update-last-seen"),
               dataIndex: "update_last_seen",
               editor: "checkbox",
               renderer: NOC.render.Bool,
@@ -187,7 +187,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
               sortable: false,
             },
             {
-              text: __("Required"),
+              text: t("header-required"),
               dataIndex: "is_required",
               editor: "checkbox",
               renderer: NOC.render.Bool,
@@ -195,29 +195,29 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
               sortable: false,
             },
             {
-              text: __("Sync Policy"),
+              text: t("label-sync-policy"),
               dataIndex: "sync_policy",
               width: 150,
               sortable: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["A", __("All")],
-                  ["M", __("Mappings Only")],
+                  ["A", t("choice-all")],
+                  ["M", t("msg-mappings-only")],
                 ],
               },
             },
             {
-              text: __("Remove Policy"),
+              text: t("header-remove-policy"),
               dataIndex: "remove_policy",
               width: 150,
               sortable: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["D", __("Disable")],
-                  ["U", __("Unmanaged")],
-                  ["R", __("Remove")],
+                  ["D", t("status-disable")],
+                  ["U", t("msg-unmanaged")],
+                  ["R", t("btn-remove")],
                 ],
               },
             },
@@ -226,7 +226,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "update_interval",
           xtype: "numberfield",
-          fieldLabel: __("Check update interval (sec)"),
+          fieldLabel: t("label-check-update-interval-sec"),
           allowBlank: true,
           uiStyle: "medium",
           defaultValue: 0,
@@ -235,7 +235,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "expired_ttl",
           xtype: "numberfield",
-          fieldLabel: __("Expired TTL (sec)"),
+          fieldLabel: t("label-expired-ttl-sec"),
           allowBlank: true,
           uiStyle: "medium",
           defaultValue: 0,
@@ -244,12 +244,12 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "default_action",
           xtype: "combobox",
-          fieldLabel: __("Default Action"),
+          fieldLabel: t("header-default-action"),
           store: [
-            ["new", __("As New")],
-            ["ignore", __("Send Ignore")],
-            ["skip", __("Skip Rule")],
-            ["approve", __("Send Approve")],
+            ["new", t("msg-as-new")],
+            ["ignore", t("msg-send-ignore")],
+            ["skip", t("msg-skip-rule")],
+            ["approve", t("msg-send-approve")],
           ],
           value: "new",
           uiStyle: "medium",
@@ -257,23 +257,23 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           name: "sync_approved",
           xtype: "checkbox",
-          boxLabel: __("Sync Approved Records"),
+          boxLabel: t("label-sync-approved-records"),
         },
         {
           name: "default_template",
           xtype: "main.modeltemplate.LookupField",
           uiStyle: "large",
-          fieldLabel: __("Default Template"),
+          fieldLabel: t("label-default-template"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("IP Scan Discovery"),
+          title: t("header-ip-scan-discovery"),
           items: [
             {
               name: "enable_ip_scan_discovery",
               xtype: "checkbox",
-              boxLabel: __("Enable IP Scan Discovery"),
+              boxLabel: t("label-enable-ip-scan-discovery"),
             },
             {
               xtype: "container",
@@ -285,7 +285,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
                 {
                   name: "ip_scan_discovery_interval",
                   xtype: "numberfield",
-                  fieldLabel: __("Interval, sec"),
+                  fieldLabel: t("label-interval-sec"),
                   allowBlank: true,
                   uiStyle: "small",
                   minValue: 0,
@@ -305,13 +305,13 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
             },
             {
               name: "checks",
-              fieldLabel: __("Checks"),
+              fieldLabel: t("header-checks"),
               xtype: "gridfield",
               allowBlank: true,
               width: 550,
               columns: [
                 {
-                  text: __("Check"),
+                  text: t("header-check"),
                   dataIndex: "check",
                   width: 100,
                   editor: "main.ref.check.LookupField",
@@ -319,13 +319,13 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
                   renderer: NOC.render.Lookup("check"),
                 },
                 {
-                  text: __("Argument"),
+                  text: t("btn-argument"),
                   dataIndex: "arg0",
                   editor: "textfield",
                   width: 150,
                 },
                 {
-                  text: __("Port"),
+                  text: t("header-port"),
                   dataIndex: "port",
                   width: 50,
                   editor: {
@@ -343,12 +343,12 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
           rows: 6,
           labelAlign: "top",
           uiStyle: "large",
-          fieldLabel: __("Match Conditions"),
+          fieldLabel: t("label-match-conditions"),
           items: [
             {
               name: "match_labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -363,7 +363,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
               xtype: "core.tagfield",
               lazyLoadTree: true,
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "match_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -371,10 +371,10 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
             {
               name: "match_checks",
               xtype: "gridfield",
-              fieldLabel: __("Check Match"),
+              fieldLabel: t("label-check-match"),
               columns: [
                 {
-                  text: __("Check"),
+                  text: t("header-check"),
                   dataIndex: "check",
                   width: 200,
                   editor: "main.ref.check.LookupField",
@@ -382,7 +382,7 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
                   renderer: NOC.render.Lookup("check"),
                 },
                 {
-                  text: __("Port"),
+                  text: t("header-port"),
                   dataIndex: "port",
                   editor: {
                     xtype: "numberfield",
@@ -390,21 +390,21 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
                   },
                 },
                 {
-                  text: __("Match State"),
+                  text: t("btn-match-state"),
                   dataIndex: "match_state",
                   width: 100,
                   editor: {
                     xtype: "combobox",
                     store: [
-                      ["ok", __("OK")],
-                      ["fail", __("Fail")],
-                      ["any", __("Any")],
+                      ["ok", t("status-ok")],
+                      ["fail", t("status-fail")],
+                      ["any", t("msg-any")],
                     ],
                   },
                   renderer: NOC.render.Choices({
-                    "ok": __("OK"),
-                    "fail": __("Fail"),
-                    "any": __("Any"),
+                    "ok": t("status-ok"),
+                    "fail": t("status-fail"),
+                    "any": t("msg-any"),
                   }),
                 },
               ],
@@ -412,36 +412,36 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
             {
               name: "match_data",
               xtype: "gridfield",
-              fieldLabel: __("Data Match"),
+              fieldLabel: t("label-data-match"),
               columns: [
                 {
-                  text: __("Field"),
+                  text: t("btn-field"),
                   dataIndex: "field",
                   editor: "textfield",
                   width: 250,
                 },
                 {
-                  text: __("Op"),
+                  text: t("btn-op"),
                   dataIndex: "op",
                   width: 100,
                   editor: {
                     xtype: "combobox",
                     store: [
-                      ["regex", __("Regex")],
-                      ["contains", __("Contains")],
-                      ["eq", __("Equal")],
-                      ["gte", __("Greater Equal")],
+                      ["regex", t("msg-regex")],
+                      ["contains", t("msg-contains")],
+                      ["eq", t("msg-equal")],
+                      ["gte", t("msg-greater-equal")],
                     ],
                   },
                   renderer: NOC.render.Choices({
-                    "regex": __("Regex"),
-                    "contains": __("Contains"),
-                    "eq": __("Equal"),
-                    "gte": __("Greater Equal"),
+                    "regex": t("msg-regex"),
+                    "contains": t("msg-contains"),
+                    "eq": t("msg-equal"),
+                    "gte": t("msg-greater-equal"),
                   }),
                 },
                 {
-                  text: __("Value"),
+                  text: t("header-value"),
                   dataIndex: "value",
                   editor: "textfield",
                   flex: 1,
@@ -451,12 +451,12 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
             {
               name: "action",
               xtype: "combobox",
-              fieldLabel: __("Default Action"),
+              fieldLabel: t("header-default-action"),
               store: [
-                ["new", __("As New")],
-                ["ignore", __("Send Ignore")],
-                ["skip", __("Skip Rule")],
-                ["approve", __("Send Approve")],
+                ["new", t("msg-as-new")],
+                ["ignore", t("msg-send-ignore")],
+                ["skip", t("msg-skip-rule")],
+                ["approve", t("msg-send-approve")],
               ],
               value: "new",
               uiStyle: "medium",
@@ -466,9 +466,9 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

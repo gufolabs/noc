@@ -26,24 +26,24 @@ Ext.define("NOC.crm.subscriber.Application", {
     Ext.apply(this, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 200,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Tags"),
+          text: t("header-tags"),
           dataIndex: "tags",
           width: 150,
           render: NOC.render.Tags,
@@ -54,54 +54,54 @@ Ext.define("NOC.crm.subscriber.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "profile",
           xtype: "crm.subscriberprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "expand",
         },
         {
           name: "address",
           xtype: "textfield",
-          fieldLabel: __("Address"),
+          fieldLabel: t("app-title-address"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "tech_contact_person",
           xtype: "textfield",
-          fieldLabel: __("Contact"),
+          fieldLabel: t("label-contact"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "tech_contact_phone",
           xtype: "textfield",
-          fieldLabel: __("Phone"),
+          fieldLabel: t("app-group-phone"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
@@ -110,7 +110,7 @@ Ext.define("NOC.crm.subscriber.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["crm.Subscriber"],

@@ -24,6 +24,9 @@ importers:
       dompurify:
         specifier: ^3.3.3
         version: 3.4.0
+      intl-messageformat:
+        specifier: ^12.1.4
+        version: 12.1.4
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -105,10 +108,13 @@ importers:
         version: 8.58.2(eslint@10.2.0)(typescript@5.9.3)
       vite:
         specifier: 8.0.12
-        version: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)
+        version: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1)
       vitest:
         specifier: ^4.1.3
-        version: 4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7))
+        version: 4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1))
+      yaml:
+        specifier: ^2.4.2
+        version: 2.9.1
 
   packages/topo-map:
     dependencies:
@@ -130,10 +136,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^8.0.12
-        version: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)
+        version: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1)
       vitest:
         specifier: ^4.1.4
-        version: 4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7))
+        version: 4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1))
 
 packages:
 
@@ -347,6 +353,15 @@ packages:
   '@eslint/plugin-kit@0.7.1':
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@formatjs/fast-memoize@3.1.7':
+    resolution: {integrity: sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==}
+
+  '@formatjs/icu-messageformat-parser@3.5.22':
+    resolution: {integrity: sha512-YuwN+dDKgssfuYwtOyGQD0CSn7K46g9cv1Fp0VgKpjZDDFvv8b8crzP990IcJhRPWHhKzCGsbUSJVIguyyFA5A==}
+
+  '@formatjs/icu-skeleton-parser@2.1.12':
+    resolution: {integrity: sha512-ca7tZMLpfHX3sUD7hP6gE/qr6Iq89EDd3ZLeRhbsB7r0UD55DGJq+tmFLzrGrnx5StahUevQmQQVtbDRHsfDHA==}
 
   '@gufo-labs/font@0.0.10':
     resolution: {integrity: sha512-LUXr1SJUweK3VC+IzwUK4V/3nBEQcbj3PgyhLsuCFo3NXaox+O43iwV3tdQ1uJCjsbH5+MtP2Q+MS5VYBphOng==}
@@ -1092,6 +1107,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  intl-messageformat@12.1.4:
+    resolution: {integrity: sha512-JUkmv3cAEyijN3oiRiV3ctel7yVMuUCgfh7Pu8pj1/z6L1DSEPRyhuMaLjVw3pGmGJ5RDH54WVFxfMHZWTwyHw==}
+
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
@@ -1790,6 +1808,11 @@ packages:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
 
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -1940,6 +1963,14 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@formatjs/fast-memoize@3.1.7': {}
+
+  '@formatjs/icu-messageformat-parser@3.5.22':
+    dependencies:
+      '@formatjs/icu-skeleton-parser': 2.1.12
+
+  '@formatjs/icu-skeleton-parser@2.1.12': {}
 
   '@gufo-labs/font@0.0.10': {}
 
@@ -2195,13 +2226,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.4(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7))':
+  '@vitest/mocker@4.1.4(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1))':
     dependencies:
       '@vitest/spy': 4.1.4
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)
+      vite: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1)
 
   '@vitest/pretty-format@4.1.4':
     dependencies:
@@ -2736,6 +2767,11 @@ snapshots:
   imurmurhash@0.1.4: {}
 
   inherits@2.0.4: {}
+
+  intl-messageformat@12.1.4:
+    dependencies:
+      '@formatjs/fast-memoize': 3.1.7
+      '@formatjs/icu-messageformat-parser': 3.5.22
 
   is-binary-path@2.1.0:
     dependencies:
@@ -3386,7 +3422,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7):
+  vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -3397,11 +3433,12 @@ snapshots:
       '@types/node': 24.12.2
       esbuild: 0.27.7
       fsevents: 2.3.3
+      yaml: 2.9.1
 
-  vitest@4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)):
+  vitest@4.1.4(@types/node@24.12.2)(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.4
-      '@vitest/mocker': 4.1.4(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7))
+      '@vitest/mocker': 4.1.4(vite@8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1))
       '@vitest/pretty-format': 4.1.4
       '@vitest/runner': 4.1.4
       '@vitest/snapshot': 4.1.4
@@ -3418,7 +3455,7 @@ snapshots:
       tinyexec: 1.1.1
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)
+      vite: 8.0.12(@types/node@24.12.2)(esbuild@0.27.7)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.12.2
@@ -3447,6 +3484,8 @@ snapshots:
   xmlhttprequest-ssl@2.1.2: {}
 
   y18n@5.0.8: {}
+
+  yaml@2.9.1: {}
 
   yargs-parser@21.1.1: {}
 

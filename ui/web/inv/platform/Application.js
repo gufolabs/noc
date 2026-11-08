@@ -21,7 +21,7 @@ Ext.define("NOC.inv.platform.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -38,55 +38,55 @@ Ext.define("NOC.inv.platform.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Vendor"),
+          text: t("header-vendor"),
           dataIndex: "vendor",
           width: 150,
           renderer: NOC.render.Lookup("vendor"),
         },
         {
-          text: __("Platform"),
+          text: t("app-title-platform"),
           dataIndex: "full_name",
           width: 200,
         },
         {
-          text: __("Aliases"),
+          text: t("header-aliases"),
           dataIndex: "aliases",
           flex: 1,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 30,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("sysObjectID"),
+          text: t("header-sysobjectid"),
           dataIndex: "snmp_sysobjectid",
           width: 200,
         },
         {
-          text: __("Start of Sale"),
+          text: t("header-start-of-sale"),
           dataIndex: "start_of_sale",
           width: 150,
         },
         {
-          text: __("End of Sale"),
+          text: t("header-end-of-sale"),
           dataIndex: "end_of_sale",
           width: 150,
         },
         {
-          text: __("End of Support"),
+          text: t("header-end-of-support"),
           dataIndex: "end_of_support",
           width: 150,
         },
         {
-          text: __("End of Extended Support"),
+          text: t("header-end-of-extended-support"),
           dataIndex: "end_of_xsupport",
           width: 150,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           width: 100,
           renderer: NOC.render.LabelField,
@@ -97,43 +97,43 @@ Ext.define("NOC.inv.platform.Application", {
         {
           name: "vendor",
           xtype: "inv.vendor.LookupField",
-          fieldLabel: __("Platform"),
+          fieldLabel: t("app-title-platform"),
           allowBlank: false,
         },
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "aliases",
           xtype: "tagsfield",
-          fieldLabel: __("Aliases"),
+          fieldLabel: t("header-aliases"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Support"),
+          title: t("app-group-support"),
           items: [
             {
               name: "start_of_sale",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("Start of Sale"),
+              fieldLabel: t("header-start-of-sale"),
               allowBlank: true,
               uiStyle: "medium",
               format: "Y-m-d",
@@ -142,7 +142,7 @@ Ext.define("NOC.inv.platform.Application", {
               name: "end_of_sale",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("End of Sale"),
+              fieldLabel: t("header-end-of-sale"),
               allowBlank: true,
               uiStyle: "medium",
               format: "Y-m-d",
@@ -151,7 +151,7 @@ Ext.define("NOC.inv.platform.Application", {
               name: "end_of_support",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("End of Support"),
+              fieldLabel: t("header-end-of-support"),
               allowBlank: true,
               uiStyle: "medium",
               format: "Y-m-d",
@@ -160,7 +160,7 @@ Ext.define("NOC.inv.platform.Application", {
               name: "end_of_xsupport",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("End of Extended Support"),
+              fieldLabel: t("header-end-of-extended-support"),
               allowBlank: true,
               uiStyle: "medium",
               format: "Y-m-d",
@@ -169,7 +169,7 @@ Ext.define("NOC.inv.platform.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("SNMP OID"),
+          title: t("header-snmp-oid"),
           items: [
             {
               name: "snmp_sysobjectid",
@@ -184,7 +184,7 @@ Ext.define("NOC.inv.platform.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_platform": true,
@@ -195,9 +195,9 @@ Ext.define("NOC.inv.platform.Application", {
       formToolbar: [
         me.cardButton,
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -206,7 +206,7 @@ Ext.define("NOC.inv.platform.Application", {
 
       filters: [
         {
-          title: __("By Vendor"),
+          title: t("app-title-by-vendor"),
           name: "vendor",
           ftype: "lookup",
           lookup: "inv.vendor",

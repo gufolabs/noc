@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.opm.OPMRightPanel");
 
 Ext.define("NOC.inv.inv.plugins.opm.OPMRightPanel", {
   extend: "Ext.panel.Panel",
-  title: __("Settings"),
+  title: t("help-settings"),
   xtype: "opm.rightPanel",  
   border: true,
   hideMode: "offsets",

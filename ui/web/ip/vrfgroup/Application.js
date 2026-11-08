@@ -16,12 +16,12 @@ Ext.define("NOC.ip.vrfgroup.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 150,
     },
     {
-      text: __("Constraint"),
+      text: t("header-constraint"),
       dataIndex: "address_constraint",
       width: 100,
       renderer: function(value){
@@ -32,18 +32,18 @@ Ext.define("NOC.ip.vrfgroup.Application", {
       },
     },
     {
-      text: __("VRFs"),
+      text: t("header-vrfs"),
       dataIndex: "vrf_count",
       sortable: false,
       width: 50,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
     {
-      text: __("Tags"),
+      text: t("header-tags"),
       dataIndex: "tags",
       renderer: "NOC.render.Tags",
     },
@@ -52,14 +52,14 @@ Ext.define("NOC.ip.vrfgroup.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("VRF Group"),
+      fieldLabel: t("label-vrf-group"),
       allowBlank: false,
       uiStyle: "medium",
     },
     {
       name: "address_constraint",
       xtype: "combobox",
-      fieldLabel: __("Address Constraint"),
+      fieldLabel: t("label-address-constraint"),
       allowBlank: false,
       queryMode: "local",
       displayField: "label",
@@ -75,13 +75,13 @@ Ext.define("NOC.ip.vrfgroup.Application", {
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
     {
       name: "labels",
       xtype: "labelfield",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       allowBlank: true,
       query: {
         "enable_vrfgroup": true,

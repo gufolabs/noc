@@ -19,7 +19,7 @@ Ext.define("NOC.sa.managedobject.LinksPanel", {
     me.currentLink = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -33,38 +33,38 @@ Ext.define("NOC.sa.managedobject.LinksPanel", {
       autoScroll: true,
       columns: [
         {
-          text: __("Local Interface"),
+          text: t("header-local-interface"),
           dataIndex: "local_interface",
           renderer: NOC.render.Lookup("local_interface"),
         },
         {
-          text: __("Local Description"),
+          text: t("header-local-description-2"),
           dataIndex: "local_description",
         },
         {
-          text: __("Neighbor"),
+          text: t("header-neighbor"),
           dataIndex: "remote_object",
           renderer: NOC.render.LookupTooltip("remote_object", "{remote_platform}"),
         },
         {
-          text: __("Remote Interface"),
+          text: t("header-remote-interface"),
           dataIndex: "remote_interface",
           renderer: NOC.render.Lookup("remote_interface"),
         },
         {
-          text: __("Remote Description"),
+          text: t("header-remote-description-987a22"),
           dataIndex: "remote_description",
         },
         {
-          text: __("Method"),
+          text: t("header-method"),
           dataIndex: "discovery_method",
         },
         {
-          text: __("First Discovered"),
+          text: t("header-first-discovered"),
           dataIndex: "first_discovered",
         },
         {
-          text: __("Last seen"),
+          text: t("header-last-seen"),
           dataIndex: "last_seen",
         },
       ],
@@ -105,7 +105,7 @@ Ext.define("NOC.sa.managedobject.LinksPanel", {
         me.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

@@ -10,17 +10,17 @@ Ext.define("NOC.sa.managedobject.scripts.ShowPortChannel", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interface",
       width: 100,
     },
     {
-      text: __("Members"),
+      text: t("header-members"),
       dataIndex: "members",
       width: 200,
     },
     {
-      text: __("Type"),
+      text: t("header-type"),
       dataIndex: "type",
       flex: 1,
     },

@@ -19,12 +19,12 @@ Ext.define("NOC.inv.ifdescpatterns.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -34,23 +34,23 @@ Ext.define("NOC.inv.ifdescpatterns.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "resolve_remote_port_by_object",
           xtype: "checkbox",
-          fieldLabel: __("Use object as Port Token"),
+          fieldLabel: t("label-use-object-as-port-token"),
           allowBlank: true,
           renderer: NOC.render.Bool,
-          tooltip: __("If checked discovery try find port by object_id (Hostname, Address, Name) contains in description"),
+          tooltip: t("help-if-checked-discovery-try-find-port-by-object-id-hostname-address"),
           listeners: {
             render: me.addTooltip,
           },
@@ -58,17 +58,17 @@ Ext.define("NOC.inv.ifdescpatterns.Application", {
         {
           name: "patterns",
           xtype: "gridfield",
-          fieldLabel: __("Patterns"),
+          fieldLabel: t("label-patterns"),
           columns: [
             {
-              text: __("Active"),
+              text: t("header-active"),
               dataIndex: "is_active",
               editor: "checkbox",
               width: 50,
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Pattern"),
+              text: t("header-pattern"),
               dataIndex: "pattern",
               editor: "textfield",
               flex: 1,

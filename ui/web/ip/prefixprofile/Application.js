@@ -28,32 +28,32 @@ Ext.define("NOC.ip.prefixprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 100,
           renderer: NOC.render.Lookup("workflow"),
         },
         {
-          text: __("Prefix"),
+          text: t("header-prefix"),
           dataIndex: "prefix_discovery_policy",
           width: 100,
           renderer: NOC.render.Choices({
-            E: __("Enabled"),
-            D: __("Disabled"),
+            E: t("header-enabled"),
+            D: t("msg-disabled"),
           }),
         },
         {
-          text: __("Address"),
+          text: t("app-title-address"),
           dataIndex: "address_discovery_policy",
           width: 100,
           renderer: NOC.render.Choices({
-            E: __("Enabled"),
-            D: __("Disabled"),
+            E: t("header-enabled"),
+            D: t("msg-disabled"),
           }),
         },
       ],
@@ -62,20 +62,20 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "prefix_discovery_policy",
           xtype: "combobox",
-          fieldLabel: __("Prefix Discovery"),
+          fieldLabel: t("label-prefix-discovery"),
           store: [
             ["E", "Enable"],
             ["D", "Disable"],
@@ -86,7 +86,7 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           name: "address_discovery_policy",
           xtype: "combobox",
-          fieldLabel: __("Address Discovery"),
+          fieldLabel: t("label-address-discovery"),
           store: [
             ["E", "Enable"],
             ["D", "Disable"],
@@ -97,54 +97,53 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           name: "enable_ip_ping_discovery",
           xtype: "checkbox",
-          boxLabel: __("IP Discovery (Ping)"),
+          boxLabel: t("label-ip-discovery-ping"),
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
           name: "name_template",
           xtype: "main.template.LookupField",
-          fieldLabel: __("Template"),
+          fieldLabel: t("header-template"),
           allowBlank: true,
         },
         {
           name: "default_address_profile",
           xtype: "ip.addressprofile.LookupField",
-          fieldLabel: __("Default Address Profile"),
+          fieldLabel: t("label-default-address-profile"),
           allowBlank: true,
         },
         {
           name: "seen_propagation_policy",
           xtype: "combobox",
-          fieldLabel: __("Seen propagation"),
+          fieldLabel: t("label-seen-propagation"),
           allowBlank: false,
           store: [
-            ["P", __("Propagate")],
-            ["E", __("Enable")],
-            ["D", __("Disable")],
+            ["P", t("msg-propagate")],
+            ["E", t("label-enable")],
+            ["D", t("status-disable")],
           ],
           uiStyle: "medium",
         },
         {
           name: "prefix_special_address_policy",
           xtype: "combobox",
-          tooltip: __("Include special addresses (Network & Broadcast for IPv4) <br/>" +
-                                    "in prefix range"),
-          fieldLabel: __("Special addresses"),
+          tooltip: t("help-include-special-addresses-network-broadcast-for-ipv4-br-in-prefi"),
+          fieldLabel: t("label-special-addresses"),
           allowBlank: false,
           store: [
-            ["I", __("Include")],
-            ["X", __("Exclude")],
+            ["I", t("label-include")],
+            ["X", t("label-exclude")],
           ],
           uiStyle: "medium",
           listeners: {
@@ -154,10 +153,10 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           name: "pools",
           xtype: "gridfield",
-          fieldLabel: __("Address Pools"),
+          fieldLabel: t("label-address-pools"),
           columns: [
             {
-              text: __("Pool"),
+              text: t("label-pool"),
               dataIndex: "pool",
               width: 200,
               editor: {
@@ -167,7 +166,7 @@ Ext.define("NOC.ip.prefixprofile.Application", {
             },
             {
               dataIndex: "description",
-              text: __("Description"),
+              text: t("label-description"),
               editor: "textfield",
               width: 150,
             },
@@ -176,7 +175,7 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -185,20 +184,20 @@ Ext.define("NOC.ip.prefixprofile.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -207,7 +206,7 @@ Ext.define("NOC.ip.prefixprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_prefixprofile": true,

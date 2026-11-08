@@ -19,7 +19,7 @@ Ext.define("NOC.inv.inv.NavSearch", {
   enableKeyEvents: true,
   queryMode: "remote",
   queryParam: "q",
-  emptyText: __("search..."),
+  emptyText: t("msg-search"),
   forceSelection: false,
   store: {
     fields: ["path"],
@@ -39,8 +39,8 @@ Ext.define("NOC.inv.inv.NavSearch", {
     },
   },
   listConfig: {
-    loadingText: __("Search..."),
-    emptyText: "<div class='noc-inv-nav-empty'>" + __("Nothing was found") + "</div>",
+    loadingText: t("btn-search"),
+    emptyText: "<div class='noc-inv-nav-empty'>" + t("label-nothing-was-found") + "</div>",
     minWidth: 800,
     padding: 4,
     tpl: [

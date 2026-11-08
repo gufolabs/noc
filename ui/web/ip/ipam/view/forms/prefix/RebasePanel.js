@@ -22,13 +22,13 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.RebasePanel", {
         {
           name: "to_vrf",
           xtype: "ip.vrf.LookupField",
-          fieldLabel: __("To VRF"),
+          fieldLabel: t("label-to-vrf"),
           allowBlank: false,
         },
         {
           name: "to_prefix",
           xtype: "textfield",
-          fieldLabel: __("To Prefix"),
+          fieldLabel: t("label-to-prefix"),
           allowBlank: false,
           uiStyle: "medium",
         },
@@ -41,7 +41,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.RebasePanel", {
     var me = this;
     me.currentPrefixId = record.id;
     me.setValues(record);
-    me.setTitle(__("Rebase prefix ") + record.get("to_prefix"))
+    me.setTitle(t("msg-rebase-prefix-value0", {value0: record.get("to_prefix")}))
   },
 
   onClose: function(){
@@ -51,7 +51,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.RebasePanel", {
 
   save: function(data){
     var me = this;
-    me.mask(__("Rebasing ..."));
+    me.mask(t("msg-rebasing"));
     NOC.api.requestLegacy({
       url: me.prefixUrl + me.currentPrefixId + "/rebase/",
       method: "POST",
@@ -62,7 +62,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.RebasePanel", {
       },
       success: function(){
         me.unmask();
-        NOC.msg.complete(__("Rebased"));
+        NOC.msg.complete(t("msg-rebased"));
         me.fireEvent("ipIPAMRebaseCloseForm");
       },
       failure: function(response){

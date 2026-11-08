@@ -12,14 +12,14 @@ Ext.define("NOC.support.account.AccountPanel", {
     "NOC.main.ref.country.LookupField",
   ],
   app: null,
-  title: __("Account"),
+  title: t("app-title-account"),
   layout: "fit",
   autoScroll: true,
   closable: false,
 
   minPasswordLength: 8,
-  notRegisteredtext: __("Account is not registred. Please register account to get access to additional support and services"),
-  registeredtext: __("Account is registred. You have access to additional support and serivces"),
+  notRegisteredtext: t("msg-account-is-not-registred-please-register-account-to-get-access-t"),
+  registeredtext: t("msg-account-is-registred-you-have-access-to-additional-support-and-s"),
   industries: [
     ["ISP", "Internet Service Provider"],
     ["DC", "Hosting & Datacenter Service Provider"],
@@ -36,21 +36,21 @@ Ext.define("NOC.support.account.AccountPanel", {
     var me = this;
 
     me.attachButton = Ext.create("Ext.button.Button", {
-      text: __("Attach existing account"),
+      text: t("btn-attach-existing-account"),
       glyph: NOC.glyph.plus_circle,
       scope: me,
       handler: me.onAttachAccount,
     });
 
     me.changePasswordButton = Ext.create("Ext.button.Button", {
-      text: __("Change password"),
+      text: t("btn-change-password-2"),
       glyph: NOC.glyph.lock,
       scope: me,
       handler: me.onChangePassword,
     });
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       handler: me.onSave,
@@ -72,38 +72,38 @@ Ext.define("NOC.support.account.AccountPanel", {
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           itemId: "uuid",
         },
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Login"),
+          fieldLabel: t("header-login"),
           allowBlank: false,
           regex: /^[a-z0-9.\-_]+$/i,
         },
         {
           xtype: "textfield",
           name: "org",
-          fieldLabel: __("Company"),
+          fieldLabel: t("label-company"),
           allowBlank: true,
         },
         {
           xtype: "textfield",
           name: "email",
-          fieldLabel: __("Mail"),
+          fieldLabel: t("label-mail"),
           allowBlank: false,
           vtype: "email",
         },
         {
           xtype: "main.ref.country.LookupField",
           name: "country",
-          fieldLabel: __("Country"),
+          fieldLabel: t("label-country"),
         },
         {
           xtype: "combobox",
           name: "language",
-          fieldLabel: __("Preferred Language"),
+          fieldLabel: t("label-preferred-language"),
           allowBlank: false,
           store: [
             ["EN", "English"],
@@ -113,7 +113,7 @@ Ext.define("NOC.support.account.AccountPanel", {
         },
         {
           xtype: "fieldset",
-          title: __("Industries"),
+          title: t("app-title-industries"),
           layout: {
             type: "table",
             columns: 2,
@@ -123,7 +123,7 @@ Ext.define("NOC.support.account.AccountPanel", {
         {
           xtype: "textfield",
           name: "password",
-          fieldLabel: __("Password"),
+          fieldLabel: t("label-password"),
           itemId: "password",
           inputType: "password",
           allowBlank: false,
@@ -132,7 +132,7 @@ Ext.define("NOC.support.account.AccountPanel", {
         {
           xtype: "textfield",
           name: "password2",
-          fieldLabel: __("Retype password"),
+          fieldLabel: t("label-retype-password"),
           itemId: "password2",
           inputType: "password",
           vtype: "password",

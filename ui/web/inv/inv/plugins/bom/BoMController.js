@@ -24,7 +24,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMController", {
     var me = this,
       currentId = me.getViewModel().get("currentId"),
       maskComponent = me.getView().up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("reloading", ["bom"]);
+      messageId = maskComponent.show("reloading", {name: "bom"});
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/bom/",
       method: "GET",
@@ -34,7 +34,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMController", {
         view.preview(data, currentId);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
       callback: function(){
         maskComponent.hide(messageId);

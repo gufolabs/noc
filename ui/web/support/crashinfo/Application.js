@@ -34,7 +34,7 @@ Ext.define("NOC.support.crashinfo.Application", {
     me.tbField = null;
 
     me.buttonReport = Ext.create("Ext.button.Button", {
-      text: __("Report"),
+      text: t("msg-report"),
       glyph: NOC.glyph.share,
       disabled: true,
       scope: me,
@@ -44,23 +44,23 @@ Ext.define("NOC.support.crashinfo.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("UUID"),
+          text: t("label-uuid"),
           dataIndex: "uuid",
           width: 220,
         },
         {
-          text: __("Timestamp"),
+          text: t("header-timestamp"),
           dataIndex: "timestamp",
           width: 170,
         },
         {
-          text: __("Status"),
+          text: t("header-status"),
           dataIndex: "status",
           width: 50,
           renderer: NOC.render.Choices(me.statuses),
         },
         {
-          text: __("Priority"),
+          text: t("header-priority"),
           dataIndex: "priority",
           width: 70,
           renderer: NOC.render.Choices({
@@ -72,17 +72,17 @@ Ext.define("NOC.support.crashinfo.Application", {
           }),
         },
         {
-          text: __("Branch"),
+          text: t("header-branch"),
           dataIndex: "branch",
           width: 120, // @todo: bitbucket branch
         },
         {
-          text: __("Tip"),
+          text: t("header-tip"),
           dataIndex: "tip",
           width: 150, // @todo: bitbucket renderer
         },
         {
-          text: __("Process"),
+          text: t("header-process"),
           dataIndex: "process",
           flex: 1,
         },
@@ -98,12 +98,12 @@ Ext.define("NOC.support.crashinfo.Application", {
           items: [
             {
               xtype: "displayfield",
-              fieldLabel: __("UUID"),
+              fieldLabel: t("label-uuid"),
               name: "uuid",
             },
             {
               xtype: "displayfield",
-              fieldLabel: __("Timestamp"),
+              fieldLabel: t("header-timestamp"),
               name: "timestamp",
             },
           ],
@@ -118,13 +118,13 @@ Ext.define("NOC.support.crashinfo.Application", {
           items: [
             {
               xtype: "displayfield",
-              fieldLabel: __("Status"),
+              fieldLabel: t("header-status"),
               name: "status",
               renderer: NOC.render.Choices(me.statuses),
             },
             {
               xtype: "combobox",
-              fieldLabel: __("Priority"),
+              fieldLabel: t("header-priority"),
               name: "priority",
               store: [
                 ["I", "Info"],
@@ -147,24 +147,24 @@ Ext.define("NOC.support.crashinfo.Application", {
           items: [
             {
               xtype: "displayfield",
-              fieldLabel: __("Branch"),
+              fieldLabel: t("header-branch"),
               name: "branch",
             },
             {
               xtype: "displayfield",
-              fieldLabel: __("Changeset"),
+              fieldLabel: t("label-changeset"),
               name: "tip",
             },
           ],
         },
         {
           xtype: "displayfield",
-          fieldLabel: __("Process"),
+          fieldLabel: t("header-process"),
           name: "process",
         },
         {
           xtype: "textarea",
-          fieldLabel: __("Comment"),
+          fieldLabel: t("header-comment"),
           name: "comment",
         },
         {

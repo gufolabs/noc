@@ -63,13 +63,13 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
       success: function(response){
         var data = Ext.decode(response.responseText);
         if(data.status){
-          NOC.info(__("Escalated"));
+          NOC.info(t("msg-escalated"));
         } else{
-          NOC.error(__("Escalate failed : ") + (Object.hasOwn(data, "error") ? data.error : "unknowns error!"));
+          NOC.error(t("msg-escalate-failed-value0", {value0: Object.hasOwn(data, "error") ? data.error : "unknowns error!"}));
         }
       },
       failure: function(){
-        NOC.error(__("Escalate failed"));
+        NOC.error(t("msg-escalate-failed-2"));
       },
     });
   },
@@ -86,8 +86,8 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
   },
   onClear: function(){
     Ext.MessageBox.prompt(
-      __("Clear alarm?"),
-      __("Please confirm the alarm is closed and must be cleared?"),
+      t("btn-clear-alarm"),
+      t("msg-please-confirm-the-alarm-is-closed-and-must-be-cleared"),
       function(btn, text){
         if(btn === "ok"){
           NOC.api.requestLegacy({
@@ -98,10 +98,10 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
             },
             scope: this,
             success: function(){
-              NOC.info(__("Alarm cleared"))
+              NOC.info(t("msg-alarm-cleared"))
             },
             failure: function(){
-              NOC.error(__("Failed to clear alarm"));
+              NOC.error(t("msg-failed-to-clear-alarm"));
             },
           });
         }
@@ -117,7 +117,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
       scope: this,
       success: Ext.emptyFn,
       failure: function(){
-        NOC.error(__("Failed to set watcher"));
+        NOC.error(t("msg-failed-to-set-watcher"));
       },
     })
   },
@@ -136,8 +136,8 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
   },
   onSetRoot: function(){
     Ext.MessageBox.prompt(
-      __("Set root"),
-      __("Please enter root cause alarm id"),
+      t("msg-set-root"),
+      t("msg-please-enter-root-cause-alarm-id"),
       function(btn, text){
         if(btn === "ok"){
           // @todo: Check alarm id
@@ -152,7 +152,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
               this.onRefresh();
             },
             failure: function(){
-              NOC.error(__("Failed to set root cause"));
+              NOC.error(t("msg-failed-to-set-root-cause"));
             },
           });
         }
@@ -200,7 +200,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
         field.setValue("");
       },
       failure: function(){
-        NOC.error(__("Failed to post message"));
+        NOC.error(t("msg-failed-to-post-message"));
       },
     });
   },

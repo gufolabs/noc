@@ -37,18 +37,18 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 30,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 200,
         },
@@ -57,23 +57,23 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Display Settings"),
+          title: t("app-title-display-settings"),
           layout: "hbox",
           defaults: {
             padding: 4,
@@ -82,7 +82,7 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "display_order",
               xtype: "numberfield",
-              fieldLabel: __("Display Order"),
+              fieldLabel: t("label-display-order"),
               value: 800,
               minValue: 0,
               allowBlank: true,
@@ -90,8 +90,8 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "show_in_display",
               xtype: "checkbox",
-              boxLabel: __("Show in form"),
-              tooltip: __("Display check state on Object Form"),
+              boxLabel: t("label-show-in-form"),
+              tooltip: t("help-display-check-state-on-object-form"),
               allowBlank: true,
               listeners: {
                 render: me.addTooltip,
@@ -100,8 +100,8 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "hide_enable",
               xtype: "checkbox",
-              boxLabel: __("Hide enabled"),
-              tooltip: __("Hide from display"),
+              boxLabel: t("label-hide-enabled"),
+              tooltip: t("help-hide-from-display"),
               allowBlank: true,
               listeners: {
                 render: me.addTooltip,
@@ -112,12 +112,12 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         {
           name: "default_state",
           xtype: "combobox",
-          fieldLabel: __("Default State"),
-          tooltip: __("Default state when set Diagnostic"),
+          fieldLabel: t("label-default-state"),
+          tooltip: t("help-default-state-when-set-diagnostic"),
           store: [
-            ["unknown", __("Unknown")],
-            ["enabled", __("Enabled")],
-            ["failed", __("Failed")],
+            ["unknown", t("status-unknown")],
+            ["enabled", t("header-enabled")],
+            ["failed", t("msg-failed")],
           ],
           allowBlank: true,
           value: "unknown",
@@ -129,13 +129,11 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         {
           name: "state_policy",
           xtype: "combobox",
-          fieldLabel: __("State Policy"),
-          tooltip: __("Policy detect diagnostic Success or Failed state <br/>" +
-                                "ALL - ALL Checks and Depended Discovery must Success for Enable state<br/>" +
-                                "ANY - ANY Checks and Depended Discovery mush Success for Enable state"),
+          fieldLabel: t("label-state-policy"),
+          tooltip: t("help-policy-detect-diagnostic-success-or-failed-state-br-all-all-chec"),
           store: [
-            ["ALL", __("ALL")],
-            ["ANY", __("ANY")],
+            ["ALL", t("msg-all")],
+            ["ANY", t("msg-any-2")],
           ],
           allowBlank: true,
           value: "ANY",
@@ -146,13 +144,13 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         },
         {
           name: "checks",
-          fieldLabel: __("Checks"),
+          fieldLabel: t("header-checks"),
           xtype: "gridfield",
           allowBlank: true,
           width: 350,
           columns: [
             {
-              text: __("Check"),
+              text: t("header-check"),
               dataIndex: "check",
               width: 200,
               editor: "main.ref.check.LookupField",
@@ -164,18 +162,18 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
               editor: "stringlistfield",
               dataIndex: "ctx",
               width: 400,
-              text: __("Context"),
+              text: t("label-context"),
               sortable: false,
             },
             {
-              text: __("Address"),
+              text: t("app-title-address"),
               dataIndex: "address",
               editor: "textfield",
               width: 150,
               sortable: false,
             },
             {
-              text: __("Remote System"),
+              text: t("app-title-remotesystem"),
               dataIndex: "remote_system",
               width: 150,
               sortable: false,
@@ -189,8 +187,8 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         {
           xtype: "core.tagfield",
           url: "/sa/objectdiagnosticconfig/lookup/",
-          fieldLabel: __("Diagnostics"),
-          tooltip: __("Depended Diagnostic for calculate state"),
+          fieldLabel: t("label-diagnostics"),
+          tooltip: t("help-depended-diagnostic-for-calculate-state"),
           name: "diagnostics",
           listeners: {
             render: me.addTooltip,
@@ -198,7 +196,7 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Run Policy"),
+          title: t("app-title-run-policy"),
           layout: {
             type: "table",
             columns: 2,
@@ -210,19 +208,17 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "enable_box",
               xtype: "checkbox",
-              boxLabel: __("Enable Box"),
+              boxLabel: t("label-enable-box"),
               allowBlank: true,
             },
             {
               name: "run_policy",
               xtype: "combobox",
-              fieldLabel: __("Run Policy"),
-              tooltip: __("Condition running diagnostic <br/>" +
-                                "Always - Always run diagnostic on Discovery<br/>" +
-                                "Failed - Run only Diagnoscti has Unknown or Failed state"),
+              fieldLabel: t("app-title-run-policy"),
+              tooltip: t("help-condition-running-diagnostic-br-always-always-run-diagnostic-on-"),
               store: [
-                ["A", __("Always")],
-                ["F", __("Unknown or Failed")],
+                ["A", t("msg-always")],
+                ["F", t("msg-unknown-or-failed")],
               ],
               allowBlank: true,
               value: "F",
@@ -234,19 +230,17 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "enable_periodic",
               xtype: "checkbox",
-              boxLabel: __("Enable Periodic"),
+              boxLabel: t("label-enable-periodic"),
               allowBlank: true,
             },
             {
               name: "run_order",
               xtype: "combobox",
-              fieldLabel: __("Run Order"),
-              tooltip: __("Order run diagnostic in Discovery process. <br/>" +
-                                "On Start - Before Discovery checks run<br/>" +
-                                "On End - After Discovery checks run"),
+              fieldLabel: t("label-run-order"),
+              tooltip: t("help-order-run-diagnostic-in-discovery-process-br-on-start-before-dis"),
               store: [
-                ["S", __("On Start")],
-                ["E", __("On End")],
+                ["S", t("msg-on-start")],
+                ["E", t("msg-on-end")],
               ],
               allowBlank: true,
               value: "A",
@@ -259,13 +253,13 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Alarm"),
+          title: t("app-title-alarm"),
           items: [
             {
               name: "alarm_class",
               xtype: "fm.alarmclass.LookupField",
-              fieldLabel: __("Alarm Class"),
-              tooltip: __("If set - Raise Alarm when diagnostic to Failed state"),
+              fieldLabel: t("app-title-alarmclass"),
+              tooltip: t("help-if-set-raise-alarm-when-diagnostic-to-failed-state"),
               uiStyle: "large",
               allowBlank: true,
               listeners: {
@@ -275,8 +269,8 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "alarm_labels",
               xtype: "labelfield",
-              fieldLabel: __("Alarm Labels"),
-              tooltip: __("Add setting labels to Raised Alarm. Label must <b>enable_alarm</b> setting"),
+              fieldLabel: t("btn-alarm-labels"),
+              tooltip: t("help-add-setting-labels-to-raised-alarm-label-must-b-enable-alarm-b-s"),
               allowBlank: true,
               isTree: false,
               filterProtected: false,
@@ -294,19 +288,19 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
         {
           name: "save_history",
           xtype: "checkbox",
-          boxLabel: __("Save History"),
+          boxLabel: t("label-save-history"),
           allowBlank: true,
         },
         {
           name: "match",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           rows: 4,
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -320,7 +314,7 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "exclude_labels",
               xtype: "labelfield",
-              fieldLabel: __("Exclude Match Labels"),
+              fieldLabel: t("label-exclude-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -334,7 +328,7 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -342,7 +336,7 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
           ],
@@ -350,9 +344,9 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

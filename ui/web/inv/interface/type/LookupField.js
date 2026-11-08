@@ -14,10 +14,10 @@ Ext.define("NOC.inv.interface.type.LookupField", {
   displayField: "label",
   store: {
     data: [
-      {value: "physical", label: __("Physical")},
-      {value: "SVI", label: __("SVI")},
-      {value: "aggregated", label: __("Aggregated")},
-      {value: "loopback", label: __("Loopback")},
+      {value: "physical", label: t("msg-physical")},
+      {value: "SVI", label: t("msg-svi")},
+      {value: "aggregated", label: t("msg-aggregated")},
+      {value: "loopback", label: t("msg-loopback")},
     ],
   },
   triggers: {

@@ -10,12 +10,12 @@ Ext.define("NOC.sa.managedobject.scripts.ShowVLANs", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("VLAN"),
+      text: t("app-title-vlan"),
       dataIndex: "vlan_id",
       width: 50,
     },
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       flex: 1,
     },

@@ -22,7 +22,7 @@ Ext.define("NOC.peer.peer.Application", {
   search: true,
   columns: [
     {
-      text: __("S"),
+      text: t("header-s"),
       dataIndex: "oper_status",
       sortable: false,
       width: 30,
@@ -30,13 +30,13 @@ Ext.define("NOC.peer.peer.Application", {
         var color;
 
         metaData.tdAttr = "data-qtip='<table style=\"font-size: 11px;\">" +
-                            "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background: grey;\"></div></td><td>" + __("IDLE") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.emerald + ";\"></div></td><td>" + __("ESTABLISHED") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.amethyst + ";\"></div></td><td>" + __("OPENCONFIRM") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: orange;\"></div></td><td>" + __("OPENSENT") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.pumpkin + ";\"></div></td><td>" + __("CONNECT") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: turquoise;\"></div></td><td>" + __("ACTIVE") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: linear-gradient(to right, green 50%, brown 50%);\"></div></td><td>" + __("In maintenance") + "</td></tr>" +
+                            "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background: grey;\"></div></td><td>" + t("msg-idle") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.emerald + ";\"></div></td><td>" + t("msg-established") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.amethyst + ";\"></div></td><td>" + t("msg-openconfirm") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: orange;\"></div></td><td>" + t("msg-opensent") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: " + NOC.colors.pumpkin + ";\"></div></td><td>" + t("msg-connect") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: turquoise;\"></div></td><td>" + t("msg-active") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: linear-gradient(to right, green 50%, brown 50%);\"></div></td><td>" + t("msg-in-maintenance") + "</td></tr>" +
                 "</table>'";
         switch(value){
           case "1":
@@ -81,76 +81,76 @@ Ext.define("NOC.peer.peer.Application", {
       },
     },
     {
-      text: __("Peering Point"),
+      text: t("header-peering-point"),
       flex: 1,
       dataIndex: "peering_point",
       renderer: NOC.render.Lookup("peering_point"),
     },
     {
-      text: __("Peer Profile"),
+      text: t("app-title-peerprofile"),
       flex: 1,
       dataIndex: "profile",
       renderer: NOC.render.Lookup("profile"),
     },
     {
-      text: __("Project"),
+      text: t("label-project"),
       dataIndex: "project",
       renderer: NOC.render.Lookup("project"),
     },
     {
-      text: __("Local AS"),
+      text: t("header-local-as"),
       flex: 1,
       dataIndex: "local_asn",
       renderer: NOC.render.Lookup("local_asn"),
     },
     {
-      text: __("Remote AS"),
+      text: t("header-remote-as"),
       flex: 1,
       dataIndex: "remote_asn",
     },
     {
-      text: __("State"),
+      text: t("header-state"),
       dataIndex: "state",
       width: 150,
       renderer: NOC.render.Lookup("state"),
     },
     {
-      text: __("Import Filter"),
+      text: t("header-import-filter"),
       flex: 1,
       dataIndex: "import_filter",
     },
     {
-      text: __("Export Filter"),
+      text: t("header-export-filter"),
       flex: 1,
       dataIndex: "export_filter",
     },
     {
-      text: __("Local Address"),
+      text: t("header-local-address"),
       flex: 1,
       dataIndex: "local_ip",
     },
     {
-      text: __("Remote Address"),
+      text: t("header-remote-address"),
       flex: 1,
       dataIndex: "remote_ip",
     },
     {
-      text: __("TT"),
+      text: t("label-tt"),
       flex: 1,
       dataIndex: "tt",
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       flex: 1,
       dataIndex: "description",
     },
     {
-      text: __("Import Communities"),
+      text: t("header-import-communities"),
       flex: 1,
       dataIndex: "communities",
     },
     {
-      text: __("Labels"),
+      text: t("header-labels"),
       flex: 1,
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
@@ -172,35 +172,35 @@ Ext.define("NOC.peer.peer.Application", {
         {
           name: "peering_point",
           xtype: "peer.peeringpoint.LookupField",
-          fieldLabel: __("Peering Point"),
+          fieldLabel: t("header-peering-point"),
           width: 400,
           allowBlank: false,
         },
         {
           name: "profile",
           xtype: "peer.peerprofile.LookupField",
-          fieldLabel: __("Peer Profile"),
+          fieldLabel: t("app-title-peerprofile"),
           width: 400,
           allowBlank: false,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           width: 400,
           allowBlank: true,
         },
         {
           name: "local_asn",
           xtype: "peer.as.LookupField",
-          fieldLabel: __("Local AS"),
+          fieldLabel: t("header-local-as"),
           width: 400,
           allowBlank: false,
         },
         {
           name: "remote_asn",
           xtype: "numberfield",
-          fieldLabel: __("Remote AS"),
+          fieldLabel: t("header-remote-as"),
           hideTrigger: true,
           keyNavEnabled: false,
           mouseWheelEnabled: false,
@@ -210,7 +210,7 @@ Ext.define("NOC.peer.peer.Application", {
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
 
@@ -232,24 +232,24 @@ Ext.define("NOC.peer.peer.Application", {
           name: "local_ip",
           xtype: "textfield",
           allowBlank: false,
-          fieldLabel: __("Local IP"),
+          fieldLabel: t("label-local-ip"),
         },
         {
           name: "local_backup_ip",
           xtype: "textfield",
-          fieldLabel: __("Local Backup IP"),
+          fieldLabel: t("label-local-backup-ip"),
           allowBlank: true,
         },
         {
           name: "remote_ip",
           xtype: "textfield",
           allowBlank: false,
-          fieldLabel: __("Remote IP"),
+          fieldLabel: t("label-remote-ip"),
         },
         {
           name: "remote_backup_ip",
           xtype: "textfield",
-          fieldLabel: __("Remote Backup IP"),
+          fieldLabel: t("label-remote-backup-ip"),
           allowBlank: true,
         },
       ],
@@ -270,14 +270,14 @@ Ext.define("NOC.peer.peer.Application", {
           name: "description",
           xtype: "textfield",
           width: 400,
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "rpsl_remark",
           xtype: "textfield",
           width: 400,
-          fieldLabel: __("RPSL Remark"),
+          fieldLabel: t("label-rpsl-remark"),
           allowBlank: true,
         },
       ],
@@ -299,42 +299,42 @@ Ext.define("NOC.peer.peer.Application", {
           xtype: "textfield",
           width: 400,
           allowBlank: false,
-          fieldLabel: __("Import Filter"),
-          emptytext: __("ANY"),
+          fieldLabel: t("header-import-filter"),
+          emptytext: t("msg-any-2"),
         },
         {
           name: "export_filter",
           xtype: "textfield",
           width: 400,
           allowBlank: false,
-          fieldLabel: __("Export Filter"),
-          emptytext: __("ANY"),
+          fieldLabel: t("header-export-filter"),
+          emptytext: t("msg-any-2"),
         },
         {
           name: "import_filter_name",
           xtype: "textfield",
           width: 400,
-          fieldLabel: __("Import Filter Name"),
+          fieldLabel: t("label-import-filter-name"),
           allowBlank: true,
         },
         {
           name: "export_filter_name",
           xtype: "textfield",
           width: 400,
-          fieldLabel: __("Export Filter Name"),
+          fieldLabel: t("label-export-filter-name"),
           allowBlank: true,
         },
         {
           name: "max_prefixes",
           xtype: "numberfield",
           allowBlank: false,
-          fieldLabel: __("Max. Prefixes"),
+          fieldLabel: t("label-max-prefixes"),
         },
         {
           name: "communities",
           xtype: "textfield",
           width: 400,
-          fieldLabel: __("Import Communities"),
+          fieldLabel: t("header-import-communities"),
           allowBlank: true,
         },
       ],
@@ -354,19 +354,19 @@ Ext.define("NOC.peer.peer.Application", {
         {
           name: "local_pref",
           xtype: "numberfield",
-          fieldLabel: __("Local Pref"),
+          fieldLabel: t("label-local-pref"),
           allowBlank: true,
         },
         {
           name: "import_med",
           xtype: "numberfield",
-          fieldLabel: __("Import MED"),
+          fieldLabel: t("label-import-med"),
           allowBlank: true,
         },
         {
           name: "export_med",
           xtype: "numberfield",
-          fieldLabel: __("Export MED"),
+          fieldLabel: t("label-export-med"),
           allowBlank: true,
         },
       ],
@@ -386,13 +386,13 @@ Ext.define("NOC.peer.peer.Application", {
         {
           name: "tt",
           xtype: "numberfield",
-          fieldLabel: __("TT"),
+          fieldLabel: t("label-tt"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           width: 400,
           query: {
@@ -405,19 +405,19 @@ Ext.define("NOC.peer.peer.Application", {
   ],
   filters: [
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "peer.peerprofile",
     },
     {
-      title: __("By State"),
+      title: t("app-title-by-state"),
       name: "state",
       ftype: "lookup",
       lookup: "wf.state",
     },
     {
-      title: __("By Object"),
+      title: t("app-title-by-object"),
       name: "managed_object",
       ftype: "lookup",
       lookup: "sa.managedobject",

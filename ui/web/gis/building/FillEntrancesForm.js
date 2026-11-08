@@ -12,7 +12,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
   autoShow: true,
   width: 270,
   height: 260,
-  title: __("Fill Entrances"),
+  title: t("btn-fill-entrances"),
   app: null,
 
   initComponent: function(){
@@ -23,7 +23,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "first_entrance",
           xtype: "numberfield",
-          fieldLabel: __("First Entrance"),
+          fieldLabel: t("label-first-entrance"),
           minValue: 1,
           value: 1,
           allowBlank: false,
@@ -31,7 +31,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "first_home",
           xtype: "numberfield",
-          fieldLabel: __("First Home"),
+          fieldLabel: t("header-first-home"),
           minValue: 1,
           value: 1,
           allowBlank: false,
@@ -39,7 +39,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "n_entrances",
           xtype: "numberfield",
-          fieldLabel: __("Entrances"),
+          fieldLabel: t("label-entrances"),
           minValue: 1,
           value: 1,
           allowBlank: false,
@@ -51,7 +51,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "first_floor",
           xtype: "numberfield",
-          fieldLabel: __("First Floor"),
+          fieldLabel: t("header-first-floor"),
           minValue: 1,
           value: 1,
           allowBlank: false,
@@ -59,7 +59,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "last_floor",
           xtype: "numberfield",
-          fieldLabel: __("Last Floor"),
+          fieldLabel: t("header-last-floor"),
           minValue: 1,
           value: 1,
           allowBlank: false,
@@ -67,7 +67,7 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "homes_per_entrance",
           xtype: "numberfield",
-          fieldLabel: __("Homes per Entrance"),
+          fieldLabel: t("label-homes-per-entrance"),
           value: 1,
           minValue: 1,
           allowBlank: false,
@@ -79,13 +79,13 @@ Ext.define("NOC.gis.building.FillEntrancesForm", {
         {
           name: "new_homes",
           xtype: "displayfield",
-          fieldLabel: __("New Homes"),
+          fieldLabel: t("label-new-homes"),
           value: "1",
         },
       ],
       buttons: [
         {
-          text: __("Create"),
+          text: t("app-title-create"),
           glyph: NOC.glyph.plus,
           disabled: true,
           formBind: true,

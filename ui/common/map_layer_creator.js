@@ -45,7 +45,7 @@ class MapLayersCreator{
             }        
         };
 
-        var ___ = options.translator ? options.translator : function(s) { return s}
+        var translate = options.translator ? options.translator : function(s) { return s}
         var optionsLayersControl = options.layersControl ? options.layersControl : {}
         var optionsDefaultLayer  = options.default_layer ? options.default_layer : ""
         var yandex_supported     = options.yandex_supported ? options.yandex_supported : false
@@ -67,7 +67,7 @@ class MapLayersCreator{
                     {
                         
                     }
-                ), ___("OpenStreetMap")
+                ), translate("OpenStreetMap")
             ] : undefined),
 
             google_roadmap : (optionsAllowedLayers.enable_google_roadmap ? [ 
@@ -75,28 +75,28 @@ class MapLayersCreator{
                     {
                         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                     }
-                ), ___("Google Roadmap") 
+                ), translate("Google Roadmap")
             ] : undefined),
             google_hybrid : (optionsAllowedLayers.enable_google_hybrid ? [ 
                 L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
                     {
                         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                     }
-                ), ___("Google Hybrid") 
+                ), translate("Google Hybrid")
             ] : undefined),
             google_sat : (optionsAllowedLayers.enable_google_sat ? [ 
                 L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                     {
                         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                     }
-                ), ___("Google Satellite") 
+                ), translate("Google Satellite")
             ] : undefined),
             google_terrain : (optionsAllowedLayers.enable_google_terrain ? [ 
                 L.tileLayer('https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
                     {
                         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                     }
-                ), ___("Google Terrain") 
+                ), translate("Google Terrain")
             ] : undefined),
             tile1: (optionsAllowedLayers.enable_tile1 ? [
                 L.tileLayer(NOC.settings.gis.custom.tile1.url, tile_cfg(NOC.settings.gis.custom.tile1)), NOC.settings.gis.custom.tile1.name
@@ -108,13 +108,13 @@ class MapLayersCreator{
                 L.tileLayer(NOC.settings.gis.custom.tile3.url, tile_cfg(NOC.settings.gis.custom.tile3)), NOC.settings.gis.custom.tile3.name
             ] : undefined),
             yandex_roadmap : (optionsAllowedLayers.enable_yandex_roadmap && yandex_supported ? [  
-                L.yandex('yandex#map'), ___("Yandex Roadmap") 
+                L.yandex('yandex#map'), translate("Yandex Roadmap")
             ] : undefined),
             yandex_hybrid : (optionsAllowedLayers.enable_yandex_hybrid && yandex_supported ? [ 
-                L.yandex('yandex#hybrid'), ___("Yandex Hybrid") 
+                L.yandex('yandex#hybrid'), translate("Yandex Hybrid")
             ] : undefined),
             yandex_sat : (optionsAllowedLayers.enable_yandex_sat && yandex_supported ? [  
-                L.yandex('yandex#satellite'), ___("Yandex Satellite") 
+                L.yandex('yandex#satellite'), translate("Yandex Satellite")
             ] : undefined),
         }
         var default_layer = baseLayers[default_layer_name]

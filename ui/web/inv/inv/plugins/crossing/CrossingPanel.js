@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.crossing.CrossingPanel");
 
 Ext.define("NOC.inv.inv.plugins.crossing.CrossingPanel", {
   extend: "NOC.inv.inv.plugins.VizSchemePluginAbstract",
-  title: __("Crossing"),
+  title: t("app-title-crossing"),
   itemId: "crossingPanel",
   scrollable: false,
   viewModel: {
@@ -19,27 +19,27 @@ Ext.define("NOC.inv.inv.plugins.crossing.CrossingPanel", {
   gridColumns: [
     {
       dataIndex: "input",
-      text: __("Input"),
+      text: t("header-input"),
       width: 150,
     },
     {
       dataIndex: "input_discriminator",
-      text: __("Input Discriminator"),
+      text: t("header-input-discriminator"),
       flex: 1,
     },
     {
       dataIndex: "output",
-      text: __("Output"),
+      text: t("header-output"),
       width: 150,
     },
     {
       dataIndex: "output_discriminator",
-      text: __("Output Discriminator"),
+      text: t("header-output-discriminator"),
       flex: 1,
     },
     {
       dataIndex: "gain_db",
-      text: __("Gain (dB)"),
+      text: t("header-gain-db"),
       width: 75,
     },
   ],

@@ -404,9 +404,9 @@ Ext.apply(NOC.render, {
 
 //
 Ext.apply(NOC.msg, {
-  started: function(){
+  started: function(message){
     Ext.toast({
-      html: '<div style="text-align: center;"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp' + Ext.String.format.apply(this, arguments) + "</div>",
+      html: '<div style="text-align: center;"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp' + message + "</div>",
       align: "bl",
       bodyStyle: {
         background: "#1E90FF",
@@ -537,7 +537,7 @@ NOC.mrt = function(options){
   xhr.send(JSON.stringify(options.params));
   xhr.onerror = function(){
     scope.unmask();
-    NOC.error(__(options.errorMsg));
+    NOC.error(options.errorMsg);
   };
 };
 //
@@ -870,7 +870,7 @@ NOC.helpOpener = function(topic){
 
 NOC.clipboardIcon = function(value){
   return "<i class='fas fa fa-clipboard noc-to-clipboard' style='padding-left: 5px;cursor: pointer' title='"
-      + __("Copy to clipboard") + "' onclick='NOC.toClipboard(\"" + value + "\")'></i>";
+      + t("btn-copy-to-clipboard") + "' onclick='NOC.toClipboard(\"" + value + "\")'></i>";
 };
 
 NOC.clipboard = function(value){
@@ -882,7 +882,7 @@ NOC.clipboard = function(value){
                   
 NOC.toClipboard = function(text){
   navigator.clipboard.writeText(text)
-  NOC.info(__("Copy to clipboard"));
+  NOC.info(t("btn-copy-to-clipboard"));
 };
 
 NOC.saveAs = function saveFile(blob, filename){

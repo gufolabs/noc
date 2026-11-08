@@ -34,12 +34,12 @@ Ext.define("NOC.main.modeltemplate.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Blt"),
+          text: t("header-blt"),
           // tooltip: "Built-in", - broken in ExtJS 5.1
           dataIndex: "is_builtin",
           width: 40,
@@ -47,17 +47,17 @@ Ext.define("NOC.main.modeltemplate.Application", {
           align: "center",
         },
         {
-          text: __("Resource"),
+          text: t("header-resource"),
           dataIndex: "resource_model",
           width: 70,
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 70,
         },
         {
-          text: __("Allow Manual"),
+          text: t("header-allow-manual"),
           dataIndex: "allow_manual",
           width: 50,
           renderer: NOC.render.Bool,
@@ -69,25 +69,25 @@ Ext.define("NOC.main.modeltemplate.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "type",
           xtype: "combobox",
           itemId: "templateType",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           uiStyle: "medium",
           allowBlank: true,
           valueField: "id",
@@ -105,7 +105,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
           store: {
             fields: ["id", "text"],
             data: [
-              {id: "host", text: __("Managed Object")},
+              {id: "host", text: t("header-managed-object-62561c")},
             ],
           },
           listeners: {
@@ -127,17 +127,17 @@ Ext.define("NOC.main.modeltemplate.Application", {
           name: "default_state",
           xtype: "wf.state.LookupField",
           uiStyle: "large",
-          fieldLabel: __("Default State"),
+          fieldLabel: t("label-default-state"),
           allowBlank: true,
         },
         {
           name: "params",
           xtype: "gridfield",
           itemId: "fieldsGrid",
-          fieldLabel: __("Fields"),
+          fieldLabel: t("label-fields"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 200,
               sortable: false,
@@ -147,35 +147,35 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Ignore"),
+              text: t("choice-ignore"),
               dataIndex: "ignore",
               editor: "checkbox",
               renderer: NOC.render.Bool,
               width: 50,
             },
             {
-              text: __("Required"),
+              text: t("header-required"),
               dataIndex: "required",
               editor: "checkbox",
               renderer: NOC.render.Bool,
               width: 50,
             },
             {
-              text: __("Preferred"),
+              text: t("header-preferred"),
               dataIndex: "preferred_template_value",
               editor: "checkbox",
               renderer: NOC.render.Bool,
               width: 50,
             },
             {
-              text: __("Overr. Existing"),
+              text: t("header-overr-existing"),
               dataIndex: "override_existing",
               editor: "checkbox",
               renderer: NOC.render.Bool,
               width: 50,
             },
             {
-              text: __("Param"),
+              text: t("btn-param"),
               dataIndex: "param",
               width: 200,
               sortable: false,
@@ -184,11 +184,11 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Dictionary"),
+              text: t("header-dictionary"),
               dataIndex: "default_dictionary",
               itemId: "paramDictionary",
               renderer: function(value, metaData, record){
-                if(value === __("Select dictionary")){
+                if(value === t("btn-select-dictionary")){
                   return value;
                 }
                 if(record && record.get("default_dictionary__label")){
@@ -208,7 +208,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Default expression"),
+              text: t("header-default-expression"),
               dataIndex: "default_expression",
               itemId: "paramExpression",
               width: 200,
@@ -218,7 +218,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Capability"),
+              text: t("app-title-capability"),
               dataIndex: "set_capability",
               renderer: NOC.render.Lookup("set_capability"),
               width: 250,
@@ -239,7 +239,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
                 success: function(response){
                   var data = Ext.decode(response.responseText);
                   if(Ext.isEmpty(data)){
-                    NOC.error(__("Dictionary not found"));
+                    NOC.error(t("msg-dictionary-not-found"));
                     return;
                   }
                   if(data.type === "lookup"){
@@ -278,7 +278,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
                   }
                 },
                 failure: function(response){
-                  NOC.error(__("Server-side failed to get default dictionary") + " : " + response.status);
+                  NOC.error(t("msg-server-side-failed-to-get-default-dictionary-value0", {value0: response.status}));
                 },
               });
             } else if(context.field === "name"){
@@ -299,7 +299,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
                         field.getStore().loadData(Ext.decode(response.responseText));
                       },
                       failure: function(response){
-                        NOC.error(__("Server-side failed to get fields") + " : " + response.status);
+                        NOC.error(t("msg-server-side-failed-to-get-fields-value0", {value0: response.status}));
                       },
                     });
                   },
@@ -308,8 +308,8 @@ Ext.define("NOC.main.modeltemplate.Application", {
                       params = form.down("#fieldsGrid"),
                       selection = params.grid.getSelectionModel().getSelection()[0];
                     if(record && record.get("type") === "lookup"){
-                      selection.set("default_dictionary", __("Select dictionary"));
-                      selection.set("default_dictionary__label", __("Select dictionary"));
+                      selection.set("default_dictionary", t("btn-select-dictionary"));
+                      selection.set("default_dictionary__label", t("btn-select-dictionary"));
                     } else{
                       selection.set("default_dictionary", "-");
                       selection.set("default_dictionary__label", "-");
@@ -324,11 +324,11 @@ Ext.define("NOC.main.modeltemplate.Application", {
         {
           name: "groups",
           xtype: "gridfield",
-          fieldLabel: __("Groups"),
+          fieldLabel: t("app-title-group"),
           columns: [
             {
               dataIndex: "group",
-              text: __("Resource Group"),
+              text: t("label-resource-group"),
               width: 350,
               renderer: NOC.render.Lookup("group"),
               editor: {
@@ -336,29 +336,29 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Action"),
+              text: t("app-title-action"),
               dataIndex: "action",
               width: 150,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["set", __("Set")],
-                  ["allow", __("Allow")],
-                  ["deny", __("Deny")],
+                  ["set", t("btn-set")],
+                  ["allow", t("app-title-allow")],
+                  ["deny", t("msg-deny")],
                 ],
                 queryMode: "local",
               },
               renderer: NOC.render.Lookup("action"),
             },
             {
-              text: __("Client"),
+              text: t("header-client"),
               dataIndex: "as_client",
               editor: "checkbox",
               renderer: NOC.render.Bool,
               width: 50,
             },
             {
-              text: __("Service"),
+              text: t("header-service"),
               dataIndex: "as_service",
               editor: "checkbox",
               renderer: NOC.render.Bool,
@@ -369,10 +369,10 @@ Ext.define("NOC.main.modeltemplate.Application", {
         {
           name: "params_form",
           xtype: "gridfield",
-          fieldLabel: __("Params Form"),
+          fieldLabel: t("label-params-form"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 100,
               sortable: false,
@@ -381,7 +381,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Hint"),
+              text: t("header-hint"),
               dataIndex: "hint",
               width: 100,
               sortable: false,
@@ -390,21 +390,21 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Is Hide"),
+              text: t("header-is-hide"),
               dataIndex: "hide",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("ModelID"),
+              text: t("header-modelid"),
               dataIndex: "model_id",
               renderer: NOC.render.Lookup("model_id"),
               editor: "main.ref.modelid.LookupField",
               width: 150,
             },
             {
-              text: __("Validation"),
+              text: t("app-title-validation"),
               dataIndex: "validation_method",
               width: 100,
               editor: {
@@ -418,7 +418,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
               },
             },
             {
-              text: __("Validataion Expr."),
+              text: t("header-validataion-expr"),
               dataIndex: "validation_expression",
               width: 100,
               sortable: false,
@@ -431,9 +431,9 @@ Ext.define("NOC.main.modeltemplate.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

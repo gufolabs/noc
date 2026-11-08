@@ -44,7 +44,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
     ;
 
     me.validationSettingsButton = Ext.create("Ext.button.Button", {
-      text: __("Validation"),
+      text: t("app-title-validation"),
       glyph: NOC.glyph.file,
       scope: me,
       handler: me.onValidationSettings,
@@ -53,11 +53,11 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
         },
         {
-          text: __("Match Expression"),
+          text: t("header-match-expression"),
           dataIndex: "match_expression",
           width: 400,
           renderer: function(v){
@@ -79,7 +79,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
           },
         },
         {
-          text: __("Link Events"),
+          text: t("header-link-events"),
           dataIndex: "link_events",
           renderer: function(value){
             return {
@@ -90,12 +90,12 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
           },
         },
         {
-          text: __("Style"),
+          text: t("app-title-style"),
           dataIndex: "style",
           renderer: NOC.render.Lookup("style"),
         },
         {
-          text: __("Policy"),
+          text: t("header-policy"),
           dataIndex: "discovery_policy",
           renderer: NOC.render.Choices({
             I: "Ignore",
@@ -105,21 +105,21 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
           }),
         },
         {
-          text: __("MAC"),
+          text: t("header-mac"),
           dataIndex: "mac_discovery_policy",
           renderer: NOC.render.Choices({
-            e: __("Transit"),
-            d: __("Disable"),
-            m: __("Management VLAN"),
-            i: __("Direct Downlink"),
-            c: __("Chained Downlink"),
-            u: __("Direct Uplink"),
-            C: __("Cloud Downlink"),
+            e: t("msg-transit"),
+            d: t("status-disable"),
+            m: t("msg-management-vlan"),
+            i: t("msg-direct-downlink"),
+            c: t("msg-chained-downlink"),
+            u: t("msg-direct-uplink"),
+            C: t("msg-cloud-downlink"),
           }),
           width: 50,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -136,21 +136,21 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               width: 200,
               allowBlank: false,
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Labels"),
+              fieldLabel: t("header-labels"),
               allowBlank: true,
               query: {
                 "allow_models": ["inv.Interface"],
@@ -159,31 +159,31 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "description",
               xtype: "textarea",
-              fieldLabel: __("Description"),
+              fieldLabel: t("label-description"),
               allowBlank: true,
             },
             {
               name: "style",
               xtype: "main.style.LookupField",
-              fieldLabel: __("Style"),
+              fieldLabel: t("app-title-style"),
               allowBlank: true,
             },
             {
               name: "is_uni",
               xtype: "checkbox",
-              boxLabel: __("User Interface"),
+              boxLabel: t("label-user-interface"),
               allowBlank: true,
             },
             {
               name: "workflow",
               xtype: "wf.workflow.LookupField",
-              fieldLabel: __("Workflow"),
+              fieldLabel: t("app-group-wf"),
               allowBlank: false,
             },
             {
               name: "dynamic_classification_policy",
               xtype: "combobox",
-              fieldLabel: __("Dynamic Classification Policy"),
+              fieldLabel: t("label-dynamic-classification-policy"),
               labelWidth: 200,
               allowBlank: false,
               queryMode: "local",
@@ -202,7 +202,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "subinterface_apply_policy",
               xtype: "combobox",
-              fieldLabel: __("SubInterface Apply Policy"),
+              fieldLabel: t("label-subinterface-apply-policy"),
               labelWidth: 200,
               allowBlank: false,
               queryMode: "local",
@@ -224,7 +224,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("FM"),
+          title: t("app-title-fm"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -233,7 +233,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "link_events",
               xtype: "combobox",
-              fieldLabel: __("Link Events"),
+              fieldLabel: t("header-link-events"),
               labelWidth: 200,
               allowBlank: false,
               queryMode: "local",
@@ -255,7 +255,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "interface_validation_policy",
               xtype: "cm.interfacevalidationpolicy.LookupField",
-              fieldLabel: __("Validation Policy"),
+              fieldLabel: t("label-validation-policy"),
               labelWidth: 200,
               allowBlank: true,
             },
@@ -264,34 +264,34 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
               xtype: "numberfield",
               labelWidth: 200,
               width: 50,
-              fieldLabel: __("Alarm Weight"),
+              fieldLabel: t("label-alarm-weight-2"),
               allowBlank: false,
               uiStyle: "small",
             },
             {
               name: "status_change_notification",
               xtype: "combobox",
-              fieldLabel: __("Status Change Notification"),
+              fieldLabel: t("label-status-change-notification"),
               allowBlank: true,
               labelWidth: 200,
               defaultValue: "d",
               store: [
-                ["d", __("Disabled")],
-                ["e", __("Enable Message")],
+                ["d", t("msg-disabled")],
+                ["e", t("btn-enable-message")],
               ],
               uiStyle: "medium",
             },
             {
               name: "default_notification_group",
               xtype: "main.notificationgroup.LookupField",
-              fieldLabel: __("Status Change Notification"),
+              fieldLabel: t("label-status-change-notification"),
               labelWidth: 200,
               allowBlank: true,
             },
             {
               xtype: "checkbox",
               name: "enable_abduct_detection",
-              boxLabel: __("Enable Abduct Detection"),
+              boxLabel: t("label-enable-abduct-detection"),
               allowBlank: true,
             },
           ],
@@ -299,7 +299,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("Discovery"),
+          title: t("header-discovery"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -308,7 +308,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "discovery_policy",
               xtype: "combobox",
-              fieldLabel: __("Link Discovery Policy"),
+              fieldLabel: t("label-link-discovery-policy"),
               allowBlank: false,
               labelWidth: 200,
               queryMode: "local",
@@ -329,61 +329,61 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "status_discovery",
               xtype: "combobox",
-              fieldLabel: __("Status Discovery"),
+              fieldLabel: t("label-status-discovery"),
               allowBlank: true,
               labelWidth: 200,
               defaultValue: "d",
               store: [
-                ["d", __("Disabled")],
-                ["e", __("Enable")],
-                ["c", __("Clear Alarm")],
-                ["ca", __("Clear Alarm if Admin Down")],
-                ["rc", __("Raise & Clear Alarm")],
+                ["d", t("msg-disabled")],
+                ["e", t("label-enable")],
+                ["c", t("btn-clear-alarm-2")],
+                ["ca", t("btn-clear-alarm-if-admin-down")],
+                ["rc", t("msg-raise-clear-alarm")],
               ],
               uiStyle: "medium",
             },
             {
               name: "mac_discovery_policy",
               xtype: "combobox",
-              fieldLabel: __("MAC Discovery Policy"),
+              fieldLabel: t("label-mac-discovery-policy"),
               allowBlank: false,
               labelWidth: 200,
               defaultValue: "e",
               store: [
-                ["e", __("Transit")],
-                ["d", __("Disable")],
-                ["m", __("Management VLAN")],
-                ["i", __("Direct Downlink")],
-                ["c", __("Chained Downlink")],
-                ["u", __("Direct Uplink")],
-                ["C", __("Cloud Downlink")],
+                ["e", t("msg-transit")],
+                ["d", t("status-disable")],
+                ["m", t("msg-management-vlan")],
+                ["i", t("msg-direct-downlink")],
+                ["c", t("msg-chained-downlink")],
+                ["u", t("msg-direct-uplink")],
+                ["C", t("msg-cloud-downlink")],
               ],
               uiStyle: "medium",
             },
             {
               name: "metric_collected_policy",
               xtype: "combobox",
-              fieldLabel: __("Metric Collected Policy"),
+              fieldLabel: t("label-metric-collected-policy"),
               allowBlank: true,
               labelWidth: 200,
               defaultValue: "e",
               store: [
-                ["e", __("Enabled")],
-                ["da", __("Disable if Admin Down")],
-                ["do", __("Disable if Oper Down")],
+                ["e", t("header-enabled")],
+                ["da", t("btn-disable-if-admin-down")],
+                ["do", t("btn-disable-if-oper-down")],
               ],
               uiStyle: "medium",
             },
             {
               name: "allow_lag_mismatch",
               xtype: "checkbox",
-              boxLabel: __("Allow LAG mismatch"),
+              boxLabel: t("label-allow-lag-mismatch"),
               allowBlank: true,
             },
             {
               name: "allow_subinterface_metrics",
               xtype: "checkbox",
-              boxLabel: __("Apply metrics to subinterfaces"),
+              boxLabel: t("label-apply-metrics-to-subinterfaces"),
               allowBlank: true,
             },
           ],
@@ -391,7 +391,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("Segment"),
+          title: t("header-segment-44986c"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -401,13 +401,13 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "allow_autosegmentation",
               xtype: "checkbox",
-              boxLabel: __("Allow Autosegmentation"),
+              boxLabel: t("label-allow-autosegmentation"),
               allowBlank: true,
             },
             {
               name: "allow_vacuum_bulling",
               xtype: "checkbox",
-              boxLabel: __("Allow Vacuum Bulling"),
+              boxLabel: t("label-allow-vacuum-bulling"),
               allowBlank: true,
             },
           ],
@@ -415,7 +415,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("IfDesc Settings"),
+          title: t("app-title-ifdesc-settings"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -425,13 +425,13 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "ifdesc_patterns",
               xtype: "inv.ifdescpatterns.LookupField",
-              fieldLabel: __("Patterns"),
+              fieldLabel: t("label-patterns"),
               allowBlank: true,
             },
             {
               name: "ifdesc_handler",
               xtype: "main.handler.LookupField",
-              fieldLabel: __("Handler"),
+              fieldLabel: t("app-title-handler"),
               allowBlank: true,
               query: {
                 allow_ifdesc: true,
@@ -447,18 +447,18 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
           defaults: fieldSetDefaults,
           collapsible: true,
           collapsed: true,
-          title: __("Integration"),
+          title: t("app-title-integration"),
           items: [
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -467,24 +467,24 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           name: "caps",
           xtype: "gridfield",
-          fieldLabel: __("Capabilities"),
+          fieldLabel: t("header-capabilities"),
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "capability",
               renderer: NOC.render.Lookup("capability"),
               width: 250,
               editor: "inv.capability.LookupField",
             },
             {
-              text: __("Default Value"),
+              text: t("header-default-value"),
               dataIndex: "default_value",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Allow Manual"),
+              text: t("header-allow-manual"),
               dataIndex: "allow_manual",
               width: 150,
               editor: "checkbox",
@@ -502,7 +502,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "metrics_default_interval",
               xtype: "numberfield",
-              fieldLabel: __("Default Interval, sec"),
+              fieldLabel: t("label-default-interval-sec"),
               labelWidth: 200,
               allowBlank: false,
               uiStyle: "small",
@@ -524,12 +524,12 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           name: "metrics",
           xtype: "gridfield",
-          fieldLabel: __("Metrics"),
+          fieldLabel: t("label-metrics"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           columns: [
             {
-              text: __("Metric Type"),
+              text: t("app-title-metrictype"),
               dataIndex: "metric_type",
               width: 250,
               editor: {
@@ -538,14 +538,14 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
               renderer: NOC.render.Lookup("metric_type"),
             },
             {
-              text: __("Stored"),
+              text: t("header-stored"),
               dataIndex: "is_stored",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Interval"),
+              text: t("label-interval"),
               dataIndex: "interval",
               editor: {
                 xtype: "numberfield",
@@ -558,7 +558,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
         {
           name: "match_rules",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           rows: 5,
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
@@ -566,7 +566,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "dynamic_order",
               xtype: "numberfield",
-              fieldLabel: __("Dynamic Order"),
+              fieldLabel: t("label-dynamic-order"),
               allowBlank: false,
               defaultValue: 0,
               validator: function(value){
@@ -578,7 +578,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
                   values = matchRulesField.getValue().map(r => r.dynamic_order),
                   withoutCurrent = values.filter(r => r !== val);
                 if(values.length > 1 && values.length !== (withoutCurrent.length + 1)){
-                  return __("Dynamic Order must be unique");
+                  return t("msg-dynamic-order-must-be-unique");
                 }
                 return true;
               },
@@ -590,7 +590,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: false,
               isTree: true,
               filterProtected: false,
@@ -606,7 +606,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -631,7 +631,7 @@ Ext.define("NOC.inv.interfaceprofile.Application", {
   },
   filters: [
     {
-      title: __("By Match Rules Labels"),
+      title: t("app-title-by-match-rules-labels"),
       name: "match_rules",
       ftype: "label",
       lookup: "main.handler.LookupField",

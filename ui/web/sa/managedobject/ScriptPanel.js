@@ -45,7 +45,7 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
       store: me.scriptStore,
       columns: [
         {
-          text: __("Script"),
+          text: t("label-script"),
           dataIndex: "name",
           flex: 1,
           renderer: function(value, meta, record){
@@ -99,7 +99,7 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
         me.scriptStore.loadData(data || []);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },
@@ -136,7 +136,7 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
       },
       failure: function(){
         me.loadMask.hide();
-        NOC.error(__("Failed to run script"));
+        NOC.error(t("msg-failed-to-run-script"));
       },
     });
   },
@@ -182,14 +182,14 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
           dock: "top",
           items: [
             {
-              text: __("Close"),
+              text: t("btn-close"),
               glyph: NOC.glyph.arrow_left,
               scope: me,
               handler: me.onFormClose,
             },
             "-",
             {
-              text: __("Run"),
+              text: t("btn-run"),
               glyph: NOC.glyph.play,
               scope: me,
               handler: Ext.bind(me.onFormRun, me, [name]),

@@ -57,22 +57,22 @@ Ext.define("NOC.inv.map.Application", {
 
     me.searchButton = Ext.create({
       xtype: "button",
-      text: __("Search"),
+      text: t("app-title-search"),
       scope: me,
       handler: me.onSearch,
     });
 
     me.segmentCombo = Ext.create("NOC.core.TreeCombo", {
       restUrl: "/inv/map",
-      fieldLabel: __("Segment"),
+      fieldLabel: t("header-segment-44986c"),
       labelWidth: 70,
       labelAlign: "left",
       listAlign: "left",
       minWidth: 400,
-      emptyText: __("Select segment..."),
+      emptyText: t("label-select-segment"),
       appId: "inv.map",
       rootNode: {
-        label: __("All Maps"),
+        label: t("msg-all-maps"),
         id: "_root_",
         level: 0,
       },
@@ -86,9 +86,9 @@ Ext.define("NOC.inv.map.Application", {
       glyph: NOC.glyph.refresh,
       iconAlign: "right",
       textAlign: "right",
-      html: "0 " + __("sec"),
+      html: "0 " + t("msg-sec"),
       width: 95,
-      tooltip: __("Reload and It has been since the last update"),
+      tooltip: t("help-reload-and-it-has-been-since-the-last-update"),
       scope: me,
       handler: me.onReload,
     });
@@ -97,14 +97,14 @@ Ext.define("NOC.inv.map.Application", {
       glyph: NOC.glyph.edit,
       enableToggle: true,
       disabled: true,
-      tooltip: __("Edit map"),
+      tooltip: t("help-edit-map"),
       scope: me,
       handler: me.onEdit,
     });
 
     me.rotateButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.rotate_right,
-      tooltip: __("Rotate"),
+      tooltip: t("help-rotate"),
       disabled: true,
       scope: me,
       handler: me.onRotate,
@@ -112,7 +112,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.saveButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.save,
-      tooltip: __("Save"),
+      tooltip: t("btn-save"),
       disabled: true,
       scope: me,
       handler: me.onSave,
@@ -120,7 +120,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.revertButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.undo,
-      tooltip: __("Revert"),
+      tooltip: t("help-revert"),
       disabled: true,
       scope: me,
       handler: me.onRevert,
@@ -128,7 +128,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.newLayoutButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.medkit,
-      tooltip: __("New layout"),
+      tooltip: t("help-new-layout"),
       disabled: me.readOnly,
       scope: me,
       handler: me.onNewLayout,
@@ -136,7 +136,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.addressIPButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.tag,
-      tooltip: __("Name/IP device"),
+      tooltip: t("help-name-ip-device"),
       enableToggle: true,
       // disabled: me.readOnly,
       scope: me,
@@ -287,7 +287,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.viewMapButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.globe,
-      tooltip: __("Show static map"),
+      tooltip: t("help-show-static-map"),
       enableToggle: true,
       toggleGroup: "overlay",
       pressed: true,
@@ -298,7 +298,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.viewLoadButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.line_chart,
-      tooltip: __("Show interface load"),
+      tooltip: t("help-show-interface-load"),
       enableToggle: true,
       toggleGroup: "overlay",
       scope: me,
@@ -310,14 +310,14 @@ Ext.define("NOC.inv.map.Application", {
       glyph: NOC.glyph.sitemap,
       enableToggle: true,
       disabled: true,
-      tooltip: __("Show STP topology"),
+      tooltip: t("help-show-stp-topology"),
       scope: me,
       handler: me.onStp,
     });
 
     me.legendButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.info,
-      tooltip: __("Show/Hide legend"),
+      tooltip: t("help-show-hide-legend"),
       enableToggle: true,
       listeners: {
         scope: me,
@@ -332,7 +332,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.miniMapButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.map,
-      tooltip: __("Show/Hide miniMap"),
+      tooltip: t("help-show-hide-minimap"),
       enableToggle: true,
       pressed: true,
       listeners: {
@@ -343,7 +343,7 @@ Ext.define("NOC.inv.map.Application", {
 
     me.basketButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.shopping_basket,
-      tooltip: __("Show/Hide basket"),
+      tooltip: t("help-show-hide-basket"),
       enableToggle: true,
       listeners: {
         scope: me,
@@ -559,8 +559,8 @@ Ext.define("NOC.inv.map.Application", {
     var me = this,
       forceSpring = ev.shiftKey;
     Ext.Msg.show({
-      title: __("Reset Layout"),
-      message: __("Would you like to reset current layout and generate new?"),
+      title: t("app-title-reset-layout"),
+      message: t("msg-would-you-like-to-reset-current-layout-and-generate-new"),
       icon: Ext.Msg.QUESTION,
       buttons: Ext.Msg.YESNO,
       fn: function(btn){
@@ -616,7 +616,7 @@ Ext.define("NOC.inv.map.Application", {
   },
 
   resetSearchButton: function(){
-    this.searchButton.setText(__("Search"));
+    this.searchButton.setText(t("app-title-search"));
   },
 
   selected: function(objectId){
@@ -663,7 +663,7 @@ Ext.define("NOC.inv.map.Application", {
     console.log("Search result", detail);
     if(!detail.found){
       this.mapPanel.onBlankSelected();
-      this.searchButton.setText(__("Not found"));
+      this.searchButton.setText(t("msg-not-found"));
     }
   },
 });

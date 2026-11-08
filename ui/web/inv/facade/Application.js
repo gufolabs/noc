@@ -18,7 +18,7 @@ Ext.define("NOC.inv.facade.Application", {
   treeFilter: "category",
   filters: [
     {
-      title: __("By Is Builtin"),
+      title: t("app-title-by-is-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },
@@ -36,19 +36,19 @@ Ext.define("NOC.inv.facade.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           width: 300,
           dataIndex: "name",
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           width: 50,
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           flex: 1,
           dataIndex: "description",
         },
@@ -57,31 +57,31 @@ Ext.define("NOC.inv.facade.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "slots",
           xtype: "displayfield",
-          fieldLabel: __("Slots"),
+          fieldLabel: t("label-slots"),
           allowBlank: true,
         },
         {
           xtype: "svgfield",
           name: "data",
-          fieldLabel: __("Image"),
+          fieldLabel: t("label-image"),
           allowBlank: false,
           listeners: {
             scope: me,
@@ -91,9 +91,9 @@ Ext.define("NOC.inv.facade.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

@@ -8,7 +8,7 @@ console.debug("Defining NOC.main.desktop.About");
 
 Ext.define("NOC.main.desktop.About", {
   extend: "Ext.Window",
-  title: __("About System"),
+  title: t("app-title-about-system"),
   layout: "fit",
   autoShow: true,
   resizable: false,

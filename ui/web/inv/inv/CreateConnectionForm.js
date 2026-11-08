@@ -92,7 +92,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     });
     me.cableCombo = Ext.create({
       xtype: "combo",
-      fieldLabel: __("Cable"),
+      fieldLabel: t("label-cable"),
       labelAlign: "right",
       labelWidth: 50,
       width: 400,
@@ -125,7 +125,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       },
     });
     Ext.apply(me, {
-      title: __("Object connections"),
+      title: t("app-title-object-connections"),
       titleAlign: "center",
       items: [
         me.drawPanel,
@@ -137,7 +137,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       },
       tbar: [
         {
-          text: __("Save"),
+          text: t("btn-save"),
           scope: me,
           glyph: NOC.glyph.save,
           bind: {
@@ -146,7 +146,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           handler: me.onSaveClick,
         },
         {
-          text: __("Close"),
+          text: t("btn-close"),
           itemId: "closeBtn",
           scope: me,
           glyph: NOC.glyph.arrow_left,
@@ -156,7 +156,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           glyph: NOC.glyph.eraser,
           scope: me,
           handler: me.onCleanClick,
-          tooltip: __("Clear objects"),
+          tooltip: t("help-clear-objects"),
           bind: {
             disabled: "{!leftObject}",
           },
@@ -165,7 +165,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           glyph: NOC.glyph.refresh,
           scope: me,
           handler: me.onReload,
-          tooltip: __("Repaint"),
+          tooltip: t("help-repaint"),
           bind: {
             disabled: "{!leftObject}",
           },
@@ -175,7 +175,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           glyph: NOC.glyph.arrows_h,
           scope: me,
           handler: me.connectPort,
-          tooltip: __("Connect ports"),
+          tooltip: t("help-connect-ports"),
           bind: {
             disabled: "{connectButtonDisabled}",
           },
@@ -279,7 +279,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
   cleanForm: function(){
     var me = this;
     me.initValues();
-    me.setTitle(__("Object connections"));
+    me.setTitle(t("app-title-object-connections"));
     me.cleanViewModel();
     me.drawPanel.setHeight(me.body.getHeight()); // parent panel height
     me.drawPanel.setWidth(me.body.getWidth());
@@ -311,14 +311,14 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       reference: "createConnFrm",
       modal: true,
       layout: "form",
-      title: __("Create internal connection from") + " " + fromSprite.attr.pinName + " " + __("to") + " " + toSprite.pinName,
+      title: t("msg-create-internal-connection-from-value0-to-value1", {value0: fromSprite.attr.pinName, value1: toSprite.pinName}),
       referenceHolder: true,
       defaultFocus: "numberfield",
       defaultButton: "createBtn",
       items: me.itemsForConnectionParamsForm(fromDiscriminators, toDiscriminators, "createBtn"),
       buttons: [
         {
-          text: __("Create"),
+          text: t("app-title-create"),
           reference: "createBtn",
           handler: function(button){
             me.addConnectionSprite(button, fromSprite, toSprite, side);
@@ -328,7 +328,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           },
         },
         {
-          text: __("Cancel"),
+          text: t("btn-cancel"),
           handler: function(){
             this.up("window").close();
           },
@@ -410,12 +410,12 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         callBack();
       },
       failure: function(response){
-        NOC.error(__("Failed to disconnect objects : ") + response.responseText);
+        NOC.error(t("msg-failed-to-disconnect-objects-value0", {value0: response.responseText}));
       },
     });
   },
   drawEmptyText: function(container){
-    var text = __("Drag other object from left tree"),
+    var text = t("msg-drag-other-object-from-left-tree"),
       minLeftWidth = 230, // min width = Ext.draw.TextMeasurer.measureText(text, font).width
       fontSize = 16,
       offset = this.schemaPadding * 0.5,
@@ -475,8 +475,8 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     surface.renderFrame();
   },
   drawLegend: function(surface, height){
-    surface.add(this.makeLegend(__("Free slot"), this.AVAILABLE_COLOR, 10, height));
-    surface.add(this.makeLegend(__("Occupied slot"), this.OCCUPIED_COLOR, 115, height));
+    surface.add(this.makeLegend(t("msg-free-slot"), this.AVAILABLE_COLOR, 10, height));
+    surface.add(this.makeLegend(t("msg-occupied-slot"), this.OCCUPIED_COLOR, 115, height));
   },
   drawObject: function(info, pins, surface, side, hasDiscriminator){
     var me = this;
@@ -669,7 +669,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       items = [
         {
           xtype: "combobox",
-          fieldLabel: __("Discriminator From"),
+          fieldLabel: t("label-discriminator-from"),
           store: fromDiscriminators,
           editable: false,
           disabled: !fromDiscriminators.length,
@@ -681,7 +681,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         },
         {
           xtype: "combobox",
-          fieldLabel: __("Discriminator To"),
+          fieldLabel: t("label-discriminator-to"),
           store: toDiscriminators,
           editable: false,
           disabled: !toDiscriminators.length,
@@ -693,7 +693,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         },
         {
           xtype: "numberfield",
-          fieldLabel: __("Gain DB"),
+          fieldLabel: t("label-gain-db"),
           step: 0.1,
           minValue: 0,
           maxValue: 100,
@@ -721,13 +721,13 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         if(leftObjectId === rightObjectId){
           return;
         }
-        title = (leftObject ? leftObject.get("name") : __("none"))
+        title = (leftObject ? leftObject.get("name") : t("msg-none-2"))
           + "<i class='fa fa-arrows-h' style='padding: 0 5px 0 5px;'></i>"
-          + (rightObject ? rightObject.get("name") : __("none"));
+          + (rightObject ? rightObject.get("name") : t("msg-none-2"));
         me.setTitle(title);
         params = "o1=" + leftObjectId + (rightObjectId ? "&o2=" + rightObjectId : "");
         params += cable ? "&cable_filter=" + cable : "";
-        me.mask(__("Loading..."));
+        me.mask(t("msg-loading-3"));
         NOC.api.requestLegacy({
           url: "/inv/inv/crossing_proposals/?" + params,
           method: "GET",
@@ -749,7 +749,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
             }
             me.drawPanel.setHeight(me.drawPanelSize.h);
             me.unmask();
-            NOC.msg.complete(__("The data was successfully loaded"));
+            NOC.msg.complete(t("msg-the-data-was-successfully-loaded"));
             mainSurface.removeAll(true);
             me.getViewModel().set("isDirty", false);
             me.cableCombo.getStore().loadData(data.cable);
@@ -783,13 +783,13 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           },
           failure: function(){
             me.unmask();
-            NOC.msg.failed(__("Error loading data"));
+            NOC.msg.failed(t("msg-error-loading-data"));
           },
         });
       };
 
     if(me.getViewModel().get("isDirty")){
-      Ext.Msg.confirm(__("Confirm"), __("There is unsaved data, do you really want to load the object?"), function(btn){
+      Ext.Msg.confirm(t("msg-confirm"), t("msg-there-is-unsaved-data-do-you-really-want-to-load-the-object"), function(btn){
         if(btn === "yes"){
           action();
         }
@@ -1050,7 +1050,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     var me = this;
 
     if(me.getViewModel().get("isDirty")){
-      Ext.Msg.confirm(__("Confirm"), __("There is unsaved data, do you really want to clean?"), function(btn){
+      Ext.Msg.confirm(t("msg-confirm"), t("msg-there-is-unsaved-data-do-you-really-want-to-clean"), function(btn){
         if(btn === "yes"){
           me.cleanForm();
         }
@@ -1068,7 +1068,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
 
     me.fireEvent("reloadInvNav");
     if(me.getViewModel().get("isDirty")){
-      Ext.Msg.confirm(__("Confirm"), __("There is unsaved data, do you really want to close the application?"), function(btn){
+      Ext.Msg.confirm(t("msg-confirm"), t("msg-there-is-unsaved-data-do-you-really-want-to-close-the-applicatio"), function(btn){
         if(btn === "yes"){
           action();
         }
@@ -1171,19 +1171,19 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
 
         vm.set("isDirty", false);
         if(data && data.status){
-          NOC.msg.complete(__("Objects was successfully connected"));
+          NOC.msg.complete(t("msg-objects-was-successfully-connected"));
           this.fireEvent("reloadInvNav");
         } else{
-          NOC.error(__("Failed to connect objects : ") + data.text);
+          NOC.error(t("msg-failed-to-connect-objects-value0", {value0: data.text}));
           invalidConnections = data.invalid_connections;
           if(invalidConnections && invalidConnections.length){
-            var title = __("Invalid Connections will be deleted") + ":<br/><br/>",
+            var title = t("msg-invalid-connections-will-be-deleted") + ":<br/><br/>",
               msg = Ext.Array.map(invalidConnections, function(connection){
                 return connection.error;
               });
             Ext.Msg.show({
-              title: __("Invalid connections"),
-              message: title + msg.join("<br/>") + "<br/><br/><br/>" + __("This message will automatically close in 5 seconds."),
+              title: t("app-title-invalid-connections"),
+              message: title + msg.join("<br/>") + "<br/><br/><br/>" + t("msg-this-message-will-automatically-close-in-5-seconds"),
               buttons: Ext.Msg.OK,
               icon: Ext.Msg.INFO,
             });
@@ -1214,7 +1214,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         rightSurface.renderFrame();
       },
       failure: function(response){
-        NOC.error(__("Failed to connect objects : ") + response.responseText);
+        NOC.error(t("msg-failed-to-connect-objects-value0-2", {value0: response.responseText}));
       },
     });
   },
@@ -1582,7 +1582,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     params = "o1=" + leftObjectId + (rightObjectId ? "&o2=" + rightObjectId : "");
     params += cable ? "&cable_filter=" + cable : "";
     params += filter ? "&" + filter : "";
-    me.mask(__("Loading..."));
+    me.mask(t("msg-loading-3"));
     NOC.api.requestLegacy({
       url: "/inv/inv/crossing_proposals/?" + params,
       method: "GET",
@@ -1596,11 +1596,11 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         });
         me.unmask();
         me.checkAvailabilityConnection();
-        NOC.msg.complete(__("The data was successfully updated"));
+        NOC.msg.complete(t("msg-the-data-was-successfully-updated"));
       },
       failure: function(){
         me.unmask();
-        NOC.msg.failed(__("Error updating statuses"));
+        NOC.msg.failed(t("msg-error-updating-statuses"));
       },
     });
   },
@@ -1636,7 +1636,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       drawPanel = me.drawPanel;
 
     drawPanel.isModalOpen = true;
-    Ext.Msg.confirm(__("Confirm"), __("Are you sure you want to delete this wire") + " " + wireSprite.fromPort + "=>" + wireSprite.toPort, function(btn){
+    Ext.Msg.confirm(t("msg-confirm"), t("msg-confirm-delete-wire", {from: wireSprite.fromPort, to: wireSprite.toPort}), function(btn){
       if(btn === "yes"){
         var vm = me.getViewModel(),
           leftObject = vm.get("leftObject"),
@@ -1658,7 +1658,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           me.disconnectConnection(params, function(){
             me.removeWire(wireSprite);
             me.reloadStatuses(true);
-            NOC.msg.complete(__("Wire was successfully disconnected"));
+            NOC.msg.complete(t("msg-wire-was-successfully-disconnected"));
           });
         }
       }
@@ -1759,14 +1759,14 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       reference: "updateRemoveConnFrm",
       modal: true,
       layout: "form",
-      title: __("Update or modify internal connection from") + " " + sprite.fromPort + " " + __("to") + " " + sprite.toPort,
+      title: t("msg-update-or-modify-internal-connection-from-value0-to-value1", {value0: sprite.fromPort, value1: sprite.toPort}),
       referenceHolder: true,
       defaultFocus: "numberfield",
       defaultButton: "updateBtn",
       items: me.itemsForConnectionParamsForm(fromSprite.allowDiscriminators, toSprite.allowDiscriminators, "updateBtn", values),
       buttons: [
         {
-          text: __("Update"),
+          text: t("status-update"),
           reference: "updateBtn",
           handler: function(button){
             sprite.remove();
@@ -1777,7 +1777,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           },
         },
         {
-          text: __("Delete"),
+          text: t("btn-delete"),
           handler: function(button){
             var vm = me.getViewModel(),
               fromObject = vm.get(sprite.fromSide + "Object"),
@@ -1793,14 +1793,14 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
             } else{
               me.disconnectConnection(params, function(){
                 me.removeInternalConnection(sprite);
-                NOC.msg.complete(__("Internal cross was successfully disconnected"));
+                NOC.msg.complete(t("msg-internal-cross-was-successfully-disconnected"));
               });
             }
             button.up("window").close();
           },
         },
         {
-          text: __("Cancel"),
+          text: t("btn-cancel"),
           handler: function(){
             this.up("window").close();
           },

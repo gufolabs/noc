@@ -23,12 +23,12 @@ Ext.define("NOC.sa.authprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 100,
           renderer: NOC.render.Choices({
@@ -40,12 +40,12 @@ Ext.define("NOC.sa.authprofile.Application", {
           }),
         },
         {
-          text: __("User"),
+          text: t("header-user"),
           dataIndex: "user",
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -54,19 +54,19 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           store: [
             ["G", "Local Group"],
@@ -78,7 +78,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "extra",
           query: {
@@ -88,27 +88,27 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "user",
           xtype: "textfield",
-          fieldLabel: __("User"),
+          fieldLabel: t("header-user"),
           allowBlank: true,
         },
         {
           name: "password",
           xtype: "password",
-          fieldLabel: __("Password"),
+          fieldLabel: t("label-password"),
           uiStyle: "large",
           allowBlank: true,
         },
         {
           name: "super_password",
           xtype: "password",
-          fieldLabel: __("Super Password"),
+          fieldLabel: t("label-super-password"),
           uiStyle: "large",
           allowBlank: true,
         },
         {
           name: "snmp_security_level",
           xtype: "combobox",
-          fieldLabel: __("SNMP Security Level"),
+          fieldLabel: t("label-snmp-security-level"),
           uiStyle: "large",
           store: [
             ["Community", "Community"],
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "snmp_ro",
           xtype: "password",
-          fieldLabel: __("SNMP RO Community"),
+          fieldLabel: t("label-snmp-ro-community"),
           uiStyle: "large",
           readOnlyCls: "x-item-disabled",
           allowBlank: true,
@@ -132,7 +132,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "snmp_rw",
           xtype: "password",
-          fieldLabel: __("SNMP RW Community"),
+          fieldLabel: t("label-snmp-rw-community"),
           uiStyle: "large",
           readOnlyCls: "x-item-disabled",
           allowBlank: true,
@@ -140,7 +140,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "snmp_username",
           xtype: "textfield",
-          fieldLabel: __("SNMP Username"),
+          fieldLabel: t("label-snmp-username"),
           uiStyle: "large",
           readOnlyCls: "x-item-disabled",
           allowBlank: true,
@@ -149,7 +149,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "snmp_ctx_name",
           xtype: "textfield",
-          fieldLabel: __("SNMP Context Name"),
+          fieldLabel: t("label-snmp-context-name"),
           allowBlank: true,
           uiStyle: "large",
           readOnlyCls: "x-item-disabled",
@@ -158,7 +158,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           xtype: "fieldcontainer",
           itemId: "snmp_auth_proto",
-          fieldLabel: __("SNMP Auth Proto"),
+          fieldLabel: t("label-snmp-auth-proto"),
           visible: false,
           maxWidth: 200,
           defaultType: "radiofield",
@@ -182,7 +182,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         },
         {
           xtype: "password",
-          fieldLabel: __("SNMP Auth Key"),
+          fieldLabel: t("label-snmp-auth-key"),
           visible: false,
           uiStyle: "large",
           name: "snmp_auth_key",
@@ -192,7 +192,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           xtype: "fieldcontainer",
           itemId: "snmp_priv_proto",
-          fieldLabel: __("SNMP Priv Proto"),
+          fieldLabel: t("label-snmp-priv-proto"),
           visible: false,
           maxWidth: 200,
           defaultType: "radiofield",
@@ -216,7 +216,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         },
         {
           xtype: "password",
-          fieldLabel: __("SNMP Priv Key"),
+          fieldLabel: t("label-snmp-priv-key"),
           visible: false,
           uiStyle: "large",
           name: "snmp_priv_key",
@@ -226,9 +226,8 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "enable_suggest_by_rule",
           xtype: "checkboxfield",
-          boxLabel: __("Enable Suggets By Rule"),
-          tooltip: __("If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/>" +
-                        " for suggest credential"),
+          boxLabel: t("label-enable-suggets-by-rule"),
+          tooltip: t("help-if-check-use-credential-check-rules-service-activation-setup-cre"),
           allowBlank: true,
           listeners: {
             render: me.addTooltip,
@@ -237,8 +236,8 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "preferred_profile_credential",
           xtype: "checkboxfield",
-          boxLabel: __("Preferred Profile Credential"),
-          tooltip: __("If set - Credential on Profile will replace credential on Device"),
+          boxLabel: t("label-preferred-profile-credential"),
+          tooltip: t("help-if-set-credential-on-profile-will-replace-credential-on-device"),
           allowBlank: true,
           listeners: {
             render: me.addTooltip,
@@ -247,7 +246,7 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -256,20 +255,20 @@ Ext.define("NOC.sa.authprofile.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -278,11 +277,11 @@ Ext.define("NOC.sa.authprofile.Application", {
         {
           name: "dynamic_classification_policy",
           xtype: "combobox",
-          fieldLabel: __("Dynamic Classification Policy"),
+          fieldLabel: t("label-dynamic-classification-policy"),
           store: [
-            ["D", __("Disabled")],
-            ["R", __("By Rule")],
-            ["U", __("By Username/SNMP RO")],
+            ["D", t("msg-disabled")],
+            ["R", t("msg-by-rule")],
+            ["U", t("msg-by-username-snmp-ro")],
           ],
           allowBlank: false,
           labelWidth: 200,
@@ -295,12 +294,12 @@ Ext.define("NOC.sa.authprofile.Application", {
           rows: 5,
           labelAlign: "top",
           uiStyle: "large",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           items: [
             {
               name: "dynamic_order",
               xtype: "numberfield",
-              fieldLabel: __("Dynamic Order"),
+              fieldLabel: t("label-dynamic-order"),
               allowBlank: true,
               defaultValue: 0,
               uiStyle: "small",
@@ -308,7 +307,7 @@ Ext.define("NOC.sa.authprofile.Application", {
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: false,
               isTree: true,
               filterProtected: false,
@@ -321,7 +320,7 @@ Ext.define("NOC.sa.authprofile.Application", {
             {
               name: "handler",
               xtype: "main.handler.LookupField",
-              fieldLabel: __("Match Handler"),
+              fieldLabel: t("label-match-handler"),
               allowBlank: true,
               uiStyle: "medium",
               query: {

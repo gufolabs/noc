@@ -27,20 +27,20 @@ Ext.define("NOC.core.MonacoPanel", {
   tbar: [
     {
       itemId: "close",
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       handler: "onBack",
     },
     {
       glyph: NOC.glyph.refresh,
-      text: __("Reset"),
-      tooltip: __("Reset"),
+      text: t("btn-reset"),
+      tooltip: t("btn-reset"),
       handler: "onReset",
     },
     "-",
     {
       xtype: "combo",
-      fieldLabel: __("Version"),
+      fieldLabel: t("header-version"),
       itemId: "revCombo",
       queryMode: "local",
       displayField: "ts_label",
@@ -71,7 +71,7 @@ Ext.define("NOC.core.MonacoPanel", {
     {
       xtype: "combo",
       itemId: "diffCombo",
-      fieldLabel: __("Compare"),
+      fieldLabel: t("label-compare"),
       queryMode: "local",
       displayField: "ts_label",
       valueField: "id",
@@ -102,7 +102,7 @@ Ext.define("NOC.core.MonacoPanel", {
     {
       itemId: "nextDiffBtn",
       glyph: NOC.glyph.arrow_down,
-      tooltip: __("Next change"),
+      tooltip: t("help-next-change"),
       handler: "onNextDiff",
       bind: {
         disabled: "{!hasChanges}",
@@ -111,7 +111,7 @@ Ext.define("NOC.core.MonacoPanel", {
     {
       itemId: "prevDiffBtn",
       glyph: NOC.glyph.arrow_up,
-      tooltip: __("Previous change"),
+      tooltip: t("help-previous-change"),
       handler: "onPrevDiff",
       bind: {
         disabled: "{!hasChanges}",
@@ -119,15 +119,15 @@ Ext.define("NOC.core.MonacoPanel", {
     },
     {
       glyph: NOC.glyph.exchange,
-      tooltip: __("Swap contents"),
+      tooltip: t("help-swap-contents"),
       handler: "onSwapRev",
       bind: {
         disabled: "{!hasChanges}",
       },
     },
     {
-      text: __("Download"),
-      tooltip: __("Download content"),
+      text: t("btn-download"),
+      tooltip: t("help-download-content"),
       glyph: NOC.glyph.download,
       handler: "onDownload",
     },
@@ -168,7 +168,7 @@ Ext.define("NOC.core.MonacoPanel", {
   },
   requestText: function(record){
     this.rootUrl = Ext.String.format(this.restUrl, record.get("id"));
-    this.mask(__("Loading"));
+    this.mask(t("msg-loading"));
     NOC.api.requestLegacy({
       url: this.rootUrl,
       method: "GET",
@@ -178,7 +178,7 @@ Ext.define("NOC.core.MonacoPanel", {
         this.setContent(text);
       },
       failure: function(){
-        NOC.error(__("Failed to get text"));
+        NOC.error(t("msg-failed-to-get-text"));
       },
       callback: function(){
         this.unmask();
@@ -220,19 +220,19 @@ Ext.define("NOC.core.MonacoPanel", {
         diffCombo.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get revisions"));
+        NOC.error(t("msg-failed-to-get-revisions"));
       },
     });
   },
   requestRevision: function(rev, callback){
-    this.mask(__("Loading"));
+    this.mask(t("msg-loading"));
     NOC.api.requestLegacy({
       url: this.rootUrl + rev + "/",
       method: "GET",
       scope: this,
       success: callback,
       failure: function(){
-        NOC.error(__("Failed to get text"));
+        NOC.error(t("msg-failed-to-get-text"));
       },
       callback: function(){
         this.unmask();

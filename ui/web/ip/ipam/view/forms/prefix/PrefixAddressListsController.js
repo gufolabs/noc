@@ -86,10 +86,10 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressListsController", {
     var store = this.getView().down("[itemId=ipam-" + name + "-grid]").getStore();
     if(store.isFiltered()){
       store.clearFilter();
-      button.setText(__("Hide Free") + " " + __(Ext.String.capitalize(name)));
+      button.setText(t("btn-hide-free") + " " + t(name === "prefix" ? "label-prefix" : "label-address"));
     } else{
       store.addFilter(filter);
-      button.setText(__("Show Free") + " " + __(Ext.String.capitalize(name)));
+      button.setText(t("btn-show-free") + " " + t(name === "prefix" ? "label-prefix" : "label-address"));
     }
   },
   filterByFree: function(record){

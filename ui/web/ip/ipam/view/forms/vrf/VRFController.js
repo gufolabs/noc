@@ -27,11 +27,11 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRFController", {
       jsonData: Ext.merge(source, data),
       success: function(response){
         if(response.status === 200){
-          NOC.msg.complete(__("Saved"));
+          NOC.msg.complete(t("msg-saved-2"));
         }
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
     });
     this.onClose();

@@ -22,92 +22,301 @@ app-group-sla: SLA
 app-group-support: Поддержка
 app-group-vc: Управление VC
 app-group-wf: Редактор процессов
+app-title-abduct-detection: Обнаружение обрыва
+app-title-about-system: О системе
 app-title-account: Учетная запись
 app-title-action: Действие
 app-title-actioncommands: Действия через команду
+app-title-activation: Включение
+app-title-activation-window: Окно включения
+app-title-add-conduits: Добавить связь
+app-title-add-vlan: Добавить VLAN
 app-title-address: Адрес
+app-title-addressprofile: Профиль Адреса
 app-title-addressrange: Диапазоны адресов
 app-title-administrativedomain: Зоны ответственности
 app-title-agent: Агент
+app-title-agentprofile: Agent Profile
+app-title-agreement: Agreement
 app-title-alarm: Авария
+app-title-alarm-transfer: Передача состатояния аварии
 app-title-alarmclass: Класс аварии
 app-title-alarmclassconfig: Настройки класса аварий
+app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
 app-title-alarmescalation: Эскалация
 app-title-alarmrule: Правила для авария
+app-title-alarms-type: Тип аварии
 app-title-alarmseverity: Серьезность
 app-title-alarmtrigger: Триггеры аварии
+app-title-all-devices-on-screen: Все устройства на экране
+app-title-allocationgroup: AllocationGroup
+app-title-allow: Разрешить
+app-title-apikey: Ключ API
 app-title-as: AS
+app-title-asprofile: AS Profile
 app-title-asset: Наборы AS
+app-title-asset-sync-settings: Настройки синхронизации с Учётом
+app-title-attach-to: Attach to
+app-title-attributes: Атрибуты
 app-title-audittrail: Аудит событий
+app-title-authldapdomain: LDAP Domain
 app-title-authprofile: Профиль авторизации
+app-title-autosegmentation: Автосегментация
+app-title-badge: Значок
+app-title-band-format: Формат области
+app-title-basket: Корзина
+app-title-bind-addresses: Назначить адреса
+app-title-biosegmentation: Биосегментация
+app-title-bom: BoM
+app-title-box: Полный опрос
+app-title-box-discovery: Полный опрос
+app-title-box-discovery-intervals: Интервал пакетного опроса
 app-title-building: Здание
+app-title-by-action: По действию
+app-title-by-active: Действующие
+app-title-by-adm-domain: По З.О.
+app-title-by-afi: By AFI
+app-title-by-builtin: Встроена
+app-title-by-can-change: Может Редактировать
+app-title-by-can-view: Может просматривать
+app-title-by-category: По категории
+app-title-by-community-type: By Community Type
+app-title-by-container-type: By Container Type
+app-title-by-default: По умолчанию
+app-title-by-delayed: С задержкой
+app-title-by-dialplan: По Номерному плану
+app-title-by-dynamic-client-labels: By Dynamic Client Labels
+app-title-by-dynamic-service-labels: By Dynamic Service Labels
+app-title-by-enabled: Включена
+app-title-by-event-class: По классу события
+app-title-by-filtered: By Filtered
+app-title-by-from: По начальному состоянию
+app-title-by-group: По Группе
+app-title-by-hidden: By Hidden
+app-title-by-immediately: Немедленно
+app-title-by-ipv4: По IPv4
+app-title-by-ipv6: По IPv6
+app-title-by-is-active: Активные
+app-title-by-is-builtin: Встроенные
+app-title-by-is-enabled: By Is Enabled
+app-title-by-is-locked: Заблокированы
+app-title-by-l2-domain: По L2 домену
+app-title-by-link-event: По событиям на линке
+app-title-by-match-rules-labels: По Меткам совпадения
+app-title-by-notification: По Уведомлению
+app-title-by-notify-group: По группе уведомления
+app-title-by-object: По Объекту
+app-title-by-parent: По Родителю
+app-title-by-productive: Продуктивные
+app-title-by-project: По Проекту
+app-title-by-protocol: По протоколу
+app-title-by-range: По Диапазону
+app-title-by-resourcegroup: По Группе ресурсов
+app-title-by-sa-profile: По профилю
+app-title-by-searchable: By Searchable
+app-title-by-segment: По сегменту
+app-title-by-service: By Service
+app-title-by-state: По состоянию
+app-title-by-subscriber: По абоненту
+app-title-by-supplier: По поставщику
+app-title-by-tech-domai: По Домену
+app-title-by-technology: По технологии
+app-title-by-to: По конечному состоянию
+app-title-by-type: По типу
+app-title-by-user: По пользователям
+app-title-by-vendor: По производителю
+app-title-by-vlan: By VLAN
+app-title-by-vrf: По VRF
+app-title-by-vrf-group: По VRF группе
+app-title-by-workflow: По процессу
+app-title-calculate-oper-status: Расчёт оперативного состояния
 app-title-calculator: Калькуляторы
+app-title-capabilities-of: Capabilities of
 app-title-capability: Свойство
+app-title-capsprofile: Caps Profile
 app-title-card: Карточки
+app-title-change-password: Изменить пароль
+app-title-change-records: Сохранить изменения?
 app-title-channel: Каналы
+app-title-chpolicy: CHPolicy
 app-title-classificationrule: Правило классификации
+app-title-clear-alarms: Очистить аварии
+app-title-clear-links: Сброс линков
+app-title-clone-item: Клонировать {name}
+app-title-clone-object: Клонирование объектв?
+app-title-cloud-inspector: Свойства "облака"
+app-title-collector-settings: Collector Settings
+app-title-colors: Цвета
 app-title-commandsnippet: Сниппеты
+app-title-common: Общий
+app-title-community: Communities
+app-title-communitytype: Community Types
+app-title-commutation: Подключения
+app-title-components: Компоненты
+app-title-compose: Преобразование
+app-title-conduits: Колодцы
+app-title-confdbquery: ConfDBQuery
+app-title-config-fetching: Сбор конфигурации
+app-title-config-handler: Config handler
+app-title-config-policy: Политика сбора конф-ии
+app-title-config-validation: Валидация конфигурации
 app-title-configurationparam: Параметр конфигуарации
 app-title-configurationscope: Область конфигурации
 app-title-configuredmap: Пользовательская карта
+app-title-confirm-reset: Подтвердить удаление
 app-title-connectionrule: Правила соединения
 app-title-connectiontype: Типы соединения
 app-title-coverage: Покрытие
+app-title-covered-buildings: Накрытые здания
+app-title-covered-objects: Накрытые объекты
 app-title-cpe: CPE
+app-title-cpe-inspector: Свойства CPE
 app-title-cpeprofile: Профиль CPE
 app-title-crashinfo: Дампы
+app-title-create: Создать
+app-title-create-internal-connection-from: Создать внутреннее подключение из
+app-title-create-item: Создать {name}
+app-title-create-new: Создать новый
+app-title-create-new-channel: Создать новый канал
+app-title-create-new-top-level-object: Создать новый объект верхнего уровня
 app-title-credentialcheckrule: Правило проверки доступа
+app-title-crontab: CronTab
+app-title-cross: Переход
+app-title-crossing: Соединить
 app-title-csv: Импорт/экспорт CSV
 app-title-customfield: Свои поля
+app-title-customfieldenumgroup: Enum Groups
 app-title-dashboard: График
+app-title-dashboardlayout: Dashboard Layout
+app-title-data: Данные
+app-title-data-sources: Источники данных
+app-title-datastream-handlers: Применять для DataStream API
 app-title-datastreamconfig: Пользовательские DataStream
 app-title-ddash: Динамический экран
+app-title-deactivation: Выключение
+app-title-deactivation-window: Окно выключения
+app-title-delete-address: Удалить IP адрес?
+app-title-delete-record: Удалить запись?
+app-title-delete-workflow: Удалить процесс?
+app-title-device-is-wiping-and-will-be-removed-soon: Будет удалено позже. Для отмены измените статус
 app-title-dialplan: Номерной план
 app-title-discoveredobject: Обнаруженные устройства
+app-title-discovery-alarm: Авария при опросе
+app-title-discovery-job-log: Лог опроса
+app-title-discovery-policy: Политики опроса
+app-title-discovery-prefix: Discovery (Prefix)
+app-title-display: Display
+app-title-display-filters: Фильтры отображения
+app-title-display-settings: Настройки отображения
 app-title-division: Подразделение
 app-title-dnsserver: Сервер DNS
 app-title-dnszone: Зона DNS
 app-title-dnszoneprofile: Профили зон
+app-title-edit: Редактировать
+app-title-edit-item: Изменить {name}
+app-title-edit-items: "{count, plural, one {Изменить # объект: {name}} few {Изменить # объекта: {name}} many {Изменить # объектов: {name}} other {Изменить # объекта: {name}}}"
+app-title-edit-thresholds: Редактировать Пороги
+app-title-edit-value: Редактировать значение
+app-title-effective-labels: Эффективный метки
+app-title-endpoint: Подключения
+app-title-escalationprofile: Профиль эскалации
 app-title-event: События
+app-title-event-inspector: Инспектор События
+app-title-event-sources: Источник событий
 app-title-eventclass: Класс событий
 app-title-eventtrigger: Триггеры событий
+app-title-extractors-loaders: Выгрузка/Загрузчики
 app-title-extstorage: Внеш. хранилище
 app-title-facade: Фасады
+app-title-facade-2: Фасад
+app-title-favorites: Избранное
+app-title-files: Файлы
+app-title-filters: Фильтры
 app-title-firmware: Прошивки
 app-title-firmwarepolicy: Политика версий прошивок
+app-title-first-100: Первые 100
+app-title-first-50: Первые 50
+app-title-first-n: Первые N
+app-title-fm: FM
+app-title-fm-handlers: FM Handlers
+app-title-get-json: Получить JSON
 app-title-getnow: Текущая информация
+app-title-glyph: Картинка
 app-title-group: Группы
 app-title-groupaccess: Права групп
+app-title-handler: Обработчик
 app-title-heatmap: Тепловая карта
+app-title-help: Помощь
+app-title-hierarchy: Hierarchy
 app-title-home: Главная
+app-title-housekeeping: Housekeeping
+app-title-ifdesc-policy: IfDesc Policy
+app-title-ifdesc-settings: Настройки линковки по Описанию
 app-title-ifdescpatterns: Маски для описания интерфейсов
 app-title-ignoreeventrule: Правила игнорирования событий
 app-title-ignorepattern: Шаблоны игнорирования
 app-title-imagestore: Изображения
+app-title-industries: Род деятельности
+app-title-info: Информация
+app-title-inputs: Входящие
+app-title-instance-policy: Instance Policy
+app-title-integration: Интеграция
 app-title-interface: Интерфейсы
+app-title-interface-bind: Интерфейс (назначить)
 app-title-interfaceprofile: Профиль интерфейса
+app-title-interfacevalidationpolicy: Interface Validation Policy
 app-title-inv: Учет объектов
 app-title-inv-reportdiscoveryproblem: Отчёт по проблемам топологии
 app-title-inv-reportobjectsummary: Сводка по инвентаризации объектов
+app-title-invalid-connections: Ошибочное подключение
+app-title-ip-dns: IP / DNS
 app-title-ipam: Назначенные адреса
+app-title-ipam-address: IPAM (Address)
+app-title-ipam-field: IPAM Field
+app-title-ipam-prefix: IPAM (Prefix)
+app-title-ipam-vpn: IPAM (VPN)
+app-title-is-active: Is Active?
+app-title-is-matching: По условию
 app-title-job: Задачи (Job)
+app-title-job-details: Подробности
 app-title-jsonimport: Импорт JSON
 app-title-kb: База знаний
 app-title-kbentry: Записи
 app-title-kbentrytemplate: Шаблоны
+app-title-l2: L2
 app-title-l2domain: Домен L2
+app-title-l2domainprofile: L2Domain Profile
 app-title-label: Метка
 app-title-language: Языки
 app-title-layer: Слои
+app-title-line-style: Стиль линии
+app-title-link-inspector: Свойства линка
+app-title-links: Линки
+app-title-localization: Перевод
 app-title-macblacklist: Чёрный список MACов
+app-title-macdb: MacDB
 app-title-maintainer: Ответственный
 app-title-maintenance: РНР
 app-title-maintenancetype: Тип РНР
+app-title-managed-object-profile-handlers: Managed Object Profile handlers
 app-title-managedobject: Список объектов
+app-title-managedobject-2: Устройство
+app-title-managedobject-sync-settings: Настройки синхронизации устройства
 app-title-managedobjectprofile: Профиль объекта
+app-title-manual: Вручную
+app-title-manual-scan: Ручное сканирование
 app-title-map: Карта сети
+app-title-map-settings: Настройки карты
+app-title-match: Критерий
+app-title-math-rule: Правила совпадения
+app-title-measurementunits: MeasurementUnits
+app-title-merge-downlinks: Merge Downlinks
+app-title-messageroute: Message Route
+app-title-metric-threshold-bind: Metric Threshold bind
 app-title-metricaction: Действия с метриками
 app-title-metricrule: Правило для метрик
+app-title-metricscope: MetricScope
+app-title-metricstream: MetricStream
 app-title-metrictype: Тип метрик
 app-title-mib: MIB
 app-title-mibpreference: Приоритет MIB
@@ -115,35 +324,83 @@ app-title-mimetype: Типы MIME
 app-title-modelinterface: Интерфейс модели
 app-title-modelmapping: Привязки моделей
 app-title-modelprotectionprofile: Профили защиты форм
+app-title-modeltemplate: Model Template
 app-title-monitor: Монитор опроса
 app-title-monmap: Карта объектов
+app-title-mx-handlers: Обработчики сообщений MX
+app-title-navigation: Навигация
+app-title-network-resources: Сетевые ресурсы
 app-title-networksegment: Сегмент сети
+app-title-networksegmentprofile: Профиль сегмента
+app-title-noc-login: Вход в NOC
+app-title-nodes: Узлы
+app-title-notification-contacts: Контакты
+app-title-notification-group-settings: Настройки уведомлений по группам
 app-title-notificationgroup: Группа уведомлений
+app-title-numbercategory: Number Category
+app-title-object-connections: Доступные слоты
+app-title-object-inspector: Свойства объекта
 app-title-objectconfigurationrule: Правила конфигурации
+app-title-objectdiagnosticconfig: Object Diagnostic Config
 app-title-objectdiscoveryrule: Правила сканирования сети
+app-title-objectgroup-inspector: Свойства группы устройств
 app-title-objectmodel: Модели объектов
 app-title-objectnotification: Уведомления
 app-title-objectnotify: Уведомления по объектам
+app-title-objectsegment-inspector: Свойства сегмента
+app-title-objectvalidationpolicy: Object Validation Policy
 app-title-oidalias: Синонимы (alias) OID
+app-title-on-clear: При закрытии
+app-title-on-raise: При создании
+app-title-oper-status-transfer: Oper Status Transfer
+app-title-oper-status-transfer-2: Передача Оперативного состояния
+app-title-opm: OPM
 app-title-organisation: Организации
 app-title-outage: Обстановка детально
 app-title-peer: Пиры
 app-title-peergroup: Группы пиров
+app-title-peeringpoint: Peering Points
 app-title-peerprofile: Профиль Пиров
+app-title-period-start-qty: Диапазон (начало, число)
+app-title-periodic-discovery: Периодический опрос
+app-title-periodic-discovery-intervals: Интервал переодического опроса
+app-title-person: Persons/Roles
 app-title-phonenumber: Телефонный номер
+app-title-phonenumberprofile: Number Profile
 app-title-phonerange: Диапазон номеров
+app-title-phonerangeprofile: Phone Range Profile
+app-title-ping-check: Проверка доступности
+app-title-ping-discovery-intervals: Интервал проверки доступности
+app-title-ping-series-settings: Настройки серии
 app-title-platform: Платформа
+app-title-platform-version: Platform & Version
+app-title-plugins: Плагины
+app-title-point-style: Стиль точки
 app-title-pool: Пул
+app-title-portal: Портал
+app-title-portal-inspector: Инспектор перехода
 app-title-prefix: Префикс
 app-title-prefixaccess: Доступ к префиксам
 app-title-prefixlistbuilder: Построение списка префиксов
 app-title-prefixprofile: Профиль префикса
 app-title-prefixtable: Таблица префиксов
+app-title-process-telemetry: Process Telemetry
 app-title-profile: Профиль
 app-title-profilecheckrule: Правило проверки профиля
 app-title-project: Проект
 app-title-protocol: Протокол
+app-title-pyrule: PyRule
 app-title-quiz: Анкеты
+app-title-rack: Стойка
+app-title-reactionrule: Reaction Rules
+app-title-referenced: Referenced
+app-title-register-instance: Добавить Экземпляр
+app-title-remote-mapping: Связи с внешней системой
+app-title-remotesystem: Внешняя система
+app-title-remove-conduits-to: Удалить подключение в
+app-title-remove-interface: Удалить интерфейс
+app-title-replace-rule: Заменить на
+app-title-reportaddressfilter: Filter Address
 app-title-reportalarmcomments: Детали комментариев по авариям
 app-title-reportalarmdetail: Детали аварии
 app-title-reportallocated: Выделенные блоки
@@ -152,12 +409,14 @@ app-title-reportclassificationquality: Качество классификаци
 app-title-reportclassificationrule: Правила классификации
 app-title-reportcompare: Сравнить спецификации
 app-title-reportcone: Анализ конуса
+app-title-reportconfig: Report Configs
 app-title-reportdbsummary: Статус БД
 app-title-reportdiscovery: Сводка опроса
 app-title-reportdiscoverycaps: Опрошенные свойства оборудования
 app-title-reportdiscoverypoison: Дубликаты в кэше Идентификаторов
 app-title-reportduplicatedfqdns: Дубликаты FQDN
 app-title-reportescalations: Эскалации
+app-title-reportexpanded: All Allocated Blocks
 app-title-reportexpiringdomains: Просроченные домены
 app-title-reportfilter: Фильтр
 app-title-reportfree: Свободные блоки
@@ -181,6 +440,7 @@ app-title-reportobjectdetail: Детализация по объектам
 app-title-reportobjectsserial: Серийные номера
 app-title-reportoutages: Обстановка детально
 app-title-reportoverlappedoids: Пересекающиеся OID
+app-title-reportoverview: Обзор
 app-title-reportpartnumbers: Модель
 app-title-reportpendinglinks: Неподтверждённые линки
 app-title-reportreboots: Перезагрузки
@@ -188,19 +448,43 @@ app-title-reportrulesbyprofile: Правила по профилю
 app-title-reportrulesetsummary: Сводка по набору правил
 app-title-reportstalediscovery: Зависший опрос
 app-title-reportsubscription: Подписка на отчёты
+app-title-reportsummary: Block Summary
+app-title-reporttaggedmodels: Tagged Models
 app-title-reportttsystemstat: Статистика по эскалациям
 app-title-reportunknownsummary: Сводка по неизвестным моделям
 app-title-reportvpnstatus: Состояние VPN
+app-title-reset-layout: Сбросить раскладку
+app-title-resourcegroup: ResourceGroup
+app-title-resourcepool: ResourcePool
 app-title-resourcestate: Состояния ресурсов
 app-title-rir: Региональный регистратор (RIR)
+app-title-root-band: Базовая область
+app-title-run-policy: Политика запуска
 app-title-runcommands: Запуск команд
 app-title-sa-reportdiscoveryproblem: Отчёт по проблемам дискавери
 app-title-sa-reportobjectsummary: Сводка по объектам
 app-title-scale: Множители (ед. изм.)
+app-title-scoped-value-colors: Цвет значения
 app-title-search: Глобальный Поиск
+app-title-segment-inspector: Свойства сегмента
+app-title-segments: Сегменты
+app-title-select-shape: Выбрать изображение
+app-title-selected-groups: Выбранные группы
 app-title-sensor: Сенсор
+app-title-sensorprofile: SensorProfile
 app-title-service: Сервисы
 app-title-serviceprofile: Профиль сервиса
+app-title-session-expired: Время сессии истекло
+app-title-severity-policy: Severity Policy
+app-title-shape: Изображение
+app-title-shape-overlay: Настройки значка
+app-title-share-contribution: Поделиться трудами
+app-title-share-item: Поделиться запись?
+app-title-show-recently-closed: Отобразить последние закрытые
+app-title-slaprobe: SLA Probe
+app-title-slaprofile: SLA Profile
+app-title-snmp: SNMP
+app-title-spec: Spec
 app-title-state: Состояния
 app-title-street: Улица
 app-title-style: Стиль
@@ -208,275 +492,1136 @@ app-title-subscriber: Абонент
 app-title-subscriberprofile: Профиль абонента
 app-title-supplier: Поставщик
 app-title-supplierprofile: Профиль поставщика
+app-title-switchports: Switchports
+app-title-sync-settings: Настройки синхронизации
+app-title-synd-data: Последняя синхронизация
 app-title-systemnotification: Системные уведомления
 app-title-systemtemplate: Системные шаблоны
 app-title-techdomain: Домен
 app-title-technology: Технология
+app-title-telemetry: Отладка (телеметрия)
 app-title-template: Шаблоны
+app-title-test-selected-groups: Проверить выбранную группу
+app-title-test-selected-patterns: Проверить выбранные шаблоны
+app-title-test-selected-prefix-tables: Проверить выбранные таблицы префиксов ...
+app-title-text: Текст
+app-title-text-style: Стиль текста
+app-title-threshold-profiles-handlers: Threshold Profiles Handlers
+app-title-thresholds: Пороги
 app-title-timepattern: Маска времени
+app-title-timing: Timing
+app-title-to: в
 app-title-tools: Инструменты
+app-title-topology: Топологии
+app-title-topology-discovery: Опрос топологии
+app-title-topology-handlers: Topology handlers
 app-title-totaloutage: Общая сводка
 app-title-transition: Переходы
+app-title-transmute: Преобразование
+app-title-trap-collector-storm-settings: Поведение при шторме трапов
+app-title-ttl-policy: TTL Policy
 app-title-ttsystem: Система TT
 app-title-unknownmodel: Неизвестные модели
+app-title-unlink-interface: Отсоединить интерфейс
+app-title-unsaved-data: Не сохранённые данные
+app-title-update-or-modify-internal-connection-from: Обновить или изменить внутренее подключения из
+app-title-upload-files: Загрузить файлы
 app-title-user: Пользователи
 app-title-useraccess: Права пользователя
 app-title-userprofile: Профиль пользователя
+app-title-validation: Проверка
+app-title-variables: Переменные
+app-title-vc: VC
 app-title-vendor: Производитель
+app-title-visual: Visual
 app-title-vlan: VLAN
 app-title-vlanfilter: Фильтр VLAN
+app-title-vlanprofile: VLAN Profile
+app-title-vlantemplate: Шаблон VLANа
 app-title-vpn: VPN
+app-title-vpnprofile: VPN Profiles
 app-title-vrf: VRF
 app-title-vrfgroup: Группы VRF
+app-title-wfmigration: WF Migration
+app-title-with: с
 app-title-workflow: Редактор процессов
+app-title-zoom: Масштаб
+app-title-zoom-in: Zoom in...
+app-title-zoom-out: Zoom out...
+btn-1-100-000: 1:100 000
+btn-about-system: О программе ...
+btn-add: Добавить
+btn-add-2: "Добавить "
+btn-add-address: Добавить Адрес
+btn-add-all-objects-to-group: Добавить все объекты в группу
+btn-add-attributes-bootprom-version: Дополнительный аттрибут (версия BootPROM)
+btn-add-attributes-hw-version: Дополнительный аттрибут (HW версия)
+btn-add-attributes-sw-patch: Дополнительный аттрибут (номер патча)
+btn-add-interface: Добавить интерфейс
+btn-add-mapping: Добавить связку
+btn-add-object-to: "Добавить объект в "
+btn-add-objects: Добавить объекты
+btn-add-prefix: Добавить Префикс
+btn-add-row: Добавить запись
+btn-add-state: Добавить состояние
+btn-add-to-favorites: Добавить в избранные
+btn-add-to-favorites-2: Добавить в избранное
+btn-add-to-group: Добавить в группу
+btn-add-to-maintenance: Добавить в РНР
+btn-add-to-maintenance-2: Добавить в РНР (работы)
+btn-add-user: Добавить пользователя
+btn-admin-down: административно отключён
+btn-affected-instance: Включая Инстанс
+btn-alarm-detail-report: Отчёт детализация аварий
+btn-alarm-labels: Метки аварии
+btn-align: Выравнивание
+btn-allocate-vlan: Разместить VLAN
+btn-allow-register: Allow Register
+btn-allow-resources: Виды ресурсов
+btn-anonymous: Анонимный
+btn-append: Добавить
+btn-apply: Применить
+btn-argument: Параметры
+btn-asset: Asset#
+btn-asset-group: Asset. Group
+btn-attach: Attach
+btn-attach-account: Подключить учётную запись
+btn-attach-existing-account: Подключить существующую учётную запись
+btn-balance: баланс
+btn-bind: Bind
+btn-calcified-profile: Профиль при кальцификации
+btn-cancel: Отмена
+btn-cancel-sort: Отменить сортировку
+btn-card: Карточка
+btn-change-password: Смена пароля ...
+btn-change-password-2: Смена пароля
+btn-clean-all: Очистить все
+btn-clear: Очистить
+btn-clear-alarm: Закрыть аварию?
+btn-clear-alarm-2: Закрыть аварию
+btn-clear-alarm-if-admin-down: Закрыть аварию если отключен
+btn-clear-value: Clear Value
+btn-clone: Клонировать
+btn-close: Закрыть
+btn-collapse-all: Схлопнуть Все
+btn-command-log: Лог команд
+btn-completed-at: Завершена
+btn-condition-param: Condition/Param
+btn-condition-values: Condition/Values
+btn-config: Конфиг
+btn-connect: Соединить
+btn-copy-to-clipboard: Копировать в буфер
+btn-create-block: Создать блок
+btn-create-channel: Создать канал
+btn-create-ignore: Правило игнорирования
+btn-create-new: Создать...
+btn-create-new-channel: Создать новый канал ...
+btn-create-new-diagram-not-implement: Создание новой диаграммы не реализовано
+btn-create-rule: Правило классификации
+btn-created-at: Создана
+btn-crm-users-contacts: Абоненты (Контакты)
+btn-csv: CSV
+btn-csv-zip: CSV+ZIP
+btn-data-unavailable: данные не доступны
+btn-datasource: Источник данных
+btn-default-labels: Метки по умолчанию
+btn-delete: Удалить
+btn-delete-prefix: Удалить префикс
+btn-dhcp: DHCP
+btn-disable-if-admin-down: Выкл если админ статус откл.
+btn-disable-if-oper-down: Выкл, если опер статус откл.
+btn-disable-scope: Disable Scope
+btn-disconnect: Отсоединить
+btn-do-checked: Далее
+btn-download: Загрузить
+btn-download-button-clicked: Нажата кнопка Загрузки
+btn-download-image: Загрузить...
+btn-download-script: Download, Script
+btn-edit-address: Редактировать
+btn-edit-mo: Редактировать MO
+btn-edit-model: Редактировать модель
+btn-edit-prefix: Редакт. Префикс
+btn-effective-client-groups: Действующие клиентские группы
+btn-effective-service-groups: Действующие сервисные группы
+btn-effective-settings: Действующие настройки
+btn-enable-for-topology: Enable for Topology
+btn-enable-message: Включить уведомления
+btn-enable-ping-but-don-t-follow-status: Enable ping but don't follow status
+btn-enable-scope: Enable Scope
+btn-end: Окончание
+btn-enter-full-screen: Enter Full Screen
+btn-escalate: Эскалировать
+btn-etl: ETL
+btn-excel: Excel
+btn-expand-all: Развернуть Все
+btn-export: Экспорт
+btn-field: Поле
+btn-fill-entrances: Заполнить подъезды
+btn-filtering-list: Список для фильтрации
+btn-fit-page: По странице
+btn-fix: Исправить
+btn-follow: Текущий
+btn-from: С
+btn-front: Передняя часть
+btn-function: Function
+btn-generate: Создать модель
+btn-generate-key: Создать ключ
+btn-get-config-now: Запрос конфига
+btn-group-actions: Групповые действия
+btn-group-comment: Групповой комментарий
+btn-group-operation: Групповая операция
+btn-hide-details: Скрыть детали
+btn-hide-free: Скрыть свобод.
+btn-include-res: Include Res.
+btn-insert: Вставить
+btn-instance-type: Тип экземпляра
+btn-ipmi-id: IPMI ID
+btn-is-required: Обязательный
+btn-is-stored: Сохранять
+btn-json: JSON
+btn-json-data: Данные (JSON)
+btn-launch: Запуск
+btn-link-bandwidth-style: Стиль полосы пропускания линка
+btn-link-status-style: Стиль статуса линка
+btn-link-utilization-style: Стиль заргрузки линка
+btn-logout: Выход
+btn-magic: Магия
+btn-map: Карта
+btn-mapping: Внешние ИД
+btn-mark-to-favorites: Добавить в избранные
+btn-mass: Групповой
+btn-match-condition: Критерий совпадения
+btn-match-level: Match Level
+btn-match-state: Состояния при совпадении
+btn-max-attacker-lvl: Макс. уровень атакующего
+btn-max-severity: Макс Важность
+btn-max-status: Макс. состояние
+btn-max-value: Макс. значение
+btn-max-value-2: Макс. значение
+btn-message: Сообщение
+btn-min-attacker-lvl: Мин. уровень атакующего
+btn-min-severity: Мин Важность
+btn-min-status: Мин. состояние
+btn-min-value: Мин. значение
+btn-min-value-2: Мин. значение
+btn-modify-api-key: Поменять API ключ
+btn-move-down: Опустить
+btn-move-up: Поднять
+btn-mpls: MPLS
+btn-new-maintaince: Новый РНР
+btn-new-maintenance: Новый РНР (работы)
+btn-next: Следующая
+btn-no-leaf-selected: Не выбран узел
+btn-no-link: No link
+btn-no-matches-found: Совпадений не найдено
+btn-no-records-found-matching: "Нет записей для условия: "
+btn-no-records-to-display: Нет записей для отображения
+btn-object-settings: Настройки Объекта
+btn-object-status-style: Стиль статуса объекта
+btn-ok: Ok
+btn-only-one-instance: Only One Instance
+btn-op: Операция
+btn-open-in-browser: Открыть в браузере
+btn-open-prefix-card: Открыть карточку
+btn-oper-down: соединение отсутствует
+btn-operation: Действие
+btn-param: Параметры
+btn-port-range: Port Range
+btn-print: Print
+btn-rear: Задняя часть
+btn-rebase: Переместить
+btn-reclassify: Переклассифицировать
+btn-ref-only: Ref. Only
+btn-ref-source: Ref. Source
+btn-reg-instance: Reg. Instance
+btn-register: Зарегистрировать
+btn-relative: Относительно
+btn-reload: Перезагрузить
+btn-remove: Удалить
+btn-remove-all: Удалить все
+btn-remove-all-connections: Удалить все подключения
+btn-remove-from-favorites: Удалить из Избранных
+btn-remove-from-favorites-2: Удалить из избранного
+btn-remove-group: Удалить группу '
+btn-remove-group-2: Удалить группу
+btn-remove-mapping: Удалить связку
+btn-remove-this-item: Удалить элемент.
+btn-remove-user: Удалить пользователя
+btn-reserved: Reserved
+btn-reset: Сброс
+btn-reset-filter: Сбросить фильтр
+btn-resources: Ресурсы
+btn-rid: RID
+btn-run: Запуск
+btn-run-action: Запустить действие
+btn-run-discovery: Запустить опрос
+btn-run-discovery-now: Запустить опрос
+btn-run-snippet: Запустить Snippet
+btn-save: Сохранить
+btn-scan: Опросить
+btn-scripts: Скрипты
+btn-search: Поиск
+btn-segment-power-function: Функц. расчёта силы
+btn-select-all: Выбрать все
+btn-select-config: Выбрать конфиг...
+btn-select-dictionary: Выбрать справочник
+btn-select-image: Выбрать изображение...
+btn-select-managed-object: Выберите объект ...
+btn-select-period: Выберите период
+btn-select-rows: Выбрать строки
+btn-send: Отправить
+btn-send-approve-to-res: Сигнал Approve
+btn-set: Установить
+btn-set-managed: Сделать управляемым
+btn-set-password: Задать пароль
+btn-set-root: Set Root
+btn-set-status: Статус
+btn-set-unmanaged: Сделать неуправляемым
+btn-share: Поделиться
+btn-show-dashboard: Графики
+btn-show-dashboard-2: Показать графики
+btn-show-details: Показать детали
+btn-show-free: Не занятые
+btn-show-map: Карта
+btn-show-object: Показать Объект
+btn-show-prefix: Показать префикс
+btn-start-zone-transfer: Начать передачу зоны
+btn-static-client-groups: Настроенные клиентские группы
+btn-static-service-groups: Настроенные сервисные группы
+btn-status-transfer: Status Transfer
+btn-stop-polling: Остановить опрос
+btn-stp-blocked: STP заблокирован
+btn-submit: Отправить
+btn-subscribe: Подписаться
+btn-suppress: Подавление
+btn-suppression: Подавление
+btn-sync-record: Синхронизировать устройство
+btn-system: Система
+btn-tagged-ranges: Тэгированный (диапазон)
+btn-test: Тест
+btn-test-sound: Тест звука
+btn-text: 
+btn-text-2: 
+btn-text-3: 
+btn-text-4: 
+btn-to: По
+btn-to-maintaince-mode: Добавить в РНР
+btn-to-status: Состояние
+btn-type: тип
+btn-unbind: Unbind
+btn-units: Размер (в юнитах)
+btn-unknown: неизвестный
+btn-unmark-from-favorites: Удалить из избранных
+btn-unregister: Удалить
+btn-unselect-all: Отменить выделение
+btn-untag: Нетэг.
+btn-update-channel: Обновить канал
+btn-update-unlink: Обновить/Отвязать
+btn-upload: Загрузка
+btn-user-profile: Профиль пользователя ...
+btn-var: Переменная
+btn-var-map: Привяз. перем.
+btn-view: Просмотр
+btn-view-card: Просмотр карточки
+btn-vlan-db: Vlan DB
+btn-vlan-interfaces: Принадлежащие интерфейсы
+btn-wait: Только
+btn-watch: Наблюдать
+btn-weight: Вес
+btn-whois: Whois
+btn-window: Окно
 choice-1-day: 1 день
 choice-1-month: 1 месяц
 choice-1-week: 1 неделя
+choice-addresses-unique-per-vrf: Addresses are unique per VRF
+choice-addresses-unique-per-vrf-group: Addresses are unique per VRF Group
+choice-all: Все
 choice-by-administrative-domain: По З.О.
 choice-by-administrative-domain-and-profile: По З.О. и профилю
 choice-by-labels: По меткам
 choice-by-platform: По платформе
 choice-by-profile: По профилю
 choice-by-version: По версии
+choice-cisco-ios-policer: Cisco IOS policer
+choice-cisco-ios-rate-limit: Cisco IOS rate-limit
+choice-config: config
+choice-dbm: dBm
+choice-disable-ping: Отключить пинг
 choice-dns: DNS
+choice-do-nothing: Do nothing
+choice-enable-ping-but-dont-follow-status: Enable ping but dont follow status
 choice-escalation-error-details: Детализация ошибок эскалации
+choice-generate-fqdns: Generate FQDNs
+choice-ignore: Игнорировать
 choice-ipv4: IPv4
 choice-ipv6: IPv6
+choice-juniper-junos-policer: Juniper JUNOS policer
+choice-mw: mW
+choice-partial-reverse-zone-delegation: Partial reverse zone delegation
 choice-range: Диапазон
+choice-require-if-enabled: Require if enabled
+choice-require-up: Требуется доступность (ICMP)
 choice-statistics: Статистика
+header-acl-policy: Acl Policy
+header-act: Act
 header-action: Действие
+header-active: Активный
+header-active-2: Активно?
+header-add-log: Add log
+header-add-to-subscription: Добавлять в подипску
 header-address: Адрес
+header-address-platform: Адрес/Платформа
+header-addresses: Адреса
 header-adm-domain: З.О.
+header-adm-domain-2: Зона ответственности
+header-adm-path1: ADM_PATH1
 header-admin: Админ
+header-admin-domain-2b0276: ADMIN_DOMAIN
 header-admin-domain-610498: З.О.
 header-administrative-domain-07d5e8: З.О.
 header-administrative-domain-d113be: Зона ответственности
 header-affected-objects: Затронутое оборудование
+header-afi: AFI
 header-alarm: Авария
 header-alarm-class: Класс аварии
+header-alarm-class-re: Класс Аварии RE
+header-alarm-cleared: Авария закрыта
+header-alarm-commented: Авария откомментирована
+header-alarm-disposition: Правила размещения событий
 header-alarm-from-ts: Время начала
+header-alarm-reopened: Авария открыта снова
+header-alarm-risen: Авария создана
 header-alarm-subject: Заголовок аварии
 header-alarm-to-ts: Время закрытия
 header-alarm-tt: Номер ТТ
 header-alarms: Аварии
 header-aliases: Псевдонимы
+header-allocated-5cf7f4: allocated
+header-allocated-c249df: Размещен
 header-allow-children: Разрешить наследников
+header-allow-fail: Allow Fail
+header-allow-manual: Allow Manual
+header-allow-params: Разрешить параметры
+header-allow-part: Allow Part.
+header-allow-subscribe: Разрешить подписку
+header-api: Имя API
 header-as: AS
+header-as-set: as-set
+header-asn: ASN
+header-assigned-user: Assigned User
+header-att: ATT
 header-attachments: Вложения
+header-attribute: Атрибут
+header-auth-profile: AUTH_PROFILE
+header-auto-confirm: Авто-завершение
+header-avail-059853: AVAIL
 header-avail-389d90: Доступность
 header-availability: Доступность
 header-avg-load-in-mbps: Средняя загрузка входящий, Мбит/с
 header-avg-load-out-mbps: Средняя загрузка исходящий, Мбит/с
+header-base: Базовая
+header-bearing: Bearing
+header-blt: Встроенный
 header-body: Текст
+header-box-completed-time: Box Completed Time
+header-box-discovery: Пакетный опрос
+header-box-duration: Box Duration
+header-box-last-status: Box Last status
+header-box-last-success: Box Last success
+header-box-status: Box Status
+header-branch: Ветка
+header-build: Здание
+header-build-letter: Литера
+header-builtin: Встроен
 header-capabilities: Свойства
+header-caps: Caps
 header-category: Категория
-header-chassis: "Шасси"
+header-cfg-ctx: Cfg Ctx.
+header-change: Сменить
+header-changed: Изменилось
+header-channel: Канал
+header-chassis: Шасси
+header-check: Проверка
+header-checks: Проверки
 header-children: Потомок
+header-choices: Варианты выбора
+header-chosen-name: Chosen Name
 header-class: Класс
+header-classified: Classified
+header-clear-template: Шаблон закрытия
+header-client: Client
 header-client-model: Модель клиента
+header-close-template: Шаблон закрытия
+header-close-tt: Закрыть TT
+header-collector: Collector
+header-color: Цвет
+header-combo: Combo
+header-command: Command
 header-comment: Комментарий
 header-comments: Комментарии
+header-comments-qty: Комментарии
+header-composite: Композитный
+header-composite-pins: Composite pins
+header-cond: Cond.
+header-cone-power: Cone Power
+header-config-changed: Конфигурация изменена
+header-config-policy-violation: Конфигурация не соответствует политике
+header-connect-timeout: Таймаут подключения
 header-connection: Связь
+header-connection-rule: Правило подключения
+header-connection-schema: Схема соединений
+header-connection-type: Тип подключения
+header-const: Неизм.
+header-constraint: Связи
 header-consume-resources: Потреблённые ресурсы
 header-consumes-resources: Потребляет ресурсы
 header-contacts: Контакты
+header-container: CONTAINER
 header-container-address: Почтовый адрес объекта
+header-container-type: Container Type
+header-content: Содержимое
+header-control-time-0: Контрольное время 0
+header-control-time-1: Контрольное время 1
+header-control-time-n: Контрольное время N
+header-count: Кол-во
 header-count-outages: Число периодов
 header-cpe: CPE
+header-cr-context: CR. Контекст
+header-created: Создана
+header-credentials: Пароли
+header-current-ma: Ток, мА
+header-d: D
 header-date: Дата
+header-deescalation-trace: Deescalation trace
+header-def-zoom: Масш. умолч.
+header-default: По умолчанию
+header-default-action: Действие
+header-default-expression: Выражение по умолчанию
+header-default-value: Значение по умолчанию
+header-delayed: С задержкой
+header-deny-params: Запретить параметры
+header-dependency-param: Dependency Param
+header-dependency-param-values: Dependency Param Values
+header-depends-on: Depends on
 header-description: Описание
 header-detail: Ссылка на детализацию
+header-device: Device
 header-diagnostic: Диагностика
 header-dialplan: Номерной план
+header-dictionary: Справочник
 header-direction: Направление проблемы
 header-discovery: Опрос
+header-discr: Discr.
+header-discrimiator: Дискриминатор
+header-dispose: Разместить
+header-disposition: Размещение
 header-dns-zone: Зона DNS
 header-domain: Домен
+header-domain-ctx: Domain Ctx
+header-domain-scopes: Domain Scopes
+header-dotall: DotALL
 header-downs: Простои
 header-downtime: Время простоя
 header-duplex: Дуплекс
+header-duplicate: Дубль
 header-duration: Продолжительность
 header-duration-sec: Длительность (сек)
+header-duration-us: Duration (us)
+header-e-mail-address: e-mail
+header-enabled: Включить
 header-end-of-ext-support: Конец расширенной поддержки
+header-end-of-extended-support: Конец расширенной поддержки
 header-end-of-sale: Конец продаж
 header-end-of-support: Конец поддержки
+header-enter-scope: Enter Scope
+header-entrance: Подъезд
+header-entries: Entries
 header-enum: ENUM
+header-enum-group: Группа нумерации (Enum Group)
 header-error: Ошибка
 header-error-code: Код ошибки
 header-error-text: Текст ошибки
+header-error-type: Тип ошибки
 header-errors: Ошибки
 header-errors-in: Вх. ошибки
 header-errors-out: Исх. ошибки
 header-escalation: Эскалация
 header-escalation-error: Ошибка эскалации
 header-escalation-timestamp: Время эскалации
+header-escalation-trace: Escalation trace
 header-escalation-ts: Время эскалации
+header-est-letter: Буква владения
+header-estate: Владение
+header-estate2: Владение2
+header-event-class-re: Шаблон Класса события
+header-event-type: EVENT_TYPE
+header-exclude-expression: Исключить вланы
+header-execute: Execute
+header-exit-command: Exit Command
+header-expiration-time: Срок давности
 header-expired: Просрочен
+header-expired-at: Заканчивается После
+header-expires: Истекает
+header-export-filter: Export Filter
+header-expose: Добавить метку
+header-expose-caps: Expose Caps
+header-expose-condition: Условия отправки
+header-expose-mx: Отправить в сообщении
+header-expresseion: Выражение
+header-extend-ctx: Extend Ctx
+header-extension: Расширение
+header-external-alias: Внешнее название
+header-extra-small: Очень маленький
+header-failed-interval: Интервал при сбое
 header-failed-request-count: Кол-во ошибочных запросов
+header-failed-status: Failed Status
+header-file-name: Имя файла
 header-filter: Фильтр
+header-filtered: Отфильтровано
 header-final-reason: Финальная диагностика
 header-firmware-policy: Политика версий прошивок
+header-first-discovered: Первый раз
+header-first-floor: Первый этаж
+header-first-home: Первая квартира
+header-first-mac: Первый MAC
+header-first-name: Имя
+header-floors: Этажи
+header-format: Формат
 header-fqdn: FQDN
+header-free: Free
+header-free-blocks: Free Blocks
+header-from-address: С адреса
+header-from-iface-down: FROM_IFACE_DOWN
+header-from-iface-name: FROM_IFACE_NAME
+header-from-number: С номера
+header-from-serial: С серийного номера
+header-from-state: Из состояния
 header-from-ts: Время начала
+header-full-duplex: Full Duplex
+header-full-name: Полное имя
+header-full-number: Полный номер
+header-gain-db: Усиление (дБ)
+header-gate-id: Gate Id
+header-gen: Версия.
+header-gender: Тип соединителя
+header-genders: Genders
+header-global-id: Глобальный ИД
+header-graph: График
 header-group: Группа
+header-grouped: Групп
+header-gtt: Групповой ТТ
+header-h: H
+header-height: Высота
+header-hide-records: Скрыть записи
+header-hint: Подсказка
+header-homes: Квартиры
 header-hostname: Имя хоста
 header-hw-revision: Версия прошивки
 header-id: ID
 header-iface-description: Описание интерфейса
 header-iface-name: Имя интерфейса
 header-iface-speed: Скорость интерфейса
+header-ifindex: ifIndex
+header-ignore-cli-errors: Игнорировать ошибки CLI
+header-immediately: Немедленно
+header-import-communities: Import Communities
+header-import-filter: Import Filter
+header-in-kbit-s: Вх (Кбит/с)
+header-include-expression: Включить вланы
+header-include-key-label: Include key Label
+header-indexed: Индексировать
+header-input: Вход
+header-input-discriminator: Входной дискриминатор
+header-instances: Экземпляры
+header-int: Интер.
+header-interaction: Взаимодействия
 header-interface: Интерфейс
 header-interfaces: Интерфейсы
+header-internal-name: Внутреннее имя
+header-interval-sec: Интервал (с)
+header-introduced: Появилась
 header-ip: IP
+header-ip-free: IP Free
+header-ip-scan-discovery: IP Scan Discovery
+header-ip-total: IP Total
+header-ip-used: IP Used
+header-is-active: Активный
+header-is-affilated: Is affilated
+header-is-builtin: Встроен
+header-is-default: По умолчанию
+header-is-dirty: Обновлено
+header-is-hide: Скрытый
 header-is-managed: управляемый
+header-is-root: Is Root
+header-is-synced: Синхронизировано
 header-job: Задача (Job)
+header-key: Ключ
+header-key-re: Шаблон Ключа
+header-kind: Kind
 header-l2-domain: Домен L2
 header-l3: L3
 header-label: Метка
 header-labels: Метки
+header-lag: LAG
+header-language: Язык
+header-large: Большой
 header-last-changed: Последнее изменение
+header-last-config-ts: LAST_CONFIG_TS
+header-last-floor: Последний этаж
+header-last-home: Последняя квартира
+header-last-login: Последний заход
+header-last-mac: Последний MAC
+header-last-name: Фамилия
+header-last-run: Последний запуск
+header-last-seen: Последний раз
+header-last-seen-17bff7: LAST_SEEN
+header-last-seen-20c226: Last Seen
+header-last-status: Последнее состояние
+header-last-status-2: Последний статус
 header-last-success: Последний успех
+header-last-success-2: Последний успешный
 header-last-successful-discovery: Время последнего запуска
+header-last-update: Последнее обновление
+header-last-updated: Изменен
+header-ldap-group-dn: DN Группы LDAP
+header-left-re: Лев. RE
+header-level: Уровень
+header-link-count: LINK_COUNT
+header-link-events: События на интерфейсе
+header-link-proto: LINK_PROTO
+header-link-status: LINK_STATUS
+header-links-count: Links count
 header-load-in: Вх. загрузка
 header-load-out: Исх. загрузка
+header-loca-id: Loca Id
+header-local: Local
+header-local-address: Локальный адрес
+header-local-as: Локальная AS
 header-local-description: Описание порта
+header-local-description-2: Локальное описание
+header-local-group: Локальная группа
+header-local-id: Локальный ИД
+header-local-id-2: Локальный ИД
+header-local-interface: Локальный интерфейс
+header-local-name: Local Name
+header-local-object: Local Object
 header-local-port: Локальный порт
+header-localid: LocalID
 header-location-40c332: Адрес
 header-location-d219c6: Расположение
+header-locked: Заблокировано?
 header-log: История
 header-log-message: Текст комментария
 header-log-source: Автор комментария
 header-log-timestamp: Время комментария
+header-login: Вход
+header-lvl: Уровень
 header-mac: MAC
+header-mac-2: Mac
+header-mac-address: MAC-адрес
 header-mac-vendor: MAC производителя
+header-maintainer: Разработчик
 header-maintenance-81e0be: РНР
 header-maintenance-94de30: РНР
 header-managed: Управляемый
+header-managed-object: Объект
 header-managed-object-62561c: Объекты управления
+header-managed-object-f070ef: MANAGED_OBJECT
 header-managed-objects: Список объектов
 header-managed-objects-administrative-domain-for-config-only: З.О. (только для конфигурации)
 header-managed-objects-group-selector: Группа устройств (Селектор)
 header-managed-objects-pool: Пул объекта
 header-managed-objects-pools: Пул
 header-managed-objects-profile: Профиль объекта
+header-management: Управление
+header-map-distange-m: Дистанция на карте (м)
 header-mask: Маска
+header-master: Master
+header-masters: Основные
+header-match-ack: Match Ack
+header-match-connection: Шаблон подключения
+header-match-expression: Выражение для совпадения
+header-match-slot-ctx: Match Slot/Ctx
+header-match-type: Тип подключения
+header-max-links: Макс. линков
 header-max-load-in-mbps: Максимальная загрузка входящий, Мбит/с
 header-max-load-in-time: Время максимальной нагрузки, входящий
 header-max-load-out-mbps: Максимальная загрузка исходящий, Мбит/с
 header-max-load-out-time: Время максимальной нагрузки, исходящий
 header-max-ms: макс. время (мс)
+header-max-objects: Макс. объектов
+header-max-zoom: Макс. шасш.
+header-max-zoom-2: Макс. увел.
+header-maximum-alarms: Макс. аварий
+header-measurment-unit: Единица измерения
+header-medium: Средний
+header-members: Участники
+header-message-type: Тип сообщения
+header-method: Метод
+header-metric: Метрика
 header-mib: MIB
+header-migrate-ts: MIGRATE_TS
+header-mime-type: Тип MIME
+header-min-weight: Мин. вес
+header-min-zoom: Мин. масш.
+header-min-zoom-2: Мин. увел.
+header-minimum-alarms: Мин. аварий
+header-mo-count: MO Count
+header-modbus-format: Формат регистра
+header-modbus-register: Регистр ModBus
+header-modbus-value-format: Modbus Value Format
 header-model: Модель
+header-modelid: ModelID
+header-modified: Modified
+header-modified-by: Modified by
+header-module: Module
+header-multi: Multi
+header-multiline: Multiline
+header-n: N
 header-name: Имя адреса
+header-name-2: имя
+header-native-name: Исходное имя (native)
+header-ne: NE
+header-neighbor: Сосед
 header-nested-groups: Вложенные группы
+header-network: Сеть
+header-new: Новый
+header-next-run: Следующий запуск
+header-nic-hdl: Nic-hdl
+header-notification: Уведомление
+header-notification-delay: Задержка уведомления
+header-notify-changed: Уведомлять при добавлении
+header-ns: NS
+header-num: Номер
+header-num-letter: Номер литеры
+header-num2: Номер2
 header-number: Номер
 header-numbers: Номера
+header-obj: Устр-во.
+header-obj-profile: Профиль объекта
 header-object: Объект
+header-object-action: Object Action
 header-object-address: IP Адрес
+header-object-adm-domain: OBJECT_ADM_DOMAIN
 header-object-admdomain: З.О.
+header-object-attr-patch: OBJECT_ATTR_PATCH
+header-object-bootprom: OBJECT_BOOTPROM
 header-object-hostname: Имя хоста
-header-object-labels: "Метки"
+header-object-hwversion: OBJECT_HWVERSION
+header-object-labels: Метки
+header-object-model: OBJECT_MODEL
 header-object-name: Имя объекта
 header-object-platform: Платформа
 header-object-profile: Профиль
 header-object-project: Проект
 header-object-segment: Сегмент объекта
+header-object-segment-2: Объект/Сегмент
+header-object-serial: OBJECT_SERIAL
+header-object-software: OBJECT_SOFTWARE
+header-object-status: OBJECT_STATUS
+header-object-vendor: OBJECT_VENDOR
 header-object-version: Версия ПО
+header-object1-address: OBJECT1_ADDRESS
+header-object1-admin-domain: OBJECT1_ADMIN_DOMAIN
+header-object1-descr: OBJECT1_DESCR
+header-object1-iface: OBJECT1_IFACE
+header-object1-name: OBJECT1_NAME
+header-object1-platform: OBJECT1_PLATFORM
+header-object1-segment: OBJECT1_SEGMENT
+header-object1-speed: OBJECT1_SPEED
+header-object1-tags: OBJECT1_TAGS
+header-object2-address: OBJECT2_ADDRESS
+header-object2-admin-domain: OBJECT2_ADMIN_DOMAIN
+header-object2-descr: OBJECT2_DESCR
+header-object2-iface: OBJECT2_IFACE
+header-object2-name: OBJECT2_NAME
+header-object2-platform: OBJECT2_PLATFORM
+header-object2-segment: OBJECT2_SEGMENT
+header-object2-speed: OBJECT2_SPEED
+header-object2-tags: OBJECT2_TAGS
 header-objects-72a83a: Объекты
 header-objects-83ccf1: Объекты
 header-oid: OID
+header-oid-2: Oid
+header-old: Старый
+header-open-template: Шаблон открытия
 header-oper: Опер
+header-oper-status: Оперативное состояние.
+header-optical-rx-dbm: Optical Rx, dBm
+header-optical-tx-dbm: Optical Tx, dBm
+header-order: Приоритет
+header-order-key: Ключ сортировки
+header-org-name: Назв. орг
+header-org-type: Тип орг
+header-other: Другие
+header-out-kbit-s: Исх (Кбит/с)
+header-output: Выход
+header-output-discriminator: Выходной дискриминатор
+header-over-topology: Over Topology
+header-overr-existing: Заменить новым
 header-p95-ms: 95% перцентиль (мс)
+header-pages: Pages
 header-paid-till: Оплачен до
+header-pair: Pair
+header-parameter: Параметр
+header-params-map: Params Map
 header-parent: Родитель
+header-parent-vlan: Родительский VLAN
+header-part-no: Part No
 header-part-number-0: Номер детали 0
 header-part-number-1: Номер детали 1
 header-part-number-2: Номер детали 2
 header-part-number-3: Номер детали 3
+header-path: Путь
+header-pattern: Шаблон
+header-peer: Peer
+header-peering-point: Peering Point
 header-percent: "%"
-header-percentage: "Процент"
+header-percent-at-all: Percent at All
+header-percentage: Процент
+header-periodic-completed-time: Время окончания периодика
+header-periodic-discovery: Периодический опрос
+header-periodic-duration: Время периодика
+header-periodic-last-status: Periodic Last status
+header-periodic-last-success: Время успешного окончания периодика
+header-periodic-status: Статус периодика
+header-periodic-time-start: Periodic Time start
+header-permission: Разрешения
+header-person-role-name: Person/Role Name
 header-phone-number: Телефонный номер
 header-phone-range: Диапазон номеров
+header-phys-interface-count: PHYS_INTERFACE_COUNT
+header-ping: Ping
 header-platform: Платформа
+header-platform-regex: Платформа (шаблон)
+header-plugin: Плагин
+header-points-of-presence: Points of presence
+header-policy: Политика
 header-pool: Пул
 header-port: Порт
+header-port-duplex: PORT_DUPLEX
+header-port-name: PORT_NAME
+header-port-profile-name: PORT_PROFILE_NAME
+header-port-speed: PORT_SPEED
+header-port-status: PORT_STATUS
+header-port-tagged-vlans: PORT_TAGGED_VLANS
+header-port-untagged-vlan: PORT_UNTAGGED_VLAN
+header-pp: PP
 header-pre-reason: Предв. диагностика
+header-pref: Приоритет
+header-pref-2: Порядок.
+header-preferred: Preferred
+header-preferred-method: Предпочтительный
 header-prefix: Префикс
+header-prefix-scope: Область
 header-prefixes: Префиксы
+header-primary: Основной
+header-primary-key: Первичный ключ
+header-prio: Прио.
+header-priority: Приоритет
 header-probable-causes: Возможная причина
+header-problem: Problem
+header-process: Процесс
+header-productive: Productive
 header-profile: Профиль
+header-profile-check-rule-name: Имя
+header-profile-name: PROFILE_NAME
+header-proj-distange-m: Проектная дистанция (м)
+header-project-16eeaf: PROJECT
 header-project-f6f4da: Проект
+header-protected: Защищена
+header-proto: Протокол
 header-protocol: Протокол
 header-provide-resources: Предоставленные ресурсы
 header-provides-resources: Предоставляет ресурсы
+header-provisioned: Provisioned
+header-provisioning: Provisioning
 header-q1-ms: Квантиль (25%)
 header-q2-ms: Медиана (мс)
 header-q3-ms: Квантиль (75%)
+header-quality: Quality
 header-quantity: Количество
+header-racks: Racks
 header-range: Диапазон
 header-ranges: Диапазоны
+header-rd: RD
+header-read-only: Read Only
 header-reason: Причина
 header-reboots: Перезагрузки
 header-recommended-actions: Рекомендованные действия
+header-records: Записи
 header-redundancy: Резервирование
+header-reference-template: Шаблон идентификатора
+header-references: References
+header-regex: REGEX
+header-regex-scope: Regex Scope
+header-register-msg: Register Msg.
+header-remote-address: Remote Address
+header-remote-as: Remote AS
 header-remote-chassis: Соседний MAC адрес (по данным LLDP)
 header-remote-description-6d7f6e: Описание порта соседа
 header-remote-description-987a22: Описание соседа (по данным LLDP)
 header-remote-hostname: Имя хоста соседа  (по данным LLDP)
+header-remote-id: ID внеш. системы
 header-remote-interface: Соседний интерфейс
+header-remote-name: Remote Name
 header-remote-object-d33f14: Сосед
 header-remote-object-e48a25: Соседнее устройство
 header-remote-port: Порт соседа
+header-remove-policy: Политика удаления
+header-repeat: Repeat
+header-req: Треб.
 header-request-count: Кол-во запросов
+header-require-confirmation: Требует подтверждения
+header-required: Обязательно
+header-reset-scopes: Сбросить область
+header-resource: Ресурс
+header-result: Результат
 header-revision: Ревизия
+header-rewrite-oid: Переписать OID
+header-right-re: Прав. RE
+header-role: Роль
+header-root-cause: Первопричина
 header-root-id: ID первопричины
+header-router-id: Router-ID
+header-row: Строка
+header-rows: Rows
+header-rt-export: RT Export
+header-rt-import: RT Import
+header-ru: RU
 header-rule: Правило
+header-rules: Правила
+header-s: S
+header-sa-profile: Профиль SA
+header-sample: Sample
+header-scope: Область
+header-scope-command: Scope Command
+header-scope-exit: Scope Exit
+header-script-failed: Ошибка скрипта
+header-searchable: Доступно для поиска
+header-section: Секция
 header-segment-44986c: Сегмент
+header-segment-aeb83a: SEGMENT
+header-sender: Sender
 header-serial: Серийный номер
+header-serial-no: Серийный №
 header-server: Имя сервера
 header-service: Сервис
+header-service-expression: Service Expression
 header-service-model: Модель сервиса
 header-services: Сервисы
 header-session: Сессия
+header-set-context: Set Context
+header-set-label: Назначить метку
+header-set-var: Назначить переменной
 header-severity: Серьезность
+header-shift: Смещение (в юнитах)
+header-short: Кратк. Имя
+header-short-label: Короткое назв
+header-show-in-menu: Отображать в меню
+header-show-remote-sync-time: Показать время последней синхронизации
+header-single-client: Одиночный клиент
+header-single-service: Одиночный сервис
+header-site: Сайт URL
 header-size: Размер
+header-size-usage: Size (Usage)
+header-slave: Slave
+header-slaves: Ведомые
+header-small: Маленький
+header-sn-changed: SN_CHANGED
+header-snmp-oid: SNMP OID
+header-snmp-ro: SNMP RO
+header-snmp-rw: SNMP RW
+header-snmp-sysobjectid: SNMP sysObjectId
+header-snmp-traps: SNMP Traps
 header-source: Источник
 header-speed: Скорость
 header-stage: Этап
 header-start: Начало
 header-start-of-sale: Начало продаж
+header-starting: Запущен
 header-state: Состояние
 header-status: Состояние
+header-step-to: Шагнуть в
 header-stop: Окончание
+header-store-column: Store Column
+header-stored: Сохрянять
+header-strict: Строгий
+header-struct: Строение
+header-struct-letter: Буква строения
+header-struct2: Строение2
+header-sub-interface: Sub.Interface
 header-sub-interfaces: СабИнтерфейсы
 header-subject: Тема
+header-subject-class: Тема/Класс
 header-subscriber: Абонент
-header-subscribers: "Абоненты"
+header-subscribers: Абоненты
 header-subscribers-6f13df: Абоненты
 header-subscribers-97ec75: Задето абонентов
 header-success-request: Процент успешных
 header-success-request-count: Кол-во успешных запросов
 header-summary: Суммарно
+header-summary-tt: Затронуто/ТТ
+header-superuser: Суперпользователь
 header-supplier: Поставщик
+header-suppress-action: Suppress Action
+header-sw: SW
 header-sw-version: Версия ПО
 header-symptoms: Симптомы
+header-syntax: Синтаксис
+header-syslog: Syslog
+header-sysobjectid: sysObjectID
+header-table: Таблица
+header-tablespace: Tablespace
+header-tagged: Тэгированный
 header-tags: Теги
+header-target: Цель
+header-target-connection: Target Connection
+header-target-number: Target Number
+header-target-type: Target Type
 header-tech-contact: Контакт инженера
 header-tech-contact-phone: Телефон инженера
 header-technology: Технология
+header-temp-c: Темп, °C
+header-template: Шаблон
 header-terminator: Терминатор
 header-terms: Диапазон
+header-text: .
+header-threshold: Порог
+header-time: Время
+header-time-duration: Время/Длительность
 header-time-pattern: Маска времени
+header-time-sec: Время (с)
+header-time-start: Time start
 header-timestamp: Время
+header-tip: Совет
+header-title-tag: тэг заголовка
+header-title-template: Шаблон заголовка
+header-to-address: До Адреса
+header-to-iface-down: TO_IFACE_DOWN
+header-to-iface-name: TO_IFACE_NAME
+header-to-number: По номер
+header-to-oid: В OID
+header-to-serial: По серийный номер
+header-to-state: В состояние
 header-to-ts: Время закрытия
+header-topo: Topo
+header-total: Всего
 header-total-in-mbyte: Суммарно входящего трафика, Мбайт
-header-total-objects: "Всего объектов"
+header-total-objects: Всего объектов
 header-total-out-mbyte: Суммарно исходящего трафика, Мбайт
 header-total-unavail-sec: Общее время недос. (сек)
 header-translation: Трансляции
 header-tt: Номер ТТ
 header-tt-id: Номер ТТ
+header-tt-queue: Очередь TT
+header-ttl: Время жизни
 header-type: Вид работ
+header-uniq-cone-power: Uniq. Cone Power
+header-unique: Уникальный
+header-untagged: Без тэга
+header-update-expired: Update Expired
+header-update-last-seen: Обновлять Последнее
 header-uplink-avg-load-in-mbps: Средняя загрузка Uplink входящий, Мбит/с
 header-uplink-avg-load-out-mbps: Средняя загрузка Uplink исходящий, Мбит/с
 header-uplink-iface-description: Описание интерфейса Uplink
@@ -488,142 +1633,2165 @@ header-uplink-max-time-in: Время максимальной нагрузки 
 header-uplink-max-time-out: Время максимальной нагрузки Uplink, исходящий
 header-uplink-total-in-mbyte: Суммарно входящего трафика Uplink, Мбайт
 header-uplink-total-out-mbyte: Суммарно исходящего трафика Uplink, Мбайт
+header-url: URL
+header-usage: Использовано
+header-use-tls: Использовать TLS
+header-used: "% Used"
+header-used-by: Используется в
+header-user: Пользователь
+header-user-clearable: User clearable
+header-user-name: Имя пользователя
+header-username: Имя пользователя
+header-validataion-expr: Выражение проверки.
 header-value: Значение
+header-value-re: Шаблон Значения
+header-vars: Переменные
 header-vendor: Производитель
+header-vendor-mac: VENDOR_MAC
 header-version: Версия
+header-version-changed: Версия изменена
+header-version-regex: Версия (Шаблон)
+header-vfr: VFR
+header-view-column: View Column
+header-views: Views
 header-vlan-560367: VLAN
+header-vlan-6c174b: Vlan
+header-vlan-discovery: Сбор вланов
 header-vlan-translation: Трансляции ВЛАНов
+header-vlans: Влан'ы
+header-voltage-v: Напряжение, В
 header-vpn: VPN
+header-vpn-id: VPN ID
 header-vrf: VRF
+header-vrfs: VRFs
+header-w: W
+header-weight-kg: Weight (kg)
+header-when-do: Когда создавать
+header-whois: whois
+header-wildcard: Маска
+header-window-sec: Интервал
+header-wiping: Удалять
+header-zindex: zIndex
 header-zone: Зона
-help-cir-bps-k-m-and-g-suffixes-can-be-used: "CIR(bps). Можно использовать множители K, M и G"
-help-go-to-object: "Соседнее устройство"
-help-load-chart: "График загр."
-help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "IP-адрес сервера имён. Сервер должен позволять передачу зоны хостам NOC"
-help-use-name-network-ex-10-0-0-0-8-or-mac: "Задайте Имя, сеть (н-р 10.0.0.0/8) или MAC адрес"
+help-action-when-discovery-firmware-denied-on-firmwarepolice-inventor: Action when discovery firmware denied on FirmwarePolice.Inventory -> Setup -> FirmwarePolicy <br/>Ignore - Ignore and do next discovery<br/>Ignore&Stop - Ignore and stop discovery<br/>Raise Alarm - Raise alarm on ManagedObject and do next discovery<br/>Raise Alarm&Stop - Raise alarm on ManagedObject and stop discovery
+help-action-when-discovery-new-platform-on-version-discovery-br-creat: Action when discovery new platform on version discovery. <br/>Create - Create platform and set it on device<br/>Alarm - Do not create platform and raise alarm
+help-activate-resolve-address-by-fqnd-field-or-other-handler-br-profi: Activate resolve Address by FQND field (or other handler).<br/> Profile - Use profile settings<br/>Disable - Do not resolve FQDN into Address field<br/>Once - Once resolve FQDN (after success settings will be set to Disable)<br/>Enable - Enable resolve address before running Job<br/>
+help-add-input: Добавить вход
+help-add-me-to-this-subscription: Добавить меня в наблюдатели
+help-add-new-record: Добавить новую запись
+help-add-setting-labels-to-raised-alarm-label-must-b-enable-alarm-b-s: Add setting labels to Raised Alarm. Label must <b>enable_alarm</b> setting
+help-add-to-exist-maintaince: Добавить в существующий РНР
+help-append-raw-section-to-confdb: Добавлять секцицю Raw в ConfDB
+help-application-help: Помощь
+help-apply-changes: Применить изменения
+help-back: Назад
+help-cache-neighbors-get-x-neighbors-script-result-br-when-informatio: Cache neighbors (get_X_neighbors script result). <br/>When information cached script not execute on device <br/>0 - do not cache
+help-calculate-oper-status-br-d-disable-calculate-status-br-r-calcula: Calculate Oper Status <br/>D - Disable Calculate Status<br/>R - Calculate By Rule<br/>MN - From Min Status<br/>MX - From Max Status
+help-calculate-oper-status-br-d-disable-status-transfer-br-r-transfer: Calculate Oper Status <br/>D - Disable Status Transfer<br/>R - Transfer By Rule<br/>P - From Profile
+help-center-to-object: Центрировать на объекте
+help-check-device-snmp-trap-storm-policy-br-check-trap-message-count-: Check Device SNMP Trap storm policy <br/>check trap message count over 60s <br/>B - Block receive trap from ManagedObject Address<br/>R - Raise Alarm to ManagedObject and not block<br/>A - Raise Alarm to ManagedObject and block trap receive<br/>D - Disable Storm Check
+help-cir-bps-k-m-and-g-suffixes-can-be-used: CIR(bps). Можно использовать множители K, M и G
+help-clean-basket: Очистить корзину
+help-clear-all-rows: Удалить все записи
+help-clear-objects: Очистить
+help-clipboard: Скопировать
+help-clone-n-times: Копировать N раз
+help-close-form: Close form
+help-close-query: Закрыть запрос
+help-close-without-deleting: Закрыть без удаления
+help-close-without-saving: Закрыть без сохранения
+help-collapse: Collapse
+help-collapse-panels: Свернуть панели
+help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default: "Common values are: Tc=1.5 for rate-limit and Tc=0.25 for policing (0.25 is default)"
+help-compose-expression-for-metrictype-worked-only-same-scopeon-expre: Выражение для расчёта Метрики. Работает только для метрик в ОДНОГО Пространства. В качестве имение переменных используется "Имя поля"
+help-condition-running-diagnostic-br-always-always-run-diagnostic-on-: Condition running diagnostic <br/>Always - Always run diagnostic on Discovery<br/>Failed - Run only Diagnoscti has Unknown or Failed state
+help-connect-ports: Соединить порты
+help-consequence-recover-time-root-cause-will-be-detached-if-conseque: Consequence recover time. Root cause will be detached if consequence alarm will not clear itself in *recover_time*
+help-console: Консоль
+help-control-time-to-reopen-alarm-after-1-reopen: Интервал для второго переоткрытия
+help-control-time-to-reopen-alarm-after-1-reopen-2: Интервал для третьего и последующих переоткрытий
+help-control-time-to-reopen-alarm-instead-of-creating-new: Интервал для переоткрытия аварии вместо создания
+help-copy-existing-values-to-a-new-object: Скопировать значения в новый объект
+help-create-new-maintaince: Создать новый РНР
+help-create-or-update-channel: Создать или обновить канал
+help-default-state-when-set-diagnostic: Default state when set Diagnostic
+help-delete-object: Удалить объект
+help-delete-object-s: Удалить объект(ы)
+help-delete-workflow: Удалить процесс
+help-depended-diagnostic-for-calculate-state: Зависима от диагностик для расчёта статуса
+help-display-check-state-on-object-form: Отображать результаты проверки
+help-dns-zone-name-to-transfer: DNS Zone name to transfer
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable<br/>Do not raise - work on current mode (immediately after login)
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg-2: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable, Do not raise - work on current mode <br/>(immediately after login)
+help-download-content: Загрузить содержимое
+help-download-image-as-svg: Загрузить изображение как SVG
+help-download-list-of-allocated-ip-addresses-in-csv-format: Download list of allocated IP addresses in CSV format
+help-download-results: Выгрузить результаты
+help-edit-map: Редактировать карту
+help-enable-allow-to-escalate-alarm-for-managedobject-br-as-depended-: Включить - разрешает эскалацию аварий для Объекта. Как Зависимую - эскалировать аварию только в составе другой аварии (указана первопричина)
+help-enable-or-disable-ping-if-working-hour-on-object-is-set-br-enabl: Enable or disable ping if working hour on object is set. <br/>Enable - Calc RTT, but do not raise alarm, Disable ping - do not send ICMP
+help-enable-send-syslog-message-to-clickhouse-b-syslog-b-table-br-may: Enable send syslog message to ClickHouse </b>syslog</b> table. <br/>May be overwritten by ManageObject <b>syslog_archive_policy</b> setting. <br/>E - Send syslog message to ClickHouse<br/>D - Do not send syslog message to ClickHouse
+help-export-all-records-from-buffer-screen: Экспортировать все записи из буфера (экрана)
+help-export-to-csv: Экспорт в CSV
+help-external-storage-for-config-downloading-setup-in-main-setup-ext-: External storage for config downloading. Setup in Main -> Setup -> Ext. storage
+help-external-storage-for-config-save-setup-in-main-setup-ext-storage: Внешнее хранилище для сохранения конфигурации. Настраивается в Основные -> Настройки -> Внешние хранилища
+help-field-on-this-use-in-etl-process-sync-on-external-system-br-do-n: Field on this use in ETL process (sync on external system). <br/>Do not Edit field directly!
+help-flap-detection: Обнаружение дребезга (Flap)
+help-form-help: Контекстная помощь
+help-get-credentials-user-pass-snmp-etc-from-auth-profile-br-service-: Брать реквизиты (user, pass, snmp etc.) из "Профиля аутентификации".<br/>  Управление объектами -> Настройки -> Профиль аутентификации. Если установлена - значения user, password, snmp community будут ПРОИГНОРИРОВАНЫ
+help-go-to-channel: Go to channel
+help-go-to-next-step: К следующему шагу
+help-go-to-object: Соседнее устройство
+help-go-to-parent: Перейти в родительскую
+help-hide-basket: Скрыть выбор
+help-hide-from-display: Hide from display
+help-how-bind-resources-to-service-instance-br-d-disable-br-a-allowed: How bind resources to Service Instance <br/>D - Disable <br/>A - Allowed AnyC - By Config
+help-i-collect-macs-only-for-allowed-interfaces-br-mac-discovery-poli: I - Collect MACs only for allowed interfaces. <br/>(MAC Discovery Policy on Inventory -> Setup -> Interface Profile) <br/>
+help-if-check-use-credential-check-rules-service-activation-setup-cre: Если отмечено - Используются Правила проверки доступа (Управление объектами -> Настройка -> Правила проверки доступа)<br/> для подбора реквизитов
+help-if-checked-discovery-try-find-port-by-object-id-hostname-address: Если отмечено опрос попробует найти пор по иднтификатору объекта (hostname, IP адрес, имя в системе) содержащееся в описании
+help-if-empty-active-true: If empty active=True
+help-if-empty-exhaus-true: If empty exhaus=True
+help-if-set-credential-on-profile-will-replace-credential-on-device: Если отмечена - Реквизиты в Профиле буду заменять реквизты на устройстве
+help-if-set-raise-alarm-when-diagnostic-to-failed-state: If set - Raise Alarm when diagnostic to Failed state
+help-include-exclude-profile-from-list: Включить/исключить профиль из списка
+help-include-special-addresses-network-broadcast-for-ipv4-br-in-prefi: Включить особые адреса (Адрес сеть и Широковещательный) в доступные для использования
+help-insert-mac-address-to-this-field-one-of-format-li-full-aa-aa-aa-: "Вставьте MAC адрес в одном из следующих форматов:<li>FULL: AA:AA:AA:AA:AA:AA</li><li>Left part: AA:AA:</li><li>Right part: :AA:AA</li>"
+help-jinja-template-for-creating-segment-name-br-worked-with-segmenta: Jinja template for creating segment name. <br/>Worked with "Segmentate for object's segment" and "Segmentate for child segment" options
+help-jump-to-group: Перейти к группе
+help-jump-to-portal: Перейти к соседу
+help-jump-to-segment: Перейти в сегмент
+help-level-up: На уровень вверх
+help-limit-snmp-query-per-second: Ограничение запросов `SNMP` (запросов в секунду)
+help-load-chart: График загр.
+help-management-console: Консоль
+help-mark-unmark: Отметить/Снять
+help-max-level-common-level-there-will-be-changed-segment-br-autosegm: Max level (Common -> Level) there will be changed segment. <br/>(Autosegmentation not worked with ManagedObject less this level
+help-metric-type-inputs: Вход. метрика
+help-metric-type-inputs-to-expression: Метрика для выражения
+help-mirror-collected-config-after-config-discovery-br-always-mirror-: Mirror collected config after Config discovery. <br/>Always Mirror - mirror every discovery run <br/>Mirror on Change - save only if detect config changed
+help-models-allowed-set-workflow: Модели, которым разрешено применять Workflow
+help-more-settings-for-worked-with-devices-br-place-on-service-activa: Больше настроек для работы с устройством. <br/>Расположены в Управлением Устройством -> Настройки -> Профиль объекта.
+help-move-all-selected-devices-to-the-basket: Переместить все выбранные устройство в корзину
+help-name-ip-device: Имя/IP устройства
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: IP-адрес сервера имён. Сервер должен позволять передачу зоны хостам NOC
+help-new-layout: Новая раскладка
+help-next-change: Следующее изменение
+help-no-comments: нет комментариев
+help-number-of-flaps-while-close-flap-window: Number of flaps while close Flap Window
+help-object-settings: Object settings
+help-open-card: Карточка
+help-open-sfp: Open SFP
+help-open-tools: Открыть инструменты
+help-order-run-diagnostic-in-discovery-process-br-on-start-before-dis: Order run diagnostic in Discovery process. <br/>On Start - Before Discovery checks run<br/>On End - After Discovery checks run
+help-parent-filter: Фильтр по родителю
+help-parent-filter-2: Фильтр по родителю
+help-policy-detect-diagnostic-success-or-failed-state-br-all-all-chec: Policy detect diagnostic Success or Failed state <br/>ALL - ALL Checks and Depended Discovery must Success for Enable state<br/>ANY - ANY Checks and Depended Discovery mush Success for Enable state
+help-position-front: Позиция спереди
+help-position-rear: Позиция сзади
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro: "Приоритет при работе скрипта профиля.\n!!Работает только при реализации в скрипте!!\n Профиль (по умолчанию) - использовать настройки профиля объекта.\n* S - использовать исключительно SNMP\n* CLI Only - использовать исключительно CLI"
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro-2: Приоритет при работе скрипта профиля.!!Работает только при реализации в скрипте!! Профиль (по умолчанию) - использовать настройки профиля объекта.* S - использовать исключительно SNMP* CLI Only - использовать исключительно CLI
+help-preview: Просмотр
+help-preview-zone: Область просмотра
+help-previous-change: Предыдущее изменение
+help-processed-syslog-snmp-trap-message-to-classifier-service-br-e-se: Processed syslog/snmp trap message to Classifier service <br/>E - Send message to Classifier<br/>D - Do not send message to Classifier
+help-profile-adapter-for-device-work-br-auto-detect-profile-by-snmp-i: Профиль SA (Адаптер) для работы устройства. <br/>!! АвтоОбнаружение профиль по SNMP если активен "Профиль объекта -> Полный -> Профиль". <br/>
+help-protocol-priority-worked-on-device-br-warning-device-profile-sa-: Protocol priority worked on device. <br/>Warning! Device profile (SA Profile) should support worked in selected mode
+help-rebase-prefix-to-a-new-location: Переместить префикс в новое месте
+help-redo: Redo
+help-refresh: Обновить
+help-refresh-data: Обновить данные
+help-reload-and-it-has-been-since-the-last-update: Обновить и с последнего обновления прошло
+help-reload-data: Обновить данные
+help-remove-all-devices-from-right-panel: Удалить все выбранные с правой панели
+help-remove-input: Удалить вход
+help-remove-me-to-this-subscription: Удалить меня из наблюдателей
+help-repaint: Обновить
+help-required-run-migration-metric-database-after-changed-that-enable: Требует миграции базы метрик после изменения. Поэтому выставляется только при деплое.
+help-reset-changes: Сбросить изменения
+help-reset-filters: Сбросить фильтры
+help-reset-title-permissions: Сбросить выданные разрешения
+help-reset-to-default-values: Сбросить на значения по умолчанию
+help-reset-values: Сбросить фильтр
+help-revert: Отменить
+help-rotate: Повернуть
+help-run-config-validate-process-br-always-validate-every-discovery-r: "Run config validate process: <br/>Always Validate - every discovery run<br/>Validate on Change - only if detect config changed"
+help-run-vpn-trace: Run VPN Trace
+help-sa-profiles-for-match-rules: Профиль SA
+help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Настройка частоты для Полного опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99 .. 0,1 частота сохранения
+help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Настройка частоты для Периодического опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99 .. 0,1 частота сохранения
+help-save-all-from-basket: Сохранить все из корзины
+help-save-changes: Сохранить изменения
+help-save-changes-and-continue-editing: Сохранить и продолжить редактирование
+help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form.Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
+help-save-screen: Сохранить экран
+help-save-workflow: Сохранить процесс
+help-select-action: Выбрать действия
+help-select-all-records-from-buffer-screen: Выбрать все записи из буфера (экрана)
+help-select-method-of-config-fetching: Выберите предпочитаемую для сбора конф-ию
+help-select-method-of-config-gathering: Выберите метод сбора конф-ии
+help-set-after-version-discovery-not-for-manual-set: Будет заполнено после опроса. Не для ручной правки
+help-set-all-permissions: Установить все разрешения
+help-set-device-name-if-fqdn-suffix-is-not-set-use-dot-after-name-nam: "Set device name. If FQDN suffix is not set use dot after name: NAME.<br/>FQND suffix set on Object Profile: Service Activation -> Setup -> Object Profile -> Common<br/>"
+help-set-measurements-unit-for-metrictype-used-for-conversation-value: Set Measurements Unit for MetricType. Used for conversation value
+help-set-position: Установить позицию
+help-set-which-caps-will-be-check-in-caps-discovery-br-service-activa: Set which CAPS will be check in Caps discovery. <br/>Service Activation -> Setup -> Caps Profiles
+help-set-which-caps-will-be-check-in-caps-discovery-br-vc-setup-vlan-: Set which CAPS will be check in Caps discovery. <br/>VC -> Setup -> VLAN Filter
+help-set-which-peer-profile-will-be-set-when-created-br-peer-setup-pe: Set which Peer Profile will be set when Created. <br/>Peer -> Setup -> Peer Profiles
+help-settings: Настройки
+help-settings-for-autosegmentation-process-br-automatically-detect-se: "Settings for autosegmentation process: <br/>Automatically detect segment for ManagedObject with this ObjectProfile.<br/>Uses MAC and needed MAC enable in Box"
+help-settings-policy-for-config-discovery-validation-and-mirroring-co: "Settings policy for config discovery: Validation and mirroring config"
+help-setup-colleted-metric-on-devices-not-interface-br-interface-metr: Setup colleted metric on devices (not Interface!). <br/>(Interface Metrics settings Inventory -> Setup -> Interface Profile)
+help-show-alarm-detail: Show alarm detail
+help-show-config: Показать конфигурацию
+help-show-hide-basket: Показать/Скрыть корзину
+help-show-hide-basket-2: Показать/Скрыть корзину
+help-show-hide-filter: Отобразить/скрыть фильтр
+help-show-hide-legend: Показать/Скрыть легенду
+help-show-hide-minimap: Показать/Скрыть миникарту
+help-show-hide-search-popup: Показать/скрыть окно поиска
+help-show-interface-load: Загрузка интерфейсов
+help-show-ipsla-dashboard: Графики
+help-show-json: Показ JSON
+help-show-kb: Show KB
+help-show-macs: Отобразить МАКи
+help-show-map: Карта
+help-show-neighbor-map: Карта соседей
+help-show-object: Объект
+help-show-static-map: Статичная карта
+help-show-stp-topology: Топология STP
+help-show-vlan-interfaces: Показать интерфейсы VLAN'а
+help-subscription: Подписка
+help-suppress-me-to-this-subscription: Приостановить наблюдение
+help-swap-contents: Поменять местами
+help-switch-to-breadcrumb-view: Компактный режим
+help-switch-to-tree-view: Переключиться на отображение дерева
+help-test-compatible-types: Проверка совместимых типов
+help-test-rule: Проверка правила
+help-this-grid-is-currently-disabled-fill-all-required-fields-and-pre: Элемент отключён. Заполните требуемые поля и нажмите 'Применить' для включения.
+help-time-in-seconds-to-delay-alarm-risen-notification: Задержка в секундах для отправки уведомления по аварии
+help-time-in-seconds-while-waiting-of-reopen: Time in seconds, while waiting of reopen
+help-to-default-value: по умолчанию
+help-to-see-the-prefix-contents: Просмотреть содержимое префикса
+help-transfer-alarm-to-operstatus-br-d-disable-alarm-transfer-br-b-se: Transfer alarm to OperStatus <br/>D - Disable Alarm Transfer<br/>B - Service Component on Alarm<br/>B - Instance Filter<br/>O - Only By Filter Rule (Empty - Disable)
+help-transfer-children-status-to-operstatus-br-d-disable-status-trans: Передавать Оперативный статус вышестоящему сервису <br/>D - Отключить<br/>T - Всех<br/>S - Собственный
+help-transfer-oper-statuses-to-adjacent-services-br-d-disable-status-: Transfer Oper Statuses to Adjacent Services <br/>D - Disable Status Transfer<br/>T - Transfer to All Adjacent<br/>R - Transfer By Rule<br/>P - From Profile
+help-undo: Undo
+help-unselect-all-devices: Снять выделение со всех устройств на экране
+help-upload-list-of-allocated-ip-addresses-from-existing-dns-servers-: Upload list of allocated IP addresses from existing DNS servers via AXFR request
+help-use-for-setup-user-permission-on-object-br-place-on-service-acti: Use for setup User permission on Object. <br/>Place on Service Activation -> Setup -> Administrative Domain.<br/>Permission on Activation -> Setup -> Group Access/User Access.<br/>
+help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre: Use for shard devices over intersection IP Address spaces. <br/>Create and Set on Tower<br/>
+help-use-name-network-ex-10-0-0-0-8-or-mac: Задайте Имя, сеть (н-р 10.0.0.0/8) или MAC адрес
+help-use-one-session-worked-on-device-br-if-disabled-worked-one-scrip: Use one session worked on device. <br/>If disabled - worked one script - one login. Logout after script end.
+help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end.Disable - worked one script - one login. Logout after script end.
+help-use-this-field-if-you-want-disable-ping-check-on-specified-time-: Use this field if you want disable ping check on specified time.<br/>  Main -> Setup -> Time Patterns
+help-use-to-override-pool-for-events-processing: Использовать при обработке событий (вместо основного)
+help-view-as-json: Посмотреть как JSON
+help-view-card: Просмотр карточки
+help-view-connection-diagram: View connection diagram
+help-worked-with-devices-settings: Работа с настройками устройства
+help-zoom-to-level: Масштаб на уровне
+label-15-min: 15 мин
+label-3-h: 3 часа
+label-30-min: 30 мин
+label-5-min: 5 мин
+label-60-min: 60 мин
+label-abduct-detection-threshold: Порог обнаружения
+label-abduct-detection-window: Окно обнаржения
+label-access: Доступ
+label-access-level: Уровень доступа
+label-access-preference: Приоритет протокола доступа
+label-account-id: Account ID
+label-acl: Список разрешённых адресов
+label-action-params: Парамтеры действия
+label-action-set: Action Set
+label-activation-function: Функция активации
+label-active-alarms: Активные (открытые) аварии
+label-add-linked-nodes: Добавить связанные узлы
+label-add-nested-nodes: Добавлять вложенные узлы
+label-add-topology-links: Добавить связь
+label-address-constraint: Ограничения по адресу
+label-address-discovery: Разрешить сбор адресов
+label-address-discovery-policy: Политика поиска адресов
 label-address-family: Семейство адресов
+label-address-pools: Ресурсные пулы
+label-address-resolution-policy: Политика определения адреса управления
+label-admin-c: Admin-c
+label-administrative: Административный
+label-administrative-division: Административное деление
 label-administrative-domain: Зона ответственности
-label-alarms: "Аварии"
-label-alternative-path: "Альтернативный путь"
+label-administrative-territorial-division: Административно-территориальное деление
+label-affected: Влияние
+label-affected-rules: Affected Rules
+label-agent-collector: Agent Collector
+label-agent-param: Agent Param
+label-agreement-id: Agreement ID
+label-alarm-affected-policy: Политика передачи аварий
+label-alarm-class-re: Класс Аварии RE
+label-alarm-commented: Авария откомментирована
+label-alarm-group: Группа аварий
+label-alarm-reopened: Авария переоткрыта
+label-alarm-risen: Авария создана
+label-alarm-status-rules: Правила передачи статуса (Для аварий)
+label-alarm-weight: Вес аварии
+label-alarm-weight-2: Вес аварии
+label-alarms: Аварии
+label-alarms-source: Источник аварии
+label-allocate-numbers: Размещённые номера
+label-allocate-strategy: Стратегия размещения
+label-allocated-till: Размещено до
+label-allocation-group: Allocation Group
+label-allow-action-command: Allow Action (Command)
+label-allow-alarm: Allow Alarm
+label-allow-auto-create: Разрешить автоматическое создание
+label-allow-autosegmentation: Разрешить автоматическую смену сегмента
+label-allow-bunch: Allow Bunch
+label-allow-config-diff: Применять для обработки изменений конфигурации
+label-allow-config-diff-filter: Применять для фильтрации изменений конфигурации
+label-allow-config-filter: Применять для фильтрации конфига
+label-allow-config-validation: Применять для валидации конфига
+label-allow-datastream-filter: Применять для фильтрации DataStream
+label-allow-diagnostics-check: Allow Diagnostics Check
+label-allow-event: Allow Event
+label-allow-housekeeping: Применять для постобработки опроса (housekeeping)
+label-allow-ifdesc: Применять для линковки по описаниям интерфейсов
+label-allow-lag-mismatch: Разрешить соединиение LAG <> physical
+label-allow-match-rule: Применять в правилах совпадения
+label-allow-multiple-values-list: Разрешить множ. значения
+label-allow-mx-transmutation: Применять для модификации сообщений в MX
+label-allow-p2mp: Разрешить P2MP
+label-allow-p2p: Разрешить P2P
+label-allow-parent: Allow Parent
+label-allow-reaction: Allow Reaction
+label-allow-resolver: Применять для резолва имени объекта в адрес
+label-allow-resource: Allow Resource
+label-allow-star: Разрешить Звезду
+label-allow-threshold-alarm: Allow Threshold Alarm
+label-allow-threshold-handler: Allow Threshold Handler
+label-allow-threshold-value-handler: Allow Threshold Value Handler
+label-allow-unidirectional-p2mp: Разрешить Однонаправленные P2MP
+label-allow-unidirectional-p2p: Разрешить Однонаправленные P2P
+label-allow-vacuum-bulling: Allow Vacuum Bulling
+label-allowed-models: Allowed Models
+label-allowed-models-2: Разрешённые модели
+label-allowing-manual-editor: Разршить редакт. польз.
+label-alterable-output: Дополнительные форматы
+label-alternative-path: Альтернативный путь
+label-answers: Вопросы
+label-api-code: Код API
+label-api-key: Api Key
+label-api-role: Роль API
+label-apply-after-sec: Apply After (sec.)
+label-apply-metrics-to-subinterfaces: Снимать метрики с сабинтерфейса
+label-archive-last-25: Архивные аварии (последние 25)
+label-archived-alarms: Архивные (закрытые) аварии
+label-args: Аргументы
 label-as-number: Номер AS
-label-children: "Потомок"
+label-as-set: AS-SET
+label-asset: Asset
+label-attic: Чердак
+label-attrs: Атрибуты
+label-auth-key: Ключ аутентификации
+label-auth-proto: Протокол аутентификации
+label-author: Автор
+label-auto-generated: Создано автоматически?
+label-auto-reload: "Авто обновленое : "
+label-auto-reload-off: "Auto reload : OFF"
+label-auto-reload-on: "Auto reload : ON"
+label-autocreated-profile: Профиль сегментов при создании
+label-autogenerated: Создана системой
+label-autosegmentation-policy: Политика автосегментации
+label-background: Цвет фона
+label-background-image: Фоновое изображение
+label-band-name: Имя области
+label-bands: Области
+label-base-measurement-units: Основная единица измерения
+label-basket-empty: корзина пуста
+label-beef-policy: Политика сбора тушёнки
+label-bfd: BFD
+label-bgp: BGP
+label-bgp-peer: BGP Peer
+label-bgp-peer-profile: BGP Peer Profile
+label-bi-id: BI ID
+label-bind-password: Привязка пароля
+label-bind-user: Привязка пользователя
+label-blank-map-layer: Пустой слой
+label-body-template: Шаблон содержимого
+label-bold: Жирный
+label-both: Оба
+label-box-alarm: Авария при опросе
+label-box-sample: Частота отладки
+label-box-telemetry: Отладка полного опроса
+label-by-adm-domain: "По З.О.:"
+label-by-adm-domain-2: По З.О.
+label-by-date: По дате
+label-by-geo-address: "По Адресной Строке:"
+label-by-interface-profile: По профилю интерфейса
+label-by-ip-list-max-2000: "По списку IP адресов (макс. 2000):"
+label-by-ip-list-max-2000-2: По списку IP (макс 2000)
+label-by-labels: "По меткам:"
+label-by-last-update: "Последнее обновление:"
+label-by-obj-profile: "По профилю объекта:"
+label-by-platform: "По Платформе:"
+label-by-pool: "По Пулу:"
+label-by-reference: By Reference
+label-by-resource-group-selector: По Группе устройств (Селектор)
+label-by-rule: "По правилу:"
+label-by-sa-profile: "По Профилю SA:"
+label-by-segment: "По Cегменту:"
+label-by-service-group: По Сервисной группе
+label-by-state: "По состоянию:"
+label-by-vendor: "По Производителю:"
+label-by-version: "По Версии:"
+label-cable: Кабель (провод)
+label-cache-neighbors-for: Кэш соседей
+label-calcified-name-template: Шаблон имени при кальцификации
+label-calculate-oper-status-policy: Политика расчёта статуса
+label-calculate-status-rules: Правила расчёта состояния
+label-can-change: Может менять
+label-can-view: Может смотреть
+label-card-template: Шаблон карточки
+label-card-title-template: Шаблон заголовка карточки
+label-cdp: CDP
+label-cellar: Подвал
+label-cells: Ячейки
+label-change-configuration: Изменить конфигурацию
+label-changeset: Changeset
+label-channel-discriminators: Дискриминатор канала
+label-check: проверка
+label-check-interval: Интервал проверки
+label-check-match: Условия совпадения
+label-check-on-config-change-after: "Проверять при смене конфига через "
+label-check-on-system-start-after: "Проверять при загрузке через "
+label-check-update-interval-sec: Интервал обновления (с)
+label-check-updates-interval: Check Updates Interval
+label-checked: Использовать
+label-children: Потомок
+label-cleanup: Очистить
+label-clear-after-sec: Clear After (sec.)
+label-clear-handlers: Обработчики (при закрытии)
+label-cli-privilege-policy: Политика работы с привелегиями CLI
+label-cli-session-policy: Политика работы в CLI
+label-clone-connections: Клонировать связь
+label-closed: Закрыт
+label-code: Код
+label-code-hex: Code (HEX)
+label-collect-interval: Интервал сбора (для агента)
+label-collector-mappings: Collector Mappings
+label-collision-policy: Политика столкновений
+label-column-formats: Формат колонок
+label-columns: Столбцы
+label-commands: Команды
+label-company: Компания
+label-compare: Сравнить
+label-compatible-groups: Группы совместимости
+label-component-scope: Компоненты области
+label-compose-expression: Выражение преобразования
+label-compose-metric-type: Расчётная метрика
+label-condition: Условие
+label-condition-op-vars: Операция
+label-condition-param: Условие (параметр)
+label-condition-value: Условие (значение)
+label-config-changed: Конфигурация изменена
+label-config-diff-filter-handler: Обработчик для фильтрации изменений конф-ии
+label-config-fetch: Config fetch
+label-config-fetch-policy: Политика сбора конфигурации
+label-config-filter-handler: Обработчик для фильтрации конф-ии
+label-config-mode: Режим настройки
+label-config-policy-violation: Конфигурация не соответствует политике
+label-config-validation-handler: Обработчик для валидации конф-ии
+label-configuration-rule: Правило настроек
+label-configuration-scopes: Области конфигурации
 label-configured-map-container: "Контейнер пользовательской карты: {name}"
-label-consumes-resources: "Потребляет ресурсы"
-label-contacts: "Контакты"
-label-container-2: "Контейнер"
-label-container-3: "Контейнер"
+label-confirm-new-password: Подтвердить
+label-connect-to: Подключить к
+label-connection-context: Контекст подключения
+label-connections: Подключения
+label-constraints: Ограничения
+label-consumes-resources: Потребляет ресурсы
+label-contact: Контакт
+label-contacts: Контакты
+label-container-2: Контейнер
+label-container-3: Контейнер
 label-container-name: "Контейнер: {name}"
-label-dashboard: "График"
+label-content-type: Тип содержимого
+label-context: Контекст
+label-context-name: Context Name
+label-contribution-url: URL для отправки
+label-control-time-0-sec: Контрольное время 0 (сек)
+label-control-time-1-reopen: Контрольное время (1 переоткрытие)
+label-control-time-1-sec: Контрольное время 1 (сек)
+label-control-time-multiple-reopens: Контрольное время (множество переоткрытий)
+label-control-time-n-sec: Контрольное время N (сек)
+label-control-time-no-reopens: Контрольное время (переоткрытий нет)
+label-controller: Контроллер
+label-controllers: Контроллеры
+label-convert-form-for-baseunit: Конвертировать из основной
+label-convert-username: Конвертировать Имя пользователя
+label-country: Страна
+label-cpe-status: CPE status
+label-cpe-type: CPE Type
+label-create-maintenance: Создать РНР
+label-custom-zoom: Custom Zoom
+label-dashboard: График
+label-dashboard-label: Обозначение для дашбордов
+label-dashboard-series-color: Цвет на графике
+label-data-match: Условия по Данным
+label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
+label-date-of-joined: Дата создания
+label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
+label-days: Days
+label-days-expr: Days Expr.
+label-dd-mm-yyyy: dd.mm.yyyy
+label-deduplication-window: Окно подавления дубликатов
+label-default-address-profile: Профиль Адреса по умолчанию
+label-default-domain: Домен по-умолчанию
+label-default-interval-sec: Интервал по умолчанию, сек
+label-default-number-profile: Профиль номера (по умолчанию)
+label-default-prefix-profile: Профиль префикса (по умолчанию)
+label-default-state: Статус по умолчанию
+label-default-template: Шаблон объекта
+label-default-vlan-profile: Профиль по умолчанию для VLAN'ов
+label-delay: Задержка
+label-delete-prefix-and-all-nested-prefixes-addresses-and-permissions: Удалить префикс, все вложенные префиксы, адреса и разрешения?
+label-delete-prefix-and-save-and-relink-the-nested-prefixes-and-addres: Удалить префикс и сохранить все вложенные префиксы и адреса в родительском?
+label-delta-value: Считать разницу
+label-deny-group: Deny Group
 label-description: Описание
-label-duplex: "Дуплекс"
+label-description-2: № описания
+label-diag: Дагностика
+label-diagnostics: Диагностики
+label-diagnostics-config: Diagnostics Config
+label-diameter-mm: Диаметр (мм)
+label-disable-all-interaction: Отключить взаимодействия
+label-disable-when-change: Disable When Change
+label-disclaimer: Описание
+label-discovered: Обнаружен
+label-discovery-interval: Интервал сегментной линковки по MAC
+label-discriminator: Дискриминатор
+label-discriminator-default: Дискриминатор по умолчанию
+label-discriminator-from: Дискриминатор От
+label-discriminator-source: Источник дискриминатора
+label-discriminator-to: Дискриминатор В
+label-display-order: Приоритет отображения
+label-dispose-alarm: Класс аварии
+label-do-not-delete: Не удалять
+label-don-t-show: не показывать
+label-dry-run: Тестовый запуск
+label-dry-run-not-execute-command: Dry Run (not execute command)
+label-duplex: Дуплекс
+label-duplicated: Дубликат MAC'а
 label-duration: Продолжительность
-label-end-of-sale: "Конец продаж"
-label-end-of-support: "Конец поддержки"
-label-errors: "Ошибки"
+label-duration-minutes: "{count, plural, one {# минута} few {# минуты} many {# минут} other {# минуты}}"
+label-dynamic: Dynamic
+label-dynamic-classification-policy: Политика автоназначения профиля
+label-dynamic-client-labels: Dynamic Client Labels
+label-dynamic-order: Порядок правила
+label-dynamic-service-labels: Dynamic Service Labels
+label-effective: Эффективные
+label-email: Email
+label-empty-list: пустой список
+label-enable: Включить
+label-enable-abduct-detection: Включить порт в обнаружение
+label-enable-autocreation: Enable Autocreation
+label-enable-box: При полном
+label-enable-collect: Включить сбор
+label-enable-excel-column-autowidth: Включить авторазмер колонок
+label-enable-fm-event: События FM
+label-enable-horizontal-transit: Разрешить транзит пути
+label-enable-ip-scan-discovery: Включить сканирование (не реализовано)
+label-enable-l2: Enable L2
+label-enable-l3: Enable L3
+label-enable-lost-redundancy-check: Включить проверку резерва
+label-enable-manual: Переключение вручную
+label-enable-metrics: Включить сбор метрик
+label-enable-node-portal: Включить переход на карту
+label-enable-periodic: При периодическом
+label-enable-prefix-list-provisioning: Enable Prefix-List Provisioning
+label-enable-provisioning: Enable Provisioning
+label-enable-received: Enable received
+label-enable-snmp: Включить SNMP
+label-enable-suggets-by-rule: Включить подбор реквизитов
+label-enable-time-delta-require-migration: Время между измерениями (Требует миграцию)
+label-enable-vlan-discovery: Разрешить Сбор вланов
+label-end-condition: End Condition
+label-end-of-sale: Конец продаж
+label-end-of-support: Конец поддержки
+label-endpoint-discriminators: Дискриминатор подключения
+label-enter-an-optional-description-for-your-contribution: Введите описание для вашей публикации
+label-enter-hex-number: Enter HEX number
+label-enter-search-text-and-press-enter: введите текст для поиска и нажмите Enter
+label-enter-your-gitlab-api-key: Введите ключ УЗ из GitLab
+label-entrances: Подъезды
+label-enumeration: Enumeration
+label-environment: Переменные окружения
+label-ephemeral: Виртуальная
+label-error-template: Шаблон описания ошибки
+label-errors: Ошибки
+label-errors-policy: Errors Policy
+label-escalate-alarm-consequence-policy: Политика доэскалации подчинённых аварий
+label-escalate-items-add-policy: Escalate Items Add Policy
+label-escalate-maintenance-policy: Escalate Maintenance Policy
+label-escalate-to: Эскалировать на (объект)
+label-escalation-policy: Политика эскалаций
+label-escalation-retries: Количество повторов
+label-event-class-re: Шаблон Класса события
+label-event-id-or-json-code: ID события или JSON
+label-event-policy: Политика событий
+label-event-sync-interval-sec: Интервал синх Событий, сек
+label-event-sync-mode: Event Sync Mode
+label-event-ttl: Время жизни события
+label-exclude: Исключить
+label-exclude-device-if-serialnumber-changed: Исключить устройства у которых менялся Серийный номер
+label-exclude-interfaces-with-the-default-name-profile-for-selector-an: Исключить интерфейсы с именем профиля "default" (для фильтров по селектору и З.О.)
+label-exclude-match-labels: Исключить с метками
+label-exclude-mo-by-resource-group-selector: Исключить устройство из Группы (Селектора)
 label-exclude-on-mac-black-list: Исключить строки из Чёрного списка MAC'ов
+label-exclude-ports-in-the-status-down: Исключить порты в состоянии "down"
+label-exit-scope-commands: Exit Scope Commands
+label-expire: Истекает
+label-expired-ttl-sec: Устаревание записей
+label-exponent: Exponent
+label-export-filter-name: Export Filter Name
+label-export-med: Export MED
+label-exposed-caps-to-objects: Exposed Caps to Objects
+label-extend: Extend
+label-extra: Extra
+label-factor: Коэфф
+label-failed-interval-sec: Интервал при сбое, сек
+label-failure-cooldown: Время недоступности системы
+label-false-level: Ложный уровень
+label-fatal: Fatal
+label-fatal-alarm-weight: Вес аварии уровня Fatal
+label-fax-no: Факс
+label-fdp: FDP
+label-female-facade: Female Facade
+label-field-access: Имя поля
+label-field-data: Field Data
+label-field-name: Имя поля
+label-field-type: Тип поля
+label-fields: Поле (метрики)
+label-file: № файла
+label-file-name: Имя файла
+label-filename-pattern: Маска имени файла
+label-fill-color: Цвет фона
+label-filter-by-description-regexp: Фильтровать по описанию (Шаблон)
 label-filter-by-ping-status: Отфильтрвовать недоступные (не пингуются)
+label-filter-interface-has-zero-load: Исключить интерфейсы с нулевой загрузкой
 label-filter-none-problems: Отфильтровать незаполненные проблемы
 label-filter-pending-links: Отфильтровать неподтверждённые линки
+label-filter-query: Запрос для фильтрации
+label-first-entrance: Первый подъезд
+label-first-number: Первый номер
+label-flap-condition: Условия дребезга (Flap)
+label-flap-threshold-pcs: Flap Threshold (pcs)
+label-flap-window-sec: Окно (сек)
+label-floating-name-template: Floating Name Template
+label-floating-parent-segment: Floating Parent Segment
+label-fm-pool: FM Pool
+label-font: Шрифт
+label-footer-remarks: Footer Remarks
+label-foreground: Foreground
+label-form: Form
+label-format-columns: Формат колонок
+label-formats: Formats
 label-fqdn: FQDN
+label-fqdn-suffix: FQDN Suffix
+label-fqdn-template: Шаблон FQDN
 label-from-date: С
-label-from-rule: "Из Правила"
-label-graphics: "Графики"
-label-hostname: "Имя хоста"
-label-in: "Вх."
+label-from-rule: Из Правила
+label-from-serial: С серийного номера
+label-front-facade: Вид спереди
+label-full-path: Полный путь
+label-gain-db: Коэф. мощности
+label-generate-rpsl: Generate RPSL
+label-generator: Генератор
+label-gitlab-api-key: Ключ из GitLab
+label-global-cpe-id: Global CPE Id
+label-global-id: Глобал. ИД
+label-global-limit: Глобальный лимит
+label-google-hybrid-map-layer: "Google: гибрид"
+label-google-roadmap-map-layer: "Google: схема"
+label-google-satellite-map-layer: "Google: спутник"
+label-google-terrain-map-layer: "Google: рельеф"
+label-graphic: Graphic
+label-graphics: Графики
+label-group-alarm: Групповая авария
+label-group-dn: Group_DN
+label-group-escalation-policy: Group Escalation Policy
+label-group-reference-regex: Регулярное выражение группы
+label-group-search-filter: Фильтр поиска групп
+label-group-select: Выбрать несколько
+label-habitated: Жилое
+label-hanlder: Обработчик
+label-has-preview: Предпросмотр
+label-header: Заголовок
+label-header-remarks: Header Remarks
+label-headers-match: Заголовки
+label-helper-modelid: Модель
+label-hide: Скрыть
+label-hide-enabled: Hide enabled
+label-hide-report-from-ui: Скрыть отчёт от пользователя
+label-homes-per-entrance: Кв./подъезд
+label-horizontal-transit-policy: Политика транзита пути
+label-hostname: Имя хоста
+label-hours-expr: Hours Expr.
+label-hsrp: HSRP
+label-huawei-ndp: Huawei NDP
+label-hw-timestamps: Аппараттные таймер
+label-icon: Иконка
+label-ifdesc: IfDesc
+label-ignore-cli-errors: Игнорировать ошибки CLI
+label-ignored: Игнорировать
+label-image: Изображение
+label-import-filter-name: Import Filter Name
+label-import-med: Import MED
+label-in: Вх.
 label-in-days: Глубина (дней)
-label-interface: "Интерфейс"
+label-in-labels: Метки
+label-include: Включить
+label-include-addresses: Include Addresses
+label-include-asn-expression: Include ASN Expression
+label-include-prefixes: Include Prefixes
+label-input-metric-type: Вход метрика
+label-insert-mac-address-to-search: вставьте MAC для поиска
+label-instance-configs: Instance Configs
+label-interaction-settings: Настройки взаимодействий
+label-interface: Интерфейс
+label-interface-changed: Интерфейс изменён
+label-interface-filter: Фильтрация интерфейсов
+label-interface-status: Статус интерфейсов
+label-interface-validation: Валидация интерфейсов
 label-interval: Интервал
-label-inventory: "Учет объектов"
-label-ip: "IP"
-label-ip-address: "IP адрес"
-label-linkgraph: "График связи"
-label-loading: "Загрузка ..."
-label-location: "Расположение"
-label-mac: "MAC"
-label-maintenance: "РНР"
-label-managed-object: Объекты управления
+label-interval-sec: Интервал, сек
+label-interval-sec-2: Interval,sec
+label-inventory: Учет объектов
+label-ip: IP
+label-ip-address: IP адрес
+label-ip-discovery-ping: IP Discovery (Ping)
+label-ip-prefix-profile: Профиль префикса
+label-ip-vrf: IP VRF
+label-is-active: работает
+label-is-enabled: Включено
+label-is-filtered: Фильтровать
+label-is-hidden: Скрывать
+label-is-indexed: Индексировать
+label-is-locked: Заблокированный
+label-is-matching-label: Условия совпадения
+label-is-searchable: Доступно для поиска
+label-isis: ISIS
+label-italic: Наклонный
+label-job-handler: Обработчик задачи
+label-keep-connections: Сохранить связи
+label-key-expression: Выражение для ключа
+label-key-fields: Ключевые поля
+label-l2-mtu: L2 MTU
+label-label-pattern: Label Pattern
+label-lacp: LACP
+label-last-extract: Последний запуск
+label-last-extract-event: Последняя загрузка событий
+label-last-load: Последнее загрзка
+label-layout: Раскладка
+label-ldp: LDP
+label-level-limit: Ограничить уровень
+label-link-discovery-policy: Политика создания линка
+label-link-event: Событие на интерфейсе
+label-linkgraph: График связи
+label-lldp: LLDP
+label-loading: Загрузка ...
+label-local-backup-ip: Local Backup IP
+label-local-cpe-id: Local CPE Id
+label-local-ip: Локальный IP
+label-local-pref: Local Pref
+label-location: Расположение
+label-long-alarm-archive-more-3-months: Архивные аварии (больше 3 месяцев)
+label-lying: Lying
+label-mac: MAC
+label-mac-db: Таблица MAC
+label-mac-discovery-policy: Политика сбора MAC адресов
+label-mac-history: История MAC
+label-mail: Почта
+label-maintenance: РНР
+label-maintenances: Maintenances
+label-male-facade: Male Facade
+label-managed-object: Объект управления
 label-managed-object-container: "Контейнер объекта управления: {name}"
+label-managed-object-loader-policy: Способ загрузки Устройств
 label-managed-object-search-for-config-only: Устройство (только для конфигурации)
-label-metrics: "Метрики"
-label-migrate: "Переместился"
-label-migrate-device-changed: "Переместился (со сменой устройства)"
-label-model: "Модель"
-label-n-a: "Н/Д"
+label-mappings: Mappings
+label-markup-language: Язык разметки
+label-match-conditions: Условия Сообщения
+label-match-handler: Обработчик
+label-match-labels: Совпадение меток
+label-match-m-units: Match M Units
+label-match-rules: Список критериев
+label-matchers: Matchers
+label-max: Макс
+label-max-duration: Макс. продолжительность
+label-max-endpoints: Макс подключений
+label-max-length: Макс. длина
+label-max-prefixes: Max. Prefixes
+label-max-scripts: Макс. скриптов
+label-max-set-severity: Max./Set Severity
+label-max-threads: Количество потоков
+label-max-windows: Макс. окно
+label-members: участники
+label-merge-window-sec: Merge Window (sec)
+label-message-pattern: Шаблон сообщения
+label-message-registry-policy: Политика регистрации сообщений
+label-message-storm-threshold: Порог срабатывания (сообщений за минуту)
+label-message-types: Типы сообщений
+label-metric-batch-delay-sec: Metric Batch Delay, sec
+label-metric-batch-signal: Metric Batch Signal
+label-metric-collected-policy: Политика сбора метрик
+label-metric-measurement-units: Единица измерения метрики
+label-metric-scale: Множитель
+label-metric-source: Источник метрик
+label-metrics: Метрики
+label-metrics-interval-buckets: Число корзин в интервале
+label-mib: "MIB #"
+label-migrate: Переместился
+label-migrate-device-changed: Переместился (со сменой устройства)
+label-mikrotik-ndp: MikroTik NDP
+label-min: мин
+label-min-2: Мин
+label-min-duration: Мин. продолжительность
+label-min-duration-2: Минимальная продолж
+label-min-objects: Мин. Объектов
+label-min-set-severity: Min./Set Severity
+label-min-subscribers: Мин. Абонентов
+label-min-windows: Мин. окно
+label-minutes-expr: Minutes Expr.
+label-mirror-policy: Политика зеркалирования
+label-mnt-ref: Mnt. Ref
+label-mode: Режим работы
+label-model: Модель
+label-modes: Режимы
+label-months-expr: Months Expr.
+label-move-nested-objects-to: Переместить вложенные объекты в
+label-move-nested-objects-to-lost-found: Переместить вложенные объекты в Потерянные
+label-multicast-vlan: Мультикаст VLAN
+label-mx-policy: MX Policy
+label-n-a: Н/Д
 label-name: Имя адреса
-label-neighbors: "Соседи"
-label-object-metrics: "Метрики"
-label-object-name: "Имя"
-label-out: "Исх."
-label-outages-summary: "Оперативная обстановка"
-label-packets: "Пакеты"
-label-platform-name: "Модель"
+label-name-template: Шаблон имени
+label-name-template-2: Шаблон имени
+label-neighbors: Соседи
+label-network-ranges: Диапазоны сети
+label-new-event-notification: Группа уведомления
+label-new-homes: Новые квартиры
+label-new-message: Новое сообщение
+label-new-password: Новый пароль
+label-new-password-cannot-be-empty: Новый пароль не может быть пуст
+label-new-password-retype: Новый пароль ещё раз
+label-no-active-alarms: No active alarms
+label-no-alarms: No Alarms
+label-no-data: Нет данных
+label-no-data-found: Данные не найдены
+label-no-events: No events
+label-no-group-selected: Нет выбранных групп
+label-no-jobs: Нет задач
+label-no-macs-collected: No MACs collected
+label-no-matching: Не совпадает
+label-no-possible-transitions: Нет доступных переходов
+label-no-recently-closed-alarms: Для интервала нет закрытых аварий
+label-no-records: Нет записей
+label-no-results: Нет результата.
+label-no-subinterfaces: Нет сабинтерфейсов
+label-not-configured: Не настроен
+label-not-found: Не найдено
+label-not-limited: Not Limited
+label-nothing-checked: ничего не выбрано
+label-nothing-was-found: Не найдено
+label-notification-delay-s: Заержка уведомления (с)
+label-notification-delay-sec: Задержка уведомления (сек)
+label-notify-delayed: Задержка уведомления
+label-notify-immediately: Немедленное уведомление
+label-nri: NRI
+label-ns: NS
+label-number-packets-on-test: Число пакетов в тесте
+label-oam: OAM
+label-object-class: Object Class
+label-object-filter: Фильтрация объектов
+label-object-groups: Группы устройств
+label-object-metrics: Метрики
+label-object-name: Имя
+label-object-url-template: Шаблон URL устройства
+label-object-validation: Валидация объектов
+label-old-password: Старый пароль
+label-old-password-cannot-be-empty: Старый пароль не может быть пуст
+label-on-denied-firmware: При заперете версии ПО
+label-on-enter-handlers: On Enter Handlers
+label-on-leave-handlers: On Leave Handlers
+label-on-new-platform: При изменении платф.
+label-on-platform-change: При смене платформы
+label-only: Только
+label-only-not-completed: Только не Завершённые
+label-only-root: Только первопричина
+label-opacity: Прозрачность
+label-openstreetmap-map-layer: OpenStreetMap
+label-operations: Operations
+label-organisation: Организация
+label-orientation: Ориентация
+label-ospf: OSPF
+label-ospf-v3: OSPF v3
+label-out: Исх.
+label-outages-summary: Оперативная обстановка
+label-output-type: Формат файла
+label-overlay-glyph: Overlay Glyph
+label-packet-size-bytes: Размер пакета (байт)
+label-packets: Пакеты
+label-packets-count: Количество пакетов
+label-param-name: Название параметра
+label-param-rules: Param Rules
+label-parameter-choices: Варианты значения
+label-parameters: Параметры
+label-parameters-schema: Схема параметров
+label-params: Параметры
+label-params-form: Params Form
+label-password: Пароль
+label-password-cannot-be-empty: Пароль не может быть пустым
+label-path-template: Шаблон пути
+label-pattern: шаблон
+label-pattern-re: Шаблон (RE)
+label-patterns: Шаблоны
+label-peer-data: Данные пира
+label-peer-discovery: Сбор Peer'ов (BGP)
+label-peer-status: Peer Status
+label-percentile: Перцентиль
+label-periodic-alarm: Авария при опросе
+label-periodic-sample: Частота отладки периодика
+label-periodic-telemetry: Отладка периодика
+label-permission-name: имя_разрешения
+label-permission-name-2: Permission Name
+label-permissions: Разрешения
+label-persistent: Постоянный
+label-phone-number: Номер телефона
+label-phone-range: Диапазон номеров
+label-ping-policy: Политика определения доступности
+label-platform-name: Модель
+label-please-confirm-your-new-password: Пожалуйста подтвердите новый пароль
+label-plugin: плагин
+label-pm-agent: PM Agent
+label-point-radius: Радиус точки
+label-policy-off-hours: Политика рабочих часов
 label-pool: Пул
+label-pool-active: Активен
+label-pool-exhaust: Pool Exhaust
+label-pool-strategy: Стратегия выделения
+label-pormapper-name: Pormapper Name
+label-portmapper: Привязка портов
+label-position: Позиция
+label-postal-code: Почтовый индекс
+label-pre-reasons: Предв. диагностики
+label-preference: Приоритет
+label-preferred-language: Язык
+label-preferred-profile-credential: Приоритет реквизитов в профиле
 label-prefix: Префикс
+label-prefix-discovery: Разрешить сбор префиксов
+label-prefix-discovery-policy: Политика поиска префиксов
+label-prefix-label: IP префикса
+label-prefix-list: Список префиксов
+label-prefix-list-notification-group: Группа уведомления
+label-priv-key: Ключ шифр.
+label-priv-proto: Протокол шифр.
 label-profile: Профиль
 label-profile-check-only: Вывести только проблемы доступа
-label-profile-sa: "Профиль SA"
-label-project: "Проект"
-label-provides-resources: "Предоставляет ресурсы"
-label-recommended: "Рекомендовано"
+label-profile-sa: Профиль SA
+label-project: Проект
+label-project-distance-m: Проектная дистанция (м)
+label-provides-resources: Предоставляет ресурсы
+label-query: Запрос
+label-query-parameters: Параметры запроса
+label-question: Вопрос
+label-questions: Вопросы
+label-quick-jump: Быстрый Переход...
+label-rack: "Стойка: "
+label-raise-alarm-to-target: Авария на ответчик
+label-rate-limit: Rate limit
+label-raw-policy: Добавить конфиг-ю в ConfDB
+label-raw-vars: Исходные переменные
+label-rear-facade: Вид сзади
+label-recent-alarms-time-opacity: Последние аварии (время/интервал)
+label-recommended: Рекомендовано
+label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Recommended way for policy-map values calculating is: normal-burst-bytes=bits-per-second*Tc/8.Recommended way for rate-limit values calculating is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
+label-recover-time-sec: Recover Time (sec)
+label-reference: Идентификатор
+label-regex-label: Regex Label
+label-regexp: Регулярное выражение
+label-register-as-notification: Register as Notification
+label-remote: Remote
+label-remote-backup-ip: Remote Backup IP
+label-remote-id: Внешний ID
+label-remote-ip: Remote IP
+label-remove-nested-objects: Удалить вложенные объекты
+label-render-template: Шаблон сообщения
+label-rep: REP
+label-repeat-delay: Repeat Delay
+label-repeat-escalations: Repeat Escalations
+label-replace-policy: Политика замены
 label-report-format: Формат отчёта
-label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: "Диапазон больше одного года не доступен для выгрузки. Если необходимо - обратитесь к администратору системы"
+label-report-formatter: Построитель отчёта
+label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: Диапазон больше одного года не доступен для выгрузки. Если необходимо - обратитесь к администратору системы
+label-report-ping-attempts: Сохранять ошибки в серии
+label-report-ping-rtt: Собирать RTT при ping
+label-report-source: Генератор отчёта
 label-report-type: Тип отчёта
-label-segment-2: "Сегмент"
-label-segment-3: "Сегмент"
+label-require-any-group: Требовать любую группу
+label-require-group: Требовать группу
+label-required-rules: Требуемые метки
+label-resolver-handler: Обработчик резолва адресов
+label-resource-group: Группа ресурсов
+label-resource-map-policy: Политика использования ресурсов
+label-restrict-mac-to-management-vlan: Ограничить сбор маков Вланом управления
+label-retry: Повтор
+label-retype-new-password: Новый пароль ещё раз
+label-retype-password: Пароль ещё раз
+label-reverse-nses: Обратная NS
+label-right-re: Прав. RE
+label-ro-community: RO Community
+label-route-maintainers: Route Maintainers
+label-route-target: Route Target
+label-rpsl: RPSL
+label-rpsl-footer: RPSL Footer
+label-rpsl-header: RPSL Header
+label-rpsl-remark: RPSL Remark
+label-rsvp: RSVP
+label-rule-action: Rule Action
+label-run-actions: Run Actions
+label-run-as: Запустить От
+label-run-order: Порядок запуска
+label-run-sync-at: Запускать после
+label-running-policy: Политика запуска опроса
+label-rw-community: RW Community
+label-save-history: Сохранять историю
+label-scheme: Схема
+label-scopes: Scopes
+label-script: Скрипт
+label-script-failed: Ошибка скрипта
+label-search: Поиск ...
+label-search-by-ip: Search by ip
+label-search-by-prefix: Search by prefix
+label-search-by-user: Search by user
+label-search-text: Введите текст для поиска
+label-seconds-expr: Seconds Expr.
+label-security-level: SNMP Уровень безопасности
+label-seen-propagation: Seen на вложенные
+label-segment-2: Сегмент
+label-segment-3: Сегмент
 label-segment-name: "Сегмент: {name}"
-label-sensors: "Сенсоры"
-label-service: "Сервис"
-label-service-range: "Время обслуживания"
+label-segment-name-2: Шаблон имени сегмента
+label-select-band: Выбрать Band
+label-select-bookmark: Выберите Закладку
+label-select-file: Выберите файл...
+label-select-file-2: Выберите файл...
+label-select-group: Выбрать группу
+label-select-mib: Выбрать MIB...
+label-select-parent: Выбрать родителя...
+label-select-pool: Выберите пул
+label-select-segment: Выберите сегмент...
+label-select-sibling: Выбрать родственника...
+label-sensor-alias-template: Sensor Alias Template
+label-sensor-measurement-units: Единицы измерения значения
+label-sensors: Сенсоры
+label-servers: Сервера
+label-service: Сервис
+label-service-binding: Привязка сервисов к портам
+label-service-dependencies: Service Dependencies
+label-service-range: Время обслуживания
+label-service-weight: Вес сервиса
+label-set-headers: Установить заголовки
+label-shape-name-template: Шаблон имени иконки
+label-shard: Шард
+label-short-name: Кртк. имя
+label-show: Показать
+label-show-in-form: Отображать в меню
+label-show-in-summary: Показывать в итоге
+label-show-labels: Показать метки
 label-show-other-problems: Отобразить неклассифицированные проблемы
 label-show-problem-on-already-linked: Показать проблемы на слинкованных интерфейсах
-label-soft-version: "Версия ПО"
-label-speed: "Скорость"
-label-state: "Состояние"
-label-time-pattern: "Маска времени"
+label-sibling: Родственники
+label-slots: Слоты
+label-snippet: Snippet
+label-snippets: Snippets
+label-snmp-auth-key: SNMP Auth Key
+label-snmp-auth-proto: SNMP Auth Proto
+label-snmp-context-name: SNMPv3 контекст
+label-snmp-credentials: Реквизиты SNMP
+label-snmp-priv-key: SNMP Ключ шифрования
+label-snmp-priv-proto: SNMP Протокол шифрования
+label-snmp-rate-limit: Частота опроса SNMP
+label-snmp-ro-community: SNMP RO Community
+label-snmp-rw-community: SNMP RW Community
+label-snmp-security-level: SNMP Уровень безопасности
+label-snmp-username: SNMPv3 Пользователь
+label-snmp-v1: SNMP v1
+label-snmp-v2c: SNMP v2c
+label-soa: SOA
+label-soft-version: Версия ПО
+label-software-image: Имя файла ПО
+label-sound: Звук
+label-source-node: Исходный узел
+label-sources: Источники
+label-special-addresses: Особые адреса (сеть и шир-ный)
+label-speed: Скорость
+label-state: Состояние
+label-state-policy: Расчёт состояния
+label-static: Static
+label-static-members: Участники
+label-status-alarm-policy: Status Alarm Policy
+label-status-change-notification: Уведомление об изменении статуса
+label-status-discovery: Опрос статуса интерфейса
+label-status-transfer-policy: Политика передачи состояния
+label-step-ness: Step  Ness
+label-step-number: Номер шага
+label-stop-processing-rules: Остановить обработку
+label-storage: Хранилище
+label-storm-policy: Политика при шторме
+label-stp: STP
+label-stream: Stream
+label-stroke-color: Цвет линии
+label-stroke-width: Ширина линии
+label-subinterface: Сабинтерфейс
+label-subinterface-apply-policy: SubInterface Apply Policy
+label-subject-template: Шаблон темы
+label-subscribers-that-sum: Учитываемые профили абонентов
+label-subscription-settings: Настройки подписки
+label-suggest-auth-profile: Возможные реквизиты профиля аутентификации
+label-suggest-cli: Возможные реквизиты CLI
+label-suggest-snmp: SNMP
+label-suggest-snmp-oids: Возможные реквизиты SNMP
+label-super-password: Пароль Суперпользователя
+label-superuser-status: Суперпользователь
+label-suppress-alarms: Подавлять аварии
+label-suppress-alarms-2: Подавлять аварии
+label-suppression-window: Окно подавления повторов
+label-switch-off: Отключить
+label-symmetric-check: Проверять с обеих сторон
+label-sync-approved-records: Синхронизировать подтвеждённые
+label-sync-asset: Создать объект (в Инв)
+label-sync-interval-sec: Интервал синхр, сек
+label-sync-managedobject: Синхронизировать как устройство
+label-sync-notification-policy: Уведомления по результатам
+label-sync-policy: Политика синхр
+label-synchronize-mail: Синхронизировать email
+label-synchronize-name: Синхронизировать имя
+label-syslog-archive-policy: Политика архивирования Syslog
+label-syslog-source: Источник Syslog
+label-syslog-source-ip: IP адрес источника Syslog
+label-target-nodes: Узел назначения
+label-tech-c: Tech-c
+label-telemetry-sample: Частота трассировки
+label-tememetry-sample: Коэф. Отладки
+label-test-cases: Данные для проверки
+label-threshold-type: Threshold Type
+label-time-params: Time Params
+label-time-pattern: Маска времени
+label-timeout: Таймаут
+label-timeout-msec: Таймаут (мсек)
+label-timeout-sec: Таймаут (с)
+label-title: Заголовок
 label-to-date: По
-label-topology-neighbors: "Соседи по топологии"
-label-tt: "Номер ТТ"
-label-utilization: "Загрузка"
+label-to-prefix: В префикс
+label-to-serial: По серийный номер
+label-to-vrf: В VRF
+label-topology-methods: Методы построения топологии
+label-topology-neighbors: Соседи по топологии
+label-tos: TOS
+label-transition: Переход
+label-trap-community: Trap Community
+label-trap-source: Источник SNMP Trap
+label-trap-source-ip: IP адрес источника SNMP Trap
+label-trapid: TrapID
+label-true-level: Истинный уровень
+label-tt: Номер ТТ
+label-tt-policy: TT Policy
+label-tt-system-config: TT System Config
+label-tt-system-id: ID в системе TT
+label-ttl-days: Глубина данных (в днях)
+label-udld: UDLD
+label-underlined: Подчеркнутый
+label-unique-resource: Unique Resource
+label-unique-value: Unique Value
+label-unknowns: Неизвестные
+label-update-addresses: Обновлять адреса
+label-update-expiration: Обновлять устаревание
+label-uplink-policy: Политика определения Аплинка
+label-uptime: Время работы
+label-use-aggregated-datasource: Использовать агрегированные данные
+label-use-connections-from: Использовать как шаблон
+label-use-object-as-port-token: Искать имя устройства в описании порта
+label-user-clearable: Закрыто пользователем
+label-user-dn: User_DN
+label-user-interface: Пользовательский интерфейс
+label-user-name-cannot-be-empty: Имя пользователя не может быть пустым
+label-user-permissions: Разрешения пользователя
+label-user-search-filter: Фильтр поиска пользователей
+label-utilization: Загрузка
+label-uuid: Идентификатор
+label-validation-as-field: Validation AS Field
+label-validation-policy: Политика Валидации
+label-values: Значения
+label-vc-l2-domain: L2 домен
+label-version-changed: Версия изменена
+label-vlan-border: Граница VLAN
+label-vlan-discovery-filter: Фильт для сбора вланов
+label-vlan-discovery-policy: Политика сбора вланов
+label-vlan-label: Метка VLAN
+label-vlan-pools: Ресурсные пулы
+label-vlan-provisioning-policy: VLAN Provisioning Policy
+label-volume: Громкость
 label-vrf: VRF
+label-vrf-group: VRF группа
+label-vrrp: VRRP
+label-vrrp-v3: VRRP v3
+label-wait-tt: Ждать TT
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-addresses: Отсутствует содержимое префикса. Добавьте IP адрес.
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-prefixes: ВНИМАНИЕ!!!&nbsp;Префикс пуст! Пожалуйста, добавьте вложенные префиксы.
+label-weekdays-expr: Weekdays Expr.
+label-wf-states: WF States
+label-when: Когда
+label-width: Ширина
+label-window-function: Функция "окна"
+label-workflow: Процесс
+label-xmac: xMAC
+label-yandex-hybrid-map-layer: "Яндекс: гибрид"
+label-yandex-roadmap-map-layer: "Яндекс: схема"
+label-yandex-satellite-map-layer: "Яндекс: спутник"
+label-years-expr: Years Expr.
+label-yes-no: Да/Нет
 label-zone: Зона
-msg-duplicate-managed-object: "Дублирование объекта"
+msg-absolute: Абсолютное
+msg-account-is-not-registred-please-register-account-to-get-access-t: Учётная запись не зарегистрирована. Пожалуйста, зарегистрируйте учётную запись для получения доступа к дополнительной поддержке и сервису
+msg-account-is-registred-you-have-access-to-additional-support-and-s: Учётная запись зарегистрирована. Вы получили доступ к дополнительной поддержке и сервисам
+msg-ack: Подтвердить
+msg-ack-subscriber: Ack Subscriber
+msg-ack-user: Ack User
+msg-acknowledge: Подтверждено
+msg-action-value0-failed: Действие {value0} ошибка
+msg-active: ACTIVE
+msg-add-object-to-value0: Добавить объект в {value0}
+msg-add-value0: Добавить {value0}
+msg-address-usage: Использовано Адресов
+msg-address-value0-successfully: Адрес {value0} успешно
+msg-adm-path: Adm Path
+msg-affected-based-severity-preferred: Affected Based Severity Preferred
+msg-affected-limit: По сервисам
+msg-affected-objects: Накрыто Объектов
+msg-affected-subscriber: Накрытых Абонентов
+msg-after-create: After Create
+msg-after-update: After Update
+msg-aggregated: Агрегированный
+msg-alarm-cleared: Авария закрыта
+msg-alarm-subject: Заголовок аварии
+msg-alarm-tt: Alarm TT
+msg-alarms-cleared-successfully: Аварии успешно очищена
+msg-all: Все
+msg-all-interface-addresses: Адреса всех интерфейсов
+msg-all-maps: Все Карты
+msg-all-message: Все сообщения
+msg-all-polling: All polling
+msg-all-segment-objects: Все объекты сегмента
+msg-all-success: Успешны все
+msg-allocated-prefixes: Разместить префиксы
+msg-allow-autosegmentation: Разрешить изменение сегмента
+msg-allowed-any: Allowed Any
+msg-always: Всегда
+msg-always-collect: Собирать всегда
+msg-always-enable: Всегда включить
+msg-always-mirror: Всегда зеркалировать
+msg-always-run: Всегда
+msg-always-validate: Всегда валидировать
+msg-and: И
+msg-any: Любой
+msg-any-2: Любой
+msg-api-key-found: Ключ API найден
+msg-api-key-required: Требуется API ключ
+msg-api-key-required-2: Требуются ключ API
+msg-api-key-saved: Ключ API сохранён
+msg-are-you-sure-you-want-to-delete-all-rows: Вы действительно хотите удалить все записи?
+msg-are-you-sure-you-want-to-delete-this-wire: Вы уверены что хотите удалить соединение
+msg-are-you-sure-you-want-to-reset-all-values: Вы уверены что хотите удалить все значения?
+msg-as-depended: Эскалировать только как зависимые
+msg-as-discovered: Как обнаруженные
+msg-as-managed-object: Как устройства
+msg-as-new: Как новое
+msg-as-or-as-set: AS or AS-set
+msg-as-set-members-cache-is-empty-please-update-whois-cache: AS-SET members cache is empty. Please update Whois Cache
+msg-asset-peer: Asset Peer
+msg-attachment-deleted: Вложение удалено
+msg-auto-reload-value0: "Авто обновленое : {value0}"
+msg-auto-reload-value0-2: "Авто обновленое : {value0}"
+msg-auto-reload-value0-3: "Авто обновленое : {value0}"
+msg-auto-reload-value0-4: "Авто обновленое : {value0}"
+msg-average-level: Средний уровень
+msg-avg-load-in: Средняя загрузка входящий
+msg-avg-load-out: Средняя загрузка исходящий
+msg-backend-failed-to-clear-alarms: "Сервер: ошибка при очистке аварий"
+msg-beef: Хранение тушенки
+msg-beef-test: Хранение тестов тушенки
+msg-beef-test-config: Хранение конфигурации тестов тушенки
+msg-bidirectional-over-differ-connection: Двунаправленное через разные подключения
+msg-bidirectional-over-one-connection: Двунаправленное через одно подключение
+msg-block: Блокировать приём
+msg-block-raise-alarm: Блокировать и поднять аварию
+msg-bool: Логическое
+msg-buffer-size: "Размер буфера: {size}"
+msg-building: Building...
+msg-by-config: By Config
+msg-by-instance: По экземпляру
+msg-by-max-status: По Макс состоянию
+msg-by-min-status: По Мин состоянию
+msg-by-rule: По Правилу
+msg-by-service-component: By Service Component
+msg-by-tokens: По меткам
+msg-by-types: По типу
+msg-by-username-snmp-ro: По Реквизитам
+msg-calcify: Кальцифицироваться
+msg-calculate: Рассчитывать
+msg-cannot-read-file: Невозможно прочитать файл
+msg-cannot-resolve-as-set-prefixes: Cannot resolve AS-SET prefixes
+msg-capabilities-of: Возможности {name}
+msg-center: Центр
+msg-chained-downlink: Chained Downlink
+msg-change-address: Изменить IP адрес
+msg-change-prefix: "Изменить префикс "
+msg-change-prefix-value0: Изменить префикс {value0}
+msg-changes: Изменения
+msg-changes-2: changes
+msg-changes-saved-successfully: Изменения успешно записаны
+msg-changes-value0: Изменения {value0}
+msg-changing-language: Смена языка
+msg-checking-api-key: Проверить API ключ...
+msg-choice: Выбор
+msg-choice-combo: Выбор (неск.)
+msg-choice-radio: Выбор (одно)
+msg-circle: Circle
+msg-class-based-policy: Настройки класса
+msg-clearing-alarms: Очистка аварий...
+msg-cli-only: Только CLI
+msg-cli-snmp: CLI, SNMP
+msg-clone-rows: Клонировать запись
+msg-cloned: Клонировано
+msg-cloud-downlink: Cloud Downlink
+msg-collect-on-change: Собирать при изменении
+msg-command-snippet: Command Snippet
+msg-comment-message: Текст комментария
+msg-comment-source: Автор комментария
+msg-comment-time: Время комментария
+msg-compare-with: Сравнить с
+msg-completed: Завершен
+msg-confdb: ConfDB
+msg-confdb-script: Конфиг, Скрипт
+msg-config-mirror: Зеркалирование конфигурации
+msg-config-saved: Настройки сохранены
+msg-config-upload: Выгрузка конфигурации
+msg-confirm: Подтвердить
+msg-confirm-delete-wire: Удалить соединение {from}=>{to}?
+msg-confirm-transition: Выполнить переход «{transition}»? Это действие нельзя отменить!
+msg-confirmation: Подтвердите
+msg-connect: CONNECT
+msg-connections-removed: Связи удалены
+msg-container-level-1: Контейнер (Уровень 1)
+msg-container-level-2: Контейнер (Уровень 2)
+msg-container-level-3: Контейнер (Уровень 3)
+msg-container-level-4: Контейнер (Уровень 4)
+msg-container-level-5: Контейнер (Уровень 5)
+msg-container-level-6: Контейнер (Уровень 6)
+msg-container-level-7: Контейнер (Уровень 7)
+msg-contains: Содержит
+msg-continue: Continue
+msg-contribution-details: Детали отправки
+msg-contribution-sent: Запись отправлена
+msg-cpu-usage: Загрузка процессора (%)
+msg-create-internal-connection-from-value0-to-value1: Создать внутреннее подключение из {value0} в {value1}
+msg-create-model: Создать модель объекта
+msg-create-new-address: Создать новый IP адрес
+msg-create-new-prefix: Создать префикс
+msg-create-new-value0: Создать новый {value0}
+msg-created-from-alarm-list-at: создано из списка аварий
+msg-created-from-alarm-list-at-value0: создано из списка аварий{value0}
+msg-created-from-alarms-list-at: "создано из списка аварий "
+msg-created-from-alarms-list-at-value0: создано из списка аварий {value0}
+msg-created-from-managed-objects-list-at: "создано из списка устройств "
+msg-created-from-managed-objects-list-at-value0: создано из списка устройств {value0}
+msg-created-from-map-at: "создано из схемы сегмента "
+msg-created-from-map-at-value0: создано из схемы сегмента {value0}
+msg-created-interface: "Создать интерфейс: "
+msg-created-interface-value0: "Создать интерфейс: {value0}"
+msg-created-interface-value0-2: "Создать интерфейс: {value0}"
+msg-credentials-has-been-changed: Пароль изменен
+msg-crm-users: Абоненты
+msg-datastream: Datastream
+msg-date-interval: Date Interval
+msg-date-interval-with-align: Date Interval with Align
+msg-degraded: Частичная неработоспособность
+msg-deleted: удалено
+msg-deleted-2: Удалено
+msg-deleting: удаляется
+msg-deleting-2: Удаление ...
+msg-deny: Запретить
+msg-description-value0: № описания{value0}
+msg-device-has-alarm: На устройстве есть авария
+msg-device-is-normal: Устройство без аварий
+msg-device-neighbors: Соседи
+msg-device-sn-changed-by-bi: Изменение серийного номера
+msg-dictionary-not-found: Справочник не найден
+msg-diff-level: Разница уровней
+msg-dimensions-must-be-set-to-generate-template: Размеры обязательны для создания шаблона
+msg-direct-alarm: Direct Alarm
+msg-direct-downlink: Direct Downlink
+msg-direct-uplink: Direct Uplink
+msg-disabled: Отключить
+msg-discards-in-packets-s: Отброшенные на входе, пакеты/с
+msg-discards-out-packets-s: Отброшенные на выходе, пакеты/с
+msg-dns-zone-record: DNS Zone Record
+msg-do-not-convert: Не конвертировать
+msg-do-not-raise: Не поднимать
+msg-do-not-segmentate: Не сегментировать
+msg-do-you-want-to-remove-all-connections-within-object-this-operati: Вы желаете осуществить переход? Операция не может быть отменена!
+msg-do-you-wish-to-delete-address-this-operation-cannot-be-undone: Вы действительно желаете удалить IP адрес? Действие невозжно будет отменить!
+msg-do-you-wish-to-delete-record-this-operation-cannot-be-undone: Вы уверены в удалении записи? Операция не может быть отменена!
+msg-do-you-wish-to-delete-workflow-this-operation-cannot-be-undone: Вы уверены что желаете процесс? Операцию невозможно отменить!
+msg-do-you-wish-to-unlink-interface: Отвязать интерфейс {name}? Это действие нельзя отменить!
+msg-don-t-raise: Не поднимать привилегии
+msg-down: Полная неработоспособность
+msg-download-button-clicked-value0: Нажата кнопка Загрузки {value0}
+msg-download-value0: Загрузить {value0}
+msg-drag-and-drop-to-reorganize: Перетащите для изменения порядка
+msg-drag-other-object-from-left-tree: Перенесите другой объект из дерева слева
+msg-drop-alarm: Отбросить
+msg-duplicate-managed-object: Дублирование объекта
 msg-duration-about-hours: "{count, plural, one {около # часа} few {около # часов} many {около # часов} other {около # часа}}"
-msg-duration-about-month: "около 1 месяца"
-msg-duration-about-year: "около 1 года"
+msg-duration-about-month: около 1 месяца
+msg-duration-about-year: около 1 года
 msg-duration-about-years: "{count, plural, one {около # года} few {около # лет} many {около # лет} other {около # года}}"
-msg-duration-almost-two-years: "почти 2 года"
+msg-duration-almost-two-years: почти 2 года
 msg-duration-almost-years: "{count, plural, one {почти # год} few {почти # года} many {почти # лет} other {почти # года}}"
 msg-duration-days: "{count, plural, one {# день} few {# дня} many {# дней} other {# дня}}"
-msg-duration-less-than-minute: "меньше минуты"
+msg-duration-less-than-minute: меньше минуты
 msg-duration-minutes: "{count, plural, one {# минута} few {# минуты} many {# минут} other {# минуты}}"
 msg-duration-months: "{count, plural, one {# месяц} few {# месяца} many {# месяцев} other {# месяца}}"
-msg-duration-never: "Никогда"
-msg-duration-over-year: "более 1 года"
+msg-duration-never: Никогда
+msg-duration-over-year: более 1 года
 msg-duration-over-years: "{count, plural, one {более # года} few {более # лет} many {более # лет} other {более # года}}"
-msg-failed-to-clear-alarms: "Ошибка при закрытии аварий"
-msg-integer-is-required: "Требуется Целочисленное значение"
-msg-main: "Основное"
-msg-managed-object-was-moved: "Объект был перемещён"
-msg-never: "никогда"
-msg-no-interfaces: "Нет интерфейсов"
-msg-no-links: "Нет линков"
-msg-no-local-rules: "Нет правил"
-msg-no-outages-detected: "Аварий не зафиксировано"
-msg-no-uplinks: "Нет аплинков"
-msg-one-params-from-date-to-date-or-ids-required: "Для отчёта требуется задать дату или список аварий"
-msg-password-is-already-used: "Пароль уже используется"
-msg-password-min-lowercase: "Пароль должен содержать не менее {count} строчных букв"
-msg-password-min-numbers: "Пароль должен содержать не менее {count} цифр"
-msg-password-min-specials: "Пароль должен содержать не менее {count} специальных символов"
-msg-password-min-uppercase: "Пароль должен содержать не менее {count} заглавных букв"
-msg-password-too-short: "Пароль слишком короткий. Минимальная длина — {count} символов"
-msg-permission-denied: "Доступ запрещён"
-msg-permission-denined: "Доступ запрещён"
-msg-prefix-not-found: "Префикс не найден"
-msg-profile-check-failed: "Профиль не определён"
-msg-report-data-source-not-found: "Источник данных отчёта {data_source} не найден"
-msg-temporary-unavailable: "Временно недоступна"
-msg-vrf-required: "Требуется VRF"
+msg-dynamic-order-must-be-unique: Dynamic Order must be unique
+msg-eat: Съесть
+msg-editable: Редактировать
+msg-empty-command: Пустой вывод
+msg-enter-a-valid-username: Enter a valid username.
+msg-enter-hex-value-starting-with-or-0x: "Enter hex value starting with # or 0x"
+msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-: Введите список валидных номеров AS (н-р, AS1234) или набора (н-р. ex. AS-MEGASET, AS-MEGA-SET)
+msg-enter-the-number-of-rows-to-clone: "Введите число записей для клонирования:"
+msg-equal: Равно
+msg-error-changing-password: Ошибка изменения пароля
+msg-error-getting-information: Ошибка получения информации
+msg-error-in-data: Ошибка в данных
+msg-error-loading-data: Ошибка загрузки данных
+msg-error-saving-changes: "Ошибка: {failure} при сохранении изменений"
+msg-error-saving-record: Ошибка сохранения записи
+msg-error-updating-statuses: Ошибка обновления статусов
+msg-error-value0: "Ошибка : {value0}"
+msg-error-value0-2: "Ошибка: {value0}"
+msg-error-value0-3: "Ошибка: {value0}"
+msg-error-value0-4: "Ошибка : {value0}"
+msg-error-value0-5: "Ошибка: {value0}"
+msg-error-value0-6: "Ошибка: {value0}"
+msg-error-value0-7: "Ошибка : {value0}"
+msg-error-value0-8: "Ошибка : {value0}"
+msg-errors-in-packets-s: Входящие ошибки, пакеты/с
+msg-errors-in-summary: Сумма входящих ошибок, пакеты
+msg-errors-out-packets-s: Исходящие ошибки, пакеты/с
+msg-errors-out-summary: Сумма исходящих ошибок, пакеты
+msg-escalate-failed: "Сбой эскалации: "
+msg-escalate-failed-2: Сбой эскалации
+msg-escalate-failed-value0: "Сбой эскалации: {value0}"
+msg-escalate-failed-value0-2: "Сбой эскалации: {value0}"
+msg-escalated: Эскалировано
+msg-escalation-time: Время эскалации
+msg-established: ESTABLISHED
+msg-event: Событие
+msg-event-reclassified: Повторить обработку
+msg-event-type-migrate-duplicate: Замена устройства
+msg-exists: Exists
+msg-exit-full-screen: Exit Full Screen
+msg-expand-panels: Развернуть панели
+msg-extend-condition: Расширить условия
+msg-failed: Ошибка
+msg-failed-2: " - Ошибка"
+msg-failed-3: ошибка
+msg-failed-add-custom-fields-to-form: "Ошибка при добавлении custom поля в форму "
+msg-failed-get-group-mo-detail: Ошибка при запросе группы
+msg-failed-get-map-menu: Ошибка запроса меню
+msg-failed-get-mo-detail: Ошибка получения данных
+msg-failed-refresh-basket: Ошибка при обновлении корзины
+msg-failed-save-data: Ошибка сохранения данных
+msg-failed-to-add-vlan: Ошибка добавления VLANа
+msg-failed-to-change-credentials: "Не удалось сменить пароль: "
+msg-failed-to-change-credentials-2: "Ошибка при изменении учётных данных:"
+msg-failed-to-change-credentials-value0: "Не удалось сменить пароль: {value0}"
+msg-failed-to-change-credentials-value0-2: "Не удалось сменить пароль: {value0}"
+msg-failed-to-change-credentials-value0-3: "Не удалось сменить пароль: {value0}"
+msg-failed-to-change-credentials-value0-4: "Ошибка при изменении учётных данных: {value0}"
+msg-failed-to-change-layer-settings: Ошибка при изменении настроек слоя
+msg-failed-to-clear-alarm: Не удалось закрыть аварию
+msg-failed-to-clear-alarms: Ошибка при закрытии аварий
+msg-failed-to-clone: Ошибка клонирования
+msg-failed-to-clone-object: Ошибка клонирования объекта.
+msg-failed-to-connect-interfaces: Не удалось соединить интерфейсы
+msg-failed-to-connect-objects: "Ошибка при соединении объектов: "
+msg-failed-to-connect-objects-value0: "Ошибка при соединении объектов: {value0}"
+msg-failed-to-connect-objects-value0-2: "Ошибка при соединении объектов: {value0}"
+msg-failed-to-create-ignore-pattern-from-event: Ошибка при создании шаблона игнорирования из события
+msg-failed-to-create-rule-from-event: Ошибка создания правила из сообщения
+msg-failed-to-delete: "Ошибка при удалении: "
+msg-failed-to-delete-file: Ошибка при удалении файла
+msg-failed-to-delete-group: Ошибка при удалении группы
+msg-failed-to-delete-value0: "Ошибка при удалении: {value0}"
+msg-failed-to-disable-tasks: Ошибка при отключении задачи
+msg-failed-to-disconnect-objects: "Ошибка отключения объекта : "
+msg-failed-to-disconnect-objects-value0: "Ошибка отключения объекта : {value0}"
+msg-failed-to-fetch-data: Ошибка при запросе данных!
+msg-failed-to-find-node: Ошибка про поиске узла
+msg-failed-to-fix: Не удалось исправить
+msg-failed-to-get-alarm: Не удалось получить аварию
+msg-failed-to-get-config: Ошибка при получении конфигурации
+msg-failed-to-get-configs-list: Ошибка при получении списка конфигураций
+msg-failed-to-get-connection-information: Ошибка при получении информации из соединения
+msg-failed-to-get-data: Ошибка получения данных
+msg-failed-to-get-data-for-job: Ошибка получения данных по задаче
+msg-failed-to-get-data-for-job-value0: "Ошибка получения данных по задаче: {value0}"
+msg-failed-to-get-data-for-menu-items: " : Ошибка получения данных для меню"
+msg-failed-to-get-data-for-plugin: Ошибка получения данных для плагина
+msg-failed-to-get-data-for-plugin-value0: Ошибка получения данных для плагина {value0}
+msg-failed-to-get-data-value0: "Ошибка получения данных: {value0}"
+msg-failed-to-get-data-value0-2: "Ошибка получения данных: {value0}"
+msg-failed-to-get-data-value0-3: "Ошибка получения данных: {value0}"
+msg-failed-to-get-home-data: Ошибка при получении данных дашбордов
+msg-failed-to-get-interfaces: Ошибка при получении интерфейсов
+msg-failed-to-get-interfaces-list: Не удалось получить список интерфейсов
+msg-failed-to-get-json: Ошибка при получении JSON
+msg-failed-to-get-layer: Failed to get layer
+msg-failed-to-get-mac-history: Ошибка при получении истории MAC адресов
+msg-failed-to-get-macs: Ошибка при получении MAC адреса
+msg-failed-to-get-neighbors: Ошибка при получении соседей
+msg-failed-to-get-object-data: Ошибка получения данных по объекту
+msg-failed-to-get-params-form: Не удалось получить форму отчёта
+msg-failed-to-get-path: Ошибка при получении пути
+msg-failed-to-get-remote-sync-time: Ошибка при получении времени синхронизации
+msg-failed-to-get-revisions: Ошибка при получении ревизий
+msg-failed-to-get-shared-info: "Ошибка получения данных по публикации:"
+msg-failed-to-get-shared-info-value0: Ошибка получения данных по публикации:{value0}
+msg-failed-to-get-stp-status: Ошибка получения статуса STP
+msg-failed-to-get-text: Ошибка при получении текста
+msg-failed-to-get-user-settings: Ошибка получения настроек пользователя
+msg-failed-to-get-vendor-information: Ошибка получения информации по производителю
+msg-failed-to-launch-application: Ошибка при запуске приложения
+msg-failed-to-launch-application-2: "Ошибка при запуске приложения "
+msg-failed-to-launch-application-value0: Ошибка при запуске приложения {value0}
+msg-failed-to-launch-application-value0-2: Ошибка при запуске приложения  {value0}
+msg-failed-to-load-capabilities: Failed to load capabilities
+msg-failed-to-load-data: Ошибка загрузки
+msg-failed-to-load-data-value0: "Ошибка загрузки: {value0}"
+msg-failed-to-load-event: "Failed to load event "
+msg-failed-to-load-event-value0: Failed to load event {value0}
+msg-failed-to-load-instances: Ошибка загрзуки экземпляров
+msg-failed-to-load-map-resources: Не удалось загрузить ресурсы карты
+msg-failed-to-log-in: Ошибка захода
+msg-failed-to-post-message: Не удалось отправить сообщение
+msg-failed-to-reclassify: Ошибка при обработке
+msg-failed-to-remove-connections: "Ошибка при удалении связи : "
+msg-failed-to-remove-connections-value0: "Ошибка при удалении связи : {value0}"
+msg-failed-to-remove-interface: Ошибка при удалении интерфейса
+msg-failed-to-reset-layout: Ошибка при сбросе уровня
+msg-failed-to-run-command: Ошибка при запуске команды
+msg-failed-to-run-report: Ошибка при запуске отчёта
+msg-failed-to-run-script: Ошибка при запуске скрипта
+msg-failed-to-run-tasks: Ошибка запуска
+msg-failed-to-save: Ошибка сохранения
+msg-failed-to-save-api-key: "Ошибка при сохранении ключа API: "
+msg-failed-to-save-api-key-value0: "Ошибка при сохранении ключа API: {value0}"
+msg-failed-to-save-changes: Ошибка при записи изменений
+msg-failed-to-save-conduits: Ошибка при сохранении связей
+msg-failed-to-save-config: Ошибка при сохранении настроек
+msg-failed-to-save-data: Ошибка при сохранении данных
+msg-failed-to-save-group-comment: Ошибка при сохранении комментария
+msg-failed-to-save-json: Ошибка при сохранении
+msg-failed-to-search: Ошибка поиска
+msg-failed-to-send-contribution: "Ошибка при отправке записи:"
+msg-failed-to-send-contribution-value0: Ошибка при отправке записи:{value0}
+msg-failed-to-set-acknowledgedun-acknowledged: Ошибка при подтверждении
+msg-failed-to-set-data: Ошибка при установке данных
+msg-failed-to-set-parameter: Ошибка при записи параметра
+msg-failed-to-set-password: Ошибка при сохранении пароля
+msg-failed-to-set-position: Ошибка при задании позиции
+msg-failed-to-set-root-cause: Не удалось установить первопричину
+msg-failed-to-set-watcher: Не удалось стать наблюдателем
+msg-failed-to-test-rule: Ошибка при тестировании правила
+msg-failed-to-update-alarm: Failed to update alarm
+msg-failed-to-update-favorites: Не удалось {action} избранное
+msg-failed-to-update-instance: Ошибка при обновлении
+msg-failed-to-update-statuses: Failed to update statuses
+msg-failed-to-update-subscription: Ошибка при обновлении подписки
+msg-failed-to-upload-files: Ошибка при загрузке файлов
+msg-failed-to-upload-mib: Ошибка при загрузке MIB
+msg-failed-value0: "Ошибка : {value0}"
+msg-favorite-status-updating: Favorite status updating ...
+msg-feed: Скормиться
+msg-female: Женский
+msg-fetching-data-for-ad-hoc-channels: Получение данных вложенных каналов
+msg-fetching-data-for-draw-scheme: Получение данных для отрисовки схемы ...
+msg-fetching-data-for-item: "Получение данных для {name}..."
+msg-field-max-length: "Максимальная длина этого поля — {maxLength}"
+msg-fields-selector: Выбор колонок
+msg-file-value0: № файла{value0}
+msg-files-has-been-uploaded: Файлы будут загружены
+msg-fire-event: Fire Event
+msg-first: Первый свободный
+msg-first-success: Первый успешный
+msg-fit-height: По высоте
+msg-fit-width: По ширине
+msg-float: Десятичное
+msg-floating: Плавающий
+msg-for-snmp-v2c-get-value-must-be-a-valid-oid-e-g-1-3-6-1-2-1: For snmp_v2c_get, Value must be a valid OID (e.g. .1.3.6.1.2.1)
+msg-forward: Прямая
+msg-free-slot: Свободный слот
+msg-free-vlan-not-found: Свободный влан не найден
+msg-from-interface-down: From Interface Down
+msg-from-interface-name: Исходный интерфейс
+msg-from-loader: Из загрузчика
+msg-fwd: Fwd
+msg-genderless: Бесполый
+msg-getting-additional-information: Запрос дополнительной информации...
+msg-getting-api-key-please-wait: Получение ключа API, ожидайте...
+msg-getting-information: Получение информации
+msg-gis-division: GIS Division
+msg-greater: Больше
+msg-greater-equal: Больше либо равно
+msg-greater-management-address: В сторону увеличения адреса управления
+msg-group-value0-value1: "Группа: {value0} {value1}"
+msg-gw: GW
+msg-hidden: Скрыть
+msg-history: история
+msg-horizontal: Горизонтальная
+msg-html: HTML
+msg-http-request-failed: Ошибка запроса.
+msg-http-status: "HTTP статуы : "
+msg-http-status-value0: "HTTP статуы : {value0}"
+msg-idle: IDLE
+msg-ignore-stop: Игнорировать и остановить опрос
+msg-in-maintenance: Проводятся работы
+msg-incremental: Incremental
+msg-information-received: Информация получена
+msg-inner: Внутрь
+msg-inner-of-scope: Inner-of-Scope
+msg-instance-updated-successfully: Экземпляр обновлён
+msg-instances-loaded: Экземпляры загружаются
+msg-integer: Число
+msg-integer-is-required: Требуется Целочисленное значение
+msg-interface-count-by-type: Кол-во интерфейсов по скорости
+msg-interface-description: Описание интерфейса
+msg-interface-flap-count: Число изменений оперативного статуса
+msg-interface-last-change-days: Время последнего изменения статуса (дней)
+msg-interface-load-url: Ссылка на график загрузки
+msg-interface-name: Имя интерфейса
+msg-interface-speed: Скорость интерфейса
+msg-interface1: Интерфейс устройства 1
+msg-interface1-description: Описание интерфейса устройства 1
+msg-interface1-speed: Скорость интерфейса устройства 1
+msg-interface2: Интерфейс устройства 2
+msg-interface2-description: Описание интерфейса устройства 2
+msg-interface2-speed: Скорость интерфейса устройства 2
+msg-internal-cross-was-successfully-disconnected: Подключения успешно соединены
+msg-internal-error: Внутренняя ошибка
+msg-internal-error-2: Внутренняя ошибка
+msg-invalid-connections-will-be-deleted: Ошибочное подключение будет удалено
+msg-invalid-data: Неверные данные!
+msg-invalid-hex-format: Invalid HEX format
+msg-invalid-input: Неверный Вход
+msg-invalid-ip-address-format: Неверной формат IP адреса
+msg-invalid-password: Invalid password
+msg-invalid-regular-expression: Ошибка в регулярном выражении
+msg-invalid-response-format: Неверный формат ответа
+msg-invalid-server-response: Ошибка ответа сервера
+msg-invalid-username: Неправильное имя пользователя
+msg-inventory-object: Inventory object
+msg-ip-address: IP адрес
+msg-ip-address-profile: IP Address Profile
+msg-ip-address-range: IP Address Range
+msg-ip-prefix: IP Prefix
+msg-ip1: IP устройства 1
+msg-ip2: IP устройства 2
+msg-ipv4-reverse: Обратная IPv4
+msg-ipv6-reverse: Обратная IPv6
+msg-is-managed: Is Managed
+msg-is-managed-object-type-defined: Is Managed, object type defined
+msg-is-managed-object-type-defined-bad-cli-credential: Is Managed, object type defined bad CLI Credential
+msg-is-managed-object-type-undefined: Is Managed, object type undefined
+msg-is-managed-object-type-undefined-bad-snmp-credential: Is Managed, object type undefined bad SNMP Credential
+msg-is-managed-object-type-undefined-for-various-reasons: Is Managed, object type undefined for various reasons
+msg-is-managed-object-type-undefined-has-ping-response: Is Managed, object type undefined has ping response
+msg-is-managed-object-type-undefined-not-ping-response: Is Managed, object type undefined not ping response
+msg-is-monitoring-object-type-undefined-only-availability-check: Is monitoring, object type undefined, only availability check
+msg-job-scheduled-to-start: Отправлено на запуск
+msg-json-saved: Сохранён
+msg-kb-entry: KB Entry
+msg-keep: Сохранить
+msg-last-config-get-timestamp: Время последнего изменения конфигурации
+msg-left: Слева
+msg-legend: Легенда
+msg-less: Меньше
+msg-less-equal: Меньше либо равно
+msg-lesser-management-address: В сторону уменьшения адреса управления
+msg-link: Линк
+msg-link-count: Кол-во линков
+msg-link-interface-with: Связать {name} с
+msg-link-last-seen: Время последнего считывания линка
+msg-link-managed-object: Привзять устройство
+msg-link-proto: Протокол построения линка
+msg-link-status: Состояние связи
+msg-load-in-90-percentile: Входящая загрузка (90% перцентиль)
+msg-load-in-average: Входящая загрузка (средняя)
+msg-load-in-bandwith: Входящая загрузка (В процентах от скорости интерфейса)
+msg-load-out-90-percentile: Исходящая загрузка (90% перцентиль)
+msg-load-out-average: Исходящая загрузка (средняя)
+msg-load-out-bandwith: Входящая загрузка (В процентах от скорости интерфейса)
+msg-loading: Загрузка
+msg-loading-2: загрузка ...
+msg-loading-3: Загрузка...
+msg-loading-4: загрузка
+msg-loading-5: загрузка ...
+msg-loading-application: "Загрузка приложения {name}, пожалуйста, подождите..."
+msg-loading-capabilities: Loading capabilities...
+msg-loading-job-panel: Загрузка панели задач ...
+msg-loading-plugin: "Загрузка плагина {name}, пожалуйста, подождите..."
+msg-loading-tab-with: Запуск таба с
+msg-loading-tab-with-value0: Запуск таба с {value0} ...
+msg-logged-in-as: "Вошёл как "
+msg-logged-in-as-value0: Вошёл как {value0}
+msg-logged-out-for-inactivity: Выход по неактивности
+msg-loopback: Loopback
+msg-loopback-address: Адрес Loopback
+msg-lowercase: Приводить к нижнему регистру
+msg-mac-counter: Число MAC адресов
+msg-main: Основное
+msg-male: Мужской
+msg-managed-object-address: Адрес управления устройства
+msg-managed-object-description: Дескрипшен устройства
+msg-managed-object-level: Уроверь устройства
+msg-managed-object-name: Имя устройства
+msg-managed-object-value0-successfully: Объект {value0} успешно
+msg-managed-object-was-moved: Объект был перемещён
+msg-management-address: Адрес управления
+msg-management-vlan: VLAN управления
+msg-manual-scan-failed: Ошибка в ручном сканировании
+msg-manual-scan-failed-value0: "Ошибка в ручном сканировании : {value0}"
+msg-map-has-been-saved: Карта будет сохранена
+msg-map-loading: Карта загружается ...
+msg-map-module-is-not-loaded: Map module is not loaded
+msg-mapping-was-performed-successfully: Связка успешно установлена
+msg-mappings-only: Только ИД
+msg-matched: Совпадение
+msg-matched-nbsp-value0: Совпадение:&nbsp;{value0}
+msg-matching-row: "Совпало строк:"
+msg-max-critical: Макс. ошибка
+msg-max-level: Максимальный уровень
+msg-max-warning: Макс. порог
+msg-maximum-load-in: Максимальная загрузка входящий
+msg-maximum-load-in-time: Время максимальной загрузки, входящий
+msg-maximum-load-out: Максимальная загрузка исходящий
+msg-maximum-load-out-time: Время максимальной загрузки, исходящий
+msg-memory-usage: Использование памяти (%)
+msg-merge: Слить
+msg-mib-value0: "MIB #{value0}"
+msg-mibs-has-been-uploaded: MIB'ы будут загружены
+msg-migrate-ts: Время перемещения MACa
+msg-min-critical: Мин. ошибка
+msg-min-level: Минимальный уровень
+msg-min-warning: Мин. порог
+msg-mirror-on-change: Зеркалировать при изменении
+msg-model-lookup: Выбор инстанса
+msg-model-multi-choice: Выбор инстанса (неск.)
+msg-modify: Изменить
+msg-more-3: More 3
+msg-move-nested-objects-to-value0: Переместить вложенные объекты в {value0}
+msg-must-contain-only-numbers: Должен содержать только числа
+msg-network-interface: Network Interface
+msg-network-scan: Сканировать
+msg-never: никогда
+msg-no-ad-hoc-channels-available: Вложенные каналы отсутствуют
+msg-no-api-token-found: API ключ не найден
+msg-no-connection-information: Нет информации о соединении
+msg-no-groups: нет групп
+msg-no-interfaces: Нет интерфейсов
+msg-no-interfaces-found: Интерфейсы не найдены
+msg-no-links: Нет линков
+msg-no-local-rules: Нет правил
+msg-no-mac-history-found: История MAC адресов не найдена
+msg-no-outages-detected: Аварий не зафиксировано
+msg-no-records-found-matching-value0: "Нет записей для условия: {value0}"
+msg-no-tables: нет таблиц
+msg-no-uplinks: Нет аплинков
+msg-no-vlan-propagation: No VLAN propagation
+msg-noc-agent: NOC Agent
+msg-none: Нет
+msg-none-2: none
+msg-not-acknowledge: Not Acknowledge
+msg-not-equal: Не равно
+msg-not-found: Не найден
+msg-not-managed: Not Managed
+msg-not-object-found-for-set-report-param: Not object found for set Report Param.
+msg-not-saved: Не сохранено
+msg-nothing: Nothing
+msg-nothing-to-copy: Nothing to copy
+msg-object-address: IP Адрес
+msg-object-adm-domain: Зона ответственности
+msg-object-administrative-domain: Зона ответсвенности
+msg-object-capabilities: Возможности объекта
+msg-object-geo-address: Почтовый адрес объекта
+msg-object-has-been-loaded: Объект будет загружен
+msg-object-hostname: Object Hostname
+msg-object-labels: Метки объекта
+msg-object-model: Модель
+msg-object-platform: Платформа
+msg-object-profile: Профиль объекта
+msg-object-segment: Сегмент
+msg-object-software: Версия ПО
+msg-object-status: Статус объекта
+msg-object1-name: Имя устройства 1
+msg-object1-platform: Платформа устройства 1
+msg-object1-segment: Сегмент устройства 1
+msg-object1-tags: Тэги устройства 1
+msg-object2-name: Имя устройства 2
+msg-object2-platform: Платформа устройства 2
+msg-object2-segment: Сегмент устройства 2
+msg-object2-tags: Тэги устройства 2
+msg-objects-statuses-failure: Ошибка получения статуса объекта!
+msg-objects-was-successfully-connected: Устройства успешно соединены
+msg-occupied-slot: Занятый слот
+msg-off: ВЫКЛ
+msg-offline: не в сети
+msg-on: ВКЛ
+msg-on-alarm-clear: При закрытии
+msg-on-alarm-raise: При открытии
+msg-on-end: В конце
+msg-on-start: В начале
+msg-on-update: On Update
+msg-once: Единожды
+msg-one-params-from-date-to-date-or-ids-required: Для отчёта требуется задать дату или список аварий
+msg-online: онлайн
+msg-only-by-filter: Only By Filter
+msg-only-changed: Только изменения
+msg-only-favorites: Только Избранные
+msg-only-watch: При подписке
+msg-openconfirm: OPENCONFIRM
+msg-opensent: OPENSENT
+msg-operation-completed: Операция выполнена
+msg-operation-failed: Ошибка
+msg-operational-status-last: Оперативный статус интерфейса (последний)
+msg-optical-lambda: Optical Lambda
+msg-or: ИЛИ
+msg-origin-routes-cache-is-empty-please-update-whois-cache: Origin routes cache is empty. Please update Whois Cache
+msg-other: OTHER
+msg-other-data: Other Data
+msg-otn-odu: OTN ODU
+msg-out-of-scope: Out-of-Scope
+msg-outer: Наружу
+msg-parameter-has-been-set: Параметр будет установлен
+msg-password-changed: Пароль изменён
+msg-password-empty: Пароль пуст
+msg-password-is-already-used: Пароль уже используется
+msg-password-min-lowercase: Пароль должен содержать не менее {count} строчных букв
+msg-password-min-numbers: Пароль должен содержать не менее {count} цифр
+msg-password-min-specials: Пароль должен содержать не менее {count} специальных символов
+msg-password-min-uppercase: Пароль должен содержать не менее {count} заглавных букв
+msg-password-mismatch: Пароли не совпадают
+msg-password-too-short: Пароль слишком короткий. Минимальная длина — {count} символов
+msg-passwords-do-not-match: Пароли не совпадают
+msg-periodic: Периодический
+msg-permission-denied: Доступ запрещён
+msg-permission-denined: Доступ запрещён
+msg-permissions-were-reset: Права были сброшены
+msg-permissions-were-set: Права были установлены
+msg-physical: Физический
+msg-physical-iface-count: Кол-во интерфейсов
+msg-ping-attempts: Число повторов ICMP
+msg-ping-fail: Устройство недоступно
+msg-ping-rtt: Круговая задержка
+msg-platfrom: Платформа
+msg-please-confirm-the-alarm-is-closed-and-must-be-cleared: Пожалуйста, подтвердите, что проблема решена и авария должна быть закрыта?
+msg-please-enter-a-valid-number: Пожалуйста, ведите верный номер.
+msg-please-enter-comment: Пожалуйста, введите комментарий
+msg-please-enter-number: "Введите число:"
+msg-please-enter-period-start-qty-first-pos-is-0: "Введите интервал (начало, число элементов), первая позиция - 0:"
+msg-please-enter-root-cause-alarm-id: Пожалуйста, введите ID аварии, являющейся первопричиной
+msg-please-enter-your-gitlab-api-key-to-continue: Введите пожалуйста ваш ключ УЗ GitLab для продолжения.
+msg-please-provide-a-description-for-your-contribution: Пожалуйста, добавьте описание вашей публикции.
+msg-please-select-a-row: Выберите строку
+msg-port-duplex: Дуплекс
+msg-port-name: Порт
+msg-port-profile-name: Профиль порта
+msg-port-speed: Скорость
+msg-port-status: Опер. статус
+msg-port-tagged-vlans: Тэг. VLAN'ы
+msg-port-untagged-vlan: Нетэг. VLAN
+msg-prefer-running: Предпочитать Running
+msg-prefer-startup: Предпочитать Startup
+msg-prefix-deleted: Перефикс удалён
+msg-prefix-list-built: Prefix List built
+msg-prefix-list-generator-is-not-implemented-for-this-profile: Prefix-list generator is not implemented for this profile
+msg-prefix-list-name: Prefix list name ...
+msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: Prefix list name must contains only 0-9,a-z,A-Z,-,_
+msg-prefix-not-found: Префикс не найден
+msg-preparing-contribution: Подготовка трудов
+msg-prev-failed: Prev Failed
+msg-prev-success: Prev Success
+msg-prev-successy: Prev Successy
+msg-processing-items-for: "Обработка элементов: {name}..."
+msg-profile-check-failed: Профиль не определён
+msg-profile-saved: Профиль сохранен
+msg-propagate: Распространить
+msg-push-collector: Push (Collector)
+msg-query-failure: Ошибка в запросе
+msg-querying: Запрашиваем ...
+msg-rack-value0: "Стойка: {value0}"
+msg-raise: Поднять
+msg-raise-alarm: Поднять аварию
+msg-raise-alarm-stop: Поднять аварию и остановить
+msg-raise-clear-alarm: Поднимать аварию
+msg-raise-privileges: Пробовать поднять привилегии
+msg-random: Случайный
+msg-raw-vars: Исходные переменные
+msg-read-only: Только чтение
+msg-read-only-2: Только чтение
+msg-ready-to-share: Готово для публикации...
+msg-rebase-prefix: "Переместить префикс "
+msg-rebase-prefix-value0: Переместить префикс {value0}
+msg-rebased: Перемещён
+msg-rebasing: Перемещение ...
+msg-record-reload-error: Ошибка при обновлении записи.
+msg-records-has-been-saved: Запись сохранена
+msg-records-has-been-updated: Записи будут обновлены
+msg-regex: Шаблон
+msg-regex-error: Ошибка в регулярном выражении!
+msg-reloading: Reloading...
+msg-reloading-item: "Перезагрузка {name}..."
+msg-remote-value0: "Remote : {value0}"
+msg-remove-conduits-to-value0: Удалить подключение в {value0}?
+msg-remove-group-value0: Удалить группу '{value0}'?
+msg-report: Отчет
+msg-report-data-source-not-found: Источник данных отчёта {data_source} не найден
+msg-request-failed-with-status: Запрос выполнен с ошибкой
+msg-request-failed-with-status-value0: Запрос выполнен с ошибкой :{value0}
+msg-request-failure: Ошибка запроса
+msg-require-up-if-ping-enabled: Требуется доступность (если активирована проверка ICMP)
+msg-required-field: Required field
+msg-resource-value0-successfully: Ресурс {value0} успешно
+msg-retrieving-additional-information-please-wait: Получение дополнительной информации, ожидайте...
+msg-rev-ipv4: Rev IPv4
+msg-rev-ipv6: Rev IPv6
+msg-rewrite: Rewrite
+msg-right: Справа
+msg-rollback: Rollback
+msg-root: Root
+msg-root-group-only-root-severvice: Root Group (Only Root Severvice)
+msg-root-id: ID Корня
+msg-round-robin: По кругу
+msg-row-read-only: Только чтение
+msg-running: Выполняется
+msg-sa-object: SA Object
+msg-saved: сохранено
+msg-saved-2: Сохранено
+msg-saving: сохраняется
+msg-saving-2: Созранение...
+msg-saving-3: Сохраняется ...
+msg-saving-item: "Сохранение {name}..."
+msg-script-confdb: Скрипт, Конфиг
+msg-script-download: Script, Download
+msg-search: поиск...
+msg-search-complete: Поиск завершен
+msg-sec: сек
+msg-segment-hierarchy: Иерархия сегментов
+msg-segment-level-1: Сегмент (Уровень 1)
+msg-segment-level-2: Сегмент (Уровень 2)
+msg-segment-level-3: Сегмент (Уровень 3)
+msg-segment-level-4: Сегмент (Уровень 4)
+msg-segment-level-5: Сегмент (Уровень 5)
+msg-segment-level-6: Сегмент (Уровень 6)
+msg-segment-level-7: Сегмент (Уровень 7)
+msg-segmentate-for-child-segment: Сегментировать в дочерние сегменты
+msg-segmentate-for-object-s-segment: Сегментировать в сегмент объекта
+msg-segmentate-to-child-segment: Перемещать соседей в дочерний сегмент
+msg-segmentate-to-existing-segment: Перемещать соседей в текущий сегмент
+msg-selected: Выбранные
+msg-selected-filter: "Выбрано ({type}): {path}"
+msg-selected-total-selected: "Выбрано: '{total.selected}'"
+msg-selected-total-selection: "Выбрано : '{total.selection}'"
+msg-self-status: Собственное состояние
+msg-send-approve: Подтвердить
+msg-send-ignore: Послать игнорировать
+msg-sending-contribution: Отправка записи...
+msg-sensor-local-id: Имя сенсора
+msg-sensor-profile: Профиль сенсора
+msg-serial-number: Серийный номер
+msg-server-error-occurred: Ошибка сервера
+msg-server-side-failed-to-get-default-dictionary: Ошибка сервера при получении справочника по умолчанию
+msg-server-side-failed-to-get-default-dictionary-value0: "Ошибка сервера при получении справочника по умолчанию : {value0}"
+msg-server-side-failed-to-get-fields: Ошибка сервера при получении списка полей
+msg-server-side-failed-to-get-fields-value0: "Ошибка сервера при получении списка полей : {value0}"
+msg-server-side-failure-status: Ошибка сервера, код {status}
+msg-server-side-failure-with-status-code: "ошибка на стороне сервера. Код "
+msg-server-side-failure-with-status-code-value0: ошибка на стороне сервера. Код {value0}
+msg-serviceactivation: Опрос оборудования
+msg-session-timeout: Время соединения вышло.
+msg-set-alarm-as-acknowledged: Подтвердить
+msg-set-alarm-as-unacknowledged: Снять подтверждение
+msg-set-group-comment: Сохранить комментарий
+msg-set-root: Set root
+msg-show-map-button-failed-to-get-data: "Показать на карте: Ошибка получения данных"
+msg-skip-rule: Пропустить
+msg-slightly-degraded: Затруднения в работе
+msg-slot: Номер слота
+msg-snapshot: Snapshot
+msg-snmp-cli: SNMP, CLI
+msg-snmp-only: Только SNMP
+msg-snmp-trap: SNMP_TRAP
+msg-sorted-labels: Sorted Labels
+msg-sound: "Sound: "
+msg-sound-value0: "Sound: {value0}"
+msg-specify-address: Заданный адрес
+msg-square: Square
+msg-srv: Сервис
+msg-ssv: SSV
+msg-starting-application: "Запуск «{application}»"
+msg-starting-search: Идет поиск
+msg-state-inspector: Инспектор состояния
+msg-state-only: Только статусы
+msg-string: Строка
+msg-sub: Абонент
+msg-subinterface-ip-address: IP адрес сабинтерфейса
+msg-subinterface-tagged-vlans: Тэг. VLAN'ы
+msg-subinterface-untagged-vlan: Нетэг. VLAN
+msg-subscription-updated-successfully: Подписка успешно обновлена
+msg-success: Успех
+msg-success-2: " - Успех"
+msg-successfully: успешно
+msg-sum: Сумма
+msg-summary-level: Сумма уровней
+msg-suspend: остановлено
+msg-suspend-2: Приостановить
+msg-svi: SVI
+msg-syslog: SYSLOG
+msg-system-is-not-registred-please-register-your-system-to-get-acces: Система не зарегистрирована. Пожалуйста, зарегистрируйте систему для получения доступа к дополнительной поддержки и сервису
+msg-system-is-registred-you-have-access-to-additional-support-and-se: Система зарегистрирована. Вы получили доступ к дополнительной поддержке и сервисам
+msg-temporary-unavailable: Временно недоступна
+msg-text: <
+msg-text-2: <=
+msg-text-3: ">"
+msg-text-4: ">="
+msg-thank-you: Спасибо!
+msg-the-data-was-successfully-loaded: Данные успешно загружены
+msg-the-data-was-successfully-updated: Данные успешно обновлены
+msg-there-is-unsaved-data-do-you-really-want-to-clean: Есть несохранённые данные, вы точно хотите очистить форму?
+msg-there-is-unsaved-data-do-you-really-want-to-close-the-applicatio: Есть несохранённые данные, вы точно хотите закрыть приложение?
+msg-there-is-unsaved-data-do-you-really-want-to-load-the-object: Есть несохранённые данные, вы точно хотите изменить объект?
+msg-there-was-an-error-sharing-your-contribution: Ошибка во время публикации.
+msg-this-message-will-automatically-close-in-5-seconds: Это сообщение будет автоматически закрыто через 5 секунд.
+msg-thresholds-has-been-updated: Пороги обновлены
+msg-thresholds-update-failed: Ошибка обновления порогов
+msg-time-interval: Time Interval
+msg-to-interface-down: To Interface Down
+msg-to-interface-name: Конечный интерфейс
+msg-to-maintenance: в РНР
+msg-too-many-ip-max-2000: Слишком много IP, макс. 2000
+msg-too-many-vendors-found: Найдено слишком много производителей!
+msg-tools: инструменты
+msg-total: "Итого: "
+msg-total-in: Сумма входящего трафика
+msg-total-nbsp-value0: Всего:&nbsp;{value0}
+msg-total-out: Сумма исходящего трафика
+msg-total-total-all: "Суммарно : '{total.all}'"
+msg-total-total-selected: "Суммарно : '{total.selected}'"
+msg-total-value0: "Итого: {value0}"
+msg-total-value0-2: "Итого: {value0}"
+msg-total-value0-3: "Итого: {value0}"
+msg-total-value0-4: "Итого: {value0}"
+msg-traffic-in-sum-by-period-in-mb: Входящий трафик (сумма за период), Мб
+msg-traffic-out-sum-by-period-in-mb: Исходящий трафик (сумма за период), Мб
+msg-transit: Транзитный
+msg-transition-inspector: Инспектор перехода
+msg-transition-started: Начат переход
+msg-transparent: Прозрачно
+msg-type-mac-address-to-search: введите MAC для поиска
+msg-type-username-and-password: "Введите пользователя и пароль:"
+msg-unack: UnAck
+msg-undefined: Неопределено
+msg-under-maintaintance: Накрыт РНР
+msg-unidirectional: Однонаправленное
+msg-unknown-as-set: Unknown AS-SET
+msg-unknown-error: Неизвестная ошибка
+msg-unknown-or-failed: Неизвестна или Ошибка
+msg-unknown-type: "Unknown type: "
+msg-unknown-type-value0: "Unknown type: {value0}"
+msg-unlink: Расцепить
+msg-unlink-failure: Ошибка при расцеплении
+msg-unmanaged: Неуправляемый
+msg-unmanaged-or-ping-is-disabled: Устройство неуправляемо или отключён опрос
+msg-up: Работает
+msg-update-channel-value0: Обновить канал {value0}
+msg-update-or-modify-internal-connection-from-value0-to-value1: Обновить или изменить внутренее подключения из {value0} в {value1}
+msg-update-unlink-value0: Обновить/Отвязать {value0}
+msg-updating: Обновление ...
+msg-uplink-avg-load-in: Средняя загрузка Uplink входящий
+msg-uplink-avg-load-out: Средняя загрузка Uplink исходящий
+msg-uplink-interface-description: Описание интерфейса Uplink
+msg-uplink-interface-name: Имя интерфейса Uplink
+msg-uplink-interface-speed: Скорость интерфейса Uplink
+msg-uplink-maximum-load-in: Максимальная загрузка Uplink входящий
+msg-uplink-maximum-load-in-time: Время максимальной загрузки Uplink, входящий
+msg-uplink-maximum-load-out: Максимальная загрузка Uplink исходящий
+msg-uplink-maximum-load-out-time: Время максимальной загрузки Uplink, исходящий
+msg-uplink-total-in: Сумма входящего трафика (Аплинка)
+msg-uplink-total-out: Сумма исходящего трафика Аплинка
+msg-uppercase: Приводить к верхнему регистру
+msg-user-account-is-blocked: User account is blocked
+msg-user-does-not-exists: User does not exists
+msg-validate-on-change: Только при изменении
+msg-validating-api-key: Проверка ключа API...
+msg-valn-allocated: Разместить VLAN
+msg-value-deleted: Значение удалено.
+msg-value-saved: Значение сохранено.
+msg-value0-failed: "{value0} - Ошибка"
+msg-value0-failed-to-get-data-for-menu-items: "{value0} : Ошибка получения данных для меню"
+msg-value0-failed-value1: "{value0} - Ошибка : {value1}"
+msg-value0-history: "{value0} - история"
+msg-value0-sec: "{value0} сек"
+msg-value0-success: "{value0} - Успех"
+msg-vendor-mac: Производитель (по MAC адресу)
+msg-vendor-not-found: Производитель не найден!
+msg-version-set: Version Set
+msg-vertical: Вертикальная
+msg-view-detail: Подробности
+msg-vlan-sync: Синхр. VLANы
+msg-vpn-profile: VPN Profile
+msg-vrf-required: Требуется VRF
+msg-waiting: Ожидание
+msg-waiting-for-api-key: Ожидание для ключа API...
+msg-whole: Целиком
+msg-wire-was-successfully-disconnected: Соединение успешно удалено
+msg-workflow-editor-is-not-initialized: Workflow editor is not initialized
+msg-workflow-editor-module-is-not-loaded: Workflow editor module is not loaded
+msg-workflow-inspector: Инспектор процесса
+msg-workflow-state: Workflow State
+msg-would-you-like-remove-interface: "Вы желаете удалить интерфейс? "
+msg-would-you-like-remove-interface-value0: Вы желаете удалить интерфейс? {value0}
+msg-would-you-like-to-remove-group: Вы хотите удалить группу?
+msg-would-you-like-to-reset-current-layout-and-generate-new: Сбросить раскладку карты и перестроить заново?
+msg-would-you-like-to-share-item-and-contribute-to-open-source-proje: Вы хотите поделиться записью и запросить добавление в Публичный проект?
+msg-xlsx: XLSX
+msg-you-have-unsaved-changes-in-inspector-save-or-cancel-the-changes: В редакторе есть не сохранённые изменения. Сохранить или отменить изменения.
+msg-your-contribution-has-been-shared-successfully: Ваша публикация успешна.
+msg-your-must-select-maintenance: Вы должны выбрать РНР!
+msg-zabbix: Zabbix
 msg-zone-transfer-upload-results: "Загружено IP-адресов при передаче зоны: создано — {created}, изменено — {changed}."
 nav-account: Учетная запись
 nav-action: Действия
@@ -641,7 +3809,9 @@ nav-alarmescalation: Эскалация
 nav-alarmrule: Правила для авария
 nav-alarmseverity: Серьезность аварии
 nav-alarmtrigger: Триггеры аварии
+nav-allocationgroup: Allocation Groups
 nav-apikey: Ключи доступа к API
+nav-as: ASes
 nav-asprofile: Профили AS
 nav-asset: Наборы AS
 nav-audittrail: Аудит событий
@@ -655,6 +3825,8 @@ nav-channel: Каналы
 nav-chpolicy: Политики устаревания данных CliсkHouse
 nav-classificationrule: Правила классификации
 nav-commandsnippet: Сниппеты
+nav-community: Communities
+nav-communitytype: Community Types
 nav-confdbquery: Запросы к ConfDB
 nav-configurationparam: Параметры конфигурации
 nav-configurationscope: Область конфигурации
@@ -669,7 +3841,9 @@ nav-credentialcheckrule: Правила проверки доступа
 nav-crontab: Планировщик
 nav-csv: Импорт/экспорт CSV
 nav-customfield: Свои поля
+nav-customfieldenumgroup: Enum Groups
 nav-dashboard: График
+nav-dashboardlayout: Dashboard Layout
 nav-datastreamconfig: Пользовательские DataStream
 nav-dialplan: Номерной план
 nav-discoveredobject: Обнаруженные устройства
@@ -678,6 +3852,7 @@ nav-dnsserver: Сервера DNS
 nav-dnszone: Зоны
 nav-dnszoneprofile: Профили зон
 nav-endpoint: Точки подключения
+nav-escalationprofile: Профиль эскалации
 nav-event: События
 nav-eventclass: Классы событий
 nav-eventtrigger: Триггеры событий
@@ -688,6 +3863,7 @@ nav-firmwarepolicy: Политика версий прошивок
 nav-getnow: Текущая информация
 nav-glyph: Иконки
 nav-group: Группы
+nav-group-edit: Групповое редактирование
 nav-groupaccess: Права групп
 nav-handler: Обработчики
 nav-heatmap: Тепловая карта
@@ -711,6 +3887,7 @@ nav-label: Метки
 nav-language: Языки
 nav-layer: Слои
 nav-macblacklist: Чёрный список MACов
+nav-macdb: Mac DB
 nav-maintainer: Ответственный
 nav-maintenance: РНР
 nav-maintenancetype: Типы РНР
@@ -749,7 +3926,9 @@ nav-organisation: Организации
 nav-outage: Обстановка детально
 nav-peer: Пиры
 nav-peergroup: Группы пиров
+nav-peeringpoint: Peering Points
 nav-peerprofile: Профили Пиров
+nav-person: Persons
 nav-phonenumber: Телефонный номер
 nav-phonenumberprofile: Профиль номера
 nav-phonerange: Диапазоны номеров
@@ -764,7 +3943,9 @@ nav-profile: Профили
 nav-profilecheckrule: Правила проверки профиля
 nav-project: Проекты
 nav-protocol: Протоколы
+nav-pyrule: PyRule
 nav-quiz: Анкеты
+nav-reactionrule: Reaction Rule
 nav-remotesystem: Внешние системы
 nav-reportalarmcomments: Комментарии аварий
 nav-reportalarmdetail: Детали аварии
@@ -779,6 +3960,8 @@ nav-reportsubscription: Подписка на отчёты
 nav-resourcegroup: Группы ресурсов
 nav-resourcepool: Пулы ресурсов
 nav-resourcestate: Состояния ресурсов
+nav-rir: RIRs
+nav-runcommands: Run Commands (On Group Edit option)
 nav-scale: Множители (ед. изм.)
 nav-search: Глобальный Поиск
 nav-sensor: Сенсор
@@ -813,48 +3996,56 @@ nav-vlanfilter: Фильтры VLAN
 nav-vlanprofile: Профили VLAN
 nav-vlantemplate: Шаблоны VLAN
 nav-vpn: VPN
+nav-vpnprofile: VPN Profiles
 nav-vrf: VRF
 nav-vrfgroup: Группы VRF
 nav-wfmigration: Миграции
 nav-workflow: Редактор процессов
-status-cleaned: "Очищено"
-status-disable: "Отключён"
-status-down: "Недоступен"
+status-cleaned: Очищено
+status-disable: Отключён
+status-down: Недоступен
+status-fail: Провал
 status-failed-discovery-only: Исключить из вывода проблемы доступа
-status-lost-redundancy: "Потеря резерва"
-status-no: "Нет"
-status-no-redundancy: "Нет резерва"
-status-redundant: "Есть резерв"
+status-lost-redundancy: Потеря резерва
+status-no: Нет
+status-no-redundancy: Нет резерва
+status-ok: Успех
+status-redundant: Есть резерв
+status-skip: Skip
 status-skip-full-available: Пропустить доступные за интервал
 status-skip-zero-access-port: Пропустить с неактивными портами доступа
 status-skip-zero-available: Пропустить недоступные за интервал
-status-up: "ОК"
-status-warning: "Авария"
-status-yes: "Да"
-title-all-allocated-blocks-in-vrf: "Все выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}"
-title-allocated-blocks-in-vrf: "Выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}"
+status-unknown: Неизвестный
+status-up: ОК
+status-update: Обновить
+status-warning: Авария
+status-yes: Да
+title-all-allocated-blocks-in-vrf: Все выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}
+title-allocated-blocks-in-vrf: Выделенные блоки в VRF {vrf} (IPv{afi}), {prefix}
 title-availability-last-day: Доступность (последний день)
 title-availability-last-month: Доступность (последний месяц)
 title-availability-last-week: Доступность (последняя неделя)
-title-channels: "Каналы"
-title-community: "Комментарий"
-title-configured-map: "Пользовательская карта"
+title-channels: Каналы
+title-cir-car-bps-to-burst-rate: CIR/CAR(bps) to Burst-rate
+title-community: Комментарий
+title-configured-map: Пользовательская карта
 title-escalations-1-day: Эскалации (за 1 день)
 title-escalations-30-day: Эскалации (за 30 дней)
 title-escalations-7-days: Эскалации (за 7 дней)
-title-free-blocks-in-vrf: "Свободные блоки в VRF {vrf} (IPv{afi}), {prefix}"
-title-inventory-summary: "Сводка по инвентаризации объектов"
-title-managed-object-summary: "Сводка по объектам"
+title-free-blocks-in-vrf: Свободные блоки в VRF {vrf} (IPv{afi}), {prefix}
+title-inventory-summary: Сводка по инвентаризации объектов
+title-l2-domains: L2 Domains
+title-managed-object-summary: Сводка по объектам
 title-managed-objects-summary-domain: Сводка по объектам (по З.О.)
 title-managed-objects-summary-domain-profile: Сводка по объектам (по З.О. и профилю)
 title-managed-objects-summary-label: Сводка по объектам (по меткам)
 title-managed-objects-summary-platform: Сводка по объектам (по платформе)
 title-managed-objects-summary-profile: Сводка по объектам (по профилю)
 title-managed-objects-summary-version: Сводка по объектам (по версии)
-title-network-segment-schemas: "Схемы сегментов сети"
-title-object-containers-map: "Локация (место)"
-title-object-group-schemas: "Схемы групп объектов"
-title-object-level-neighbor-schemas: "Схемы соседей объекта"
+title-network-segment-schemas: Схемы сегментов сети
+title-object-containers-map: Локация (место)
+title-object-group-schemas: Схемы групп объектов
+title-object-level-neighbor-schemas: Схемы соседей объекта
 title-outages-1-day: Оперативная обстановка (за 1 день)
 title-outages-30-day: Оперативная обстановка (за 30 дней)
 title-outages-7-days: Оперативная обстановка (за 7 дней)
@@ -863,9 +4054,9 @@ title-reboot-30-day: Перезагрузки (за 30 дней)
 title-reboots-1-day: Перезагрузки (за 1 день)
 title-reboots-7-days: Перезагрузки (за 7 дней)
 title-summary-for-vrf: "Сводка для VRF {vrf} (IPv{afi}): {prefix}"
-title-total-alarms: "Всего Аварий"
+title-total-alarms: Всего Аварий
 title-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
 title-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
 title-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
 title-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
-title-welcome: "Добро пожаловать в {brand}"
+title-welcome: Добро пожаловать в {brand}

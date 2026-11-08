@@ -10,7 +10,7 @@ Ext.define("NOC.fm.event.EventFilter", {
   extend: "Ext.form.Panel",
   border: false,
   minWidth: 210,
-  title: __("Filter"),
+  title: t("app-title-reportfilter"),
   scrollable: {
     indicators: false,
     x: false,
@@ -25,14 +25,14 @@ Ext.define("NOC.fm.event.EventFilter", {
   items: [
     {
       xtype: "button",
-      text: __("Reset Filter"),
+      text: t("btn-reset-filter"),
       enableToggle: false,
       listeners: {
         click: "onResetFilter",
       },
     },
     {
-      title: __("Filters"),
+      title: t("app-title-filters"),
       collapsed: false,
       defaults: {
         labelAlign: "top",
@@ -42,7 +42,7 @@ Ext.define("NOC.fm.event.EventFilter", {
         {
           xtype: "core.combo",
           restUrl: "/sa/managedobject/lookup/",
-          fieldLabel: __("Object"),
+          fieldLabel: t("header-object"),
           name: "managed_object",
           bind: {
             selection: "{filter.managed_object}",
@@ -51,7 +51,7 @@ Ext.define("NOC.fm.event.EventFilter", {
         {
           xtype: "noc.core.combotree",
           restUrl: "/sa/administrativedomain/",
-          fieldLabel: __("Adm. Domain"),
+          fieldLabel: t("header-adm-domain"),
           name: "administrative_domain",
           bind: {
             selection: "{filter.administrative_domain}",
@@ -61,7 +61,7 @@ Ext.define("NOC.fm.event.EventFilter", {
           name: "resource_group",
           xtype: "noc.core.combotree",
           restUrl: "/inv/resourcegroup/",
-          fieldLabel: __("By Resource Group (Selector)"),
+          fieldLabel: t("label-by-resource-group-selector"),
           listWidth: 1,
           listAlign: "left",
           labelAlign: "top",
@@ -73,7 +73,7 @@ Ext.define("NOC.fm.event.EventFilter", {
         {
           xtype: "core.combo",
           restUrl: "/fm/eventclass/lookup/",
-          fieldLabel: __("Event Class"),
+          fieldLabel: t("app-title-eventclass"),
           name: "event_class",
           bind: {
             selection: "{filter.event_class}",
@@ -81,7 +81,7 @@ Ext.define("NOC.fm.event.EventFilter", {
         },
         {
           xtype: "fieldcontainer",
-          fieldLabel: __("By Date"),
+          fieldLabel: t("label-by-date"),
           layout: "column",
           padding: "5 0 5",
           defaults: {

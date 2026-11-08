@@ -16,7 +16,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
     "Ext.form.field.ComboBox",
   ],
 
-  title: __("Clear alarms"),
+  title: t("app-title-clear-alarms"),
   modal: true,
   itemId: "fmAlarmClear",
   width: 400,
@@ -27,7 +27,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
     bodyPadding: 10,
     items: [{
       xtype: "textarea",
-      fieldLabel: __("Message"),
+      fieldLabel: t("btn-message"),
       name: "message",
       allowBlank: false,
       width: "100%",
@@ -38,21 +38,21 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
       },
     }, {
       xtype: "checkbox",
-      fieldLabel: __("Create maintenance"),
+      fieldLabel: t("label-create-maintenance"),
       name: "maintenance",
       value: false,
     }],
   }],
     
   buttons: [{
-    text: __("Cancel"),
+    text: t("btn-cancel"),
     glyph: NOC.glyph.times, 
     handler: function(){
       this.up("window").close();
     },
   }, {
     itemId: "clearBtn",
-    text: __("Clear"),
+    text: t("btn-clear"),
     glyph: NOC.glyph.minus, 
     disabled: true,
     handler: function(){
@@ -61,7 +61,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
         values = form.getValues(),
         alarms = this.up("[itemId=fmAlarmClear]").alarms;
 
-      form.mask(__("Clearing alarms..."));
+      form.mask(t("msg-clearing-alarms"));
       NOC.api.requestLegacy({
         url: "/fm/alarm/clear/",
         method: "POST",
@@ -74,7 +74,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
           if(data.status){
             win.close();
             win.parentController.reloadActiveGrid();
-            NOC.info(__("Alarms cleared successfully"));
+            NOC.info(t("msg-alarms-cleared-successfully"));
             if(values.maintenance){
               var objects = Ext.Array.map(alarms, function(alarm){
                   return {
@@ -84,7 +84,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
                 }),
                 args = {
                   direct_objects: objects,
-                  subject: __("created from alarm list at ") + Ext.Date.format(new Date(), "d.m.Y H:i P"),
+                  subject: t("msg-created-from-alarm-list-at-value0", {value0: Ext.Date.format(new Date(), "d.m.Y H:i P")}),
                   contacts: NOC.email ? NOC.email : NOC.username,
                   start_date: Ext.Date.format(new Date(), "d.m.Y"),
                   start_time: Ext.Date.format(new Date(), "H:i"),
@@ -108,11 +108,11 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
             });
             }
           } else{
-            NOC.error(data.message || __("Failed to clear alarms"));
+            NOC.error(data.message || t("msg-failed-to-clear-alarms"));
           }
         },
         failure: function(){
-          NOC.error(__("Backend: failed to clear alarms"));
+          NOC.error(t("msg-backend-failed-to-clear-alarms"));
           form.unmask();
         },
         callback: function(){

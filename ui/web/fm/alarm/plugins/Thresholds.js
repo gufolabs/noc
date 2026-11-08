@@ -8,7 +8,7 @@ console.debug("Defining NOC.fm.alarm.plugins.Validation");
 
 Ext.define("NOC.fm.alarm.plugins.Thresholds", {
   extend: "Ext.panel.Panel",
-  title: __("Thresholds"),
+  title: t("app-title-thresholds"),
   app: null,
   autoScroll: true,
   bodyPadding: 4,
@@ -29,33 +29,33 @@ Ext.define("NOC.fm.alarm.plugins.Thresholds", {
       columns: [
         {
           dataIndex: "name",
-          text: __("Metric"),
+          text: t("header-metric"),
           width: 150,
         },
         {
           dataIndex: "interface",
-          text: __("Interface"),
+          text: t("header-interface"),
           width: 150,
         },
         {
           dataIndex: "level",
-          text: __("Level"),
+          text: t("header-level"),
           width: 50,
         },
         {
           dataIndex: "value",
-          text: __("Value"),
+          text: t("header-value"),
           width: 100,
           renderer: NOC.render.Size,
         },
         {
           dataIndex: "condition",
-          text: __("Condition"),
+          text: t("label-condition"),
           width: 50,
         },
         {
           dataIndex: "threshold",
-          text: __("Threshold"),
+          text: t("header-threshold"),
           flex: 1,
           renderer: NOC.render.Size,
         },

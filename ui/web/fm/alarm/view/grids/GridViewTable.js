@@ -61,7 +61,7 @@ Ext.define("NOC.fm.alarm.view.grids.GridViewTable", {
           itemId: "fm-alarm-contextmenu",
           items: [
             {
-              text: __("Refresh"),
+              text: t("help-refresh"),
               glyph: NOC.glyph.refresh,
               scope: this,
               handler: this.onContextMenuRefresh,
@@ -72,7 +72,7 @@ Ext.define("NOC.fm.alarm.view.grids.GridViewTable", {
               scope: this,
             },
             {
-              text: __("Save screen"),
+              text: t("help-save-screen"),
               glyph: NOC.glyph.arrow_down,
               scope: this,
               handler: function(){
@@ -81,26 +81,26 @@ Ext.define("NOC.fm.alarm.view.grids.GridViewTable", {
               },
             },
             {
-              text: __("Filter"),
+              text: t("app-title-reportfilter"),
               glyph: NOC.glyph.filter,
               menu: [
                 {
                   itemId: "objectFilterMenuItem",
-                  text: __("Object"),
+                  text: t("header-object"),
                   reference: "managed_object",
                   scope: this,
                   handler: Ext.pass(this.onContextMenuFilter, record),
                 },
                 {
                   itemId: "segmentFilterMenuItem",
-                  text: __("Segment"),
+                  text: t("header-segment-44986c"),
                   reference: "segment",
                   scope: this,
                   handler: Ext.pass(this.onContextMenuFilter, record),
                 },
                 {
                   itemId: "classFilterMenuItem",
-                  text: __("Class"),
+                  text: t("header-class"),
                   reference: "alarm_class",
                   scope: this,
                   handler: Ext.pass(this.onContextMenuFilter, record),
@@ -116,7 +116,7 @@ Ext.define("NOC.fm.alarm.view.grids.GridViewTable", {
         segmentFilterMenuItem = this.contextMenu.down("#segmentFilterMenuItem"),
         classFilterMenuItem = this.contextMenu.down("#classFilterMenuItem");
 
-      favItemMenu.setText(record.get("fav_status") ? __("Remove from favorites") : __("Add to favorites"));  
+      favItemMenu.setText(record.get("fav_status") ? t("btn-remove-from-favorites-2") : t("btn-add-to-favorites-2"));
       favItemMenu.setHandler(Ext.pass(this.onContextMenuAddToFavorites, record), this);
       classFilterMenuItem.setHandler(Ext.pass(this.onContextMenuFilter, record), this);
       objectFilterMenuItem.setHandler(Ext.pass(this.onContextMenuFilter, record), this);
@@ -150,10 +150,10 @@ Ext.define("NOC.fm.alarm.view.grids.GridViewTable", {
   },
   //
   tooltip: function(record){
-    var tooltipFromData = "<span class='noc-alarm-tooltip-flat'>" + __("no comments") + "</span>";
+    var tooltipFromData = "<span class='noc-alarm-tooltip-flat'>" + t("help-no-comments") + "</span>";
 
     if(record.get("logs").length){
-      tooltipFromData = "<table><thead><tr><th>" + __("Date") + "</th><th>" + __("User") + "</th><th>" + __("Message") + "</th></tr></thead><tbody>";
+      tooltipFromData = "<table><thead><tr><th>" + t("header-date") + "</th><th>" + t("header-user") + "</th><th>" + t("btn-message") + "</th></tr></thead><tbody>";
       for(var j = 0; j < record.get("logs").length; j++){
         var r = record.get("logs")[j];
         tooltipFromData += "<tr><td>" + Ext.util.Format.date(r.timestamp, "d.m.Y H:i")

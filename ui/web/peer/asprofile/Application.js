@@ -30,7 +30,7 @@ Ext.define("NOC.peer.asprofile.Application", {
       columns: [
         {
           dataIndex: "name",
-          text: __("Name"),
+          text: t("header-name"),
           width: 100,
         },
       ],
@@ -39,26 +39,26 @@ Ext.define("NOC.peer.asprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
           name: "validation_policy",
           xtype: "combobox",
-          fieldLabel: __("Validation AS Field"),
+          fieldLabel: t("label-validation-as-field"),
           labelWidth: 200,
           allowBlank: false,
           queryMode: "local",
@@ -77,18 +77,18 @@ Ext.define("NOC.peer.asprofile.Application", {
         {
           name: "gen_rpsl",
           xtype: "checkbox",
-          boxLabel: __("Generate RPSL"),
+          boxLabel: t("label-generate-rpsl"),
           allowBlank: true,
         },
         {
           name: "enable_discovery_peer",
           xtype: "checkbox",
-          boxLabel: __("Peer Discovery"),
+          boxLabel: t("label-peer-discovery"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Discovery (Prefix)"),
+          title: t("app-title-discovery-prefix"),
           layout: {
             type: "table",
             columns: 3,
@@ -99,7 +99,7 @@ Ext.define("NOC.peer.asprofile.Application", {
           items: [
             {
               xtype: "label",
-              text: __("Whois"),
+              text: t("btn-whois"),
             },
             {
               name: "enable_discovery_prefix_whois_route",
@@ -119,7 +119,7 @@ Ext.define("NOC.peer.asprofile.Application", {
         {
           name: "match_rules",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           rows: 5,
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
@@ -127,7 +127,7 @@ Ext.define("NOC.peer.asprofile.Application", {
             {
               name: "dynamic_order",
               xtype: "numberfield",
-              fieldLabel: __("Dynamic Order"),
+              fieldLabel: t("label-dynamic-order"),
               allowBlank: true,
               defaultValue: 0,
               uiStyle: "small",
@@ -135,14 +135,14 @@ Ext.define("NOC.peer.asprofile.Application", {
             {
               name: "include_expression",
               xtype: "textfield",
-              fieldLabel: __("Include ASN Expression"),
+              fieldLabel: t("label-include-asn-expression"),
               allowBlank: true,
               regex: /^\s*\d+\s*(-\d+\s*)?(,\s*\d+\s*(-\d+)?)*$/,
             },
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,

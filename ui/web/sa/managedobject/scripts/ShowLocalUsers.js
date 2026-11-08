@@ -10,17 +10,17 @@ Ext.define("NOC.sa.managedobject.scripts.ShowLocalUsers", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("User name"),
+      text: t("header-user-name"),
       dataIndex: "username",
       width: 120,
     },
     {
-      text: __("Class"),
+      text: t("header-class"),
       dataIndex: "class",
       width: 70,
     },
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       renderer: NOC.render.Bool,
       flex: 1,

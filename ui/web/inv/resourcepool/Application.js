@@ -19,7 +19,7 @@ Ext.define("NOC.inv.resourcepool.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -43,21 +43,21 @@ Ext.define("NOC.inv.resourcepool.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "large",
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           uiStyle: "medium",
           store: [
@@ -68,12 +68,12 @@ Ext.define("NOC.inv.resourcepool.Application", {
         {
           name: "is_unique",
           xtype: "checkbox",
-          boxLabel: __("Unique Resource"),
+          boxLabel: t("label-unique-resource"),
         },
         {
           name: "strategy",
           xtype: "combobox",
-          fieldLabel: __("Allocate Strategy"),
+          fieldLabel: t("label-allocate-strategy"),
           value: "F",
           uiStyle: "medium",
           store: [
@@ -85,7 +85,7 @@ Ext.define("NOC.inv.resourcepool.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("API"),
+          title: t("header-api"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -94,14 +94,14 @@ Ext.define("NOC.inv.resourcepool.Application", {
             {
               name: "api_code",
               xtype: "textfield",
-              fieldLabel: __("API Code"),
+              fieldLabel: t("label-api-code"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "api_role",
               xtype: "textfield",
-              fieldLabel: __("API Role"),
+              fieldLabel: t("label-api-role"),
               allowBlank: true,
               uiStyle: "medium",
             },

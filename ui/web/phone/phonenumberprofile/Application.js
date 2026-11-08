@@ -28,7 +28,7 @@ Ext.define("NOC.phone.phonenumberprofile.Application", {
           width: 100,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 150,
           renderer: NOC.render.Lookup("workflow"),
@@ -44,26 +44,26 @@ Ext.define("NOC.phone.phonenumberprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
       ],
@@ -72,7 +72,7 @@ Ext.define("NOC.phone.phonenumberprofile.Application", {
   },
   filters: [
     {
-      title: __("By Workflow"),
+      title: t("app-title-by-workflow"),
       name: "workflow",
       ftype: "lookup",
       lookup: "wf.workflow",

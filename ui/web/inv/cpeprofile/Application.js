@@ -31,12 +31,12 @@ Ext.define("NOC.inv.cpeprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100,
@@ -47,28 +47,28 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "bi_id",
           xtype: "displayfield",
-          fieldLabel: __("BI ID"),
+          fieldLabel: t("label-bi-id"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["inv.CPEProfile"],
@@ -77,30 +77,30 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("WorkFlow"),
+          fieldLabel: t("label-workflow"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Display Settings"),
+          title: t("app-title-display-settings"),
           items: [
             {
               name: "style",
               xtype: "main.style.LookupField",
-              fieldLabel: __("Style"),
+              fieldLabel: t("app-title-style"),
               allowBlank: true,
             },
             {
               name: "glyph",
               xtype: "main.glyph.LookupField",
-              fieldLabel: __("Glyph"),
+              fieldLabel: t("app-title-glyph"),
               allowBlank: true,
             },
             {
               name: "shape_title_template",
               xtype: "textarea",
               maxLength: 250,
-              fieldLabel: __("Shape Name template"),
+              fieldLabel: t("label-shape-name-template"),
               allowBlank: true,
               width: 650,
             },
@@ -108,48 +108,48 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("ManagedObject Sync Settings"),
+          title: t("app-title-managedobject-sync-settings"),
           items: [
             {
               name: "sync_managedobject",
               xtype: "checkbox",
-              boxLabel: __("Sync ManagedObject"),
+              boxLabel: t("label-sync-managedobject"),
             },
             {
               name: "object_profile",
               xtype: "sa.managedobjectprofile.LookupField",
-              fieldLabel: __("Managed Object Profile"),
+              fieldLabel: t("app-title-managedobjectprofile"),
               allowBlank: true,
             },
             {
               name: "pool",
               xtype: "main.pool.LookupField",
-              fieldLabel: __("Pool"),
+              fieldLabel: t("label-pool"),
               allowBlank: true,
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Asset Sync Settings"),
+          title: t("app-title-asset-sync-settings"),
           items: [
             {
               name: "sync_asset",
               xtype: "checkbox",
-              boxLabel: __("Sync Asset"),
+              boxLabel: t("label-sync-asset"),
             },
           ],
         },
         {
           name: "cpe_status_discovery",
           xtype: "combobox",
-          fieldLabel: __("Status Discovery"),
+          fieldLabel: t("label-status-discovery"),
           allowBlank: true,
           labelWidth: 200,
           defaultValue: "D",
           store: [
-            ["D", __("Disabled")],
-            ["E", __("Enable")],
+            ["D", t("msg-disabled")],
+            ["E", t("label-enable")],
           ],
           uiStyle: "medium",
         },
@@ -163,7 +163,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
             {
               name: "metrics_default_interval",
               xtype: "numberfield",
-              fieldLabel: __("Default Interval, sec"),
+              fieldLabel: t("label-default-interval-sec"),
               labelWidth: 200,
               allowBlank: false,
               uiStyle: "small",
@@ -185,7 +185,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "metrics_interval_buckets",
           xtype: "numberfield",
-          fieldLabel: __("Metrics interval Buckets"),
+          fieldLabel: t("label-metrics-interval-buckets"),
           allowBlank: true,
           uiStyle: "medium",
           minValue: 0,
@@ -193,12 +193,12 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "metrics",
           xtype: "gridfield",
-          fieldLabel: __("Metrics"),
+          fieldLabel: t("label-metrics"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           columns: [
             {
-              text: __("Metric Type"),
+              text: t("app-title-metrictype"),
               dataIndex: "metric_type",
               width: 250,
               editor: {
@@ -207,14 +207,14 @@ Ext.define("NOC.inv.cpeprofile.Application", {
               renderer: NOC.render.Lookup("metric_type"),
             },
             {
-              text: __("Stored"),
+              text: t("header-stored"),
               dataIndex: "is_stored",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Interval"),
+              text: t("label-interval"),
               dataIndex: "interval",
               editor: {
                 xtype: "numberfield",
@@ -226,7 +226,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "dynamic_classification_policy",
           xtype: "combobox",
-          fieldLabel: __("Dynamic Classification Policy"),
+          fieldLabel: t("label-dynamic-classification-policy"),
           allowBlank: false,
           queryMode: "local",
           displayField: "label",
@@ -244,12 +244,12 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           name: "match_rules",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           items: [
             {
               name: "dynamic_order",
               xtype: "numberfield",
-              fieldLabel: __("Dynamic Order"),
+              fieldLabel: t("label-dynamic-order"),
               allowBlank: true,
               defaultValue: 0,
               minValue: 0,
@@ -258,7 +258,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -271,7 +271,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -279,7 +279,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
             {
               name: "type",
               xtype: "combobox",
-              fieldLabel: __("CPE Type"),
+              fieldLabel: t("label-cpe-type"),
               allowBlank: true,
               labelWidth: 200,
               store: [

@@ -10,17 +10,17 @@ Ext.define("NOC.sa.managedobject.scripts.ShowARP", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("IP"),
+      text: t("header-ip"),
       dataIndex: "ip",
       width: 100,
     },
     {
-      text: __("MAC"),
+      text: t("header-mac"),
       dataIndex: "mac",
       width: 120,
     },
     {
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interface",
       flex: 1,
     },

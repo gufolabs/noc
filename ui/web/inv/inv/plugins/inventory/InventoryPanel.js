@@ -14,7 +14,7 @@ Ext.define("NOC.inv.inv.plugins.inventory.InventoryPanel", {
   layout: "fit",
   app: null,
   scrollable: false,
-  title: __("Inventory"),
+  title: t("app-title-inv"),
 
   initComponent: function(){
     var me = this;
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.inv.plugins.inventory.InventoryPanel", {
 
     //
     me.defaultRoot = {
-      text: __("."),
+      text: t("header-text"),
       children: [],
     };
 
@@ -42,26 +42,26 @@ Ext.define("NOC.inv.inv.plugins.inventory.InventoryPanel", {
         {
           xtype: "treecolumn",
           dataIndex: "name",
-          text: __("Name"),
+          text: t("header-name"),
           width: 200,
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model",
           width: 300,
         },
         {
-          text: __("Revision"),
+          text: t("header-revision"),
           dataIndex: "revision",
           width: 100,
         },
         {
-          text: __("Serial"),
+          text: t("header-serial"),
           dataIndex: "serial",
           width: 150,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },

@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.CloudInspector");
 
 Ext.define("NOC.inv.map.inspectors.CloudInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("Cloud Inspector"),
+  title: t("app-title-cloud-inspector"),
   inspectorName: "cloud",
 
   tpl: [
@@ -37,7 +37,7 @@ Ext.define("NOC.inv.map.inspectors.CloudInspector", {
     this.dashboardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.line_chart,
       scope: this,
-      tooltip: __("Show dashboard"),
+      tooltip: t("btn-show-dashboard-2"),
       handler: this.onDashboard,
       disabled: true,
     });

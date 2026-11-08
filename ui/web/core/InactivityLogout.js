@@ -56,8 +56,8 @@ Ext.define("NOC.core.InactivityLogout", {
   //
   showSessionTimeoutMessage: function(){
     Ext.Msg.show({
-      title: __("Session Expired"),
-      message: __("Logged out for inactivity"),
+      title: t("app-title-session-expired"),
+      message: t("msg-logged-out-for-inactivity"),
       buttons: Ext.Msg.OK,
       icon: Ext.Msg.WARNING,
       modal: true,
@@ -65,7 +65,7 @@ Ext.define("NOC.core.InactivityLogout", {
       resizable: false,
       width: 500,  
       buttonText: {
-        ok: __("Ok"),
+        ok: t("btn-ok"),
       },  
       fn: function(btn){
         if(btn === "ok"){

@@ -15,7 +15,7 @@ Ext.define("NOC.main.jsonimport.Application", {
     var me = this;
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       handler: me.onSave,
@@ -68,7 +68,7 @@ Ext.define("NOC.main.jsonimport.Application", {
       success: function(response){
         var data = Ext.decode(response.responseText);
         if(data.status){
-          NOC.info(__("Object has been loaded"));
+          NOC.info(t("msg-object-has-been-loaded"));
           me.jsonField.setValue("");
         } else{
           NOC.error("Error loading object: " + data.error);

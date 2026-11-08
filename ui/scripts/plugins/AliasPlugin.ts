@@ -31,7 +31,10 @@ export class AliasPlugin{
             if(aliasPath.includes(alias)){
               resolvedPath = resolvedPath.replace(new RegExp(alias, "g"), target);
             }
-          }  
+          }
+          if(aliasPath.startsWith("@") && resolvedPath === aliasPath){
+            return null;
+          }
           const fullResolvedPath = resolvedPath.startsWith("/") 
             ? resolvedPath 
             : path.join(basePath, resolvedPath);

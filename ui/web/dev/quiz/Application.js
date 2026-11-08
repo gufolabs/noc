@@ -30,7 +30,7 @@ Ext.define("NOC.dev.quiz.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
@@ -40,26 +40,26 @@ Ext.define("NOC.dev.quiz.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: false,
         },
         {
           name: "revision",
           xtype: "numberfield",
-          fieldLabel: __("Revision"),
+          fieldLabel: t("header-revision"),
           allowBlank: false,
           minValue: 1,
           uiStyle: "small",
@@ -67,19 +67,19 @@ Ext.define("NOC.dev.quiz.Application", {
         {
           name: "changes",
           xtype: "listform",
-          fieldLabel: __("Changes"),
+          fieldLabel: t("msg-changes"),
           items: [
             {
               name: "date",
               xtype: "textfield",
-              fieldLabel: __("Date"),
+              fieldLabel: t("header-date"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "changes",
               xtype: "textarea",
-              fieldLabel: __("Changes"),
+              fieldLabel: t("msg-changes"),
               allowBlank: false,
               uiStyle: "extra",
             },
@@ -88,25 +88,25 @@ Ext.define("NOC.dev.quiz.Application", {
         {
           name: "disclaimer",
           xtype: "textarea",
-          fieldLabel: __("Disclaimer"),
+          fieldLabel: t("label-disclaimer"),
           allowBlank: true,
         },
         {
           name: "questions",
           xtype: "listform",
-          fieldLabel: __("Questions"),
+          fieldLabel: t("label-questions"),
           items: [
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "type",
               xtype: "combobox",
-              fieldLabel: __("Type"),
+              fieldLabel: t("header-type"),
               allowBlank: false,
               uiStyle: "medium",
               store: [
@@ -121,14 +121,14 @@ Ext.define("NOC.dev.quiz.Application", {
             {
               name: "question",
               xtype: "textarea",
-              fieldLabel: __("Question"),
+              fieldLabel: t("label-question"),
               allowBlank: false,
               uiStyle: "extra",
             },
             {
               name: "when",
               xtype: "textfield",
-              fieldLabel: __("When"),
+              fieldLabel: t("label-when"),
               allowBlank: true,
               uiStyle: "extra",
             },
@@ -137,9 +137,9 @@ Ext.define("NOC.dev.quiz.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

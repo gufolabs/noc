@@ -8,7 +8,7 @@ console.debug("Defining NOC.fm.alarm.plugins.Validation");
 
 Ext.define("NOC.fm.alarm.plugins.Validation", {
   extend: "Ext.panel.Panel",
-  title: __("Validation"),
+  title: t("app-title-validation"),
   app: null,
   autoScroll: true,
   bodyPadding: 4,
@@ -46,23 +46,23 @@ Ext.define("NOC.fm.alarm.plugins.Validation", {
       columns: [
         {
           dataIndex: "subject",
-          text: __("Subject"),
+          text: t("header-subject"),
           flex: 1,
         },
         {
           dataIndex: "cls",
-          text: __("Error Type"),
+          text: t("header-error-type"),
           width: 200,
         },
         {
           dataIndex: "introduced",
-          text: __("Introduced"),
+          text: t("header-introduced"),
           width: 150,
           renderer: NOC.render.DateTime,
         },
         {
           dataIndex: "changed",
-          text: __("Changed"),
+          text: t("header-changed"),
           width: 150,
           renderer: NOC.render.DateTime,
         },

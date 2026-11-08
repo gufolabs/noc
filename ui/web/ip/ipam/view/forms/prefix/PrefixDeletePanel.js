@@ -51,18 +51,18 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
           bind: "{deleteType}",
           items: [
             {
-              boxLabel: __("Do not delete"),
+              boxLabel: t("label-do-not-delete"),
               name: "delete_type",
               inputValue: "none",
               checked: true,
             },
             {
-              boxLabel: __("Delete prefix and save and relink the nested prefixes and addresses?"),
+              boxLabel: t("label-delete-prefix-and-save-and-relink-the-nested-prefixes-and-addres"),
               name: "delete_type",
               inputValue: "p",
             },
             {
-              boxLabel: __("Delete prefix and all nested prefixes, addresses and permissions?"),
+              boxLabel: t("label-delete-prefix-and-all-nested-prefixes-addresses-and-permissions"),
               name: "delete_type",
               inputValue: "r",
             },
@@ -74,16 +74,16 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
         xtype: "toolbar",
         items: [
           {
-            text: __("Close"),
-            tooltip: __("Close without deleting"),
+            text: t("btn-close"),
+            tooltip: t("help-close-without-deleting"),
             glyph: NOC.glyph.arrow_left,
             scope: me,
             handler: me.onClose,
           },
           "-",
           {
-            text: __("Delete"),
-            tooltip: __("Delete Prefix"),
+            text: t("btn-delete"),
+            tooltip: t("btn-delete-prefix"),
             glyph: NOC.glyph.trash,
             scope: me,
             handler: me.onDelete,
@@ -111,7 +111,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
         me.viewModel.set("description", data.description);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     })
   },
@@ -133,11 +133,11 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
       method: "DELETE",
       scope: me,
       success: function(){
-        NOC.info(__("Prefix Deleted"));
+        NOC.info(t("msg-prefix-deleted"));
         me.fireEvent("ipIPAMParentPrefixOpen");
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     })
   },

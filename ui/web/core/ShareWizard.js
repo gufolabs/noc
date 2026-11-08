@@ -8,7 +8,7 @@ console.debug("Defining NOC.core.ShareWizard");
 
 Ext.define("NOC.core.ShareWizard", {
   extend: "Ext.window.Window",
-  title: __("Share Contribution"),
+  title: t("app-title-share-contribution"),
   modal: true,
   resizable: false,
   width: 650,
@@ -55,7 +55,7 @@ Ext.define("NOC.core.ShareWizard", {
           items: [
             {
               xtype: "container",
-              html: "<h2>" + __("Preparing Contribution") + "</h2><p>" + __("Getting API key, please wait...") + "</p>",
+              html: "<h2>" + t("msg-preparing-contribution") + "</h2><p>" + t("msg-getting-api-key-please-wait") + "</p>",
             },
             {
               xtype: "container", 
@@ -80,25 +80,25 @@ Ext.define("NOC.core.ShareWizard", {
           items: [
             {
               xtype: "container",
-              html: "<h2>" + __("API Key Required") + "</h2><p>" + __("Please enter your GitLab API key to continue.") + "</p>",
+              html: "<h2>" + t("msg-api-key-required") + "</h2><p>" + t("msg-please-enter-your-gitlab-api-key-to-continue") + "</p>",
               margin: "0 0 20 0",
             },
             {
               xtype: "textfield",
-              fieldLabel: __("GitLab API Key"),
+              fieldLabel: t("label-gitlab-api-key"),
               name: "apiKey",
               allowBlank: false,
               labelWidth: 120,
-              emptyText: __("Enter your GitLab API key"),
+              emptyText: t("label-enter-your-gitlab-api-key"),
             },
           ],
           buttons: [
             {
-              text: __("Cancel"),
+              text: t("btn-cancel"),
               handler: "onCancel",
             },
             {
-              text: __("Next"),
+              text: t("btn-next"),
               formBind: true,
               handler: "onApiKeySubmit",
             },
@@ -115,7 +115,7 @@ Ext.define("NOC.core.ShareWizard", {
           items: [
             {
               xtype: "container",
-              html: "<h2>" + __("Getting Information") + "</h2><p>" + __("Retrieving additional information, please wait...") + "</p>",
+              html: "<h2>" + t("msg-getting-information") + "</h2><p>" + t("msg-retrieving-additional-information-please-wait") + "</p>",
             },
             {
               xtype: "container", 
@@ -140,25 +140,25 @@ Ext.define("NOC.core.ShareWizard", {
           items: [
             {
               xtype: "container",
-              html: "<h2>" + __("Contribution Details") + "</h2><p>" + __("Please provide a description for your contribution.") + "</p>",
+              html: "<h2>" + t("msg-contribution-details") + "</h2><p>" + t("msg-please-provide-a-description-for-your-contribution") + "</p>",
               margin: "0 0 20 0",
             },
             {
               xtype: "textarea",
-              fieldLabel: __("Description"),
+              fieldLabel: t("label-description"),
               name: "description",
               labelWidth: 120,
               flex: 1,
-              emptyText: __("Enter an optional description for your contribution"),
+              emptyText: t("label-enter-an-optional-description-for-your-contribution"),
             },
           ],
           buttons: [
             {
-              text: __("Modify API Key"),
+              text: t("btn-modify-api-key"),
               handler: "onDescriptionBack",
             },
             {
-              text: __("Share"),
+              text: t("btn-share"),
               formBind: true,
               handler: "onDescriptionSubmit",
             },
@@ -176,13 +176,13 @@ Ext.define("NOC.core.ShareWizard", {
             {
               xtype: "container",
               itemId: "finishMessage",
-              html: "<h2>" + __("Thank You!") + "</h2><p>" + __("Your contribution has been shared successfully.") + "</p>",
+              html: "<h2>" + t("msg-thank-you") + "</h2><p>" + t("msg-your-contribution-has-been-shared-successfully") + "</p>",
             },
             {
               xtype: "container",
               itemId: "finishError",
               hidden: true,
-              html: "<h2>" + __("Error") + "</h2><p>" + __("There was an error sharing your contribution.") + "</p>",
+              html: "<h2>" + t("header-error") + "</h2><p>" + t("msg-there-was-an-error-sharing-your-contribution") + "</p>",
             },
             {
               xtype: "container",
@@ -192,14 +192,14 @@ Ext.define("NOC.core.ShareWizard", {
               items: [
                 {
                   xtype: "displayfield",
-                  fieldLabel: __("Contribution URL"),
+                  fieldLabel: t("label-contribution-url"),
                   labelWidth: 120,
                   name: "url",
                   value: "",
                 },
                 {
                   xtype: "button",
-                  text: __("Open in Browser"),
+                  text: t("btn-open-in-browser"),
                   margin: "10 0 0 0",
                   handler: "onOpenContribution",
                 },
@@ -208,7 +208,7 @@ Ext.define("NOC.core.ShareWizard", {
           ],
           buttons: [
             {
-              text: __("Close"),
+              text: t("btn-close"),
               handler: "onClose",
             },
           ],
@@ -301,7 +301,7 @@ Ext.define("NOC.core.ShareWizard", {
     var me = this;
     
     // Update progress
-    me.progressBar.updateProgress(0.1, __("Checking API key..."));
+    me.progressBar.updateProgress(0.1, t("msg-checking-api-key"));
     
     // Create animation for the start progress
     var startProgress = me.down("#startProgress"),
@@ -325,13 +325,13 @@ Ext.define("NOC.core.ShareWizard", {
     me.getAPIToken().then(
       function(token){
         me.stateData.apiKey = token;
-        me.progressBar.updateProgress(0.3, __("API key found"));
+        me.progressBar.updateProgress(0.3, t("msg-api-key-found"));
         me.down("textfield[name=apiKey]").setValue(token);
         me.transitionTo(null, "success");
       },
       function(){
         // Failure - need to ask for API key
-        me.progressBar.updateProgress(0.2, __("API key required"));
+        me.progressBar.updateProgress(0.2, t("msg-api-key-required-2"));
         me.transitionTo(null, "failure");
       },
     );
@@ -339,23 +339,23 @@ Ext.define("NOC.core.ShareWizard", {
   // STATE_ENTER_API_KEY implementation
   enterApiKeyState: function(){
     var me = this;
-    me.progressBar.updateProgress(0.2, __("Waiting for API key..."));
+    me.progressBar.updateProgress(0.2, t("msg-waiting-for-api-key"));
   },
   
   // GET_SHARED_INFO implementation
   getSharedInfoState: function(){
     var me = this;
-    me.progressBar.updateProgress(0.4, __("Getting additional information..."));
+    me.progressBar.updateProgress(0.4, t("msg-getting-additional-information"));
     
     me.getSharedInfo().then(
       function(info){
         me.stateData.sharedInfo = info;
-        me.progressBar.updateProgress(0.5, __("Information received"));
+        me.progressBar.updateProgress(0.5, t("msg-information-received"));
         me.transitionTo(null, "success");
       },
       function(error){
-        me.stateData.error = __("Failed to get shared info: ") + error;
-        me.progressBar.updateProgress(0.4, __("Error getting information"));
+        me.stateData.error = t("msg-failed-to-get-shared-info-value0", {value0: error});
+        me.progressBar.updateProgress(0.4, t("msg-error-getting-information"));
         me.transitionTo(null, "failure");
       },
     );
@@ -363,7 +363,7 @@ Ext.define("NOC.core.ShareWizard", {
   // STATE_ENTER_DESCRIPTION implementation
   enterDescriptionState: function(){
     var me = this;
-    me.progressBar.updateProgress(0.5, __("Ready to share..."));
+    me.progressBar.updateProgress(0.5, t("msg-ready-to-share"));
   },
   
   // STATE_FINISH implementation
@@ -374,14 +374,14 @@ Ext.define("NOC.core.ShareWizard", {
     if(me.stateData.error){
       me.down("#finishMessage").hide();
       me.down("#finishError").show();
-      me.down("#finishError").update("<h2>" + __("Error") + "</h2><p>" + me.stateData.error + "</p>");
-      me.progressBar.updateProgress(1.0, __("Failed"));
+      me.down("#finishError").update("<h2>" + t("header-error") + "</h2><p>" + me.stateData.error + "</p>");
+      me.progressBar.updateProgress(1.0, t("msg-failed"));
       me.statusBarColor = me.getProgressBarColor();
       me.setProgressBarColor("#e74c3c");
     } else{
       me.down("#finishMessage").show();
       me.down("#finishError").hide();
-      me.progressBar.updateProgress(1.0, __("Completed"));
+      me.progressBar.updateProgress(1.0, t("msg-completed"));
       // Show contribution URL if available
       if(me.stateData.url){
         me.down("#contributionUrl").show();
@@ -410,17 +410,17 @@ Ext.define("NOC.core.ShareWizard", {
       return;
     }
     
-    me.progressBar.updateProgress(0.3, __("Validating API key..."));
+    me.progressBar.updateProgress(0.3, t("msg-validating-api-key"));
     
     // Save API key
     me.saveAPIToken(apiKey).then(
       function(){
         me.stateData.apiKey = apiKey;
-        me.progressBar.updateProgress(0.4, __("API key saved"));
+        me.progressBar.updateProgress(0.4, t("msg-api-key-saved"));
         me.transitionTo(null, "success");
       },
       function(error){
-        me.stateData.error = __("Failed to save API key: ") + error;
+        me.stateData.error = t("msg-failed-to-save-api-key-value0", {value0: error});
         me.transitionTo(null, "failure");
       },
     );
@@ -434,17 +434,17 @@ Ext.define("NOC.core.ShareWizard", {
     var me = this;
     var description = me.down("textarea[name=description]").getValue() || "";
     
-    me.progressBar.updateProgress(0.7, __("Sending contribution..."));
+    me.progressBar.updateProgress(0.7, t("msg-sending-contribution"));
     
     // Send contribution
     me.doContrib(me.stateData.apiKey, me.stateData.sharedInfo, description).then(
       function(result){
         me.stateData.url = result.url;
-        me.progressBar.updateProgress(0.9, __("Contribution sent"));
+        me.progressBar.updateProgress(0.9, t("msg-contribution-sent"));
         me.transitionTo(null, "success");
       },
       function(error){
-        me.stateData.error = __("Failed to send contribution: ") + error;
+        me.stateData.error = t("msg-failed-to-send-contribution-value0", {value0: error});
         me.transitionTo(null, "failure");
       },
     );
@@ -477,7 +477,7 @@ Ext.define("NOC.core.ShareWizard", {
           if(data && data.token){
             resolve(data.token)
           } else{
-            reject(__("No API token found"));
+            reject(t("msg-no-api-token-found"));
           }
         },
         failure: failureCb(reject),
@@ -517,11 +517,11 @@ Ext.define("NOC.core.ShareWizard", {
             if(Ext.isDefined(result.path)){
               resolve(result);
             } else{
-              reject(result.error || __("Unknown error"));
+              reject(result.error || t("msg-unknown-error"));
             }
           } catch(error){
             console.error(error);
-            reject(__("Invalid response format"));
+            reject(t("msg-invalid-response-format"));
           }
         },
         failure: failureCb(reject),
@@ -571,7 +571,7 @@ Ext.define("NOC.core.ShareWizard", {
   // Handle failure
   failureCb: function(reject){
     return function(response){
-      reject(__("Request failed with status") + " :" + response.status);
+      reject(t("msg-request-failed-with-status-value0", {value0: response.status}));
     }
   },
 });

@@ -31,7 +31,7 @@ Ext.define("NOC.vc.vlan.Application", {
     me.addVLANForm = Ext.create("NOC.vc.vlan.AddVLANForm", {app: me});
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -40,35 +40,35 @@ Ext.define("NOC.vc.vlan.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("L2 Domain"),
+          text: t("header-l2-domain"),
           dataIndex: "l2_domain",
           width: 150,
           renderer: NOC.render.Lookup("l2_domain"),
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 150,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("VLAN"),
+          text: t("app-title-vlan"),
           dataIndex: "vlan",
           width: 75,
         },
         {
-          text: __("Int."),
+          text: t("header-int"),
           dataIndex: "interfaces_count",
           width: 50,
           sortable: false,
@@ -77,13 +77,13 @@ Ext.define("NOC.vc.vlan.Application", {
           onClick: me.onInterfacesCellClick,
         },
         {
-          text: __("Prefixes"),
+          text: t("header-prefixes"),
           dataIndex: "prefixes",
           width: 100,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -93,20 +93,20 @@ Ext.define("NOC.vc.vlan.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "profile",
           xtype: "vc.vlanprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "vlan",
           xtype: "numberfield",
-          fieldLabel: __("VLAN"),
+          fieldLabel: t("app-title-vlan"),
           allowBlank: false,
           uiStyle: "small",
           minValue: 1,
@@ -115,31 +115,31 @@ Ext.define("NOC.vc.vlan.Application", {
         {
           name: "l2_domain",
           xtype: "vc.l2domain.LookupField",
-          fieldLabel: __("L2 Domain"),
+          fieldLabel: t("header-l2-domain"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: false,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -148,20 +148,20 @@ Ext.define("NOC.vc.vlan.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -170,7 +170,7 @@ Ext.define("NOC.vc.vlan.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Discovery"),
+          title: t("header-discovery"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -179,19 +179,19 @@ Ext.define("NOC.vc.vlan.Application", {
             {
               name: "first_discovered",
               xtype: "displayfield",
-              fieldLabel: __("Discovered"),
+              fieldLabel: t("label-discovered"),
               allowBlank: true,
             },
             {
               name: "last_seen",
               xtype: "displayfield",
-              fieldLabel: __("Last Seen"),
+              fieldLabel: t("header-last-seen-20c226"),
               allowBlank: true,
             },
             {
               name: "expired",
               xtype: "displayfield",
-              fieldLabel: __("Expired"),
+              fieldLabel: t("header-expired"),
               allowBlank: true,
             },
           ],
@@ -199,7 +199,7 @@ Ext.define("NOC.vc.vlan.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": "vc.VLAN",
@@ -210,9 +210,9 @@ Ext.define("NOC.vc.vlan.Application", {
       gridToolbar: [
         {
           itemId: "allocate_vlan",
-          text: __("Allocate VLAN"),
+          text: t("btn-allocate-vlan"),
           glyph: NOC.glyph.plus_circle,
-          tooltip: __("Allocate VLAN"),
+          tooltip: t("btn-allocate-vlan"),
           hasAccess: NOC.hasPermission("create"),
           scope: me,
           handler: me.onAllocateVLAN,
@@ -222,9 +222,9 @@ Ext.define("NOC.vc.vlan.Application", {
       formToolbar: [
         {
           itemId: "interfaces",
-          text: __("VLAN Interfaces"),
+          text: t("btn-vlan-interfaces"),
           glyph: NOC.glyph.list,
-          tooltip: __("Show VLAN interfaces"),
+          tooltip: t("help-show-vlan-interfaces"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onVLANInterfaces,
@@ -297,14 +297,14 @@ Ext.define("NOC.vc.vlan.Application", {
       success: function(response){
         var r = Ext.decode(response.responseText);
         if(!r.tagged && !r.untagged && !r.l3){
-          NOC.info(__("No interfaces found"));
+          NOC.info(t("msg-no-interfaces-found"));
         } else{
           var item = me.showItem(me.ITEM_VLAN_INTERFACES);
           item.preview(record, {interfaces: r});
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get interfaces"));
+        NOC.error(t("msg-failed-to-get-interfaces"));
       },
     });
   },
@@ -335,13 +335,13 @@ Ext.define("NOC.vc.vlan.Application", {
   },
   filters: [
     {
-      title: __("By L2 Domain"),
+      title: t("app-title-by-l2-domain"),
       name: "l2_domain",
       ftype: "lookup",
       lookup: "vc.l2domain",
     },
     {
-      title: __("By State"),
+      title: t("app-title-by-state"),
       name: "state",
       ftype: "lookup",
       lookup: "main.resourcestate",

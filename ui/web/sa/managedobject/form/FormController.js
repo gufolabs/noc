@@ -56,7 +56,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
   prepareData: function(){
     var me = this.getView();
     if(!this.getView().down("[itemId=managedobject-form-panel]").form.isValid()){
-      NOC.error(__("Error in data"));
+      NOC.error(t("msg-error-in-data"));
       return;
     }
     var v = me.getFormData();
@@ -109,7 +109,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
       values.ids = formPanel.ids;
       var message = `Do you wish to change ${values.ids.length} record(s): <br/><br/>${valuesTxt}<br/>This operation cannot be undone!`;
       Ext.Msg.show({
-        title: __("Change records?"),
+        title: t("app-title-change-records"),
         msg: message,
         buttons: Ext.Msg.YESNO,
         icon: Ext.window.MessageBox.QUESTION,
@@ -123,13 +123,13 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
               scope: me,
               jsonData: values,
               success: function(){
-                NOC.info(__("Records has been updated"));
+                NOC.info(t("msg-records-has-been-updated"));
                 me.getView().setHistoryHash();
                 me.reloadSelectionGrids();
                 me.toMain();
               },
               failure: function(){
-                NOC.error(__("Failed"));
+                NOC.error(t("msg-failed"));
               },
             });
           }
@@ -146,7 +146,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     var view = this.getView(),
       parentController = view.up("[itemId=sa-managedobject]").getController(),
       formPanel = this.getView().down("[itemId=managedobject-form-panel]");
-    parentController.setFormTitle(__("Clone") + " {0}", {id: "CLONE"});
+    parentController.setFormTitle("app-title-clone-item", {id: "CLONE"});
     parentController.displayButtons(["closeBtn", "saveBtn", "applyBtn", "resetBtn"]);
     formPanel.getForm().setValues({bi_id: null});
     formPanel.recordId = undefined;
@@ -155,8 +155,8 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
   onDeleteRecord: function(){
     var me = this;
     Ext.Msg.show({
-      title: __("Delete record?"),
-      msg: __("Do you wish to delete record? This operation cannot be undone!"),
+      title: t("app-title-delete-record"),
+      msg: t("msg-do-you-wish-to-delete-record-this-operation-cannot-be-undone"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -235,7 +235,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     Ext.Array.each(fieldsWithDefaultValue, function(field){
       defaultValues[field.name] = field.defaultValue;
     });
-    parentController.setFormTitle(__("Create") + " {0}", {id: "NEW"});
+    parentController.setFormTitle("app-title-create-item", {id: "NEW"});
     parentController.resetInlineStore(formPanel, defaults);
     parentController.displayButtons(["closeBtn", "saveBtn", "applyBtn", "resetBtn"]);
     formPanel.recordId = undefined;
@@ -258,7 +258,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     record.getProxy().getWriter().setWriteAllFields(true);
     if(!record.validate().isValid()){
       // @todo: Error report
-      NOC.error(__("Invalid data!"));
+      NOC.error(t("msg-invalid-data"));
       return;
     }
     record.set("id", formPanel.recordId);
@@ -267,7 +267,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
       record.proxy.url += record.id + "/";
     }
 
-    this.getView().mask(__("Saving ..."));
+    this.getView().mask(t("msg-saving-3"));
     this.getView().saveInlines(record.id,
                                Ext.Array.map(this.getView().query("[itemId$=-inline]"), function(grid){return grid.getStore()}));
     Ext.Object.each(data, function(key, value){if(!Ext.isEmpty(value)) record.set(key, value)});
@@ -280,10 +280,10 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
         if(goToMain){
           me.toMain();
         }
-        NOC.msg.complete(__("Saved"));
+        NOC.msg.complete(t("msg-saved-2"));
       },
       failure: function(record, operation){
-        var message = __("Error saving record");
+        var message = t("msg-error-saving-record");
         me.getView().unmask();
         if(operation && operation.error && operation.error.response){
           if(operation.error.status !== 500 && operation.error.response.responseText){
@@ -293,7 +293,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
             }
           }
           if(operation.error.status === 500){
-            message = __("Internal Error");
+            message = t("msg-internal-error-2");
           }
         }
         NOC.error(message);
@@ -314,7 +314,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
 
     record.self.setProxy({type: "managedobject"});
     if(formPanel.recordId){
-      this.getView().mask(__("Deleting ..."));
+      this.getView().mask(t("msg-deleting-2"));
       NOC.api.requestLegacy({
         url: "/sa/managedobject/" + formPanel.recordId + "/",
         method: "DELETE",

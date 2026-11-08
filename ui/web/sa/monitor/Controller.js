@@ -63,7 +63,7 @@ Ext.define("NOC.sa.monitor.Controller", {
     if(btn.pressed){
       this.startPolling();
       this.getViewModel().set("icon",
-                              this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+                              this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
     } else{
       this.stopPolling();
       this.getViewModel().set("icon", this.generateIcon(false));
@@ -81,8 +81,8 @@ Ext.define("NOC.sa.monitor.Controller", {
       grid.getView().setDisabled(state);
     }
     this.getViewModel().set("icon", state ?
-      this.generateIcon(true, "stop-circle-o", "grey", __("suspend")) :
-      this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+      this.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend")) :
+      this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
   },
 
   pollingTask: function(){
@@ -95,7 +95,7 @@ Ext.define("NOC.sa.monitor.Controller", {
   objectsReload: function(){
     var logPanel = this.getView().lookupReference("logPanel"),
       grid = this.getView().lookupReference("grid");
-    grid.mask(__("Loading..."));
+    grid.mask(t("msg-loading-3"));
     this.getViewModel().getStore("objectsStore").load(
       function(){
         grid.unmask();

@@ -164,7 +164,7 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
         this.setUrl(hash);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

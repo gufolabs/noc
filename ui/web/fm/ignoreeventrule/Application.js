@@ -12,22 +12,22 @@ Ext.define("NOC.fm.ignoreeventrule.Application", {
   model: "NOC.fm.ignoreeventrule.Model",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       width: 50,
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Left RE"),
+      text: t("header-left-re"),
       dataIndex: "left_re",
       flex: 1,
     },
     {
-      text: __("Right RE"),
+      text: t("header-right-re"),
       dataIndex: "right_re",
       flex: 1,
     },
@@ -36,37 +36,37 @@ Ext.define("NOC.fm.ignoreeventrule.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "is_active",
       xtype: "checkboxfield",
-      boxLabel: __("Is Active"),
+      boxLabel: t("header-is-active"),
       allowBlank: false,
     },
     {
       name: "left_re",
       xtype: "textfield",
-      fieldLabel: __("Left RE"),
+      fieldLabel: t("header-left-re"),
       allowBlank: false,
     },
     {
       name: "right_re",
       xtype: "textfield",
-      fieldLabel: __("Right Re"),
+      fieldLabel: t("label-right-re"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
   ],
   filters: [
     {
-      title: __("By Is Active"),
+      title: t("app-title-by-is-active"),
       name: "is_active",
       ftype: "boolean",
     },

@@ -29,7 +29,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Sidebar", {
                 });
 
       if(value.length > 2000){
-        NOC.msg.failed(__("Too many IP, max 2000"));
+        NOC.msg.failed(t("msg-too-many-ip-max-2000"));
         return;
       }
     }
@@ -78,7 +78,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Sidebar", {
       grid = appView.down("grid"),
       store = grid.getStore();
 
-    grid.mask(__("Loading..."));
+    grid.mask(t("msg-loading-3"));
     store.getProxy().setExtraParams(filterObject);
     store.load({
       callback: function(){

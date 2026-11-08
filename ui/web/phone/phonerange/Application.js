@@ -28,7 +28,7 @@ Ext.define("NOC.phone.phonerange.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -37,58 +37,58 @@ Ext.define("NOC.phone.phonerange.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Dialplan"),
+          text: t("header-dialplan"),
           dataIndex: "dialplan",
           width: 150,
           renderer: NOC.render.Lookup("dialplan"),
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("From Number"),
+          text: t("header-from-number"),
           dataIndex: "from_number",
           width: 100,
         },
         {
-          text: __("To Number"),
+          text: t("header-to-number"),
           dataIndex: "to_number",
           width: 100,
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Allocated"),
+          text: t("header-allocated-c249df"),
           dataIndex: "to_allocate_numbers",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Total"),
+          text: t("header-total"),
           dataIndex: "total_numbers",
           align: "right",
           width: 50,
         },
         {
-          text: __("Supplier"),
+          text: t("header-supplier"),
           dataIndex: "supplier",
           width: 100,
           renderer: NOC.render.Lookup("supplier"),
         },
         {
-          text: __("Administrative Domain"),
+          text: t("header-administrative-domain-d113be"),
           dataIndex: "administrative_domain",
           width: 100,
           renderer: NOC.render.Lookup("administrative_domain"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -98,13 +98,13 @@ Ext.define("NOC.phone.phonerange.Application", {
         {
           name: "dialplan",
           xtype: "phone.dialplan.LookupField",
-          fieldLabel: __("Dialplan"),
+          fieldLabel: t("header-dialplan"),
           allowBlank: false,
         },
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
@@ -112,7 +112,7 @@ Ext.define("NOC.phone.phonerange.Application", {
           name: "from_number",
           xtype: "textfield",
           regex: /^\d+$/,
-          fieldLabel: __("From Number"),
+          fieldLabel: t("header-from-number"),
           allowBlank: false,
           uiStyle: "medium",
         },
@@ -120,49 +120,49 @@ Ext.define("NOC.phone.phonerange.Application", {
           name: "to_number",
           xtype: "textfield",
           regex: /^\d+$/,
-          fieldLabel: __("To Number"),
+          fieldLabel: t("header-to-number"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "profile",
           xtype: "phone.phonerangeprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           name: "supplier",
           xtype: "crm.supplier.LookupField",
-          fieldLabel: __("Supplier"),
+          fieldLabel: t("header-supplier"),
           allowBlank: true,
         },
         {
           name: "administrative_domain",
           xtype: "sa.administrativedomain.LookupField",
-          fieldLabel: __("Adm. Domain"),
+          fieldLabel: t("header-adm-domain"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Resource Groups"),
+          title: t("nav-resourcegroup"),
           layout: "column",
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
@@ -184,7 +184,7 @@ Ext.define("NOC.phone.phonerange.Application", {
                 //     items: [
                 //         {
                 //             glyph: NOC.glyph.search,
-                //             tooltip: __("Show Card"),
+                //             tooltip: t("Show Card"),
                 //             scope: me,
                 //             handler: me.onShowResourceGroup
                 //         }
@@ -192,7 +192,7 @@ Ext.define("NOC.phone.phonerange.Application", {
                 // },
                 {
                   dataIndex: "group",
-                  text: __("Static Service Groups"),
+                  text: t("btn-static-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -207,7 +207,7 @@ Ext.define("NOC.phone.phonerange.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Service Groups"),
+                  text: t("btn-effective-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -222,7 +222,7 @@ Ext.define("NOC.phone.phonerange.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Static Client Groups"),
+                  text: t("btn-static-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -237,7 +237,7 @@ Ext.define("NOC.phone.phonerange.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Client Groups"),
+                  text: t("btn-effective-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -251,7 +251,7 @@ Ext.define("NOC.phone.phonerange.Application", {
         {
           name: "to_allocate_numbers",
           xtype: "checkbox",
-          boxLabel: __("Allocate Numbers"),
+          boxLabel: t("label-allocate-numbers"),
         },
       ],
 
@@ -268,25 +268,25 @@ Ext.define("NOC.phone.phonerange.Application", {
   },
   filters: [
     {
-      title: __("By Dialplan"),
+      title: t("app-title-by-dialplan"),
       name: "dialplan",
       ftype: "lookup",
       lookup: "phone.dialplan",
     },
     {
-      title: __("By Range"),
+      title: t("app-title-by-range"),
       name: "parent",
       ftype: "tree",
       lookup: "phone.phonerange",
     },
     {
-      title: __("By Supplier"),
+      title: t("app-title-by-supplier"),
       name: "supplier",
       ftype: "lookup",
       lookup: "crm.supplier",
     },
     {
-      title: __("By Project"),
+      title: t("app-title-by-project"),
       name: "project",
       ftype: "lookup",
       lookup: "project.project",
@@ -305,6 +305,6 @@ Ext.define("NOC.phone.phonerange.Application", {
     icon: NOC.glyph.level_down,
     color: NOC.colors.level_down,
     filter: "parent",
-    tooltip: __("Parent filter"),
+    tooltip: t("help-parent-filter"),
   },
 });

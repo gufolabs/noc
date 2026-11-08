@@ -16,12 +16,12 @@ Ext.define("NOC.sa.useraccess.Application", {
   model: "NOC.sa.useraccess.Model",
   columns: [
     {
-      text: __("User"),
+      text: t("header-user"),
       dataIndex: "user",
       renderer: NOC.render.Lookup("user"),
     },
     {
-      text: __("Adm. Domain"),
+      text: t("header-adm-domain"),
       dataIndex: "administrative_domain",
       renderer: NOC.render.Lookup("administrative_domain"),
     },
@@ -30,25 +30,25 @@ Ext.define("NOC.sa.useraccess.Application", {
     {
       name: "user",
       xtype: "aaa.user.LookupField",
-      fieldLabel: __("User"),
+      fieldLabel: t("header-user"),
       allowBlank: false,
     },
     {
       name: "administrative_domain",
       xtype: "sa.administrativedomain.LookupField",
-      fieldLabel: __("Adm. Domain"),
+      fieldLabel: t("header-adm-domain"),
       allowBlank: true,
     },
   ],
   filters: [
     {
-      title: __("By User"),
+      title: t("app-title-by-user"),
       name: "user",
       ftype: "lookup",
       lookup: "aaa.user",
     },
     {
-      title: __("By Administrative Domain"),
+      title: t("choice-by-administrative-domain"),
       name: "administrative_domain",
       ftype: "lookup",
       lookup: "sa.administrativedomain",

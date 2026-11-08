@@ -50,8 +50,8 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
       },
       field: "label",
       reference: "multi-search",
-      searchText: __("search..."),
-      removeRowTip: __("Remove this item."),
+      searchText: t("msg-search"),
+      removeRowTip: t("btn-remove-this-item"),
       listeners: {
         focusleave: function(){
           this.hidePopup();
@@ -100,7 +100,7 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
             items: [
               {
                 xtype: "button",
-                text: __("Select All"),
+                text: t("btn-select-all"),
                 handler: function(btn){
                   var selector = btn.up("multiselector-search"),
                     store = selector.getSearchStore();
@@ -110,7 +110,7 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
               "->",
               {
                 xtype: "button",
-                text: __("Unselect All"),
+                text: t("btn-unselect-all"),
                 handler: function(btn){
                   var selector = btn.up("multiselector-search"),
                     store = selector.getSearchStore();
@@ -148,11 +148,11 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
             leadingBufferZone: 2,
             viewConfig: {
               deferEmptyText: false,
-              emptyText: __("No results."),
+              emptyText: t("label-no-results"),
             },
             columns: [
               {
-                text: __("Name"),
+                text: t("header-name"),
                 dataIndex: "label",
                 flex: 3,
                 renderer: function(v, _, record){
@@ -162,13 +162,13 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
                   return v;
                 },
               }, {
-                text: __("Type"),
+                text: t("header-type"),
                 dataIndex: "type",
                 flex: 1,
                 renderer: function(v){
                   var TYPE_MAP = {
-                    Service: __("SRV"),
-                    Subscribers: __("SUB"),
+                    Service: t("msg-srv"),
+                    Subscribers: t("msg-sub"),
                   };
                   return NOC.render.Choices(TYPE_MAP)(v);
                 },
@@ -237,13 +237,13 @@ Ext.define("NOC.fm.alarm.view.grids.MultiPanel", {
     this.addTool([
       {
         bind: {type: "{includeProfile}"},
-        tooltip: __("Include/Exclude profile from list"),
+        tooltip: t("help-include-exclude-profile-from-list"),
         callback: this._onIncludeClick,
         scope: this,
       },
       {
         bind: {type: "{popupState}"},
-        tooltip: __("Show/Hide search popup"),
+        tooltip: t("help-show-hide-search-popup"),
         callback: this._onShowSearch,
         scope: this,
       },

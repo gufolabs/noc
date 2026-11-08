@@ -13,7 +13,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
     "NOC.core.StateField",
     "NOC.core.ComboBox",
   ],
-  title: __("Physical"),
+  title: t("msg-physical"),
   closable: false,
   layout: "fit",
   rowClassField: "row_class",
@@ -36,7 +36,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
     }
 
     me.addInterfaceButton = Ext.create("Ext.button.Button", {
-      text: __("Add Interface"),
+      text: t("btn-add-interface"),
       glyph: NOC.glyph.plus,
       scope: me,
       disabled: !NOC.hasPermission("sa:managedobject:change_interface"),
@@ -54,7 +54,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
           store: me.store,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               editor: {
                 xtype: "textfield",
@@ -62,26 +62,26 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               },
             },
             {
-              text: __("Status"),
+              text: t("header-status"),
               dataIndex: "status",
               width: 100,
             },
             {
-              text: __("Metrics"),
+              text: t("label-metrics"),
               dataIndex: "metrics",
               width: 100,
             },
             {
-              text: __("MAC"),
+              text: t("header-mac"),
               dataIndex: "mac",
               width: 120,
             },
             {
-              text: __("LAG"),
+              text: t("header-lag"),
               dataIndex: "lag",
             },
             {
-              text: __("Caps"),
+              text: t("header-caps"),
               dataIndex: "caps",
               onClick: me.onCapsClick,
               renderer: function(value){
@@ -93,7 +93,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               },
             },
             {
-              text: __("Link"),
+              text: t("msg-link"),
               dataIndex: "link",
               renderer: function(value){
                 var v = value ? value.label : "...";
@@ -102,7 +102,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               onClick: me.onLinkClick,
             },
             {
-              text: __("Profile"),
+              text: t("header-profile"),
               dataIndex: "profile",
               renderer: NOC.render.Lookup("profile"),
               editor: {
@@ -111,7 +111,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               },
             },
             {
-              text: __("Project"),
+              text: t("label-project"),
               dataIndex: "project",
               renderer: NOC.render.Lookup("project"),
               editor: {
@@ -120,7 +120,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               },
             },
             {
-              text: __("State"),
+              text: t("header-state"),
               dataIndex: "state",
               editor: {
                 xtype: "statefield",
@@ -129,11 +129,11 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               renderer: NOC.render.Lookup("state"),
             },
             {
-              text: __("Protocols"),
+              text: t("nav-protocol"),
               dataIndex: "enabled_protocols",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
               editor: {
@@ -141,7 +141,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
               },
             },
             {
-              text: __("ifIndex"),
+              text: t("header-ifindex"),
               dataIndex: "ifindex",
               hidden: true,
               width: 50,
@@ -222,14 +222,14 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
       success: function(){
         me.app.onRefresh();
         if(isNewRecord){
-          NOC.info(__("Created interface: ") + r.get("name"));
+          NOC.info(t("msg-created-interface-value0-2", {value0: r.get("name")}));
         } else{
-          NOC.info(__("Saved"));
+          NOC.info(t("msg-saved-2"));
         }
         // @todo: Set tab
       },
       failure: function(){
-        NOC.error(__("Failed to set data"));
+        NOC.error(t("msg-failed-to-set-data"));
       },
     });
   },
@@ -237,7 +237,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
   onLinkClick: function(record){
     var me = this;
     Ext.create("NOC.sa.managedobject.LinkForm", {
-      title: Ext.String.format(__("Link") + " {0} " + __("with"), record.get("name")),
+      title: t("msg-link-interface-with", {name: record.get("name")}),
       app: me.app,
       ifaceId: record.get("id"),
       ifName: record.get("name"),
@@ -248,7 +248,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
 
   onCapsClick: function(record){
     Ext.create("NOC.sa.managedobject.CapsForm", {
-      title: Ext.String.format(__("Capabilities of") + " {0}", record.get("name")),
+      title: t("msg-capabilities-of", {name: record.get("name")}),
       app: this.app,
       rowId: record.get("id"),
       dataCaps: record.get("caps"),
@@ -270,8 +270,8 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
       rec = grid.getStore().getAt(rowIndex);
     console.log(me.app.currentRecord.get("id"));
     Ext.Msg.show({
-      title: __("Remove interface"),
-      msg: __("Would you like remove interface ") + rec.get("name"),
+      title: t("app-title-remove-interface"),
+      msg: t("msg-would-you-like-remove-interface-value0", {value0: rec.get("name")}),
       buttons: Ext.Msg.YESNO,
       modal: true,
       fn: function(button){
@@ -303,10 +303,10 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
       method: "DELETE",
       success: function(){
         me.app.onRefresh();
-        NOC.info(__("Deleted"));
+        NOC.info(t("msg-deleted-2"));
       },
       failure: function(){
-        NOC.error(__("Failed to remove interface"));
+        NOC.error(t("msg-failed-to-remove-interface"));
       },
     });
   },

@@ -60,47 +60,47 @@ Ext.define("NOC.fm.event.Application", {
       stateful: true,
       stateId: "fm.event-grid",
       allowDeselect: true,
-      emptyText: __("No events"),
+      emptyText: t("label-no-events"),
       // * dispose (логическое)
       columns: [
         {
-          text: __("ID"),
+          text: t("header-id"),
           dataIndex: "id",
           width: 150,
         },
         {
-          text: __("Time"),
+          text: t("header-time"),
           dataIndex: "timestamp",
           width: 100,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Administrative Domain"),
+          text: t("header-administrative-domain-d113be"),
           dataIndex: "administrative_domain",
         },
         {
-          text: __("Target"),
+          text: t("header-target"),
           dataIndex: "target",
         },
         {
-          text: __("Class"),
+          text: t("header-class"),
           dataIndex: "event_class",
         },
         {
-          text: __("Message"),
+          text: t("btn-message"),
           dataIndex: "message",
         },
         {
-          text: __("Source"),
+          text: t("header-source"),
           dataIndex: "source",
         },
         {
-          text: __("Severity"),
+          text: t("header-severity"),
           dataIndex: "severity",
           width: 50,
         },
         {
-          text: __("Dispose"),
+          text: t("header-dispose"),
           dataIndex: "dispose",
           renderer: NOC.render.Bool,
           width: 20,
@@ -150,9 +150,9 @@ Ext.define("NOC.fm.event.Application", {
           handler: "onRefresh",
         },
         {
-          text: __("Filtering List"),
+          text: t("btn-filtering-list"),
           glyph: NOC.glyph.filter,
-          tooltip: __("Show/Hide Filter"),
+          tooltip: t("help-show-hide-filter"),
           style: {
             pointerEvents: "all",
           },
@@ -230,7 +230,7 @@ Ext.define("NOC.fm.event.Application", {
         me.getController().expandInspector(null, record);
       },
       failure: function(){
-        NOC.error(__("Failed to load event ") + id);
+        NOC.error(t("msg-failed-to-load-event-value0", {value0: id}));
       },
     });
   },

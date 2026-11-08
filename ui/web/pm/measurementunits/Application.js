@@ -30,22 +30,22 @@ Ext.define("NOC.pm.measurementunits.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 100,
         },
         {
-          text: __("Base"),
+          text: t("header-base"),
           dataIndex: "base_unit",
           renderer: NOC.render.Lookup("base_unit"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -54,64 +54,64 @@ Ext.define("NOC.pm.measurementunits.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "base_unit",
           xtype: "pm.measurementunits.LookupField",
-          fieldLabel: __("Base Measurement Units"),
+          fieldLabel: t("label-base-measurement-units"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "label",
           xtype: "textfield",
-          fieldLabel: __("Label"),
+          fieldLabel: t("header-label"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "dashboard_label",
           xtype: "textfield",
-          fieldLabel: __("Dashboard Label"),
+          fieldLabel: t("label-dashboard-label"),
           uiStyle: "medium",
         },
         {
           name: "dashboard_sr_color",
           xtype: "colorfield",
-          fieldLabel: __("Dashboard Series Color"),
+          fieldLabel: t("label-dashboard-series-color"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "convert_from",
           xtype: "gridfield",
-          fieldLabel: __("Convert form for BaseUnit"),
+          fieldLabel: t("label-convert-form-for-baseunit"),
           allowBlank: true,
           columns: [
             {
-              text: __("Measurment Unit"),
+              text: t("header-measurment-unit"),
               dataIndex: "unit",
               width: 200,
               editor: {
@@ -120,7 +120,7 @@ Ext.define("NOC.pm.measurementunits.Application", {
               renderer: NOC.render.Lookup("unit"),
             },
             {
-              text: __("Expresseion"),
+              text: t("header-expresseion"),
               dataIndex: "expr",
               flex: 1,
               editor: "textfield",
@@ -130,17 +130,17 @@ Ext.define("NOC.pm.measurementunits.Application", {
         {
           name: "enum",
           xtype: "gridfield",
-          fieldLabel: __("Enumeration"),
+          fieldLabel: t("label-enumeration"),
           allowBlank: true,
           columns: [
             {
-              text: __("Key"),
+              text: t("header-key"),
               dataIndex: "key",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "numberfield",
@@ -150,9 +150,9 @@ Ext.define("NOC.pm.measurementunits.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

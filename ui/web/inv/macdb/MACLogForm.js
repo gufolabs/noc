@@ -19,7 +19,7 @@ Ext.define("NOC.inv.macdb.MACLogForm", {
 
     me.closeButton = Ext.create("Ext.button.Button", {
       itemId: "close",
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.onClose,
@@ -31,37 +31,37 @@ Ext.define("NOC.inv.macdb.MACLogForm", {
       layout: "fit",
       columns: [
         {
-          text: __("Timestamp"),
+          text: t("header-timestamp"),
           dataIndex: "timestamp",
           width: 160,
         },
         {
-          text: __("Mac"),
+          text: t("header-mac-2"),
           dataIndex: "mac",
           width: 110,
         },
         {
-          text: __("L2 Domain"),
+          text: t("header-l2-domain"),
           dataIndex: "l2_domain",
           flex: 1,
         },
         {
-          text: __("Vlan"),
+          text: t("header-vlan-6c174b"),
           dataIndex: "vlan",
           width: 40,
         },
         {
-          text: __("Managed Object"),
+          text: t("header-managed-object-62561c"),
           dataIndex: "managed_object_name",
           flex: 2,
         },
         {
-          text: __("Interface"),
+          text: t("header-interface"),
           dataIndex: "interface_name",
           flex: 1,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -96,14 +96,14 @@ Ext.define("NOC.inv.macdb.MACLogForm", {
         var r = Ext.decode(response.responseText);
         //me.store.clear();
         if(!r || !r.length){
-          NOC.info(__("No MAC history found"));
+          NOC.info(t("msg-no-mac-history-found"));
         } else{
           me.grid.setTitle(` MAC ${me.currentMAC} history`);
           me.store.loadData(r);
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get MAC history"));
+        NOC.error(t("msg-failed-to-get-mac-history"));
       },
     });
   },

@@ -87,7 +87,7 @@ Ext.define("NOC.core.tagfield.TreePickerController", {
   loadChildren: function(id){
     var me = this.getView();
     if(!me.hidden){
-      me.mask(__("loading ..."));
+      me.mask(t("msg-loading-2"));
     }
     me.treeStore.load({
       params: {

@@ -19,7 +19,7 @@ Ext.define("NOC.sa.monitor.JobLogPanel", {
   tools: [
     {
       type: "down",
-      tooltip: __("Collapse"),
+      tooltip: t("help-collapse"),
 
       callback: function(panel){
         panel.collapse();
@@ -39,7 +39,7 @@ Ext.define("NOC.sa.monitor.JobLogPanel", {
           panel.expand();
         },
         failure: function(){
-          NOC.error(__("Failed to get data"));
+          NOC.error(t("msg-failed-to-get-data"));
         },
       });
     }

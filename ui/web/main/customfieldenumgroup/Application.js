@@ -15,12 +15,12 @@ Ext.define("NOC.main.customfieldenumgroup.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Act"),
+      text: t("header-act"),
       dataIndex: "is_active",
       width: 30,
       renderer: NOC.render.Bool,
@@ -35,24 +35,24 @@ Ext.define("NOC.main.customfieldenumgroup.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "is_active",
       xtype: "checkboxfield",
-      boxLabel: __("Is Active"),
+      boxLabel: t("header-is-active"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
   ],
   filters: [{
-    title: __("Is Active?"),
+    title: t("app-title-is-active"),
     name: "is_active",
     ftype: "boolean",
   }],
@@ -61,14 +61,14 @@ Ext.define("NOC.main.customfieldenumgroup.Application", {
     model: "NOC.main.customfieldenumgroup.ValuesModel",
     columns: [
       {
-        text: __("Act"),
+        text: t("header-act"),
         dataIndex: "is_active",
         renderer: NOC.render.Bool,
         width: 30,
         editor: "checkbox",
       },
       {
-        text: __("Key"),
+        text: t("header-key"),
         dataIndex: "key",
         width: 150,
         editor: {
@@ -77,7 +77,7 @@ Ext.define("NOC.main.customfieldenumgroup.Application", {
         },
       },
       {
-        text: __("Value"),
+        text: t("header-value"),
         dataIndex: "value",
         flex: 1,
         editor: {

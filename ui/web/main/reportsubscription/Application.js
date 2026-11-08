@@ -20,24 +20,24 @@ Ext.define("NOC.main.reportsubscription.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("File Name"),
+          text: t("header-file-name"),
           dataIndex: "file_name",
           width: 100,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Report"),
+          text: t("msg-report"),
           dataIndex: "report",
           width: 250,
           renderer: NOC.render.Lookup("report"),
         },
         {
-          text: __("Notification Group"),
+          text: t("app-title-notificationgroup"),
           dataIndex: "notification_group",
           flex: 1,
           renderer: NOC.render.Lookup("notification_group"),
@@ -48,37 +48,37 @@ Ext.define("NOC.main.reportsubscription.Application", {
         {
           name: "file_name",
           xtype: "textfield",
-          fieldLabel: __("File Name"),
+          fieldLabel: t("header-file-name"),
           allowBlank: false,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Is Active"),
+          boxLabel: t("header-is-active"),
         },
         {
           name: "run_as",
           xtype: "aaa.user.LookupField",
-          fieldLabel: __("Run As"),
+          fieldLabel: t("label-run-as"),
           allowBlank: false,
         },
         {
           name: "report",
           xtype: "main.ref.report.LookupField",
-          fieldLabel: __("Report"),
+          fieldLabel: t("msg-report"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "subject",
           xtype: "textfield",
-          fieldLabel: __("Subject"),
+          fieldLabel: t("header-subject"),
           allowBlank: true,
         },
         {
           name: "notification_group",
           xtype: "main.notificationgroup.LookupField",
-          fieldLabel: __("Notification Group"),
+          fieldLabel: t("app-title-notificationgroup"),
           uiStyle: "medium",
           allowBlank: true,
         },

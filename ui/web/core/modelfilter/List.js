@@ -18,14 +18,14 @@ Ext.define("NOC.core.modelfilter.List", {
   initComponent: function(){
     var me = this;
     // me.checkValue = Ext.create("Ext.form.field.Checkbox", {
-    //     fieldLabel: __('Value'),
+    //     fieldLabel: t('Value'),
     //     listeners: {
     //         scope: me,
     //         change: me.onCheckClick
     //     }
     // });
     me.checkValue = Ext.create("Ext.form.ComboBox", {
-      fieldLabel: __("Value"),
+      fieldLabel: t("header-value"),
       labelAlign: "left",
       width: me.width,
       store: me.valuesStore,

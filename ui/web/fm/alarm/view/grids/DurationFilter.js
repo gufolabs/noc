@@ -28,7 +28,7 @@ Ext.define("NOC.fm.alarm.view.grids.DurationFilter", {
   items: [
     {
       xtype: "checkboxfield",
-      boxLabel: __("Switch Off"),
+      boxLabel: t("label-switch-off"),
       name: "on",
       listeners: {
         change: "onChangeValue",

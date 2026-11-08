@@ -16,12 +16,12 @@ Ext.define("NOC.sa.groupaccess.Application", {
   model: "NOC.sa.groupaccess.Model",
   columns: [
     {
-      text: __("Group"),
+      text: t("header-group"),
       dataIndex: "group",
       renderer: NOC.render.Lookup("group"),
     },
     {
-      text: __("Adm. Domain"),
+      text: t("header-adm-domain"),
       dataIndex: "administrative_domain",
       renderer: NOC.render.Lookup("administrative_domain"),
     },
@@ -30,25 +30,25 @@ Ext.define("NOC.sa.groupaccess.Application", {
     {
       name: "group",
       xtype: "aaa.group.LookupField",
-      fieldLabel: __("Group"),
+      fieldLabel: t("header-group"),
       allowBlank: false,
     },
     {
       name: "administrative_domain",
       xtype: "sa.administrativedomain.LookupField",
-      fieldLabel: __("Adm. Domain"),
+      fieldLabel: t("header-adm-domain"),
       allowBlank: true,
     },
   ],
   filters: [
     {
-      title: __("By Group"),
+      title: t("app-title-by-group"),
       name: "group",
       ftype: "lookup",
       lookup: "aaa.group",
     },
     {
-      title: __("By Administrative Domain"),
+      title: t("choice-by-administrative-domain"),
       name: "administrative_domain",
       ftype: "lookup",
       lookup: "sa.administrativedomain",

@@ -37,7 +37,7 @@ Ext.define("NOC.core.FormPanel", {
           }
         },
         failure: function(){
-          NOC.error(__("Failed add custom fields to form "));
+          NOC.error(t("msg-failed-add-custom-fields-to-form"));
         },
       });
     }
@@ -128,8 +128,8 @@ Ext.define("NOC.core.FormPanel", {
     // //
     // me.resetButton = Ext.create("Ext.button.Button", {
     //     itemId: "reset",
-    //     text: __("Reset"),
-    //     tooltip: __("Reset to default values"),
+    //     text: t("Reset"),
+    //     tooltip: t("Reset to default values"),
     //     glyph: NOC.glyph.undo,
     //     disabled: true,
     //     scope: me,
@@ -140,8 +140,8 @@ Ext.define("NOC.core.FormPanel", {
       items.push(
         Ext.create("Ext.button.Button", {
           itemId: "save",
-          text: __("Save"),
-          tooltip: __("Save changes"),
+          text: t("btn-save"),
+          tooltip: t("help-save-changes"),
           glyph: NOC.glyph.save,
           formBind: true,
           disabled: true,
@@ -156,8 +156,8 @@ Ext.define("NOC.core.FormPanel", {
       items.push(
         Ext.create("Ext.button.Button", {
           itemId: "close",
-          text: __("Close"),
-          tooltip: __("Close without saving"),
+          text: t("btn-close"),
+          tooltip: t("help-close-without-saving"),
           glyph: NOC.glyph.arrow_left,
           scope: me,
           handler: me.onClose,
@@ -171,8 +171,8 @@ Ext.define("NOC.core.FormPanel", {
       }
       me.deleteButton = Ext.create("Ext.button.Button", {
         itemId: "delete",
-        text: __("Delete"),
-        tooltip: __("Delete object"),
+        text: t("btn-delete"),
+        tooltip: t("help-delete-object"),
         glyph: NOC.glyph.times,
         disabled: true,
         hasAccess: NOC.hasPermission("delete"),
@@ -199,7 +199,7 @@ Ext.define("NOC.core.FormPanel", {
   onSave: function(){
     var me = this;
     if(!me.form.isValid()){
-      NOC.error(__("Error in data"));
+      NOC.error(t("msg-error-in-data"));
       return
     }
     var v = me.getFormData();

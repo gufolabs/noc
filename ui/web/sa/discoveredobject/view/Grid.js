@@ -29,61 +29,61 @@ Ext.define("NOC.sa.discoveredobject.view.Grid", {
   },
   columns: [
     {
-      text: __("ID"),
+      text: t("header-id"),
       dataIndex: "id",
       hidden: true,
     },
     {
-      text: __("Address"),
+      text: t("app-title-address"),
       dataIndex: "address",
     },
     {
-      text: __("Pool"),
+      text: t("label-pool"),
       dataIndex: "pool",
       width: 70,
       renderer: NOC.render.Lookup("pool"),
     },
     {
-      text: __("Is Dirty"),
+      text: t("header-is-dirty"),
       dataIndex: "is_dirty",
       width: 50,
       renderer: NOC.render.Bool,
       sortable: false,
     },
     {
-      text: __("Is Synced"),
+      text: t("header-is-synced"),
       dataIndex: "is_synced",
       width: 50,
       renderer: NOC.render.Bool,
       sortable: false,
     },
     {
-      text: __("Hostname"),
+      text: t("header-hostname"),
       dataIndex: "hostname",
       renderer: function(v){
         return v || "N/A";
       },
     },
     {
-      text: __("State"),
+      text: t("header-state"),
       dataIndex: "state",
       width: 200,
       renderer: NOC.render.Lookup("state"),
     },
     {
-      text: __("Rule"),
+      text: t("header-rule"),
       dataIndex: "rule",
       width: 100,
       renderer: NOC.render.Lookup("rule"),
     },
     {
-      text: __("Checks"),
+      text: t("header-checks"),
       dataIndex: "checks",
       width: 250,
       renderer: "checksRenderer",
     },
     {
-      text: __("Labels"),
+      text: t("header-labels"),
       dataIndex: "effective_labels",
       editor: "labelfield",
       width: 200,
@@ -99,7 +99,7 @@ Ext.define("NOC.sa.discoveredobject.view.Grid", {
       items: [
         { // @todo: Search
           glyph: NOC.glyph.refresh,
-          tooltip: __("Refresh data"),
+          tooltip: t("help-refresh-data"),
           style: {
             pointerEvents: "all",
           },
@@ -109,15 +109,15 @@ Ext.define("NOC.sa.discoveredobject.view.Grid", {
           xtype: "combo",
           editable: false,
           minWidth: 225,
-          emptyText: __("Group select"),
+          emptyText: t("label-group-select"),
           store: {
             fields: ["cmd", "title"],
             data: [
-              {"cmd": "SCREEN", "title": __("All devices on screen")},
-              {"cmd": "FIRST_50", "title": __("First 50")},
-              {"cmd": "FIRST_100", "title": __("First 100")},
-              {"cmd": "N_ROWS", "title": __("First N")},
-              {"cmd": "PERIOD", "title": __("Period start,qty")},
+              {"cmd": "SCREEN", "title": t("app-title-all-devices-on-screen")},
+              {"cmd": "FIRST_50", "title": t("app-title-first-50")},
+              {"cmd": "FIRST_100", "title": t("app-title-first-100")},
+              {"cmd": "N_ROWS", "title": t("app-title-first-n")},
+              {"cmd": "PERIOD", "title": t("app-title-period-start-qty")},
             ],
           },
           queryMode: "local",
@@ -128,9 +128,9 @@ Ext.define("NOC.sa.discoveredobject.view.Grid", {
           },
         },
         {
-          text: __("Unselect All"),
+          text: t("btn-unselect-all"),
           glyph: NOC.glyph.minus_circle,
-          tooltip: __("Unselect all devices"),
+          tooltip: t("help-unselect-all-devices"),
           style: {
             pointerEvents: "all",
           },
@@ -143,14 +143,14 @@ Ext.define("NOC.sa.discoveredobject.view.Grid", {
         {
           xtype: "box",
           bind: {
-            html: "<span class='x-btn-inner x-btn-inner-default-toolbar-small'>" + __("Selected : {total.selected}") + "</span",
+            html: "<span class='x-btn-inner x-btn-inner-default-toolbar-small'>" + t("msg-selected-total-selected") + "</span",
           },
         },
         "|",
         {
           xtype: "box",
           bind: {
-            html: "<span class='x-btn-inner x-btn-inner-default-toolbar-small'>" + __("Total : {total.all}") + "</span>",
+            html: "<span class='x-btn-inner x-btn-inner-default-toolbar-small'>" + t("msg-total-total-all") + "</span>",
           },
         }],
     },

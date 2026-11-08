@@ -8,7 +8,7 @@ console.debug("Defining NOC.fm.event.EventInspector");
 
 Ext.define("NOC.fm.event.EventInspector", {
   extend: "Ext.form.Panel",
-  title: __("Event Inspector"),
+  title: t("app-title-event-inspector"),
   scrollable: true,
   bodyPadding: 4,
   defaultListenerScope: true,
@@ -36,47 +36,47 @@ Ext.define("NOC.fm.event.EventInspector", {
   items: [
     {
       xtype: "displayfield",
-      fieldLabel: __("ID"),
+      fieldLabel: t("header-id"),
       bind: "{id}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Message"),
+      fieldLabel: t("btn-message"),
       bind: "{message}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("TrapID"),
+      fieldLabel: t("label-trapid"),
       bind: "{snmp_trap_oid}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       bind: "{labels}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Class"),
+      fieldLabel: t("header-class"),
       bind: "{event_class}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Remote"),
+      fieldLabel: t("label-remote"),
       bind: "{remote}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Target"),
+      fieldLabel: t("header-target"),
       bind: "{target}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Object"),
+      fieldLabel: t("header-object"),
       bind: "{object}",
     },
     {
       xtype: "displayfield",
-      fieldLabel: __("Segment"),
+      fieldLabel: t("header-segment-44986c"),
       bind: "{segment}",
     },
     {
@@ -119,15 +119,15 @@ Ext.define("NOC.fm.event.EventInspector", {
       dock: "top",
       items: [
         {xtype: "button", text: "JSON", flex: 1, handler: "onJSON"},
-        {xtype: "button", text: __("Reclassify"), flex: 1, handler: "onReclassify"},
+        {xtype: "button", text: t("btn-reclassify"), flex: 1, handler: "onReclassify"},
       ],
     },
     {
       xtype: "toolbar",
       dock: "top",
       items: [
-        {xtype: "button", text: __("Create Rule"), flex: 1, handler: "onCreateRule"},
-        {xtype: "button", text: __("Create Ignore"), flex: 1, handler: "onCreateIgnorePattern"},
+        {xtype: "button", text: t("btn-create-rule"), flex: 1, handler: "onCreateRule"},
+        {xtype: "button", text: t("btn-create-ignore"), flex: 1, handler: "onCreateIgnorePattern"},
       ],
     },
   ],
@@ -145,10 +145,10 @@ Ext.define("NOC.fm.event.EventInspector", {
       method: "POST",
       jsonData: record.data,
       success: function(){
-        NOC.info(__("Event reclassified"));
+        NOC.info(t("msg-event-reclassified"));
       },
       failure: function(){
-        NOC.error(__("Failed to reclassify"));
+        NOC.error(t("msg-failed-to-reclassify"));
       },
     });
   },
@@ -185,8 +185,8 @@ Ext.define("NOC.fm.event.EventInspector", {
       objectStr = Ext.Object.isEmpty(object) ? "-" : `${object.name || ""}(${object.address || ""})`,
       remoteStr = Ext.isEmpty(record.get("remote_system")) ? "-" : `${record.get("remote_system")}:${record.get("remote_id")}`,
       labels = Ext.isEmpty(record.get("labels")) ? "-" : NOC.render.LabelField(record.get("labels")),
-      varsData = [...this.makeVarsData(__("Raw vars"), record.get("raw_vars")),
-                  ...this.makeVarsData(__("Vars"), record.get("vars"))];
+      varsData = [...this.makeVarsData(t("msg-raw-vars"), record.get("raw_vars")),
+                  ...this.makeVarsData(t("header-vars"), record.get("vars"))];
    
     this.getViewModel().set("record", record);
     this.getViewModel().setData({

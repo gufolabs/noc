@@ -56,7 +56,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemePluginAbstract", {
   tbar: [
     {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       handler: "onReload",
     },
     "-",
@@ -73,7 +73,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemePluginAbstract", {
     },
     {
       xtype: "button",
-      tooltip: __("Download image as SVG"),
+      tooltip: t("help-download-image-as-svg"),
       glyph: NOC.glyph.download,
       handler: "onDownloadSVG",
     },
@@ -88,7 +88,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemePluginAbstract", {
       svgUrl = me.svgUrlTemplate ? me.svgUrlTemplate.apply({id: data.id, name: name, side: side})
       : data.views[side === "front" ? 0 : 1].src,
       maskComponent = me.up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("fetching", [name]);
+      messageId = maskComponent.show("fetching", {name: name});
     vm.set("currentId", data.id);
     //
     viewPanel.filenamePrefix = `${name}-${side}`;

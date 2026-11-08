@@ -28,12 +28,12 @@ Ext.define("NOC.main.handler.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Handler"),
+          text: t("app-title-handler"),
           dataIndex: "handler",
           flex: 1,
         },
@@ -43,14 +43,14 @@ Ext.define("NOC.main.handler.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "meduim",
         },
         {
           name: "handler",
           xtype: "textfield",
-          fieldLabel: __("Handler"),
+          fieldLabel: t("app-title-handler"),
           allowBlank: false,
           vtype: "handler",
           uiStyle: "large",
@@ -58,12 +58,12 @@ Ext.define("NOC.main.handler.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Config handler"),
+          title: t("app-title-config-handler"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -73,28 +73,28 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_config_filter",
               xtype: "checkbox",
-              boxLabel: __("Allow Config Filter"),
+              boxLabel: t("label-allow-config-filter"),
             },
             {
               name: "allow_config_validation",
               xtype: "checkbox",
-              boxLabel: __("Allow Config Validation"),
+              boxLabel: t("label-allow-config-validation"),
             },
             {
               name: "allow_config_diff",
               xtype: "checkbox",
-              boxLabel: __("Allow Config Diff"),
+              boxLabel: t("label-allow-config-diff"),
             },
             {
               name: "allow_config_diff_filter",
               xtype: "checkbox",
-              boxLabel: __("Allow Config Diff Filter"),
+              boxLabel: t("label-allow-config-diff-filter"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Managed Object Profile handlers"),
+          title: t("app-title-managed-object-profile-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -104,18 +104,18 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_housekeeping",
               xtype: "checkbox",
-              boxLabel: __("Allow housekeeping"),
+              boxLabel: t("label-allow-housekeeping"),
             },
             {
               name: "allow_resolver",
               xtype: "checkbox",
-              boxLabel: __("Allow Resolver"),
+              boxLabel: t("label-allow-resolver"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Threshold Profiles Handlers"),
+          title: t("app-title-threshold-profiles-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -125,23 +125,23 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_threshold",
               xtype: "checkbox",
-              boxLabel: __("Allow Threshold Alarm"),
+              boxLabel: t("label-allow-threshold-alarm"),
             },
             {
               name: "allow_threshold_handler",
               xtype: "checkbox",
-              boxLabel: __("Allow Threshold Handler"),
+              boxLabel: t("label-allow-threshold-handler"),
             },
             {
               name: "allow_threshold_value_handler",
               xtype: "checkbox",
-              boxLabel: __("Allow Threshold Value Handler"),
+              boxLabel: t("label-allow-threshold-value-handler"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Topology handlers"),
+          title: t("app-title-topology-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -151,13 +151,13 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_ifdesc",
               xtype: "checkbox",
-              boxLabel: __("Allow IfDesc"),
+              boxLabel: t("label-allow-ifdesc"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("DataStream handlers"),
+          title: t("app-title-datastream-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -167,13 +167,13 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_ds_filter",
               xtype: "checkbox",
-              boxLabel: __("Allow DataStream filter"),
+              boxLabel: t("label-allow-datastream-filter"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("MX handlers"),
+          title: t("app-title-mx-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -183,13 +183,13 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_mx_transmutation",
               xtype: "checkbox",
-              boxLabel: __("Allow MX Transmutation"),
+              boxLabel: t("label-allow-mx-transmutation"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Math rule"),
+          title: t("app-title-math-rule"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -199,13 +199,13 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_match_rule",
               xtype: "checkbox",
-              boxLabel: __("Allow Match Rule"),
+              boxLabel: t("label-allow-match-rule"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Diagnostic"),
+          title: t("header-diagnostic"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -215,13 +215,13 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_diagnostics_checks",
               xtype: "checkbox",
-              boxLabel: __("Allow Diagnostics Check"),
+              boxLabel: t("label-allow-diagnostics-check"),
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("FM Handlers"),
+          title: t("app-title-fm-handlers"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -231,36 +231,36 @@ Ext.define("NOC.main.handler.Application", {
             {
               name: "allow_event",
               xtype: "checkbox",
-              boxLabel: __("Allow Event"),
+              boxLabel: t("label-allow-event"),
             },
             {
               name: "allow_resource",
               xtype: "checkbox",
-              boxLabel: __("Allow Resource"),
+              boxLabel: t("label-allow-resource"),
             },
             {
               name: "allow_fm_alarm",
               xtype: "checkbox",
-              boxLabel: __("Allow Alarm"),
+              boxLabel: t("label-allow-alarm"),
             },
           ],
         },
         {
           name: "allow_reaction",
           xtype: "checkbox",
-          boxLabel: __("Allow Reaction"),
+          boxLabel: t("label-allow-reaction"),
         },
         {
           name: "allow_action",
           xtype: "checkbox",
-          boxLabel: __("Allow Action (Command)"),
+          boxLabel: t("label-allow-action-command"),
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

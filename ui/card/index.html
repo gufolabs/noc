@@ -21,16 +21,16 @@
     <div id="card-banner"><b>{{ brand }} |</b> {{ installation_name }}</div>
     <div class="container-fluid">
         <div class="input-group">
-            <input id="query" type="text" class="form-control" placeholder="{{ _(" Enter text to search") }}">
+            <input id="query" type="text" class="form-control" placeholder="{{ t("label-search-text") }}">
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="search()" disable>{{ _("Search") }}</button>
+                <button class="btn btn-default" type="button" onclick="search()" disable>{{ t("btn-search") }}</button>
             </span>
         </div>
         <div class="form-inline">
             <label class="radio">
-                <input type="radio" name="scope" value="managedobject" checked> {{ _("Managed Object") }}
-                <input type="radio" name="scope" value="phonerange"> {{ _("Phone Range") }}
-                <input type="radio" name="scope" value="phonenumber"> {{ _("Phone Number") }}
+                <input type="radio" name="scope" value="managedobject" checked> {{ t("label-managed-object") }}
+                <input type="radio" name="scope" value="phonerange"> {{ t("label-phone-range") }}
+                <input type="radio" name="scope" value="phonenumber"> {{ t("label-phone-number") }}
             </label>
         </div>
     </div>

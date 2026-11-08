@@ -12,7 +12,7 @@ Ext.define("NOC.main.desktop.LoginView", {
   autoShow: true,
   closable: false,
   resizable: false,
-  title: __("NOC Login"),
+  title: t("app-title-noc-login"),
   layout: "fit",
   modal: true,
   defaultListenerScope: true,
@@ -53,22 +53,22 @@ Ext.define("NOC.main.desktop.LoginView", {
     items: [
       {
         xtype: "displayfield",
-        value: __("Type username and password:"),
+        value: t("msg-type-username-and-password"),
         hideLabel: true,
       },
       {
         reference: "user",
         name: "user",
         bind: "{user}",
-        fieldLabel: __("User"),
-        blankText: __("User name cannot be empty"),
+        fieldLabel: t("header-user"),
+        blankText: t("label-user-name-cannot-be-empty"),
       },
       {
         reference: "password",
         name: "password",
         bind: "{password}",
-        fieldLabel: __("Password"),
-        blankText: __("Password cannot be empty"),
+        fieldLabel: t("label-password"),
+        blankText: t("label-password-cannot-be-empty"),
         inputType: "password",
       },
     ],
@@ -77,12 +77,12 @@ Ext.define("NOC.main.desktop.LoginView", {
         reference: "okButton",
         formBind: true,
         handler: "onLoginClick",
-        text: __("Login"),
+        text: t("header-login"),
         glyph: "xf090@FontAwesome",
       },
       {
         reference: "resetBtn",
-        text: __("Reset"),
+        text: t("btn-reset"),
         glyph: "xf00d@FontAwesome",
         handler: function(){
           this.up("form").reset();
@@ -94,7 +94,7 @@ Ext.define("NOC.main.desktop.LoginView", {
     var restartReason = localStorage.getItem("NOC.restartReason");
     if(!Ext.isEmpty(restartReason) || restartReason === "Autologout"){
       localStorage.removeItem("NOC.restartReason");
-      this.items.items[0].value = __("Session timeout.") + "<br/>" + this.items.items[0].value;
+      this.items.items[0].value = t("msg-session-timeout") + "<br/>" + this.items.items[0].value;
     }
     this.callParent();
   },
@@ -129,7 +129,7 @@ Ext.define("NOC.main.desktop.LoginView", {
     if(Ext.isDefined(responseData.message)){
       NOC.error(responseData.message);
     } else{
-      NOC.error(__("Failed to log in"));
+      NOC.error(t("msg-failed-to-log-in"));
     }
   },
   onLoginSuccess: function(failureFunc, response){

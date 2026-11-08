@@ -15,38 +15,38 @@ Ext.define("NOC.gis.area.Application", {
   model: "NOC.gis.area.Model",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
 
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       renderer: NOC.render.Bool,
       width: 50,
     },
 
     {
-      text: __("SW"),
+      text: t("header-sw"),
       dataIndex: "SW",
     },
 
     {
-      text: __("NE"),
+      text: t("header-ne"),
       dataIndex: "NE",
     },
 
     {
-      text: __("Min. Zoom"),
+      text: t("header-min-zoom"),
       dataIndex: "min_zoom",
     },
 
     {
-      text: __("Max. Zoom"),
+      text: t("header-max-zoom"),
       dataIndex: "max_zoom",
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -55,30 +55,30 @@ Ext.define("NOC.gis.area.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "is_active",
       xtype: "checkboxfield",
-      boxLabel: __("Active"),
+      boxLabel: t("header-active"),
     },
     {
       name: "SW",
       xtype: "geofield",
-      fieldLabel: __("SW"),
+      fieldLabel: t("header-sw"),
       allowBlank: false,
     },
     {
       name: "NE",
       xtype: "geofield",
-      fieldLabel: __("NE"),
+      fieldLabel: t("header-ne"),
       allowBlank: false,
     },
     {
       name: "min_zoom",
       xtype: "numberfield",
-      fieldLabel: __("Min. Zoom"),
+      fieldLabel: t("header-min-zoom"),
       allowBlank: false,
       defaultValue: 0,
       minValue: 0,
@@ -87,7 +87,7 @@ Ext.define("NOC.gis.area.Application", {
     {
       name: "max_zoom",
       xtype: "numberfield",
-      fieldLabel: __("Max. Zoom"),
+      fieldLabel: t("header-max-zoom"),
       allowBlank: false,
       defaultValue: 18,
       minValue: 0,
@@ -96,7 +96,7 @@ Ext.define("NOC.gis.area.Application", {
     {
       name: "description",
       xtype: "textfield",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
   ],

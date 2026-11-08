@@ -30,7 +30,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("VRF"),
+      fieldLabel: t("header-vrf"),
       width: "100%",
       columnWidth: 1,
       allowBlank: false,
@@ -41,7 +41,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "vrf_group",
       restUrl: "/ip/vrfgroup/lookup/",
-      fieldLabel: __("VRF Group"),
+      fieldLabel: t("label-vrf-group"),
       labelAlign: "left",
       margin: "5 0 0 0",
       allowBlank: true,
@@ -52,7 +52,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "vpn_id",
       xtype: "textfield",
-      fieldLabel: __("VPN ID"),
+      fieldLabel: t("header-vpn-id"),
       margin: "5 0 5 5",
       bind: {
         value: "{vrf.vpn_id}",
@@ -61,7 +61,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "profile",
       restUrl: "/vc/vpnprofile/lookup/",
-      fieldLabel: __("Profile"),
+      fieldLabel: t("header-profile"),
       labelAlign: "left",
       allowBlank: false,
       margin: "5 0 0 0",
@@ -72,7 +72,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "rd",
       xtype: "textfield",
-      fieldLabel: __("RD"),
+      fieldLabel: t("header-rd"),
       margin: "5 0 5 5",
       bind: {
         value: "{vrf.rd}",
@@ -81,7 +81,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "state",
       xtype: "statefield",
-      fieldLabel: __("State"),
+      fieldLabel: t("header-state"),
       allowBlank: false,
       restUrl: "/ip/vrf/",
       labelAlign: "left",
@@ -92,7 +92,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "afi_ipv4",
       xtype: "checkboxfield",
-      boxLabel: __("IPv4"),
+      boxLabel: t("choice-ipv4"),
       columnWidth: 0.25,
       margin: "0 0 5 5",
       bind: {
@@ -102,7 +102,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "afi_ipv6",
       xtype: "checkboxfield",
-      boxLabel: __("IPv6"),
+      boxLabel: t("choice-ipv6"),
       columnWidth: 0.25,
       bind: {
         value: "{vrf.afi_ipv6}",
@@ -111,7 +111,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       width: "100%",
       columnWidth: 1,
       allowBlank: true,
@@ -122,7 +122,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
     {
       name: "project",
       restUrl: "/project/project/lookup/",
-      fieldLabel: __("Project"),
+      fieldLabel: t("label-project"),
       columnWidth: 1,
       allowBlank: true,
       labelAlign: "left",
@@ -135,7 +135,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
       name: "tt",
       xtype: "textfield",
       regexText: /^\d*$/,
-      fieldLabel: __("TT"),
+      fieldLabel: t("label-tt"),
       margin: "5 0 5 0",
       bind: {
         value: "{vrf.tt}",
@@ -146,7 +146,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
       xtype: "datefield",
       startDay: 1,
       submitFormat: "Y-m-d",
-      fieldLabel: __("Allocated till"),
+      fieldLabel: t("label-allocated-till"),
       margin: "5 0 5 5",
       bind: {
         value: "{vrf.allocated_till}",
@@ -156,7 +156,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
       name: "labels",
       xtype: "labelfield",
       width: "100%",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       columnWidth: 1,
       allowBlank: true,
       query: {
@@ -170,15 +170,15 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRF", {
 
   tbar: [
     {
-      text: __("Close"),
-      tooltip: __("Close without saving"),
+      text: t("btn-close"),
+      tooltip: t("help-close-without-saving"),
       glyph: NOC.glyph.arrow_left,
       handler: "onClose",
     },
     "-",
     {
-      text: __("Save"),
-      tooltip: __("Save changes"),
+      text: t("btn-save"),
+      tooltip: t("help-save-changes"),
       glyph: NOC.glyph.save,
       // formBind: true,
       handler: "onSave",

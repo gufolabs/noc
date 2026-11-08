@@ -9,7 +9,7 @@ Ext.define("NOC.core.InlineGrid", {
   alias: "widget.inlinegrid",
   selType: "rowmodel",
   readOnly: false,
-  disabledTooltip: __("This grid is currently disabled. Fill all required fields and press 'Apply' button to enable it."),
+  disabledTooltip: t("help-this-grid-is-currently-disabled-fill-all-required-fields-and-pre"),
   defaultListenerScope: true,
   plugins: [
     {
@@ -24,17 +24,17 @@ Ext.define("NOC.core.InlineGrid", {
   ],
   tbar: [
     {
-      text: __("Add"),
+      text: t("btn-add"),
       glyph: NOC.glyph.plus,
       handler: "addHandler",
     },
     {
-      text: __("Append"),
+      text: t("btn-append"),
       glyph: NOC.glyph.sign_in,
       handler: "appendHandler",
     },
     {
-      text: __("Delete"),
+      text: t("btn-delete"),
       glyph: NOC.glyph.times,
       handler: "deleteHandler",
     },
@@ -91,7 +91,7 @@ Ext.define("NOC.core.InlineGrid", {
     if(store.getCount() > 0){
       sm.select(0);
     }
-    this.storeSync(store, __("deleted"), __("deleting"));
+    this.storeSync(store, t("msg-deleted"), t("msg-deleting"));
   },
   //
   validator: function(editor, context){
@@ -106,16 +106,16 @@ Ext.define("NOC.core.InlineGrid", {
   },
   //
   onEdit: function(editor, context){
-    this.storeSync(context.grid.getStore(), __("saved"), __("saving"));
+    this.storeSync(context.grid.getStore(), t("msg-saved"), t("msg-saving"));
   },
   //
   storeSync: function(store, success, failure){
     store.sync({
       success: function(){
-        NOC.info(__("Changes") + " " + success);
+        NOC.info(t("msg-changes-value0", {value0: success}));
       },
       failure: function(){
-        NOC.error(__("Error" + " " + failure + " " + __("changes")));
+        NOC.error(t("msg-error-saving-changes", {failure}));
       },
     });
   },

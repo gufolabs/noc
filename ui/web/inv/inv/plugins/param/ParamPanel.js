@@ -11,11 +11,14 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
   requires: [
     "NOC.inv.inv.plugins.param.ParamModel",
   ],
-  title: __("Param"),
+  title: t("btn-param"),
   closable: false,
   itemId: "paramPanel",
   border: false,
   saveBuffer: [],
+  getBufferSizeText: function(size){
+    return '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + t("msg-buffer-size", {size}) + "</span>";
+  },
   initComponent: function(){
     var me = this;
     me.groupingFeature = Ext.create("Ext.grid.feature.Grouping", {startCollapsed: false});
@@ -24,20 +27,19 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
       model: "NOC.inv.inv.plugins.param.ParamModel",
       groupField: "scope__label",
     });
-    me.bufferSizeText = '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + __("Buffer Size") + " : {0}</span>";
     me.dynamicField = Ext.create({
       xtype: "box",
-      html: Ext.String.format(me.bufferSizeText, 0),
+      html: me.getBufferSizeText(0),
     });
     Ext.apply(me, {
       tbar: [
         {
-          text: __("Save"),
+          text: t("btn-save"),
           glyph: NOC.glyph.save,
           handler: me.save,
         },
         {
-          text: __("Mass"),
+          text: t("btn-mass"),
           itemId: "saveModeBtn",
           enableToggle: true,
         },
@@ -45,17 +47,17 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
         me.dynamicField,
         "|",
         {
-          text: __("Reset"),
+          text: t("btn-reset"),
           glyph: NOC.glyph.eraser,
           handler: me.reset,
         },
         "->",
         {
-          text: __("Collapse All"),
+          text: t("btn-collapse-all"),
           handler: me.collapseAll,
         },
         {
-          text: __("Expand All"),
+          text: t("btn-expand-all"),
           handler: me.expandAll,
         },
       ],
@@ -98,14 +100,14 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
                   editable: false,
                   multiSelect: true,
                   queryMode: "remote",
-                  emptyText: __("Component Scope"),
+                  emptyText: t("label-component-scope"),
                   flex: 1,
                 },
                 {
 
                   xtype: "textfield",
                   name: "param__label",
-                  emptyText: __("Param name"),
+                  emptyText: t("label-param-name"),
                   flex: 1,
                 },
               ],
@@ -122,15 +124,15 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
           store: me.store,
           columns: [
             {
-              text: __("Param"),
+              text: t("btn-param"),
               dataIndex: "param__label",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope__label",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "textfield",
@@ -145,7 +147,7 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
               },
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
             },
           ],
@@ -280,7 +282,7 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
       }
       this.saveBuffer.push(buf);
     }
-    this.dynamicField.setHtml(Ext.String.format(this.bufferSizeText, this.saveBuffer.length));
+    this.dynamicField.setHtml(this.getBufferSizeText(this.saveBuffer.length));
   },
   preview: function(data){
     var me = this;
@@ -305,14 +307,14 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
         me.onReload();
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
     });
   },
   onReload: function(){
     var me = this;
     me.saveBuffer = [];
-    me.dynamicField.setHtml(Ext.String.format(me.bufferSizeText, me.saveBuffer.length));
+    me.dynamicField.setHtml(me.getBufferSizeText(me.saveBuffer.length));
     NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/param/",
       method: "GET",
@@ -321,7 +323,7 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

@@ -31,24 +31,24 @@ Ext.define("NOC.pm.agent.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 150,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "effective_labels",
           renderer: NOC.render.LabelField,
           width: 300,
@@ -59,41 +59,41 @@ Ext.define("NOC.pm.agent.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "extra",
           allowBlank: true,
         },
         {
           name: "profile",
           xtype: "pm.agentprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "zk_check_interval",
           xtype: "numberfield",
-          fieldLabel: __("Check Interval"),
+          fieldLabel: t("label-check-interval"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_agent": true,
@@ -102,29 +102,29 @@ Ext.define("NOC.pm.agent.Application", {
         {
           name: "bi_id",
           xtype: "displayfield",
-          fieldLabel: __("BI ID"),
+          fieldLabel: t("label-bi-id"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "key",
           xtype: "displayfield",
-          fieldLabel: __("Key"),
+          fieldLabel: t("header-key"),
           allowBlank: true,
         },
         {
           name: "serial",
           xtype: "textfield",
-          fieldLabel: __("Serial"),
+          fieldLabel: t("header-serial"),
           allowBlank: true,
         },
         {
           name: "ip",
           xtype: "gridfield",
-          fieldLabel: __("IP"),
+          fieldLabel: t("header-ip"),
           columns: [
             {
-              name: __("IP"),
+              name: t("header-ip"),
               dataIndex: "ip",
               editor: "textfield",
               flex: 1,
@@ -134,10 +134,10 @@ Ext.define("NOC.pm.agent.Application", {
         {
           name: "mac",
           xtype: "gridfield",
-          fieldLabel: __("MAC"),
+          fieldLabel: t("header-mac"),
           columns: [
             {
-              name: __("MAC"),
+              name: t("header-mac"),
               dataIndex: "mac",
               editor: "textfield",
               flex: 1,
@@ -147,9 +147,9 @@ Ext.define("NOC.pm.agent.Application", {
       ],
       formToolbar: [
         {
-          text: __("Config"),
+          text: t("btn-config"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show Config"),
+          tooltip: t("help-show-config"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

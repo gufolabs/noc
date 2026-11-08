@@ -16,7 +16,7 @@ Ext.define("NOC.fm.classificationrule.TestForm", {
     me.dataField = Ext.create("Ext.form.field.TextArea", {
       name: "data",
       labelAlign: "top",
-      fieldLabel: __("Event id or JSON code"),
+      fieldLabel: t("label-event-id-or-json-code"),
       width: 400,
       height: 200,
     });
@@ -28,13 +28,13 @@ Ext.define("NOC.fm.classificationrule.TestForm", {
           dock: "top",
           items: [
             {
-              text: __("Close"),
+              text: t("btn-close"),
               glyph: NOC.glyph.arrow_left,
               scope: me,
               handler: me.onClose,
             },
             {
-              text: __("Test"),
+              text: t("btn-test"),
               glyph: NOC.glyph.question_circle,
               scope: me,
               handler: me.onTest,
@@ -74,7 +74,7 @@ Ext.define("NOC.fm.classificationrule.TestForm", {
         me.onSuccess(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to test rule"))
+        NOC.error(t("msg-failed-to-test-rule"))
       },
     });
   },

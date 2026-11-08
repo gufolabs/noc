@@ -92,7 +92,7 @@ Ext.define("NOC.core.mixins.Ballon", {
         tooltip.showAt(pos);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

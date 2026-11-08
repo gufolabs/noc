@@ -26,19 +26,19 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       sourceStore: {
         fields: ["id", "label"],
         data: [
-          {id: "M", label: __("Manual")},
-          {id: "D", label: __("Discovery")},
-          {id: "E", label: __("ETL")},
-          {id: "C", label: __("Config")},
+          {id: "M", label: t("app-title-manual")},
+          {id: "D", label: t("header-discovery")},
+          {id: "E", label: t("btn-etl")},
+          {id: "C", label: t("btn-config")},
         ],
       },
       typeStore: {
         fields: ["id", "label"],
         data: [
-          {id: "network", label: __("Network")},
-          {id: "endpoint", label: __("Endpoint")},
-          {id: "asset", label: __("Asset")},
-          {id: "other", label: __("Other")},
+          {id: "network", label: t("header-network")},
+          {id: "endpoint", label: t("app-title-endpoint")},
+          {id: "asset", label: t("label-asset")},
+          {id: "other", label: t("header-other")},
         ],
       },
       gridStore: {
@@ -69,8 +69,8 @@ Ext.define("NOC.sa.service.InstancesPanel", {
   },
   tbar: [
     {
-      text: __("Close"),
-      tooltip: __("Close without saving"),
+      text: t("btn-close"),
+      tooltip: t("help-close-without-saving"),
       glyph: NOC.glyph.arrow_left,
       handler: "onClose",
     },
@@ -100,14 +100,14 @@ Ext.define("NOC.sa.service.InstancesPanel", {
 
     "|",
     {
-      text: __("Register"),
+      text: t("btn-register"),
       bind: {
         disabled: "{!enableRegisterBtn}",
       },
       handler: "open_registerForm",
     },
     {
-      text: __("Unregister"),
+      text: t("btn-unregister"),
       bind: {
         disabled: "{!canUnregister}",
       },
@@ -127,24 +127,24 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       },
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           editor: "textfield",
           renderer: "lockIcon",
         },
         {
-          text: __("RID"),
+          text: t("btn-rid"),
           editor: "textfield",
           dataIndex: "remote_id",
           maxWidth: 100,
         },
         {
-          text: __("FQDN"),
+          text: t("label-fqdn"),
           editor: "textfield",
           dataIndex: "fqdn",
         },
         {
-          text: __("Port"),
+          text: t("header-port"),
           editor: {
             xtype: "numberfield",
             minValue: 0,
@@ -154,7 +154,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           maxWidth: 50,
         },
         {
-          text: __("Sources"),
+          text: t("label-sources"),
           dataIndex: "sources",
           maxWidth: 120,
           renderer: function(value){
@@ -163,7 +163,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           },
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           maxWidth: 50,
           renderer: function(value){
@@ -172,7 +172,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           },
         },
         {
-          text: __("Managed Object"),
+          text: t("header-managed-object-62561c"),
           dataIndex: "managed_object",
           renderer: function(value, meta, record){
             var v = value ? record.get("managed_object__label") : "...",
@@ -183,7 +183,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           onClick: "openForm",
         },
         {
-          text: __("Addresses"),
+          text: t("header-addresses"),
           dataIndex: "addresses",
           renderer: function(value, meta, record){
             var app = this.up("[reference=saInstancesPanel]");
@@ -193,7 +193,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           onClick: "openForm",
         },
         {
-          text: __("Resources"),
+          text: t("btn-resources"),
           dataIndex: "resources",
           renderer: function(value, meta, record){
             var app = this.up("[reference=saInstancesPanel]");
@@ -279,7 +279,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     vm.set("showOnClose", showOnClose);
     vm.set("enableRegisterBtn", this.up().hasPermission("register_instance"));
     vm.set("enableUnregisterBtn", this.up().hasPermission("unregister_instance"));
-    // this.mask(__("Loading instances..."));
+    // this.mask(t("Loading instances..."));
     NOC.api.requestLegacy({
       url: "/sa/service/" + recordId + "/instance/",
       method: "GET",
@@ -287,11 +287,11 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       success: function(response){
         let data = Ext.decode(response.responseText);
         this.getViewModel().getStore("gridStore").loadData(data);
-        NOC.info(__("Instances loaded"));
+        NOC.info(t("msg-instances-loaded"));
       },
       failure: function(response){
         var text = Ext.decode(response.responseText); 
-        NOC.error(text.message || __("Failed to load instances"));
+        NOC.error(text.message || t("msg-failed-to-load-instances"));
       },
       // callback: function(){
       // this.unmask();
@@ -301,10 +301,10 @@ Ext.define("NOC.sa.service.InstancesPanel", {
   open_managed_objectForm: function(record){
     var name = record.get("managed_object__label"),
       isNewLink = Ext.isEmpty(record.get("managed_object")),
-      title = __("Update/Unlink") + " " + name,
+      title = t("msg-update-unlink-value0", {value0: name}),
       serviceId = this.getViewModel().get("recordId");
     if(isNewLink){
-      title = __("Link Managed Object");
+      title = t("msg-link-managed-object");
     }
     var form = Ext.create("NOC.sa.service.ManagedObjectLinkForm", {
       title: title,
@@ -317,7 +317,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
   open_addressesForm: function(record){
     var serviceId = this.getViewModel().get("recordId"), 
       form = Ext.create("NOC.sa.service.AddressesLinkForm", {
-        title: __("Bind Addresses"),
+        title: t("app-title-bind-addresses"),
         service_id: serviceId,
         instance_id: record.id,
         addresses: record.get("addresses"),
@@ -333,7 +333,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     var serviceId = this.getViewModel().get("recordId"),
       resourceUrl = "/sa/service/" + serviceId + "/resource/interface/",
       form = Ext.create("NOC.sa.service.ResourceLinkForm", {
-        title: __("Interface <Bind>"),
+        title: t("app-title-interface-bind"),
       }),
       managed_id = record.get("managed_object"),
       resources = record.get("resources"),
@@ -366,7 +366,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     form.instanceStore = this.getViewModel().getStore("gridStore");
   },
   lockIcon: function(value, meta, record){
-    var icon = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + __("Row read only") + "'></i>";
+    var icon = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + t("msg-row-read-only") + "'></i>";
     if(record.get("allow_update")){
       return value;
     }
@@ -408,17 +408,17 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       success: function(response){
         var result = Ext.decode(response.responseText);
         if(result.success){
-          NOC.info(__("Instance updated successfully"));
+          NOC.info(t("msg-instance-updated-successfully"));
           record.set("name", result.data.name);
           record.set("fqdn", result.data.fqdn);
           record.set("port", result.data.port);
         } else{
-          NOC.error(__("Error") + ": " + (result.message || __("Failed to update instance")));
+          NOC.error(t("msg-error-value0-5", {value0: result.message || t("msg-failed-to-update-instance")}));
         }
       },
       failure: function(response){
         var result = Ext.decode(response.responseText);
-        NOC.error(__("Error") + ": " + (result.errors || __("Server error occurred")));
+        NOC.error(t("msg-error-value0-6", {value0: result.errors || t("msg-server-error-occurred")}));
       },
     });
   },
@@ -458,7 +458,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       },
       failure: function(response){
         var text = Ext.decode(response.responseText);
-        NOC.error(text.message || __("Failed to load instances"));
+        NOC.error(text.message || t("msg-failed-to-load-instances"));
       },
       callback: function(){
         this.unmask();

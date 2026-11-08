@@ -35,21 +35,21 @@ Ext.define("NOC.inv.networksegment.Application", {
     );
 
     me.settingsButton = Ext.create("Ext.button.Button", {
-      text: __("Effective Settings"),
+      text: t("btn-effective-settings"),
       glyph: NOC.glyph.file,
       scope: me,
       handler: me.onEffectiveSettings,
     });
 
     me.showMapButton = Ext.create("Ext.button.Button", {
-      text: __("Show Map"),
+      text: t("btn-show-map"),
       glyph: NOC.glyph.globe,
       scope: me,
       handler: me.onShowMap,
     });
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -58,36 +58,36 @@ Ext.define("NOC.inv.networksegment.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Parent"),
+          text: t("header-parent"),
           dataIndex: "parent",
           width: 200,
           renderer: NOC.render.Lookup("parent"),
           hidden: true,
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           width: 100,
           renderer: NOC.render.LabelField,
         },
         {
-          text: __("Redundant"),
+          text: t("status-redundant"),
           dataIndex: "is_redundant",
           width: 50,
           renderer: NOC.render.Lookup("is_redundant"),
         },
         {
-          text: __("Obj."),
+          text: t("header-obj"),
           dataIndex: "count",
           width: 30,
           align: "right",
@@ -95,12 +95,12 @@ Ext.define("NOC.inv.networksegment.Application", {
           renderer: NOC.render.Badge,
         },
         {
-          text: __("Max Links"),
+          text: t("header-max-links"),
           dataIndex: "max_shown_downlinks",
           width: 70,
         },
         {
-          text: __("Max Objects"),
+          text: t("header-max-objects"),
           dataIndex: "max_objects",
           width: 70,
         },
@@ -110,14 +110,14 @@ Ext.define("NOC.inv.networksegment.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "large",
           allowBlank: false,
         },
         Ext.create("NOC.inv.networksegment.TreeCombo", {
           name: "parent",
-          emptyText: __("Select parent..."),
-          fieldLabel: __("Parent"),
+          emptyText: t("label-select-parent"),
+          fieldLabel: t("header-parent"),
           listWidth: 0.6,
           labelAlign: "left",
           labelWidth: 100,
@@ -127,20 +127,20 @@ Ext.define("NOC.inv.networksegment.Application", {
         {
           name: "profile",
           xtype: "inv.networksegmentprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "extra",
           allowBlank: true,
         },
         Ext.create("NOC.inv.networksegment.TreeCombo", {
           name: "sibling",
-          emptyText: __("Select sibling..."),
-          fieldLabel: __("Sibling"),
+          emptyText: t("label-select-sibling"),
+          fieldLabel: t("label-sibling"),
           listWidth: 0.6,
           labelAlign: "left",
           labelWidth: 100,
@@ -150,72 +150,72 @@ Ext.define("NOC.inv.networksegment.Application", {
         {
           name: "settings",
           xtype: "dictfield",
-          fieldLabel: __("Settings"),
+          fieldLabel: t("help-settings"),
         },
         {
           name: "max_shown_downlinks",
           xtype: "numberfield",
-          fieldLabel: __("Max Links"),
+          fieldLabel: t("header-max-links"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "max_objects",
           xtype: "numberfield",
-          fieldLabel: __("Max Objects"),
+          fieldLabel: t("header-max-objects"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "horizontal_transit_policy",
           xtype: "combobox",
-          fieldLabel: __("Horizontal Transit Policy"),
+          fieldLabel: t("label-horizontal-transit-policy"),
           allowBlank: false,
           store: [
-            ["E", __("Always Enable")],
-            ["C", __("Calculate")],
-            ["D", __("Disable")],
-            ["P", __("Profile")],
+            ["E", t("msg-always-enable")],
+            ["C", t("msg-calculate")],
+            ["D", t("status-disable")],
+            ["P", t("header-profile")],
           ],
           uiStyle: "medium",
         },
         {
           name: "enable_horizontal_transit",
           xtype: "checkbox",
-          boxLabel: __("Enable Horizontal Transit"),
+          boxLabel: t("label-enable-horizontal-transit"),
         },
         {
           name: "vlan_border",
           xtype: "checkbox",
-          boxLabel: __("VLAN Border"),
+          boxLabel: t("label-vlan-border"),
         },
         {
           name: "allocation_group",
           xtype: "inv.allocationgroup.LookupField",
-          fieldLabel: __("Allocation Group"),
+          fieldLabel: t("label-allocation-group"),
           allowBlank: true,
         },
         {
           name: "l2_domain",
           xtype: "vc.l2domain.LookupField",
-          fieldLabel: __("L2 Domain"),
+          fieldLabel: t("header-l2-domain"),
           allowBlank: true,
         },
         {
           name: "vlan_translation",
-          fieldLabel: __("VLAN Translation"),
+          fieldLabel: t("header-vlan-translation"),
           xtype: "gridfield",
           allowBlank: true,
           columns: [
             {
-              text: __("Filter"),
+              text: t("app-title-reportfilter"),
               dataIndex: "filter",
               width: 300,
               renderer: NOC.render.Lookup("filter"),
               editor: "vc.vlanfilter.LookupField",
             },
             {
-              text: __("Rule"),
+              text: t("header-rule"),
               dataIndex: "rule",
               width: 100,
               editor: {
@@ -227,7 +227,7 @@ Ext.define("NOC.inv.networksegment.Application", {
               },
             },
             {
-              text: __("Parent VLAN"),
+              text: t("header-parent-vlan"),
               dataIndex: "parent_vlan",
               flex: 1,
               editor: "vc.vlan.LookupField",
@@ -238,13 +238,13 @@ Ext.define("NOC.inv.networksegment.Application", {
         {
           name: "l2_mtu",
           xtype: "numberfield",
-          fieldLabel: __("L2 MTU"),
+          fieldLabel: t("label-l2-mtu"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -253,20 +253,20 @@ Ext.define("NOC.inv.networksegment.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -275,7 +275,7 @@ Ext.define("NOC.inv.networksegment.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_networksegment": true,
@@ -314,13 +314,13 @@ Ext.define("NOC.inv.networksegment.Application", {
   },
   filters: [
     {
-      title: __("By Segment"),
+      title: t("app-title-by-segment"),
       name: "parent",
       ftype: "tree",
       lookup: "inv.networksegment",
     },
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "inv.networksegmentprofile",
@@ -330,6 +330,6 @@ Ext.define("NOC.inv.networksegment.Application", {
     icon: NOC.glyph.level_down,
     color: NOC.colors.level_down,
     filter: "parent",
-    tooltip: __("Parent filter"),
+    tooltip: t("help-parent-filter"),
   },
 });

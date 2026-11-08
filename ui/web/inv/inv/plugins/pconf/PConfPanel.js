@@ -33,7 +33,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
     "NOC.inv.inv.plugins.pconf.PConfController",
     "NOC.inv.inv.plugins.pconf.PConfEditPlugin",
   ],
-  title: __("Config"),
+  title: t("btn-config"),
   closable: false,
   layout: "fit",
   viewModel: {
@@ -66,13 +66,13 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
   tbar: [
     {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       handler: "onReload",
     },
     {
       xtype: "textfield",
       itemId: "searchText",
-      emptyText: __("Search..."),
+      emptyText: t("btn-search"),
       width: 300,
       bind: {
         value: "{searchText}",
@@ -117,7 +117,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
       displayField: "label",
       valueField: "id",
       editable: false,
-      // fieldLabel: __("Mode"),
+      // fieldLabel: t("Mode"),
       // labelWidth: 130,
       // allowBlank: false,
       // labelAlign: "right",
@@ -140,7 +140,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
       displayField: "label",
       valueField: "id",
       editable: false,
-      // fieldLabel: __("Group"),
+      // fieldLabel: t("Group"),
       // labelAlign: "right",
       listeners: {
         select: "onReload",
@@ -148,7 +148,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
     },
     {
       glyph: NOC.glyph.wrench,
-      tooltip: __("Management console"),
+      tooltip: t("help-management-console"),
       handler: "onMgmtClick",
       bind: {
         disabled: "{!mgmt_url}",
@@ -163,22 +163,22 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
     //   },
     //   items: [
     //     {
-    //       tooltip: __("Unknown"),
+    //       tooltip: t("Unknown"),
     //       toggleGroup: "status",
     //       value: "u",
     //     },
     //     {
-    //       tooltip: __("Ok"),
+    //       tooltip: t("Ok"),
     //       toggleGroup: "status",
     //       value: "o",
     //     },
     //     {
-    //       tooltip: __("Warning"),
+    //       tooltip: t("Warning"),
     //       toggleGroup: "status",
     //       value: "w",
     //     },
     //     {
-    //       tooltip: __("Critical"),
+    //       tooltip: t("Critical"),
     //       toggleGroup: "status",
     //       value: "c",
     //     },
@@ -192,7 +192,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
     {
       xtype: "tbtext",
       bind: {
-        html: __("Total") + ": {totalCount}" + "{icon}",
+        html: t("header-total") + ": {totalCount}" + "{icon}",
       },
     },
   ],
@@ -203,7 +203,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
       autoScroll: true,
       stateful: true,
       stateId: "inv.inv-pconf-grid",
-      emptyText: __("No data"),
+      emptyText: t("label-no-data"),
       store: {
         model: "NOC.inv.inv.plugins.pconf.PConfModel",
       },
@@ -217,12 +217,12 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
       // ],
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 250,
         },
         {
-          text: __("Value"),
+          text: t("header-value"),
           dataIndex: "value",
           editor: {
             xtype: "textfield",
@@ -231,12 +231,12 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
           renderer: "valueRenderer",
         },
         // {
-        // text: __("Units"),
+        // text: t("Units"),
         // dataIndex: "units",
         // width: 50,
         // },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -265,8 +265,8 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfPanel", {
       groupStore = vm.getStore("groupStore"),
       tableStore = vm.getStore("tableStore"),
       // uniqueGroups = Ext.Array.map(Ext.Array.unique(Ext.Array.pluck(data.conf, "group")), function(obj){return {value: obj};}),
-      firstTable = Ext.isEmpty(data.tables) ? __("no tables") : data.tables[0].id,
-      firstGroup = Ext.isEmpty(data.groups) ? __("no groups") : data.groups[0].id;
+      firstTable = Ext.isEmpty(data.tables) ? t("msg-no-tables") : data.tables[0].id,
+      firstGroup = Ext.isEmpty(data.groups) ? t("msg-no-groups") : data.groups[0].id;
 
     if(Ext.isEmpty(gridStore) || Ext.isEmpty(groupStore) || Ext.isEmpty(tableStore)){
       return;

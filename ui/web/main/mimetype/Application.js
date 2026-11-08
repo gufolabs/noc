@@ -14,11 +14,11 @@ Ext.define("NOC.main.mimetype.Application", {
     
   columns: [
     {
-      text: __("Extension"),
+      text: t("header-extension"),
       dataIndex: "extension",
     },
     {
-      text: __("MIME Type"),
+      text: t("header-mime-type"),
       dataIndex: "mime_type",
       flex: 1,
     },
@@ -27,7 +27,7 @@ Ext.define("NOC.main.mimetype.Application", {
   fields: [
     {
       xtype: "textfield",
-      fieldLabel: __("Extension"),
+      fieldLabel: t("header-extension"),
       name: "extension",
       allowBlank: false,
       regex: /^\.[a-zA-Z0-9-]+$/,
@@ -35,7 +35,7 @@ Ext.define("NOC.main.mimetype.Application", {
 
     {
       xtype: "textfield",
-      fieldLabel: __("MIME Type"),
+      fieldLabel: t("header-mime-type"),
       name: "mime_type",
       allowBlank: false,
       width: 500,

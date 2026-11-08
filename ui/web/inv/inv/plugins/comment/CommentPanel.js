@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
   requires: [
     "NOC.core.MarkdownEditor",
   ],
-  title: __("Comment"),
+  title: t("header-comment"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -28,14 +28,14 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
     me.editField = Ext.create("NOC.core.MarkdownEditor");
     me.editField.hide();
     me.editButton = Ext.create("Ext.button.Button", {
-      text: __("Edit"),
+      text: t("app-title-edit"),
       glyph: NOC.glyph.edit,
       scope: me,
       handler: me.onEdit,
     });
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       handler: me.onSave,
@@ -78,7 +78,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
   //
   onSave: function(){
     var value = this.editField.getValue();
-    this.mask(__("Saving..."));
+    this.mask(t("msg-saving-2"));
     NOC.api.requestLegacy({
       url: "/inv/inv/" + this.currentId + "/plugin/comment/",
       method: "POST",
@@ -94,7 +94,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
         this.displayField.show();
       },
       failure: function(){
-        NOC.error(__("Failed to save data"));
+        NOC.error(t("msg-failed-to-save-data"));
       },
       callback: function(){
         this.unmask();

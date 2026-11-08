@@ -22,21 +22,21 @@ Ext.define("NOC.core.JSONPreview", {
     this.tbar = [
       {
         itemId: "close",
-        text: __("Close"),
+        text: t("btn-close"),
         glyph: NOC.glyph.arrow_left,
         handler: "onBack",
       },
       "-",
       {
         itemId: "save",
-        text: __("Save"),
+        text: t("btn-save"),
         glyph: NOC.glyph.save,
         disabled: this.saveDisabled,
         handler: "onSave",
       },
       "-",
       {
-        text: __("Share"),
+        text: t("btn-share"),
         glyph: NOC.glyph.share,
         disabled: this.shareDisabled,
         handler: "onShare",
@@ -48,8 +48,8 @@ Ext.define("NOC.core.JSONPreview", {
   },
   onShare: function(){
     Ext.Msg.show({
-      title: __("Share item?"),
-      msg: __("Would you like to share item and contribute to Open-Source project?"),
+      title: t("app-title-share-item"),
+      msg: t("msg-would-you-like-to-share-item-and-contribute-to-open-source-proje"),
       buttons: Ext.Msg.YESNO,
       modal: true,
       scope: this,
@@ -67,10 +67,10 @@ Ext.define("NOC.core.JSONPreview", {
       method: "POST",
       scope: this,
       success: function(){
-        NOC.info(__("JSON saved"));
+        NOC.info(t("msg-json-saved"));
       },
       failure: function(){
-        NOC.error(__("Failed to save JSON"))
+        NOC.error(t("msg-failed-to-save-json"))
       },
     });
   },

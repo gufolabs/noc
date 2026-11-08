@@ -13,17 +13,17 @@ const defaultColumns = [
     }],
   },
   {
-    text: __("S"),
+    text: t("header-s"),
     dataIndex: "oper_state",
     sortable: false,
     width: 30,
     renderer: function(value, metaData){
       var color = "grey";
       metaData.tdAttr = "data-qtip='<table style=\"font-size: 11px;\">" +
-                "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background-color: grey;\"></div></td><td>" + __("Unmanaged or ping is disabled") + "</td></tr>" +
-                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: red;\"></div></td><td>" + __("Ping fail") + "</td></tr>" +
-                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: yellow;\"></div></td><td>" + __("Device has alarm") + "</td></tr>" +
-                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: green;\"></div></td><td>" + __("Device is normal") + "</td></tr>" +
+                "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background-color: grey;\"></div></td><td>" + t("msg-unmanaged-or-ping-is-disabled") + "</td></tr>" +
+                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: red;\"></div></td><td>" + t("msg-ping-fail") + "</td></tr>" +
+                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: yellow;\"></div></td><td>" + t("msg-device-has-alarm") + "</td></tr>" +
+                "<tr><td><div class=\"noc-object-oper-state\" style=\"background-color: green;\"></div></td><td>" + t("msg-device-is-normal") + "</td></tr>" +
                 "</table>'";
       if(value === "failed"){
         color = "red";
@@ -36,78 +36,78 @@ const defaultColumns = [
     },
   },
   {
-    text: __("Name"),
+    text: t("header-name"),
     dataIndex: "name",
     width: 200,
   },
   {
-    text: __("Managed"),
+    text: t("header-managed"),
     dataIndex: "is_managed",
     width: 30,
     renderer: NOC.render.Bool,
   },
   {
-    text: __("State"),
+    text: t("header-state"),
     dataIndex: "state",
   },
   {
-    text: __("Address"),
+    text: t("app-title-address"),
     dataIndex: "address",
     width: 100,
   },
   {
-    text: __("Profile"),
+    text: t("header-profile"),
     dataIndex: "profile",
     width: 100,
   },
   {
-    text: __("Platform"),
+    text: t("app-title-platform"),
     dataIndex: "platform",
     flex: 1,
   },
   {
-    text: __("Version"),
+    text: t("header-version"),
     dataIndex: "version",
     flex: 1,
   },
   {
-    text: __("Obj. Profile"),
+    text: t("header-obj-profile"),
     dataIndex: "object_profile",
     flex: 1,
   },
   {
-    text: __("Adm. Domain"),
+    text: t("header-adm-domain"),
     dataIndex: "administrative_domain",
     flex: 1,
   },
   {
-    text: __("Auth Profile"),
+    text: t("app-title-authprofile"),
     dataIndex: "auth_profile",
     flex: 1,
   },
   {
-    text: __("VRF"),
+    text: t("header-vrf"),
     dataIndex: "vrf",
     flex: 1,
   },
   {
-    text: __("Pool"),
+    text: t("label-pool"),
     dataIndex: "pool",
     flex: 1,
   },
   {
-    text: __("Description"),
+    text: t("label-description"),
     dataIndex: "description",
     flex: 1,
   },
   {
-    text: __("FQDN"),
+    text: t("label-fqdn"),
     dataIndex: "fqdn",
     width: 200,
     hidden: true,
   },
   {
-    text: __("Interfaces"),
+    text: t("header-interfaces"),
     dataIndex: "interface_count",
     width: 50,
     sortable: false,
@@ -118,7 +118,7 @@ const defaultColumns = [
     },
   },
   {
-    text: __("Links"),
+    text: t("app-title-links"),
     dataIndex: "link_count",
     width: 50,
     sortable: true,
@@ -129,7 +129,7 @@ const defaultColumns = [
     },
   },
   {
-    text: __("Labels"),
+    text: t("header-labels"),
     dataIndex: "labels",
     renderer: NOC.render.LabelField,
     align: "right",
@@ -154,10 +154,10 @@ Ext.define("NOC.sa.managedobject.Application", {
     "NOC.sa.managedobject.form.View",
   ],
   stateMap: {
-    w: __("Waiting"),
-    r: __("Running"),
-    s: __("Success"),
-    f: __("Failed"),
+    w: t("msg-waiting"),
+    r: t("msg-running"),
+    s: t("msg-success"),
+    f: t("msg-failed"),
   },
   defaults: {
     xtype: "panel",
@@ -188,14 +188,14 @@ Ext.define("NOC.sa.managedobject.Application", {
               pageSize: 0,
               border: false,
               scrollable: true,
-              emptyText: __("Not Found"),
+              emptyText: t("label-not-found"),
               columns: [{
                 xtype: "glyphactioncolumn",
                 width: 50,
                 items: [
                   {
                     glyph: NOC.glyph.star,
-                    tooltip: __("Mark/Unmark"),
+                    tooltip: t("help-mark-unmark"),
                     getColor: function(cls, meta, r){
                       return r.get("fav_status") ? NOC.colors.starred : NOC.colors.unstarred;
                     },
@@ -203,7 +203,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                   },
                   {
                     glyph: NOC.glyph.edit,
-                    tooltip: __("Edit"),
+                    tooltip: t("app-title-edit"),
                     handler: "onEdit",
                   },
                 ],
@@ -228,7 +228,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                   items: [
                     { // @todo: Search
                       glyph: NOC.glyph.refresh,
-                      tooltip: __("Refresh data"),
+                      tooltip: t("help-refresh-data"),
                       style: {
                         pointerEvents: "all",
                       },
@@ -238,15 +238,15 @@ Ext.define("NOC.sa.managedobject.Application", {
                       xtype: "combo",
                       editable: false,
                       minWidth: 225,
-                      emptyText: __("Group select"),
+                      emptyText: t("label-group-select"),
                       store: {
                         fields: ["cmd", "title"],
                         data: [
-                          {"cmd": "SCREEN", "title": __("All devices on screen")},
-                          {"cmd": "FIRST_50", "title": __("First 50")},
-                          {"cmd": "FIRST_100", "title": __("First 100")},
-                          {"cmd": "N_ROWS", "title": __("First N")},
-                          {"cmd": "PERIOD", "title": __("Period start,qty")},
+                          {"cmd": "SCREEN", "title": t("app-title-all-devices-on-screen")},
+                          {"cmd": "FIRST_50", "title": t("app-title-first-50")},
+                          {"cmd": "FIRST_100", "title": t("app-title-first-100")},
+                          {"cmd": "N_ROWS", "title": t("app-title-first-n")},
+                          {"cmd": "PERIOD", "title": t("app-title-period-start-qty")},
                         ],
                       },
                       queryMode: "local",
@@ -257,9 +257,9 @@ Ext.define("NOC.sa.managedobject.Application", {
                       },
                     },
                     {
-                      text: __("Unselect All"),
+                      text: t("btn-unselect-all"),
                       glyph: NOC.glyph.minus_circle,
-                      tooltip: __("Unselect all devices"),
+                      tooltip: t("help-unselect-all-devices"),
                       style: {
                         pointerEvents: "all",
                       },
@@ -270,9 +270,9 @@ Ext.define("NOC.sa.managedobject.Application", {
                     },
                     "->",
                     {
-                      text: __("Add"),
+                      text: t("btn-add"),
                       glyph: NOC.glyph.cart_plus,
-                      tooltip: __("Move all selected devices to the basket"),
+                      tooltip: t("help-move-all-selected-devices-to-the-basket"),
                       style: {
                         pointerEvents: "all",
                       },
@@ -284,7 +284,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                     "|",
                     {
                       glyph: NOC.glyph.shopping_cart,
-                      tooltip: __("Show/Hide Basket"),
+                      tooltip: t("help-show-hide-basket-2"),
                       style: {
                         pointerEvents: "all",
                       },
@@ -300,7 +300,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                     "|",
                     {
                       glyph: NOC.glyph.trash_o,
-                      tooltip: __("Clean Basket"),
+                      tooltip: t("help-clean-basket"),
                       style: {
                         pointerEvents: "all",
                       },
@@ -316,14 +316,14 @@ Ext.define("NOC.sa.managedobject.Application", {
                     {
                       xtype: "box",
                       bind: {
-                        html: '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + __("Selected : {total.selection}") + "</span",
+                        html: '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + t("msg-selected-total-selection") + "</span",
                       },
                     },
                     "|",
                     {
                       xtype: "box",
                       bind: {
-                        html: '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + __("Total : {total.all}") + "</span>",
+                        html: '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + t("msg-total-total-all") + "</span>",
                       },
                     }],
                 },
@@ -348,7 +348,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               pageSize: 0,
               border: false,
               scrollable: true,
-              emptyText: __("nothing checked"),
+              emptyText: t("label-nothing-checked"),
               columns: [{
                 xtype: "glyphactioncolumn",
                 width: 25,
@@ -371,9 +371,9 @@ Ext.define("NOC.sa.managedobject.Application", {
               dockedItems: [{
                 tbar: {
                   items: [{
-                    text: __("Remove All"),
+                    text: t("btn-remove-all"),
                     glyph: NOC.glyph.minus_circle,
-                    tooltip: __("Remove all devices from right panel"),
+                    tooltip: t("help-remove-all-devices-from-right-panel"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -386,9 +386,9 @@ Ext.define("NOC.sa.managedobject.Application", {
                     handler: "onSelectedRemoveAll",
                   },
                           {
-                            text: __("Export"),
+                            text: t("btn-export"),
                             glyph: NOC.glyph.arrow_down,
-                            tooltip: __("Save all from basket"),
+                            tooltip: t("help-save-all-from-basket"),
                             handler: "onExportBasket",
 
                           },
@@ -399,17 +399,17 @@ Ext.define("NOC.sa.managedobject.Application", {
                             bind: {
                               html: '<span class="x-btn-button x-btn-button-default-toolbar-small x-btn-text x-btn-icon x-btn-icon-left x-btn-button-center">'
                                                 + '<span class="x-btn-icon-el x-btn-icon-el-default-toolbar-small x-btn-glyph" style="font-family:FontAwesome;">&#xf07a;</span>'
-                                                + '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + __("Total : {total.selected}") + "</span>"
+                                                + '<span class="x-btn-inner x-btn-inner-default-toolbar-small">' + t("msg-total-total-selected") + "</span>"
                                                 + "</span>",
                             },
                           }],
                 },
               }],
-              title: __("Basket"),
+              title: t("app-title-basket"),
               tools: [
                 {
                   type: "right",
-                  tooltip: __("Hide basket"),
+                  tooltip: t("help-hide-basket"),
                   callback: "toggleBasket",
                 },
               ],
@@ -442,7 +442,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                 xtype: "searchfield",
                 itemId: "__query", // name of http request query param
                 width: 400,
-                emptyText: __("Search ..."),
+                emptyText: t("label-search"),
                 triggers: {
                   clear: {
                     cls: "x-form-clear-trigger",
@@ -453,24 +453,24 @@ Ext.define("NOC.sa.managedobject.Application", {
                   specialkey: "onSearchFieldChange",
                 },
               }, "|", {
-                text: __("Filtering List"),
+                text: t("btn-filtering-list"),
                 glyph: NOC.glyph.filter,
-                tooltip: __("Show/Hide Filter"),
+                tooltip: t("help-show-hide-filter"),
                 style: {
                   pointerEvents: "all",
                 },
                 handler: "collapseFilter",
               }, {
                 xtype: "splitbutton",
-                text: __("Group Operation"),
-                tooltip: __("Select Action"),
+                text: t("btn-group-operation"),
+                tooltip: t("help-select-action"),
                 bind: {
                   disabled: "{!hasRecords}",
                 },
                 menu: {
                   items: [
                     {
-                      text: __("Group Edit"),
+                      text: t("nav-group-edit"),
                       glyph: NOC.glyph.edit,
                       bind: {
                         disabled: "{!hasUpdatePerm}",
@@ -478,33 +478,33 @@ Ext.define("NOC.sa.managedobject.Application", {
                       handler: "onGroupEdit",
                     },
                     {
-                      text: __("Run discovery now"),
+                      text: t("btn-run-discovery-now"),
                       glyph: NOC.glyph.play,
                       handler: "onRunDiscovery",
                     },
                     {
-                      text: __("Set managed"),
+                      text: t("btn-set-managed"),
                       glyph: NOC.glyph.check,
                       handler: "onSetManaged",
                     },
                     {
-                      text: __("Set unmanaged"),
+                      text: t("btn-set-unmanaged"),
                       glyph: NOC.glyph.times,
                       handler: "onSetUnmanaged",
                     },
                     {
-                      text: __("New Maintenance"),
+                      text: t("btn-new-maintenance"),
                       glyph: NOC.glyph.wrench,
                       handler: "onNewMaintenance",
                     },
                     {
-                      text: __("Add to Maintenance"),
+                      text: t("btn-add-to-maintenance-2"),
                       glyph: NOC.glyph.plus,
                       handler: "onAddToMaintenance",
                     },
                     {
                       itemId: "runCmdBtn",
-                      text: __("Run Commands"),
+                      text: t("app-title-runcommands"),
                       glyph: NOC.glyph.play,
                       bind: {
                         disabled: "{!hasRunCmdPerm}",
@@ -515,9 +515,9 @@ Ext.define("NOC.sa.managedobject.Application", {
                 },
               }, {
                 itemId: "createBtn",
-                text: __("Add"),
+                text: t("btn-add"),
                 glyph: NOC.glyph.plus,
-                tooltip: __("Add new record"),
+                tooltip: t("help-add-new-record"),
                 bind: {
                   disabled: "{!hasCreatePerm}",
                 },
@@ -576,7 +576,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                 {
                   xtype: "combo",
                   reference: "saManagedobjectMode",
-                  fieldLabel: __("Mode"),
+                  fieldLabel: t("label-mode"),
                   labelWidth: 50,
                   queryMode: "local",
                   displayField: "name",
@@ -584,9 +584,9 @@ Ext.define("NOC.sa.managedobject.Application", {
                   editable: false,
                   store: {
                     data: [
-                      {value: "commands", name: __("Run Commands")},
-                      {value: "snippet", name: __("Run Snippet")},
-                      {value: "action", name: __("Run Action")},
+                      {value: "commands", name: t("app-title-runcommands")},
+                      {value: "snippet", name: t("btn-run-snippet")},
+                      {value: "action", name: t("btn-run-action")},
                     ],
                   },
                   listeners: {
@@ -599,13 +599,13 @@ Ext.define("NOC.sa.managedobject.Application", {
                 {
                   xtype: "checkboxfield",
                   reference: "ignoreCliErrors",
-                  boxLabel: __("Ignore CLI errors"),
+                  boxLabel: t("label-ignore-cli-errors"),
                   checked: true,
                 },
                 {
                   xtype: "checkboxfield",
                   reference: "dryRun",
-                  boxLabel: __("Dry Run (not execute command)"),
+                  boxLabel: t("label-dry-run-not-execute-command"),
                   checked: false,
                 },
               ],
@@ -631,7 +631,7 @@ Ext.define("NOC.sa.managedobject.Application", {
                 items: [
                   {xtype: "component", flex: 1},
                   {
-                    xtype: "button", text: __("Run"),
+                    xtype: "button", text: t("btn-run"),
                     glyph: NOC.glyph.play,
                     disabled: true,
                     formBind: true,
@@ -648,7 +648,7 @@ Ext.define("NOC.sa.managedobject.Application", {
           items: [
             {
               glyph: NOC.glyph.arrow_left,
-              tooltip: __("Back"),
+              tooltip: t("help-back"),
               style: {
                 pointerEvents: "all",
               },
@@ -671,14 +671,14 @@ Ext.define("NOC.sa.managedobject.Application", {
           scrollable: true,
           bind: "{selectedStore}",
           columns: defaultColumns.concat({
-            text: __("Status"),
+            text: t("header-status"),
             dataIndex: "status",
             width: 70,
             renderer: NOC.render.Choices({
-              w: __("Waiting"),
-              r: __("Running"),
-              f: __("Failed"),
-              s: __("Success"),
+              w: t("msg-waiting"),
+              r: t("msg-running"),
+              f: t("msg-failed"),
+              s: t("msg-success"),
             }),
           }),
           selModel: {
@@ -703,28 +703,28 @@ Ext.define("NOC.sa.managedobject.Application", {
                   pressed: true,
                   value: "w",
                   bind: {
-                    text: "<span>" + __("Waiting") + '&nbsp;<span class="noc-badge noc-badge-waiting">{progressState.w}</span></span>',
+                    text: "<span>" + t("msg-waiting") + '&nbsp;<span class="noc-badge noc-badge-waiting">{progressState.w}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "r",
                   bind: {
-                    text: "<span>" + __("Running") + '&nbsp;<span class="noc-badge noc-badge-running">{progressState.r}</span></span>',
+                    text: "<span>" + t("msg-running") + '&nbsp;<span class="noc-badge noc-badge-running">{progressState.r}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "f",
                   bind: {
-                    text: "<span>" + __("Failed") + '&nbsp;<span class="noc-badge noc-badge-failed">{progressState.f}</span></span>',
+                    text: "<span>" + t("msg-failed") + '&nbsp;<span class="noc-badge noc-badge-failed">{progressState.f}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "s",
                   bind: {
-                    text: "<span>" + __("Success") + '&nbsp;<span class="noc-badge noc-badge-success">{progressState.s}</span></span>',
+                    text: "<span>" + t("msg-success") + '&nbsp;<span class="noc-badge noc-badge-success">{progressState.s}</span></span>',
                   },
                 },
               ],
@@ -758,7 +758,7 @@ Ext.define("NOC.sa.managedobject.Application", {
           items: [
             {
               glyph: NOC.glyph.arrow_left,
-              tooltip: __("Back"),
+              tooltip: t("help-back"),
               style: {
                 pointerEvents: "all",
               },
@@ -768,7 +768,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               },
             }, {
               glyph: NOC.glyph.print,
-              tooltip: __("Report"),
+              tooltip: t("msg-report"),
               style: {
                 pointerEvents: "all",
               },
@@ -795,7 +795,7 @@ Ext.define("NOC.sa.managedobject.Application", {
         items: [
           {
             glyph: NOC.glyph.arrow_left,
-            tooltip: __("Back"),
+            tooltip: t("help-back"),
             style: {
               pointerEvents: "all",
             },
@@ -803,7 +803,7 @@ Ext.define("NOC.sa.managedobject.Application", {
           },
           {
             glyph: NOC.glyph.download,
-            tooltip: __("Download results"),
+            tooltip: t("help-download-results"),
             style: {
               pointerEvents: "all",
             },

@@ -56,19 +56,19 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
               grid = this.lookup("sa-discoveredobject-grid");
 
             if(data.status){
-              grid.mask(__("Reloading..."));
+              grid.mask(t("msg-reloading"));
               grid.getStore().load({
                 callback: function(){
                   grid.unmask();
                 },
               });
-              NOC.info(button.text + __(" - Success"));
+              NOC.info(t("msg-value0-success", {value0: button.text}));
             } else{
-              NOC.error(button.text + __(" - Failed") + " : " + data.error);
+              NOC.error(t("msg-value0-failed-value1", {value0: button.text, value1: data.error}));
             }
           },
           failure: function(){
-            NOC.error(button.text + __(" - Failed"));
+            NOC.error(t("msg-value0-failed", {value0: button.text}));
           },
         });
       };
@@ -102,7 +102,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
         });
       },
       failure: function(){
-        NOC.error(button.text + __(" : Failed to get data for menu items"));
+        NOC.error(t("msg-value0-failed-to-get-data-for-menu-items", {value0: button.text}));
       },
     });
   },
@@ -114,7 +114,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
       modal: true,
       width: 400,
       reference: "scanFrm",
-      title: __("Manual Scan"),
+      title: t("app-title-manual-scan"),
       items: {
         xtype: "form",
         layout: "form",
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
             xtype: "textarea",
             name: "addresses",
             allowBlank: false,
-            emptyText: __("By IP, list (max. 2000)"),
+            emptyText: t("label-by-ip-list-max-2000-2"),
           },
           {
             xtype: "checkfield",
@@ -141,12 +141,12 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
             xtype: "textarea",
             name: "credentials",
             allowBlank: true,
-            emptyText: __("SNMP Credentials"),
+            emptyText: t("label-snmp-credentials"),
           },
         ],
         buttons: [
           {
-            text: __("Send"),
+            text: t("btn-send"),
             reference: "sendBtn",
             handler: function(button){
               var form = button.up("form").getForm();
@@ -171,23 +171,23 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
                   var data = Ext.decode(response.responseText);
 
                   if(data.status){
-                    NOC.info(__("Success"));
+                    NOC.info(t("msg-success"));
                     this.lookup("sa-discovered-sidebar").getController().reload();
                   } else{
-                    NOC.error(__("Failed") + " : " + data.error_description);
+                    NOC.error(t("msg-failed-value0", {value0: data.error_description}));
                   }
                 },
                 failure: function(response){
                   var data = Ext.decode(response.responseText);
 
-                  NOC.error(__("Manual Scan Failed") + " : " + data.error_description);
+                  NOC.error(t("msg-manual-scan-failed-value0", {value0: data.error_description}));
                 },
               });
               button.up("window").close();
             },
           },
           {
-            text: __("Cancel"),
+            text: t("btn-cancel"),
             handler: function(){
               this.up("window").close();
             },

@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.ObjectGroupInspector");
 
 Ext.define("NOC.inv.map.inspectors.ObjectGroupInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("ObjectGroup Inspector"),
+  title: t("app-title-objectgroup-inspector"),
   inspectorName: "objectgroup",
 
   tpl: [
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.map.inspectors.ObjectGroupInspector", {
     this.cardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.eye,
       scope: this,
-      tooltip: __("View card"),
+      tooltip: t("help-view-card"),
       handler: this.onMOCard,
       disabled: true,
     });
@@ -31,7 +31,7 @@ Ext.define("NOC.inv.map.inspectors.ObjectGroupInspector", {
     this.segmentButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.location_arrow,
       scope: this,
-      tooltip: __("Jump to Group"),
+      tooltip: t("help-jump-to-group"),
       handler: this.onJumpSegment,
       disabled: true,
     });

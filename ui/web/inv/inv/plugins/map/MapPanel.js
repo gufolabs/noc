@@ -12,7 +12,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     "NOC.core.MapLayersCreator",
     "NOC.core.ResourceLoader",
   ],
-  title: __("Map"),
+  title: t("btn-map"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -29,8 +29,8 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     data: {
       autoReload: true,
       autoReloadIcon: "xf021", // NOC.glyph.refresh
-      autoReloadText: __("Auto reload : ON"),
-      icon: `<i class='fa fa-circle' style='color:${NOC.colors.yes};width:16px;' data-qtip='${__("online")}'></i>`,
+      autoReloadText: t("label-auto-reload-on"),
+      icon: `<i class='fa fa-circle' style='color:${NOC.colors.yes};width:16px;' data-qtip='${t("msg-online")}'></i>`,
     },
   },
   // Zoom levels according to
@@ -68,14 +68,14 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     me.objectLayer = undefined;
     //
     me.centerButton = Ext.create("Ext.button.Button", {
-      tooltip: __("Center to object"),
+      tooltip: t("help-center-to-object"),
       glyph: NOC.glyph.location_arrow,
       scope: me,
       handler: me.centerToObject,
     });
     me.zoomLevelButton = Ext.create("Ext.button.Button", {
-      tooltip: __("Zoom to level"),
-      text: __("1:100 000"),
+      tooltip: t("help-zoom-to-level"),
+      text: t("btn-1-100-000"),
       menu: {
         items: me.zoomLevels.map(function(z, index){
           return {
@@ -89,7 +89,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     });
     //
     me.setPositionButton = Ext.create("Ext.button.Button", {
-      tooltip: __("Set position"),
+      tooltip: t("help-set-position"),
       glyph: NOC.glyph.map_marker,
       enableToggle: true,
       listeners: {
@@ -114,7 +114,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
           "-",
           me.setPositionButton,
           {
-            text: __("Reload"),
+            text: t("btn-reload"),
             iconAlign: "right",
             enableToggle: true,
             bind: {
@@ -153,7 +153,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       me.createMap(data);
     })
     .catch(() => {
-      NOC.error(__("Failed to load map resources"));
+      NOC.error(t("msg-failed-to-load-map-resources"));
     });
   },
   //
@@ -244,7 +244,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
           }
         },
         failure: function(){
-          NOC.error(__("Failed to get layer"));
+          NOC.error(t("msg-failed-to-get-layer"));
         },
       });
     }
@@ -275,7 +275,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
             resolve();
           },
           failure: function(error){
-            NOC.error(__("Failed to get layer"));
+            NOC.error(t("msg-failed-to-get-layer"));
             reject(error);
           },
         });
@@ -325,7 +325,20 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
         default_layer: NOC.settings.gis.default_layer,
         allowed_layers: NOC.settings.gis.base,
         yandex_supported: NOC.settings.gis.yandex_supported,
-        translator: __,
+        translator: function(s){
+          var keys = {
+            "Blank": "label-blank-map-layer",
+            "OpenStreetMap": "label-openstreetmap-map-layer",
+            "Google Roadmap": "label-google-roadmap-map-layer",
+            "Google Hybrid": "label-google-hybrid-map-layer",
+            "Google Satellite": "label-google-satellite-map-layer",
+            "Google Terrain": "label-google-terrain-map-layer",
+            "Yandex Roadmap": "label-yandex-roadmap-map-layer",
+            "Yandex Hybrid": "label-yandex-hybrid-map-layer",
+            "Yandex Satellite": "label-yandex-satellite-map-layer",
+          };
+          return keys[s] ? t(keys[s]) : s;
+        },
       }),
       mapDom = Ext.select("#" + mapDiv).elements[0];
     me.center = [data.y, data.x];
@@ -346,8 +359,8 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     me.map.on("click", Ext.bind(me.onSetPositionClick, me));
     //
     L.control.zoom({
-      zoomInTitle: __("Zoom in..."),
-      zoomOutTitle: __("Zoom out..."),
+      zoomInTitle: t("app-title-zoom-in"),
+      zoomOutTitle: t("app-title-zoom-out"),
     }).addTo(me.map);
     //
 
@@ -377,7 +390,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to change layer settings"));
+        NOC.error(t("msg-failed-to-change-layer-settings"));
       },
     });
 
@@ -389,7 +402,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     this.isUpdatingStatuses = true;
     let resources = this.getVisibleResources();
     
-    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
+    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", t("msg-loading-4")));
     
     NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
@@ -411,12 +424,12 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       },
       failure: function(){
         if(!this.destroyed){
-          NOC.error(__("Failed to update statuses"));
+          NOC.error(t("msg-failed-to-update-statuses"));
         }
       },
       callback: function(){
         if(!this.destroyed){
-          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
         }
         this.isUpdatingStatuses = false;
       },
@@ -468,7 +481,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       renderTo: me.mapDom,
       items: [
         {
-          text: __("Add"),
+          text: t("btn-add"),
           menu: addHandler(me.contextMenuData),
         },
       ],
@@ -550,7 +563,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
           }
         },
         failure: function(){
-          NOC.error(__("Failed to set position"));
+          NOC.error(t("msg-failed-to-set-position"));
         },
       });
     }
@@ -565,7 +578,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     this.autoReloadIcon(self.pressed);
     this.autoReloadText(self.pressed);
     if(this.getViewModel()){
-      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, __("online")));
+      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, t("msg-online")));
     }
     if(self.pressed){
       this.startPolling();
@@ -582,7 +595,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   },
   //
   autoReloadText: function(isReloading){
-    this.getViewModel().set("autoReloadText", __("Auto reload : ") + (isReloading ? __("ON") : __("OFF")));
+    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0-4", {value0: isReloading ? t("msg-on") : t("msg-off")}));
   },
   //
   pollingTask: function(){
@@ -598,9 +611,9 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     let icon;
     this.mapPanel.setDisabled(state);
     if(state){
-      icon = this.generateIcon(true, "stop-circle-o", "grey", __("suspend"));
+      icon = this.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend"));
     } else{
-      icon = this.generateIcon(true, "circle", NOC.colors.yes, __("online"));
+      icon = this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online"));
     }
     if(this.getViewModel()){
       this.getViewModel().set("icon", icon);

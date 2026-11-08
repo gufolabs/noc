@@ -30,22 +30,22 @@ Ext.define("NOC.inv.macblacklist.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("From"),
+          text: t("btn-from"),
           dataIndex: "from_mac",
           width: 150,
         },
         {
-          text: __("To"),
+          text: t("btn-to"),
           dataIndex: "to_mac",
           width: 150,
         },
         {
-          text: __("Duplicate"),
+          text: t("header-duplicate"),
           dataIndex: "is_duplicated",
           width: 50,
           renderer: NOC.render.Bool,
@@ -56,20 +56,20 @@ Ext.define("NOC.inv.macblacklist.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
@@ -82,14 +82,14 @@ Ext.define("NOC.inv.macblacklist.Application", {
             {
               name: "from_mac",
               xtype: "textfield",
-              fieldLabel: __("From"),
+              fieldLabel: t("btn-from"),
               uiStyle: "medium",
               allowBlank: false,
             },
             {
               name: "to_mac",
               xtype: "textfield",
-              fieldLabel: __("To"),
+              fieldLabel: t("btn-to"),
               uiStyle: "medium",
               allowBlank: false,
             },
@@ -97,7 +97,7 @@ Ext.define("NOC.inv.macblacklist.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Reason"),
+          title: t("header-reason"),
           defaults: {
             padding: 4,
           },
@@ -105,29 +105,29 @@ Ext.define("NOC.inv.macblacklist.Application", {
             {
               name: "is_duplicated",
               xtype: "checkbox",
-              boxLabel: __("Duplicated"),
+              boxLabel: t("label-duplicated"),
             },
             {
               name: "is_ignored",
               xtype: "checkbox",
-              boxLabel: __("Ignored"),
+              boxLabel: t("label-ignored"),
             },
           ],
         },
         {
           name: "affected",
           xtype: "gridfield",
-          fieldLabel: __("Affected"),
+          fieldLabel: t("label-affected"),
           columns: [
             {
-              text: __("Vendor"),
+              text: t("header-vendor"),
               dataIndex: "vendor",
               editor: "inv.vendor.LookupField",
               width: 200,
               renderer: NOC.render.Lookup("vendor"),
             },
             {
-              text: __("Platform"),
+              text: t("app-title-platform"),
               dataIndex: "platform",
               editor: "inv.platform.LookupField",
               width: 200,
@@ -138,9 +138,9 @@ Ext.define("NOC.inv.macblacklist.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

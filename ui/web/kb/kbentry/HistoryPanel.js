@@ -43,7 +43,7 @@ Ext.define("NOC.kb.kbentry.HistoryPanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    me.setTitle(record.get("subject") + " - " + __("history"));
+    me.setTitle(t("msg-value0-history", {value0: record.get("subject")}));
     NOC.api.requestLegacy({
       url: "/kb/kbentry/" + record.get("id") + "/history/",
       method: "GET",
@@ -53,7 +53,7 @@ Ext.define("NOC.kb.kbentry.HistoryPanel", {
         me.view.store.loadData(result.data);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

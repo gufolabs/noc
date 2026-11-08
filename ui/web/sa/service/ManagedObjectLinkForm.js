@@ -36,7 +36,7 @@ Ext.define("NOC.sa.service.ManagedObjectLinkForm", {
               value: this.instance_id,
             },
             {
-              fieldLabel: __("Managed Object"),
+              fieldLabel: t("header-managed-object-62561c"),
               labelAlign: "left",
               labelWidth: 150,
               name: "managed_id",
@@ -51,12 +51,12 @@ Ext.define("NOC.sa.service.ManagedObjectLinkForm", {
           ],
           buttons: [
             {
-              text: __("Bind"),
+              text: t("btn-bind"),
               formBind: true,
               handler: "buttonBindHandler",
             },
             {
-              text: __("Unbind"),
+              text: t("btn-unbind"),
               handler: "buttonResetHandler",
             },
           ],
@@ -92,10 +92,10 @@ Ext.define("NOC.sa.service.ManagedObjectLinkForm", {
           this.instanceRecord.set("managed_object", result.data.managed_object);
           this.instanceRecord.set("managed_object__label", result.data.managed_object__label);
           this.instanceRecord.commit();
-          NOC.info(__("Managed object") + " " + method + " " + __("successfully"));
+          NOC.info(t("msg-managed-object-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(__("Error") + " : " + result.message || __("Operation failed"));
+          NOC.error(t("msg-error-value0-7", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

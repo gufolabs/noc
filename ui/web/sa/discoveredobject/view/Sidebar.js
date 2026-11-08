@@ -17,7 +17,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
     "NOC.sa.discoveredobject.widget.Check",
     "NOC.sa.discoveredobject.widget.Source",
   ],
-  title: __("Filter"),
+  title: t("app-title-reportfilter"),
   reference: "sa-discoveredobject-filter",
   config: {
     value: {},
@@ -59,7 +59,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
           xtype: "core.combo",
           restUrl: "/wf/state/lookup/",
           name: "state",
-          fieldLabel: __("By State:"),
+          fieldLabel: t("label-by-state"),
           listeners: {
             select: "setFilter",
           },
@@ -71,7 +71,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
           xtype: "core.combo",
           restUrl: "/sa/objectdiscoveryrule/lookup/",
           name: "rule",
-          fieldLabel: __("By Rule:"),
+          fieldLabel: t("label-by-rule"),
           listeners: {
             select: "setFilter",
           },
@@ -79,7 +79,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
         {
           xtype: "labelfield",
           name: "effective_labels",
-          fieldLabel: __("By Labels:"),
+          fieldLabel: t("label-by-labels"),
           toBufferTrigger: false,
           filterProtected: false,
           query: {
@@ -93,9 +93,9 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
           xtype: "datefield",
           name: "last_update",
           startDay: 1,
-          fieldLabel: __("By Last Update:"),
+          fieldLabel: t("label-by-last-update"),
           format: "d.m.Y",
-          emptyText: __("dd.mm.yyyy"),
+          emptyText: t("label-dd-mm-yyyy"),
           listeners: {
             change: "setFilter",
           },
@@ -105,15 +105,15 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
           name: "source",
           items: [
             {
-              text: __("ETL"),
+              text: t("btn-etl"),
               value: "etl",
             },
             {
-              text: __("Discovery"),
+              text: t("header-discovery"),
               value: "scan",
             },
             {
-              text: __("Manual"),
+              text: t("app-title-manual"),
               value: "manual",
             },
           ],
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
         {
           xtype: "textarea",
           name: "addresses",
-          fieldLabel: __("By IP list (max. 2000):"),
+          fieldLabel: t("label-by-ip-list-max-2000"),
           listeners: {
             change: "setFilter",
           },
@@ -147,7 +147,7 @@ Ext.define("NOC.sa.discoveredobject.view.Sidebar", {
           xtype: "button",
           itemId: "clean-btn",
           minWidth: 50,
-          text: __("Clean All"),
+          text: t("btn-clean-all"),
           handler: "cleanAllFilters",
         },
       ],

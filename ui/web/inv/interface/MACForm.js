@@ -33,36 +33,36 @@ Ext.define("NOC.inv.interface.MACForm", {
           xtype: "grid",
           store: me.store,
           scrollable: "y",
-          emptyText: __("No MACs collected"),
+          emptyText: t("label-no-macs-collected"),
           viewConfig: {
             enableTextSelection: true,
           },
           tbar: [
             {
               scope: me,
-              text: __("Refresh"),
+              text: t("help-refresh"),
               glyph: NOC.glyph.refresh,
               handler: me.refresh,
             },
           ],
           columns: [
             {
-              text: __("Interface"),
+              text: t("header-interface"),
               dataIndex: "interfaces",
               flex: 1,
             },
             {
-              text: __("MAC"),
+              text: t("header-mac"),
               dataIndex: "mac",
               width: 130,
             },
             {
-              text: __("VLAN"),
+              text: t("app-title-vlan"),
               dataIndex: "vlan_id",
               width: 75,
             },
             {
-              text: __("type"),
+              text: t("btn-type"),
               dataIndex: "type",
               width: 55,
             },
@@ -87,7 +87,7 @@ Ext.define("NOC.inv.interface.MACForm", {
           },
         },
       ],
-      errorMsg: __("Failed to get MACs"),
+      errorMsg: t("msg-failed-to-get-macs"),
       cb: me.loadData,
     });
   },

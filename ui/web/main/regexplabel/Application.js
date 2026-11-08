@@ -16,12 +16,12 @@ Ext.define("NOC.main.regexplabel.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -30,37 +30,37 @@ Ext.define("NOC.main.regexplabel.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
     {
       name: "regexp",
       xtype: "textfield",
-      fieldLabel: __("REGEX"),
+      fieldLabel: t("header-regex"),
       allowBlank: false,
     },
     {
       name: "flag_multiline",
       xtype: "checkbox",
-      boxLabel: __("Multiline"),
+      boxLabel: t("header-multiline"),
       allowBlank: true,
     },
     {
       name: "flag_dotall",
       xtype: "checkbox",
-      boxLabel: __("DotALL"),
+      boxLabel: t("header-dotall"),
       allowBlank: true,
     },
     {
       name: "labels",
       xtype: "labelfield",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       allowBlank: true,
       query: {
         "enable_managedobject": true,
@@ -69,7 +69,7 @@ Ext.define("NOC.main.regexplabel.Application", {
     {
       xtype: "fieldset",
       layout: "vbox",
-      title: __("Enable"),
+      title: t("label-enable"),
       defaults: {
         padding: 4,
         labelAlign: "right",
@@ -78,7 +78,7 @@ Ext.define("NOC.main.regexplabel.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("ManagedObject"),
+          title: t("app-title-managedobject-2"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -87,24 +87,24 @@ Ext.define("NOC.main.regexplabel.Application", {
             {
               name: "enable_managedobject_name",
               xtype: "checkbox",
-              boxLabel: __("Managed Object Name"),
+              boxLabel: t("msg-managed-object-name"),
             },
             {
               name: "enable_managedobject_address",
               xtype: "checkbox",
-              boxLabel: __("Managed Object Address"),
+              boxLabel: t("msg-managed-object-address"),
             },
             {
               name: "enable_managedobject_description",
               xtype: "checkbox",
-              boxLabel: __("Managed Object Description"),
+              boxLabel: t("msg-managed-object-description"),
             },
           ],
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Interface"),
+          title: t("header-interface"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -113,19 +113,19 @@ Ext.define("NOC.main.regexplabel.Application", {
             {
               name: "enable_interface_name",
               xtype: "checkbox",
-              boxLabel: __("Interface Name"),
+              boxLabel: t("msg-interface-name"),
             },
             {
               name: "enable_interface_description",
               xtype: "checkbox",
-              boxLabel: __("Interface Description"),
+              boxLabel: t("msg-interface-description"),
             },
           ],
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Sensor"),
+          title: t("app-title-sensor"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -134,7 +134,7 @@ Ext.define("NOC.main.regexplabel.Application", {
             {
               name: "enable_sensor_local_id",
               xtype: "checkbox",
-              boxLabel: __("Sensor Local ID"),
+              boxLabel: t("msg-sensor-local-id"),
             },
           ],
         },

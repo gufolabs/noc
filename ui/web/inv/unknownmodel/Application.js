@@ -17,7 +17,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
   canAdd: false,
   actions: [
     {
-      title: __("Remove"),
+      title: t("btn-remove"),
       action: "remove",
       glyph: NOC.glyph.remove,
     },
@@ -27,7 +27,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
 
     me.generateBtn = Ext.create("Ext.button.Button", {
       xtype: "button",
-      text: __("Generate"),
+      text: t("btn-generate"),
       glyph: NOC.glyph.magic,
       disabled: true,
       height: 30,
@@ -39,27 +39,27 @@ Ext.define("NOC.inv.unknownmodel.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Object"),
+          text: t("header-object"),
           dataIndex: "managed_object",
           width: 100,
         },
         {
-          text: __("Platform"),
+          text: t("app-title-platform"),
           dataIndex: "platform",
           width: 100,
         },
         {
-          text: __("Vendor"),
+          text: t("header-vendor"),
           dataIndex: "vendor",
           width: 70,
         },
         {
-          text: __("Part No"),
+          text: t("header-part-no"),
           dataIndex: "part_no",
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -70,7 +70,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
         {
           name: "managed_object",
           xtype: "displayfield",
-          fieldLabel: __("Object"),
+          fieldLabel: t("header-object"),
           labelWidth: 200,
           allowBlank: true,
           uiStyle: "large",
@@ -78,7 +78,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
         {
           xtype: "inv.objectmodel.LookupField",
           name: "type",
-          fieldLabel: __("Use connections from"),
+          fieldLabel: t("label-use-connections-from"),
           labelWidth: 200,
           allowBlank: true,
           uiStyle: "large",
@@ -108,13 +108,13 @@ Ext.define("NOC.inv.unknownmodel.Application", {
           if(Object.hasOwn(result, "total") && result.total === 1){
             resolve(result.data[0]);
           } else if(Object.hasOwn(result, "total") && result.total === 0){
-            NOC.error(__("Vendor not found!"));
+            NOC.error(t("msg-vendor-not-found"));
           } else{
-            NOC.error(__("Too many vendors found!"));
+            NOC.error(t("msg-too-many-vendors-found"));
           }
         },
         failure: function(){
-          NOC.error(__("Failed to get vendor information"));
+          NOC.error(t("msg-failed-to-get-vendor-information"));
         },
       })
     }).then(function(vendor){
@@ -127,7 +127,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
           if(Object.hasOwn(result, "connections")){
             NOC.run(
               "NOC.inv.objectmodel.Application",
-              __("Create Model"),
+              t("msg-create-model"),
               {
                 cmd: {
                   cmd: "new",
@@ -146,11 +146,11 @@ Ext.define("NOC.inv.unknownmodel.Application", {
               },
             );
           } else{
-            NOC.error(__("No connection information"));
+            NOC.error(t("msg-no-connection-information"));
           }
         },
         failure: function(){
-          NOC.error(__("Failed to get connection information"));
+          NOC.error(t("msg-failed-to-get-connection-information"));
         },
       })
     });

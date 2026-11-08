@@ -23,7 +23,7 @@ Ext.define("NOC.fm.alarm.view.grids.FavoriteStatusGroup", {
     
   items: [ {
     xtype: "displayfield",
-    fieldLabel: __("Favorites"),
+    fieldLabel: t("app-title-favorites"),
     allowBlank: true,
     flex: 2,
   },{

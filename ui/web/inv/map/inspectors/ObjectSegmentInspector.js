@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.ObjectSegmentInspector");
 
 Ext.define("NOC.inv.map.inspectors.ObjectSegmentInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("ObjectSegment Inspector"),
+  title: t("app-title-objectsegment-inspector"),
   inspectorName: "objectsegment",
 
   tpl: [
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.map.inspectors.ObjectSegmentInspector", {
     this.cardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.eye,
       scope: this,
-      tooltip: __("View card"),
+      tooltip: t("help-view-card"),
       handler: this.onSegmentCard,
       disabled: true,
     });
@@ -31,7 +31,7 @@ Ext.define("NOC.inv.map.inspectors.ObjectSegmentInspector", {
     this.segmentButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.location_arrow,
       scope: this,
-      tooltip: __("Jump to Segment"),
+      tooltip: t("help-jump-to-segment"),
       handler: this.onJumpSegment,
       disabled: true,
     });

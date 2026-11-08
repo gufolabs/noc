@@ -103,7 +103,7 @@ export default tseslint.config(
         ...globals.browser,
         "Ext": "readonly",
         "NOC": "writable",
-        "__": "readonly",
+        "t": "readonly",
         "Viz": "readonly",
         "V": "readonly",
         "joint": "readonly",

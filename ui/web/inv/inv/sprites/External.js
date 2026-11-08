@@ -115,7 +115,7 @@ Ext.define("NOC.inv.inv.sprites.External", {
         fill: "#bdc3c7",
       });
       me.remoteNameTooltip = Ext.create("Ext.tip.ToolTip", {
-        html: __("Remote") + " : " + me.remoteName,
+        html: t("msg-remote-value0", {value0: me.remoteName}),
         hidden: true,
       });
     }

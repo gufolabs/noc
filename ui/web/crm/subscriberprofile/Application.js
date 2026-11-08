@@ -27,7 +27,7 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Glyph"),
+          text: t("app-title-glyph"),
           dataIndex: "glyph",
           width: 25,
           renderer: function(v){
@@ -40,18 +40,18 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
           },
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 150,
           renderer: NOC.render.Lookup("workflow"),
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           width: 150,
           render: NOC.render.LabelField,
@@ -62,40 +62,40 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "expand",
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
           name: "glyph",
           xtype: "main.glyph.LookupField",
-          fieldLabel: __("Icon"),
+          fieldLabel: t("label-icon"),
           allowBlank: true,
           uiStyle: "large",
         },
         {
           name: "display_order",
           xtype: "numberfield",
-          fieldLabel: __("Display Order"),
+          fieldLabel: t("label-display-order"),
           uiStyle: "small",
           minValue: 0,
           allowBlank: false,
@@ -103,13 +103,13 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
         {
           name: "show_in_summary",
           xtype: "checkbox",
-          boxLabel: __("Show in summary"),
+          boxLabel: t("label-show-in-summary"),
           allowBlank: true,
         },
         {
           name: "weight",
           xtype: "numberfield",
-          fieldLabel: __("Alarm weight"),
+          fieldLabel: t("label-alarm-weight"),
           allowBlank: true,
           uiStyle: "small",
         },
@@ -119,7 +119,7 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["crm.SubscriberProfile", "crl.Subscriber"],

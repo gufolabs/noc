@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.log.LogPanel", {
   requires: [
     "NOC.inv.inv.plugins.log.LogModel",
   ],
-  title: __("Log"),
+  title: t("header-log"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -35,33 +35,33 @@ Ext.define("NOC.inv.inv.plugins.log.LogPanel", {
           store: me.store,
           columns: [
             {
-              text: __("Time"),
+              text: t("header-time"),
               dataIndex: "ts",
               renderer: NOC.render.DateTime,
               width: 100,
             },
             {
-              text: __("User"),
+              text: t("header-user"),
               dataIndex: "user",
               width: 70,
             },
             {
-              text: __("System"),
+              text: t("btn-system"),
               dataIndex: "system",
               width: 70,
             },
             {
-              text: __("Operation"),
+              text: t("btn-operation"),
               dataIndex: "op",
               width: 70,
             },
             {
-              text: __("Object"),
+              text: t("header-object"),
               dataIndex: "managed_object",
               width: 100,
             },
             {
-              text: __("Message"),
+              text: t("btn-message"),
               dataIndex: "message",
               flex: 1,
             },
@@ -91,7 +91,7 @@ Ext.define("NOC.inv.inv.plugins.log.LogPanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

@@ -29,7 +29,7 @@ Ext.define("NOC.inv.technology.Application", {
     me.ITEM_JSON = me.registerItem(me.jsonPanel);
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -38,34 +38,34 @@ Ext.define("NOC.inv.technology.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Service Model"),
+          text: t("header-service-model"),
           dataIndex: "service_model",
           width: 150,
         },
         {
-          text: __("Client Model"),
+          text: t("header-client-model"),
           dataIndex: "client_model",
           width: 150,
         },
         {
-          text: __("Single Service"),
+          text: t("header-single-service"),
           dataIndex: "single_service",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Single Client"),
+          text: t("header-single-client"),
           dataIndex: "single_client",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Allow Children"),
+          text: t("header-allow-children"),
           dataIndex: "allow_children",
           width: 50,
           renderer: NOC.render.Bool,
@@ -75,56 +75,56 @@ Ext.define("NOC.inv.technology.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "service_model",
           xtype: "main.ref.modelid.LookupField",
-          fieldLabel: __("Service Model"),
+          fieldLabel: t("header-service-model"),
           allowBlank: true,
         },
         {
           name: "client_model",
           xtype: "main.ref.modelid.LookupField",
-          fieldLabel: __("Client Model"),
+          fieldLabel: t("header-client-model"),
           allowBlank: true,
         },
         {
           name: "single_service",
           xtype: "checkbox",
-          boxLabel: __("Single Service"),
+          boxLabel: t("header-single-service"),
         },
         {
           name: "single_client",
           xtype: "checkbox",
-          boxLabel: __("Single Client"),
+          boxLabel: t("header-single-client"),
         },
         {
           name: "allow_children",
           xtype: "checkbox",
-          boxLabel: __("Allow Children"),
+          boxLabel: t("header-allow-children"),
         },
       ],
       formToolbar: [
         me.cardButton,
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

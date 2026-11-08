@@ -30,20 +30,20 @@ Ext.define("NOC.fm.alarmrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
           align: "left",
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 100,
           align: "left",
         },
         {
-          text: __("Escalation Profile"),
+          text: t("app-title-escalationprofile"),
           dataIndex: "escalation_profile",
           width: 200,
           renderer: NOC.render.Lookup("escalation_profile"),
@@ -54,24 +54,24 @@ Ext.define("NOC.fm.alarmrule.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "large",
         },
         {
           xtype: "fieldset",
-          title: __("Severity Policy"),
+          title: t("app-title-severity-policy"),
           layout: "hbox",
           defaults: {
             labelAlign: "left",
@@ -81,13 +81,13 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "severity_policy",
               xtype: "combobox",
-              fieldLabel: __("Severity Policy"),
+              fieldLabel: t("app-title-severity-policy"),
               allowBlank: true,
               store: [
-                ["B", __("Class Based Policy")],
-                ["AB", __("Affected Based Severity Preferred")],
-                ["AL", __("Affected Limit")],
-                ["ST", __("By Tokens")],
+                ["B", t("msg-class-based-policy")],
+                ["AB", t("msg-affected-based-severity-preferred")],
+                ["AL", t("msg-affected-limit")],
+                ["ST", t("msg-by-tokens")],
               ],
               uiStyle: "medium",
               value: "AL",
@@ -95,14 +95,14 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "min_severity",
               xtype: "fm.alarmseverity.LookupField",
-              fieldLabel: __("Min./Set Severity"),
+              fieldLabel: t("label-min-set-severity"),
               uiStyle: "medium",
               allowBlank: true,
             },
             {
               name: "max_severity",
               xtype: "fm.alarmseverity.LookupField",
-              fieldLabel: __("Max./Set Severity"),
+              fieldLabel: t("label-max-set-severity"),
               uiStyle: "medium",
               allowBlank: true,
             },
@@ -110,7 +110,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("TTL Policy"),
+          title: t("app-title-ttl-policy"),
           layout: "hbox",
           defaults: {
             labelAlign: "left",
@@ -120,11 +120,11 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "ttl_policy",
               xtype: "combobox",
-              fieldLabel: __("TT Policy"),
+              fieldLabel: t("label-tt-policy"),
               store: [
-                ["D", __("Disable")],
-                ["C", __("After Create")],
-                ["U", __("After Update")],
+                ["D", t("status-disable")],
+                ["C", t("msg-after-create")],
+                ["U", t("msg-after-update")],
               ],
               value: "continue",
               uiStyle: "medium",
@@ -132,7 +132,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "clear_after_delay",
               xtype: "numberfield",
-              fieldLabel: __("Clear After (sec.)"),
+              fieldLabel: t("label-clear-after-sec"),
               allowBlank: true,
               min: 0,
               uiStyle: "small",
@@ -142,13 +142,13 @@ Ext.define("NOC.fm.alarmrule.Application", {
         {
           name: "escalation_profile",
           xtype: "fm.escalationprofile.LookupField",
-          fieldLabel: __("Escalation Profile"),
+          fieldLabel: t("app-title-escalationprofile"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Action"),
+          title: t("app-title-action"),
           layout: "hbox",
           defaults: {
             labelAlign: "left",
@@ -158,11 +158,11 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "rule_action",
               xtype: "combobox",
-              fieldLabel: __("Rule Action"),
+              fieldLabel: t("label-rule-action"),
               store: [
-                ["continue", __("Continue")],
-                ["drop", __("Drop Alarm")],
-                ["rewrite", __("Rewrite")],
+                ["continue", t("msg-continue")],
+                ["drop", t("msg-drop-alarm")],
+                ["rewrite", t("msg-rewrite")],
               ],
               value: "continue",
               uiStyle: "medium",
@@ -170,7 +170,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "rule_apply_delay",
               xtype: "numberfield",
-              fieldLabel: __("Apply After (sec.)"),
+              fieldLabel: t("label-apply-after-sec"),
               allowBlank: true,
               min: 0,
               uiStyle: "small",
@@ -178,7 +178,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "alarm_class",
               xtype: "fm.alarmclass.LookupField",
-              fieldLabel: __("Alarm Class"),
+              fieldLabel: t("app-title-alarmclass"),
               uiStyle: "large",
               allowBlank: true,
             },
@@ -187,10 +187,10 @@ Ext.define("NOC.fm.alarmrule.Application", {
         {
           name: "groups",
           xtype: "gridfield",
-          fieldLabel: __("Group Alarm"),
+          fieldLabel: t("label-group-alarm"),
           columns: [
             {
-              text: __("Minimum alarms"),
+              text: t("header-minimum-alarms"),
               dataIndex: "min_threshold",
               editor: {
                 xtype: "numberfield",
@@ -200,7 +200,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
               width: 50,
             },
             {
-              text: __("Maximum alarms"),
+              text: t("header-maximum-alarms"),
               dataIndex: "max_threshold",
               editor: {
                 xtype: "numberfield",
@@ -210,7 +210,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
               width: 50,
             },
             {
-              text: __("Window (sec.)"),
+              text: t("header-window-sec"),
               dataIndex: "window",
               editor: {
                 xtype: "numberfield",
@@ -220,27 +220,27 @@ Ext.define("NOC.fm.alarmrule.Application", {
               width: 50,
             },
             {
-              text: __("Reference Template"),
+              text: t("header-reference-template"),
               dataIndex: "reference_template",
               editor: "textfield",
               width: 250,
             },
             {
-              text: __("Alarm Class"),
+              text: t("app-title-alarmclass"),
               dataIndex: "alarm_class",
               editor: "fm.alarmclass.LookupField",
               renderer: NOC.render.Lookup("alarm_class"),
               width: 200,
             },
             {
-              text: __("Title Template"),
+              text: t("header-title-template"),
               dataIndex: "title_template",
               editor: "textfield",
               allowBlank: true,
               width: 200,
             },
             {
-              text: __("Labels"),
+              text: t("header-labels"),
               dataIndex: "labels",
               renderer: NOC.render.LabelField,
               allowBlank: true,
@@ -256,28 +256,28 @@ Ext.define("NOC.fm.alarmrule.Application", {
         {
           name: "actions",
           xtype: "gridfield",
-          fieldLabel: __("Actions"),
+          fieldLabel: t("nav-action"),
           columns: [
             {
-              text: __("When Do"),
+              text: t("header-when-do"),
               dataIndex: "when",
               width: 100,
               allowBlank: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["raise", __("On Alarm Raise")],
-                  ["update", __("On Update")],
-                  ["clear", __("On Alarm Clear")],
+                  ["raise", t("msg-on-alarm-raise")],
+                  ["update", t("msg-on-update")],
+                  ["clear", t("msg-on-alarm-clear")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "raise": __("On Alarm Raise"),
-                "clear": __("On Alarm Clear"),
+                "raise": t("msg-on-alarm-raise"),
+                "clear": t("msg-on-alarm-clear"),
               }),
             },
             {
-              text: __("Notification Group"),
+              text: t("app-title-notificationgroup"),
               dataIndex: "notification_group",
               editor: "main.notificationgroup.LookupField",
               width: 150,
@@ -285,7 +285,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
               renderer: NOC.render.Lookup("notification_group"),
             },
             {
-              text: __("Template"),
+              text: t("header-template"),
               dataIndex: "template",
               editor: "main.template.LookupField",
               width: 150,
@@ -293,7 +293,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
               renderer: NOC.render.Lookup("template"),
             },
             {
-              text: __("Object Action"),
+              text: t("header-object-action"),
               dataIndex: "object_action",
               editor: "sa.action.LookupField",
               width: 150,
@@ -301,14 +301,14 @@ Ext.define("NOC.fm.alarmrule.Application", {
               renderer: NOC.render.Lookup("object_action"),
             },
             {
-              text: __("Message"),
+              text: t("btn-message"),
               dataIndex: "message",
               editor: "textfield",
               allowBlank: true,
               width: 200,
             },
             {
-              text: __("Handler"),
+              text: t("app-title-handler"),
               dataIndex: "handler",
               editor: {
                 xtype: "main.handler.LookupField",
@@ -324,13 +324,13 @@ Ext.define("NOC.fm.alarmrule.Application", {
         {
           name: "match",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           rows: 5,
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -343,7 +343,7 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "exclude_labels",
               xtype: "labelfield",
-              fieldLabel: __("Exclude Match Labels"),
+              fieldLabel: t("label-exclude-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -356,14 +356,14 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "alarm_class",
               xtype: "fm.alarmclass.LookupField",
-              fieldLabel: __("Alarm Class"),
+              fieldLabel: t("app-title-alarmclass"),
               uiStyle: "large",
               allowBlank: true,
             },
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -371,20 +371,20 @@ Ext.define("NOC.fm.alarmrule.Application", {
             {
               name: "severity",
               xtype: "fm.alarmseverity.LookupField",
-              fieldLabel: __("Alarm Severity"),
+              fieldLabel: t("app-title-alarmseverity"),
               uiStyle: "medium",
               allowBlank: true,
             },
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "reference_rx",
               xtype: "textfield",
-              fieldLabel: __("Group Reference Regex"),
+              fieldLabel: t("label-group-reference-regex"),
               uiStyle: "large",
               allowBlank: true,
             },

@@ -35,18 +35,18 @@ Ext.define("NOC.fm.eventclass.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 250,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 30,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -59,14 +59,14 @@ Ext.define("NOC.fm.eventclass.Application", {
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: false,
               uiStyle: "large",
             },
             {
               name: "uuid",
               xtype: "displayfield",
-              fieldLabel: __("UUID"),
+              fieldLabel: t("label-uuid"),
             },
           ],
         },
@@ -81,58 +81,58 @@ Ext.define("NOC.fm.eventclass.Application", {
           },
           items: [
             {
-              title: __("Text"),
+              title: t("app-title-text"),
               items: [
                 {
                   name: "description",
                   xtype: "textarea",
-                  fieldLabel: __("Description"),
+                  fieldLabel: t("label-description"),
                   uiStyle: "extra",
                 },
                 {
                   name: "subject_template",
                   xtype: "textfield",
-                  fieldLabel: __("Subject Template"),
+                  fieldLabel: t("label-subject-template"),
                   uiStyle: "extra",
                   allowBlank: false,
                 },
                 {
                   name: "body_template",
                   xtype: "textarea",
-                  fieldLabel: __("Body Template"),
+                  fieldLabel: t("label-body-template"),
                   uiStyle: "extra",
                   allowBlank: false,
                 },
                 {
                   name: "symptoms",
                   xtype: "textarea",
-                  fieldLabel: __("Symptoms"),
+                  fieldLabel: t("header-symptoms"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
                 {
                   name: "probable_causes",
                   xtype: "textarea",
-                  fieldLabel: __("Probable Causes"),
+                  fieldLabel: t("header-probable-causes"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
                 {
                   name: "recommended_actions",
                   xtype: "textarea",
-                  fieldLabel: __("Recommended Actions"),
+                  fieldLabel: t("header-recommended-actions"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
               ],
             },
             {
-              title: __("Action"),
+              title: t("app-title-action"),
               items: [
                 {
                   name: "action",
                   xtype: "combobox",
-                  fieldLabel: __("Action"),
+                  fieldLabel: t("app-title-action"),
                   allowBlank: false,
                   store: me.actionStore,
                   queryMode: "local",
@@ -142,25 +142,25 @@ Ext.define("NOC.fm.eventclass.Application", {
                 {
                   name: "link_event",
                   xtype: "checkboxfield",
-                  boxLabel: __("Link Event"),
+                  boxLabel: t("label-link-event"),
                 },
               ],
             },
             {
-              title: __("Variables"),
+              title: t("app-title-variables"),
               items: [
                 {
                   name: "vars",
                   xtype: "gridfield",
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Type"),
+                      text: t("header-type"),
                       dataIndex: "type",
                       width: 100,
                       editor: {
@@ -175,21 +175,21 @@ Ext.define("NOC.fm.eventclass.Application", {
                       },
                     },
                     {
-                      text: __("Required"),
+                      text: t("header-required"),
                       dataIndex: "required",
                       width: 50,
                       editor: "checkboxfield",
                       renderer: NOC.render.Bool,
                     },
                     {
-                      text: __("Suppression"),
+                      text: t("btn-suppression"),
                       dataIndex: "match_suppress",
                       width: 50,
                       editor: "checkboxfield",
                       renderer: NOC.render.Bool,
                     },
                     {
-                      text: __("Description"),
+                      text: t("label-description"),
                       dataIndex: "description",
                       flex: 1,
                       editor: "textfield",
@@ -199,27 +199,27 @@ Ext.define("NOC.fm.eventclass.Application", {
               ],
             },
             {
-              title: __("Disposition"),
+              title: t("header-disposition"),
               items: [
                 {
                   name: "disposition",
                   xtype: "gridfield",
-                  fieldLabel: __("Disposition"),
+                  fieldLabel: t("header-disposition"),
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Condition"),
+                      text: t("label-condition"),
                       dataIndex: "condition",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Action"),
+                      text: t("app-title-action"),
                       dataIndex: "action",
                       width: 70,
                       editor: {
@@ -228,27 +228,27 @@ Ext.define("NOC.fm.eventclass.Application", {
                       },
                     },
                     {
-                      text: __("Alarm"),
+                      text: t("app-title-alarm"),
                       dataIndex: "alarm_class",
                       renderer: NOC.render.Lookup("alarm_class"),
                       width: 200,
                       editor: "fm.alarmclass.LookupField",
                     },
                     {
-                      text: __("Stop"),
+                      text: t("header-stop"),
                       dataIndex: "stop_disposition",
                       renderer: NOC.render.Bool,
                       width: 50,
                       editor: "checkbox",
                     },
                     {
-                      text: __("Managed Object"),
+                      text: t("header-managed-object-62561c"),
                       dataIndex: "managed_object",
                       editor: "textfield",
                       width: 100,
                     },
                     {
-                      text: __("Var.  Map."),
+                      text: t("btn-var-map"),
                       dataIndex: "var_mapping",
                       renderer: NOC.render.JSON,
                       editor: "jsonfield",
@@ -259,57 +259,57 @@ Ext.define("NOC.fm.eventclass.Application", {
               ],
             },
             {
-              title: __("Suppression"),
+              title: t("btn-suppression"),
               items: [
                 {
                   name: "deduplication_window",
                   xtype: "numberfield",
                   uiStyle: "small",
-                  fieldLabel: __("Deduplication Window"),
+                  fieldLabel: t("label-deduplication-window"),
                   allowBlank: false,
                 },
                 {
                   name: "suppression_window",
                   xtype: "numberfield",
                   uiStyle: "small",
-                  fieldLabel: __("Suppression Window"),
+                  fieldLabel: t("label-suppression-window"),
                   allowBlank: false,
                 },
                 {
                   name: "ttl",
                   xtype: "numberfield",
                   uiStyle: "small",
-                  fieldLabel: __("Event TTL"),
+                  fieldLabel: t("label-event-ttl"),
                   allowBlank: false,
                 },
               ],
             },
             {
-              title: __("Handlers"),
+              title: t("nav-handler"),
               items: [
                 {
                   xtype: "stringsfield",
                   name: "handlers",
-                  fieldLabel: __("Handlers"),
+                  fieldLabel: t("nav-handler"),
                 },
               ],
             },
             {
-              title: __("Plugins"),
+              title: t("app-title-plugins"),
               items: [
                 {
                   xtype: "gridfield",
                   name: "plugins",
-                  fieldLabel: __("Plugins"),
+                  fieldLabel: t("app-title-plugins"),
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       editor: "textfield",
                       width: 150,
                     },
                     {
-                      text: __("Config"),
+                      text: t("btn-config"),
                       dataIndex: "config",
                       editor: "jsonfield",
                       flex: 1,
@@ -324,9 +324,9 @@ Ext.define("NOC.fm.eventclass.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("View as JSON"),
+          tooltip: t("help-view-as-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -343,7 +343,7 @@ Ext.define("NOC.fm.eventclass.Application", {
   },
   filters: [
     {
-      title: __("By Link Event"),
+      title: t("app-title-by-link-event"),
       name: "link_event",
       ftype: "boolean",
     },

@@ -28,31 +28,31 @@ Ext.define("NOC.fm.classificationrule.Application", {
   treeFilter: "category",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 500,
     },
     {
-      text: __("Builtin"),
+      text: t("header-builtin"),
       dataIndex: "is_builtin",
       width: 50,
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Event Class"),
+      text: t("app-title-eventclass"),
       dataIndex: "event_class",
       flex: 1,
       renderer: NOC.render.Lookup("event_class"),
     },
     {
-      text: __("Pref"),
+      text: t("header-pref"),
       dataIndex: "preference",
       width: 50,
     },
   ],
   filters: [
     {
-      title: __("By Event Class"),
+      title: t("app-title-by-event-class"),
       name: "event_class",
       ftype: "lookup",
       lookup: "fm.eventclass",
@@ -86,24 +86,24 @@ Ext.define("NOC.fm.classificationrule.Application", {
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           xtype: "textarea",
           name: "description",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Match"),
+          title: t("app-title-match"),
           labelAlign: "right",
           defaults: {
             padding: 4,
@@ -113,7 +113,7 @@ Ext.define("NOC.fm.classificationrule.Application", {
             {
               xtype: "numberfield",
               name: "preference",
-              fieldLabel: __("Preference"),
+              fieldLabel: t("label-preference"),
               allowBlank: false,
               uiStyle: "small",
               defaultValue: 1000,
@@ -123,19 +123,19 @@ Ext.define("NOC.fm.classificationrule.Application", {
             {
               name: "sources",
               xtype: "tagfield",
-              fieldLabel: __("Sources"),
+              fieldLabel: t("label-sources"),
               allowBlank: false,
               store: [
-                ["syslog", __("SYSLOG")],
-                ["SNMP Trap", __("SNMP_TRAP")],
-                ["other", __("OTHER")],
+                ["syslog", t("msg-syslog")],
+                ["SNMP Trap", t("msg-snmp-trap")],
+                ["other", t("msg-other")],
               ],
               uiStyle: "medium",
             },
             {
               xtype: "fm.eventclass.LookupField",
               name: "event_class",
-              fieldLabel: __("Event Class"),
+              fieldLabel: t("app-title-eventclass"),
               allowBlank: false,
               uiStyle: "large",
               listeners: {
@@ -150,8 +150,8 @@ Ext.define("NOC.fm.classificationrule.Application", {
         {
           xtype: "core.tagfield",
           url: "/sa/profile/lookup/",
-          fieldLabel: __("Profiles"),
-          tooltip: __("SA Profiles, for match rules"),
+          fieldLabel: t("nav-profile"),
+          tooltip: t("help-sa-profiles-for-match-rules"),
           name: "profiles",
           uiStyle: "large",
           listeners: {
@@ -161,24 +161,24 @@ Ext.define("NOC.fm.classificationrule.Application", {
         {
           xtype: "textarea",
           name: "message_rx",
-          fieldLabel: __("Message Pattern"),
+          fieldLabel: t("label-message-pattern"),
           allowBlank: true,
         },
         {
           xtype: "gridfield",
           name: "patterns",
-          fieldLabel: __("Patterns"),
+          fieldLabel: t("label-patterns"),
           allowBlank: false,
           columns: [
             {
-              text: __("Key RE"),
+              text: t("header-key-re"),
               dataIndex: "key_re",
               flex: 1,
               editor: "textfield",
               renderer: NOC.render.htmlEncode,
             },
             {
-              text: __("Value RE"),
+              text: t("header-value-re"),
               dataIndex: "value_re",
               flex: 1,
               editor: "textfield",
@@ -189,24 +189,24 @@ Ext.define("NOC.fm.classificationrule.Application", {
         {
           xtype: "gridfield",
           name: "labels",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: false,
           columns: [
             {
-              text: __("Wildcard"),
+              text: t("header-wildcard"),
               dataIndex: "wildcard",
               width: 200,
               editor: "textfield",
             },
             {
               dataIndex: "is_required",
-              text: __("Required"),
+              text: t("header-required"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Set Label"),
+              text: t("header-set-label"),
               dataIndex: "set_label",
               width: 200,
               editor: {
@@ -215,7 +215,7 @@ Ext.define("NOC.fm.classificationrule.Application", {
               renderer: NOC.render.Lookup("set_label"),
             },
             {
-              text: __("Set Var"),
+              text: t("header-set-var"),
               dataIndex: "set_var",
               width: 100,
               editor: "textfield",
@@ -225,18 +225,18 @@ Ext.define("NOC.fm.classificationrule.Application", {
         {
           xtype: "gridfield",
           name: "vars",
-          fieldLabel: __("Vars"),
+          fieldLabel: t("header-vars"),
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 100,
               editor: "textfield",
               renderer: NOC.render.htmlEncode,
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "textfield",
@@ -248,25 +248,25 @@ Ext.define("NOC.fm.classificationrule.Application", {
           name: "test_cases",
           xtype: "listform",
           rows: 3,
-          fieldLabel: __("Test cases"),
+          fieldLabel: t("label-test-cases"),
           labelAlign: "top",
           items: [
             {
               xtype: "textfield",
               name: "message",
               width: 900,
-              fieldLabel: __("Message"),
+              fieldLabel: t("btn-message"),
             },
             {
               xtype: "stringlistfield",
               name: "input_labels",
               width: 400,
-              fieldLabel: __("In Labels"),
+              fieldLabel: t("label-in-labels"),
             },
             {
               xtype: "jsonfield",
               name: "raw_vars",
-              fieldLabel: __("Raw Vars"),
+              fieldLabel: t("label-raw-vars"),
               width: 500,
               editor: "jsonfield",
               renderer: NOC.render.JSON,
@@ -276,23 +276,23 @@ Ext.define("NOC.fm.classificationrule.Application", {
         // {
         //     xtype: "gridfield",
         //     name: "test_cases",
-        //     fieldLabel: __("Test cases"),
+        //     fieldLabel: t("Test cases"),
         //     allowBlank: true,
         //     columns: [
         //         {
-        //             text: __("Message"),
+        //             text: t("Message"),
         //             dataIndex: "message",
         //             width: 200,
         //             editor: "textfield",
         //         },
         //         {
-        //             text: __('Labels'),
+        //             text: t('Labels'),
         //             dataIndex: 'labels',
         //             width: 200,
         //             editor: 'stringlistfield'
         //         },
         //         {
-        //             text: __("Raw Vars"),
+        //             text: t("Raw Vars"),
         //             dataIndex: "raw_vars",
         //             flex: 1,
         //             editor: 'jsonfield',
@@ -303,17 +303,17 @@ Ext.define("NOC.fm.classificationrule.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
         },
         {
-          text: __("Test"),
+          text: t("btn-test"),
           glyph: NOC.glyph.question_circle,
-          tooltip: __("Test rule"),
+          tooltip: t("help-test-rule"),
           hasAccess: NOC.hasPermission("test"),
           scope: me,
           handler: me.onTest,
@@ -378,7 +378,7 @@ Ext.define("NOC.fm.classificationrule.Application", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to create rule from event"));
+        NOC.error(t("msg-failed-to-create-rule-from-event"));
       },
     });
   },

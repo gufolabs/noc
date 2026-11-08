@@ -21,18 +21,18 @@ Ext.define("NOC.main.glyph.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 100,
           renderer: (value) => `U+${value.toString(16).toUpperCase()}`,
         },
         {
-          text: __("Glyph"),
+          text: t("app-title-glyph"),
           dataIndex: "name",
           flex: 1,
           renderer: (value) => `<i class="gf ${value}"></i>`,
@@ -43,24 +43,24 @@ Ext.define("NOC.main.glyph.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code (HEX)"),
-          emptyText: __("Enter HEX number"),
+          fieldLabel: t("label-code-hex"),
+          emptyText: t("label-enter-hex-number"),
           allowBlank: false,
           regex: /^[0-9a-fA-F]+$/,
-          invalidText: __("Invalid HEX format"),
+          invalidText: t("msg-invalid-hex-format"),
           valueToRaw: function(value){
             return Ext.util.Format.hex(value);
           },
@@ -80,7 +80,7 @@ Ext.define("NOC.main.glyph.Application", {
         {
           itemId: "preview",
           xtype: "displayfield",
-          fieldLabel: __("Preview"),
+          fieldLabel: t("help-preview"),
           renderer: (value, field) => {
             if(value){
               let name = field.up().getForm().findField("name")?.getValue();

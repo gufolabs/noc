@@ -17,18 +17,18 @@ Ext.define("NOC.maintenance.maintenancetype.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Suppress"),
+          text: t("btn-suppress"),
           dataIndex: "suppress_alarms",
           width: 75,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -38,26 +38,26 @@ Ext.define("NOC.maintenance.maintenancetype.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "extra",
           allowBlank: true,
         },
         {
           name: "suppress_alarms",
           xtype: "checkbox",
-          boxLabel: __("Suppress Alarms"),
+          boxLabel: t("label-suppress-alarms-2"),
         },
         {
           name: "card_template",
           xtype: "textfield",
-          fieldLabel: __("Card Template"),
+          fieldLabel: t("label-card-template"),
           allowBlank: true,
         },
       ],

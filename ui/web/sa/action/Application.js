@@ -32,28 +32,28 @@ Ext.define("NOC.sa.action.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Label"),
+          text: t("header-label"),
           dataIndex: "Label",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Lvl"),
+          text: t("header-lvl"),
           dataIndex: "access_level",
           width: 50,
         },
@@ -62,7 +62,7 @@ Ext.define("NOC.sa.action.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
           regex: /^[a-zA-Z_][a-zA-Z_\-0-9]*$/,
@@ -70,25 +70,25 @@ Ext.define("NOC.sa.action.Application", {
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "label",
           xtype: "textfield",
-          fieldLabel: __("Label"),
+          fieldLabel: t("header-label"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "extra",
         },
         {
           name: "access_level",
           xtype: "numberfield",
-          fieldLabel: __("Access Level"),
+          fieldLabel: t("label-access-level"),
           value: 15,
           minValue: 0,
           maxValue: 15,
@@ -97,7 +97,7 @@ Ext.define("NOC.sa.action.Application", {
         {
           name: "handler",
           xtype: "main.handler.LookupField",
-          fieldLabel: __("Handler"),
+          fieldLabel: t("app-title-handler"),
           query: {
             allow_action: true,
           },
@@ -107,10 +107,10 @@ Ext.define("NOC.sa.action.Application", {
         {
           name: "params",
           xtype: "gridfield",
-          fieldLabel: __("Params"),
+          fieldLabel: t("label-params"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 150,
               editor: {
@@ -119,14 +119,14 @@ Ext.define("NOC.sa.action.Application", {
               },
             },
             {
-              text: __("Required"),
+              text: t("header-required"),
               dataIndex: "is_required",
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
               width: 100,
               editor: {
@@ -145,38 +145,38 @@ Ext.define("NOC.sa.action.Application", {
               },
             },
             {
-              text: __("Multi"),
+              text: t("header-multi"),
               dataIndex: "multi",
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Default"),
+              text: t("header-default"),
               dataIndex: "default",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               flex: 100,
               editor: "textfield",
             },
             {
-              text: __("Scope Command"),
+              text: t("header-scope-command"),
               dataIndex: "scope_command",
               flex: 200,
               editor: "textfield",
             },
             {
-              text: __("Scope Exit"),
+              text: t("header-scope-exit"),
               dataIndex: "scope_exit",
               flex: 100,
               editor: "textfield",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 100,
               editor: "textfield",
@@ -186,10 +186,10 @@ Ext.define("NOC.sa.action.Application", {
         {
           name: "action_set",
           xtype: "gridfield",
-          fieldLabel: __("Action Set"),
+          fieldLabel: t("label-action-set"),
           columns: [
             {
-              text: __("Action"),
+              text: t("app-title-action"),
               dataIndex: "action",
               width: 200,
               renderer: NOC.render.Lookup("action"),
@@ -199,27 +199,27 @@ Ext.define("NOC.sa.action.Application", {
               },
             },
             {
-              text: __("Execute"),
+              text: t("header-execute"),
               dataIndex: "execute",
               width: 150,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["S", __("Set")],
-                  ["D", __("Disable Scope")],
-                  ["E", __("Enable Scope")],
-                  ["R", __("Rollback")],
+                  ["S", t("btn-set")],
+                  ["D", t("btn-disable-scope")],
+                  ["E", t("btn-enable-scope")],
+                  ["R", t("msg-rollback")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "S": __("Set"),
-                "D": __("Disable Scope"),
-                "E": __("Enable Scope"),
-                "R": __("Rollback"),
+                "S": t("btn-set"),
+                "D": t("btn-disable-scope"),
+                "E": t("btn-enable-scope"),
+                "R": t("msg-rollback"),
               }),
             },
             {
-              text: __("Cancel"),
+              text: t("btn-cancel"),
               dataIndex: "cancel",
               editor: "checkbox",
               renderer: NOC.render.Bool,
@@ -228,22 +228,22 @@ Ext.define("NOC.sa.action.Application", {
               editor: "stringlistfield",
               dataIndex: "domain_scopes",
               width: 200,
-              text: __("Domain Scopes"),
+              text: t("header-domain-scopes"),
             },
             {
               editor: "stringlistfield",
               dataIndex: "params_ctx",
               width: 400,
-              text: __("Params Map"),
+              text: t("header-params-map"),
             },
           ],
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

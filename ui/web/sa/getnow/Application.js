@@ -47,16 +47,16 @@ Ext.define("NOC.sa.getnow.Application", {
       },
       tbar: [
         {
-          text: __("Get config NOW"),
-          tooltip: __("Get config NOW"),
+          text: t("btn-get-config-now"),
+          tooltip: t("btn-get-config-now"),
           bind: {
             disabled: "{!selectionGrid.selection}",
           },
           handler: "onGetConfig",
         },
         {
-          text: __("Stop Polling"),
-          tooltip: __("Stop Polling"),
+          text: t("btn-stop-polling"),
+          tooltip: t("btn-stop-polling"),
           bind: {
             disabled: "{!isStarted}",
           },

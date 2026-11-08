@@ -19,11 +19,11 @@ Ext.define("NOC.sa.managedobject.RepoPreview", {
       itemId: "menuBtn",
       menu: [
         {
-          text: __("Revision"),
+          text: t("header-revision"),
           handler: Ext.pass(me.menuBtnFn, "revision", me),
         },
         {
-          text: __("Object"),
+          text: t("header-object"),
           handler: Ext.pass(me.menuBtnFn, "object", me),
         },
       ],
@@ -77,7 +77,7 @@ Ext.define("NOC.sa.managedobject.RepoPreview", {
       case "object": {
         me.clearHideCombo(me.diffCombo);
         me.objectCombo.show();
-        me.menuBtn.setText(`${__("Compare With")} ${__("Object")}`);
+        me.menuBtn.setText(`${t("msg-compare-with")} ${t("header-object")}`);
         break;
       }
       case "revision": {
@@ -87,7 +87,7 @@ Ext.define("NOC.sa.managedobject.RepoPreview", {
           me.requestRevisions(id);
         }
         me.diffCombo.show();
-        me.menuBtn.setText(`${__("Compare With")} ${__("Revision")}`);
+        me.menuBtn.setText(`${t("msg-compare-with")} ${t("header-revision")}`);
         break;
       }
     }

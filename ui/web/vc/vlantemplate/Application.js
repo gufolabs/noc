@@ -37,20 +37,20 @@ Ext.define("NOC.vc.vlantemplate.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           store: [
             ["global", "Global"],
@@ -61,10 +61,10 @@ Ext.define("NOC.vc.vlantemplate.Application", {
         {
           name: "vlans",
           xtype: "gridfield",
-          fieldLabel: __("VLANs"),
+          fieldLabel: t("header-vlans"),
           columns: [
             {
-              text: __("VLANs"),
+              text: t("header-vlans"),
               dataIndex: "vlan",
               editor: "textfield",
               regex: /^\s*\d+\s*(-\d+\s*)?(,\s*\d+\s*(-\d+)?)*$/,
@@ -72,18 +72,18 @@ Ext.define("NOC.vc.vlantemplate.Application", {
             },
             {
               dataIndex: "name",
-              text: __("Name"),
+              text: t("header-name"),
               editor: "textfield",
               width: 150,
             },
             {
               dataIndex: "description",
-              text: __("Description"),
+              text: t("label-description"),
               editor: "textfield",
               width: 150,
             },
             {
-              text: __("VLAN Profile"),
+              text: t("app-title-vlanprofile"),
               dataIndex: "profile",
               width: 200,
               editor: {

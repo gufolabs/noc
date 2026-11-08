@@ -21,7 +21,7 @@ Ext.define("NOC.inv.firmware.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -37,24 +37,24 @@ Ext.define("NOC.inv.firmware.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 100,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("Vendor"),
+          text: t("header-vendor"),
           dataIndex: "vendor",
           width: 100,
           renderer: NOC.render.Lookup("vendor"),
         },
         {
-          text: __("Version"),
+          text: t("header-version"),
           dataIndex: "version",
           flex: 1,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 30,
           renderer: NOC.render.Bool,
@@ -66,36 +66,36 @@ Ext.define("NOC.inv.firmware.Application", {
         {
           name: "profile",
           xtype: "sa.profile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "vendor",
           xtype: "inv.vendor.LookupField",
-          fieldLabel: __("Vendor"),
+          fieldLabel: t("header-vendor"),
           allowBlank: false,
         },
         {
           name: "version",
           xtype: "textfield",
-          fieldLabel: __("Version"),
+          fieldLabel: t("header-version"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "download_url",
           xtype: "textfield",
-          fieldLabel: __("URL"),
+          fieldLabel: t("header-url"),
           allowBlank: true,
         },
       ],
@@ -103,9 +103,9 @@ Ext.define("NOC.inv.firmware.Application", {
       formToolbar: [
         me.cardButton,
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -114,13 +114,13 @@ Ext.define("NOC.inv.firmware.Application", {
 
       filters: [
         {
-          title: __("By Profile"),
+          title: t("choice-by-profile"),
           name: "profile",
           ftype: "lookup",
           lookup: "sa.profile",
         },
         {
-          title: __("By Vendor"),
+          title: t("app-title-by-vendor"),
           name: "vendor",
           ftype: "lookup",
           lookup: "inv.vendor",

@@ -29,7 +29,7 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMController", {
     var vm = this.getViewModel(),
       currentId = vm.get("currentId");
     if(Ext.isEmpty(currentId)) return;
-    vm.set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
+    vm.set("icon", this.generateIcon(true, "spinner", "grey", t("msg-loading-4")));
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/opm/data/",
       method: "GET",
@@ -43,11 +43,11 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMController", {
         if(data.status){
           this.drawDiagram(data.power, vm.get("band"));
         }
-        vm.set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+        vm.set("icon", this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
       },
       failure: function(){
-        vm.set("icon", this.generateIcon(true, "circle", NOC.colors.no, __("offline")));
-        NOC.error(__("Failed to load data"));
+        vm.set("icon", this.generateIcon(true, "circle", NOC.colors.no, t("msg-offline")));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

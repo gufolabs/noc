@@ -29,7 +29,7 @@ Ext.define("NOC.phone.phonerangeprofile.Application", {
           width: 100,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 150,
           renderer: NOC.render.Lookup("workflow"),
@@ -45,32 +45,32 @@ Ext.define("NOC.phone.phonerangeprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "default_number_profile",
           xtype: "phone.phonenumberprofile.LookupField",
-          fieldLabel: __("Default Number Profile"),
+          fieldLabel: t("label-default-number-profile"),
           allowBlank: false,
         },
         // {
         //     name: "cooldown",
         //     xtype: "numberfield",
-        //     fieldLabel: __("Cooldown"),
+        //     fieldLabel: t("Cooldown"),
         //     uiStyle: "small",
         //     minValue: 0,
         //     maxValue: 9999,
@@ -79,7 +79,7 @@ Ext.define("NOC.phone.phonerangeprofile.Application", {
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
       ],
@@ -88,7 +88,7 @@ Ext.define("NOC.phone.phonerangeprofile.Application", {
   },
   filters: [
     {
-      title: __("By Workflow"),
+      title: t("app-title-by-workflow"),
       name: "workflow",
       ftype: "lookup",
       lookup: "wf.workflow",

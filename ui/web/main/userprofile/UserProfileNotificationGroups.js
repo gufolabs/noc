@@ -36,14 +36,14 @@ Ext.define("NOC.main.userprofile.UserProfileNotificationGroups", {
             if(result.success){
               Ext.Object.each(result.data, function(key, value){record.set(key,value)});
               record.commit();
-              NOC.info(__("Changes saved successfully"));
+              NOC.info(t("msg-changes-saved-successfully"));
             } else{
-              NOC.error(result.message || __("Failed to save changes"));
+              NOC.error(result.message || t("msg-failed-to-save-changes"));
             }
           },
           failure: function(response){
             var text = Ext.decode(response.responseText); 
-            NOC.error(text.message || __("Failed to save changes"));
+            NOC.error(text.message || t("msg-failed-to-save-changes"));
           },
         });
       },
@@ -63,22 +63,22 @@ Ext.define("NOC.main.userprofile.UserProfileNotificationGroups", {
   },
   columns: [
     {
-      text: __("Notification Group"),
+      text: t("app-title-notificationgroup"),
       dataIndex: "notification_group",
       renderer: NOC.render.Lookup("notification_group"),
     },
     {
-      text: __("Policy"),
+      text: t("header-policy"),
       dataIndex: "user_policy",
       editor: {
         xtype: "combobox",
         store: {
           fields: ["id", "name"],
           data: [
-            {id: "A", name: __("All")},
-            {id: "W", name: __("Only Watch")},
-            {id: "F", name: __("Only Favorites")},
-            {id: "D", name: __("Disable")},
+            {id: "A", name: t("choice-all")},
+            {id: "W", name: t("msg-only-watch")},
+            {id: "F", name: t("msg-only-favorites")},
+            {id: "D", name: t("status-disable")},
           ],
         },
         displayField: "name",
@@ -88,33 +88,33 @@ Ext.define("NOC.main.userprofile.UserProfileNotificationGroups", {
       },
       renderer: function(v){
         var m = {
-          A: __("All"),
-          W: __("Only Watch"),
-          F: __("Only Favorites"),
-          D: __("Disable"),
+          A: t("choice-all"),
+          W: t("msg-only-watch"),
+          F: t("msg-only-favorites"),
+          D: t("status-disable"),
         };
         return m[v];
       },
     },
     {
-      text: __("Preferred Method"),
+      text: t("header-preferred-method"),
       dataIndex: "preferred_method",
       editor: "main.ref.unotificationmethod.LookupField",
       renderer: NOC.render.Lookup("preferred_method"),
     },
     {
-      text: __("Time Pattern"),
+      text: t("header-time-pattern"),
       dataIndex: "time_pattern",
       editor: "main.timepattern.LookupField",
       renderer: NOC.render.Lookup("time_pattern"),
     },
     {
-      text: __("title-tag"),
+      text: t("header-title-tag"),
       dataIndex: "title_tag",
       editor: "textfield",
     },
     {
-      text: __("Expired At"),
+      text: t("header-expired-at"),
       dataIndex: "expired_at",
       editor: {
         xtype: "datefield",
@@ -130,7 +130,7 @@ Ext.define("NOC.main.userprofile.UserProfileNotificationGroups", {
       },
     },
     {
-      text: __("Message Types"),
+      text: t("label-message-types"),
       dataIndex: "tag",
       renderer: function(v){
         if(Ext.isEmpty(v)){

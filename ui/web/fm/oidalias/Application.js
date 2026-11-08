@@ -28,24 +28,24 @@ Ext.define("NOC.fm.oidalias.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Rewrite OID"),
+          text: t("header-rewrite-oid"),
           dataIndex: "rewrite_oid",
           width: 200,
         },
         {
-          text: __("To OID"),
+          text: t("header-to-oid"),
           dataIndex: "to_oid",
           width: 200,
         },
         {
-          text: __("Is Builtin"),
+          text: t("header-is-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -54,34 +54,34 @@ Ext.define("NOC.fm.oidalias.Application", {
         {
           name: "rewrite_oid",
           xtype: "textfield",
-          fieldLabel: __("Rewrite OID"),
+          fieldLabel: t("header-rewrite-oid"),
           allowBlank: false,
           regex: /^[0-9]+(\.[0-9]+)+$/,
         },
         {
           name: "to_oid",
           xtype: "textfield",
-          fieldLabel: __("To OID"),
+          fieldLabel: t("header-to-oid"),
           allowBlank: true,
           regex: /^[0-9]+(\.[0-9]+)+$/,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

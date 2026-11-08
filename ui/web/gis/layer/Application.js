@@ -29,47 +29,47 @@ Ext.define("NOC.gis.layer.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 100,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
         },
         {
-          text: __("zIndex"),
+          text: t("header-zindex"),
           dataIndex: "zindex",
           width: 50,
           align: "right",
         },
         {
-          text: __("Min Zoom"),
+          text: t("header-min-zoom-2"),
           dataIndex: "min_zoom",
           width: 50,
           align: "right",
         },
         {
-          text: __("Max Zoom"),
+          text: t("header-max-zoom-2"),
           dataIndex: "max_zoom",
           width: 50,
           align: "right",
         },
         {
-          text: __("Def. Zoom"),
+          text: t("header-def-zoom"),
           dataIndex: "default_zoom",
           width: 50,
           align: "right",
         },
         {
-          text: __("Color"),
+          text: t("header-color"),
           dataIndex: "stroke_color",
           width: 50,
           renderer: me.renderStyle,
@@ -79,55 +79,55 @@ Ext.define("NOC.gis.layer.Application", {
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           xtype: "textfield",
           name: "code",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: false,
         },
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           xtype: "textarea",
           name: "description",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "numberfield",
           name: "zindex",
-          fieldLabel: __("zIndex"),
+          fieldLabel: t("header-zindex"),
           minValue: 0,
         },
         {
           xtype: "fieldset",
-          title: __("Zoom"),
+          title: t("app-title-zoom"),
           layout: "hbox",
           items: [
             {
               xtype: "numberfield",
               name: "min_zoom",
-              fieldLabel: __("Min"),
+              fieldLabel: t("label-min-2"),
               minValue: 0,
               maxValue: 19,
             },
             {
               xtype: "numberfield",
               name: "max_zoom",
-              fieldLabel: __("Max"),
+              fieldLabel: t("label-max"),
               minValue: 0,
               maxValue: 19,
             },
             {
               xtype: "numberfield",
               name: "default_zoom",
-              fieldLabel: __("Default"),
+              fieldLabel: t("header-default"),
               minValue: 0,
               maxValue: 19,
             },
@@ -135,43 +135,43 @@ Ext.define("NOC.gis.layer.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Style"),
+          title: t("app-title-style"),
           items: [
             {
               name: "stroke_color",
               xtype: "colorfield",
-              fieldLabel: __("Stroke Color"),
+              fieldLabel: t("label-stroke-color"),
               allowBlank: false,
             },
             {
               name: "fill_color",
               xtype: "colorfield",
-              fieldLabel: __("Fill Color"),
+              fieldLabel: t("label-fill-color"),
               allowBlank: false,
             },
             {
               name: "stroke_width",
               xtype: "numberfield",
-              fieldLabel: __("Stroke Width"),
+              fieldLabel: t("label-stroke-width"),
               allowBlank: true,
             },
           ],
         },
         {
           xtype: "fieldset",
-          title: __("Point Style"),
+          title: t("app-title-point-style"),
           items: [
             {
               name: "point_radius",
               xtype: "numberfield",
-              fieldLabel: __("Point Radius"),
+              fieldLabel: t("label-point-radius"),
               minValue: 0,
               allowBlank: true,
             },
             {
               name: "point_graphic",
               xtype: "combobox",
-              fieldLabel: __("Graphic"),
+              fieldLabel: t("label-graphic"),
               allowBlank: true,
               store: [
                 ["circle", "circle"],
@@ -189,12 +189,12 @@ Ext.define("NOC.gis.layer.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Line Style"),
+          title: t("app-title-line-style"),
           items: [
             {
               name: "stroke_dashstyle",
               xtype: "combobox",
-              fieldLabel: __("Line Style"),
+              fieldLabel: t("app-title-line-style"),
               allowBlank: true,
               store: [
                 ["solid", "solid"],
@@ -208,21 +208,21 @@ Ext.define("NOC.gis.layer.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Text Style"),
+          title: t("app-title-text-style"),
           items: [
             {
               name: "show_labels",
               xtype: "checkboxfield",
-              boxLabel: __("Show Labels"),
+              boxLabel: t("label-show-labels"),
             },
           ],
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

@@ -20,12 +20,12 @@ Ext.define("NOC.main.pool.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -35,7 +35,7 @@ Ext.define("NOC.main.pool.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           regex: /^[0-9a-zA-Z]{1,16}$/,
           allowBlank: false,
           uiStyle: "medium",
@@ -43,7 +43,7 @@ Ext.define("NOC.main.pool.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
       ],

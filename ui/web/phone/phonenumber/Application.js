@@ -42,7 +42,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -51,53 +51,53 @@ Ext.define("NOC.phone.phonenumber.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Dialplan"),
+          text: t("header-dialplan"),
           dataIndex: "dialplan",
           width: 150,
           renderer: NOC.render.Lookup("dialplan"),
         },
         {
-          text: __("Number"),
+          text: t("header-number"),
           dataIndex: "number",
           width: 100,
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Protocol"),
+          text: t("header-protocol"),
           dataIndex: "protocol",
           width: 50,
         },
         {
-          text: __("Range"),
+          text: t("header-range"),
           dataIndex: "phone_range",
           width: 150,
           renderer: NOC.render.Lookup("phone_range"),
         },
         {
-          text: __("Category"),
+          text: t("header-category"),
           dataIndex: "category",
           width: 150,
           renderer: NOC.render.Lookup("category"),
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("Administrative Domain"),
+          text: t("header-administrative-domain-d113be"),
           dataIndex: "administrative_domain",
           width: 100,
           renderer: NOC.render.Lookup("administrative_domain"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -107,47 +107,47 @@ Ext.define("NOC.phone.phonenumber.Application", {
         {
           name: "dialplan",
           xtype: "phone.dialplan.LookupField",
-          fieldLabel: __("Dialplan"),
+          fieldLabel: t("header-dialplan"),
           allowBlank: false,
         },
         {
           name: "number",
           xtype: "textfield",
-          fieldLabel: __("Number"),
+          fieldLabel: t("header-number"),
           regex: /^\d+$/,
-          regexText: __("Must contain only numbers"),
+          regexText: t("msg-must-contain-only-numbers"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "profile",
           xtype: "phone.phonenumberprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "phone_range",
           xtype: "phone.phonerange.LookupField",
-          fieldLabel: __("Range"),
+          fieldLabel: t("header-range"),
           allowBlank: true,
           disabled: true,
         },
         {
           name: "category",
           xtype: "phone.numbercategory.LookupField",
-          fieldLabel: __("Category"),
+          fieldLabel: t("header-category"),
           allowBlank: true,
         },
         {
           name: "protocol",
           xtype: "combobox",
-          fieldLabel: __("Protocol"),
+          fieldLabel: t("header-protocol"),
           allowBlank: false,
           store: me.protocolStore,
           uiStyle: "medium",
@@ -155,24 +155,24 @@ Ext.define("NOC.phone.phonenumber.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           name: "administrative_domain",
           xtype: "sa.administrativedomain.LookupField",
-          fieldLabel: __("Adm. Domain"),
+          fieldLabel: t("header-adm-domain"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Resource Groups"),
+          title: t("nav-resourcegroup"),
           layout: "column",
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
@@ -194,7 +194,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
                 //     items: [
                 //         {
                 //             glyph: NOC.glyph.search,
-                //             tooltip: __("Show Card"),
+                //             tooltip: t("Show Card"),
                 //             scope: me,
                 //             handler: me.onShowResourceGroup
                 //         }
@@ -202,7 +202,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
                 // },
                 {
                   dataIndex: "group",
-                  text: __("Static Service Groups"),
+                  text: t("btn-static-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -217,7 +217,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Service Groups"),
+                  text: t("btn-effective-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -232,7 +232,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Static Client Groups"),
+                  text: t("btn-static-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -247,7 +247,7 @@ Ext.define("NOC.phone.phonenumber.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Client Groups"),
+                  text: t("btn-effective-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -266,37 +266,37 @@ Ext.define("NOC.phone.phonenumber.Application", {
 
       filters: [
         {
-          title: __("By Dialplan"),
+          title: t("app-title-by-dialplan"),
           name: "dialplan",
           ftype: "lookup",
           lookup: "phone.dialplan",
         },
         {
-          title: __("By Range"),
+          title: t("app-title-by-range"),
           name: "phone_range",
           ftype: "tree",
           lookup: "phone.phonerange",
         },
         {
-          title: __("By Category"),
+          title: t("app-title-by-category"),
           name: "category",
           ftype: "lookup",
           lookup: "phone.numbercategory",
         },
         {
-          title: __("By Profile"),
+          title: t("choice-by-profile"),
           name: "profile",
           ftype: "lookup",
           lookup: "phone.phonenumberprofile",
         },
         {
-          title: __("By State"),
+          title: t("app-title-by-state"),
           name: "state",
           ftype: "lookup",
           lookup: "wf.state",
         },
         {
-          title: __("By Protocol"),
+          title: t("app-title-by-protocol"),
           name: "protocol",
           ftype: "choices",
           store: me.protocolStore,

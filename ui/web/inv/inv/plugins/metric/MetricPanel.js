@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
   requires: [
     "NOC.inv.inv.plugins.metric.MetricModel",
   ],
-  title: __("Metric"),
+  title: t("header-metric"),
   closable: false,
   itemId: "metricPanel",
   border: false,
@@ -29,22 +29,22 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
       tbar: [
         "->",
         {
-          text: __("Refresh"),
+          text: t("help-refresh"),
           scope: me,
           handler: me.refreshMetric,
         },
         {
           enableToggle: true,
           itemId: "rangesBtn",
-          text: __("Ranges") + ": " + __("Relative"),
+          text: t("header-ranges") + ": " + t("btn-relative"),
           handler: me.rangeStyleToggle,
         },
         {
-          text: __("Collapse All"),
+          text: t("btn-collapse-all"),
           handler: me.collapseAll,
         },
         {
-          text: __("Expand All"),
+          text: t("btn-expand-all"),
           handler: me.expandAll,
         },
       ],
@@ -59,11 +59,11 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
           store: me.store,
           columns: [
             {
-              text: __("Metric Type"),
+              text: t("app-title-metrictype"),
               dataIndex: "name",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               renderer: this.valueRenderer,
               editor: {
@@ -71,11 +71,11 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
               },
             },
             {
-              text: __("Units"),
+              text: t("btn-units"),
               dataIndex: "units__label",
             },
             {
-              text: __("Alarm"),
+              text: t("app-title-alarm"),
               dataIndex: "oper_state__label",
             },
             {
@@ -83,7 +83,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
               width: 100,
               widget: {
                 xtype: "button",
-                text: __("Graph"),
+                text: t("header-graph"),
                 handler: function(){
                   // var record = btn.getWidgetRecord();
                   // var dataIndex = btn.getWidgetColumn().dataIndex;
@@ -105,7 +105,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
                 return;
               }
               var popupWindow = Ext.create("Ext.window.Window", {
-                title: __("Edit Thresholds"),
+                title: t("app-title-edit-thresholds"),
                 modal: true,
                 items: [
                   {
@@ -117,7 +117,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
                     },
                     tbar: [
                       {
-                        text: __("Save"),
+                        text: t("btn-save"),
                         handler: function(){
                           var me = this,
                             url = `/inv/inv/${record.get("object")}/plugin/metric/${record.get("id")}/set_threshold/`,
@@ -131,17 +131,17 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
                             jsonData: body,
                             success: function(){
                               metricPanel.refreshMetric();
-                              NOC.info(__("Thresholds has been updated"));
+                              NOC.info(t("msg-thresholds-has-been-updated"));
                               me.up("window").close();
                             },
                             failure: function(){
-                              NOC.error(__("Thresholds update failed"));
+                              NOC.error(t("msg-thresholds-update-failed"));
                             },
                           });
                         },
                       },
                       {
-                        text: __("Cancel"),
+                        text: t("btn-cancel"),
                         handler: function(){
                           this.up("window").close();
                         },
@@ -197,15 +197,15 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
         me.preview(data, me.currentId);
       },
       failure: function(){
-        NOC.error(__("Failed to get data for plugin") + " metric");
+        NOC.error(t("msg-failed-to-get-data-for-plugin") + " metric");
       },
     });
   },
   rangeStyleToggle: function(btn){
     if(btn.pressed){
-      btn.setText(__("Ranges") + ": " + __("Absolute"));
+      btn.setText(t("header-ranges") + ": " + t("msg-absolute"));
     } else{
-      btn.setText(__("Ranges") + ": " + __("Relative"));
+      btn.setText(t("header-ranges") + ": " + t("btn-relative"));
     }
     this.up("[itemId=metricPanel]").down("[xtype=grid]").getView().refresh();
   },

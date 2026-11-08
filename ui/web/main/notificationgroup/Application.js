@@ -39,12 +39,12 @@ Ext.define("NOC.main.notificationgroup.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 250,
         },
         {
-          text: __("Blt"),
+          text: t("header-blt"),
           // tooltip: "Built-in", - broken in ExtJS 5.1
           dataIndex: "is_builtin",
           width: 40,
@@ -52,7 +52,7 @@ Ext.define("NOC.main.notificationgroup.Application", {
           align: "center",
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           width: 350,
         },
@@ -61,45 +61,45 @@ Ext.define("NOC.main.notificationgroup.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "message_register_policy",
           xtype: "combobox",
-          fieldLabel: __("Message Registry Policy"),
+          fieldLabel: t("label-message-registry-policy"),
           allowBlank: true,
           store: [
-            ["d", __("Disabled")],
-            ["a", __("Any")],
-            ["t", __("By Types")],
+            ["d", t("msg-disabled")],
+            ["a", t("msg-any")],
+            ["t", t("msg-by-types")],
           ],
         },
         {
           name: "message_types",
-          fieldLabel: __("Message Types"),
+          fieldLabel: t("label-message-types"),
           xtype: "gridfield",
           columns: [
             {
-              text: __("Message Type"),
+              text: t("header-message-type"),
               dataIndex: "message_type",
               width: 150,
               renderer: NOC.render.Lookup("message_type"),
               editor: "main.ref.messagetype.LookupField",
             },
             {
-              text: __("Template"),
+              text: t("header-template"),
               dataIndex: "template",
               width: 350,
               renderer: NOC.render.Lookup("template"),
@@ -109,25 +109,25 @@ Ext.define("NOC.main.notificationgroup.Application", {
         },
         {
           name: "static_members",
-          fieldLabel: __("Static Members"),
+          fieldLabel: t("label-static-members"),
           xtype: "gridfield",
           columns: [
             {
-              text: __("Time Pattern"),
+              text: t("header-time-pattern"),
               dataIndex: "time_pattern",
               width: 350,
               renderer: NOC.render.Lookup("time_pattern"),
               editor: "main.timepattern.LookupField",
             },
             {
-              text: __("Method"),
+              text: t("header-method"),
               dataIndex: "notification_method",
               width: 75,
               renderer: NOC.render.Lookup("notification_method"),
               editor: "main.ref.unotificationmethod.LookupField",
             },
             {
-              text: __("Contact"),
+              text: t("label-contact"),
               dataIndex: "contact",
               width: 300,
               editor: "textfield",
@@ -137,38 +137,38 @@ Ext.define("NOC.main.notificationgroup.Application", {
         {
           name: "subscription_settings",
           xtype: "gridfield",
-          fieldLabel: __("Subscription Settings"),
+          fieldLabel: t("label-subscription-settings"),
           columns: [
             {
-              text: __("User"),
+              text: t("header-user"),
               dataIndex: "user",
               editor: "aaa.user.LookupField",
               renderer: NOC.render.Lookup("user"),
               width: 250,
             },
             {
-              text: __("Group"),
+              text: t("header-group"),
               dataIndex: "group",
               editor: "aaa.group.LookupField",
               renderer: NOC.render.Lookup("group"),
               width: 250,
             },
             {
-              text: __("Allow Subscribe"),
+              text: t("header-allow-subscribe"),
               dataIndex: "allow_subscribe",
               editor: "checkboxfield",
               width: 100,
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Add to Subscription"),
+              text: t("header-add-to-subscription"),
               dataIndex: "auto_subscription",
               editor: "checkboxfield",
               width: 100,
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Notify Changed"),
+              text: t("header-notify-changed"),
               dataIndex: "notify_if_subscribed",
               editor: "checkboxfield",
               width: 100,
@@ -179,13 +179,13 @@ Ext.define("NOC.main.notificationgroup.Application", {
         {
           name: "conditions",
           xtype: "listform",
-          fieldLabel: __("Match Conditions"),
+          fieldLabel: t("label-match-conditions"),
           rows: 5,
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               pickerPosition: "down",
@@ -197,13 +197,13 @@ Ext.define("NOC.main.notificationgroup.Application", {
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
             },
             {
               name: "administrative_domain",
               xtype: "sa.administrativedomain.LookupField",
-              fieldLabel: __("Adm. Domain"),
+              fieldLabel: t("header-adm-domain"),
               allowBlank: true,
             },
           ],
@@ -211,20 +211,20 @@ Ext.define("NOC.main.notificationgroup.Application", {
       ],
       actions: [
         {
-          title: __("Test selected groups"),
+          title: t("app-title-test-selected-groups"),
           action: "test",
           form: [
             {
               name: "subject",
               xtype: "textfield",
-              fieldLabel: __("Subject"),
+              fieldLabel: t("header-subject"),
               allowBlank: false,
               width: 600,
             },
             {
               name: "body",
               xtype: "textarea",
-              fieldLabel: __("Body"),
+              fieldLabel: t("header-body"),
               allowBlank: false,
               width: 600,
             },
@@ -233,9 +233,9 @@ Ext.define("NOC.main.notificationgroup.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

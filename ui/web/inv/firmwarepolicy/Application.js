@@ -21,24 +21,24 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Platform"),
+          text: t("app-title-platform"),
           dataIndex: "platform",
           renderer: NOC.render.Lookup("platform"),
           width: 200,
         },
         {
-          text: __("Firmware"),
+          text: t("app-title-firmware"),
           dataIndex: "firmware",
           renderer: NOC.render.Lookup("firmware"),
           width: 200,
         },
         {
-          text: __("Condition"),
+          text: t("label-condition"),
           dataIndex: "condition",
           width: 50,
         },
         {
-          text: __("Status"),
+          text: t("header-status"),
           dataIndex: "status",
           width: 100,
           renderer: NOC.render.Choices({
@@ -49,7 +49,7 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
           }),
         },
         {
-          text: __("Management"),
+          text: t("header-management"),
           dataIndex: "management",
           flex: 1,
           renderer: function(v){
@@ -62,21 +62,21 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
         {
           name: "platform",
           xtype: "inv.platform.LookupField",
-          fieldLabel: __("Platform"),
+          fieldLabel: t("app-title-platform"),
           allowBlank: true,
           uiStyle: "large",
         },
         {
           name: "firmware",
           xtype: "inv.firmware.LookupField",
-          fieldLabel: __("Firmware"),
+          fieldLabel: t("app-title-firmware"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "condition",
           xtype: "combobox",
-          fieldLabel: __("Condition"),
+          fieldLabel: t("label-condition"),
           store: [
             ["<", "<"],
             ["<=", "<="],
@@ -91,7 +91,7 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
         {
           name: "status",
           xtype: "combobox",
-          fieldLabel: __("Status"),
+          fieldLabel: t("header-status"),
           allowBlank: false,
           store: [
             ["r", "Recommended"],
@@ -105,30 +105,22 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "large",
           allowBlank: true,
         },
         {
           name: "access_preference",
           xtype: "combobox",
-          fieldLabel: __("Access Preference"),
-          tooltip: __(
-            "Preference mode with worked profile script. <br/>" +
-                        "!! Work if Device Profile supported. <br/>" +
-                        "Profile (default) - use Object Profile settings <br/>" +
-                        "S - Use only SNMP when access to device" +
-                        "CLI Only - Use only CLI when access to device" +
-                        "SNMP, CLI - Use SNMP, if not avail swithc to CLI" +
-                        "CLI, SNMP - Use CLI, if not avail swithc to SNMP",
-          ),
+          fieldLabel: t("label-access-preference"),
+          tooltip: t("help-preference-mode-with-worked-profile-script-br-work-if-device-pro"),
           allowBlank: true,
           uiStyle: "medium",
           store: [
-            ["S", __("SNMP Only")],
-            ["C", __("CLI Only")],
-            ["SC", __("SNMP, CLI")],
-            ["CS", __("CLI, SNMP")],
+            ["S", t("msg-snmp-only")],
+            ["C", t("msg-cli-only")],
+            ["SC", t("msg-snmp-cli")],
+            ["CS", t("msg-cli-snmp")],
           ],
           listeners: {
             render: me.addTooltip,
@@ -137,10 +129,8 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
         {
           name: "snmp_rate_limit",
           xtype: "numberfield",
-          fieldLabel: __("SNMP Rate limit"),
-          tooltip: __(
-            "Limit SNMP (Query per second).",
-          ),
+          fieldLabel: t("label-snmp-rate-limit"),
+          tooltip: t("help-limit-snmp-query-per-second"),
           allowBlank: true,
           hideTrigger: true,
           uiStyle: "medium",
@@ -153,7 +143,7 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "large",
           query: {
@@ -164,10 +154,10 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
           name: "management",
           xtype: "gridfield",
           uiStyle: "medium",
-          fieldLabel: __("Management"),
+          fieldLabel: t("header-management"),
           columns: [
             {
-              text: __("Protocol"),
+              text: t("header-protocol"),
               dataIndex: "protocol",
               flex: 1,
               editor: {

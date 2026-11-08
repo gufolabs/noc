@@ -27,7 +27,7 @@ Ext.define("NOC.sa.discoveredobject.view.Container", {
       xtype: "searchfield",
       width: 400,
       enableKeyEvents: true,
-      emptyText: __("enter search text and press <Enter>"),
+      emptyText: t("label-enter-search-text-and-press-enter"),
       triggers: {
         clear: {
           cls: "x-form-clear-trigger",
@@ -40,9 +40,9 @@ Ext.define("NOC.sa.discoveredobject.view.Container", {
       },
     },
     {
-      text: __("Filtering List"),
+      text: t("btn-filtering-list"),
       glyph: NOC.glyph.filter,
-      tooltip: __("Show/Hide Filter"),
+      tooltip: t("help-show-hide-filter"),
       enableToggle: true,
       toggleHandler: "onToggleFilter",
       bind: {
@@ -51,7 +51,7 @@ Ext.define("NOC.sa.discoveredobject.view.Container", {
     },
     {
       xtype: "splitbutton",
-      text: __("Group Operation"),
+      text: t("btn-group-operation"),
       menu: [],
       bind: {
         disabled: "{buttonDisabled}",
@@ -62,7 +62,7 @@ Ext.define("NOC.sa.discoveredobject.view.Container", {
     },
     {
       xtype: "splitbutton",
-      text: __("Sync Record"),
+      text: t("btn-sync-record"),
       menu: [],
       bind: {
         disabled: "{buttonDisabled}",
@@ -72,7 +72,7 @@ Ext.define("NOC.sa.discoveredobject.view.Container", {
       },
     },
     {
-      text: __("Scan"),
+      text: t("btn-scan"),
       handler: "onScan",
     },
   ],

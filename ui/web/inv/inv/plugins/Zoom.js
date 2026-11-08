@@ -23,7 +23,7 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
   WHEEL_ZOOM_STEP: 0.01,
   
   // Configuration
-  text: __("Fit Page"),
+  text: t("btn-fit-page"),
   width: 150,
   defaultListenerScope: true,
   bind: {
@@ -40,9 +40,9 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
           bindTo: "{zoom}",
         },
         get: function(zoom){
-          return zoom === -3 ? __("Fit Page") :
-            zoom === -1 ? __("Fit Height") :
-            zoom === -2 ? __("Fit Width") : `${zoom}%`;
+          return zoom === -3 ? t("btn-fit-page") :
+            zoom === -1 ? t("msg-fit-height") :
+            zoom === -2 ? t("msg-fit-width") : `${zoom}%`;
         },
       },
       customField: {
@@ -60,9 +60,9 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
     xtype: "menu",
     plain: true,
     items: [
-      {zoom: -3, text: __("Fit Page"), handler: "menuHandler"},
-      {zoom: -1, text: __("Fit Height"), handler: "menuHandler"},
-      {zoom: -2, text: __("Fit Width"), handler: "menuHandler"},
+      {zoom: -3, text: t("btn-fit-page"), handler: "menuHandler"},
+      {zoom: -1, text: t("msg-fit-height"), handler: "menuHandler"},
+      {zoom: -2, text: t("msg-fit-width"), handler: "menuHandler"},
       {xtype: "menuseparator"},
       ...Array.from({length: 9}, (_, i) => {
         var zoom = [25, 50, 75, 100, 125, 150, 200, 300, 400][i];
@@ -72,7 +72,7 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
       {
         xtype: "numberfield",
         itemId: "customZoomField",
-        fieldLabel: __("Custom Zoom"),
+        fieldLabel: t("label-custom-zoom"),
         labelAlign: "top",
         minValue: 10,
         maxValue: 1000,

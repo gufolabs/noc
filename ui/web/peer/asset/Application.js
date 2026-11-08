@@ -18,23 +18,23 @@ Ext.define("NOC.peer.asset.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       flex: 1,
       dataIndex: "name",
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       flex: 1,
       dataIndex: "description",
     },
     {
-      text: __("Members"),
+      text: t("header-members"),
       flex: 1,
       dataIndex: "members",
       renderer: NOC.render.WrapColumn,
     },
     {
-      text: __("Labels"),
+      text: t("header-labels"),
       flex: 1,
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
@@ -44,7 +44,7 @@ Ext.define("NOC.peer.asset.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       width: 400,
       allowBlank: false,
       plugins: [ "ucfield" ],
@@ -53,14 +53,14 @@ Ext.define("NOC.peer.asset.Application", {
     {
       name: "description",     
       xtype: "textfield",
-      fieldLabel: __("Description"),     
+      fieldLabel: t("label-description"),
       width: 400,
       allowBlank: false,
     },
     {
       name: "members",
       xtype: "textareafield",
-      fieldLabel: __("members"),
+      fieldLabel: t("label-members"),
       allowBlank: true,
       width: 600,
       height: 100,
@@ -72,7 +72,7 @@ Ext.define("NOC.peer.asset.Application", {
     {
       name: "rpsl_header",
       xtype: "textareafield",
-      fieldLabel: __("RPSL Header"),
+      fieldLabel: t("label-rpsl-header"),
       allowBlank: true,
       width: 600,
       height: 100,
@@ -83,7 +83,7 @@ Ext.define("NOC.peer.asset.Application", {
     {
       name: "rpsl_footer",
       xtype: "textareafield",
-      fieldLabel: __("RPSL Footer"),
+      fieldLabel: t("label-rpsl-footer"),
       allowBlank: true,
       width: 600,
       height: 100,
@@ -94,7 +94,7 @@ Ext.define("NOC.peer.asset.Application", {
     {
       name: "labels",
       xtype: "labelfield",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       allowBlank: true,
       width: 400,
       query: {

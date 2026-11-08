@@ -18,28 +18,28 @@ Ext.define("NOC.inv.vendor.Application", {
 
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 150,
     },
     {
-      text: __("Full Name"),
+      text: t("header-full-name"),
       dataIndex: "full_name",
       width: 200,
     },
     {
-      text: __("Code"),
+      text: t("label-code"),
       dataIndex: "code",
       width: 200,
     },
     {
-      text: __("Site"),
+      text: t("header-site"),
       dataIndex: "site",
       flex: 1,
       renderer: NOC.render.URL,
     },
     {
-      text: __("Builtin"),
+      text: t("header-builtin"),
       dataIndex: "is_builtin",
       width: 30,
       renderer: NOC.render.Bool,
@@ -50,32 +50,32 @@ Ext.define("NOC.inv.vendor.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
       uiStyle: "medium",
     },
     {
       name: "full_name",
       xtype: "textfield",
-      fieldLabel: __("Full Name"),
+      fieldLabel: t("header-full-name"),
       allowBlank: false,
       uiStyle: "medium",
     },
     {
       name: "uuid",
       xtype: "displayfield",
-      fieldLabel: __("UUID"),
+      fieldLabel: t("label-uuid"),
     },
     {
       name: "code",
       xtype: "tagsfield",
-      fieldLabel: __("Code"),
+      fieldLabel: t("label-code"),
       allowBlank: false,
     },
     {
       name: "site",
       xtype: "textfield",
-      fieldLabel: __("Site"),
+      fieldLabel: t("header-site"),
       allowBlank: false,
     },
   ],
@@ -93,9 +93,9 @@ Ext.define("NOC.inv.vendor.Application", {
     Ext.apply(me, {
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

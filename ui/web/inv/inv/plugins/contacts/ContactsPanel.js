@@ -10,7 +10,7 @@ Ext.define("NOC.inv.inv.plugins.contacts.ContactsPanel", {
   extend: "Ext.panel.Panel",
   requires: [
   ],
-  title: __("Contacts"),
+  title: t("header-contacts"),
   closable: false,
   scrollable: false,
   padding: 4,
@@ -64,14 +64,14 @@ Ext.define("NOC.inv.inv.plugins.contacts.ContactsPanel", {
     });
 
     me.editButton = Ext.create("Ext.button.Button", {
-      text: __("Edit"),
+      text: t("app-title-edit"),
       glyph: NOC.glyph.edit,
       scope: me,
       handler: me.onEdit,
     });
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       handler: me.onSave,
@@ -166,7 +166,7 @@ Ext.define("NOC.inv.inv.plugins.contacts.ContactsPanel", {
         me.displayTechField.show();
       },
       failure: function(){
-        NOC.error(__("Failed to save data"));
+        NOC.error(t("msg-failed-to-save-data"));
       },
     });
   },

@@ -18,7 +18,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemeController", {
       vm = me.getViewModel(),
       view = me.getView(),
       maskComponent = me.getView().up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("reloading", ["scheme"]),
+      messageId = maskComponent.show("reloading", {name: "scheme"}),
       name = view.itemId.replace("Panel", "").toLowerCase();
     NOC.api.requestLegacy({
       url: "/inv/inv/" + vm.get("currentId") + "/plugin/" + name + "/",
@@ -34,7 +34,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemeController", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
       callback: function(){
         maskComponent.hide(messageId);

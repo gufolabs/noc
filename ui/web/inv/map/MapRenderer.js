@@ -28,7 +28,7 @@ Ext.define("NOC.inv.map.MapRenderer", {
   getMapModule: function(){
     var module = window.map;
     if(!module || !module.Topology){
-      NOC.error(__("Map module is not loaded"));
+      NOC.error(t("msg-map-module-is-not-loaded"));
       return null;
     }
     return module;

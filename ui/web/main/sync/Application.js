@@ -20,30 +20,30 @@ Ext.define("NOC.main.sync.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 50,
         },
         {
-          text: __("Instances"),
+          text: t("header-instances"),
           dataIndex: "n_instances",
           width: 70,
           align: "right",
         },
         {
-          text: __("Credentials"),
+          text: t("header-credentials"),
           dataIndex: "user",
           width: 100,
           renderer: NOC.render.Lookup("user"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -53,35 +53,35 @@ Ext.define("NOC.main.sync.Application", {
           name: "name",
           xtype: "textfield",
           allowBlank: false,
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           regex: /^[a-z0-9.\-_]+$/i,
         },
         {
           name: "is_active",
           xtype: "checkboxfield",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "user",
           xtype: "aaa.user.LookupField",
-          fieldLabel: __("Credentials"),
+          fieldLabel: t("header-credentials"),
         },
         {
           name: "n_instances",
           xtype: "numberfield",
-          fieldLabel: __("Instances"),
+          fieldLabel: t("header-instances"),
           minValue: 1,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
       ],
       filters: [
         {
-          title: __("Active"),
+          title: t("header-active"),
           name: "is_active",
           ftype: "boolean",
         },

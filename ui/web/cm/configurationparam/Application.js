@@ -34,7 +34,7 @@ Ext.define("NOC.cm.configurationparam.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 350,
         },
@@ -44,25 +44,25 @@ Ext.define("NOC.cm.configurationparam.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           store: [
-            ["string", __("String")],
-            ["number", __("Number")],
-            ["bool", __("Bool")],
+            ["string", t("msg-string")],
+            ["number", t("header-number")],
+            ["bool", t("msg-bool")],
           ],
           allowBlank: false,
           labelWidth: 200,
@@ -72,18 +72,18 @@ Ext.define("NOC.cm.configurationparam.Application", {
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           labelAlign: "top",
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Metric Threshold bind"),
+          title: t("app-title-metric-threshold-bind"),
           layout: "hbox",
           defaults: {
             padding: 4,
@@ -93,12 +93,12 @@ Ext.define("NOC.cm.configurationparam.Application", {
             {
               name: "threshold_type",
               xtype: "combobox",
-              fieldLabel: __("Threshold Type"),
+              fieldLabel: t("label-threshold-type"),
               store: [
-                ["critical_min", __("Min. Critical")],
-                ["warning_min", __("Min. Warning")],
-                ["warning_max", __("Max. Warning")],
-                ["critical_max", __("Max. Critical")],
+                ["critical_min", t("msg-min-critical")],
+                ["warning_min", t("msg-min-warning")],
+                ["warning_max", t("msg-max-warning")],
+                ["critical_max", t("msg-max-critical")],
               ],
               allowBlank: true,
               labelWidth: 200,
@@ -106,7 +106,7 @@ Ext.define("NOC.cm.configurationparam.Application", {
             {
               name: "metric_type",
               xtype: "pm.metrictype.LookupField",
-              fieldLabel: __("Metric Type"),
+              fieldLabel: t("app-title-metrictype"),
               allowBlank: true,
             },
           ],
@@ -114,18 +114,18 @@ Ext.define("NOC.cm.configurationparam.Application", {
         {
           name: "scopes",
           xtype: "gridfield",
-          fieldLabel: __("Configuration Scopes"),
+          fieldLabel: t("label-configuration-scopes"),
           labelAlign: "top",
           columns: [
             {
               dataIndex: "scope",
-              text: __("Name"),
+              text: t("header-name"),
               editor: "cm.configurationscope.LookupField",
               renderer: NOC.render.Lookup("scope"),
               width: 150,
             },
             {
-              text: __("Required"),
+              text: t("header-required"),
               dataIndex: "is_required",
               width: 50,
               editor: "checkbox",
@@ -136,12 +136,12 @@ Ext.define("NOC.cm.configurationparam.Application", {
         {
           name: "schema",
           xtype: "gridfield",
-          fieldLabel: __("Parameters Schema"),
+          fieldLabel: t("label-parameters-schema"),
           labelAlign: "top",
           columns: [
             {
               dataIndex: "key",
-              text: __("Key"),
+              text: t("header-key"),
               width: 150,
               editor: {
                 xtype: "combobox",
@@ -160,7 +160,7 @@ Ext.define("NOC.cm.configurationparam.Application", {
             },
             {
               dataIndex: "format",
-              text: __("Format"),
+              text: t("header-format"),
               width: 70,
               editor: {
                 xtype: "combobox",
@@ -174,12 +174,12 @@ Ext.define("NOC.cm.configurationparam.Application", {
             },
             {
               dataIndex: "value",
-              text: __("Value"),
+              text: t("header-value"),
               editor: "textfield",
               width: 200,
             },
             {
-              text: __("Model Interface"),
+              text: t("app-title-modelinterface"),
               dataIndex: "model_interface",
               editor: {
                 xtype: "inv.modelinterface.LookupField",
@@ -188,7 +188,7 @@ Ext.define("NOC.cm.configurationparam.Application", {
               },
             },
             {
-              text: __("Attribute"),
+              text: t("header-attribute"),
               dataIndex: "model_attr",
               editor: "textfield",
             },
@@ -197,18 +197,18 @@ Ext.define("NOC.cm.configurationparam.Application", {
         {
           name: "choices",
           xtype: "gridfield",
-          fieldLabel: __("Parameter Choices"),
+          fieldLabel: t("label-parameter-choices"),
           labelAlign: "top",
           columns: [
             {
               dataIndex: "name",
-              text: __("name"),
+              text: t("header-name-2"),
               editor: "textfield",
               width: 200,
             },
             {
               dataIndex: "value",
-              text: __("Value"),
+              text: t("header-value"),
               editor: "textfield",
               width: 200,
             },
@@ -218,9 +218,9 @@ Ext.define("NOC.cm.configurationparam.Application", {
 
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

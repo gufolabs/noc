@@ -22,114 +22,297 @@ app-group-sla: SLA
 app-group-support: Support
 app-group-vc: VC Management
 app-group-wf: Workflow
+app-title-abduct-detection: Abduct Detection
+app-title-about-system: About System
 app-title-account: Account
 app-title-action: Action
 app-title-actioncommands: Action Command
+app-title-activation: Activation
+app-title-activation-window: Activation Window
+app-title-add-conduits: Add Conduits
+app-title-add-vlan: Add VLAN
 app-title-address: Address
 app-title-addressprofile: Address Profile
 app-title-addressrange: Address Ranges
 app-title-administrativedomain: Administrative Domains
 app-title-agent: Agent
 app-title-agentprofile: Agent Profile
+app-title-agreement: Agreement
 app-title-alarm: Alarm
+app-title-alarm-transfer: Alarm Transfer
 app-title-alarmclass: Alarm Class
 app-title-alarmclassconfig: Alarm Class Config
 app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
 app-title-alarmescalation: Alarm Escalation
 app-title-alarmrule: Alarm Rules
+app-title-alarms-type: Alarms type
 app-title-alarmseverity: Alarm Severity
 app-title-alarmtrigger: Alarm Triggers
+app-title-all-devices-on-screen: All devices on screen
 app-title-allocationgroup: AllocationGroup
+app-title-allow: Allow
 app-title-apikey: API Key
 app-title-as: AS
 app-title-asprofile: AS Profile
 app-title-asset: AS Sets
+app-title-asset-sync-settings: Asset Sync Settings
+app-title-attach-to: Attach to
+app-title-attributes: Attributes
 app-title-audittrail: Audit Trail
 app-title-authldapdomain: LDAP Domain
 app-title-authprofile: Auth Profile
+app-title-autosegmentation: Autosegmentation
+app-title-badge: Badge
+app-title-band-format: Band Format
+app-title-basket: Basket
+app-title-bind-addresses: Bind Addresses
+app-title-biosegmentation: Biosegmentation
+app-title-bom: BoM
+app-title-box: Box
+app-title-box-discovery: Box Discovery
+app-title-box-discovery-intervals: Box discovery intervals
 app-title-building: Building
+app-title-by-action: By Action
+app-title-by-active: By Active
+app-title-by-adm-domain: By Adm. Domain
+app-title-by-afi: By AFI
+app-title-by-builtin: By Builtin
+app-title-by-can-change: By Can Change
+app-title-by-can-view: By Can View
+app-title-by-category: By Category
+app-title-by-community-type: By Community Type
+app-title-by-container-type: By Container Type
+app-title-by-default: By Default
+app-title-by-delayed: By Delayed
+app-title-by-dialplan: By Dialplan
+app-title-by-dynamic-client-labels: By Dynamic Client Labels
+app-title-by-dynamic-service-labels: By Dynamic Service Labels
+app-title-by-enabled: By Enabled
+app-title-by-event-class: By Event Class
+app-title-by-filtered: By Filtered
+app-title-by-from: By From
+app-title-by-group: By Group
+app-title-by-hidden: By Hidden
+app-title-by-immediately: By Immediately
+app-title-by-ipv4: By IPv4
+app-title-by-ipv6: By IPv6
+app-title-by-is-active: By Is Active
+app-title-by-is-builtin: By Is Builtin
+app-title-by-is-enabled: By Is Enabled
+app-title-by-is-locked: By Is Locked
+app-title-by-l2-domain: By L2 Domain
+app-title-by-link-event: By Link Event
+app-title-by-match-rules-labels: By Match Rules Labels
+app-title-by-notification: By Notification
+app-title-by-notify-group: By Notify Group
+app-title-by-object: By Object
+app-title-by-parent: By Parent
+app-title-by-productive: By Productive
+app-title-by-project: By Project
+app-title-by-protocol: By Protocol
+app-title-by-range: By Range
+app-title-by-resourcegroup: By ResourceGroup
+app-title-by-sa-profile: By SA Profile
+app-title-by-searchable: By Searchable
+app-title-by-segment: By Segment
+app-title-by-service: By Service
+app-title-by-state: By State
+app-title-by-subscriber: By Subscriber
+app-title-by-supplier: By Supplier
+app-title-by-tech-domai: By Tech Domai
+app-title-by-technology: By Technology
+app-title-by-to: By To
+app-title-by-type: By Type
+app-title-by-user: By User
+app-title-by-vendor: By Vendor
+app-title-by-vlan: By VLAN
+app-title-by-vrf: By VRF
+app-title-by-vrf-group: By VRF Group
+app-title-by-workflow: By Workflow
+app-title-calculate-oper-status: Calculate Oper Status
 app-title-calculator: Calculators
+app-title-capabilities-of: Capabilities of
 app-title-capability: Capability
 app-title-capsprofile: Caps Profile
 app-title-card: Cards
+app-title-change-password: Change Password
+app-title-change-records: Change records?
 app-title-channel: Channels
 app-title-chpolicy: CHPolicy
 app-title-classificationrule: Classification Rule
+app-title-clear-alarms: Clear alarms
+app-title-clear-links: Clear links
+app-title-clone-item: Clone {name}
+app-title-clone-object: Clone object?
+app-title-cloud-inspector: Cloud Inspector
+app-title-collector-settings: Collector Settings
+app-title-colors: Colors
 app-title-commandsnippet: Command Snippets
+app-title-common: Common
 app-title-community: Communities
 app-title-communitytype: Community Types
+app-title-commutation: Commutation
+app-title-components: Components
+app-title-compose: Compose
+app-title-conduits: Conduits
 app-title-confdbquery: ConfDBQuery
+app-title-config-fetching: Config Fetching
+app-title-config-handler: Config handler
+app-title-config-policy: Config Policy
+app-title-config-validation: Config Validation
 app-title-configurationparam: Configuration Param
 app-title-configurationscope: Configuration Scope
 app-title-configuredmap: Configured Map
+app-title-confirm-reset: Confirm Reset
 app-title-connectionrule: Connection Rules
 app-title-connectiontype: Connection Types
 app-title-coverage: Coverage
+app-title-covered-buildings: Covered Buildings
+app-title-covered-objects: Covered Objects
 app-title-cpe: CPEs
+app-title-cpe-inspector: CPE Inspector
 app-title-cpeprofile: CPE Profile
 app-title-crashinfo: Crashinfo
+app-title-create: Create
+app-title-create-internal-connection-from: Create internal connection from
+app-title-create-item: Create {name}
+app-title-create-new: Create new
+app-title-create-new-channel: Create new channel
+app-title-create-new-top-level-object: Create new top-level object
 app-title-credentialcheckrule: Credential Check Rule
 app-title-crontab: CronTab
+app-title-cross: Cross
+app-title-crossing: Crossing
 app-title-csv: CSV Export/Import
 app-title-customfield: Custom Fields
 app-title-customfieldenumgroup: Enum Groups
 app-title-dashboard: Dashboard
 app-title-dashboardlayout: Dashboard Layout
+app-title-data: Data
+app-title-data-sources: Data Sources
+app-title-datastream-handlers: DataStream handlers
 app-title-datastreamconfig: DataStream Config
 app-title-ddash: Dynamic Dashboard
+app-title-deactivation: Deactivation
+app-title-deactivation-window: Deactivation Window
+app-title-delete-address: Delete address?
+app-title-delete-record: Delete record?
+app-title-delete-workflow: Delete Workflow?
+app-title-device-is-wiping-and-will-be-removed-soon: Device is wiping and will be removed soon
 app-title-dialplan: DialPlan
 app-title-discoveredobject: Discovered Object
+app-title-discovery-alarm: Discovery Alarm
+app-title-discovery-job-log: Discovery Job Log
+app-title-discovery-policy: Discovery Policy
+app-title-discovery-prefix: Discovery (Prefix)
+app-title-display: Display
+app-title-display-filters: Display filters
+app-title-display-settings: Display Settings
 app-title-division: Division
 app-title-dnsserver: DNS Server
 app-title-dnszone: DNS Zone
 app-title-dnszoneprofile: Zone Profiles
+app-title-edit: Edit
+app-title-edit-item: Edit {name}
+app-title-edit-items: "{count, plural, one {Edit # {name}} other {Edit # {name}}}"
+app-title-edit-thresholds: Edit Thresholds
+app-title-edit-value: Edit value
+app-title-effective-labels: Effective Labels
 app-title-endpoint: Endpoint
 app-title-escalationprofile: Escalation Profile
 app-title-event: Events
+app-title-event-inspector: Event Inspector
+app-title-event-sources: Event Sources
 app-title-eventclass: Event Class
 app-title-eventtrigger: Event Triggers
+app-title-extractors-loaders: Extractors/Loaders
 app-title-extstorage: Ext. Storage
 app-title-facade: Facades
+app-title-facade-2: Facade
+app-title-favorites: Favorites
+app-title-files: Files
+app-title-filters: Filters
 app-title-firmware: Firmware
 app-title-firmwarepolicy: Firmware Policy
+app-title-first-100: First 100
+app-title-first-50: First 50
+app-title-first-n: First N
+app-title-fm: FM
+app-title-fm-handlers: FM Handlers
+app-title-get-json: Get JSON
 app-title-getnow: Get Now
 app-title-glyph: Glyph
 app-title-group: Groups
 app-title-groupaccess: Group Access
 app-title-handler: Handler
 app-title-heatmap: Heatmap
+app-title-help: Help
+app-title-hierarchy: Hierarchy
 app-title-home: Home
+app-title-housekeeping: Housekeeping
+app-title-ifdesc-policy: IfDesc Policy
+app-title-ifdesc-settings: IfDesc Settings
 app-title-ifdescpatterns: IfDesc Patterns
 app-title-ignoreeventrule: Ignore Event Rules
 app-title-ignorepattern: Ignore Patterns
 app-title-imagestore: Images
+app-title-industries: Industries
+app-title-info: Info
+app-title-inputs: Inputs
+app-title-instance-policy: Instance Policy
+app-title-integration: Integration
 app-title-interface: Interfaces
+app-title-interface-bind: Interface <Bind>
 app-title-interfaceprofile: Interface Profile
 app-title-interfacevalidationpolicy: Interface Validation Policy
 app-title-inv: Inventory
 app-title-inv-reportdiscoveryproblem: Discovery Topology Problems
 app-title-inv-reportobjectsummary: Inventory Object Summary
+app-title-invalid-connections: Invalid connections
+app-title-ip-dns: IP / DNS
 app-title-ipam: Assigned Addresses
+app-title-ipam-address: IPAM (Address)
+app-title-ipam-field: IPAM Field
+app-title-ipam-prefix: IPAM (Prefix)
+app-title-ipam-vpn: IPAM (VPN)
+app-title-is-active: Is Active?
+app-title-is-matching: Is Matching
 app-title-job: Jobs
+app-title-job-details: Job Details
 app-title-jsonimport: JSON Import
 app-title-kb: Knowledge Base
 app-title-kbentry: Entries
 app-title-kbentrytemplate: Templates
+app-title-l2: L2
 app-title-l2domain: L2 Domain
 app-title-l2domainprofile: L2Domain Profile
 app-title-label: Label
 app-title-language: Languages
 app-title-layer: Layers
+app-title-line-style: Line Style
+app-title-link-inspector: Link Inspector
+app-title-links: Links
+app-title-localization: Localization
 app-title-macblacklist: MAC Blacklist
 app-title-macdb: MacDB
 app-title-maintainer: Maintainers
 app-title-maintenance: Maintenance
 app-title-maintenancetype: Maintenance Type
+app-title-managed-object-profile-handlers: Managed Object Profile handlers
 app-title-managedobject: Managed Objects
+app-title-managedobject-2: ManagedObject
+app-title-managedobject-sync-settings: ManagedObject Sync Settings
 app-title-managedobjectprofile: Managed Object Profile
+app-title-manual: Manual
+app-title-manual-scan: Manual Scan
 app-title-map: Network Map
+app-title-map-settings: Map settings
+app-title-match: Match
+app-title-math-rule: Math rule
 app-title-measurementunits: MeasurementUnits
+app-title-merge-downlinks: Merge Downlinks
 app-title-messageroute: Message Route
+app-title-metric-threshold-bind: Metric Threshold bind
 app-title-metricaction: Metric Action
 app-title-metricrule: Metric Rule
 app-title-metricscope: MetricScope
@@ -144,44 +327,79 @@ app-title-modelprotectionprofile: ModelProtection Profile
 app-title-modeltemplate: Model Template
 app-title-monitor: Monitor
 app-title-monmap: Monmap
+app-title-mx-handlers: MX handlers
+app-title-navigation: Navigation
+app-title-network-resources: Network Resources
 app-title-networksegment: Network Segment
 app-title-networksegmentprofile: Network Segment Profile
+app-title-noc-login: NOC Login
+app-title-nodes: Nodes
+app-title-notification-contacts: Notification Contacts
+app-title-notification-group-settings: Notification Group Settings
 app-title-notificationgroup: Notification Group
 app-title-numbercategory: Number Category
+app-title-object-connections: Object connections
+app-title-object-inspector: Object Inspector
 app-title-objectconfigurationrule: Configuration Rules
 app-title-objectdiagnosticconfig: Object Diagnostic Config
 app-title-objectdiscoveryrule: Object Discovered Rules
+app-title-objectgroup-inspector: ObjectGroup Inspector
 app-title-objectmodel: Object Models
 app-title-objectnotification: Object Notification
 app-title-objectnotify: Object Notifies
+app-title-objectsegment-inspector: ObjectSegment Inspector
 app-title-objectvalidationpolicy: Object Validation Policy
 app-title-oidalias: OID Aliases
+app-title-on-clear: On Clear
+app-title-on-raise: On Raise
+app-title-oper-status-transfer: Oper Status Transfer
+app-title-oper-status-transfer-2: Oper. Status Transfer
+app-title-opm: OPM
 app-title-organisation: Organisations
 app-title-outage: Outages
 app-title-peer: Peers
 app-title-peergroup: Peer Groups
 app-title-peeringpoint: Peering Points
 app-title-peerprofile: Peer Profile
+app-title-period-start-qty: Period start,qty
+app-title-periodic-discovery: Periodic Discovery
+app-title-periodic-discovery-intervals: Periodic discovery intervals
 app-title-person: Persons/Roles
 app-title-phonenumber: Phone Number
 app-title-phonenumberprofile: Number Profile
 app-title-phonerange: Phone Range
 app-title-phonerangeprofile: Phone Range Profile
+app-title-ping-check: Ping Check
+app-title-ping-discovery-intervals: Ping discovery intervals
+app-title-ping-series-settings: Ping series settings
 app-title-platform: Platform
+app-title-platform-version: Platform & Version
+app-title-plugins: Plugins
+app-title-point-style: Point Style
 app-title-pool: Pool
+app-title-portal: Portal
+app-title-portal-inspector: Portal Inspector
 app-title-prefix: Prefix
 app-title-prefixaccess: Prefix Access
 app-title-prefixlistbuilder: Prefix List Builder
 app-title-prefixprofile: Prefix Profile
 app-title-prefixtable: Prefix Table
+app-title-process-telemetry: Process Telemetry
 app-title-profile: Profile
 app-title-profilecheckrule: Profile Check Rule
 app-title-project: Project
 app-title-protocol: Protocol
 app-title-pyrule: PyRule
 app-title-quiz: Quiz
+app-title-rack: Rack
 app-title-reactionrule: Reaction Rules
+app-title-referenced: Referenced
+app-title-register-instance: Register Instance
+app-title-remote-mapping: Remote Mapping
 app-title-remotesystem: Remote System
+app-title-remove-conduits-to: Remove conduits to
+app-title-remove-interface: Remove interface
+app-title-replace-rule: Replace Rule
 app-title-reportaddressfilter: Filter Address
 app-title-reportalarmcomments: Alarm Comments Detail
 app-title-reportalarmdetail: Alarm Detail
@@ -235,21 +453,37 @@ app-title-reporttaggedmodels: Tagged Models
 app-title-reportttsystemstat: TT system statistics
 app-title-reportunknownsummary: Unknown Models Summary
 app-title-reportvpnstatus: VPN Status
+app-title-reset-layout: Reset Layout
 app-title-resourcegroup: ResourceGroup
 app-title-resourcepool: ResourcePool
 app-title-resourcestate: Resource States
 app-title-rir: RIR
+app-title-root-band: Root Band
+app-title-run-policy: Run Policy
 app-title-runcommands: Run Commands
 app-title-sa-reportdiscoveryproblem: Discovery Problem
 app-title-sa-reportobjectsummary: Managed Objects Summary
 app-title-scale: Scale
+app-title-scoped-value-colors: Scoped Value Colors
 app-title-search: Search
+app-title-segment-inspector: Segment Inspector
+app-title-segments: Segments
+app-title-select-shape: Select Shape
+app-title-selected-groups: Selected Groups
 app-title-sensor: Sensor
 app-title-sensorprofile: SensorProfile
 app-title-service: Services
 app-title-serviceprofile: Service Profile
+app-title-session-expired: Session Expired
+app-title-severity-policy: Severity Policy
+app-title-shape: Shape
+app-title-shape-overlay: Shape Overlay
+app-title-share-contribution: Share Contribution
+app-title-share-item: Share item?
+app-title-show-recently-closed: Show recently closed
 app-title-slaprobe: SLA Probe
 app-title-slaprofile: SLA Profile
+app-title-snmp: SNMP
 app-title-spec: Spec
 app-title-state: States
 app-title-street: Street
@@ -258,21 +492,48 @@ app-title-subscriber: Subscriber
 app-title-subscriberprofile: Subscriber Profile
 app-title-supplier: Supplier
 app-title-supplierprofile: Supplier Profile
+app-title-switchports: Switchports
+app-title-sync-settings: Sync Settings
+app-title-synd-data: Synd Data
 app-title-systemnotification: System Notifications
 app-title-systemtemplate: System Templates
 app-title-techdomain: Tech Domain
 app-title-technology: Technology
+app-title-telemetry: Telemetry
 app-title-template: Templates
+app-title-test-selected-groups: Test selected groups
+app-title-test-selected-patterns: Test selected patterns
+app-title-test-selected-prefix-tables: Test selected prefix tables ...
+app-title-text: Text
+app-title-text-style: Text Style
+app-title-threshold-profiles-handlers: Threshold Profiles Handlers
+app-title-thresholds: Thresholds
 app-title-timepattern: Time Pattern
+app-title-timing: Timing
+app-title-to: to
 app-title-tools: Tools
+app-title-topology: Topology
+app-title-topology-discovery: Topology Discovery
+app-title-topology-handlers: Topology handlers
 app-title-totaloutage: Total Outages
 app-title-transition: Transitions
+app-title-transmute: Transmute
+app-title-trap-collector-storm-settings: Trap Collector Storm Settings
+app-title-ttl-policy: TTL Policy
 app-title-ttsystem: TT System
 app-title-unknownmodel: Unknown Models
+app-title-unlink-interface: Unlink interface
+app-title-unsaved-data: Unsaved data
+app-title-update-or-modify-internal-connection-from: Update or modify internal connection from
+app-title-upload-files: Upload Files
 app-title-user: Users
 app-title-useraccess: User Access
 app-title-userprofile: User Profile
+app-title-validation: Validation
+app-title-variables: Variables
+app-title-vc: VC
 app-title-vendor: Vendor
+app-title-visual: Visual
 app-title-vlan: VLAN
 app-title-vlanfilter: VLAN Filter
 app-title-vlanprofile: VLAN Profile
@@ -282,13 +543,298 @@ app-title-vpnprofile: VPN Profiles
 app-title-vrf: VRF
 app-title-vrfgroup: VRF Groups
 app-title-wfmigration: WF Migration
+app-title-with: with
 app-title-workflow: Workflows
-btn-print: "Print"
-choice-1-day: "1 day"
+app-title-zoom: Zoom
+app-title-zoom-in: Zoom in...
+app-title-zoom-out: Zoom out...
+btn-1-100-000: 1:100 000
+btn-about-system: About system ...
+btn-add: Add
+btn-add-2: "Add "
+btn-add-address: Add Address
+btn-add-all-objects-to-group: Add all objects to group
+btn-add-attributes-bootprom-version: "Add. attributes: BootPROM Version"
+btn-add-attributes-hw-version: "Add. attributes: HW Version"
+btn-add-attributes-sw-patch: "Add. attributes: sw. patch"
+btn-add-interface: Add Interface
+btn-add-mapping: Add Mapping
+btn-add-object-to: "Add object to "
+btn-add-objects: Add objects
+btn-add-prefix: Add Prefix
+btn-add-row: Add row
+btn-add-state: Add State
+btn-add-to-favorites: Add to Favorites
+btn-add-to-favorites-2: Add to favorites
+btn-add-to-group: Add to group
+btn-add-to-maintenance: Add To Maintenance
+btn-add-to-maintenance-2: Add to Maintenance
+btn-add-user: Add User
+btn-admin-down: admin down
+btn-affected-instance: Affected Instance
+btn-alarm-detail-report: Alarm Detail Report
+btn-alarm-labels: Alarm Labels
+btn-align: Align
+btn-allocate-vlan: Allocate VLAN
+btn-allow-register: Allow Register
+btn-allow-resources: Allow Resources
+btn-anonymous: Anonymous
+btn-append: Append
+btn-apply: Apply
+btn-argument: Argument
+btn-asset: Asset#
+btn-asset-group: Asset. Group
+btn-attach: Attach
+btn-attach-account: Attach account
+btn-attach-existing-account: Attach existing account
+btn-balance: balance
+btn-bind: Bind
+btn-calcified-profile: Calcified Profile
+btn-cancel: Cancel
+btn-cancel-sort: Cancel Sort
+btn-card: Card
+btn-change-password: Change password ...
+btn-change-password-2: Change password
+btn-clean-all: Clean All
+btn-clear: Clear
+btn-clear-alarm: Clear alarm?
+btn-clear-alarm-2: Clear Alarm
+btn-clear-alarm-if-admin-down: Clear Alarm if Admin Down
+btn-clear-value: Clear Value
+btn-clone: Clone
+btn-close: Close
+btn-collapse-all: Collapse All
+btn-command-log: Command Log
+btn-completed-at: Completed At
+btn-condition-param: Condition/Param
+btn-condition-values: Condition/Values
+btn-config: Config
+btn-connect: Connect
+btn-copy-to-clipboard: Copy to clipboard
+btn-create-block: Create Block
+btn-create-channel: Create channel
+btn-create-ignore: Create Ignore
+btn-create-new: Create new...
+btn-create-new-channel: Create new channel ...
+btn-create-new-diagram-not-implement: Create new diagram not implement
+btn-create-rule: Create Rule
+btn-created-at: Created At
+btn-crm-users-contacts: CRM Users (Contacts)
+btn-csv: CSV
+btn-csv-zip: CSV+ZIP
+btn-data-unavailable: data unavailable
+btn-datasource: Datasource
+btn-default-labels: Default Labels
+btn-delete: Delete
+btn-delete-prefix: Delete Prefix
+btn-dhcp: DHCP
+btn-disable-if-admin-down: Disable if Admin Down
+btn-disable-if-oper-down: Disable if Oper Down
+btn-disable-scope: Disable Scope
+btn-disconnect: Disconnect
+btn-do-checked: Do Checked
+btn-download: Download
+btn-download-button-clicked: Download button clicked
+btn-download-image: Download Image...
+btn-download-script: Download, Script
+btn-edit-address: Edit Address
+btn-edit-mo: Edit MO
+btn-edit-model: Edit model
+btn-edit-prefix: Edit Prefix
+btn-effective-client-groups: Effective Client Groups
+btn-effective-service-groups: Effective Service Groups
+btn-effective-settings: Effective Settings
+btn-enable-for-topology: Enable for Topology
+btn-enable-message: Enable Message
+btn-enable-ping-but-don-t-follow-status: Enable ping but don't follow status
+btn-enable-scope: Enable Scope
+btn-end: End
+btn-enter-full-screen: Enter Full Screen
+btn-escalate: Escalate
+btn-etl: ETL
+btn-excel: Excel
+btn-expand-all: Expand All
+btn-export: Export
+btn-field: Field
+btn-fill-entrances: Fill Entrances
+btn-filtering-list: Filtering List
+btn-fit-page: Fit Page
+btn-fix: Fix
+btn-follow: Follow
+btn-from: From
+btn-front: Front
+btn-function: Function
+btn-generate: Generate
+btn-generate-key: Generate key
+btn-get-config-now: Get config NOW
+btn-group-actions: Group actions
+btn-group-comment: Group comment
+btn-group-operation: Group Operation
+btn-hide-details: Hide details
+btn-hide-free: Hide Free
+btn-include-res: Include Res.
+btn-insert: Insert
+btn-instance-type: Instance Type
+btn-ipmi-id: IPMI ID
+btn-is-required: Is Required
+btn-is-stored: Is Stored
+btn-json: JSON
+btn-json-data: Json Data
+btn-launch: Launch
+btn-link-bandwidth-style: Link bandwidth style
+btn-link-status-style: Link status style
+btn-link-utilization-style: Link utilization style
+btn-logout: Logout
+btn-magic: Magic
+btn-map: Map
+btn-mapping: Mapping
+btn-mark-to-favorites: Mark to favorites
+btn-mass: Mass
+btn-match-condition: Match Condition
+btn-match-level: Match Level
+btn-match-state: Match State
+btn-max-attacker-lvl: Max Attacker Lvl
+btn-max-severity: Max. Severity
+btn-max-status: Max. Status
+btn-max-value: Max. Value
+btn-max-value-2: Max.Value
+btn-message: Message
+btn-min-attacker-lvl: Min Attacker Lvl
+btn-min-severity: Min. Severity
+btn-min-status: Min. Status
+btn-min-value: Min. Value
+btn-min-value-2: Min.Value
+btn-modify-api-key: Modify API Key
+btn-move-down: Move Down
+btn-move-up: Move Up
+btn-mpls: MPLS
+btn-new-maintaince: New Maintaince
+btn-new-maintenance: New Maintenance
+btn-next: Next
+btn-no-leaf-selected: No leaf selected
+btn-no-link: No link
+btn-no-matches-found: No matches found
+btn-no-records-found-matching: "No records found matching: "
+btn-no-records-to-display: No records to display
+btn-object-settings: Object Settings
+btn-object-status-style: Object status style
+btn-ok: Ok
+btn-only-one-instance: Only One Instance
+btn-op: Op
+btn-open-in-browser: Open in Browser
+btn-open-prefix-card: Open Prefix Card
+btn-oper-down: oper down
+btn-operation: Operation
+btn-param: Param
+btn-port-range: Port Range
+btn-print: Print
+btn-rear: Rear
+btn-rebase: Rebase
+btn-reclassify: Reclassify
+btn-ref-only: Ref. Only
+btn-ref-source: Ref. Source
+btn-reg-instance: Reg. Instance
+btn-register: Register
+btn-relative: Relative
+btn-reload: Reload
+btn-remove: Remove
+btn-remove-all: Remove All
+btn-remove-all-connections: Remove all connections
+btn-remove-from-favorites: Remove from Favorites
+btn-remove-from-favorites-2: Remove from favorites
+btn-remove-group: Remove group '
+btn-remove-group-2: Remove Group
+btn-remove-mapping: Remove Mapping
+btn-remove-this-item: Remove this item.
+btn-remove-user: Remove User
+btn-reserved: Reserved
+btn-reset: Reset
+btn-reset-filter: Reset Filter
+btn-resources: Resources
+btn-rid: RID
+btn-run: Run
+btn-run-action: Run Action
+btn-run-discovery: Run Discovery
+btn-run-discovery-now: Run discovery now
+btn-run-snippet: Run Snippet
+btn-save: Save
+btn-scan: Scan
+btn-scripts: Scripts
+btn-search: Search
+btn-segment-power-function: Segment power function
+btn-select-all: Select All
+btn-select-config: Select Config ...
+btn-select-dictionary: Select dictionary
+btn-select-image: Select Image...
+btn-select-managed-object: Select managed object ...
+btn-select-period: Select period
+btn-select-rows: Select rows
+btn-send: Send
+btn-send-approve-to-res: Send Approve (To Res)
+btn-set: Set
+btn-set-managed: Set managed
+btn-set-password: Set password
+btn-set-root: Set Root
+btn-set-status: Set Status
+btn-set-unmanaged: Set unmanaged
+btn-share: Share
+btn-show-dashboard: Show Dashboard
+btn-show-dashboard-2: Show dashboard
+btn-show-details: Show details
+btn-show-free: Show Free
+btn-show-map: Show Map
+btn-show-object: Show Object
+btn-show-prefix: Show Prefix
+btn-start-zone-transfer: Start zone transfer
+btn-static-client-groups: Static Client Groups
+btn-static-service-groups: Static Service Groups
+btn-status-transfer: Status Transfer
+btn-stop-polling: Stop Polling
+btn-stp-blocked: STP blocked
+btn-submit: Submit
+btn-subscribe: Subscribe
+btn-suppress: Suppress
+btn-suppression: Suppression
+btn-sync-record: Sync Record
+btn-system: System
+btn-tagged-ranges: Tagged (Ranges)
+btn-test: Test
+btn-test-sound: Test Sound
+btn-text: 
+btn-text-2: 
+btn-text-3: 
+btn-text-4: 
+btn-to: To
+btn-to-maintaince-mode: To maintaince mode
+btn-to-status: To Status
+btn-type: type
+btn-unbind: Unbind
+btn-units: Units
+btn-unknown: unknown
+btn-unmark-from-favorites: Unmark from favorites
+btn-unregister: Unregister
+btn-unselect-all: Unselect All
+btn-untag: Untag.
+btn-update-channel: Update channel
+btn-update-unlink: Update/Unlink
+btn-upload: Upload
+btn-user-profile: User profile ...
+btn-var: Var
+btn-var-map: Var.  Map.
+btn-view: View
+btn-view-card: View Card
+btn-vlan-db: Vlan DB
+btn-vlan-interfaces: VLAN Interfaces
+btn-wait: Wait
+btn-watch: Watch
+btn-weight: Weight
+btn-whois: Whois
+btn-window: Window
+choice-1-day: 1 day
 choice-1-month: 1 month
 choice-1-week: 1 week
-choice-addresses-unique-per-vrf: "Addresses are unique per VRF"
-choice-addresses-unique-per-vrf-group: "Addresses are unique per VRF Group"
+choice-addresses-unique-per-vrf: Addresses are unique per VRF
+choice-addresses-unique-per-vrf-group: Addresses are unique per VRF Group
 choice-all: All
 choice-by-administrative-domain: By Administrative Domain
 choice-by-administrative-domain-and-profile: By Administrative Domain and Profile
@@ -300,27 +846,35 @@ choice-cisco-ios-policer: Cisco IOS policer
 choice-cisco-ios-rate-limit: Cisco IOS rate-limit
 choice-config: config
 choice-dbm: dBm
-choice-disable-ping: "Disable ping"
+choice-disable-ping: Disable ping
 choice-dns: DNS
-choice-do-nothing: "Do nothing"
-choice-enable-ping-but-dont-follow-status: "Enable ping but dont follow status"
+choice-do-nothing: Do nothing
+choice-enable-ping-but-dont-follow-status: Enable ping but dont follow status
 choice-escalation-error-details: Escalation Error Details
-choice-generate-fqdns: "Generate FQDNs"
-choice-ignore: "Ignore"
+choice-generate-fqdns: Generate FQDNs
+choice-ignore: Ignore
 choice-ipv4: IPv4
 choice-ipv6: IPv6
 choice-juniper-junos-policer: Juniper JUNOS policer
 choice-mw: mW
-choice-partial-reverse-zone-delegation: "Partial reverse zone delegation"
+choice-partial-reverse-zone-delegation: Partial reverse zone delegation
 choice-range: Range
-choice-require-if-enabled: "Require if enabled"
-choice-require-up: "Require Up"
+choice-require-if-enabled: Require if enabled
+choice-require-up: Require Up
 choice-statistics: Statistics
+header-acl-policy: Acl Policy
+header-act: Act
 header-action: Action
+header-active: Active
+header-active-2: Active?
+header-add-log: Add log
+header-add-to-subscription: Add to Subscription
 header-address: Address
+header-address-platform: Address/Platform
 header-addresses: Addresses
 header-adm-domain: Adm. Domain
-header-adm-path1: "ADM_PATH1"
+header-adm-domain-2: Adm. domain
+header-adm-path1: ADM_PATH1
 header-admin: Admin
 header-admin-domain-2b0276: ADMIN_DOMAIN
 header-admin-domain-610498: Admin. Domain
@@ -330,7 +884,13 @@ header-affected-objects: Affected objects
 header-afi: AFI
 header-alarm: Alarm
 header-alarm-class: ALARM_CLASS
+header-alarm-class-re: Alarm Class RE
+header-alarm-cleared: Alarm Cleared
+header-alarm-commented: Alarm Commented
+header-alarm-disposition: Alarm Disposition
 header-alarm-from-ts: ALARM_FROM_TS
+header-alarm-reopened: Alarm Reopened
+header-alarm-risen: Alarm Risen
 header-alarm-subject: ALARM_SUBJECT
 header-alarm-to-ts: ALARM_TO_TS
 header-alarm-tt: ALARM_TT
@@ -339,67 +899,149 @@ header-aliases: Aliases
 header-allocated-5cf7f4: allocated
 header-allocated-c249df: Allocated
 header-allow-children: Allow Children
+header-allow-fail: Allow Fail
+header-allow-manual: Allow Manual
+header-allow-params: Allow Params
+header-allow-part: Allow Part.
+header-allow-subscribe: Allow Subscribe
+header-api: API
 header-as: AS
 header-as-set: as-set
 header-asn: ASN
+header-assigned-user: Assigned User
+header-att: ATT
 header-attachments: Attachments
+header-attribute: Attribute
 header-auth-profile: AUTH_PROFILE
+header-auto-confirm: Auto-confirm
 header-avail-059853: AVAIL
 header-avail-389d90: Avail
 header-availability: Availability
 header-avg-load-in-mbps: AVG_LOAD_IN, Mbps
 header-avg-load-out-mbps: AVG_LOAD_OUT, Mbps
+header-base: Base
+header-bearing: Bearing
+header-blt: Blt
 header-body: Body
+header-box-completed-time: Box Completed Time
+header-box-discovery: Box discovery
+header-box-duration: Box Duration
+header-box-last-status: Box Last status
+header-box-last-success: Box Last success
+header-box-status: Box Status
+header-branch: Branch
+header-build: Build
+header-build-letter: Build Letter
 header-builtin: Builtin
 header-capabilities: Capabilities
+header-caps: Caps
 header-category: Category
-header-chassis: "Chassis"
+header-cfg-ctx: Cfg Ctx.
+header-change: Change
+header-changed: Changed
+header-channel: Channel
+header-chassis: Chassis
+header-check: Check
+header-checks: Checks
 header-children: Children
+header-choices: Choices
 header-chosen-name: Chosen Name
 header-class: Class
 header-classified: Classified
+header-clear-template: Clear Template
+header-client: Client
 header-client-model: Client Model
+header-close-template: Close Template
+header-close-tt: Close TT
+header-collector: Collector
+header-color: Color
+header-combo: Combo
+header-command: Command
 header-comment: Comment
 header-comments: Comments
+header-comments-qty: Comments Qty
+header-composite: Composite
+header-composite-pins: Composite pins
+header-cond: Cond.
 header-cone-power: Cone Power
+header-config-changed: Config Changed
+header-config-policy-violation: Config Policy Violation
+header-connect-timeout: Connect timeout
 header-connection: Connection
+header-connection-rule: Connection Rule
+header-connection-schema: Connection Schema
+header-connection-type: Connection Type
+header-const: Const.
+header-constraint: Constraint
 header-consume-resources: Consume Resources
 header-consumes-resources: Consumes Resources
 header-contacts: Contacts
 header-container: CONTAINER
 header-container-address: CONTAINER_ADDRESS
+header-container-type: Container Type
+header-content: Content
+header-control-time-0: Control Time 0
+header-control-time-1: Control Time 1
+header-control-time-n: Control Time N
 header-count: Count
 header-count-outages: Count outages
 header-cpe: CPE
+header-cr-context: CR. Context
+header-created: Created
+header-credentials: Credentials
+header-current-ma: Current, mA
 header-d: D
 header-date: Date
 header-deescalation-trace: Deescalation trace
+header-def-zoom: Def. Zoom
+header-default: Default
+header-default-action: Default Action
+header-default-expression: Default expression
+header-default-value: Default Value
+header-delayed: Delayed
+header-deny-params: Deny Params
+header-dependency-param: Dependency Param
+header-dependency-param-values: Dependency Param Values
 header-depends-on: Depends on
 header-description: Description
 header-detail: Detail
 header-device: Device
 header-diagnostic: Diagnostic
 header-dialplan: Dialplan
+header-dictionary: Dictionary
 header-direction: Direction
 header-discovery: Discovery
 header-discr: Discr.
+header-discrimiator: Discrimiator
+header-dispose: Dispose
 header-disposition: Disposition
 header-dns-zone: DNS Zone
 header-domain: Domain
+header-domain-ctx: Domain Ctx
+header-domain-scopes: Domain Scopes
+header-dotall: DotALL
 header-downs: Downs
 header-downtime: Downtime
 header-duplex: Duplex
+header-duplicate: Duplicate
 header-duration: Duration
 header-duration-sec: DURATION_SEC
 header-duration-us: Duration (us)
+header-e-mail-address: e-mail Address
+header-enabled: Enabled
 header-end-of-ext-support: End of Ext. Support
+header-end-of-extended-support: End of Extended Support
 header-end-of-sale: End of Sale
 header-end-of-support: End of Support
+header-enter-scope: Enter Scope
+header-entrance: Entrance
 header-entries: Entries
 header-enum: ENUM
+header-enum-group: Enum Group
 header-error: Error
 header-error-code: Error code
 header-error-text: Error text
+header-error-type: Error Type
 header-errors: Errors
 header-errors-in: Errors In
 header-errors-out: Errors Out
@@ -408,70 +1050,181 @@ header-escalation-error: Escalation Error
 header-escalation-timestamp: Escalation Timestamp
 header-escalation-trace: Escalation trace
 header-escalation-ts: ESCALATION_TS
+header-est-letter: Est. Letter
+header-estate: Estate
+header-estate2: Estate2
+header-event-class-re: Event Class RE
 header-event-type: EVENT_TYPE
+header-exclude-expression: Exclude Expression
+header-execute: Execute
+header-exit-command: Exit Command
+header-expiration-time: Expiration time
 header-expired: Expired
+header-expired-at: Expired At
+header-expires: Expires
+header-export-filter: Export Filter
+header-expose: Expose
+header-expose-caps: Expose Caps
+header-expose-condition: Expose Condition
+header-expose-mx: Expose MX
+header-expresseion: Expresseion
+header-extend-ctx: Extend Ctx
+header-extension: Extension
+header-external-alias: External Alias
+header-extra-small: Extra Small
+header-failed-interval: Failed interval
 header-failed-request-count: Failed request count
+header-failed-status: Failed Status
+header-file-name: File Name
 header-filter: Filter
+header-filtered: Filtered
 header-final-reason: Final Reason
 header-firmware-policy: Firmware Policy
+header-first-discovered: First Discovered
+header-first-floor: First Floor
+header-first-home: First Home
+header-first-mac: First MAC
+header-first-name: First Name
+header-floors: Floors
+header-format: Format
 header-fqdn: FQDN
 header-free: Free
 header-free-blocks: Free Blocks
+header-from-address: From Address
 header-from-iface-down: FROM_IFACE_DOWN
 header-from-iface-name: FROM_IFACE_NAME
+header-from-number: From Number
+header-from-serial: From serial
+header-from-state: From State
 header-from-ts: FROM_TS
+header-full-duplex: Full Duplex
+header-full-name: Full Name
+header-full-number: Full Number
+header-gain-db: Gain (dB)
+header-gate-id: Gate Id
+header-gen: Gen.
+header-gender: Gender
+header-genders: Genders
+header-global-id: Global ID
 header-graph: Graph
 header-group: Group
+header-grouped: Grouped
+header-gtt: GTT
 header-h: H
+header-height: Height
+header-hide-records: Hide Records
+header-hint: Hint
+header-homes: Homes
 header-hostname: Hostname
 header-hw-revision: HW Revision
 header-id: ID
 header-iface-description: IFACE_DESCRIPTION
 header-iface-name: IFACE_NAME
 header-iface-speed: IFACE_SPEED
+header-ifindex: ifIndex
+header-ignore-cli-errors: Ignore CLI Errors
+header-immediately: Immediately
+header-import-communities: Import Communities
 header-import-filter: Import Filter
+header-in-kbit-s: In (kbit/s)
+header-include-expression: Include Expression
+header-include-key-label: Include key Label
+header-indexed: Indexed
+header-input: Input
+header-input-discriminator: Input Discriminator
+header-instances: Instances
+header-int: Int.
+header-interaction: Interaction
 header-interface: Interface
 header-interfaces: Interfaces
+header-internal-name: Internal name
+header-interval-sec: Interval (sec)
+header-introduced: Introduced
 header-ip: IP
 header-ip-free: IP Free
+header-ip-scan-discovery: IP Scan Discovery
 header-ip-total: IP Total
 header-ip-used: IP Used
+header-is-active: Is Active
 header-is-affilated: Is affilated
+header-is-builtin: Is Builtin
+header-is-default: Is Default
+header-is-dirty: Is Dirty
+header-is-hide: Is Hide
 header-is-managed: is managed
+header-is-root: Is Root
+header-is-synced: Is Synced
 header-job: Job
+header-key: Key
 header-key-re: Key RE
+header-kind: Kind
 header-l2-domain: L2 Domain
 header-l3: L3
 header-label: Label
 header-labels: Labels
+header-lag: LAG
+header-language: Language
+header-large: Large
 header-last-changed: Last Changed
 header-last-config-ts: LAST_CONFIG_TS
+header-last-floor: Last Floor
+header-last-home: Last Home
+header-last-login: Last Login
+header-last-mac: Last MAC
+header-last-name: Last Name
+header-last-run: Last Run
+header-last-seen: Last seen
 header-last-seen-17bff7: LAST_SEEN
 header-last-seen-20c226: Last Seen
+header-last-status: Last status
+header-last-status-2: Last Status
 header-last-success: Last Success
+header-last-success-2: Last success
 header-last-successful-discovery: Last successful discovery
+header-last-update: Last update
 header-last-updated: Last Updated
+header-ldap-group-dn: LDAP Group DN
+header-left-re: Left RE
+header-level: Level
 header-link-count: LINK_COUNT
+header-link-events: Link Events
 header-link-proto: LINK_PROTO
 header-link-status: LINK_STATUS
-header-links-count: "Links count"
+header-links-count: Links count
 header-load-in: Load In
 header-load-out: Load Out
+header-loca-id: Loca Id
 header-local: Local
+header-local-address: Local Address
+header-local-as: Local AS
 header-local-description: Local description
+header-local-description-2: Local Description
+header-local-group: Local Group
 header-local-id: Local Id
+header-local-id-2: Local ID
+header-local-interface: Local Interface
+header-local-name: Local Name
+header-local-object: Local Object
 header-local-port: Local port
+header-localid: LocalID
 header-location-40c332: LOCATION
 header-location-d219c6: Location
+header-locked: Locked?
 header-log: Log
 header-log-message: LOG_MESSAGE
 header-log-source: LOG_SOURCE
 header-log-timestamp: LOG_TIMESTAMP
+header-login: Login
+header-lvl: Lvl
 header-mac: MAC
+header-mac-2: Mac
+header-mac-address: Mac Address
 header-mac-vendor: MAC Vendor
+header-maintainer: Maintainer
 header-maintenance-81e0be: MAINTENANCE
 header-maintenance-94de30: Maintenance
 header-managed: Managed
+header-managed-object: Managed object
 header-managed-object-62561c: Managed Object
 header-managed-object-f070ef: MANAGED_OBJECT
 header-managed-objects: Managed Objects
@@ -480,27 +1233,74 @@ header-managed-objects-group-selector: Managed Objects Group (Selector)
 header-managed-objects-pool: Managed Objects Pool
 header-managed-objects-pools: Managed Objects Pools
 header-managed-objects-profile: Managed Objects Profile
+header-management: Management
+header-map-distange-m: Map Distange (m)
 header-mask: Mask
 header-master: Master
+header-masters: Masters
+header-match-ack: Match Ack
+header-match-connection: Match Connection
+header-match-expression: Match Expression
+header-match-slot-ctx: Match Slot/Ctx
+header-match-type: Match Type
+header-max-links: Max Links
 header-max-load-in-mbps: MAX_LOAD_IN, Mbps
 header-max-load-in-time: MAX_LOAD_IN_TIME
 header-max-load-out-mbps: MAX_LOAD_OUT, Mbps
 header-max-load-out-time: MAX_LOAD_OUT_TIME
 header-max-ms: max (ms)
+header-max-objects: Max Objects
+header-max-zoom: Max. Zoom
+header-max-zoom-2: Max Zoom
+header-maximum-alarms: Maximum alarms
+header-measurment-unit: Measurment Unit
+header-medium: Medium
+header-members: Members
+header-message-type: Message Type
+header-method: Method
+header-metric: Metric
 header-mib: MIB
 header-migrate-ts: MIGRATE_TS
-header-mo-count: "MO Count"
+header-mime-type: MIME Type
+header-min-weight: Min. Weight
+header-min-zoom: Min. Zoom
+header-min-zoom-2: Min Zoom
+header-minimum-alarms: Minimum alarms
+header-mo-count: MO Count
+header-modbus-format: Modbus Format
+header-modbus-register: Modbus Register
+header-modbus-value-format: Modbus Value Format
 header-model: Model
+header-modelid: ModelID
 header-modified: Modified
 header-modified-by: Modified by
 header-module: Module
+header-multi: Multi
+header-multiline: Multiline
 header-n: N
 header-name: Name
+header-name-2: name
+header-native-name: Native Name
+header-ne: NE
+header-neighbor: Neighbor
 header-nested-groups: Nested Groups
+header-network: Network
+header-new: New
+header-next-run: Next Run
+header-nic-hdl: Nic-hdl
+header-notification: Notification
+header-notification-delay: Notification Delay
+header-notify-changed: Notify Changed
 header-ns: NS
+header-num: Num
+header-num-letter: Num Letter
+header-num2: Num2
 header-number: Number
 header-numbers: Numbers
+header-obj: Obj.
+header-obj-profile: Obj. Profile
 header-object: Object
+header-object-action: Object Action
 header-object-address: OBJECT_ADDRESS
 header-object-adm-domain: OBJECT_ADM_DOMAIN
 header-object-admdomain: OBJECT_ADMDOMAIN
@@ -508,13 +1308,14 @@ header-object-attr-patch: OBJECT_ATTR_PATCH
 header-object-bootprom: OBJECT_BOOTPROM
 header-object-hostname: OBJECT_HOSTNAME
 header-object-hwversion: OBJECT_HWVERSION
-header-object-labels: "OBJECT_LABELS"
+header-object-labels: OBJECT_LABELS
 header-object-model: OBJECT_MODEL
 header-object-name: OBJECT_NAME
 header-object-platform: OBJECT_PLATFORM
 header-object-profile: OBJECT_PROFILE
 header-object-project: OBJECT_PROJECT
 header-object-segment: OBJECT_SEGMENT
+header-object-segment-2: Object/Segment
 header-object-serial: OBJECT_SERIAL
 header-object-software: OBJECT_SOFTWARE
 header-object-status: OBJECT_STATUS
@@ -541,26 +1342,61 @@ header-object2-tags: OBJECT2_TAGS
 header-objects-72a83a: Objects
 header-objects-83ccf1: OBJECTS
 header-oid: OID
+header-oid-2: Oid
+header-old: Old
+header-open-template: Open Template
 header-oper: Oper
+header-oper-status: Oper Status.
+header-optical-rx-dbm: Optical Rx, dBm
+header-optical-tx-dbm: Optical Tx, dBm
+header-order: Order
+header-order-key: Order Key
+header-org-name: Org. Name
+header-org-type: Org. Type
 header-other: Other
+header-out-kbit-s: Out (kbit/s)
+header-output: Output
+header-output-discriminator: Output Discriminator
+header-over-topology: Over Topology
+header-overr-existing: Overr. Existing
 header-p95-ms: p95 (ms)
 header-pages: Pages
 header-paid-till: Paid Till
+header-pair: Pair
+header-parameter: Parameter
+header-params-map: Params Map
 header-parent: Parent
+header-parent-vlan: Parent VLAN
 header-part-no: Part No
 header-part-number-0: Part Number 0
 header-part-number-1: Part Number 1
 header-part-number-2: Part Number 2
 header-part-number-3: Part Number 3
+header-path: Path
+header-pattern: Pattern
 header-peer: Peer
+header-peering-point: Peering Point
 header-percent: "%"
-header-percent-at-all: "Percent at All"
-header-percentage: "Percent"
+header-percent-at-all: Percent at All
+header-percentage: Percent
+header-periodic-completed-time: Periodic Completed Time
+header-periodic-discovery: Periodic discovery
+header-periodic-duration: Periodic Duration
+header-periodic-last-status: Periodic Last status
+header-periodic-last-success: Periodic Last success
+header-periodic-status: Periodic Status
+header-periodic-time-start: Periodic Time start
+header-permission: Permission
+header-person-role-name: Person/Role Name
 header-phone-number: Phone Number
 header-phone-range: Phone Range
 header-phys-interface-count: PHYS_INTERFACE_COUNT
+header-ping: Ping
 header-platform: Platform
-header-points-of-presence: "Points of presence"
+header-platform-regex: Platform (Regex)
+header-plugin: Plugin
+header-points-of-presence: Points of presence
+header-policy: Policy
 header-pool: Pool
 header-port: Port
 header-port-duplex: PORT_DUPLEX
@@ -570,67 +1406,132 @@ header-port-speed: PORT_SPEED
 header-port-status: PORT_STATUS
 header-port-tagged-vlans: PORT_TAGGED_VLANS
 header-port-untagged-vlan: PORT_UNTAGGED_VLAN
-header-pp: "PP"
+header-pp: PP
 header-pre-reason: Pre Reason
+header-pref: Pref
+header-pref-2: Pref.
+header-preferred: Preferred
+header-preferred-method: Preferred Method
 header-prefix: Prefix
+header-prefix-scope: Prefix Scope
 header-prefixes: Prefixes
+header-primary: Primary
+header-primary-key: Primary Key
+header-prio: Prio.
+header-priority: Priority
 header-probable-causes: Probable Causes
 header-problem: Problem
+header-process: Process
+header-productive: Productive
 header-profile: Profile
+header-profile-check-rule-name: Profile Check Rule Name
 header-profile-name: PROFILE_NAME
+header-proj-distange-m: Proj. Distange (m)
 header-project-16eeaf: PROJECT
 header-project-f6f4da: Project
+header-protected: Protected
+header-proto: Proto
 header-protocol: Protocol
 header-provide-resources: Provide Resources
 header-provides-resources: Provides Resources
+header-provisioned: Provisioned
+header-provisioning: Provisioning
 header-q1-ms: Q1 (ms)
 header-q2-ms: Q2 (ms)
 header-q3-ms: Q3 (ms)
 header-quality: Quality
 header-quantity: Quantity
-header-racks: "Racks"
+header-racks: Racks
 header-range: Range
 header-ranges: Ranges
 header-rd: RD
+header-read-only: Read Only
 header-reason: Reason
 header-reboots: Reboots
 header-recommended-actions: Recommended Actions
 header-records: Records
 header-redundancy: Redundancy
+header-reference-template: Reference Template
 header-references: References
+header-regex: REGEX
+header-regex-scope: Regex Scope
+header-register-msg: Register Msg.
+header-remote-address: Remote Address
+header-remote-as: Remote AS
 header-remote-chassis: Remote Chassis
 header-remote-description-6d7f6e: Remote description
 header-remote-description-987a22: Remote Description
 header-remote-hostname: Remote Hostname
+header-remote-id: Remote Id
 header-remote-interface: Remote Interface
+header-remote-name: Remote Name
 header-remote-object-d33f14: Remote object
 header-remote-object-e48a25: Remote Object
 header-remote-port: Remote port
+header-remove-policy: Remove Policy
+header-repeat: Repeat
+header-req: Req.
 header-request-count: Request count
+header-require-confirmation: Require Confirmation
 header-required: Required
+header-reset-scopes: Reset Scopes
 header-resource: Resource
+header-result: Result
 header-revision: Revision
+header-rewrite-oid: Rewrite OID
+header-right-re: Right RE
+header-role: Role
 header-root-cause: Root Cause
 header-root-id: ROOT_ID
+header-router-id: Router-ID
+header-row: Row
+header-rows: Rows
+header-rt-export: RT Export
+header-rt-import: RT Import
 header-ru: RU
 header-rule: Rule
 header-rules: Rules
+header-s: S
+header-sa-profile: SA Profile
 header-sample: Sample
+header-scope: Scope
+header-scope-command: Scope Command
+header-scope-exit: Scope Exit
+header-script-failed: Script Failed
+header-searchable: Searchable
+header-section: Section
 header-segment-44986c: Segment
 header-segment-aeb83a: SEGMENT
+header-sender: Sender
 header-serial: Serial
+header-serial-no: Serial No
 header-server: Server
 header-service: Service
+header-service-expression: Service Expression
 header-service-model: Service Model
 header-services: Services
 header-session: Session
+header-set-context: Set Context
+header-set-label: Set Label
+header-set-var: Set Var
 header-severity: Severity
+header-shift: Shift
+header-short: Short
+header-short-label: Short Label
+header-show-in-menu: Show in menu
+header-show-remote-sync-time: Show remote sync time
 header-single-client: Single Client
 header-single-service: Single Service
+header-site: Site
 header-size: Size
 header-size-usage: Size (Usage)
 header-slave: Slave
+header-slaves: Slaves
+header-small: Small
 header-sn-changed: SN_CHANGED
+header-snmp-oid: SNMP OID
+header-snmp-ro: SNMP RO
+header-snmp-rw: SNMP RW
 header-snmp-sysobjectid: SNMP sysObjectId
 header-snmp-traps: SNMP Traps
 header-source: Source
@@ -638,50 +1539,89 @@ header-speed: Speed
 header-stage: Stage
 header-start: Start
 header-start-of-sale: Start of Sale
+header-starting: Starting
 header-state: State
 header-status: Status
+header-step-to: Step to
 header-stop: Stop
+header-store-column: Store Column
+header-stored: Stored
+header-strict: Strict
+header-struct: Struct
+header-struct-letter: Struct Letter
+header-struct2: Struct2
 header-sub-interface: Sub.Interface
 header-sub-interfaces: Sub.Interfaces
 header-subject: Subject
+header-subject-class: Subject/Class
 header-subscriber: Subscriber
-header-subscribers: "Subscribers"
+header-subscribers: Subscribers
 header-subscribers-6f13df: Subscribers
 header-subscribers-97ec75: SUBSCRIBERS
 header-success-request: Success request (%)
 header-success-request-count: Success request count
 header-summary: Summary
+header-summary-tt: Summary/TT
+header-superuser: Superuser
 header-supplier: Supplier
+header-suppress-action: Suppress Action
+header-sw: SW
 header-sw-version: SW Version
 header-symptoms: Symptoms
+header-syntax: Syntax
 header-syslog: Syslog
+header-sysobjectid: sysObjectID
 header-table: Table
 header-tablespace: Tablespace
 header-tagged: Tagged
 header-tags: Tags
+header-target: Target
+header-target-connection: Target Connection
+header-target-number: Target Number
+header-target-type: Target Type
 header-tech-contact: Tech Contact
 header-tech-contact-phone: Tech Contact Phone
 header-technology: Technology
+header-temp-c: Temp, C
+header-template: Template
 header-terminator: Terminator
 header-terms: Terms
+header-text: .
+header-threshold: Threshold
 header-time: Time
+header-time-duration: Time/Duration
 header-time-pattern: Time Pattern
+header-time-sec: Time (sec)
+header-time-start: Time start
 header-timestamp: Timestamp
+header-tip: Tip
+header-title-tag: title-tag
+header-title-template: Title Template
+header-to-address: To Address
 header-to-iface-down: TO_IFACE_DOWN
 header-to-iface-name: TO_IFACE_NAME
+header-to-number: To Number
+header-to-oid: To OID
+header-to-serial: To serial
+header-to-state: To State
 header-to-ts: TO_TS
+header-topo: Topo
 header-total: Total
 header-total-in-mbyte: TOTAL_IN, Mbyte
-header-total-objects: "Total objects"
+header-total-objects: Total objects
 header-total-out-mbyte: TOTAL_OUT, Mbyte
 header-total-unavail-sec: Total unavail (sec)
 header-translation: Translation
 header-tt: TT
 header-tt-id: TT ID
+header-tt-queue: TT Queue
+header-ttl: TTL
 header-type: Type
 header-uniq-cone-power: Uniq. Cone Power
 header-unique: Unique
 header-untagged: Untagged
+header-update-expired: Update Expired
+header-update-last-seen: Update Last Seen
 header-uplink-avg-load-in-mbps: UPLINK_AVG_LOAD_IN, Mbps
 header-uplink-avg-load-out-mbps: UPLINK_AVG_LOAD_OUT, Mbps
 header-uplink-iface-description: UPLINK_IFACE_DESCRIPTION
@@ -695,196 +1635,2163 @@ header-uplink-total-in-mbyte: UPLINK_TOTAL_IN, Mbyte
 header-uplink-total-out-mbyte: UPLINK_TOTAL_OUT, Mbyte
 header-url: URL
 header-usage: Usage
+header-use-tls: Use TLS
 header-used: "% Used"
 header-used-by: Used by
 header-user: User
 header-user-clearable: User clearable
+header-user-name: User name
+header-username: Username
+header-validataion-expr: Validataion Expr.
 header-value: Value
 header-value-re: Value RE
 header-vars: Vars
 header-vendor: Vendor
 header-vendor-mac: VENDOR_MAC
 header-version: Version
+header-version-changed: Version Changed
+header-version-regex: Version (Regex)
+header-vfr: VFR
+header-view-column: View Column
 header-views: Views
 header-vlan-560367: VLAN
 header-vlan-6c174b: Vlan
+header-vlan-discovery: VLAN Discovery
 header-vlan-translation: VLAN Translation
 header-vlans: VLANs
+header-voltage-v: Voltage, V
 header-vpn: VPN
 header-vpn-id: VPN ID
 header-vrf: VRF
+header-vrfs: VRFs
 header-w: W
 header-weight-kg: Weight (kg)
+header-when-do: When Do
+header-whois: whois
+header-wildcard: Wildcard
+header-window-sec: Window (sec.)
+header-wiping: Wiping
+header-zindex: zIndex
 header-zone: Zone
-help-cir-bps-k-m-and-g-suffixes-can-be-used: "CIR(bps). K, M and G suffixes can be used"
+help-action-when-discovery-firmware-denied-on-firmwarepolice-inventor: Action when discovery firmware denied on FirmwarePolice.Inventory -> Setup -> FirmwarePolicy <br/>Ignore - Ignore and do next discovery<br/>Ignore&Stop - Ignore and stop discovery<br/>Raise Alarm - Raise alarm on ManagedObject and do next discovery<br/>Raise Alarm&Stop - Raise alarm on ManagedObject and stop discovery
+help-action-when-discovery-new-platform-on-version-discovery-br-creat: Action when discovery new platform on version discovery. <br/>Create - Create platform and set it on device<br/>Alarm - Do not create platform and raise alarm
+help-activate-resolve-address-by-fqnd-field-or-other-handler-br-profi: Activate resolve Address by FQND field (or other handler).<br/> Profile - Use profile settings<br/>Disable - Do not resolve FQDN into Address field<br/>Once - Once resolve FQDN (after success settings will be set to Disable)<br/>Enable - Enable resolve address before running Job<br/>
+help-add-input: Add Input
+help-add-me-to-this-subscription: Add me to this subscription
+help-add-new-record: Add new record
+help-add-setting-labels-to-raised-alarm-label-must-b-enable-alarm-b-s: Add setting labels to Raised Alarm. Label must <b>enable_alarm</b> setting
+help-add-to-exist-maintaince: Add to exist maintaince
+help-append-raw-section-to-confdb: Append raw section to confdb
+help-application-help: Application Help
+help-apply-changes: Apply changes
+help-back: Back
+help-cache-neighbors-get-x-neighbors-script-result-br-when-informatio: Cache neighbors (get_X_neighbors script result). <br/>When information cached script not execute on device <br/>0 - do not cache
+help-calculate-oper-status-br-d-disable-calculate-status-br-r-calcula: Calculate Oper Status <br/>D - Disable Calculate Status<br/>R - Calculate By Rule<br/>MN - From Min Status<br/>MX - From Max Status
+help-calculate-oper-status-br-d-disable-status-transfer-br-r-transfer: Calculate Oper Status <br/>D - Disable Status Transfer<br/>R - Transfer By Rule<br/>P - From Profile
+help-center-to-object: Center to object
+help-check-device-snmp-trap-storm-policy-br-check-trap-message-count-: Check Device SNMP Trap storm policy <br/>check trap message count over 60s <br/>B - Block receive trap from ManagedObject Address<br/>R - Raise Alarm to ManagedObject and not block<br/>A - Raise Alarm to ManagedObject and block trap receive<br/>D - Disable Storm Check
+help-cir-bps-k-m-and-g-suffixes-can-be-used: CIR(bps). K, M and G suffixes can be used
+help-clean-basket: Clean Basket
+help-clear-all-rows: Clear all rows
+help-clear-objects: Clear objects
+help-clipboard: Clipboard
+help-clone-n-times: Clone N times
+help-close-form: Close form
+help-close-query: Close Query
+help-close-without-deleting: Close without deleting
+help-close-without-saving: Close without saving
+help-collapse: Collapse
+help-collapse-panels: Collapse panels
 help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default: "Common values are: Tc=1.5 for rate-limit and Tc=0.25 for policing (0.25 is default)"
-help-dns-zone-name-to-transfer: "DNS Zone name to transfer"
-help-go-to-channel: "Go to channel"
-help-go-to-object: "Go to object"
-help-load-chart: "Load Chart"
-help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "Name server IP address. NS must have zone transfer enabled for NOC host"
-help-open-sfp: "Open SFP"
-help-run-vpn-trace: "Run VPN Trace"
-help-use-name-network-ex-10-0-0-0-8-or-mac: "Use name, network (ex 10.0.0.0/8) or MAC"
+help-compose-expression-for-metrictype-worked-only-same-scopeon-expre: Compose expression for MetricType. Worked only SAME ScopeOn expression use MetricType field_name as variable name
+help-condition-running-diagnostic-br-always-always-run-diagnostic-on-: Condition running diagnostic <br/>Always - Always run diagnostic on Discovery<br/>Failed - Run only Diagnoscti has Unknown or Failed state
+help-connect-ports: Connect ports
+help-consequence-recover-time-root-cause-will-be-detached-if-conseque: Consequence recover time. Root cause will be detached if consequence alarm will not clear itself in *recover_time*
+help-console: Console
+help-control-time-to-reopen-alarm-after-1-reopen: Control time to reopen alarm after 1 reopen
+help-control-time-to-reopen-alarm-after-1-reopen-2: Control time to reopen alarm after >1 reopen
+help-control-time-to-reopen-alarm-instead-of-creating-new: Control time to reopen alarm instead of creating new
+help-copy-existing-values-to-a-new-object: Copy existing values to a new object
+help-create-new-maintaince: Create new maintaince
+help-create-or-update-channel: Create or update channel
+help-default-state-when-set-diagnostic: Default state when set Diagnostic
+help-delete-object: Delete object
+help-delete-object-s: Delete object(s)
+help-delete-workflow: Delete Workflow
+help-depended-diagnostic-for-calculate-state: Depended Diagnostic for calculate state
+help-display-check-state-on-object-form: Display check state on Object Form
+help-dns-zone-name-to-transfer: DNS Zone name to transfer
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable<br/>Do not raise - work on current mode (immediately after login)
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg-2: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable, Do not raise - work on current mode <br/>(immediately after login)
+help-download-content: Download content
+help-download-image-as-svg: Download image as SVG
+help-download-list-of-allocated-ip-addresses-in-csv-format: Download list of allocated IP addresses in CSV format
+help-download-results: Download results
+help-edit-map: Edit map
+help-enable-allow-to-escalate-alarm-for-managedobject-br-as-depended-: Enable - allow to escalate alarm for ManagedObject. <br/>As Depended - allow to escalate ManagedObject only as depend (not root) on alarm
+help-enable-or-disable-ping-if-working-hour-on-object-is-set-br-enabl: Enable or disable ping if working hour on object is set. <br/>Enable - Calc RTT, but do not raise alarm, Disable ping - do not send ICMP
+help-enable-send-syslog-message-to-clickhouse-b-syslog-b-table-br-may: Enable send syslog message to ClickHouse </b>syslog</b> table. <br/>May be overwritten by ManageObject <b>syslog_archive_policy</b> setting. <br/>E - Send syslog message to ClickHouse<br/>D - Do not send syslog message to ClickHouse
+help-export-all-records-from-buffer-screen: Export all records from buffer (screen)
+help-export-to-csv: Export to CSV
+help-external-storage-for-config-downloading-setup-in-main-setup-ext-: External storage for config downloading. Setup in Main -> Setup -> Ext. storage
+help-external-storage-for-config-save-setup-in-main-setup-ext-storage: External storage for config save. Setup in Main -> Setup -> Ext. storage
+help-field-on-this-use-in-etl-process-sync-on-external-system-br-do-n: Field on this use in ETL process (sync on external system). <br/>Do not Edit field directly!
+help-flap-detection: Flap detection
+help-form-help: Form Help
+help-get-credentials-user-pass-snmp-etc-from-auth-profile-br-service-: Get credentials (user, pass, snmp etc.) from Auth profile.<br/>  Service Activation -> Setup -> Auth Profile. If set - value in field user, password, snmp community will be IGNORED
+help-go-to-channel: Go to channel
+help-go-to-next-step: Go to next step
+help-go-to-object: Go to object
+help-go-to-parent: Go to Parent
+help-hide-basket: Hide basket
+help-hide-from-display: Hide from display
+help-how-bind-resources-to-service-instance-br-d-disable-br-a-allowed: How bind resources to Service Instance <br/>D - Disable <br/>A - Allowed AnyC - By Config
+help-i-collect-macs-only-for-allowed-interfaces-br-mac-discovery-poli: I - Collect MACs only for allowed interfaces. <br/>(MAC Discovery Policy on Inventory -> Setup -> Interface Profile) <br/>
+help-if-check-use-credential-check-rules-service-activation-setup-cre: If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/> for suggest credential
+help-if-checked-discovery-try-find-port-by-object-id-hostname-address: If checked discovery try find port by object_id (Hostname, Address, Name) contains in description
+help-if-empty-active-true: If empty active=True
+help-if-empty-exhaus-true: If empty exhaus=True
+help-if-set-credential-on-profile-will-replace-credential-on-device: If set - Credential on Profile will replace credential on Device
+help-if-set-raise-alarm-when-diagnostic-to-failed-state: If set - Raise Alarm when diagnostic to Failed state
+help-include-exclude-profile-from-list: Include/Exclude profile from list
+help-include-special-addresses-network-broadcast-for-ipv4-br-in-prefi: Include special addresses (Network & Broadcast for IPv4) <br/>in prefix range
+help-insert-mac-address-to-this-field-one-of-format-li-full-aa-aa-aa-: "Insert MAC address to this field one of format:<li>FULL: AA:AA:AA:AA:AA:AA</li><li>Left part: AA:AA:</li><li>Right part: :AA:AA</li>"
+help-jinja-template-for-creating-segment-name-br-worked-with-segmenta: Jinja template for creating segment name. <br/>Worked with "Segmentate for object's segment" and "Segmentate for child segment" options
+help-jump-to-group: Jump to Group
+help-jump-to-portal: Jump to Portal
+help-jump-to-segment: Jump to Segment
+help-level-up: Level Up
+help-limit-snmp-query-per-second: Limit SNMP (Query per second).
+help-load-chart: Load Chart
+help-management-console: Management console
+help-mark-unmark: Mark/Unmark
+help-max-level-common-level-there-will-be-changed-segment-br-autosegm: Max level (Common -> Level) there will be changed segment. <br/>(Autosegmentation not worked with ManagedObject less this level
+help-metric-type-inputs: Metric Type inputs
+help-metric-type-inputs-to-expression: Metric Type inputs to Expression
+help-mirror-collected-config-after-config-discovery-br-always-mirror-: Mirror collected config after Config discovery. <br/>Always Mirror - mirror every discovery run <br/>Mirror on Change - save only if detect config changed
+help-models-allowed-set-workflow: Models allowed set workflow
+help-more-settings-for-worked-with-devices-br-place-on-service-activa: More settings for worked with devices. <br/>Place on Service Activation -> Setup -> Object Profile.
+help-move-all-selected-devices-to-the-basket: Move all selected devices to the basket
+help-name-ip-device: Name/IP device
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: Name server IP address. NS must have zone transfer enabled for NOC host
+help-new-layout: New layout
+help-next-change: Next change
+help-no-comments: no comments
+help-number-of-flaps-while-close-flap-window: Number of flaps while close Flap Window
+help-object-settings: Object settings
+help-open-card: Open card
+help-open-sfp: Open SFP
+help-open-tools: Open tools
+help-order-run-diagnostic-in-discovery-process-br-on-start-before-dis: Order run diagnostic in Discovery process. <br/>On Start - Before Discovery checks run<br/>On End - After Discovery checks run
+help-parent-filter: Parent filter
+help-parent-filter-2: Parent Filter
+help-policy-detect-diagnostic-success-or-failed-state-br-all-all-chec: Policy detect diagnostic Success or Failed state <br/>ALL - ALL Checks and Depended Discovery must Success for Enable state<br/>ANY - ANY Checks and Depended Discovery mush Success for Enable state
+help-position-front: Position Front
+help-position-rear: Position Rear
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro: Preference mode with worked profile script. <br/>!! Work if Device Profile supported. <br/>Profile (default) - use Object Profile settings <br/>S - Use only SNMP when access to deviceCLI Only - Use only CLI when access to deviceSNMP, CLI - Use SNMP, if not avail swithc to CLICLI, SNMP - Use CLI, if not avail swithc to SNMP
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro-2: Preference mode with worked profile script. <br/>!! Work if Device Profile supported. <br/>Profile (default) - use Object Profile settings <br/>S - Use only SNMP when access to deviceCLI Only - Use only CLI when access to deviceSNMP, CLI - Use SNMP, if not avail switch to CLICLI, SNMP - Use CLI, if not avail switch to SNMP
+help-preview: Preview
+help-preview-zone: Preview zone
+help-previous-change: Previous change
+help-processed-syslog-snmp-trap-message-to-classifier-service-br-e-se: Processed syslog/snmp trap message to Classifier service <br/>E - Send message to Classifier<br/>D - Do not send message to Classifier
+help-profile-adapter-for-device-work-br-auto-detect-profile-by-snmp-i: Profile (Adapter) for device work. <br/>!! Auto detect profile by SNMP if Object Profile -> Box -> Profile is set. <br/>
+help-protocol-priority-worked-on-device-br-warning-device-profile-sa-: Protocol priority worked on device. <br/>Warning! Device profile (SA Profile) should support worked in selected mode
+help-rebase-prefix-to-a-new-location: Rebase prefix to a new location
+help-redo: Redo
+help-refresh: Refresh
+help-refresh-data: Refresh data
+help-reload-and-it-has-been-since-the-last-update: Reload and It has been since the last update
+help-reload-data: Reload data
+help-remove-all-devices-from-right-panel: Remove all devices from right panel
+help-remove-input: Remove Input
+help-remove-me-to-this-subscription: Remove me to this subscription
+help-repaint: Repaint
+help-required-run-migration-metric-database-after-changed-that-enable: Required run migration metric Database after changed.That enabled only by deploy.
+help-reset-changes: Reset changes
+help-reset-filters: Reset filters
+help-reset-title-permissions: Reset title permissions
+help-reset-to-default-values: Reset to default values
+help-reset-values: Reset values
+help-revert: Revert
+help-rotate: Rotate
+help-run-config-validate-process-br-always-validate-every-discovery-r: "Run config validate process: <br/>Always Validate - every discovery run<br/>Validate on Change - only if detect config changed"
+help-run-vpn-trace: Run VPN Trace
+help-sa-profiles-for-match-rules: SA Profiles, for match rules
+help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Sampling value for Box discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry, <br/> 0,99 ... 0,1 - chance to save
+help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Sampling value for Periodic discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry,  0,99 ... 0,1 - chance to save
+help-save-all-from-basket: Save all from basket
+help-save-changes: Save changes
+help-save-changes-and-continue-editing: Save changes and continue editing
+help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form.Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
+help-save-screen: Save screen
+help-save-workflow: Save Workflow
+help-select-action: Select Action
+help-select-all-records-from-buffer-screen: Select all records from buffer (screen)
+help-select-method-of-config-fetching: Select method of config fetching
+help-select-method-of-config-gathering: Select method of config gathering
+help-set-after-version-discovery-not-for-manual-set: Set after Version Discovery. Not for manual set
+help-set-all-permissions: Set all permissions
+help-set-device-name-if-fqdn-suffix-is-not-set-use-dot-after-name-nam: "Set device name. If FQDN suffix is not set use dot after name: NAME.<br/>FQND suffix set on Object Profile: Service Activation -> Setup -> Object Profile -> Common<br/>"
+help-set-measurements-unit-for-metrictype-used-for-conversation-value: Set Measurements Unit for MetricType. Used for conversation value
+help-set-position: Set position
+help-set-which-caps-will-be-check-in-caps-discovery-br-service-activa: Set which CAPS will be check in Caps discovery. <br/>Service Activation -> Setup -> Caps Profiles
+help-set-which-caps-will-be-check-in-caps-discovery-br-vc-setup-vlan-: Set which CAPS will be check in Caps discovery. <br/>VC -> Setup -> VLAN Filter
+help-set-which-peer-profile-will-be-set-when-created-br-peer-setup-pe: Set which Peer Profile will be set when Created. <br/>Peer -> Setup -> Peer Profiles
+help-settings: Settings
+help-settings-for-autosegmentation-process-br-automatically-detect-se: "Settings for autosegmentation process: <br/>Automatically detect segment for ManagedObject with this ObjectProfile.<br/>Uses MAC and needed MAC enable in Box"
+help-settings-policy-for-config-discovery-validation-and-mirroring-co: "Settings policy for config discovery: Validation and mirroring config"
+help-setup-colleted-metric-on-devices-not-interface-br-interface-metr: Setup colleted metric on devices (not Interface!). <br/>(Interface Metrics settings Inventory -> Setup -> Interface Profile)
+help-show-alarm-detail: Show alarm detail
+help-show-config: Show Config
+help-show-hide-basket: Show/Hide basket
+help-show-hide-basket-2: Show/Hide Basket
+help-show-hide-filter: Show/Hide Filter
+help-show-hide-legend: Show/Hide legend
+help-show-hide-minimap: Show/Hide miniMap
+help-show-hide-search-popup: Show/Hide search popup
+help-show-interface-load: Show interface load
+help-show-ipsla-dashboard: Show IPSLA Dashboard
+help-show-json: Show JSON
+help-show-kb: Show KB
+help-show-macs: Show MACs
+help-show-map: Show map
+help-show-neighbor-map: Show neighbor map
+help-show-object: Show object
+help-show-static-map: Show static map
+help-show-stp-topology: Show STP topology
+help-show-vlan-interfaces: Show VLAN interfaces
+help-subscription: Subscription
+help-suppress-me-to-this-subscription: Suppress me to this subscription
+help-swap-contents: Swap contents
+help-switch-to-breadcrumb-view: Switch to breadcrumb view
+help-switch-to-tree-view: Switch to tree view
+help-test-compatible-types: Test compatible types
+help-test-rule: Test rule
+help-this-grid-is-currently-disabled-fill-all-required-fields-and-pre: This grid is currently disabled. Fill all required fields and press 'Apply' button to enable it.
+help-time-in-seconds-to-delay-alarm-risen-notification: Time in seconds to delay alarm risen notification
+help-time-in-seconds-while-waiting-of-reopen: Time in seconds, while waiting of reopen
+help-to-default-value: to default value
+help-to-see-the-prefix-contents: To see the prefix contents
+help-transfer-alarm-to-operstatus-br-d-disable-alarm-transfer-br-b-se: Transfer alarm to OperStatus <br/>D - Disable Alarm Transfer<br/>B - Service Component on Alarm<br/>B - Instance Filter<br/>O - Only By Filter Rule (Empty - Disable)
+help-transfer-children-status-to-operstatus-br-d-disable-status-trans: Transfer children Status to OperStatus <br/>D - Disable Status Transfer<br/>T - All Status transferS - Self Status
+help-transfer-oper-statuses-to-adjacent-services-br-d-disable-status-: Transfer Oper Statuses to Adjacent Services <br/>D - Disable Status Transfer<br/>T - Transfer to All Adjacent<br/>R - Transfer By Rule<br/>P - From Profile
+help-undo: Undo
+help-unselect-all-devices: Unselect all devices
+help-upload-list-of-allocated-ip-addresses-from-existing-dns-servers-: Upload list of allocated IP addresses from existing DNS servers via AXFR request
+help-use-for-setup-user-permission-on-object-br-place-on-service-acti: Use for setup User permission on Object. <br/>Place on Service Activation -> Setup -> Administrative Domain.<br/>Permission on Activation -> Setup -> Group Access/User Access.<br/>
+help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre: Use for shard devices over intersection IP Address spaces. <br/>Create and Set on Tower<br/>
+help-use-name-network-ex-10-0-0-0-8-or-mac: Use name, network (ex 10.0.0.0/8) or MAC
+help-use-one-session-worked-on-device-br-if-disabled-worked-one-scrip: Use one session worked on device. <br/>If disabled - worked one script - one login. Logout after script end.
+help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end.Disable - worked one script - one login. Logout after script end.
+help-use-this-field-if-you-want-disable-ping-check-on-specified-time-: Use this field if you want disable ping check on specified time.<br/>  Main -> Setup -> Time Patterns
+help-use-to-override-pool-for-events-processing: Use to override pool for events processing
+help-view-as-json: View as JSON
+help-view-card: View card
+help-view-connection-diagram: View connection diagram
+help-worked-with-devices-settings: Worked with devices settings
+help-zoom-to-level: Zoom to level
+label-15-min: 15 min
+label-3-h: 3 h
+label-30-min: 30 min
+label-5-min: 5 min
+label-60-min: 60 min
+label-abduct-detection-threshold: Abduct Detection Threshold
+label-abduct-detection-window: Abduct Detection Window
+label-access: Access
+label-access-level: Access Level
+label-access-preference: Access Preference
+label-account-id: Account ID
+label-acl: ACL
+label-action-params: Action Params
+label-action-set: Action Set
+label-activation-function: Activation Function
+label-active-alarms: Active Alarms
+label-add-linked-nodes: Add Linked Nodes
+label-add-nested-nodes: Add nested nodes
+label-add-topology-links: Add Topology links
+label-address-constraint: Address Constraint
+label-address-discovery: Address Discovery
+label-address-discovery-policy: Address Discovery Policy
 label-address-family: Address Family
+label-address-pools: Address Pools
+label-address-resolution-policy: Address Resolution Policy
+label-admin-c: Admin-c
+label-administrative: Administrative
+label-administrative-division: Administrative Division
 label-administrative-domain: Administrative Domain
-label-alarms: "Alarms"
-label-alternative-path: "Alternative path"
+label-administrative-territorial-division: Administrative-Territorial Division
+label-affected: Affected
+label-affected-rules: Affected Rules
+label-agent-collector: Agent Collector
+label-agent-param: Agent Param
+label-agreement-id: Agreement ID
+label-alarm-affected-policy: Alarm Affected Policy
+label-alarm-class-re: Alarm class RE
+label-alarm-commented: Alarm commented
+label-alarm-group: Alarm Group
+label-alarm-reopened: Alarm reopened
+label-alarm-risen: Alarm risen
+label-alarm-status-rules: Alarm Status Rules
+label-alarm-weight: Alarm weight
+label-alarm-weight-2: Alarm Weight
+label-alarms: Alarms
+label-alarms-source: Alarms source
+label-allocate-numbers: Allocate Numbers
+label-allocate-strategy: Allocate Strategy
+label-allocated-till: Allocated till
+label-allocation-group: Allocation Group
+label-allow-action-command: Allow Action (Command)
+label-allow-alarm: Allow Alarm
+label-allow-auto-create: Allow Auto Create
+label-allow-autosegmentation: Allow Autosegmentation
+label-allow-bunch: Allow Bunch
+label-allow-config-diff: Allow Config Diff
+label-allow-config-diff-filter: Allow Config Diff Filter
+label-allow-config-filter: Allow Config Filter
+label-allow-config-validation: Allow Config Validation
+label-allow-datastream-filter: Allow DataStream filter
+label-allow-diagnostics-check: Allow Diagnostics Check
+label-allow-event: Allow Event
+label-allow-housekeeping: Allow housekeeping
+label-allow-ifdesc: Allow IfDesc
+label-allow-lag-mismatch: Allow LAG mismatch
+label-allow-match-rule: Allow Match Rule
+label-allow-multiple-values-list: Allow multiple values (List)
+label-allow-mx-transmutation: Allow MX Transmutation
+label-allow-p2mp: Allow P2MP
+label-allow-p2p: Allow P2P
+label-allow-parent: Allow Parent
+label-allow-reaction: Allow Reaction
+label-allow-resolver: Allow Resolver
+label-allow-resource: Allow Resource
+label-allow-star: Allow Star
+label-allow-threshold-alarm: Allow Threshold Alarm
+label-allow-threshold-handler: Allow Threshold Handler
+label-allow-threshold-value-handler: Allow Threshold Value Handler
+label-allow-unidirectional-p2mp: Allow Unidirectional P2MP
+label-allow-unidirectional-p2p: Allow Unidirectional P2P
+label-allow-vacuum-bulling: Allow Vacuum Bulling
+label-allowed-models: Allowed Models
+label-allowed-models-2: Allowed models
+label-allowing-manual-editor: Allowing Manual Editor
+label-alterable-output: Alterable output
+label-alternative-path: Alternative path
+label-answers: Answers
+label-api-code: API Code
+label-api-key: Api Key
+label-api-role: API Role
+label-apply-after-sec: Apply After (sec.)
+label-apply-metrics-to-subinterfaces: Apply metrics to subinterfaces
+label-archive-last-25: Archive (last 25)
+label-archived-alarms: Archived Alarms
+label-args: Args
 label-as-number: AS Number
-label-children: "Children"
+label-as-set: AS-SET
+label-asset: Asset
+label-attic: Attic
+label-attrs: Attrs
+label-auth-key: Auth Key
+label-auth-proto: Auth Proto
+label-author: Author
+label-auto-generated: Auto generated?
+label-auto-reload: "Auto reload : "
+label-auto-reload-off: "Auto reload : OFF"
+label-auto-reload-on: "Auto reload : ON"
+label-autocreated-profile: Autocreated Profile
+label-autogenerated: Autogenerated
+label-autosegmentation-policy: Autosegmentation Policy
+label-background: Background
+label-background-image: Background Image
+label-band-name: Band Name
+label-bands: Bands
+label-base-measurement-units: Base Measurement Units
+label-basket-empty: basket empty
+label-beef-policy: Beef Policy
+label-bfd: BFD
+label-bgp: BGP
+label-bgp-peer: BGP Peer
+label-bgp-peer-profile: BGP Peer Profile
+label-bi-id: BI ID
+label-bind-password: Bind Password
+label-bind-user: Bind User
+label-blank-map-layer: Blank
+label-body-template: Body Template
+label-bold: Bold
+label-both: Both
+label-box-alarm: Box Alarm
+label-box-sample: Box Sample
+label-box-telemetry: Box Telemetry
+label-by-adm-domain: "By Adm. Domain:"
+label-by-adm-domain-2: By Adm. domain
+label-by-date: By Date
+label-by-geo-address: "By Geo Address:"
+label-by-interface-profile: By Interface Profile
+label-by-ip-list-max-2000: "By IP list (max. 2000):"
+label-by-ip-list-max-2000-2: By IP, list (max. 2000)
+label-by-labels: "By Labels:"
+label-by-last-update: "By Last Update:"
+label-by-obj-profile: "By Obj. Profile:"
+label-by-platform: "By Platform:"
+label-by-pool: "By Pool:"
+label-by-reference: By Reference
+label-by-resource-group-selector: By Resource Group (Selector)
+label-by-rule: "By Rule:"
+label-by-sa-profile: "By SA Profile:"
+label-by-segment: "By Segment:"
+label-by-service-group: By Service Group
+label-by-state: "By State:"
+label-by-vendor: "By Vendor:"
+label-by-version: "By Version:"
+label-cable: Cable
+label-cache-neighbors-for: Cache neighbors for
+label-calcified-name-template: Calcified Name Template
+label-calculate-oper-status-policy: Calculate Oper Status Policy
+label-calculate-status-rules: Calculate Status Rules
+label-can-change: Can Change
+label-can-view: Can View
+label-card-template: Card Template
+label-card-title-template: Card Title Template
+label-cdp: CDP
+label-cellar: Cellar
+label-cells: Cells
+label-change-configuration: Change configuration
+label-changeset: Changeset
+label-channel-discriminators: Channel Discriminators
+label-check: check
+label-check-interval: Check Interval
+label-check-match: Check Match
+label-check-on-config-change-after: "Check on config change after "
+label-check-on-system-start-after: "Check on system start after "
+label-check-update-interval-sec: Check update interval (sec)
+label-check-updates-interval: Check Updates Interval
+label-checked: Checked
+label-children: Children
+label-cleanup: Cleanup
+label-clear-after-sec: Clear After (sec.)
+label-clear-handlers: Clear Handlers
+label-cli-privilege-policy: CLI Privilege Policy
+label-cli-session-policy: CLI Session Policy
+label-clone-connections: Clone connections
+label-closed: Closed
+label-code: Code
+label-code-hex: Code (HEX)
+label-collect-interval: Collect interval
+label-collector-mappings: Collector Mappings
+label-collision-policy: Collision Policy
+label-column-formats: Column Formats
+label-columns: Columns
+label-commands: Commands
+label-company: Company
+label-compare: Compare
+label-compatible-groups: Compatible groups
+label-component-scope: Component Scope
+label-compose-expression: Compose Expression
+label-compose-metric-type: Compose Metric Type
+label-condition: Condition
+label-condition-op-vars: Condition Op Vars
+label-condition-param: Condition Param
+label-condition-value: Condition Value
+label-config-changed: Config changed
+label-config-diff-filter-handler: Config Diff Filter Handler
+label-config-fetch: Config fetch
+label-config-fetch-policy: Config Fetch Policy
+label-config-filter-handler: Config Filter Handler
+label-config-mode: Config. Mode
+label-config-policy-violation: Config policy violation
+label-config-validation-handler: Config Validation Handler
+label-configuration-rule: Configuration Rule
+label-configuration-scopes: Configuration Scopes
 label-configured-map-container: "Configured Map Container: {name}"
-label-consumes-resources: "Consumes Resources"
-label-contacts: "Contacts"
-label-container-2: "Container"
-label-container-3: "Container"
+label-confirm-new-password: Confirm New Password
+label-connect-to: Connect to
+label-connection-context: Connection Context
+label-connections: Connections
+label-constraints: Constraints
+label-consumes-resources: Consumes Resources
+label-contact: Contact
+label-contacts: Contacts
+label-container-2: Container
+label-container-3: Container
 label-container-name: "Container: {name}"
-label-dashboard: "Dashboard"
+label-content-type: Content Type
+label-context: Context
+label-context-name: Context Name
+label-contribution-url: Contribution URL
+label-control-time-0-sec: Control Time 0 (sec)
+label-control-time-1-reopen: Control time (1 reopen)
+label-control-time-1-sec: Control Time 1 (sec)
+label-control-time-multiple-reopens: Control time (multiple reopens)
+label-control-time-n-sec: Control Time N (sec)
+label-control-time-no-reopens: Control time (no reopens)
+label-controller: Controller
+label-controllers: Controllers
+label-convert-form-for-baseunit: Convert form for BaseUnit
+label-convert-username: Convert Username
+label-country: Country
+label-cpe-status: CPE status
+label-cpe-type: CPE Type
+label-create-maintenance: Create maintenance
+label-custom-zoom: Custom Zoom
+label-dashboard: Dashboard
+label-dashboard-label: Dashboard Label
+label-dashboard-series-color: Dashboard Series Color
+label-data-match: Data Match
 label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
+label-date-of-joined: Date of joined
 label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
 label-days: Days
+label-days-expr: Days Expr.
+label-dd-mm-yyyy: dd.mm.yyyy
+label-deduplication-window: Deduplication Window
+label-default-address-profile: Default Address Profile
+label-default-domain: Default Domain
+label-default-interval-sec: Default Interval, sec
+label-default-number-profile: Default Number Profile
+label-default-prefix-profile: Default Prefix Profile
+label-default-state: Default State
+label-default-template: Default Template
+label-default-vlan-profile: Default VLAN Profile
+label-delay: Delay
+label-delete-prefix-and-all-nested-prefixes-addresses-and-permissions: Delete prefix and all nested prefixes, addresses and permissions?
+label-delete-prefix-and-save-and-relink-the-nested-prefixes-and-addres: Delete prefix and save and relink the nested prefixes and addresses?
+label-delta-value: Delta Value
+label-deny-group: Deny Group
 label-description: Description
-label-duplex: "Duplex"
+label-description-2: "Description #"
+label-diag: Diag
+label-diagnostics: Diagnostics
+label-diagnostics-config: Diagnostics Config
+label-diameter-mm: Diameter (mm)
+label-disable-all-interaction: Disable All Interaction
+label-disable-when-change: Disable When Change
+label-disclaimer: Disclaimer
+label-discovered: Discovered
+label-discovery-interval: Discovery interval
+label-discriminator: Discriminator
+label-discriminator-default: Discriminator Default
+label-discriminator-from: Discriminator From
+label-discriminator-source: Discriminator Source
+label-discriminator-to: Discriminator To
+label-display-order: Display Order
+label-dispose-alarm: Dispose Alarm
+label-do-not-delete: Do not delete
+label-don-t-show: don't show
+label-dry-run: Dry Run
+label-dry-run-not-execute-command: Dry Run (not execute command)
+label-duplex: Duplex
+label-duplicated: Duplicated
 label-duration: Duration
-label-dynamic: "Dynamic"
-label-end-of-sale: "End of Sale"
-label-end-of-support: "End of Support"
-label-errors: "Errors"
+label-duration-minutes: "{count, plural, one {# min} other {# min}}"
+label-dynamic: Dynamic
+label-dynamic-classification-policy: Dynamic Classification Policy
+label-dynamic-client-labels: Dynamic Client Labels
+label-dynamic-order: Dynamic Order
+label-dynamic-service-labels: Dynamic Service Labels
+label-effective: Effective
+label-email: Email
+label-empty-list: empty list
+label-enable: Enable
+label-enable-abduct-detection: Enable Abduct Detection
+label-enable-autocreation: Enable Autocreation
+label-enable-box: Enable Box
+label-enable-collect: Enable Collect
+label-enable-excel-column-autowidth: Enable Excel column autowidth
+label-enable-fm-event: Enable FM Event
+label-enable-horizontal-transit: Enable Horizontal Transit
+label-enable-ip-scan-discovery: Enable IP Scan Discovery
+label-enable-l2: Enable L2
+label-enable-l3: Enable L3
+label-enable-lost-redundancy-check: Enable lost redundancy check
+label-enable-manual: Enable Manual
+label-enable-metrics: Enable Metrics
+label-enable-node-portal: Enable Node Portal
+label-enable-periodic: Enable Periodic
+label-enable-prefix-list-provisioning: Enable Prefix-List Provisioning
+label-enable-provisioning: Enable Provisioning
+label-enable-received: Enable received
+label-enable-snmp: Enable SNMP
+label-enable-suggets-by-rule: Enable Suggets By Rule
+label-enable-time-delta-require-migration: Enable Time Delta (Require migration)
+label-enable-vlan-discovery: Enable VLAN Discovery
+label-end-condition: End Condition
+label-end-of-sale: End of Sale
+label-end-of-support: End of Support
+label-endpoint-discriminators: Endpoint Discriminators
+label-enter-an-optional-description-for-your-contribution: Enter an optional description for your contribution
+label-enter-hex-number: Enter HEX number
+label-enter-search-text-and-press-enter: enter search text and press <Enter>
+label-enter-your-gitlab-api-key: Enter your GitLab API key
+label-entrances: Entrances
+label-enumeration: Enumeration
+label-environment: Environment
+label-ephemeral: Ephemeral
+label-error-template: Error template
+label-errors: Errors
+label-errors-policy: Errors Policy
+label-escalate-alarm-consequence-policy: Escalate Alarm Consequence Policy
+label-escalate-items-add-policy: Escalate Items Add Policy
+label-escalate-maintenance-policy: Escalate Maintenance Policy
+label-escalate-to: Escalate to
+label-escalation-policy: Escalation Policy
+label-escalation-retries: Escalation Retries
+label-event-class-re: Event class RE
+label-event-id-or-json-code: Event id or JSON code
+label-event-policy: Event Policy
+label-event-sync-interval-sec: Event Sync Interval, sec
+label-event-sync-mode: Event Sync Mode
+label-event-ttl: Event TTL
+label-exclude: Exclude
+label-exclude-device-if-serialnumber-changed: Exclude Device if SerialNumber changed
+label-exclude-interfaces-with-the-default-name-profile-for-selector-an: Exclude interfaces with the "default" name profile (for Selector and Administrative Domain filter)
+label-exclude-match-labels: Exclude Match Labels
+label-exclude-mo-by-resource-group-selector: Exclude MO by Resource Group (Selector)
 label-exclude-on-mac-black-list: Exclude on MAC Black List
+label-exclude-ports-in-the-status-down: Exclude ports in the status "down"
+label-exit-scope-commands: Exit Scope Commands
+label-expire: Expire
+label-expired-ttl-sec: Expired TTL (sec)
+label-exponent: Exponent
+label-export-filter-name: Export Filter Name
+label-export-med: Export MED
+label-exposed-caps-to-objects: Exposed Caps to Objects
+label-extend: Extend
+label-extra: Extra
+label-factor: Factor
+label-failed-interval-sec: Failed Interval, sec
+label-failure-cooldown: Failure Cooldown
+label-false-level: False Level
+label-fatal: Fatal
+label-fatal-alarm-weight: Fatal Alarm Weight
+label-fax-no: Fax-no
+label-fdp: FDP
+label-female-facade: Female Facade
+label-field-access: Field Access
+label-field-data: Field Data
+label-field-name: Field Name
+label-field-type: Field Type
+label-fields: Fields
+label-file: "File #"
+label-file-name: File name
+label-filename-pattern: Filename pattern
+label-fill-color: Fill Color
+label-filter-by-description-regexp: Filter by Description (REGEXP)
 label-filter-by-ping-status: Filter by Ping status
+label-filter-interface-has-zero-load: Filter interface has zero load
 label-filter-none-problems: Filter None problems
 label-filter-pending-links: Filter Pending links
+label-filter-query: Filter Query
+label-first-entrance: First Entrance
+label-first-number: First Number
+label-flap-condition: Flap Condition
+label-flap-threshold-pcs: Flap Threshold (pcs)
+label-flap-window-sec: Flap Window (sec)
+label-floating-name-template: Floating Name Template
+label-floating-parent-segment: Floating Parent Segment
+label-fm-pool: FM Pool
+label-font: Font
+label-footer-remarks: Footer Remarks
+label-foreground: Foreground
+label-form: Form
+label-format-columns: Format Columns
+label-formats: Formats
 label-fqdn: FQDN
+label-fqdn-suffix: FQDN Suffix
+label-fqdn-template: FQDN Template
 label-from-date: From Date
-label-from-rule: "From Rule"
-label-graphics: "Graphics"
-label-hostname: "Hostname"
-label-in: "In"
+label-from-rule: From Rule
+label-from-serial: From Serial
+label-front-facade: Front Facade
+label-full-path: Full Path
+label-gain-db: Gain DB
+label-generate-rpsl: Generate RPSL
+label-generator: Generator
+label-gitlab-api-key: GitLab API Key
+label-global-cpe-id: Global CPE Id
+label-global-id: Global Id
+label-global-limit: Global limit
+label-google-hybrid-map-layer: Google Hybrid
+label-google-roadmap-map-layer: Google Roadmap
+label-google-satellite-map-layer: Google Satellite
+label-google-terrain-map-layer: Google Terrain
+label-graphic: Graphic
+label-graphics: Graphics
+label-group-alarm: Group Alarm
+label-group-dn: Group_DN
+label-group-escalation-policy: Group Escalation Policy
+label-group-reference-regex: Group Reference Regex
+label-group-search-filter: Group Search Filter
+label-group-select: Group select
+label-habitated: Habitated
+label-hanlder: Hanlder
+label-has-preview: Has Preview
+label-header: Header
+label-header-remarks: Header Remarks
+label-headers-match: Headers Match
+label-helper-modelid: Helper ModelID
+label-hide: Hide
+label-hide-enabled: Hide enabled
+label-hide-report-from-ui: Hide Report from UI
+label-homes-per-entrance: Homes per Entrance
+label-horizontal-transit-policy: Horizontal Transit Policy
+label-hostname: Hostname
+label-hours-expr: Hours Expr.
+label-hsrp: HSRP
+label-huawei-ndp: Huawei NDP
+label-hw-timestamps: HW. Timestamps
+label-icon: Icon
+label-ifdesc: IfDesc
+label-ignore-cli-errors: Ignore CLI errors
+label-ignored: Ignored
+label-image: Image
+label-import-filter-name: Import Filter Name
+label-import-med: Import MED
+label-in: In
 label-in-days: In Days
+label-in-labels: In Labels
+label-include: Include
 label-include-addresses: Include Addresses
+label-include-asn-expression: Include ASN Expression
 label-include-prefixes: Include Prefixes
-label-interface: "Interface"
+label-input-metric-type: Input Metric Type
+label-insert-mac-address-to-search: insert MAC address to search
+label-instance-configs: Instance Configs
+label-interaction-settings: Interaction Settings
+label-interface: Interface
+label-interface-changed: Interface changed
+label-interface-filter: Interface Filter
+label-interface-status: Interface status
+label-interface-validation: Interface Validation
 label-interval: Interval
-label-inventory: "Inventory"
-label-ip: "IP"
-label-ip-address: "IP Address"
-label-linkgraph: "LinkGraph"
-label-loading: "Loading ..."
-label-location: "Location"
-label-mac: "MAC"
-label-maintenance: "Maintenance"
+label-interval-sec: Interval, sec
+label-interval-sec-2: Interval,sec
+label-inventory: Inventory
+label-ip: IP
+label-ip-address: IP Address
+label-ip-discovery-ping: IP Discovery (Ping)
+label-ip-prefix-profile: IP Prefix Profile
+label-ip-vrf: IP VRF
+label-is-active: is_active
+label-is-enabled: Is Enabled
+label-is-filtered: Is Filtered
+label-is-hidden: Is Hidden
+label-is-indexed: Is Indexed
+label-is-locked: Is Locked
+label-is-matching-label: Is Matching Label
+label-is-searchable: Is Searchable
+label-isis: ISIS
+label-italic: Italic
+label-job-handler: Job Handler
+label-keep-connections: Keep connections
+label-key-expression: Key Expression
+label-key-fields: Key Fields
+label-l2-mtu: L2 MTU
+label-label-pattern: Label Pattern
+label-lacp: LACP
+label-last-extract: Last Extract
+label-last-extract-event: Last Extract Event
+label-last-load: Last Load
+label-layout: Layout
+label-ldp: LDP
+label-level-limit: Level Limit
+label-link-discovery-policy: Link Discovery Policy
+label-link-event: Link Event
+label-linkgraph: LinkGraph
+label-lldp: LLDP
+label-loading: Loading ...
+label-local-backup-ip: Local Backup IP
+label-local-cpe-id: Local CPE Id
+label-local-ip: Local IP
+label-local-pref: Local Pref
+label-location: Location
+label-long-alarm-archive-more-3-months: Long Alarm Archive (more 3 months)
+label-lying: Lying
+label-mac: MAC
+label-mac-db: MAC DB
+label-mac-discovery-policy: MAC Discovery Policy
+label-mac-history: MAC History
+label-mail: Mail
+label-maintenance: Maintenance
+label-maintenances: Maintenances
+label-male-facade: Male Facade
 label-managed-object: Managed Object
 label-managed-object-container: "ManagedObject Container: {name}"
+label-managed-object-loader-policy: Managed Object Loader Policy
 label-managed-object-search-for-config-only: Managed object search (for config only)
-label-metrics: "Metrics"
-label-migrate: "Migrate"
-label-migrate-device-changed: "Migrate (Device Changed)"
-label-model: "Model"
-label-n-a: "N/A"
+label-mappings: Mappings
+label-markup-language: Markup Language
+label-match-conditions: Match Conditions
+label-match-handler: Match Handler
+label-match-labels: Match Labels
+label-match-m-units: Match M Units
+label-match-rules: Match Rules
+label-matchers: Matchers
+label-max: Max
+label-max-duration: Max. Duration
+label-max-endpoints: Max. Endpoints
+label-max-length: Max. Length
+label-max-prefixes: Max. Prefixes
+label-max-scripts: Max. Scripts
+label-max-set-severity: Max./Set Severity
+label-max-threads: Max. Threads
+label-max-windows: Max  Windows
+label-members: members
+label-merge-window-sec: Merge Window (sec)
+label-message-pattern: Message Pattern
+label-message-registry-policy: Message Registry Policy
+label-message-storm-threshold: Message Storm Threshold
+label-message-types: Message Types
+label-metric-batch-delay-sec: Metric Batch Delay, sec
+label-metric-batch-signal: Metric Batch Signal
+label-metric-collected-policy: Metric Collected Policy
+label-metric-measurement-units: Metric Measurement Units
+label-metric-scale: Metric Scale
+label-metric-source: Metric source
+label-metrics: Metrics
+label-metrics-interval-buckets: Metrics interval Buckets
+label-mib: "MIB #"
+label-migrate: Migrate
+label-migrate-device-changed: Migrate (Device Changed)
+label-mikrotik-ndp: MikroTik NDP
+label-min: min
+label-min-2: Min
+label-min-duration: Min. Duration
+label-min-duration-2: Min Duration
+label-min-objects: Min. Objects
+label-min-set-severity: Min./Set Severity
+label-min-subscribers: Min. Subscribers
+label-min-windows: Min  Windows
+label-minutes-expr: Minutes Expr.
+label-mirror-policy: Mirror Policy
+label-mnt-ref: Mnt. Ref
+label-mode: Mode
+label-model: Model
+label-modes: Modes
+label-months-expr: Months Expr.
+label-move-nested-objects-to: Move nested objects to
+label-move-nested-objects-to-lost-found: Move nested objects to Lost&Found
+label-multicast-vlan: Multicast VLAN
+label-mx-policy: MX Policy
+label-n-a: N/A
 label-name: Name
-label-neighbors: "Neighbors"
+label-name-template: Name Template
+label-name-template-2: Name template
+label-neighbors: Neighbors
+label-network-ranges: Network Ranges
+label-new-event-notification: New Event Notification
+label-new-homes: New Homes
+label-new-message: New message
+label-new-password: New Password
+label-new-password-cannot-be-empty: New Password cannot be empty
+label-new-password-retype: New Password (Retype)
+label-no-active-alarms: No active alarms
+label-no-alarms: No Alarms
+label-no-data: No data
+label-no-data-found: No data found
+label-no-events: No events
+label-no-group-selected: No group selected
+label-no-jobs: No jobs
+label-no-macs-collected: No MACs collected
+label-no-matching: No matching
+label-no-possible-transitions: No possible transitions
+label-no-recently-closed-alarms: No recently closed alarms
+label-no-records: No records
+label-no-results: No results.
+label-no-subinterfaces: No SubInterfaces
+label-not-configured: Not Configured
+label-not-found: Not Found
+label-not-limited: Not Limited
+label-nothing-checked: nothing checked
+label-nothing-was-found: Nothing was found
+label-notification-delay-s: Notification Delay (s)
+label-notification-delay-sec: Notification Delay (sec)
+label-notify-delayed: Notify Delayed
+label-notify-immediately: Notify Immediately
+label-nri: NRI
 label-ns: NS
-label-object-metrics: "Object Metrics"
-label-object-name: "Object Name"
-label-out: "Out"
-label-outages-summary: "Outages Summary"
-label-packets: "Packets"
-label-platform-name: "Platform Name"
+label-number-packets-on-test: Number Packets on Test
+label-oam: OAM
+label-object-class: Object Class
+label-object-filter: Object Filter
+label-object-groups: Object Groups
+label-object-metrics: Object Metrics
+label-object-name: Object Name
+label-object-url-template: Object URL Template
+label-object-validation: Object Validation
+label-old-password: Old Password
+label-old-password-cannot-be-empty: Old Password cannot be empty
+label-on-denied-firmware: On Denied Firmware
+label-on-enter-handlers: On Enter Handlers
+label-on-leave-handlers: On Leave Handlers
+label-on-new-platform: On New Platform
+label-on-platform-change: On platform change
+label-only: Only
+label-only-not-completed: Only not Completed
+label-only-root: Only Root
+label-opacity: Opacity
+label-openstreetmap-map-layer: OpenStreetMap
+label-operations: Operations
+label-organisation: Organisation
+label-orientation: Orientation
+label-ospf: OSPF
+label-ospf-v3: OSPF v3
+label-out: Out
+label-outages-summary: Outages Summary
+label-output-type: Output Type
+label-overlay-glyph: Overlay Glyph
+label-packet-size-bytes: Packet size, bytes
+label-packets: Packets
+label-packets-count: Packets count
+label-param-name: Param name
+label-param-rules: Param Rules
+label-parameter-choices: Parameter Choices
+label-parameters: Parameters
+label-parameters-schema: Parameters Schema
+label-params: Params
+label-params-form: Params Form
+label-password: Password
+label-password-cannot-be-empty: Password cannot be empty
+label-path-template: Path Template
+label-pattern: pattern
+label-pattern-re: Pattern (RE)
+label-patterns: Patterns
+label-peer-data: Peer Data
+label-peer-discovery: Peer Discovery
+label-peer-status: Peer Status
+label-percentile: Percentile
+label-periodic-alarm: Periodic Alarm
+label-periodic-sample: Periodic Sample
+label-periodic-telemetry: Periodic Telemetry
+label-permission-name: permission_name
+label-permission-name-2: Permission Name
+label-permissions: Permissions
+label-persistent: Persistent
+label-phone-number: Phone Number
+label-phone-range: Phone Range
+label-ping-policy: Ping Policy
+label-platform-name: Platform Name
+label-please-confirm-your-new-password: Please confirm your new password
+label-plugin: plugin
+label-pm-agent: PM Agent
+label-point-radius: Point Radius
+label-policy-off-hours: Policy Off Hours
 label-pool: Pool
+label-pool-active: Pool Active
+label-pool-exhaust: Pool Exhaust
+label-pool-strategy: Pool Strategy
+label-pormapper-name: Pormapper Name
+label-portmapper: Portmapper
+label-position: Position
+label-postal-code: Postal Code
+label-pre-reasons: Pre Reasons
+label-preference: Preference
+label-preferred-language: Preferred Language
+label-preferred-profile-credential: Preferred Profile Credential
 label-prefix: Prefix
+label-prefix-discovery: Prefix Discovery
+label-prefix-discovery-policy: Prefix Discovery Policy
+label-prefix-label: Prefix Label
+label-prefix-list: Prefix List
+label-prefix-list-notification-group: Prefix-List Notification Group
+label-priv-key: Priv Key
+label-priv-proto: Priv Proto
 label-profile: Profile
 label-profile-check-only: Profile check only
-label-profile-sa: "Profile SA"
-label-project: "Project"
-label-provides-resources: "Provides Resources"
-label-recommended: "Recommended"
+label-profile-sa: Profile SA
+label-project: Project
+label-project-distance-m: Project distance (m)
+label-provides-resources: Provides Resources
+label-query: Query
+label-query-parameters: Query Parameters
+label-question: Question
+label-questions: Questions
+label-quick-jump: Quick Jump...
+label-rack: "Rack: "
+label-raise-alarm-to-target: Raise Alarm to target
+label-rate-limit: Rate limit
+label-raw-policy: Raw Policy
+label-raw-vars: Raw Vars
+label-rear-facade: Rear Facade
+label-recent-alarms-time-opacity: Recent Alarms (time/opacity)
+label-recommended: Recommended
 label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Recommended way for policy-map values calculating is: normal-burst-bytes=bits-per-second*Tc/8.Recommended way for rate-limit values calculating is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
+label-recover-time-sec: Recover Time (sec)
+label-reference: Reference
+label-regex-label: Regex Label
+label-regexp: Regexp
+label-register-as-notification: Register as Notification
+label-remote: Remote
+label-remote-backup-ip: Remote Backup IP
+label-remote-id: Remote ID
+label-remote-ip: Remote IP
+label-remove-nested-objects: Remove nested objects
+label-render-template: Render Template
+label-rep: REP
+label-repeat-delay: Repeat Delay
+label-repeat-escalations: Repeat Escalations
+label-replace-policy: Replace Policy
 label-report-format: Report Format
-label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: "Report more than 1 year not allowed. If nedeed - request it from Administrator"
+label-report-formatter: Report Formatter
+label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: Report more than 1 year not allowed. If nedeed - request it from Administrator
+label-report-ping-attempts: Report ping attempts
+label-report-ping-rtt: Report ping RTT
+label-report-source: Report Source
 label-report-type: Report Type
+label-require-any-group: Require any group
+label-require-group: Require Group
+label-required-rules: Required Rules
+label-resolver-handler: Resolver Handler
+label-resource-group: Resource Group
+label-resource-map-policy: Resource Map Policy
+label-restrict-mac-to-management-vlan: Restrict MAC to management vlan
+label-retry: Retry
+label-retype-new-password: Retype New Password
+label-retype-password: Retype password
+label-reverse-nses: Reverse NSes
+label-right-re: Right Re
+label-ro-community: RO Community
+label-route-maintainers: Route Maintainers
+label-route-target: Route Target
+label-rpsl: RPSL
+label-rpsl-footer: RPSL Footer
+label-rpsl-header: RPSL Header
+label-rpsl-remark: RPSL Remark
+label-rsvp: RSVP
+label-rule-action: Rule Action
+label-run-actions: Run Actions
+label-run-as: Run As
+label-run-order: Run Order
+label-run-sync-at: Run Sync At
+label-running-policy: Running Policy
+label-rw-community: RW Community
+label-save-history: Save History
+label-scheme: Scheme
+label-scopes: Scopes
+label-script: Script
+label-script-failed: Script failed
+label-search: Search ...
 label-search-by-ip: Search by ip
 label-search-by-prefix: Search by prefix
 label-search-by-user: Search by user
-label-segment-2: "Segment"
-label-segment-3: "Segment"
+label-search-text: Enter text to search
+label-seconds-expr: Seconds Expr.
+label-security-level: Security Level
+label-seen-propagation: Seen propagation
+label-segment-2: Segment
+label-segment-3: Segment
 label-segment-name: "Segment: {name}"
-label-sensors: "Sensors"
-label-service: "Service"
-label-service-range: "Service Range"
+label-segment-name-2: Segment Name
+label-select-band: Select band
+label-select-bookmark: Select Bookmark
+label-select-file: Select file...
+label-select-file-2: Select File...
+label-select-group: Select group
+label-select-mib: Select MIB...
+label-select-parent: Select parent...
+label-select-pool: Select Pool
+label-select-segment: Select segment...
+label-select-sibling: Select sibling...
+label-sensor-alias-template: Sensor Alias Template
+label-sensor-measurement-units: Sensor Measurement Units
+label-sensors: Sensors
+label-servers: Servers
+label-service: Service
+label-service-binding: Service Binding
+label-service-dependencies: Service Dependencies
+label-service-range: Service Range
+label-service-weight: Service weight
+label-set-headers: Set Headers
+label-shape-name-template: Shape Name template
+label-shard: Shard
+label-short-name: Short Name
+label-show: Show
+label-show-in-form: Show in form
+label-show-in-summary: Show in summary
+label-show-labels: Show Labels
 label-show-other-problems: Show other problems
 label-show-problem-on-already-linked: Show problem on already linked
-label-soft-version: "Soft Version"
-label-speed: "Speed"
-label-state: "State"
-label-static: "Static"
-label-time-pattern: "Time Pattern"
+label-sibling: Sibling
+label-slots: Slots
+label-snippet: Snippet
+label-snippets: Snippets
+label-snmp-auth-key: SNMP Auth Key
+label-snmp-auth-proto: SNMP Auth Proto
+label-snmp-context-name: SNMP Context Name
+label-snmp-credentials: SNMP Credentials
+label-snmp-priv-key: SNMP Priv Key
+label-snmp-priv-proto: SNMP Priv Proto
+label-snmp-rate-limit: SNMP Rate limit
+label-snmp-ro-community: SNMP RO Community
+label-snmp-rw-community: SNMP RW Community
+label-snmp-security-level: SNMP Security Level
+label-snmp-username: SNMP Username
+label-snmp-v1: SNMP v1
+label-snmp-v2c: SNMP v2c
+label-soa: SOA
+label-soft-version: Soft Version
+label-software-image: Software Image
+label-sound: Sound
+label-source-node: Source Node
+label-sources: Sources
+label-special-addresses: Special addresses
+label-speed: Speed
+label-state: State
+label-state-policy: State Policy
+label-static: Static
+label-static-members: Static Members
+label-status-alarm-policy: Status Alarm Policy
+label-status-change-notification: Status Change Notification
+label-status-discovery: Status Discovery
+label-status-transfer-policy: Status Transfer Policy
+label-step-ness: Step  Ness
+label-step-number: Step  Number
+label-stop-processing-rules: Stop Processing Rules
+label-storage: Storage
+label-storm-policy: Storm Policy
+label-stp: STP
+label-stream: Stream
+label-stroke-color: Stroke Color
+label-stroke-width: Stroke Width
+label-subinterface: Subinterface
+label-subinterface-apply-policy: SubInterface Apply Policy
+label-subject-template: Subject Template
+label-subscribers-that-sum: Subscribers that Sum
+label-subscription-settings: Subscription Settings
+label-suggest-auth-profile: Suggest Auth Profile
+label-suggest-cli: Suggest CLI
+label-suggest-snmp: Suggest SNMP
+label-suggest-snmp-oids: Suggest SNMP OIDs
+label-super-password: Super Password
+label-superuser-status: Superuser status
+label-suppress-alarms: Suppress alarms
+label-suppress-alarms-2: Suppress Alarms
+label-suppression-window: Suppression Window
+label-switch-off: Switch Off
+label-symmetric-check: Symmetric Check
+label-sync-approved-records: Sync Approved Records
+label-sync-asset: Sync Asset
+label-sync-interval-sec: Sync Interval, sec
+label-sync-managedobject: Sync ManagedObject
+label-sync-notification-policy: Sync Notification Policy
+label-sync-policy: Sync Policy
+label-synchronize-mail: Synchronize mail
+label-synchronize-name: Synchronize name
+label-syslog-archive-policy: Syslog Archive Policy
+label-syslog-source: Syslog Source
+label-syslog-source-ip: Syslog Source IP
+label-target-nodes: Target Nodes
+label-tech-c: Tech-c
+label-telemetry-sample: Telemetry Sample
+label-tememetry-sample: Tememetry Sample
+label-test-cases: Test cases
+label-threshold-type: Threshold Type
+label-time-params: Time Params
+label-time-pattern: Time Pattern
+label-timeout: Timeout
+label-timeout-msec: Timeout, msec
+label-timeout-sec: Timeout(sec)
+label-title: Title
 label-to-date: To Date
-label-topology-neighbors: "Topology Neighbors"
-label-tt: "TT"
-label-utilization: "Utilization"
+label-to-prefix: To Prefix
+label-to-serial: To Serial
+label-to-vrf: To VRF
+label-topology-methods: Topology methods
+label-topology-neighbors: Topology Neighbors
+label-tos: TOS
+label-transition: Transition
+label-trap-community: Trap Community
+label-trap-source: Trap Source
+label-trap-source-ip: Trap Source IP
+label-trapid: TrapID
+label-true-level: True Level
+label-tt: TT
+label-tt-policy: TT Policy
+label-tt-system-config: TT System Config
+label-tt-system-id: TT System ID
+label-ttl-days: TTL (days)
+label-udld: UDLD
+label-underlined: Underlined
+label-unique-resource: Unique Resource
+label-unique-value: Unique Value
+label-unknowns: Unknowns
+label-update-addresses: Update Addresses
+label-update-expiration: Update Expiration
+label-uplink-policy: Uplink Policy
+label-uptime: Uptime
+label-use-aggregated-datasource: Use aggregated Datasource
+label-use-connections-from: Use connections from
+label-use-object-as-port-token: Use object as Port Token
+label-user-clearable: User Clearable
+label-user-dn: User_DN
+label-user-interface: User Interface
+label-user-name-cannot-be-empty: User name cannot be empty
+label-user-permissions: User Permissions
+label-user-search-filter: User Search Filter
+label-utilization: Utilization
+label-uuid: UUID
+label-validation-as-field: Validation AS Field
+label-validation-policy: Validation Policy
+label-values: Values
+label-vc-l2-domain: VC L2 Domain
+label-version-changed: Version changed
+label-vlan-border: VLAN Border
+label-vlan-discovery-filter: VLAN Discovery Filter
+label-vlan-discovery-policy: VLAN Discovery Policy
+label-vlan-label: VLAN Label
+label-vlan-pools: VLAN Pools
+label-vlan-provisioning-policy: VLAN Provisioning Policy
+label-volume: Volume
 label-vrf: VRF
+label-vrf-group: VRF Group
+label-vrrp: VRRP
+label-vrrp-v3: VRRP v3
+label-wait-tt: Wait TT
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-addresses: WARNING!!!&nbsp;This prefix is empty! Please add nested addresses.
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-prefixes: WARNING!!!&nbsp;This prefix is empty! Please add nested prefixes.
+label-weekdays-expr: Weekdays Expr.
+label-wf-states: WF States
+label-when: When
+label-width: Width
+label-window-function: Window Function
+label-workflow: WorkFlow
+label-xmac: xMAC
+label-yandex-hybrid-map-layer: Yandex Hybrid
+label-yandex-roadmap-map-layer: Yandex Roadmap
+label-yandex-satellite-map-layer: Yandex Satellite
+label-years-expr: Years Expr.
+label-yes-no: Yes/No
 label-zone: Zone
-msg-all-polling: "All polling"
-msg-as-set-members-cache-is-empty-please-update-whois-cache: "AS-SET members cache is empty. Please update Whois Cache"
-msg-cannot-resolve-as-set-prefixes: "Cannot resolve AS-SET prefixes"
-msg-duplicate-managed-object: "Duplicate MO"
+msg-absolute: Absolute
+msg-account-is-not-registred-please-register-account-to-get-access-t: Account is not registred. Please register account to get access to additional support and services
+msg-account-is-registred-you-have-access-to-additional-support-and-s: Account is registred. You have access to additional support and serivces
+msg-ack: Ack
+msg-ack-subscriber: Ack Subscriber
+msg-ack-user: Ack User
+msg-acknowledge: Acknowledge
+msg-action-value0-failed: Action {value0} failed
+msg-active: ACTIVE
+msg-add-object-to-value0: Add object to {value0}
+msg-add-value0: Add {value0}
+msg-address-usage: Address Usage
+msg-address-value0-successfully: Address {value0} successfully
+msg-adm-path: Adm Path
+msg-affected-based-severity-preferred: Affected Based Severity Preferred
+msg-affected-limit: Affected Limit
+msg-affected-objects: Affected Objects
+msg-affected-subscriber: Affected Subscriber
+msg-after-create: After Create
+msg-after-update: After Update
+msg-aggregated: Aggregated
+msg-alarm-cleared: Alarm cleared
+msg-alarm-subject: Alarm Subject
+msg-alarm-tt: Alarm TT
+msg-alarms-cleared-successfully: Alarms cleared successfully
+msg-all: ALL
+msg-all-interface-addresses: All interface addresses
+msg-all-maps: All Maps
+msg-all-message: All Message
+msg-all-polling: All polling
+msg-all-segment-objects: All Segment Objects
+msg-all-success: All Success
+msg-allocated-prefixes: Allocated Prefixes
+msg-allow-autosegmentation: Allow autosegmentation
+msg-allowed-any: Allowed Any
+msg-always: Always
+msg-always-collect: Always Collect
+msg-always-enable: Always Enable
+msg-always-mirror: Always Mirror
+msg-always-run: Always Run
+msg-always-validate: Always Validate
+msg-and: AND
+msg-any: Any
+msg-any-2: ANY
+msg-api-key-found: API key found
+msg-api-key-required: API Key Required
+msg-api-key-required-2: API key required
+msg-api-key-saved: API key saved
+msg-are-you-sure-you-want-to-delete-all-rows: Are you sure you want to delete all rows?
+msg-are-you-sure-you-want-to-delete-this-wire: Are you sure you want to delete this wire
+msg-are-you-sure-you-want-to-reset-all-values: Are you sure you want to reset all values?
+msg-as-depended: As Depended
+msg-as-discovered: As Discovered
+msg-as-managed-object: As Managed Object
+msg-as-new: As New
+msg-as-or-as-set: AS or AS-set
+msg-as-set-members-cache-is-empty-please-update-whois-cache: AS-SET members cache is empty. Please update Whois Cache
+msg-asset-peer: Asset Peer
+msg-attachment-deleted: Attachment deleted
+msg-auto-reload-value0: "Auto reload : {value0}"
+msg-auto-reload-value0-2: "Auto reload : {value0}"
+msg-auto-reload-value0-3: "Auto reload : {value0}"
+msg-auto-reload-value0-4: "Auto reload : {value0}"
+msg-average-level: Average level
+msg-avg-load-in: AVG Load In
+msg-avg-load-out: AVG Load Out
+msg-backend-failed-to-clear-alarms: "Backend: failed to clear alarms"
+msg-beef: Beef
+msg-beef-test: Beef Test
+msg-beef-test-config: Beef Test Config
+msg-bidirectional-over-differ-connection: Bidirectional over Differ Connection
+msg-bidirectional-over-one-connection: Bidirectional over One Connection
+msg-block: Block
+msg-block-raise-alarm: Block & Raise Alarm
+msg-bool: Bool
+msg-buffer-size: "Buffer Size: {size}"
+msg-building: Building...
+msg-by-config: By Config
+msg-by-instance: By Instance
+msg-by-max-status: By Max Status
+msg-by-min-status: By Min Status
+msg-by-rule: By Rule
+msg-by-service-component: By Service Component
+msg-by-tokens: By Tokens
+msg-by-types: By Types
+msg-by-username-snmp-ro: By Username/SNMP RO
+msg-calcify: Calcify
+msg-calculate: Calculate
+msg-cannot-read-file: Cannot read file
+msg-cannot-resolve-as-set-prefixes: Cannot resolve AS-SET prefixes
+msg-capabilities-of: Capabilities of {name}
+msg-center: Center
+msg-chained-downlink: Chained Downlink
+msg-change-address: Change address
+msg-change-prefix: "Change prefix "
+msg-change-prefix-value0: Change prefix {value0}
+msg-changes: Changes
+msg-changes-2: changes
+msg-changes-saved-successfully: Changes saved successfully
+msg-changes-value0: Changes {value0}
+msg-changing-language: Changing language
+msg-checking-api-key: Checking API key...
+msg-choice: Choice
+msg-choice-combo: Choice (combo)
+msg-choice-radio: Choice (radio)
+msg-circle: Circle
+msg-class-based-policy: Class Based Policy
+msg-clearing-alarms: Clearing alarms...
+msg-cli-only: CLI Only
+msg-cli-snmp: CLI, SNMP
+msg-clone-rows: Clone Rows
+msg-cloned: Cloned
+msg-cloud-downlink: Cloud Downlink
+msg-collect-on-change: Collect on Change
+msg-command-snippet: Command Snippet
+msg-comment-message: Comment Message
+msg-comment-source: Comment Source
+msg-comment-time: Comment Time
+msg-compare-with: Compare With
+msg-completed: Completed
+msg-confdb: ConfDB
+msg-confdb-script: ConfDB, Script
+msg-config-mirror: Config Mirror
+msg-config-saved: Config saved
+msg-config-upload: Config Upload
+msg-confirm: Confirm
+msg-confirm-delete-wire: Are you sure you want to delete this wire {from}=>{to}?
+msg-confirm-transition: Do you wish to perform '{transition}' transition? This operation cannot be undone!
+msg-confirmation: Confirmation
+msg-connect: CONNECT
+msg-connections-removed: Connections removed
+msg-container-level-1: Container (Level 1)
+msg-container-level-2: Container (Level 2)
+msg-container-level-3: Container (Level 3)
+msg-container-level-4: Container (Level 4)
+msg-container-level-5: Container (Level 5)
+msg-container-level-6: Container (Level 6)
+msg-container-level-7: Container (Level 7)
+msg-contains: Contains
+msg-continue: Continue
+msg-contribution-details: Contribution Details
+msg-contribution-sent: Contribution sent
+msg-cpu-usage: CPU Usage
+msg-create-internal-connection-from-value0-to-value1: Create internal connection from {value0} to {value1}
+msg-create-model: Create Model
+msg-create-new-address: Create new address
+msg-create-new-prefix: Create new prefix
+msg-create-new-value0: Create new {value0}
+msg-created-from-alarm-list-at: "created from alarm list at "
+msg-created-from-alarm-list-at-value0: created from alarm list at {value0}
+msg-created-from-alarms-list-at: "created from alarms list at "
+msg-created-from-alarms-list-at-value0: created from alarms list at {value0}
+msg-created-from-managed-objects-list-at: "created from managed objects list at "
+msg-created-from-managed-objects-list-at-value0: created from managed objects list at {value0}
+msg-created-from-map-at: "created from map at "
+msg-created-from-map-at-value0: created from map at {value0}
+msg-created-interface: "Created interface: "
+msg-created-interface-value0: "Created interface: {value0}"
+msg-created-interface-value0-2: "Created interface: {value0}"
+msg-credentials-has-been-changed: Credentials has been changed
+msg-crm-users: CRM Users
+msg-datastream: Datastream
+msg-date-interval: Date Interval
+msg-date-interval-with-align: Date Interval with Align
+msg-degraded: DEGRADED
+msg-deleted: deleted
+msg-deleted-2: Deleted
+msg-deleting: deleting
+msg-deleting-2: Deleting ...
+msg-deny: Deny
+msg-description-value0: "Description #{value0}"
+msg-device-has-alarm: Device has alarm
+msg-device-is-normal: Device is normal
+msg-device-neighbors: Device Neighbors
+msg-device-sn-changed-by-bi: Device SN changed (by BI)
+msg-dictionary-not-found: Dictionary not found
+msg-diff-level: Diff level
+msg-dimensions-must-be-set-to-generate-template: Dimensions must be set to generate template
+msg-direct-alarm: Direct Alarm
+msg-direct-downlink: Direct Downlink
+msg-direct-uplink: Direct Uplink
+msg-disabled: Disabled
+msg-discards-in-packets-s: Discards In (packets/s)
+msg-discards-out-packets-s: Discards Out (packets/s)
+msg-dns-zone-record: DNS Zone Record
+msg-do-not-convert: Do not convert
+msg-do-not-raise: Do not raise
+msg-do-not-segmentate: Do not segmentate
+msg-do-you-want-to-remove-all-connections-within-object-this-operati: Do you want to remove all connections within object? This operation cannot be undone!
+msg-do-you-wish-to-delete-address-this-operation-cannot-be-undone: Do you wish to delete address? This operation cannot be undone!
+msg-do-you-wish-to-delete-record-this-operation-cannot-be-undone: Do you wish to delete record? This operation cannot be undone!
+msg-do-you-wish-to-delete-workflow-this-operation-cannot-be-undone: Do you wish to delete Workflow? This operation cannot be undone!
+msg-do-you-wish-to-unlink-interface: Do you wish to unlink interface {name}? This operation cannot be undone!
+msg-don-t-raise: Don't Raise
+msg-down: DOWN
+msg-download-button-clicked-value0: Download button clicked {value0}
+msg-download-value0: Download {value0}
+msg-drag-and-drop-to-reorganize: Drag and drop to reorganize
+msg-drag-other-object-from-left-tree: Drag other object from left tree
+msg-drop-alarm: Drop Alarm
+msg-duplicate-managed-object: Duplicate MO
 msg-duration-about-hours: "{count, plural, one {about # hour} other {about # hours}}"
-msg-duration-about-month: "about 1 month"
-msg-duration-about-year: "about 1 year"
+msg-duration-about-month: about 1 month
+msg-duration-about-year: about 1 year
 msg-duration-about-years: "{count, plural, one {about # year} other {about # years}}"
-msg-duration-almost-two-years: "almost 2 years"
+msg-duration-almost-two-years: almost 2 years
 msg-duration-almost-years: "{count, plural, one {almost # year} other {almost # years}}"
 msg-duration-days: "{count, plural, one {# day} other {# days}}"
-msg-duration-less-than-minute: "less than a minute"
+msg-duration-less-than-minute: less than a minute
 msg-duration-minutes: "{count, plural, one {# minute} other {# minutes}}"
 msg-duration-months: "{count, plural, one {# month} other {# months}}"
-msg-duration-never: "Never"
-msg-duration-over-year: "over 1 year"
+msg-duration-never: Never
+msg-duration-over-year: over 1 year
 msg-duration-over-years: "{count, plural, one {over # year} other {over # years}}"
-msg-enter-a-valid-username: "Enter a valid username."
-msg-failed-to-clear-alarms: "Failed to clear alarms"
-msg-integer-is-required: "Integer is required"
-msg-invalid-password: "Invalid password"
-msg-is-managed: "Is Managed"
-msg-is-managed-object-type-defined: "Is Managed, object type defined"
-msg-is-managed-object-type-defined-bad-cli-credential: "Is Managed, object type defined bad CLI Credential"
-msg-is-managed-object-type-undefined: "Is Managed, object type undefined"
-msg-is-managed-object-type-undefined-bad-snmp-credential: "Is Managed, object type undefined bad SNMP Credential"
-msg-is-managed-object-type-undefined-for-various-reasons: "Is Managed, object type undefined for various reasons"
-msg-is-managed-object-type-undefined-has-ping-response: "Is Managed, object type undefined has ping response"
-msg-is-managed-object-type-undefined-not-ping-response: "Is Managed, object type undefined not ping response"
-msg-is-monitoring-object-type-undefined-only-availability-check: "Is monitoring, object type undefined, only availability check"
-msg-main: "Main"
-msg-managed-object-was-moved: "MO is move"
-msg-more-3: "More 3"
-msg-never: "never"
-msg-no-interfaces: "No interfaces"
-msg-no-links: "No links"
-msg-no-local-rules: "No local rules"
-msg-no-outages-detected: "No outages detected"
-msg-no-uplinks: "No uplinks"
-msg-no-vlan-propagation: "No VLAN propagation"
-msg-not-managed: "Not Managed"
-msg-not-object-found-for-set-report-param: "Not object found for set Report Param."
-msg-one-params-from-date-to-date-or-ids-required: "One params - FROM_DATE/TO_DATE or IDS required"
-msg-origin-routes-cache-is-empty-please-update-whois-cache: "Origin routes cache is empty. Please update Whois Cache"
-msg-password-is-already-used: "Password is already used"
-msg-password-min-lowercase: "Password must have at least {count} lower-case letters"
-msg-password-min-numbers: "Password must have at least {count} numbers"
-msg-password-min-specials: "Password must have at least {count} special symbols"
-msg-password-min-uppercase: "Password must have at least {count} upper-case letters"
-msg-password-too-short: "Password too short. Must be at least {count} characters"
-msg-permission-denied: "Permission denied"
-msg-permission-denined: "Permission denined"
-msg-prefix-list-built: "Prefix List built"
-msg-prefix-list-generator-is-not-implemented-for-this-profile: "Prefix-list generator is not implemented for this profile"
-msg-prefix-not-found: "Prefix not found"
-msg-profile-check-failed: "Profile check failed"
-msg-report-data-source-not-found: "Report data source {data_source} not found"
-msg-temporary-unavailable: "Temporary unavailable"
-msg-unknown-as-set: "Unknown AS-SET"
-msg-user-account-is-blocked: "User account is blocked"
-msg-user-does-not-exists: "User does not exists"
-msg-vrf-required: "VRF Required"
+msg-dynamic-order-must-be-unique: Dynamic Order must be unique
+msg-eat: Eat
+msg-editable: Editable
+msg-empty-command: Empty command
+msg-enter-a-valid-username: Enter a valid username.
+msg-enter-hex-value-starting-with-or-0x: "Enter hex value starting with # or 0x"
+msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-: Enter list valid ASnumber (ex., AS1234) or as sets (ex. AS-MEGASET, AS-MEGA-SET)
+msg-enter-the-number-of-rows-to-clone: "Enter the number of rows to clone:"
+msg-equal: Equal
+msg-error-changing-password: Error changing password
+msg-error-getting-information: Error getting information
+msg-error-in-data: Error in data
+msg-error-loading-data: Error loading data
+msg-error-saving-changes: Error {failure} changes
+msg-error-saving-record: Error saving record
+msg-error-updating-statuses: Error updating statuses
+msg-error-value0: "Error : {value0}"
+msg-error-value0-2: "Error: {value0}"
+msg-error-value0-3: "Error: {value0}"
+msg-error-value0-4: "Error : {value0}"
+msg-error-value0-5: "Error: {value0}"
+msg-error-value0-6: "Error: {value0}"
+msg-error-value0-7: "Error : {value0}"
+msg-error-value0-8: "Error : {value0}"
+msg-errors-in-packets-s: Errors In (packets/s)
+msg-errors-in-summary: Errors In (Summary)
+msg-errors-out-packets-s: Errors Out (packets/s)
+msg-errors-out-summary: Errors Out (Summary)
+msg-escalate-failed: "Escalate failed : "
+msg-escalate-failed-2: Escalate failed
+msg-escalate-failed-value0: "Escalate failed : {value0}"
+msg-escalate-failed-value0-2: "Escalate failed : {value0}"
+msg-escalated: Escalated
+msg-escalation-time: Escalation Time
+msg-established: ESTABLISHED
+msg-event: Event
+msg-event-reclassified: Event reclassified
+msg-event-type-migrate-duplicate: Event Type (Migrate/Duplicate)
+msg-exists: Exists
+msg-exit-full-screen: Exit Full Screen
+msg-expand-panels: Expand panels
+msg-extend-condition: Extend Condition
+msg-failed: Failed
+msg-failed-2: " - Failed"
+msg-failed-3: failed
+msg-failed-add-custom-fields-to-form: "Failed add custom fields to form "
+msg-failed-get-group-mo-detail: Failed get group MO detail
+msg-failed-get-map-menu: Failed get map menu
+msg-failed-get-mo-detail: Failed get MO detail
+msg-failed-refresh-basket: Failed refresh basket
+msg-failed-save-data: Failed save data
+msg-failed-to-add-vlan: Failed to add VLAN
+msg-failed-to-change-credentials: "Failed to change credentials: "
+msg-failed-to-change-credentials-2: "Failed to change credentials:"
+msg-failed-to-change-credentials-value0: "Failed to change credentials: {value0}"
+msg-failed-to-change-credentials-value0-2: "Failed to change credentials: {value0}"
+msg-failed-to-change-credentials-value0-3: "Failed to change credentials: {value0}"
+msg-failed-to-change-credentials-value0-4: "Failed to change credentials: {value0}"
+msg-failed-to-change-layer-settings: Failed to change layer settings
+msg-failed-to-clear-alarm: Failed to clear alarm
+msg-failed-to-clear-alarms: Failed to clear alarms
+msg-failed-to-clone: Failed to clone
+msg-failed-to-clone-object: Failed to clone object.
+msg-failed-to-connect-interfaces: Failed to connect interfaces
+msg-failed-to-connect-objects: "Failed to connect objects : "
+msg-failed-to-connect-objects-value0: "Failed to connect objects : {value0}"
+msg-failed-to-connect-objects-value0-2: "Failed to connect objects : {value0}"
+msg-failed-to-create-ignore-pattern-from-event: Failed to create ignore pattern from event
+msg-failed-to-create-rule-from-event: Failed to create rule from event
+msg-failed-to-delete: "Failed to delete: "
+msg-failed-to-delete-file: Failed to delete file
+msg-failed-to-delete-group: Failed to delete group
+msg-failed-to-delete-value0: "Failed to delete: {value0}"
+msg-failed-to-disable-tasks: Failed to disable tasks
+msg-failed-to-disconnect-objects: "Failed to disconnect objects : "
+msg-failed-to-disconnect-objects-value0: "Failed to disconnect objects : {value0}"
+msg-failed-to-fetch-data: Failed to fetch data!
+msg-failed-to-find-node: Failed to find node
+msg-failed-to-fix: Failed to fix
+msg-failed-to-get-alarm: Failed to get alarm
+msg-failed-to-get-config: Failed to get config
+msg-failed-to-get-configs-list: Failed to get configs list
+msg-failed-to-get-connection-information: Failed to get connection information
+msg-failed-to-get-data: Failed to get data
+msg-failed-to-get-data-for-job: Failed to get data for job
+msg-failed-to-get-data-for-job-value0: "Failed to get data for job: {value0}"
+msg-failed-to-get-data-for-menu-items: " : Failed to get data for menu items"
+msg-failed-to-get-data-for-plugin: Failed to get data for plugin
+msg-failed-to-get-data-for-plugin-value0: Failed to get data for plugin {value0}
+msg-failed-to-get-data-value0: "Failed to get data: {value0}"
+msg-failed-to-get-data-value0-2: "Failed to get data: {value0}"
+msg-failed-to-get-data-value0-3: "Failed to get data: {value0}"
+msg-failed-to-get-home-data: Failed to get home data
+msg-failed-to-get-interfaces: Failed to get interfaces
+msg-failed-to-get-interfaces-list: Failed to get interfaces list
+msg-failed-to-get-json: Failed to get JSON
+msg-failed-to-get-layer: Failed to get layer
+msg-failed-to-get-mac-history: Failed to get MAC history
+msg-failed-to-get-macs: Failed to get MACs
+msg-failed-to-get-neighbors: Failed to get neighbors
+msg-failed-to-get-object-data: Failed to get object data
+msg-failed-to-get-params-form: Failed to get params form
+msg-failed-to-get-path: Failed to get path
+msg-failed-to-get-remote-sync-time: Failed to get remote sync time
+msg-failed-to-get-revisions: Failed to get revisions
+msg-failed-to-get-shared-info: "Failed to get shared info: "
+msg-failed-to-get-shared-info-value0: "Failed to get shared info: {value0}"
+msg-failed-to-get-stp-status: Failed to get STP status
+msg-failed-to-get-text: Failed to get text
+msg-failed-to-get-user-settings: Failed to get user settings
+msg-failed-to-get-vendor-information: Failed to get vendor information
+msg-failed-to-launch-application: Failed to launch application
+msg-failed-to-launch-application-2: "Failed to launch application "
+msg-failed-to-launch-application-value0: Failed to launch application {value0}
+msg-failed-to-launch-application-value0-2: Failed to launch application  {value0}
+msg-failed-to-load-capabilities: Failed to load capabilities
+msg-failed-to-load-data: Failed to load data
+msg-failed-to-load-data-value0: "Failed to load data: {value0}"
+msg-failed-to-load-event: "Failed to load event "
+msg-failed-to-load-event-value0: Failed to load event {value0}
+msg-failed-to-load-instances: Failed to load instances
+msg-failed-to-load-map-resources: Failed to load map resources
+msg-failed-to-log-in: Failed to log in
+msg-failed-to-post-message: Failed to post message
+msg-failed-to-reclassify: Failed to reclassify
+msg-failed-to-remove-connections: "Failed to remove connections : "
+msg-failed-to-remove-connections-value0: "Failed to remove connections : {value0}"
+msg-failed-to-remove-interface: Failed to remove interface
+msg-failed-to-reset-layout: Failed to reset layout
+msg-failed-to-run-command: Failed to run command
+msg-failed-to-run-report: Failed to run report
+msg-failed-to-run-script: Failed to run script
+msg-failed-to-run-tasks: Failed to run tasks
+msg-failed-to-save: Failed to save
+msg-failed-to-save-api-key: "Failed to save API key: "
+msg-failed-to-save-api-key-value0: "Failed to save API key: {value0}"
+msg-failed-to-save-changes: Failed to save changes
+msg-failed-to-save-conduits: Failed to save conduits
+msg-failed-to-save-config: Failed to save config
+msg-failed-to-save-data: Failed to save data
+msg-failed-to-save-group-comment: Failed to save group comment
+msg-failed-to-save-json: Failed to save JSON
+msg-failed-to-search: Failed to search
+msg-failed-to-send-contribution: "Failed to send contribution: "
+msg-failed-to-send-contribution-value0: "Failed to send contribution: {value0}"
+msg-failed-to-set-acknowledgedun-acknowledged: Failed to set acknowledgedun/acknowledged
+msg-failed-to-set-data: Failed to set data
+msg-failed-to-set-parameter: Failed to set parameter
+msg-failed-to-set-password: Failed to set password
+msg-failed-to-set-position: Failed to set position
+msg-failed-to-set-root-cause: Failed to set root cause
+msg-failed-to-set-watcher: Failed to set watcher
+msg-failed-to-test-rule: Failed to test rule
+msg-failed-to-update-alarm: Failed to update alarm
+msg-failed-to-update-favorites: Failed to {action} favorites
+msg-failed-to-update-instance: Failed to update instance
+msg-failed-to-update-statuses: Failed to update statuses
+msg-failed-to-update-subscription: Failed to update subscription
+msg-failed-to-upload-files: Failed to upload files
+msg-failed-to-upload-mib: Failed to upload MIB
+msg-failed-value0: "Failed : {value0}"
+msg-favorite-status-updating: Favorite status updating ...
+msg-feed: Feed
+msg-female: Female
+msg-fetching-data-for-ad-hoc-channels: Fetching data for ad-hoc channels
+msg-fetching-data-for-draw-scheme: Fetching data for draw scheme ...
+msg-fetching-data-for-item: "Fetching data for {name}..."
+msg-field-max-length: "The maximum length for this field is {maxLength}"
+msg-fields-selector: Fields Selector
+msg-file-value0: "File #{value0}"
+msg-files-has-been-uploaded: Files has been uploaded
+msg-fire-event: Fire Event
+msg-first: First
+msg-first-success: First Success
+msg-fit-height: Fit Height
+msg-fit-width: Fit Width
+msg-float: Float
+msg-floating: Floating
+msg-for-snmp-v2c-get-value-must-be-a-valid-oid-e-g-1-3-6-1-2-1: For snmp_v2c_get, Value must be a valid OID (e.g. .1.3.6.1.2.1)
+msg-forward: Forward
+msg-free-slot: Free slot
+msg-free-vlan-not-found: Free VLAN not found
+msg-from-interface-down: From Interface Down
+msg-from-interface-name: From Interface Name
+msg-from-loader: From Loader
+msg-fwd: Fwd
+msg-genderless: Genderless
+msg-getting-additional-information: Getting additional information...
+msg-getting-api-key-please-wait: Getting API key, please wait...
+msg-getting-information: Getting Information
+msg-gis-division: GIS Division
+msg-greater: Greater
+msg-greater-equal: Greater Equal
+msg-greater-management-address: Greater Management Address
+msg-group-value0-value1: "Group: {value0} {value1}"
+msg-gw: GW
+msg-hidden: Hidden
+msg-history: history
+msg-horizontal: Horizontal
+msg-html: HTML
+msg-http-request-failed: HTTP request failed.
+msg-http-status: "HTTP status : "
+msg-http-status-value0: "HTTP status : {value0}"
+msg-idle: IDLE
+msg-ignore-stop: Ignore&Stop
+msg-in-maintenance: In maintenance
+msg-incremental: Incremental
+msg-information-received: Information received
+msg-inner: Inner
+msg-inner-of-scope: Inner-of-Scope
+msg-instance-updated-successfully: Instance updated successfully
+msg-instances-loaded: Instances loaded
+msg-integer: Integer
+msg-integer-is-required: Integer is required
+msg-interface-count-by-type: Interface count by type
+msg-interface-description: Interface Description
+msg-interface-flap-count: Interface Flap count
+msg-interface-last-change-days: Interface Last Change (days)
+msg-interface-load-url: Interface Load URL
+msg-interface-name: Interface Name
+msg-interface-speed: Interface Speed
+msg-interface1: Interface1
+msg-interface1-description: Interface1 Description
+msg-interface1-speed: Interface1 Speed
+msg-interface2: Interface2
+msg-interface2-description: Interface2 Description
+msg-interface2-speed: Interface2 Speed
+msg-internal-cross-was-successfully-disconnected: Internal cross was successfully disconnected
+msg-internal-error: Internal error
+msg-internal-error-2: Internal Error
+msg-invalid-connections-will-be-deleted: Invalid Connections will be deleted
+msg-invalid-data: Invalid data!
+msg-invalid-hex-format: Invalid HEX format
+msg-invalid-input: Invalid Input
+msg-invalid-ip-address-format: Invalid IP address format
+msg-invalid-password: Invalid password
+msg-invalid-regular-expression: Invalid regular expression
+msg-invalid-response-format: Invalid response format
+msg-invalid-server-response: Invalid server response
+msg-invalid-username: Invalid username
+msg-inventory-object: Inventory object
+msg-ip-address: IP address
+msg-ip-address-profile: IP Address Profile
+msg-ip-address-range: IP Address Range
+msg-ip-prefix: IP Prefix
+msg-ip1: IP1
+msg-ip2: IP2
+msg-ipv4-reverse: IPv4 Reverse
+msg-ipv6-reverse: IPv6 Reverse
+msg-is-managed: Is Managed
+msg-is-managed-object-type-defined: Is Managed, object type defined
+msg-is-managed-object-type-defined-bad-cli-credential: Is Managed, object type defined bad CLI Credential
+msg-is-managed-object-type-undefined: Is Managed, object type undefined
+msg-is-managed-object-type-undefined-bad-snmp-credential: Is Managed, object type undefined bad SNMP Credential
+msg-is-managed-object-type-undefined-for-various-reasons: Is Managed, object type undefined for various reasons
+msg-is-managed-object-type-undefined-has-ping-response: Is Managed, object type undefined has ping response
+msg-is-managed-object-type-undefined-not-ping-response: Is Managed, object type undefined not ping response
+msg-is-monitoring-object-type-undefined-only-availability-check: Is monitoring, object type undefined, only availability check
+msg-job-scheduled-to-start: Job scheduled to start
+msg-json-saved: JSON saved
+msg-kb-entry: KB Entry
+msg-keep: Keep
+msg-last-config-get-timestamp: Last Config get Timestamp
+msg-left: Left
+msg-legend: Legend
+msg-less: Less
+msg-less-equal: Less Equal
+msg-lesser-management-address: Lesser Management Address
+msg-link: Link
+msg-link-count: Link Count
+msg-link-interface-with: Link {name} with
+msg-link-last-seen: Link Last Seen
+msg-link-managed-object: Link Managed Object
+msg-link-proto: Link Proto
+msg-link-status: Link status
+msg-load-in-90-percentile: Load In (90% percentile)
+msg-load-in-average: Load In (Average)
+msg-load-in-bandwith: Load In (% Bandwith)
+msg-load-out-90-percentile: Load Out (90% percentile)
+msg-load-out-average: Load Out (Average)
+msg-load-out-bandwith: Load Out (% Bandwith)
+msg-loading: Loading
+msg-loading-2: loading ...
+msg-loading-3: Loading...
+msg-loading-4: loading
+msg-loading-5: loading...
+msg-loading-application: "Loading application {name}, please wait..."
+msg-loading-capabilities: Loading capabilities...
+msg-loading-job-panel: Loading job panel ...
+msg-loading-plugin: "Loading plugin {name}, please wait..."
+msg-loading-tab-with: Loading tab with
+msg-loading-tab-with-value0: Loading tab with {value0} ...
+msg-logged-in-as: "Logged in as "
+msg-logged-in-as-value0: Logged in as {value0}
+msg-logged-out-for-inactivity: Logged out for inactivity
+msg-loopback: Loopback
+msg-loopback-address: Loopback address
+msg-lowercase: Lowercase
+msg-mac-counter: Mac counter
+msg-main: Main
+msg-male: Male
+msg-managed-object-address: Managed Object Address
+msg-managed-object-description: Managed Object Description
+msg-managed-object-level: Managed Object Level
+msg-managed-object-name: Managed Object Name
+msg-managed-object-value0-successfully: Managed object {value0} successfully
+msg-managed-object-was-moved: MO is move
+msg-management-address: Management Address
+msg-management-vlan: Management VLAN
+msg-manual-scan-failed: Manual Scan Failed
+msg-manual-scan-failed-value0: "Manual Scan Failed : {value0}"
+msg-map-has-been-saved: Map has been saved
+msg-map-loading: Map loading ...
+msg-map-module-is-not-loaded: Map module is not loaded
+msg-mapping-was-performed-successfully: Mapping was performed successfully
+msg-mappings-only: Mappings Only
+msg-matched: Matched
+msg-matched-nbsp-value0: Matched:&nbsp;{value0}
+msg-matching-row: "Matching row:"
+msg-max-critical: Max. Critical
+msg-max-level: Max level
+msg-max-warning: Max. Warning
+msg-maximum-load-in: Maximum Load In
+msg-maximum-load-in-time: Maximum Load In Time
+msg-maximum-load-out: Maximum Load Out
+msg-maximum-load-out-time: Maximum Load Out Time
+msg-memory-usage: Memory Usage
+msg-merge: Merge
+msg-mib-value0: "MIB #{value0}"
+msg-mibs-has-been-uploaded: MIBs has been uploaded
+msg-migrate-ts: Migrate TS
+msg-min-critical: Min. Critical
+msg-min-level: Min level
+msg-min-warning: Min. Warning
+msg-mirror-on-change: Mirror on Change
+msg-model-lookup: Model Lookup
+msg-model-multi-choice: Model Multi Choice
+msg-modify: Modify
+msg-more-3: More 3
+msg-move-nested-objects-to-value0: Move nested objects to {value0}
+msg-must-contain-only-numbers: Must contain only numbers
+msg-network-interface: Network Interface
+msg-network-scan: Network Scan
+msg-never: never
+msg-no-ad-hoc-channels-available: No ad-hoc channels available
+msg-no-api-token-found: No API token found
+msg-no-connection-information: No connection information
+msg-no-groups: no groups
+msg-no-interfaces: No interfaces
+msg-no-interfaces-found: No interfaces found
+msg-no-links: No links
+msg-no-local-rules: No local rules
+msg-no-mac-history-found: No MAC history found
+msg-no-outages-detected: No outages detected
+msg-no-records-found-matching-value0: "No records found matching: {value0}"
+msg-no-tables: no tables
+msg-no-uplinks: No uplinks
+msg-no-vlan-propagation: No VLAN propagation
+msg-noc-agent: NOC Agent
+msg-none: None
+msg-none-2: none
+msg-not-acknowledge: Not Acknowledge
+msg-not-equal: Not Equal
+msg-not-found: Not found
+msg-not-managed: Not Managed
+msg-not-object-found-for-set-report-param: Not object found for set Report Param.
+msg-not-saved: Not saved
+msg-nothing: Nothing
+msg-nothing-to-copy: Nothing to copy
+msg-object-address: Object  Address
+msg-object-adm-domain: Object Adm. Domain
+msg-object-administrative-domain: Object Administrative domain
+msg-object-capabilities: Object capabilities
+msg-object-geo-address: Object Geo Address
+msg-object-has-been-loaded: Object has been loaded
+msg-object-hostname: Object Hostname
+msg-object-labels: Object Labels
+msg-object-model: Object Model
+msg-object-platform: Object Platform
+msg-object-profile: Object Profile
+msg-object-segment: Object Segment
+msg-object-software: Object Software
+msg-object-status: Object Status
+msg-object1-name: Object1 Name
+msg-object1-platform: Object1 Platform
+msg-object1-segment: Object1 Segment
+msg-object1-tags: Object1 Tags
+msg-object2-name: Object2 Name
+msg-object2-platform: Object2 Platform
+msg-object2-segment: Object2 Segment
+msg-object2-tags: Object2 Tags
+msg-objects-statuses-failure: Objects statuses failure!
+msg-objects-was-successfully-connected: Objects was successfully connected
+msg-occupied-slot: Occupied slot
+msg-off: "OFF"
+msg-offline: offline
+msg-on: "ON"
+msg-on-alarm-clear: On Alarm Clear
+msg-on-alarm-raise: On Alarm Raise
+msg-on-end: On End
+msg-on-start: On Start
+msg-on-update: On Update
+msg-once: Once
+msg-one-params-from-date-to-date-or-ids-required: One params - FROM_DATE/TO_DATE or IDS required
+msg-online: online
+msg-only-by-filter: Only By Filter
+msg-only-changed: Only Changed
+msg-only-favorites: Only Favorites
+msg-only-watch: Only Watch
+msg-openconfirm: OPENCONFIRM
+msg-opensent: OPENSENT
+msg-operation-completed: Operation completed
+msg-operation-failed: Operation failed
+msg-operational-status-last: Operational status (Last)
+msg-optical-lambda: Optical Lambda
+msg-or: OR
+msg-origin-routes-cache-is-empty-please-update-whois-cache: Origin routes cache is empty. Please update Whois Cache
+msg-other: OTHER
+msg-other-data: Other Data
+msg-otn-odu: OTN ODU
+msg-out-of-scope: Out-of-Scope
+msg-outer: Outer
+msg-parameter-has-been-set: Parameter has been set
+msg-password-changed: Password changed
+msg-password-empty: Password empty
+msg-password-is-already-used: Password is already used
+msg-password-min-lowercase: Password must have at least {count} lower-case letters
+msg-password-min-numbers: Password must have at least {count} numbers
+msg-password-min-specials: Password must have at least {count} special symbols
+msg-password-min-uppercase: Password must have at least {count} upper-case letters
+msg-password-mismatch: Password mismatch
+msg-password-too-short: Password too short. Must be at least {count} characters
+msg-passwords-do-not-match: Passwords do not match
+msg-periodic: Periodic
+msg-permission-denied: Permission denied
+msg-permission-denined: Permission denined
+msg-permissions-were-reset: Permissions were reset
+msg-permissions-were-set: Permissions were set
+msg-physical: Physical
+msg-physical-iface-count: Physical Iface Count
+msg-ping-attempts: Ping Attempts
+msg-ping-fail: Ping fail
+msg-ping-rtt: Ping RTT
+msg-platfrom: Platfrom
+msg-please-confirm-the-alarm-is-closed-and-must-be-cleared: Please confirm the alarm is closed and must be cleared?
+msg-please-enter-a-valid-number: Please enter a valid number.
+msg-please-enter-comment: Please enter comment
+msg-please-enter-number: "Please enter number:"
+msg-please-enter-period-start-qty-first-pos-is-0: "Please enter period (start,qty), first pos is 0:"
+msg-please-enter-root-cause-alarm-id: Please enter root cause alarm id
+msg-please-enter-your-gitlab-api-key-to-continue: Please enter your GitLab API key to continue.
+msg-please-provide-a-description-for-your-contribution: Please provide a description for your contribution.
+msg-please-select-a-row: Please select a row
+msg-port-duplex: Port duplex
+msg-port-name: Port name
+msg-port-profile-name: Port profile name
+msg-port-speed: Port speed
+msg-port-status: Port status
+msg-port-tagged-vlans: Port tagged vlans
+msg-port-untagged-vlan: Port untagged vlan
+msg-prefer-running: Prefer Running
+msg-prefer-startup: Prefer Startup
+msg-prefix-deleted: Prefix Deleted
+msg-prefix-list-built: Prefix List built
+msg-prefix-list-generator-is-not-implemented-for-this-profile: Prefix-list generator is not implemented for this profile
+msg-prefix-list-name: Prefix list name ...
+msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: Prefix list name must contains only 0-9,a-z,A-Z,-,_
+msg-prefix-not-found: Prefix not found
+msg-preparing-contribution: Preparing Contribution
+msg-prev-failed: Prev Failed
+msg-prev-success: Prev Success
+msg-prev-successy: Prev Successy
+msg-processing-items-for: "Processing items for {name}..."
+msg-profile-check-failed: Profile check failed
+msg-profile-saved: Profile saved
+msg-propagate: Propagate
+msg-push-collector: Push (Collector)
+msg-query-failure: Query failure
+msg-querying: Querying ...
+msg-rack-value0: "Rack: {value0}"
+msg-raise: Raise
+msg-raise-alarm: Raise Alarm
+msg-raise-alarm-stop: Raise Alarm&Stop
+msg-raise-clear-alarm: Raise & Clear Alarm
+msg-raise-privileges: Raise Privileges
+msg-random: Random
+msg-raw-vars: Raw vars
+msg-read-only: Read-Only
+msg-read-only-2: Read only
+msg-ready-to-share: Ready to share...
+msg-rebase-prefix: "Rebase prefix "
+msg-rebase-prefix-value0: Rebase prefix {value0}
+msg-rebased: Rebased
+msg-rebasing: Rebasing ...
+msg-record-reload-error: Record reload error.
+msg-records-has-been-saved: Records has been saved
+msg-records-has-been-updated: Records has been updated
+msg-regex: Regex
+msg-regex-error: Regex error!
+msg-reloading: Reloading...
+msg-reloading-item: "Reloading {name}..."
+msg-remote-value0: "Remote : {value0}"
+msg-remove-conduits-to-value0: Remove conduits to {value0}?
+msg-remove-group-value0: Remove group '{value0}'?
+msg-report: Report
+msg-report-data-source-not-found: Report data source {data_source} not found
+msg-request-failed-with-status: Request failed with status
+msg-request-failed-with-status-value0: Request failed with status :{value0}
+msg-request-failure: Request failure
+msg-require-up-if-ping-enabled: Require Up if ping enabled
+msg-required-field: Required field
+msg-resource-value0-successfully: Resource {value0} successfully
+msg-retrieving-additional-information-please-wait: Retrieving additional information, please wait...
+msg-rev-ipv4: Rev IPv4
+msg-rev-ipv6: Rev IPv6
+msg-rewrite: Rewrite
+msg-right: Right
+msg-rollback: Rollback
+msg-root: Root
+msg-root-group-only-root-severvice: Root Group (Only Root Severvice)
+msg-root-id: Root ID
+msg-round-robin: Round Robin
+msg-row-read-only: Row read only
+msg-running: Running
+msg-sa-object: SA Object
+msg-saved: saved
+msg-saved-2: Saved
+msg-saving: saving
+msg-saving-2: Saving...
+msg-saving-3: Saving ...
+msg-saving-item: "Saving {name}..."
+msg-script-confdb: Script, ConfDB
+msg-script-download: Script, Download
+msg-search: search...
+msg-search-complete: Search complete
+msg-sec: sec
+msg-segment-hierarchy: Segment Hierarchy
+msg-segment-level-1: Segment (Level 1)
+msg-segment-level-2: Segment (Level 2)
+msg-segment-level-3: Segment (Level 3)
+msg-segment-level-4: Segment (Level 4)
+msg-segment-level-5: Segment (Level 5)
+msg-segment-level-6: Segment (Level 6)
+msg-segment-level-7: Segment (Level 7)
+msg-segmentate-for-child-segment: Segmentate for child segment
+msg-segmentate-for-object-s-segment: Segmentate for object's segment
+msg-segmentate-to-child-segment: Segmentate to child segment
+msg-segmentate-to-existing-segment: Segmentate to existing segment
+msg-selected: Selected
+msg-selected-filter: "Selected ({type}): {path}"
+msg-selected-total-selected: "Selected : '{total.selected}'"
+msg-selected-total-selection: "Selected : '{total.selection}'"
+msg-self-status: Self Status
+msg-send-approve: Send Approve
+msg-send-ignore: Send Ignore
+msg-sending-contribution: Sending contribution...
+msg-sensor-local-id: Sensor Local ID
+msg-sensor-profile: Sensor Profile
+msg-serial-number: Serial Number
+msg-server-error-occurred: Server error occurred
+msg-server-side-failed-to-get-default-dictionary: Server-side failed to get default dictionary
+msg-server-side-failed-to-get-default-dictionary-value0: "Server-side failed to get default dictionary : {value0}"
+msg-server-side-failed-to-get-fields: Server-side failed to get fields
+msg-server-side-failed-to-get-fields-value0: "Server-side failed to get fields : {value0}"
+msg-server-side-failure-status: Server-side failure with status code {status}
+msg-server-side-failure-with-status-code: "server-side failure with status code "
+msg-server-side-failure-with-status-code-value0: server-side failure with status code {value0}
+msg-serviceactivation: ServiceActivation
+msg-session-timeout: Session timeout.
+msg-set-alarm-as-acknowledged: Set alarm as acknowledged
+msg-set-alarm-as-unacknowledged: Set alarm as unacknowledged
+msg-set-group-comment: Set group comment
+msg-set-root: Set root
+msg-show-map-button-failed-to-get-data: "Show Map Button : Failed to get data"
+msg-skip-rule: Skip Rule
+msg-slightly-degraded: SLIGHTLY_DEGRADED
+msg-slot: Slot
+msg-snapshot: Snapshot
+msg-snmp-cli: SNMP, CLI
+msg-snmp-only: SNMP Only
+msg-snmp-trap: SNMP_TRAP
+msg-sorted-labels: Sorted Labels
+msg-sound: "Sound: "
+msg-sound-value0: "Sound: {value0}"
+msg-specify-address: Specify address
+msg-square: Square
+msg-srv: SRV
+msg-ssv: SSV
+msg-starting-application: "Starting \"{application}\""
+msg-starting-search: Starting search
+msg-state-inspector: State Inspector
+msg-state-only: State only
+msg-string: String
+msg-sub: SUB
+msg-subinterface-ip-address: SubInterface IP Address
+msg-subinterface-tagged-vlans: SubInterface Tagged VLANs
+msg-subinterface-untagged-vlan: SubInterface Untagged VLAN
+msg-subscription-updated-successfully: Subscription updated successfully
+msg-success: Success
+msg-success-2: " - Success"
+msg-successfully: successfully
+msg-sum: Sum
+msg-summary-level: Summary level
+msg-suspend: suspend
+msg-suspend-2: Suspend
+msg-svi: SVI
+msg-syslog: SYSLOG
+msg-system-is-not-registred-please-register-your-system-to-get-acces: System is not registred. Please register your system to get access to additional support and services
+msg-system-is-registred-you-have-access-to-additional-support-and-se: System is registred. You have access to additional support and services
+msg-temporary-unavailable: Temporary unavailable
+msg-text: <
+msg-text-2: <=
+msg-text-3: ">"
+msg-text-4: ">="
+msg-thank-you: Thank You!
+msg-the-data-was-successfully-loaded: The data was successfully loaded
+msg-the-data-was-successfully-updated: The data was successfully updated
+msg-there-is-unsaved-data-do-you-really-want-to-clean: There is unsaved data, do you really want to clean?
+msg-there-is-unsaved-data-do-you-really-want-to-close-the-applicatio: There is unsaved data, do you really want to close the application?
+msg-there-is-unsaved-data-do-you-really-want-to-load-the-object: There is unsaved data, do you really want to load the object?
+msg-there-was-an-error-sharing-your-contribution: There was an error sharing your contribution.
+msg-this-message-will-automatically-close-in-5-seconds: This message will automatically close in 5 seconds.
+msg-thresholds-has-been-updated: Thresholds has been updated
+msg-thresholds-update-failed: Thresholds update failed
+msg-time-interval: Time Interval
+msg-to-interface-down: To Interface Down
+msg-to-interface-name: To Interface Name
+msg-to-maintenance: to maintenance
+msg-too-many-ip-max-2000: Too many IP, max 2000
+msg-too-many-vendors-found: Too many vendors found!
+msg-tools: tools
+msg-total: "Total: "
+msg-total-in: Total In
+msg-total-nbsp-value0: Total:&nbsp;{value0}
+msg-total-out: Total Out
+msg-total-total-all: "Total : '{total.all}'"
+msg-total-total-selected: "Total : '{total.selected}'"
+msg-total-value0: "Total: {value0}"
+msg-total-value0-2: "Total: {value0}"
+msg-total-value0-3: "Total: {value0}"
+msg-total-value0-4: "Total: {value0}"
+msg-traffic-in-sum-by-period-in-mb: Traffic In (Sum by period in MB)
+msg-traffic-out-sum-by-period-in-mb: Traffic Out (Sum by period in MB)
+msg-transit: Transit
+msg-transition-inspector: Transition Inspector
+msg-transition-started: Transition started
+msg-transparent: Transparent
+msg-type-mac-address-to-search: type MAC address to search
+msg-type-username-and-password: "Type username and password:"
+msg-unack: UnAck
+msg-undefined: Undefined
+msg-under-maintaintance: Under maintaintance
+msg-unidirectional: Unidirectional
+msg-unknown-as-set: Unknown AS-SET
+msg-unknown-error: Unknown error
+msg-unknown-or-failed: Unknown or Failed
+msg-unknown-type: "Unknown type: "
+msg-unknown-type-value0: "Unknown type: {value0}"
+msg-unlink: Unlink
+msg-unlink-failure: Unlink failure
+msg-unmanaged: Unmanaged
+msg-unmanaged-or-ping-is-disabled: Unmanaged or ping is disabled
+msg-up: UP
+msg-update-channel-value0: Update channel {value0}
+msg-update-or-modify-internal-connection-from-value0-to-value1: Update or modify internal connection from {value0} to {value1}
+msg-update-unlink-value0: Update/Unlink {value0}
+msg-updating: Updating ...
+msg-uplink-avg-load-in: Uplink AVG Load In
+msg-uplink-avg-load-out: Uplink AVG Load Out
+msg-uplink-interface-description: Uplink Interface Description
+msg-uplink-interface-name: Uplink Interface Name
+msg-uplink-interface-speed: Uplink Interface Speed
+msg-uplink-maximum-load-in: Uplink Maximum Load In
+msg-uplink-maximum-load-in-time: Uplink Maximum Load In Time
+msg-uplink-maximum-load-out: Uplink Maximum Load Out
+msg-uplink-maximum-load-out-time: Uplink Maximum Load Out Time
+msg-uplink-total-in: Uplink Total In
+msg-uplink-total-out: Uplink Total Out
+msg-uppercase: Uppercase
+msg-user-account-is-blocked: User account is blocked
+msg-user-does-not-exists: User does not exists
+msg-validate-on-change: Validate on Change
+msg-validating-api-key: Validating API key...
+msg-valn-allocated: VALN Allocated
+msg-value-deleted: Value deleted.
+msg-value-saved: Value saved.
+msg-value0-failed: "{value0} - Failed"
+msg-value0-failed-to-get-data-for-menu-items: "{value0} : Failed to get data for menu items"
+msg-value0-failed-value1: "{value0} - Failed : {value1}"
+msg-value0-history: "{value0} - history"
+msg-value0-sec: "{value0} sec"
+msg-value0-success: "{value0} - Success"
+msg-vendor-mac: Vendor MAC
+msg-vendor-not-found: Vendor not found!
+msg-version-set: Version Set
+msg-vertical: Vertical
+msg-view-detail: View Detail
+msg-vlan-sync: VLAN Sync
+msg-vpn-profile: VPN Profile
+msg-vrf-required: VRF Required
+msg-waiting: Waiting
+msg-waiting-for-api-key: Waiting for API key...
+msg-whole: Whole
+msg-wire-was-successfully-disconnected: Wire was successfully disconnected
+msg-workflow-editor-is-not-initialized: Workflow editor is not initialized
+msg-workflow-editor-module-is-not-loaded: Workflow editor module is not loaded
+msg-workflow-inspector: Workflow Inspector
+msg-workflow-state: Workflow State
+msg-would-you-like-remove-interface: "Would you like remove interface "
+msg-would-you-like-remove-interface-value0: Would you like remove interface {value0}
+msg-would-you-like-to-remove-group: Would you like to remove group?
+msg-would-you-like-to-reset-current-layout-and-generate-new: Would you like to reset current layout and generate new?
+msg-would-you-like-to-share-item-and-contribute-to-open-source-proje: Would you like to share item and contribute to Open-Source project?
+msg-xlsx: XLSX
+msg-you-have-unsaved-changes-in-inspector-save-or-cancel-the-changes: You have unsaved changes in inspector. Save or cancel the changes.
+msg-your-contribution-has-been-shared-successfully: Your contribution has been shared successfully.
+msg-your-must-select-maintenance: Your must select maintenance!
+msg-zabbix: Zabbix
 msg-zone-transfer-upload-results: "Created: {created} and changed: {changed} IP addresses uploaded via zone transfer."
 nav-account: Account
 nav-action: Actions
@@ -956,6 +3863,7 @@ nav-firmwarepolicy: Firmware Policy
 nav-getnow: Get Now
 nav-glyph: Glyphs
 nav-group: Groups
+nav-group-edit: Group Edit
 nav-groupaccess: Group Access
 nav-handler: Handlers
 nav-heatmap: Heatmap
@@ -1093,51 +4001,51 @@ nav-vrf: VRF
 nav-vrfgroup: VRF Groups
 nav-wfmigration: Migrations
 nav-workflow: Workflow
-status-cleaned: "Cleaned"
-status-disable: "Disable"
-status-down: "Down"
+status-cleaned: Cleaned
+status-disable: Disable
+status-down: Down
 status-fail: Fail
 status-failed-discovery-only: Failed discovery only
-status-lost-redundancy: "Lost redundancy"
+status-lost-redundancy: Lost redundancy
 status-no: "No"
-status-no-redundancy: "No redundancy"
-status-ok: "OK"
-status-redundant: "Redundant"
+status-no-redundancy: No redundancy
+status-ok: OK
+status-redundant: Redundant
 status-skip: Skip
 status-skip-full-available: Skip full available
 status-skip-zero-access-port: Skip zero access port
 status-skip-zero-available: Skip zero available
-status-unknown: "Unknown"
-status-up: "Up"
+status-unknown: Unknown
+status-up: Up
 status-update: Update
-status-warning: "Warning"
+status-warning: Warning
 status-yes: "Yes"
-title-all-allocated-blocks-in-vrf: "All allocated blocks in VRF {vrf} (IPv{afi}), {prefix}"
-title-allocated-blocks-in-vrf: "Allocated blocks in VRF {vrf} (IPv{afi}), {prefix}"
+title-all-allocated-blocks-in-vrf: All allocated blocks in VRF {vrf} (IPv{afi}), {prefix}
+title-allocated-blocks-in-vrf: Allocated blocks in VRF {vrf} (IPv{afi}), {prefix}
 title-availability-last-day: Availability (last day)
 title-availability-last-month: Availability (last month)
 title-availability-last-week: Availability (last week)
-title-channels: "Channels"
-title-cir-car-bps-to-burst-rate: "CIR/CAR(bps) to Burst-rate"
-title-community: "Community"
-title-configured-map: "Configured Map"
+title-channels: Channels
+title-cir-car-bps-to-burst-rate: CIR/CAR(bps) to Burst-rate
+title-community: Community
+title-configured-map: Configured Map
 title-escalations-1-day: Escalations (1 day)
 title-escalations-30-day: Escalations (30 day)
 title-escalations-7-days: Escalations (7 days)
-title-free-blocks-in-vrf: "Free blocks in VRF {vrf} (IPv{afi}), {prefix}"
-title-inventory-summary: "Inventory summary"
-title-l2-domains: "L2 Domains"
-title-managed-object-summary: "Managed Object Summary"
+title-free-blocks-in-vrf: Free blocks in VRF {vrf} (IPv{afi}), {prefix}
+title-inventory-summary: Inventory summary
+title-l2-domains: L2 Domains
+title-managed-object-summary: Managed Object Summary
 title-managed-objects-summary-domain: Managed Objects Summary (domain)
 title-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
 title-managed-objects-summary-label: Managed Objects Summary (label)
 title-managed-objects-summary-platform: Managed Objects Summary (platform)
 title-managed-objects-summary-profile: Managed Objects Summary (profile)
 title-managed-objects-summary-version: Managed Objects Summary (version)
-title-network-segment-schemas: "Network Segment Schemas"
-title-object-containers-map: "Object Containers Map"
-title-object-group-schemas: "Object Group Schemas"
-title-object-level-neighbor-schemas: "Object Level Neighbor Schemas"
+title-network-segment-schemas: Network Segment Schemas
+title-object-containers-map: Object Containers Map
+title-object-group-schemas: Object Group Schemas
+title-object-level-neighbor-schemas: Object Level Neighbor Schemas
 title-outages-1-day: Outages (1 day)
 title-outages-30-day: Outages (30 day)
 title-outages-7-days: Outages (7 days)
@@ -1146,9 +4054,9 @@ title-reboot-30-day: Reboot (30 day)
 title-reboots-1-day: Reboots (1 day)
 title-reboots-7-days: Reboots (7 days)
 title-summary-for-vrf: "Summary for VRF {vrf} (IPv{afi}): {prefix}"
-title-total-alarms: "Total Alarms"
+title-total-alarms: Total Alarms
 title-ttsystem-errors-1-day: TTSystem Errors (1 day)
 title-ttsystem-stat-1-day: TTSystem Stat (1 day)
 title-ttsystem-stat-30-day: TTSystem Stat (30 day)
 title-ttsystem-stat-7-days: TTSystem Stat (7 days)
-title-welcome: "Welcome to {brand}"
+title-welcome: Welcome to {brand}

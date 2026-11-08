@@ -29,11 +29,10 @@ Use a key prefix that describes the text's purpose and context:
 | `msg-` | User-facing messages and errors |
 | `label-` | Form field labels and field headings in cards |
 | `help-` | Help text and tooltips |
-| `choice-` | Values in a choice list |
 | `header-` | Report and table column headings |
-| `title-` | Titles that are not application titles |
-| `status-` | State and status values |
-| `app-title-`, `app-group-`, `nav-` | Application titles, menu groups, and navigation labels |
+| `app-title-` | Application titles |
+| `app-group-` | Application groups |
+| `nav-` | Application menu items |
 
 Card templates use the same function without an import:
 
@@ -57,28 +56,14 @@ t("msg-item-count", count=item_count)
 
 For Russian, include the `one`, `few`, `many`, and `other` plural forms. Use the ICU MessageFormat syntax in every language catalog.
 
-## Translate JavaScript Strings
+## Translate the JavaScript Interface
 
-JavaScript continues to use `__()` and gettext catalogs. For example:
+JavaScript UI uses `t()` and the same YAML catalogs as Python: `src/noc/i18n/{en,ru,pt_BR}.yml`. The English catalog is the base; each selected language overlays it during the UI build.
 
-```javascript
-__("Save")
-```
-
-Extract and update the Web catalog after changing JavaScript strings:
-
-```bash
-./noc translation extract web
-./noc translation update web
-```
-
-Edit `src/noc/services/web/translations/<language>/LC_MESSAGES/messages_js.po`, then compile it:
-
-```bash
-./noc translation compile web
-```
-
-Compilation writes the JavaScript JSON catalog to `ui/web/translations/<language>.json`. The `translation` commands apply to the gettext catalogs; they do not extract Python `t()` keys. New JavaScript source files must be tracked by Git before extraction because the command scans `git ls-files`.
+1. Add a stable key and English text to `en.yml`.
+2. Add the translation under the same key to the language catalogs. Use named arguments and ICU plural forms for dynamic messages.
+3. Call `t("btn-save")` in JavaScript.
+4. Choose a key prefix by purpose: `app-title-`, `nav-`, `app-group-`, `msg-`, `label-`, `header-`, `help-`, or `btn-`.
 
 ## Validate Catalogs
 

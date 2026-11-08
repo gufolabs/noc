@@ -17,59 +17,59 @@ Ext.define("NOC.inv.macdb.Application", {
   ],
   model: "NOC.inv.macdb.Model",
   search: true,
-  searchPlaceholder: __("insert MAC address to search"),
-  requirePlaceholder: __("type MAC address to search"),
-  searchTooltip: __("Insert MAC address to this field one of format:<li>FULL: AA:AA:AA:AA:AA:AA</li><li>Left part: AA:AA:</li><li>Right part: :AA:AA</li>"),
+  searchPlaceholder: t("label-insert-mac-address-to-search"),
+  requirePlaceholder: t("msg-type-mac-address-to-search"),
+  searchTooltip: t("help-insert-mac-address-to-this-field-one-of-format-li-full-aa-aa-aa-"),
   canCreate: false,
   rowClassField: "row_class",
   //
   columns: [
     {
-      text: __("Mac Address"),
+      text: t("header-mac-address"),
       dataIndex: "mac",
       width: 110,
     },
     {
-      text: __("L2 Domain"),
+      text: t("header-l2-domain"),
       dataIndex: "l2_domain",
       renderer: NOC.render.Lookup("l2_domain"),
       flex: 1,
     },
     {
-      text: __("Pool"),
+      text: t("label-pool"),
       dataIndex: "pool",
       renderer: NOC.render.Lookup("pool"),
       flex: 1,
     },
     {
-      text: __("Object Profile"),
+      text: t("msg-object-profile"),
       dataIndex: "object_profile",
       renderer: NOC.render.Lookup("object_profile"),
       flex: 1,
     },
     {
-      text: __("Vlan"),
+      text: t("header-vlan-6c174b"),
       dataIndex: "vlan",
       width: 40,
     },
     {
       flex: 1,
-      text: __("Managed Object"),
+      text: t("header-managed-object-62561c"),
       renderer: NOC.render.Lookup("managed_object"),
       dataIndex: "managed_object",
     },
     {
       flex: 1,
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interface",
     },
     {
       flex: 1,
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
     },
     {
-      text: __("Last Changed"),
+      text: t("header-last-changed"),
       dataIndex: "last_changed",
       width: 150,
     },
@@ -77,13 +77,13 @@ Ext.define("NOC.inv.macdb.Application", {
   //
   filters: [
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "interface_profile",
       ftype: "lookup",
       lookup: "inv.interfaceprofile",
     },
     {
-      title: __("By Object"),
+      title: t("app-title-by-object"),
       name: "managed_object",
       ftype: "lookup",
       lookup: "sa.managedobject",
@@ -97,13 +97,13 @@ Ext.define("NOC.inv.macdb.Application", {
         {
           checked: true,
           xtype: "radio",
-          boxLabel: __("MAC DB"),
+          boxLabel: t("label-mac-db"),
           name: "source",
           inputValue: "macdb",
         },
         {
           xtype: "radio",
-          boxLabel: __("MAC History"),
+          boxLabel: t("label-mac-history"),
           name: "source",
           inputValue: "history",
         },
@@ -121,7 +121,7 @@ Ext.define("NOC.inv.macdb.Application", {
             }
           }
           if(newValue.source === "history"){
-            searchField.markInvalid(__("Required field"));
+            searchField.markInvalid(t("msg-required-field"));
             searchField.setEmptyText(app.requirePlaceholder);
           }
           if(!Ext.isEmpty(query)){

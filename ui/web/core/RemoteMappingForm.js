@@ -17,7 +17,7 @@ Ext.define("NOC.core.RemoteMappingForm", {
   modal: true,
   scrollable: true,
   layout: "fit",
-  title: __("Remote Mapping"),
+  title: t("app-title-remote-mapping"),
   initComponent: function(){
     Ext.apply(this, {
       items: [{
@@ -39,20 +39,20 @@ Ext.define("NOC.core.RemoteMappingForm", {
         ],
         buttons: [
           {
-            text: __("Map"),
+            text: t("btn-map"),
             itemId: "mapButton",
             disabled: false,
             scope: this,
             handler: this.mappingHandler,
           },
           {
-            text: __("Reset"),
+            text: t("btn-reset"),
             formBind: true,
             scope: this,
             handler: this.resetFormHandler,
           },
           {
-            text: __("Close"),
+            text: t("btn-close"),
             handler: function(){
               this.up("window").close();
             }, 
@@ -101,7 +101,7 @@ Ext.define("NOC.core.RemoteMappingForm", {
     }    
   },
   getButtonConfig: function(type){
-    var tooltip = type === "add" ? __("Add Mapping") : __("Remove Mapping"),
+    var tooltip = type === "add" ? t("btn-add-mapping") : t("btn-remove-mapping"),
       glyph = type === "add" ? NOC.glyph.plus : NOC.glyph.minus,
       config = {
         xtype: "button",
@@ -182,10 +182,10 @@ Ext.define("NOC.core.RemoteMappingForm", {
         if(result.status){
           this.parentForm.getForm().setValues({mappings: result.data});
           this.parentForm.currentRecord.set("mappings", result.data);
-          NOC.info(__("Mapping was performed successfully"));
+          NOC.info(t("msg-mapping-was-performed-successfully"));
           this.close();
         } else{
-          NOC.error(__("Error") + " : " + result.message || __("Operation failed"));
+          NOC.error(t("msg-error-value0", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

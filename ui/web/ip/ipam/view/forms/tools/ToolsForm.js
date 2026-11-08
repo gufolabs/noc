@@ -29,7 +29,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsForm", {
     {
       xtype: "container",
       bind: {
-        html: "VRF:" + "{prefix.vrf__label} {prefix.name} " + __("tools"),
+        html: "VRF:" + "{prefix.vrf__label} {prefix.name} " + t("msg-tools"),
       },
       padding: "0 0 4 0",
       style: {
@@ -38,7 +38,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsForm", {
       },
     },
     {
-      fieldLabel: __("NS"),
+      fieldLabel: t("label-ns"),
       emptyText: "Name server IP or Address",
       name: "ns",
       allowBlank: false,
@@ -48,7 +48,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsForm", {
       },
     },
     {
-      fieldLabel: __("Zone"),
+      fieldLabel: t("label-zone"),
       name: "zone",
       emptyText: "DNS Zone name to transfer",
       allowBlank: false,
@@ -58,7 +58,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsForm", {
       },
     },
     //{
-    //    fieldLabel: __("Source Address"),
+    //    fieldLabel: t("Source Address"),
     //    name: "source",
     //    allowBlank: true,
     //    bind: {
@@ -69,21 +69,21 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsForm", {
 
   tbar: [
     {
-      text: __("Close"),
-      tooltip: __("Close form"),
+      text: t("btn-close"),
+      tooltip: t("help-close-form"),
       glyph: NOC.glyph.arrow_left,
       handler: "onClose",
     },
     "-",
     {
-      text: __("Download"),
-      tooltip: __("Download list of allocated IP addresses in CSV format"),
+      text: t("btn-download"),
+      tooltip: t("help-download-list-of-allocated-ip-addresses-in-csv-format"),
       glyph: NOC.glyph.download,
       handler: "onDownload",
     },
     {
-      text: __("Start zone transfer"),
-      tooltip: __("Upload list of allocated IP addresses from existing DNS servers via AXFR request"),
+      text: t("btn-start-zone-transfer"),
+      tooltip: t("help-upload-list-of-allocated-ip-addresses-from-existing-dns-servers-"),
       glyph: NOC.glyph.upload,
       bind: {
         disabled: "{!isValid}",

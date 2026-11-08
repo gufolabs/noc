@@ -39,33 +39,33 @@ Ext.define("NOC.main.messageroute.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 50,
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 150,
         },
         {
-          text: __("Order"),
+          text: t("header-order"),
           dataIndex: "order",
           width: 50,
         },
         {
-          text: __("Action"),
+          text: t("app-title-action"),
           dataIndex: "action",
           width: 150,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -83,53 +83,53 @@ Ext.define("NOC.main.messageroute.Application", {
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               uiStyle: "medium",
               allowBlank: false,
             },
             {
               name: "is_active",
               xtype: "checkbox",
-              boxLabel: __("Active"),
+              boxLabel: t("header-active"),
             },
             {
               name: "description",
               xtype: "textarea",
-              fieldLabel: __("Description"),
+              fieldLabel: t("label-description"),
               uiStyle: "extra",
               allowBlank: true,
             },
             {
               name: "order",
               xtype: "numberfield",
-              fieldLabel: __("Order"),
+              fieldLabel: t("header-order"),
               uiStyle: "small",
               allowBlank: false,
             },
             {
               name: "type",
               xtype: "main.ref.messagetype.LookupField",
-              fieldLabel: __("Type"),
+              fieldLabel: t("header-type"),
               labelAlign: "left",
               allowBlank: false,
             },
             {
               name: "telemetry_sample",
               xtype: "numberfield",
-              fieldLabel: __("Telemetry Sample"),
+              fieldLabel: t("label-telemetry-sample"),
               uiStyle: "small",
               allowBlank: true,
             },
             {
               name: "register_notification_method",
               xtype: "checkbox",
-              boxLabel: __("Register as Notification"),
+              boxLabel: t("label-register-as-notification"),
             }],
         },
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("Transmute"),
+          title: t("app-title-transmute"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -138,12 +138,12 @@ Ext.define("NOC.main.messageroute.Application", {
             {
               name: "transmute_template",
               xtype: "main.template.LookupField",
-              fieldLabel: __("Template"),
+              fieldLabel: t("header-template"),
             },
             {
               name: "transmute_handler",
               xtype: "main.handler.LookupField",
-              fieldLabel: __("Hanlder"),
+              fieldLabel: t("label-hanlder"),
               query: {
                 allow_mx_transmutation: true,
               },
@@ -153,7 +153,7 @@ Ext.define("NOC.main.messageroute.Application", {
         {
           xtype: "fieldset",
           layout: "column",
-          title: __("Action"),
+          title: t("app-title-action"),
           minWidth: me.formMinWidth,
           maxWidth: me.formMaxWidth,
           defaults: fieldSetDefaults,
@@ -169,41 +169,41 @@ Ext.define("NOC.main.messageroute.Application", {
                 ["notification", "Notificaiton"],
                 ["job", "Job"],
               ],
-              fieldLabel: __("Action"),
+              fieldLabel: t("app-title-action"),
               uiStyle: "medium",
               allowBlank: false,
             },
             {
               name: "stream",
               xtype: "textfield",
-              fieldLabel: __("Stream"),
+              fieldLabel: t("label-stream"),
               uiStyle: "medium",
             },
             {
               name: "notification_group",
               xtype: "main.notificationgroup.LookupField",
-              fieldLabel: __("Notification Group"),
+              fieldLabel: t("app-title-notificationgroup"),
             },
             {
               name: "render_template",
               xtype: "main.template.LookupField",
-              fieldLabel: __("Render Template"),
+              fieldLabel: t("label-render-template"),
             },
           ],
         },
         {
           name: "headers",
           xtype: "gridfield",
-          fieldLabel: __("Set Headers"),
+          fieldLabel: t("label-set-headers"),
           columns: [
             {
-              text: __("Header"),
+              text: t("label-header"),
               dataIndex: "header",
               width: 200,
               editor: "main.ref.messageheader.LookupField",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: {
@@ -216,13 +216,13 @@ Ext.define("NOC.main.messageroute.Application", {
         {
           name: "match",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           rows: 5,
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               pickerPosition: "down",
@@ -234,7 +234,7 @@ Ext.define("NOC.main.messageroute.Application", {
             {
               name: "exclude_labels",
               xtype: "labelfield",
-              fieldLabel: __("Exclude Match Labels"),
+              fieldLabel: t("label-exclude-match-labels"),
               allowBlank: true,
               isTree: true,
               pickerPosition: "down",
@@ -246,34 +246,34 @@ Ext.define("NOC.main.messageroute.Application", {
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
             },
             {
               name: "administrative_domain",
               xtype: "sa.administrativedomain.LookupField",
-              fieldLabel: __("Adm. Domain"),
+              fieldLabel: t("header-adm-domain"),
               allowBlank: true,
             },
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "headers_match",
               xtype: "gridfield",
-              fieldLabel: __("Headers Match"),
+              fieldLabel: t("label-headers-match"),
               columns: [
                 {
-                  text: __("Header"),
+                  text: t("label-header"),
                   dataIndex: "header",
                   editor: "main.ref.messageheader.LookupField",
                   width: 250,
                 },
                 {
-                  text: __("Operation"),
+                  text: t("btn-operation"),
                   dataIndex: "op",
                   editor: {
                     xtype: "combobox",
@@ -286,7 +286,7 @@ Ext.define("NOC.main.messageroute.Application", {
                   width: 100,
                 },
                 {
-                  text: __("Value"),
+                  text: t("header-value"),
                   dataIndex: "value",
                   editor: "textfield",
                   flex: 1,
@@ -301,7 +301,7 @@ Ext.define("NOC.main.messageroute.Application", {
   },
   filters: [
     {
-      title: __("Type"),
+      title: t("header-type"),
       name: "type",
       ftype: "lookup",
       lookup: "main.ref.messagetype",

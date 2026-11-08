@@ -8,14 +8,14 @@ console.debug("Defining NOC.fm.alarm.plugins.Diagnostic");
 
 Ext.define("NOC.fm.alarm.plugins.Diagnostic", {
   extend: "Ext.panel.Panel",
-  title: __("Diagnostic"),
+  title: t("header-diagnostic"),
   app: null,
   autoScroll: true,
   bodyPadding: 4,
   stateMap: {
-    "R": __("Raise"),
-    "C": __("Clear"),
-    "P": __("Periodic"),
+    "R": t("msg-raise"),
+    "C": t("btn-clear"),
+    "P": t("msg-periodic"),
   },
 
   updateData: function(data){

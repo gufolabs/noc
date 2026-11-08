@@ -24,11 +24,11 @@ Ext.define("NOC.inv.map.Basket", {
   scrollable: true,
   hideHeaders: true,
   reference: "basketGrid",
-  emptyText: __("basket empty"),
+  emptyText: t("label-basket-empty"),
   tbar: [
     {
       xtype: "button",
-      text: __("All"),
+      text: t("choice-all"),
       glyph: NOC.glyph.minus_circle,
       handler: "onDeleteAllClick",
       bind: {
@@ -37,7 +37,7 @@ Ext.define("NOC.inv.map.Basket", {
     },
     {
       xtype: "button",
-      tooltip: __("Delete object(s)"),
+      tooltip: t("help-delete-object-s"),
       glyph: NOC.glyph.minus_circle,
       handler: "onDeleteClick",
       bind: {
@@ -46,7 +46,7 @@ Ext.define("NOC.inv.map.Basket", {
     },
     {
       xtype: "button",
-      tooltip: __("Add to exist maintaince"),
+      tooltip: t("help-add-to-exist-maintaince"),
       glyph: NOC.glyph.plus,
       handler: "onAddToMaintainceClick",
       bind: {
@@ -55,7 +55,7 @@ Ext.define("NOC.inv.map.Basket", {
     },
     {
       xtype: "button",
-      tooltip: __("Create new maintaince"),
+      tooltip: t("help-create-new-maintaince"),
       glyph: NOC.glyph.file,
       handler: "onCreateMaintainceClick",
       bind: {
@@ -64,7 +64,7 @@ Ext.define("NOC.inv.map.Basket", {
     },
     {
       xtype: "button",
-      tooltip: __("Export"),
+      tooltip: t("btn-export"),
       glyph: NOC.glyph.arrow_down,
       handler: "onExportClick",
       bind: {

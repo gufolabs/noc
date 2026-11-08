@@ -18,7 +18,7 @@ Ext.define("NOC.sa.managedobject.AlarmPanel", {
     var me = this;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -30,13 +30,13 @@ Ext.define("NOC.sa.managedobject.AlarmPanel", {
       },
       items: [
         {
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
           name: "params",
           inputValue: "status=A",
           checked: true,
         },
         {
-          boxLabel: __("Archive (last 25)"),
+          boxLabel: t("label-archive-last-25"),
           width: 150,
           name: "params",
           inputValue: 'status=C&__limit=25&__sort=[{"property":"timestamp","direction":"DESC"}]',
@@ -59,42 +59,42 @@ Ext.define("NOC.sa.managedobject.AlarmPanel", {
       stateId: "sa.managedobject-alarm",
       columns: [
         {
-          text: __("ID"),
+          text: t("header-id"),
           dataIndex: "id",
           width: 150,
         },
         {
-          text: __("Time"),
+          text: t("header-time"),
           dataIndex: "timestamp",
           width: 100,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Severity"),
+          text: t("header-severity"),
           dataIndex: "severity",
           width: 70,
           renderer: NOC.render.Lookup("severity"),
         },
         {
-          text: __("Class"),
+          text: t("header-class"),
           dataIndex: "alarm_class",
           width: 300,
           renderer: NOC.render.Lookup("alarm_class"),
         },
         {
-          text: __("Subject"),
+          text: t("header-subject"),
           dataIndex: "subject",
           flex: 1,
         },
         {
-          text: __("Duration"),
+          text: t("header-duration"),
           dataIndex: "duration",
           width: 70,
           align: "right",
           renderer: NOC.render.Duration,
         },
         {
-          text: __("Events"),
+          text: t("app-title-event"),
           dataIndex: "events",
           width: 30,
           align: "right",
@@ -146,7 +146,7 @@ Ext.define("NOC.sa.managedobject.AlarmPanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

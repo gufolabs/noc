@@ -28,17 +28,17 @@ Ext.define("NOC.core.ReportControl", {
             width: 150,
             items: [
               {
-                text: __("CSV"),
+                text: t("btn-csv"),
                 value: "csv",
                 width: 70,
               },
               {
-                text: __("CSV+ZIP"),
+                text: t("btn-csv-zip"),
                 value: "csv_zip",
                 width: 70,
               },
               {
-                text: __("Excel"),
+                text: t("btn-excel"),
                 value: "xlsx",
                 pressed: true,
                 width: 70,
@@ -58,14 +58,14 @@ Ext.define("NOC.core.ReportControl", {
             region: "south",
             columns: [
               {
-                text: __("Active"),
+                text: t("header-active"),
                 dataIndex: "is_active",
                 width: 25,
                 renderer: NOC.render.Bool,
                 editor: "checkbox",
               },
               {
-                text: __("Field"),
+                text: t("btn-field"),
                 dataIndex: "label",
                 flex: 1,
               },
@@ -80,7 +80,7 @@ Ext.define("NOC.core.ReportControl", {
             viewConfig: {
               plugins: {
                 ptype: "gridviewdragdrop",
-                dragText: __("Drag and drop to reorganize"),
+                dragText: t("msg-drag-and-drop-to-reorganize"),
               },
             },
           },
@@ -91,13 +91,13 @@ Ext.define("NOC.core.ReportControl", {
             dock: "top",
             items: [
               {
-                text: __("Download"),
+                text: t("btn-download"),
                 glyph: NOC.glyph.download,
                 scope: me,
                 handler: me.onDownload,
               },
               {
-                text: __("Reset Filter"),
+                text: t("btn-reset-filter"),
                 glyph: NOC.glyph.eraser,
                 scope: me,
                 handler: me.onReset,

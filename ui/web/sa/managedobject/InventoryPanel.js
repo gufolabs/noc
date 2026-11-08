@@ -24,21 +24,21 @@ Ext.define("NOC.sa.managedobject.InventoryPanel", {
     me.currentObject = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
     });
     //
     me.exportButton = Ext.create("Ext.button.Button", {
-      text: __("Export"),
+      text: t("btn-export"),
       glyph: NOC.glyph.arrow_down,
       scope: me,
       handler: me.onExport,
     });
     //
     me.defaultRoot = {
-      text: __("."),
+      text: t("header-text"),
       children: [],
     };
 
@@ -53,36 +53,36 @@ Ext.define("NOC.sa.managedobject.InventoryPanel", {
       useArrows: true,
       stateful: true,
       stateId: "sa.managedobject-inventory",
-      emptyText: __("No data"),
+      emptyText: t("label-no-data"),
       columns: [
         {
           xtype: "treecolumn",
           dataIndex: "name",
-          text: __("Name"),
+          text: t("header-name"),
           width: 200,
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model",
           width: 300,
         },
         {
-          text: __("Revision"),
+          text: t("header-revision"),
           dataIndex: "revision",
           width: 100,
         },
         {
-          text: __("Serial"),
+          text: t("header-serial"),
           dataIndex: "serial",
           width: 150,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Interface"),
+          text: t("header-interface"),
           dataIndex: "interface",
           width: 150,
         },
@@ -121,7 +121,7 @@ Ext.define("NOC.sa.managedobject.InventoryPanel", {
         me.store.setRootNode(data || me.defaultRoot)
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

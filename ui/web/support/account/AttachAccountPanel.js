@@ -8,7 +8,7 @@ console.debug("Defining NOC.support.account.AttachAccountPanel");
 
 Ext.define("NOC.support.account.AttachAccountPanel", {
   extend: "Ext.Window",
-  title: __("Attach existing account"),
+  title: t("btn-attach-existing-account"),
   layout: "fit",
   autoShow: true,
   draggable: false,
@@ -36,13 +36,13 @@ Ext.define("NOC.support.account.AttachAccountPanel", {
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Login"),
+          fieldLabel: t("header-login"),
           allowBlank: false,
         },
         {
           xtype: "textfield",
           name: "password",
-          fieldLabel: __("Password"),
+          fieldLabel: t("label-password"),
           allowBlank: false,
           inputType: "password",
         },
@@ -50,19 +50,19 @@ Ext.define("NOC.support.account.AttachAccountPanel", {
       buttonAlign: "center",
       buttons: [
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.times,
           scope: me,
           handler: me.onClose,
         },
         {
-          text: __("Reset"),
+          text: t("btn-reset"),
           glyph: NOC.glyph.undo,
           scope: me,
           handler: me.onReset,
         },
         {
-          text: __("Attach account"),
+          text: t("btn-attach-account"),
           glyph: NOC.glyph.save,
           disabled: true,
           formBind: true,

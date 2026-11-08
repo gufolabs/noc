@@ -13,7 +13,7 @@ Ext.define("NOC.vc.vlan.AddVLANForm", {
     "NOC.inv.resourcepool.LookupField",
     "NOC.vc.vlan.Model",
   ],
-  title: __("Add VLAN"),
+  title: t("app-title-add-vlan"),
   autoShow: false,
   modal: true,
   app: null,
@@ -30,19 +30,19 @@ Ext.define("NOC.vc.vlan.AddVLANForm", {
             {
               xtype: "vc.l2domain.LookupField",
               name: "vc_l2domain",
-              fieldLabel: __("VC L2 Domain"),
+              fieldLabel: t("label-vc-l2-domain"),
               allowBlank: false,
             },
             {
               xtype: "inv.resourcepool.LookupField",
               name: "resource_pool",
-              fieldLabel: __("Resource Pool"),
+              fieldLabel: t("nav-resourcepool"),
               allowBlank: false,
             },
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: true,
             },
           ],
@@ -50,7 +50,7 @@ Ext.define("NOC.vc.vlan.AddVLANForm", {
       ],
       buttons: [
         {
-          text: __("Add VLAN"),
+          text: t("app-title-add-vlan"),
           itemId: "add",
           glyph: NOC.glyph.plus,
           scope: me,
@@ -81,17 +81,17 @@ Ext.define("NOC.vc.vlan.AddVLANForm", {
       success: function(response){
         var vlan = Ext.decode(response.responseText);
         if(vlan !== 404){
-          NOC.info(__("VALN Allocated"));
+          NOC.info(t("msg-valn-allocated"));
           me.hide();
           me.app.editRecord(Ext.create("NOC.vc.vlan.Model", vlan));
           return;
         } else{
-          NOC.error(__("Free VLAN not found"));
+          NOC.error(t("msg-free-vlan-not-found"));
         }
         me.hide();
       },
       failure: function(){
-        NOC.error(__("Failed to add VLAN"));
+        NOC.error(t("msg-failed-to-add-vlan"));
         me.hide();
       },
     });

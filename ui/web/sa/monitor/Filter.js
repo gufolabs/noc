@@ -22,7 +22,7 @@ Ext.define("NOC.sa.monitor.Filter", {
             {
               xtype: "button",
               toggleGroup: "status",
-              text: __("Suspend"),
+              text: t("msg-suspend-2"),
               value: "s",
               reference: "sbtn",
               handler: "setFilter",
@@ -30,7 +30,7 @@ Ext.define("NOC.sa.monitor.Filter", {
             {
               xtype: "button",
               toggleGroup: "status",
-              text: __("Wait"),
+              text: t("btn-wait"),
               value: "W",
               reference: "wbtn",
               handler: "setFilter",
@@ -38,7 +38,7 @@ Ext.define("NOC.sa.monitor.Filter", {
             {
               xtype: "button",
               toggleGroup: "status",
-              text: __("Run"),
+              text: t("btn-run"),
               value: "R",
               reference: "rbtn",
               handler: "setFilter",
@@ -46,7 +46,7 @@ Ext.define("NOC.sa.monitor.Filter", {
             {
               xtype: "button",
               toggleGroup: "status",
-              text: __("Disabled"),
+              text: t("msg-disabled"),
               value: "D",
               reference: "dbtn",
               handler: "setFilter",
@@ -57,7 +57,7 @@ Ext.define("NOC.sa.monitor.Filter", {
           xtype: "numberfield",
           itemId: "ldur",
           isLookupField: true,
-          fieldLabel: __("Min Duration"),
+          fieldLabel: t("label-min-duration-2"),
           minValue: 0,
           triggers: {
             clear: {

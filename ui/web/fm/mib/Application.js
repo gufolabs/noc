@@ -16,12 +16,12 @@ Ext.define("NOC.fm.mib.Application", {
   ],
   columns: [
     {
-      text: __("MIB"),
+      text: t("header-mib"),
       dataIndex: "name",
       flex: 1,
     },
     {
-      text: __("Last Updated"),
+      text: t("header-last-updated"),
       dataIndex: "last_updated",
       width: 100,
     },
@@ -32,7 +32,7 @@ Ext.define("NOC.fm.mib.Application", {
     tbar: [
       {
         itemId: "close",
-        text: __("Close"),
+        text: t("btn-close"),
         glyph: NOC.glyph.arrow_left,
         handler: "onBack",
       },
@@ -45,19 +45,19 @@ Ext.define("NOC.fm.mib.Application", {
     var me = this;
     //
     me.toolbarIdField = Ext.create("Ext.form.field.Display", {
-      fieldLabel: __("ID"),
+      fieldLabel: t("header-id"),
       labelWidth: 15,
     });
     //
     me.closeButton = Ext.create("Ext.button.Button", {
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.showGrid,
     });
     //
     me.previewButton = Ext.create("Ext.button.Button", {
-      text: __("View"),
+      text: t("btn-view"),
       glyph: NOC.glyph.file,
       scope: me,
       handler: me.onPreview,
@@ -78,24 +78,24 @@ Ext.define("NOC.fm.mib.Application", {
       columns: [
         {
           xtype: "treecolumn",
-          text: __("OID"),
+          text: t("header-oid"),
           dataIndex: "oid",
           width: 300,
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
           xtype: "templatecolumn",
           tpl: "<pre>{description}</pre>",
         },
         {
-          text: __("Syntax"),
+          text: t("header-syntax"),
           dataIndex: "syntax",
           width: 200,
           xtype: "templatecolumn",
@@ -142,7 +142,7 @@ Ext.define("NOC.fm.mib.Application", {
         me.treeStore.setRootNode(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

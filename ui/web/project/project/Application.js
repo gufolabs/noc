@@ -21,7 +21,7 @@ Ext.define("NOC.project.project.Application", {
   initComponent: function(){
     var me = this;
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -33,17 +33,17 @@ Ext.define("NOC.project.project.Application", {
       ],
       columns: [
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 150,
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -52,24 +52,24 @@ Ext.define("NOC.project.project.Application", {
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: false,
         },
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("Shape Overlay"),
+          title: t("app-title-shape-overlay"),
           layout: "hbox",
           defaults: {
             padding: 4,
@@ -78,14 +78,14 @@ Ext.define("NOC.project.project.Application", {
             {
               name: "shape_overlay_glyph",
               xtype: "main.glyph.LookupField",
-              fieldLabel: __("Glyph"),
+              fieldLabel: t("app-title-glyph"),
               labelWidth: 150,
               allowBlank: true,
             },
             {
               name: "shape_overlay_position",
               xtype: "main.ref.soposition.LookupField",
-              fieldLabel: __("Position"),
+              fieldLabel: t("label-position"),
               labelWidth: 175,
               width: 330,
               listConfig: {
@@ -97,7 +97,7 @@ Ext.define("NOC.project.project.Application", {
             {
               name: "shape_overlay_form",
               xtype: "main.ref.soform.LookupField",
-              fieldLabel: __("Form"),
+              fieldLabel: t("label-form"),
               labelWidth: 50,
               width: 200,
               listConfig: {

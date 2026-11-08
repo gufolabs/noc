@@ -19,12 +19,12 @@ Ext.define("NOC.wf.wfmigration.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -34,14 +34,14 @@ Ext.define("NOC.wf.wfmigration.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
@@ -49,28 +49,28 @@ Ext.define("NOC.wf.wfmigration.Application", {
           xtype: "gridfield",
           columns: [
             {
-              text: __("Active"),
+              text: t("header-active"),
               dataIndex: "is_active",
               editor: "checkbox",
               width: 50,
               renderer: NOC.render.Bool,
             },
             {
-              text: __("From State"),
+              text: t("header-from-state"),
               dataIndex: "from_state",
               editor: "wf.state.LookupField",
               width: 150,
               renderer: NOC.render.Lookup("from_state"),
             },
             {
-              text: __("To State"),
+              text: t("header-to-state"),
               dataIndex: "to_state",
               editor: "wf.state.LookupField",
               width: 150,
               renderer: NOC.render.Lookup("to_state"),
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               editor: "textfield",
               flex: 1,

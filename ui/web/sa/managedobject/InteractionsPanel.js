@@ -17,21 +17,21 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
     var me = this;
 
     me.closeButton = Ext.create("Ext.button.Button", {
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.onClose,
     });
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
     });
 
     me.clipboardButton = Ext.create("Ext.button.Button", {
-      text: __("Clipboard"),
+      text: t("help-clipboard"),
       glyph: NOC.glyph.copy,
       scope: me,
       handler: me.onClipboard,
@@ -64,13 +64,13 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
       stateId: "sa.managedobject-interactions",
       columns: [
         {
-          text: __("Date"),
+          text: t("header-date"),
           dataIndex: "ts",
           width: 120,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Operation"),
+          text: t("btn-operation"),
           dataIndex: "op",
           width: 100,
           renderer: NOC.render.Choices({
@@ -84,12 +84,12 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
           }),
         },
         {
-          text: __("User"),
+          text: t("header-user"),
           dataIndex: "user",
           width: 100,
         },
         {
-          text: __("Text"),
+          text: t("app-title-text"),
           dataIndex: "text",
           flex: 1,
         },
@@ -137,7 +137,7 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
         me.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },
@@ -179,7 +179,7 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
     if(!Ext.isEmpty(text)){
       NOC.toClipboard(text);
     }{
-      NOC.error(__("Nothing to copy"));
+      NOC.error(t("msg-nothing-to-copy"));
     }
   },
 });

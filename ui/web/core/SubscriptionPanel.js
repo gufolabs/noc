@@ -48,31 +48,31 @@ Ext.define("NOC.core.SubscriptionPanel", {
       ],
       tbar: [
         {
-          text: __("Close"),
-          tooltip: __("Close without saving"),
+          text: t("btn-close"),
+          tooltip: t("help-close-without-saving"),
           glyph: NOC.glyph.arrow_left,
           handler: "onClose",
         },
         "|",
         {
-          text: __("Add"),
-          tooltip: __("Add me to this subscription"),
+          text: t("btn-add"),
+          tooltip: t("help-add-me-to-this-subscription"),
           bind: {
             disabled: "{!addDisabled}",
           },
           handler: "onAddMe",
         },
         {
-          text: __("Remove"),
-          tooltip: __("Remove me to this subscription"),
+          text: t("btn-remove"),
+          tooltip: t("help-remove-me-to-this-subscription"),
           bind: {
             disabled: "{!removeDisabled}",
           },
           handler: "onRemoveMe",
         },
         {
-          text: __("Suppress"),
-          tooltip: __("Suppress me to this subscription"),
+          text: t("btn-suppress"),
+          tooltip: t("help-suppress-me-to-this-subscription"),
           bind: {
             disabled: "{!isSelected}",
           },
@@ -81,37 +81,37 @@ Ext.define("NOC.core.SubscriptionPanel", {
       ],
       columns: [
         {
-          text: __("Source"),
+          text: t("header-source"),
           dataIndex: "source",
           flex: 0.5,
         },
         {
-          text: __("Notification Group"),
+          text: t("app-title-notificationgroup"),
           dataIndex: "notification_group",
           flex: 1,
           renderer: NOC.render.Lookup("notification_group"),
         },
         {
-          text: __("Users"),
+          text: t("app-title-user"),
           dataIndex: "users",
           flex: 4,
           lookupUrl: "/aaa/user/lookup/",
           renderer: "userRenderer",
         },
         {
-          text: __("CRM Users (Contacts)"),
+          text: t("btn-crm-users-contacts"),
           dataIndex: "crm_users",
           flex: 4,
           lookupUrl: "/crm/subscriber/lookup/",
           renderer: "userRenderer",
         },
         {
-          text: __("Suppress"),
+          text: t("btn-suppress"),
           dataIndex: "me_suppress",
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Subscribe"),
+          text: t("btn-subscribe"),
           dataIndex: "me_subscribe",
           renderer: NOC.render.Bool,
         },
@@ -143,7 +143,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
   //
   request: function(url, method, successCallback){
     if(this.rendered && !this.destroyed){
-      this.mask(__("Updating ..."));
+      this.mask(t("msg-updating"));
     }
     NOC.api.requestLegacy({
       url: url,
@@ -203,7 +203,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
         grid.selection.set(data);
         grid.selection.commit();
         self.onSelectionChange(grid, [grid.selection]);
-        NOC.info(__("Operation completed"));
+        NOC.info(t("msg-operation-completed"));
       },
     );
   },
@@ -231,7 +231,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
     metaData.tdStyle = "cursor: pointer;";
     if(!record.get("allow_edit")){
       metaData.tdStyle = "cursor: not-allowed;";
-      icon = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + __("Read only") + "'></i>";
+      icon = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + t("msg-read-only-2") + "'></i>";
     }
 
     return icon + value.map(function(user){

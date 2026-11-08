@@ -42,18 +42,18 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
         },
         {
           xtype: "radiogroup",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           layout: "hbox",
           items: [
             {
-              boxLabel: __("Interface"),
+              boxLabel: t("header-interface"),
               name: "type",
               inputValue: "interface",
               checked: true,
               margin: "0 10 0 0", 
             },
             {
-              boxLabel: __("Subinterface"),
+              boxLabel: t("label-subinterface"),
               name: "type",
               inputValue: "subinterface",
             },
@@ -74,7 +74,7 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
           },
         },
         {
-          fieldLabel: __("Managed Object"),
+          fieldLabel: t("header-managed-object-62561c"),
           name: "managed_id",
           restUrl: "/sa/managedobject/lookup/",
           listeners: {
@@ -89,7 +89,7 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
           },
         },
         {
-          fieldLabel: __("Resource"),
+          fieldLabel: t("header-resource"),
           name: "resources",
           valueField: "resource",
           displayField: "resource__label",
@@ -97,20 +97,20 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
       ],
       buttons: [
         {
-          text: __("Bind"),
+          text: t("btn-bind"),
           formBind: true,
           handler: "buttonBindHandler",
         },
         {
-          text: __("Unbind"),
+          text: t("btn-unbind"),
           handler: "buttonResetHandler",
         },
         {
-          text: __("Reset"),
+          text: t("btn-reset"),
           handler: "resetFormHandler",
         },
         {
-          text: __("Close"),
+          text: t("btn-close"),
           handler: function(){
             this.up("window").close();
           }, 
@@ -144,10 +144,10 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
         if(result.success){
           this.instanceRecord.set("resources", result.data.resources);
           this.instanceRecord.commit();
-          NOC.info(__("Resource") + " " + method + " " + __("successfully"));
+          NOC.info(t("msg-resource-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(__("Error") + " : " + result.message || __("Operation failed"));
+          NOC.error(t("msg-error-value0-8", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

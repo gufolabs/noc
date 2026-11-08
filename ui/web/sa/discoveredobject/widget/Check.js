@@ -116,7 +116,7 @@ Ext.define("NOC.sa.discoveredobject.widget.Check", {
         {
           xtype: "combobox",
           name: "name",
-          emptyText: __("check"),
+          emptyText: t("label-check"),
           editable: false,
           displayField: "label",
           allowBlank: false,

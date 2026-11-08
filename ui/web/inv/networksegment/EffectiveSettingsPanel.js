@@ -18,7 +18,7 @@ Ext.define("NOC.inv.networksegment.EffectiveSettingsPanel", {
     me.currentObject = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -35,12 +35,12 @@ Ext.define("NOC.inv.networksegment.EffectiveSettingsPanel", {
       columns: [
         {
           dataIndex: "key",
-          text: __("Key"),
+          text: t("header-key"),
           width: 150,
         },
         {
           dataIndex: "value",
-          text: __("Value"),
+          text: t("header-value"),
           flex: 1,
         },
       ],
@@ -83,7 +83,7 @@ Ext.define("NOC.inv.networksegment.EffectiveSettingsPanel", {
         me.store.sort("key", "ASC");
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

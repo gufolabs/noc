@@ -14,7 +14,7 @@ Ext.define("NOC.inv.map.Legend", {
     {
       xtype: "box",
       padding: "0 5",
-      html: __("Legend"),
+      html: t("msg-legend"),
     },
     {
       xtype: "draw",
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.map.Legend", {
       sprites: [
         {
           type: "text", x: 10, y: 15,
-          text: __("Object status style"),
+          text: t("btn-object-status-style"),
         },
         {
           type: "rect", x: 20, y: 22, width: 20, height: 10,
@@ -31,7 +31,7 @@ Ext.define("NOC.inv.map.Legend", {
         },
         {
           type: "text", x: 60, y: 30,
-          text: __("unknown"),
+          text: t("btn-unknown"),
         },
         {
           type: "rect", x: 20, y: 37, width: 20, height: 10,
@@ -67,7 +67,7 @@ Ext.define("NOC.inv.map.Legend", {
         },
         {
           type: "text", x: 10, y: 105,
-          text: __("Link bandwidth style"),
+          text: t("btn-link-bandwidth-style"),
         },
         {
           type: "line", fromX: 20, fromY: 120, toX: 100, toY: 120,
@@ -76,7 +76,7 @@ Ext.define("NOC.inv.map.Legend", {
         },
         {
           type: "text", x: 110, y: 120,
-          text: __("data unavailable"),
+          text: t("btn-data-unavailable"),
         },
         {
           type: "line", fromX: 20, fromY: 135, toX: 100, toY: 135,
@@ -104,7 +104,7 @@ Ext.define("NOC.inv.map.Legend", {
         },
         {
           type: "text", x: 10, y: 185,
-          text: __("Link utilization style"),
+          text: t("btn-link-utilization-style"),
         },
         {
           type: "line", fromX: 20, fromY: 200, toX: 100, toY: 200,
@@ -146,15 +146,15 @@ Ext.define("NOC.inv.map.Legend", {
           type: "text", x: 40, y: 262,
           fontFamily: "FontAwesome", fontSize: 5,
           fillStyle: "#ff9933",
-          text: __("\uf111"),
+          text: t("btn-text"),
         },
         {
           type: "text", x: 110, y: 260,
-          text: __("balance"),
+          text: t("btn-balance"),
         },
         {
           type: "text", x: 10, y: 280,
-          text: __("Link status style"),
+          text: t("btn-link-status-style"),
         },
         {
           type: "line", fromX: 20, fromY: 295, toX: 100, toY: 295,
@@ -164,11 +164,11 @@ Ext.define("NOC.inv.map.Legend", {
           type: "text", x: 40, y: 298,
           fontFamily: "FontAwesome", fontSize: 12,
           fillStyle: "#c0392b",
-          text: __("\uf071"),
+          text: t("btn-text-2"),
         },
         {
           type: "text", x: 110, y: 295,
-          text: __("oper down"),
+          text: t("btn-oper-down"),
         },
         {
           type: "line", fromX: 20, fromY: 310, toX: 100, toY: 310,
@@ -178,11 +178,11 @@ Ext.define("NOC.inv.map.Legend", {
           type: "text", x: 40, y: 314,
           fontFamily: "FontAwesome", fontSize: 12,
           fillStyle: "#7f8c8d",
-          text: __("\uf00d"),
+          text: t("btn-text-3"),
         },
         {
           type: "text", x: 110, y: 310,
-          text: __("admin down"),
+          text: t("btn-admin-down"),
         },
         {
           type: "line", fromX: 20, fromY: 325, toX: 100, toY: 325,
@@ -192,11 +192,11 @@ Ext.define("NOC.inv.map.Legend", {
           type: "text", x: 40, y: 329,
           fontFamily: "FontAwesome", fontSize: 12,
           fillStyle: "#8e44ad",
-          text: __("\uf05e"),
+          text: t("btn-text-4"),
         },
         {
           type: "text", x: 110, y: 325,
-          text: __("STP blocked"),
+          text: t("btn-stp-blocked"),
         },
       ],
     },

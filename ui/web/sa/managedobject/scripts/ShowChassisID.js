@@ -10,12 +10,12 @@ Ext.define("NOC.sa.managedobject.scripts.ShowChassisID", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("First MAC"),
+      text: t("header-first-mac"),
       dataIndex: "first_chassis_mac",
       width: 120,
     },
     {
-      text: __("Last MAC"),
+      text: t("header-last-mac"),
       dataIndex: "last_chassis_mac",
       width: 120,
       flex: 1,

@@ -9,20 +9,20 @@ console.debug("Defining NOC.support.account.SystemPanel");
 Ext.define("NOC.support.account.SystemPanel", {
   extend: "Ext.panel.Panel",
   app: null,
-  title: __("System"),
+  title: t("btn-system"),
   layout: "fit",
   autoScroll: true,
   closable: false,
 
   minPasswordLength: 8,
-  notRegisteredtext: __("System is not registred. Please register your system to get access to additional support and services"),
-  registeredtext: __("System is registred. You have access to additional support and services"),
+  notRegisteredtext: t("msg-system-is-not-registred-please-register-your-system-to-get-acces"),
+  registeredtext: t("msg-system-is-registred-you-have-access-to-additional-support-and-se"),
 
   initComponent: function(){
     var me = this;
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       handler: me.onSave,
@@ -44,20 +44,20 @@ Ext.define("NOC.support.account.SystemPanel", {
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           itemId: "uuid",
         },
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           regex: /^[a-z0-9.\-_]+$/i,
         },
         {
           xtype: "combobox",
           name: "type",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           store: [
             ["dev", "Development"],
@@ -70,7 +70,7 @@ Ext.define("NOC.support.account.SystemPanel", {
         {
           xtype: "textarea",
           name: "description",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           anchor: "100%",
         },

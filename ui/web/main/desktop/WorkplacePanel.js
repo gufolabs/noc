@@ -27,7 +27,7 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
 
     me.expandButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.expand,
-      tooltip: __("Collapse panels"),
+      tooltip: t("help-collapse-panels"),
       enableToggle: true,
       scope: me,
       cls: "noc-navigation-button",
@@ -43,7 +43,7 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
   },
   // Launch application in tab
   launchTab: function(panel_class, title, params, node){
-    this.mask(__("Loading tab with") + " " + panel_class + " ...");
+    this.mask(t("msg-loading-tab-with-value0", {value0: panel_class}));
     var tab = this.add({
         title: title,
         closable: true,
@@ -96,7 +96,7 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
       var me = this.up(), // Desktop Application
         homeTab = me.workplacePanel.down("[appId=main.home]");
       if(Ext.isEmpty(homeTab)){
-        me.launchTab("NOC.main.home.Application", __("Home"), {});
+        me.launchTab("NOC.main.home.Application", t("app-title-home"), {});
       } else{
         var tabIndex = me.workplacePanel.items.indexOf(homeTab);
         me.workplacePanel.setActiveTab(tabIndex);
@@ -112,12 +112,12 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
   setExpanded: function(){
     var me = this;
     me.expandButton.setGlyph(NOC.glyph.compress);
-    me.expandButton.setTooltip(__("Expand panels"));
+    me.expandButton.setTooltip(t("msg-expand-panels"));
   },
   //
   setCollapsed: function(){
     var me = this;
     me.expandButton.setGlyph(NOC.glyph.expand);
-    me.expandButton.setTooltip(__("Collapse panels"));
+    me.expandButton.setTooltip(t("help-collapse-panels"));
   },
 });

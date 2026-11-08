@@ -25,7 +25,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
     "Ext.ux.form.SearchField",
   ],
   reference: "fm-alarm-filter",
-  title: __("Filter"),
+  title: t("app-title-reportfilter"),
   minWidth: 350,
   scrollable: {
     indicators: false,
@@ -41,14 +41,14 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
   items: [
     {
       xtype: "button",
-      text: __("Reset Filter"),
+      text: t("btn-reset-filter"),
       iconAlign: "right",
       listeners: {
         click: "onResetFilter",
       },
     },
     {
-      title: __("Summary"),
+      title: t("header-summary"),
       bind: {hidden: "{isActiveAlarmsSelected}"},
       items: [
         {
@@ -61,11 +61,11 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
             {xtype: "displayfield", width: 30, bind: {value: "{total.objectsFiltered}"} },
           ],
         },
-        {xtype: "button", text: __("Reset"), margin: "0 0 5 0", handler: "onResetStatuses"},
+        {xtype: "button", text: t("btn-reset"), margin: "0 0 5 0", handler: "onResetStatuses"},
       ],
     },
     {
-      title: __("Alarms type"),
+      title: t("app-title-alarms-type"),
       collapsed: false,
       defaults: {
         xtype: "radiogroup",
@@ -77,15 +77,15 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           bind: {value: "{status}"},
           items: [
             {
-              boxLabel: __("Active"),
+              boxLabel: t("header-active"),
               inputValue: "A",
               // ToDo make all tooltip
-              // tooltip: __("Show active alarms"),
+              // tooltip: t("Show active alarms"),
             },
             {
-              boxLabel: __("Closed"),
+              boxLabel: t("label-closed"),
               inputValue: "C",
-              // tooltip: __("Show archived alarms")
+              // tooltip: t("Show archived alarms")
             },
           ],
         },
@@ -100,19 +100,19 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           },
           items: [
             {
-              fieldLabel: __("Root"),
+              fieldLabel: t("msg-root"),
               name: "collapse",
               bind: {value: "{collapse}"},
               items: [
                 {
-                  boxLabel: __("Only"),
+                  boxLabel: t("label-only"),
                   inputValue: 1,
-                  // tooltip: __("Show only root causes"),
+                  // tooltip: t("Show only root causes"),
                 },
                 {
-                  boxLabel: __("All"),
+                  boxLabel: t("choice-all"),
                   inputValue: 0,
-                  // tooltip: __("Show all alarms")
+                  // tooltip: t("Show all alarms")
                 },
               ],
             },
@@ -122,39 +122,39 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
               fieldLabel: "TT",
               items: [
                 {
-                  boxLabel: __("Wait TT"),
+                  boxLabel: t("label-wait-tt"),
                   inputValue: 1,
-                  // tooltip: __("Show only waiting confirmation"),
+                  // tooltip: t("Show only waiting confirmation"),
                 },
                 {
-                  boxLabel: __("All"),
+                  boxLabel: t("choice-all"),
                   inputValue: 0,
-                  // tooltip: __("Show all alarms")
+                  // tooltip: t("Show all alarms")
                 },
               ],
             },
           ],
         },
         {
-          fieldLabel: __("Maintenance"),
+          fieldLabel: t("label-maintenance"),
           name: "maintenance",
           bind: {value: "{maintenance}"},
           labelAlign: "top",
           columns: 3,
           items: [
             {
-              boxLabel: __("Hide"),
-              // tooltip: __("Hide alarms covered by maintenance"),
+              boxLabel: t("label-hide"),
+              // tooltip: t("Hide alarms covered by maintenance"),
               inputValue: "hide",
             },
             {
-              boxLabel: __("Only"),
-              // tooltip: __("Show only alarms covered by maintenance"),
+              boxLabel: t("label-only"),
+              // tooltip: t("Show only alarms covered by maintenance"),
               inputValue: "only",
             },
             {
-              boxLabel: __("All"),
-              // tooltip: __("Show all alarms"),
+              boxLabel: t("choice-all"),
+              // tooltip: t("Show all alarms"),
               inputValue: "show",
             },
           ],
@@ -170,19 +170,19 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           },
           items: [
             {
-              fieldLabel: __("Alarm Group"),
+              fieldLabel: t("label-alarm-group"),
               name: "alarm_group",
               bind: {value: "{alarm_group}"},
               items: [
                 {
-                  boxLabel: __("Only"),
+                  boxLabel: t("label-only"),
                   inputValue: "only",
-                  // tooltip: __("Show only alarm causes"),
+                  // tooltip: t("Show only alarm causes"),
                 },
                 {
-                  boxLabel: __("All"),
+                  boxLabel: t("choice-all"),
                   inputValue: "show",
-                  // tooltip: __("Show all alarms")
+                  // tooltip: t("Show all alarms")
                 },
               ],
             },
@@ -192,14 +192,14 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
               fieldLabel: "Ephemeral",
               items: [
                 {
-                  boxLabel: __("Show"),
+                  boxLabel: t("label-show"),
                   inputValue: 1,
-                  // tooltip: __("Show only waiting confirmation"),
+                  // tooltip: t("Show only waiting confirmation"),
                 },
                 {
-                  boxLabel: __("Hide"),
+                  boxLabel: t("label-hide"),
                   inputValue: 0,
-                  // tooltip: __("Show all alarms")
+                  // tooltip: t("Show all alarms")
                 },
               ],
             },
@@ -208,7 +208,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
       ],
     },
     {
-      title: __("Filters"),
+      title: t("app-title-filters"),
       collapsed: false,
       defaults: {
         labelAlign: "top",
@@ -225,7 +225,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         {
           xtype: "core.combo",
           restUrl: "/sa/managedobject/lookup/",
-          fieldLabel: __("Object"),
+          fieldLabel: t("header-object"),
           name: "managed_object",
           bind: {
             selection: "{activeFilter.managed_object}",
@@ -234,7 +234,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         {
           xtype: "noc.core.combotree",
           restUrl: "/inv/networksegment/",
-          fieldLabel: __("Segment"),
+          fieldLabel: t("header-segment-44986c"),
           name: "segment",
           bind: {
             selection: "{activeFilter.segment}",
@@ -244,7 +244,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           xtype: "core.tagfield",
           url: "/sa/administrativedomain/lookup/",
           lazyLoadTree: true,
-          fieldLabel: __("Adm. Domain"),
+          fieldLabel: t("header-adm-domain"),
           name: "administrative_domain",
           bind: {
             selected: "{activeFilter.administrative_domain}",
@@ -254,7 +254,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           name: "resource_group",
           xtype: "noc.core.combotree",
           restUrl: "/inv/resourcegroup/",
-          fieldLabel: __("By Resource Group (Selector)"),
+          fieldLabel: t("label-by-resource-group-selector"),
           listWidth: 1,
           listAlign: "left",
           labelAlign: "top",
@@ -266,7 +266,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         {
           xtype: "core.tagfield",
           url: "/fm/alarmclass/lookup/",
-          fieldLabel: __("Class"),
+          fieldLabel: t("header-class"),
           name: "alarm_class",
           bind: {
             selected: "{activeFilter.alarm_class}",
@@ -274,7 +274,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         },
         {
           xtype: "searchfield",
-          fieldLabel: __("TT"),
+          fieldLabel: t("label-tt"),
           name: "escalation_tt__contains",
           triggers: {
             clear: {
@@ -299,7 +299,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         },
         {
           xtype: "fieldcontainer",
-          fieldLabel: __("By Date"),
+          fieldLabel: t("label-by-date"),
           layout: "column",
           padding: "5 0 5",
           defaults: {
@@ -324,13 +324,13 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
         {
           xtype: "fm.alarm.filter.profile",
           name: "profile",
-          fieldLabel: __("Service Profiles"),
+          fieldLabel: t("nav-serviceprofile"),
           bind: {value: "{activeFilter.profiles}"},
         },
       ],
     },
     {
-      title: __("Display filters"),
+      title: t("app-title-display-filters"),
       collapsed: false,
       reference: "fm-alarm-display-filters",
       items: [
@@ -340,7 +340,7 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
       ],
     },
     {
-      title: __("Show recently closed"),
+      title: t("app-title-show-recently-closed"),
       collapsed: true,
       reference: "fm-alarm-recent-switcher",
       items: [
@@ -354,12 +354,12 @@ Ext.define("NOC.fm.alarm.view.grids.Sidebar", {
           store: {
             fields: ["value", "text"],
             data: [
-              {"value": 0, "text": __("don't show")},
-              {"value": 300, "text": __("5 min")},
-              {"value": 900, "text": __("15 min")},
-              {"value": 1800, "text": __("30 min")},
-              {"value": 3600, "text": __("60 min")},
-              {"value": 10800, "text": __("3 h")},
+              {"value": 0, "text": t("label-don-t-show")},
+              {"value": 300, "text": t("label-5-min")},
+              {"value": 900, "text": t("label-15-min")},
+              {"value": 1800, "text": t("label-30-min")},
+              {"value": 3600, "text": t("label-60-min")},
+              {"value": 10800, "text": t("label-3-h")},
             ],
           },
         },

@@ -32,14 +32,14 @@ Ext.define("NOC.maintenance.maintenance.Application", {
     );
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
     });
 
     me.affectedButton = Ext.create("Ext.button.Button", {
-      text: __("Affected Objects"),
+      text: t("msg-affected-objects"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onObjects,
@@ -48,41 +48,41 @@ Ext.define("NOC.maintenance.maintenance.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 150,
           renderer: NOC.render.Lookup("type"),
         },
         {
-          text: __("Start"),
+          text: t("header-start"),
           dataIndex: "start",
           width: 120,
         },
         {
-          text: __("Stop"),
+          text: t("header-stop"),
           dataIndex: "stop",
           width: 120,
         },
         {
-          text: __("Completed"),
+          text: t("msg-completed"),
           dataIndex: "is_completed",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Auto-confirm"),
+          text: t("header-auto-confirm"),
           dataIndex: "auto_confirm",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Time Pattern"),
+          text: t("header-time-pattern"),
           dataIndex: "time_pattern",
           width: 150,
           renderer: NOC.render.Lookup("time_pattern"),
         },
         {
-          text: __("TT"),
+          text: t("label-tt"),
           dataIndex: "escalation_tt",
           width: 150,
           sortable: false,
@@ -101,7 +101,7 @@ Ext.define("NOC.maintenance.maintenance.Application", {
           },
         },
         {
-          text: __("Subject"),
+          text: t("header-subject"),
           dataIndex: "subject",
           flex: 1,
         },
@@ -110,13 +110,13 @@ Ext.define("NOC.maintenance.maintenance.Application", {
         {
           name: "subject",
           xtype: "textfield",
-          fieldLabel: __("Subject"),
+          fieldLabel: t("header-subject"),
           allowBlank: false,
         },
         {
           name: "type",
           xtype: "maintenance.maintenancetype.LookupField",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
         },
         {
@@ -127,7 +127,7 @@ Ext.define("NOC.maintenance.maintenance.Application", {
               name: "start_date",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("Start"),
+              fieldLabel: t("header-start"),
               allowBlank: false,
               format: "d.m.Y",
             },
@@ -148,7 +148,7 @@ Ext.define("NOC.maintenance.maintenance.Application", {
               name: "stop_date",
               xtype: "datefield",
               startDay: 1,
-              fieldLabel: __("Stop"),
+              fieldLabel: t("header-stop"),
               allowBlank: false,
               format: "d.m.Y",
             },
@@ -164,52 +164,52 @@ Ext.define("NOC.maintenance.maintenance.Application", {
         {
           name: "is_completed",
           xtype: "checkbox",
-          boxLabel: __("Completed"),
+          boxLabel: t("msg-completed"),
         },
         {
           name: "auto_confirm",
           xtype: "checkbox",
-          boxLabel: __("Auto-confirm"),
+          boxLabel: t("header-auto-confirm"),
         },
         {
           name: "template",
           xtype: "main.template.LookupField",
-          fieldLabel: __("Close Template"),
+          fieldLabel: t("header-close-template"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "contacts",
           xtype: "textarea",
-          fieldLabel: __("Contacts"),
+          fieldLabel: t("header-contacts"),
           allowBlank: false,
         },
         {
           name: "time_pattern",
           xtype: "main.timepattern.LookupField",
-          fieldLabel: __("Time Pattern"),
+          fieldLabel: t("header-time-pattern"),
           allowBlank: true,
         },
         {
           name: "suppress_alarms",
           xtype: "checkbox",
-          boxLabel: __("Suppress alarms"),
+          boxLabel: t("label-suppress-alarms"),
         },
         {
           name: "escalation_policy",
           xtype: "combobox",
-          fieldLabel: __("Escalation Policy"),
+          fieldLabel: t("label-escalation-policy"),
           allowBlank: true,
           store: [
-            ["E", __("Enable")],
-            ["D", __("Disable")],
-            ["S", __("Suspend")],
-            ["M", __("Maintenance")],
+            ["E", t("label-enable")],
+            ["D", t("status-disable")],
+            ["S", t("msg-suspend-2")],
+            ["M", t("label-maintenance")],
           ],
           uiStyle: "medium",
           listeners: {
@@ -221,7 +221,7 @@ Ext.define("NOC.maintenance.maintenance.Application", {
         {
           name: "escalate_managed_object",
           xtype: "sa.managedobject.LookupField",
-          fieldLabel: __("Escalate to"),
+          fieldLabel: t("label-escalate-to"),
           allowBlank: true,
           disabled: true,
         },
@@ -229,10 +229,10 @@ Ext.define("NOC.maintenance.maintenance.Application", {
       gridToolbar: [
         {
           xtype: "combo",
-          fieldLabel: __("Status"),
+          fieldLabel: t("header-status"),
           store: [
-            ["false", __("Active")],
-            ["true", __("Completed")],
+            ["false", t("header-active")],
+            ["true", t("msg-completed")],
           ],
           triggerAction: "all",
           editable: false,
@@ -283,12 +283,12 @@ Ext.define("NOC.maintenance.maintenance.Application", {
   },
   inlines: [
     {
-      title: __("Objects"),
+      title: t("header-objects-72a83a"),
       collapsed: false,
       model: "NOC.maintenance.maintenance.DirectObjectsModel",
       columns: [
         {
-          text: __("Object"),
+          text: t("header-object"),
           dataIndex: "object",
           editor: "sa.managedobject.LookupField",
           flex: 1,
@@ -297,12 +297,12 @@ Ext.define("NOC.maintenance.maintenance.Application", {
       ],
     },
     {
-      title: __("Segments"),
+      title: t("app-title-segments"),
       collapsed: false,
       model: "NOC.maintenance.maintenance.DirectSegmentsModel",
       columns: [
         {
-          text: __("Segment"),
+          text: t("header-segment-44986c"),
           dataIndex: "segment",
           editor: "inv.networksegment.ComboTree",
           flex: 1,
@@ -311,12 +311,12 @@ Ext.define("NOC.maintenance.maintenance.Application", {
       ],
     },
     {
-      title: __("Services"),
+      title: t("app-title-service"),
       collapsed: false,
       model: "NOC.maintenance.maintenance.DirectServicesModel",
       columns: [
         {
-          text: __("Service"),
+          text: t("header-service"),
           dataIndex: "service",
           editor: "sa.service.LookupField",
           flex: 1,

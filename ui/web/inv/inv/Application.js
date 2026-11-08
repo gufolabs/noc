@@ -24,7 +24,7 @@ Ext.define("NOC.inv.inv.Application", {
     data: {
       autoReload: false,
       autoReloadIcon: "xf05e", // NOC.glyph.ban
-      autoReloadText: __("Auto reload : OFF"),
+      autoReloadText: t("label-auto-reload-off"),
       icon: "<i class='fa fa-fw' style='width:16px;'></i>",
     },
   },
@@ -35,7 +35,7 @@ Ext.define("NOC.inv.inv.Application", {
     me.invPlugins = {};
     // Navigation tree
     me.defaultRoot = {
-      text: __("."),
+      text: t("header-text"),
       children: [],
     };
 
@@ -51,7 +51,7 @@ Ext.define("NOC.inv.inv.Application", {
         scope: me,
         beforeload: function(store, operation){
           if(this.navTree){
-            let naviTreeMessageId = this.maskNaviTree.show(__("Loading..."));
+            let naviTreeMessageId = this.maskNaviTree.show(t("msg-loading-3"));
             operation.messageId = naviTreeMessageId;
             this.naviTreeMessageStack.push({
               id: naviTreeMessageId,
@@ -69,7 +69,7 @@ Ext.define("NOC.inv.inv.Application", {
 
     me.navReloadButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       scope: me,
       handler: me.onReloadNav,
     });
@@ -80,19 +80,19 @@ Ext.define("NOC.inv.inv.Application", {
         {
           glyph: NOC.glyph.plus,
           itemId: "invNavContextMenuAddItem",
-          text: __("Add objects"),
+          text: t("btn-add-objects"),
           scope: me,
           handler: me.onAddObject,
         },
         {
           glyph: NOC.glyph.copy,
-          text: __("Clone"),
+          text: t("btn-clone"),
           scope: me,
           handler: me.onClone,
         },
         {
           glyph: NOC.glyph.plug,
-          text: __("Connect"),
+          text: t("btn-connect"),
           scope: me,
           disabled: false,
           handler: me.onCreateConnection,
@@ -103,7 +103,7 @@ Ext.define("NOC.inv.inv.Application", {
         {
           glyph: NOC.glyph.line_chart,
           itemId: "invNavContextMenuShowDashboardItem",
-          text: __("Show Dashboard"),
+          text: t("btn-show-dashboard"),
           scope: me,
           disabled: false,
           handler: me.onOpenDashboard,
@@ -114,7 +114,7 @@ Ext.define("NOC.inv.inv.Application", {
         {
           glyph: NOC.glyph.trash_o,
           itemId: "invNavContextMenuRemoveAllConnectionItem",
-          text: __("Remove all connections"),
+          text: t("btn-remove-all-connections"),
           scope: me,
           cls: "noc-remove-menu-item",
           handler: me.onRemoveAllConnections,
@@ -122,7 +122,7 @@ Ext.define("NOC.inv.inv.Application", {
         {
           glyph: NOC.glyph.trash_o,
           itemId: "invNavContextMenuRemoveItem",
-          text: __("Delete"),
+          text: t("btn-delete"),
           scope: me,
           cls: "noc-remove-menu-item",
           handler: me.onRemoveGroup,
@@ -207,7 +207,7 @@ Ext.define("NOC.inv.inv.Application", {
             items: [
               me.navReloadButton,
               {
-                text: __("Reload"),
+                text: t("btn-reload"),
                 iconAlign: "right",
                 enableToggle: true,
                 bind: {
@@ -223,7 +223,7 @@ Ext.define("NOC.inv.inv.Application", {
               "->",
               {
                 glyph: NOC.glyph.plus,
-                tooltip: __("Add objects"),
+                tooltip: t("btn-add-objects"),
                 itemId: "addObjectDock",
                 disabled: false,
                 scope: me,
@@ -293,7 +293,7 @@ Ext.define("NOC.inv.inv.Application", {
                   if(Ext.isEmpty(data)){
                     me.menu.insert(mapItemPosition, {
                       itemId: "invNavContextMenuMapItem",
-                      text: __("Show Map"),
+                      text: t("btn-show-map"),
                       glyph: NOC.glyph.globe,
                       disabled: true,
                     });
@@ -318,14 +318,14 @@ Ext.define("NOC.inv.inv.Application", {
                   if(menuItems.length){
                     me.menu.insert(mapItemPosition, {
                       itemId: "invNavContextMenuMapItem",
-                      text: __("Show Map"),
+                      text: t("btn-show-map"),
                       glyph: NOC.glyph.globe,
                       menu: menuItems,
                     });
                   } else{
                     me.menu.insert(mapItemPosition, {
                       itemId: "invNavContextMenuMapItem",
-                      text: __("Show Map"),
+                      text: t("btn-show-map"),
                       glyph: NOC.glyph.globe,
                       handler: function(){
                         NOC.launch("inv.map", "history", {
@@ -336,7 +336,7 @@ Ext.define("NOC.inv.inv.Application", {
                   }
                 },
                 failure: function(){
-                  NOC.error(__("Failed get map menu"));
+                  NOC.error(t("msg-failed-get-map-menu"));
                 },
               });
               me.isMenuShow = true;
@@ -495,7 +495,7 @@ Ext.define("NOC.inv.inv.Application", {
   //
   runPlugin: function(objectId, pData, index){
     var me = this,
-      messageId = me.maskComponent.show("loading", [pData.name]);
+      messageId = me.maskComponent.show("loading", {name: pData.name});
 
     Ext.Loader.require(pData.xtype, function(){
       if(this.destroyed || this.isDestroying || this.isClearingTabPanel || !this.tabPanel || this.tabPanel.destroyed || this.tabPanel.isDestroying || this.selectedObjectId !== objectId){
@@ -537,7 +537,7 @@ Ext.define("NOC.inv.inv.Application", {
   addAppForm: function(parent, app, objectId){
     var me = this,
       url = "/" + app.replace(".", "/") + "/launch_info/",
-      messageId = me.maskComponent.show("processing", [app]),
+      messageId = me.maskComponent.show("processing", {name: app}),
       c;
     NOC.api.requestLegacy({
       url: url,
@@ -562,7 +562,7 @@ Ext.define("NOC.inv.inv.Application", {
       },
       failure: function(){
         me.maskComponent.hide(messageId);
-        NOC.error(__("Failed to launch application") + " " + app);
+        NOC.error(t("msg-failed-to-launch-application-value0", {value0: app}));
       },
     });
   },
@@ -570,7 +570,7 @@ Ext.define("NOC.inv.inv.Application", {
     var me = this,
       objectId = me.selectedObjectId,
       pluginName = currentPanel.pluginName,
-      messageId = me.maskComponent.show("fetching", [pluginName]);
+      messageId = me.maskComponent.show("fetching", {name: pluginName});
     // Reflect the active plugin tab in the URL as inv.inv/<id>/<plugin>.
     // Restored on reload via restoreHistory() (sets currentPlugin). dedup
     // avoids a duplicate history entry while restoring from the URL.
@@ -597,7 +597,7 @@ Ext.define("NOC.inv.inv.Application", {
         currentPanel.preview(data, objectId);
       },
       failure: function(){
-        NOC.error(__("Failed to get data for plugin") + " " + pluginName);
+        NOC.error(t("msg-failed-to-get-data-for-plugin-value0", {value0: pluginName}));
       },
       callback: function(){
         me.maskComponent.hide(messageId);
@@ -679,13 +679,13 @@ Ext.define("NOC.inv.inv.Application", {
           path, "id", "/",
           function(success){
             if(!success){
-              NOC.error(__("Failed to find node"));
+              NOC.error(t("msg-failed-to-find-node"));
             }
           }, me,
         );
       },
       failure: function(){
-        NOC.error(__("Failed to get path"));
+        NOC.error(t("msg-failed-to-get-path"));
       },
     })
   },
@@ -730,7 +730,7 @@ Ext.define("NOC.inv.inv.Application", {
             // open popup with choices
             Ext.create("Ext.window.Window", {
               autoShow: true,
-              title: __("Attach to"),
+              title: t("app-title-attach-to"),
               height: 400,
               width: 800,
               layout: "fit",
@@ -770,7 +770,7 @@ Ext.define("NOC.inv.inv.Application", {
                   ],
                   buttons: [
                     {
-                      text: __("Attach"),
+                      text: t("btn-attach"),
                       itemId: "attachBtn",
                       disabled: true,
                       glyph: NOC.glyph.check,
@@ -797,17 +797,17 @@ Ext.define("NOC.inv.inv.Application", {
                               var data = Ext.decode(response.responseText);
                               dropHandlers.cancelDrop();
                               if(data.status === false){
-                                NOC.error(__(data.message));
+                                NOC.error(data.message);
                                 return;
                               }
-                              NOC.error(__("HTTP request failed."));
+                              NOC.error(t("msg-http-request-failed"));
                             },
                           });
                         }
                       },
                     },
                     {
-                      text: __("Cancel"),
+                      text: t("btn-cancel"),
                       glyph: NOC.glyph.times,
                       handler: function(){
                         dropHandlers.cancelDrop();
@@ -830,7 +830,7 @@ Ext.define("NOC.inv.inv.Application", {
             NOC.error(data.message);
             return;
           }
-          NOC.error(__("HTTP request failed."));
+          NOC.error(t("msg-http-request-failed"));
         },
       });
     }
@@ -854,12 +854,12 @@ Ext.define("NOC.inv.inv.Application", {
       var hasNoChildren = container.get("expandable") === false,
         parent= container.parentNode,
         hasNoParent = Ext.isEmpty(parent.get("name")),
-        title = __("Remove group '") + container.get("name") + "'?";
+        title = t("msg-remove-group-value0", {value0: container.get("name")});
       
       if(hasNoChildren){
         Ext.Msg.show({
           title: title,
-          msg: __("Would you like to remove group?"),
+          msg: t("msg-would-you-like-to-remove-group"),
           buttons: Ext.Msg.YESNO,
           glyph: NOC.glyph.question_circle,
           fn: function(rec){
@@ -885,13 +885,13 @@ Ext.define("NOC.inv.inv.Application", {
               vertical: true,
               items: [
                 {
-                  boxLabel: __("Move nested objects to") + " " + parent.get("name"),
+                  boxLabel: t("msg-move-nested-objects-to-value0", {value0: parent.get("name")}),
                   name: "action",
                   inputValue: "p",
                   disabled: hasNoParent,
                 },
-                {boxLabel: __("Move nested objects to Lost&Found"), name: "action", inputValue: "l"},
-                {boxLabel: __("Remove nested objects"), name: "action", inputValue: "r"},
+                {boxLabel: t("label-move-nested-objects-to-lost-found"), name: "action", inputValue: "l"},
+                {boxLabel: t("label-remove-nested-objects"), name: "action", inputValue: "r"},
               ],
               listeners: {
                 change: function(radio, newValue){
@@ -905,12 +905,12 @@ Ext.define("NOC.inv.inv.Application", {
               xtype: "checkbox",
               itemId: "keepConnections",
               disabled: true,
-              boxLabel: __("Keep connections"),
+              boxLabel: t("label-keep-connections"),
             },
           ],
           buttons: [
             {
-              text: __("Remove Group"),
+              text: t("btn-remove-group-2"),
               glyph: NOC.glyph.minus,
               itemId: "removeBtn",
               disabled: true,
@@ -927,7 +927,7 @@ Ext.define("NOC.inv.inv.Application", {
               },
             },
             {
-              text: __("Cancel"),
+              text: t("btn-cancel"),
               glyph: NOC.glyph.times,
               handler: function(){
                 dialog.close();
@@ -940,8 +940,8 @@ Ext.define("NOC.inv.inv.Application", {
   },
   onRemoveAllConnections: function(){
     Ext.Msg.show({
-      title: __("Remove all connections"),
-      message: __("Do you want to remove all connections within object? This operation cannot be undone!"),
+      title: t("btn-remove-all-connections"),
+      message: t("msg-do-you-want-to-remove-all-connections-within-object-this-operati"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.Msg.QUESTION,
       scope: this,
@@ -956,13 +956,13 @@ Ext.define("NOC.inv.inv.Application", {
               success: function(response){
                 var data = Ext.decode(response.responseText);
                 if(data.status){
-                  NOC.info(__("Connections removed"));
+                  NOC.info(t("msg-connections-removed"));
                 } else{
                   NOC.error(data.message);
                 }
               },
               failure: function(response){
-                NOC.error(__("Failed to remove connections : ") + response.responseText);
+                NOC.error(t("msg-failed-to-remove-connections-value0", {value0: response.responseText}));
               },
             });
           }
@@ -1032,7 +1032,7 @@ Ext.define("NOC.inv.inv.Application", {
   onClone: function(){
     var me = this,
       dialog = Ext.create("Ext.window.Window", {
-        title: __("Clone object?"),
+        title: t("app-title-clone-object"),
         modal: true,
         width: 250,
         height: 160,
@@ -1041,14 +1041,14 @@ Ext.define("NOC.inv.inv.Application", {
         items: [
           {
             xtype: "checkbox",
-            boxLabel: __("Clone connections"),
+            boxLabel: t("label-clone-connections"),
             padding: 10,
             itemId: "cloneConnectionsCheckbox",
           },
         ],
         buttons: [
           {
-            text: __("Clone"),
+            text: t("btn-clone"),
             glyph: NOC.glyph.copy,
             handler: function(){
               var sel, cloneConnections = dialog.down("#cloneConnectionsCheckbox").checked,
@@ -1090,7 +1090,7 @@ Ext.define("NOC.inv.inv.Application", {
                   }
                 },
                 failure: function(){
-                  NOC.error(__("Failed to clone object."));
+                  NOC.error(t("msg-failed-to-clone-object"));
                 },
               });
 
@@ -1098,7 +1098,7 @@ Ext.define("NOC.inv.inv.Application", {
             },
           },
           {
-            text: __("Cancel"),
+            text: t("btn-cancel"),
             glyph: NOC.glyph.times,
             handler: function(){
               dialog.close();
@@ -1141,7 +1141,7 @@ Ext.define("NOC.inv.inv.Application", {
         if(dialog){
           dialog.close();
         }
-        NOC.error(__("Failed to delete group"));
+        NOC.error(t("msg-failed-to-delete-group"));
       },
     });
   },
@@ -1156,7 +1156,7 @@ Ext.define("NOC.inv.inv.Application", {
     this.autoReloadIcon(self.pressed);
     this.autoReloadText(self.pressed);
     if(this.getViewModel()){
-      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, __("online")));
+      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, t("msg-online")));
     }
     if(self.pressed){
       this.startPolling();
@@ -1175,7 +1175,7 @@ Ext.define("NOC.inv.inv.Application", {
   },
   //
   autoReloadText: function(isReloading){
-    this.getViewModel().set("autoReloadText", __("Auto reload : ") + (isReloading ? __("ON") : __("OFF")));
+    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0-2", {value0: isReloading ? t("msg-on") : t("msg-off")}));
   },
   //
   pollingTask: function(){
@@ -1191,9 +1191,9 @@ Ext.define("NOC.inv.inv.Application", {
     let icon;
     this.navTree.setDisabled(state);
     if(state){
-      icon = this.generateIcon(true, "stop-circle-o", "grey", __("suspend"));
+      icon = this.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend"));
     } else{
-      icon = this.generateIcon(true, "circle", NOC.colors.yes, __("online"));
+      icon = this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online"));
     }
     if(this.getViewModel()){
       this.getViewModel().set("icon", icon);
@@ -1214,7 +1214,7 @@ Ext.define("NOC.inv.inv.Application", {
   statusUpdate: function(){
     if(this.destroyed || this.isUpdating) return;
     this.isUpdating = true;
-    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
+    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", t("msg-loading-4")));
     NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
       method: "POST",
@@ -1236,12 +1236,12 @@ Ext.define("NOC.inv.inv.Application", {
       },
       failure: function(){
         if(!this.destroyed){
-          NOC.error(__("Failed to update alarm"));
+          NOC.error(t("msg-failed-to-update-alarm"));
         }
       },
       callback: function(){
         if(!this.destroyed && this.getViewModel().get("autoReload")){
-          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
           this.isUpdating = false;
         }
       },

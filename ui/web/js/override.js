@@ -253,7 +253,7 @@ Ext.define("EXTJS-15862.tab.Bar", {
 //       menuItems = me.callParent(arguments); 
 
 //     menuItems.push({
-//       text: __("Отменить сортировку"),
+//       text: t("Отменить сортировку"),
 //       handler: me.onClearSortClick,
 //       scope: me,
 //     });
@@ -534,7 +534,7 @@ Ext.define("Override.grid.header.Container", {
       menuItems = me.callParent(arguments); 
 
     menuItems.unshift({
-      text: __("Cancel Sort"),
+      text: t("btn-cancel-sort"),
       iconCls: "x-hmenu-sort-cancel",
       handler: me.onClearSortClick,
       scope: me,

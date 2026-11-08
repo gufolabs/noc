@@ -30,7 +30,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
     });
 
     me.unlinkButton = Ext.create("Ext.button.Button", {
-      text: __("Disconnect"),
+      text: t("btn-disconnect"),
       glyph: NOC.glyph.times,
       disabled: !me.isLinked,
       scope: me,
@@ -38,7 +38,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
     });
 
     me.fixButton = Ext.create("Ext.button.Button", {
-      text: __("Fix"),
+      text: t("btn-fix"),
       glyph: NOC.glyph.check_circle,
       disabled: !me.isLinked,
       scope: me,
@@ -56,8 +56,8 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
               restUrl: "/sa/managedobject/lookup/",
               uiStyle: "medium-combo",
               name: "managed_object",
-              emptyText: __("Select managed object ..."),
-              fieldLabel: __("Object"),
+              emptyText: t("btn-select-managed-object"),
+              fieldLabel: t("header-object"),
               width: 360,
               allowBlank: false,
               listeners: {
@@ -68,7 +68,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
             {
               xtype: "combobox",
               name: "interface",
-              fieldLabel: __("Interface"),
+              fieldLabel: t("header-interface"),
               width: 360,
               allowBlank: false,
               displayField: "label",
@@ -80,7 +80,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
           buttonAlign: "center",
           buttons: [
             {
-              text: __("Connect"),
+              text: t("btn-connect"),
               glyph: NOC.glyph.link,
               formBind: true,
               scope: me,
@@ -108,7 +108,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
         me.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get interfaces list"));
+        NOC.error(t("msg-failed-to-get-interfaces-list"));
       },
     });
   },
@@ -130,7 +130,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
         me.close();
       },
       failure: function(){
-        NOC.error(__("Failed to connect interfaces"));
+        NOC.error(t("msg-failed-to-connect-interfaces"));
       },
     });
   },
@@ -138,8 +138,8 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
   onUnlink: function(){
     var me = this;
     Ext.Msg.show({
-      title: __("Unlink interface"),
-      msg: Ext.String.format(__("Do you wish to unlink interface {0}?"), me.ifName),
+      title: t("app-title-unlink-interface"),
+      msg: t("msg-do-you-wish-to-unlink-interface", {name: me.ifName}),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -160,7 +160,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
               }
             },
             failure: function(){
-              NOC.error(__("Unlink failure"));
+              NOC.error(t("msg-unlink-failure"));
             },
           });
         }
@@ -187,7 +187,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to fix"));
+        NOC.error(t("msg-failed-to-fix"));
         me.unmask();
       },
     });

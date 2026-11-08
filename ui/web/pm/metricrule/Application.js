@@ -26,13 +26,13 @@ Ext.define("NOC.pm.metricrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
           align: "left",
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 100,
@@ -44,25 +44,25 @@ Ext.define("NOC.pm.metricrule.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "large",
         },
         {
           name: "actions",
           xtype: "listform",
-          fieldLabel: __("Actions"),
+          fieldLabel: t("nav-action"),
           rows: 8,
           // minHeight: 600,
           labelAlign: "top",
@@ -79,14 +79,14 @@ Ext.define("NOC.pm.metricrule.Application", {
                   name: "is_active",
                   xtype: "checkbox",
                   isFormField: false,
-                  boxLabel: __("Active"),
+                  boxLabel: t("header-active"),
                   width: 100,
                 },
                 {
                   name: "metric_action",
                   xtype: "pm.metricaction.LookupField",
                   isFormField: false,
-                  fieldLabel: __("Metric Action"),
+                  fieldLabel: t("app-title-metricaction"),
                   listeners: {
                     scope: me,
                     select: me.onSelectQuery,
@@ -97,8 +97,8 @@ Ext.define("NOC.pm.metricrule.Application", {
                 {
                   xtype: "pm.metrictype.LookupField",
                   isFormField: false,
-                  fieldLabel: __("Metric Type"),
-                  tooltip: __("Metric Type inputs"),
+                  fieldLabel: t("app-title-metrictype"),
+                  tooltip: t("help-metric-type-inputs"),
                   name: "metric_type",
                   labelWidth: 150,
                   width: 500,
@@ -112,30 +112,30 @@ Ext.define("NOC.pm.metricrule.Application", {
               name: "thresholds",
               xtype: "gridfield",
               isFormField: false,
-              fieldLabel: __("Thresholds"),
+              fieldLabel: t("app-title-thresholds"),
               columns: [
                 {
-                  text: __("Op"),
+                  text: t("btn-op"),
                   dataIndex: "op",
                   width: 100,
                   editor: {
                     xtype: "combobox",
                     store: [
-                      ["<", __("<")],
-                      ["<=", __("<=")],
-                      [">", __(">")],
-                      [">=", __(">=")],
+                      ["<", t("msg-text")],
+                      ["<=", t("msg-text-2")],
+                      [">", t("msg-text-3")],
+                      [">=", t("msg-text-4")],
                     ],
                   },
                   renderer: NOC.render.Choices({
-                    "<": __("<"),
-                    "<=": __("<="),
-                    ">": __(">"),
-                    ">=": __(">="),
+                    "<": t("msg-text"),
+                    "<=": t("msg-text-2"),
+                    ">": t("msg-text-3"),
+                    ">=": t("msg-text-4"),
                   }),
                 },
                 {
-                  text: __("Value"),
+                  text: t("header-value"),
                   dataIndex: "value",
                   editor: {
                     xtype: "numberfield",
@@ -146,7 +146,7 @@ Ext.define("NOC.pm.metricrule.Application", {
                   },
                 },
                 {
-                  text: __("Clear Value"),
+                  text: t("btn-clear-value"),
                   dataIndex: "clear_value",
                   editor: {
                     xtype: "numberfield",
@@ -155,7 +155,7 @@ Ext.define("NOC.pm.metricrule.Application", {
                   },
                 },
                 {
-                  text: __("Alarm Class"),
+                  text: t("app-title-alarmclass"),
                   dataIndex: "alarm_class",
                   width: 200,
                   editor: {
@@ -164,7 +164,7 @@ Ext.define("NOC.pm.metricrule.Application", {
                   renderer: NOC.render.Lookup("alarm_class"),
                 },
                 {
-                  text: __("Alarm Labels"),
+                  text: t("btn-alarm-labels"),
                   dataIndex: "alarm_labels",
                   renderer: NOC.render.LabelField,
                   editor: {
@@ -181,42 +181,42 @@ Ext.define("NOC.pm.metricrule.Application", {
               name: "metric_action_params",
               xtype: "gridfield",
               isFormField: false,
-              fieldLabel: __("Action Params"),
+              fieldLabel: t("label-action-params"),
               columns: [
                 {
                   dataIndex: "name",
-                  text: __("Name"),
+                  text: t("header-name"),
                   width: 150,
                 },
                 {
                   dataIndex: "type",
-                  text: __("Type"),
+                  text: t("header-type"),
                   width: 70,
                 },
                 {
                   dataIndex: "value",
-                  text: __("Value"),
+                  text: t("header-value"),
                   editor: "textfield",
                   width: 200,
                 },
                 {
                   dataIndex: "min_value",
-                  text: __("Min.Value"),
+                  text: t("btn-min-value-2"),
                   width: 70,
                 },
                 {
                   dataIndex: "max_value",
-                  text: __("Max.Value"),
+                  text: t("btn-max-value-2"),
                   width: 70,
                 },
                 {
                   dataIndex: "default",
-                  text: __("Default"),
+                  text: t("header-default"),
                   width: 100,
                 },
                 {
                   dataIndex: "description",
-                  text: __("Description"),
+                  text: t("label-description"),
                   flex: 1,
                 },
               ],
@@ -226,14 +226,14 @@ Ext.define("NOC.pm.metricrule.Application", {
         {
           name: "match",
           xtype: "listform",
-          fieldLabel: __("Match Rules"),
+          fieldLabel: t("label-match-rules"),
           labelAlign: "top",
           rows: 5,
           items: [
             {
               xtype: "core.tagfield",
               url: "/inv/resourcegroup/lookup/",
-              fieldLabel: __("Object Groups"),
+              fieldLabel: t("label-object-groups"),
               name: "resource_groups",
               allowBlank: true,
               uiStyle: "extra",
@@ -242,7 +242,7 @@ Ext.define("NOC.pm.metricrule.Application", {
               name: "labels",
               xtype: "labelfield",
               isFormField: false,
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,
@@ -256,7 +256,7 @@ Ext.define("NOC.pm.metricrule.Application", {
               name: "exclude_labels",
               xtype: "labelfield",
               isFormField: false,
-              fieldLabel: __("Exclude Match Labels"),
+              fieldLabel: t("label-exclude-match-labels"),
               allowBlank: true,
               isTree: true,
               filterProtected: false,

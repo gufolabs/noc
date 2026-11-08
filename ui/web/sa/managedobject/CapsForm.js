@@ -28,7 +28,7 @@ Ext.define("NOC.sa.managedobject.CapsForm", {
       items: [
         {
           xtype: "inlinegrid",
-          title: __("Capabilities"),
+          title: t("header-capabilities"),
           collapsible: false,
           collapsed: false,
           itemId: "sa-mo-caps-inline",
@@ -47,28 +47,28 @@ Ext.define("NOC.sa.managedobject.CapsForm", {
           ],
           columns: [
             {
-              text: __("Capability"),
+              text: t("app-title-capability"),
               dataIndex: "capability",
               width: 200,
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               useModalEditor: true,
               urlPrefix: "/inv/interface",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               width: 80,
             },
             {
-              text: __("Source"),
+              text: t("header-source"),
               dataIndex: "source",
               width: 70,
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
             },
@@ -83,13 +83,13 @@ Ext.define("NOC.sa.managedobject.CapsForm", {
   loadStore: function(id){
     let store = this.down("[itemId=sa-mo-caps-inline]").getStore();
     store.setParent(id);
-    this.app.mask(__("Loading capabilities..."));
+    this.app.mask(t("msg-loading-capabilities"));
     store.load({
       scope: this.app,
       callback: function(records, operation, success){
         this.unmask();
         if(!success){
-          NOC.error(__("Failed to load capabilities"));
+          NOC.error(t("msg-failed-to-load-capabilities"));
         }
       },
     });
