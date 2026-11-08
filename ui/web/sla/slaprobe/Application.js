@@ -25,50 +25,50 @@ Ext.define("NOC.sla.slaprobe.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Group"),
+          text: t("header-group"),
           dataIndex: "group",
           width: 200,
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 150,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 75,
         },
         {
-          text: __("Target"),
+          text: t("header-target"),
           dataIndex: "target",
           width: 200,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("Managed Object"),
+          text: t("header-managed-object-62561c"),
           dataIndex: "managed_object",
           width: 200,
           renderer: NOC.render.Lookup("managed_object"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100,
@@ -79,39 +79,39 @@ Ext.define("NOC.sla.slaprobe.Application", {
         {
           name: "managed_object",
           xtype: "sa.managedobject.LookupField",
-          fieldLabel: __("Managed Object"),
+          fieldLabel: t("header-managed-object-62561c"),
           allowBlank: true,
         },
         {
           name: "agent",
           xtype: "pm.agent.LookupField",
-          fieldLabel: __("Agent"),
+          fieldLabel: t("app-title-agent"),
           allowBlank: true,
         },
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "group",
           xtype: "textfield",
-          fieldLabel: __("Group"),
+          fieldLabel: t("header-group"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           uiStyle: "medium",
           store: [
@@ -129,7 +129,7 @@ Ext.define("NOC.sla.slaprobe.Application", {
         },
         {
           name: "tos",
-          fieldLabel: __("TOS"),
+          fieldLabel: t("label-tos"),
           xtype: "numberfield",
           allowBlank: true,
           defaultValue: 0,
@@ -138,31 +138,31 @@ Ext.define("NOC.sla.slaprobe.Application", {
         {
           name: "target",
           xtype: "textfield",
-          fieldLabel: __("Target"),
+          fieldLabel: t("header-target"),
           allowBlank: false,
         },
         {
           name: "profile",
           xtype: "sla.slaprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "hw_timestamps",
           xtype: "checkbox",
-          boxLabel: __("HW. Timestamps"),
+          boxLabel: t("label-hw-timestamps"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "extra",
           query: {
@@ -172,7 +172,7 @@ Ext.define("NOC.sla.slaprobe.Application", {
         {
           name: "bi_id",
           xtype: "displayfield",
-          fieldLabel: __("BI ID"),
+          fieldLabel: t("label-bi-id"),
           allowBlank: true,
           uiStyle: "medium",
         },
@@ -181,7 +181,7 @@ Ext.define("NOC.sla.slaprobe.Application", {
         icon: NOC.glyph.line_chart,
         color: NOC.colors.line_chart,
         type: "ipsla",
-        tooltip: __("Show IPSLA Dashboard"),
+        tooltip: t("help-show-ipsla-dashboard"),
       },
     });
     me.callParent();

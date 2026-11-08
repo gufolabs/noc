@@ -27,33 +27,33 @@ Ext.define("NOC.maintenance.maintenance.ObjectsPanel", {
   },
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Managed"),
+      text: t("header-managed"),
       dataIndex: "is_managed",
       renderer: NOC.render.Bool,
       width: 50,
     },
     {
-      text: __("Profile"),
+      text: t("header-profile"),
       dataIndex: "profile",
       width: 100,
     },
     {
-      text: __("Address"),
+      text: t("app-title-address"),
       dataIndex: "address",
       width: 100,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
     {
-      text: __("Labels"),
+      text: t("header-labels"),
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
       width: 150,
@@ -65,14 +65,14 @@ Ext.define("NOC.maintenance.maintenance.ObjectsPanel", {
       dock: "top",
       items: [
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.arrow_left,
           handler: "onClose",
         },
         {
           itemId: "exportBtn",
-          tooltip: __("Export"),
-          text: __("Export"),
+          tooltip: t("btn-export"),
+          text: t("btn-export"),
           glyph: NOC.glyph.arrow_down,
           handler: "onExport",
 
@@ -80,9 +80,9 @@ Ext.define("NOC.maintenance.maintenance.ObjectsPanel", {
         "->",
         {
           xtype: "displayfield",
-          fieldLabel: __("Total"),
+          fieldLabel: t("header-total"),
           name: "total",
-          value: __("loading..."),
+          value: t("msg-loading-5"),
         },
       ],
     },

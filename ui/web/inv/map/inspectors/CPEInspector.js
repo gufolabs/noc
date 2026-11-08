@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.CPEInspector");
 
 Ext.define("NOC.inv.map.inspectors.CPEInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("CPE Inspector"),
+  title: t("app-title-cpe-inspector"),
   inspectorName: "cpe",
 
   tpl: [
@@ -26,7 +26,7 @@ Ext.define("NOC.inv.map.inspectors.CPEInspector", {
     this.lookButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.pencil,
       scope: this,
-      tooltip: __("Edit"),
+      tooltip: t("app-title-edit"),
       handler: this.onLook,
       disabled: true,
     });
@@ -34,7 +34,7 @@ Ext.define("NOC.inv.map.inspectors.CPEInspector", {
     this.cardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.eye,
       scope: this,
-      tooltip: __("View card"),
+      tooltip: t("help-view-card"),
       handler: this.onMOCard,
       disabled: true,
     });
@@ -42,7 +42,7 @@ Ext.define("NOC.inv.map.inspectors.CPEInspector", {
     this.dashboardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.line_chart,
       scope: this,
-      tooltip: __("Show dashboard"),
+      tooltip: t("btn-show-dashboard-2"),
       handler: this.onDashboard,
       disabled: true,
     });

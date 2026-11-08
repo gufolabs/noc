@@ -16,7 +16,7 @@ Ext.define("NOC.fm.alarm.view.grids.Recent", {
     "NOC.fm.alarm.view.grids.SidebarModel",
     "NOC.fm.alarm.view.grids.Grid",
   ],
-  emptyText: __("No recently closed alarms"),
+  emptyText: t("label-no-recently-closed-alarms"),
   initComponent: function(){
     Ext.apply(this, {
       store: {

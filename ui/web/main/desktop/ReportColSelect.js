@@ -14,13 +14,13 @@ Ext.define("NOC.main.desktop.ReportColSelect", {
   },
   columns: [
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       width: 70,
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Field"),
+      text: t("btn-field"),
       dataIndex: "label",
       flex: 1,
     },

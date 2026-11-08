@@ -10,7 +10,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ParamsForm", {
   extend: "Ext.window.Window",
   xtype: "invChannelParamsForm",
   defaultListenerScope: true,
-  title: __("Create Item"),
+  title: t("app-title-create"),
   modal: true,
   closeAction: "hide",
   layout: "fit",
@@ -40,7 +40,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ParamsForm", {
           handler: "onCreateChannel",
         },
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.times,
           handler: function(button){
             button.up("window").hide();

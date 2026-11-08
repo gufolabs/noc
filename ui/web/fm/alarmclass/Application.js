@@ -36,24 +36,24 @@ Ext.define("NOC.fm.alarmclass.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 250,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 30,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -66,7 +66,7 @@ Ext.define("NOC.fm.alarmclass.Application", {
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: false,
               uiStyle: "large",
             },
@@ -74,7 +74,7 @@ Ext.define("NOC.fm.alarmclass.Application", {
               name: "uuid",
               xtype: "displayfield",
               style: "padding-left: 10px",
-              fieldLabel: __("UUID"),
+              fieldLabel: t("label-uuid"),
             },
           ],
         },
@@ -89,58 +89,58 @@ Ext.define("NOC.fm.alarmclass.Application", {
           },
           items: [ // tabs
             {
-              title: __("Text"),
+              title: t("app-title-text"),
               items: [
                 {
                   name: "description",
                   xtype: "textarea",
-                  fieldLabel: __("Description"),
+                  fieldLabel: t("label-description"),
                   uiStyle: "extra",
                 },
                 {
                   name: "subject_template",
                   xtype: "textfield",
-                  fieldLabel: __("Subject Template"),
+                  fieldLabel: t("label-subject-template"),
                   uiStyle: "extra",
                   allowBlank: false,
                 },
                 {
                   name: "body_template",
                   xtype: "textarea",
-                  fieldLabel: __("Body Template"),
+                  fieldLabel: t("label-body-template"),
                   uiStyle: "extra",
                   allowBlank: false,
                 },
                 {
                   name: "symptoms",
                   xtype: "textarea",
-                  fieldLabel: __("Symptoms"),
+                  fieldLabel: t("header-symptoms"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
                 {
                   name: "probable_causes",
                   xtype: "textarea",
-                  fieldLabel: __("Probable Causes"),
+                  fieldLabel: t("header-probable-causes"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
                 {
                   name: "recommended_actions",
                   xtype: "textarea",
-                  fieldLabel: __("Recommended Actions"),
+                  fieldLabel: t("header-recommended-actions"),
                   uiStyle: "extra",
                   allowBlank: true,
                 },
               ],
             }, // Text
             {
-              title: __("Severity"),
+              title: t("header-severity"),
               items: [
                 {
                   name: "labels",
                   xtype: "labelfield",
-                  fieldLabel: __("Labels"),
+                  fieldLabel: t("header-labels"),
                   allowBlank: true,
                   uiStyle: "medium",
                   filterProtected: false,
@@ -151,51 +151,51 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "is_unique",
                   xtype: "checkboxfield",
-                  boxLabel: __("Unique"),
+                  boxLabel: t("header-unique"),
                 },
                 {
                   name: "user_clearable",
                   xtype: "checkboxfield",
-                  boxLabel: __("User Clearable"),
+                  boxLabel: t("label-user-clearable"),
                 },
                 {
                   name: "is_ephemeral",
                   xtype: "checkboxfield",
-                  boxLabel: __("Ephemeral"),
+                  boxLabel: t("label-ephemeral"),
                 },
                 {
                   name: "by_reference",
                   xtype: "checkboxfield",
-                  boxLabel: __("By Reference"),
+                  boxLabel: t("label-by-reference"),
                 },
                 {
                   name: "reference",
                   xtype: "stringsfield",
-                  fieldLabel: __("Reference"),
+                  fieldLabel: t("label-reference"),
                 },
               ],
             }, // Severity
             {
-              title: __("Variables"),
+              title: t("app-title-variables"),
               items: [
                 {
                   name: "vars",
                   xtype: "gridfield",
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Description"),
+                      text: t("label-description"),
                       dataIndex: "description",
                       flex: 250,
                       editor: "textfield",
                     },
                     {
-                      text: __("Default Labels"),
+                      text: t("btn-default-labels"),
                       dataIndex: "default_labels",
                       renderer: NOC.render.LabelField,
                       editor: {
@@ -208,7 +208,7 @@ Ext.define("NOC.fm.alarmclass.Application", {
                       width: 200,
                     },
                     {
-                      text: __("Default"),
+                      text: t("header-default"),
                       dataIndex: "default",
                       width: 150,
                       editor: "textfield",
@@ -218,26 +218,26 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Variables
             {
-              title: __("Data Sources"),
+              title: t("app-title-data-sources"),
               items: [
                 {
                   name: "datasources",
                   xtype: "gridfield",
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Datasource"),
+                      text: t("btn-datasource"),
                       dataIndex: "datasource",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Search"),
+                      text: t("app-title-search"),
                       dataIndex: "search",
                       flex: 1,
                       editor: "jsonfield",
@@ -248,40 +248,40 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Data Sources
             {
-              title: __("Components"),
+              title: t("app-title-components"),
               items: [
                 {
                   name: "components",
                   xtype: "listform",
-                  fieldLabel: __("Components"),
+                  fieldLabel: t("app-title-components"),
                   labelAlign: "top",
                   items: [
                     {
                       name: "name",
                       xtype: "textfield",
-                      fieldLabel: __("Name"),
+                      fieldLabel: t("header-name"),
                       allowBlank: false,
                     },
                     {
                       name: "model",
                       xtype: "textfield",
-                      fieldLabel: __("Model"),
+                      fieldLabel: t("header-model"),
                       allowBlank: false,
                     },
                     {
                       name: "args",
                       xtype: "gridfield",
-                      fieldLabel: __("Args"),
+                      fieldLabel: t("label-args"),
                       columns: [
                         {
                           dataIndex: "param",
-                          text: __("Param"),
+                          text: t("btn-param"),
                           editor: "textfield",
                           width: 150,
                         },
                         {
                           dataIndex: "var",
-                          text: __("Var"),
+                          text: t("btn-var"),
                           editor: "textfield",
                           width: 100,
                         },
@@ -292,39 +292,39 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Components
             {
-              title: __("Root Cause"),
+              title: t("header-root-cause"),
               items: [
                 {
                   name: "root_cause",
                   xtype: "gridfield",
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       width: 200,
                       editor: "textfield",
                     },
                     {
-                      text: __("Root"),
+                      text: t("msg-root"),
                       dataIndex: "root",
                       renderer: NOC.render.Lookup("root"),
                       editor: "fm.alarmclass.LookupField",
                       width: 200,
                     },
                     {
-                      text: __("Window"),
+                      text: t("btn-window"),
                       dataIndex: "window",
                       width: 50,
                       editor: "numberfield",
                     },
                     {
-                      text: __("Condition"),
+                      text: t("label-condition"),
                       dataIndex: "condition",
                       editor: "textfield",
                       width: 150,
                     },
                     {
-                      text: __("Match Condition"),
+                      text: t("btn-match-condition"),
                       dataIndex: "match_condition",
                       editor: "jsonfield",
                       flex: 1,
@@ -335,26 +335,26 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Root Cause
             {
-              title: __("Jobs"),
+              title: t("app-title-job"),
               items: [
                 {
                   name: "jobs",
                   xtype: "gridfield",
                   columns: [
                     {
-                      text: __("Job"),
+                      text: t("header-job"),
                       dataIndex: "job",
                       width: 100,
                       editor: "textfield",
                     },
                     {
-                      text: __("Interval"),
+                      text: t("label-interval"),
                       dataIndex: "interval",
                       width: 50,
                       editor: "numberfield",
                     },
                     {
-                      text: __("Vars"),
+                      text: t("header-vars"),
                       dataIndex: "vars",
                       flex: 1,
                       editor: "jsonfield",
@@ -365,36 +365,36 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Jobs
             {
-              title: __("Handlers"),
+              title: t("nav-handler"),
               items: [
                 {
                   xtype: "stringsfield",
                   name: "handlers",
-                  fieldLabel: __("Handlers"),
+                  fieldLabel: t("nav-handler"),
                 },
                 {
                   xtype: "stringsfield",
                   name: "clear_handlers",
-                  fieldLabel: __("Clear Handlers"),
+                  fieldLabel: t("label-clear-handlers"),
                 },
               ],
             }, // Handlers
             {
-              title: __("Plugins"),
+              title: t("app-title-plugins"),
               items: [
                 {
                   xtype: "gridfield",
                   name: "plugins",
-                  fieldLabel: __("Plugins"),
+                  fieldLabel: t("app-title-plugins"),
                   columns: [
                     {
-                      text: __("Name"),
+                      text: t("header-name"),
                       dataIndex: "name",
                       editor: "textfield",
                       width: 150,
                     },
                     {
-                      text: __("Config"),
+                      text: t("btn-config"),
                       dataIndex: "config",
                       editor: "jsonfield",
                       flex: 1,
@@ -405,7 +405,7 @@ Ext.define("NOC.fm.alarmclass.Application", {
               ],
             }, // Plugins
             {
-              title: __("Timing"),
+              title: t("app-title-timing"),
               defaults: {
                 labelWidth: 150,
               },
@@ -413,13 +413,13 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "flap_condition",
                   xtype: "combobox",
-                  fieldLabel: __("Flap Condition"),
-                  tooltip: __("Flap detection"),
+                  fieldLabel: t("label-flap-condition"),
+                  tooltip: t("help-flap-detection"),
                   allowBlank: false,
                   uiStyle: "small",
                   store: [
-                    ["none", __("None")],
-                    ["count", __("Count")],
+                    ["none", t("msg-none")],
+                    ["count", t("header-count")],
                   ],
                   listeners: {
                     render: me.addTooltip,
@@ -428,8 +428,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "flap_window",
                   xtype: "numberfield",
-                  fieldLabel: __("Flap Window (sec)"),
-                  tooltip: __("Time in seconds, while waiting of reopen"),
+                  fieldLabel: t("label-flap-window-sec"),
+                  tooltip: t("help-time-in-seconds-while-waiting-of-reopen"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -439,8 +439,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "flap_threshold",
                   xtype: "numberfield",
-                  fieldLabel: __("Flap Threshold (pcs)"),
-                  tooltip: __("Number of flaps while close Flap Window"),
+                  fieldLabel: t("label-flap-threshold-pcs"),
+                  tooltip: t("help-number-of-flaps-while-close-flap-window"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -450,8 +450,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "notification_delay",
                   xtype: "numberfield",
-                  fieldLabel: __("Notification Delay (sec)"),
-                  tooltip: __("Time in seconds to delay alarm risen notification"),
+                  fieldLabel: t("label-notification-delay-sec"),
+                  tooltip: t("help-time-in-seconds-to-delay-alarm-risen-notification"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -461,8 +461,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "control_time0",
                   xtype: "numberfield",
-                  fieldLabel: __("Control Time 0 (sec)"),
-                  tooltip: __("Control time to reopen alarm instead of creating new"),
+                  fieldLabel: t("label-control-time-0-sec"),
+                  tooltip: t("help-control-time-to-reopen-alarm-instead-of-creating-new"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -472,8 +472,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "control_time1",
                   xtype: "numberfield",
-                  fieldLabel: __("Control Time 1 (sec)"),
-                  tooltip: __("Control time to reopen alarm after 1 reopen"),
+                  fieldLabel: t("label-control-time-1-sec"),
+                  tooltip: t("help-control-time-to-reopen-alarm-after-1-reopen"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -483,8 +483,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "control_timeN",
                   xtype: "numberfield",
-                  fieldLabel: __("Control Time N (sec)"),
-                  tooltip: __("Control time to reopen alarm after >1 reopen"),
+                  fieldLabel: t("label-control-time-n-sec"),
+                  tooltip: t("help-control-time-to-reopen-alarm-after-1-reopen-2"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -494,8 +494,8 @@ Ext.define("NOC.fm.alarmclass.Application", {
                 {
                   name: "recover_time",
                   xtype: "numberfield",
-                  fieldLabel: __("Recover Time (sec)"),
-                  tooltip: __("Consequence recover time. Root cause will be detached if consequence alarm will not clear itself in *recover_time*"),
+                  fieldLabel: t("label-recover-time-sec"),
+                  tooltip: t("help-consequence-recover-time-root-cause-will-be-detached-if-conseque"),
                   allowBlank: true,
                   uiStyle: "small",
                   listeners: {
@@ -509,9 +509,9 @@ Ext.define("NOC.fm.alarmclass.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("View as JSON"),
+          tooltip: t("help-view-as-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -523,7 +523,7 @@ Ext.define("NOC.fm.alarmclass.Application", {
   //
   filters: [
     {
-      title: __("By Builtin"),
+      title: t("app-title-by-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },

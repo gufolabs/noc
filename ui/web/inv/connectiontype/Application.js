@@ -20,7 +20,7 @@ Ext.define("NOC.inv.connectiontype.Application", {
   treeFilter: "category",
   filters: [
     {
-      title: __("By Is Builtin"),
+      title: t("app-title-by-is-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },
@@ -48,24 +48,24 @@ Ext.define("NOC.inv.connectiontype.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           width: 300,
           dataIndex: "name",
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           width: 50,
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Genders"),
+          text: t("header-genders"),
           width: 50,
           dataIndex: "genders",
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           flex: 1,
           dataIndex: "description",
         },
@@ -74,29 +74,29 @@ Ext.define("NOC.inv.connectiontype.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "extend",
           xtype: "inv.connectiontype.LookupField",
-          fieldLabel: __("Extend"),
+          fieldLabel: t("label-extend"),
           allowBlank: true,
         },
         {
           name: "genders",
           xtype: "combobox",
-          fieldLabel: __("Genders"),
+          fieldLabel: t("header-genders"),
           store: [
             ["s", "Genderless"],
             ["ss", "Genderless, 2 or more"],
@@ -112,28 +112,28 @@ Ext.define("NOC.inv.connectiontype.Application", {
         {
           name: "male_facade",
           xtype: "inv.facade.LookupField",
-          fieldLabel: __("Male Facade"),
+          fieldLabel: t("label-male-facade"),
           allowBlank: true,
         },
         {
           name: "female_facade",
           xtype: "inv.facade.LookupField",
-          fieldLabel: __("Female Facade"),
+          fieldLabel: t("label-female-facade"),
           allowBlank: true,
         },
         // {
         //   name: "data",
         //   xtype: "modeldatafield",
-        //   fieldLabel: __("Model Data"),
+        //   fieldLabel: t("Model Data"),
         // },
         {
           name: "data",
-          fieldLabel: __("Data"),
+          fieldLabel: t("app-title-data"),
           xtype: "gridfield",
           allowBlank: true,
           columns: [
             {
-              text: __("Interface"),
+              text: t("header-interface"),
               dataIndex: "interface",
               editor: {
                 xtype: "inv.modelinterface.LookupField",
@@ -142,12 +142,12 @@ Ext.define("NOC.inv.connectiontype.Application", {
               },
             },
             {
-              text: __("Key"),
+              text: t("header-key"),
               dataIndex: "attr",
               editor: "textfield",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               editor: "textfield",
             },
@@ -156,21 +156,21 @@ Ext.define("NOC.inv.connectiontype.Application", {
         {
           name: "c_group",
           xtype: "stringlistfield",
-          fieldLabel: __("Compatible groups"),
+          fieldLabel: t("label-compatible-groups"),
         },
         {
           name: "matchers",
           xtype: "gridfield",
-          fieldLabel: __("Matchers"),
+          fieldLabel: t("label-matchers"),
           columns: [
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               editor: "textfield",
               width: 100,
             },
             {
-              text: __("Protocol"),
+              text: t("header-protocol"),
               dataIndex: "protocol",
               editor: "textfield",
               flex: 1,
@@ -180,17 +180,17 @@ Ext.define("NOC.inv.connectiontype.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
         },
         {
-          text: __("Test"),
+          text: t("btn-test"),
           glyph: NOC.glyph.question,
-          tooltip: __("Test compatible types"),
+          tooltip: t("help-test-compatible-types"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onTest,
@@ -217,7 +217,7 @@ Ext.define("NOC.inv.connectiontype.Application", {
         me.showItem(me.ITEM_TEST).preview(me.currentRecord, {data: data});
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

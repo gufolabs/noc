@@ -35,7 +35,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
       xtype: "ip.ipam.info",
       width: "15%",
       split: true,
-      title: __("Info"),
+      title: t("app-title-info"),
       bind: {
         data: "{prefix}",
       },
@@ -43,15 +43,15 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
   ],
   tbar: [
     {
-      text: __("Close"),
-      tooltip: __("Close without saving"),
+      text: t("btn-close"),
+      tooltip: t("help-close-without-saving"),
       glyph: NOC.glyph.arrow_left,
       handler: "onClose",
     },
     "-",
     {
-      text: __("Add Address"),
-      tooltip: __("Add Address"),
+      text: t("btn-add-address"),
+      tooltip: t("btn-add-address"),
       glyph: NOC.glyph.plus,
       handler: "onAddAddress",
       bind: {
@@ -60,8 +60,8 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
     },
     "-",
     {
-      text: __("Add Prefix"),
-      tooltip: __("Add Prefix"),
+      text: t("btn-add-prefix"),
+      tooltip: t("btn-add-prefix"),
       glyph: NOC.glyph.plus,
       handler: "onAddPrefix",
       bind: {
@@ -69,8 +69,8 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
       },
     },
     {
-      text: __("Delete Prefix"),
-      tooltip: __("Delete Prefix"),
+      text: t("btn-delete-prefix"),
+      tooltip: t("btn-delete-prefix"),
       glyph: NOC.glyph.trash,
       handler: "onDeletePrefix",
       bind: {
@@ -78,8 +78,8 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
       },
     },
     {
-      text: __("Edit Prefix"),
-      tooltip: __("Edit Prefix"),
+      text: t("btn-edit-prefix"),
+      tooltip: t("btn-edit-prefix"),
       glyph: NOC.glyph.wrench,
       handler: "onEditPrefix",
       bind: {
@@ -87,8 +87,8 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.Prefix", {
       },
     },
     {
-      text: __("Tools"),
-      tooltip: __("Open tools"),
+      text: t("app-title-tools"),
+      tooltip: t("help-open-tools"),
       glyph: NOC.glyph.edit,
       handler: "onTools",
     },

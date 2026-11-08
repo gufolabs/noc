@@ -18,7 +18,7 @@ Ext.define("NOC.aaa.group.Application", {
   maskElement: "el",
   // actions: [
   //     {
-  //         title: __("Delete selected groups"),
+  //         title: t("Delete selected groups"),
   //         run: "groupDelete",
   //         glyph: NOC.glyph.trash
   //     }
@@ -28,7 +28,7 @@ Ext.define("NOC.aaa.group.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 130,
         },
@@ -37,7 +37,7 @@ Ext.define("NOC.aaa.group.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           autoFocus: true,
           tabIndex: 10,
@@ -46,7 +46,7 @@ Ext.define("NOC.aaa.group.Application", {
         {
           name: "permissions",
           xtype: "noc.group.permission",
-          fieldLabel: __("Permissions"),
+          fieldLabel: t("label-permissions"),
           allowBlank: true,
         },
       ],
@@ -65,12 +65,12 @@ Ext.define("NOC.aaa.group.Application", {
         me.newRecord(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
   onReset: function(){
-    var me = this, msg = __("Reset");
+    var me = this, msg = t("btn-reset");
     me.mask(msg);
     Ext.TaskManager.start({
       run: function(){

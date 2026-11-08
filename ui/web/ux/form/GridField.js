@@ -44,21 +44,21 @@ Ext.define("Ext.ux.form.GridField", {
     });
 
     me.insertButton = Ext.create("Ext.button.Button", {
-      text: __("Insert"),
+      text: t("btn-insert"),
       glyph: NOC.glyph.plus,
       scope: me,
       handler: me.onAddRecord,
     });
 
     me.appendButton = Ext.create("Ext.button.Button", {
-      text: __("Append"),
+      text: t("btn-append"),
       glyph: NOC.glyph.sign_in,
       scope: me,
       handler: Ext.pass(me.onAddRecord, true),
     });
 
     me.deleteButton = Ext.create("Ext.button.Button", {
-      text: __("Delete"),
+      text: t("btn-delete"),
       glyph: NOC.glyph.minus,
       disabled: true,
       scope: me,
@@ -66,7 +66,7 @@ Ext.define("Ext.ux.form.GridField", {
     });
 
     me.cloneButton = Ext.create("Ext.button.Button", {
-      text: __("Clone"),
+      text: t("btn-clone"),
       glyph: NOC.glyph.copy,
       disabled: true,
       scope: me,
@@ -114,7 +114,7 @@ Ext.define("Ext.ux.form.GridField", {
       viewConfig: {
         plugins: {
           ptype: "gridviewdragdrop",
-          dragtext: __("Drag and drop to reorganize"),
+          dragtext: t("msg-drag-and-drop-to-reorganize"),
         },
         getRowClass: function(record){
           var pfix = Ext.baseCSSPrefix,

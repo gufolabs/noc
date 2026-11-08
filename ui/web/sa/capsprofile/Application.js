@@ -27,9 +27,9 @@ Ext.define("NOC.sa.capsprofile.Application", {
   initComponent: function(){
     var me = this,
       policyStore = [
-        ["E", __("Enable")],
-        ["T", __("Enable for Topology")],
-        ["D", __("Disable")],
+        ["E", t("label-enable")],
+        ["T", t("btn-enable-for-topology")],
+        ["D", t("status-disable")],
       ];
     Ext.apply(me, {
       columns: [
@@ -43,30 +43,30 @@ Ext.define("NOC.sa.capsprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
-          title: __("SNMP"),
+          title: t("app-title-snmp"),
           items: [
             {
               name: "enable_snmp",
               xtype: "checkbox",
-              boxLabel: __("Enable SNMP"),
+              boxLabel: t("label-enable-snmp"),
               reference: "enableSNMP",
             },
             {
               name: "enable_snmp_v1",
               xtype: "checkbox",
-              boxLabel: __("SNMP v1"),
+              boxLabel: t("label-snmp-v1"),
               bind: {
                 disabled: "{!enableSNMP.checked}",
               },
@@ -74,7 +74,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "enable_snmp_v2c",
               xtype: "checkbox",
-              boxLabel: __("SNMP v2c"),
+              boxLabel: t("label-snmp-v2c"),
               bind: {
                 disabled: "{!enableSNMP.checked}",
               },
@@ -83,18 +83,18 @@ Ext.define("NOC.sa.capsprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("L2"),
+          title: t("app-title-l2"),
           items: [
             {
               name: "enable_l2",
               xtype: "checkbox",
-              boxLabel: __("Enable L2"),
+              boxLabel: t("label-enable-l2"),
               reference: "enableL2",
             },
             {
               name: "bfd_policy",
               xtype: "combobox",
-              fieldLabel: __("BFD"),
+              fieldLabel: t("label-bfd"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -104,7 +104,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "fdp_policy",
               xtype: "combobox",
-              fieldLabel: __("FDP"),
+              fieldLabel: t("label-fdp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -114,7 +114,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "huawei_ndp_policy",
               xtype: "combobox",
-              fieldLabel: __("Huawei NDP"),
+              fieldLabel: t("label-huawei-ndp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "lacp_policy",
               xtype: "combobox",
-              fieldLabel: __("LACP"),
+              fieldLabel: t("label-lacp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -134,7 +134,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "lldp_policy",
               xtype: "combobox",
-              fieldLabel: __("LLDP"),
+              fieldLabel: t("label-lldp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -144,7 +144,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "oam_policy",
               xtype: "combobox",
-              fieldLabel: __("OAM"),
+              fieldLabel: t("label-oam"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -154,7 +154,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "rep_policy",
               xtype: "combobox",
-              fieldLabel: __("REP"),
+              fieldLabel: t("label-rep"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -164,7 +164,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "stp_policy",
               xtype: "combobox",
-              fieldLabel: __("STP"),
+              fieldLabel: t("label-stp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -174,7 +174,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "udld_policy",
               xtype: "combobox",
-              fieldLabel: __("UDLD"),
+              fieldLabel: t("label-udld"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -185,18 +185,18 @@ Ext.define("NOC.sa.capsprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("L3"),
+          title: t("header-l3"),
           items: [
             {
               name: "enable_l3",
               xtype: "checkbox",
-              boxLabel: __("Enable L3"),
+              boxLabel: t("label-enable-l3"),
               reference: "enableL3",
             },
             {
               name: "hsrp_policy",
               xtype: "combobox",
-              fieldLabel: __("HSRP"),
+              fieldLabel: t("label-hsrp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -206,7 +206,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "vrrp_policy",
               xtype: "combobox",
-              fieldLabel: __("VRRP"),
+              fieldLabel: t("label-vrrp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -216,7 +216,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "vrrpv3_policy",
               xtype: "combobox",
-              fieldLabel: __("VRRP v3"),
+              fieldLabel: t("label-vrrp-v3"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -226,7 +226,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "bgp_policy",
               xtype: "combobox",
-              fieldLabel: __("BGP"),
+              fieldLabel: t("label-bgp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -236,7 +236,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "ospf_policy",
               xtype: "combobox",
-              fieldLabel: __("OSPF"),
+              fieldLabel: t("label-ospf"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -246,7 +246,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "ospfv3_policy",
               xtype: "combobox",
-              fieldLabel: __("OSPF v3"),
+              fieldLabel: t("label-ospf-v3"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -256,7 +256,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "isis_policy",
               xtype: "combobox",
-              fieldLabel: __("ISIS"),
+              fieldLabel: t("label-isis"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -266,7 +266,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "ldp_policy",
               xtype: "combobox",
-              fieldLabel: __("LDP"),
+              fieldLabel: t("label-ldp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -276,7 +276,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
             {
               name: "rsvp_policy",
               xtype: "combobox",
-              fieldLabel: __("RSVP"),
+              fieldLabel: t("label-rsvp"),
               store: policyStore,
               uiStyle: "medium",
               bind: {
@@ -288,7 +288,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
         {
           name: "error_caps_policy",
           xtype: "combobox",
-          fieldLabel: __("Errors Policy"),
+          fieldLabel: t("label-errors-policy"),
           allowBlank: true,
           uiStyle: "medium",
           store: [
@@ -300,18 +300,18 @@ Ext.define("NOC.sa.capsprofile.Application", {
         {
           name: "caps",
           xtype: "gridfield",
-          fieldLabel: __("Capabilities"),
+          fieldLabel: t("header-capabilities"),
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "capability",
               renderer: NOC.render.Lookup("capability"),
               width: 250,
               editor: "inv.capability.LookupField",
             },
             {
-              text: __("Required"),
+              text: t("header-required"),
               dataIndex: "required",
               width: 75,
               editor: "checkbox",
@@ -319,14 +319,14 @@ Ext.define("NOC.sa.capsprofile.Application", {
               sortable: false,
             },
             {
-              text: __("Default Value"),
+              text: t("header-default-value"),
               dataIndex: "default_value",
               width: 100,
               editor: "textfield",
               sortable: false,
             },
             {
-              text: __("Allow Manual"),
+              text: t("header-allow-manual"),
               dataIndex: "allow_manual",
               width: 75,
               editor: "checkbox",
@@ -334,7 +334,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
               sortable: false,
             },
             {
-              text: __("Expose Caps"),
+              text: t("header-expose-caps"),
               dataIndex: "exposed",
               width: 75,
               editor: "checkbox",
@@ -342,7 +342,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
               sortable: false,
             },
             {
-              text: __("Set Label"),
+              text: t("header-set-label"),
               dataIndex: "set_label",
               width: 200,
               editor: {

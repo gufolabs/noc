@@ -30,7 +30,7 @@ Ext.define("NOC.core.filter.Filter", {
   },
   scrollable: "y",
   // minWidth: 300,
-  title: __("Filter"),
+  title: t("app-title-reportfilter"),
   itemId: "filterPanel",
   layout: {
     type: "vbox",
@@ -41,7 +41,7 @@ Ext.define("NOC.core.filter.Filter", {
     //     xtype: 'searchfield',
     //     isLookupField: true,
     //     itemId: '__query',  // name of http request query param
-    //     fieldLabel: __('Name'),
+    //     fieldLabel: t('Name'),
     //     labelWidth: 50,
     //     triggers: {
     //         clear: {
@@ -55,7 +55,7 @@ Ext.define("NOC.core.filter.Filter", {
     // },
     {
       xtype: "container",
-      title: __("Favorites"),
+      title: t("app-title-favorites"),
       itemId: "fav_status",
       layout: {
         type: "hbox",
@@ -64,7 +64,7 @@ Ext.define("NOC.core.filter.Filter", {
       items: [
         {
           xtype: "displayfield",
-          fieldLabel: __("Favorites"),
+          fieldLabel: t("app-title-favorites"),
           allowBlank: true,
           flex: 2,
         },
@@ -113,7 +113,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/gis/geocoder/lookup/",
       itemId: "__geoaddress", // name of request query param
-      fieldLabel: __("By Geo Address:"),
+      fieldLabel: t("label-by-geo-address"),
       typeAheadDelay: 500,
       minChars: 4,
       pageSize: 0,
@@ -147,7 +147,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/wf/state/lookup/",
       itemId: "state", // name of request query param
-      fieldLabel: __("By State:"),
+      fieldLabel: t("label-by-state"),
       listeners: {
         select: "setFilter",
       },
@@ -159,7 +159,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/sa/profile/lookup/",
       itemId: "profile", // name of http request query param
-      fieldLabel: __("By SA Profile:"),
+      fieldLabel: t("label-by-sa-profile"),
       listeners: {
         select: "setFilter",
       },
@@ -168,7 +168,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/sa/managedobjectprofile/lookup/",
       itemId: "object_profile", // name of http request query param
-      fieldLabel: __("By Obj. Profile:"),
+      fieldLabel: t("label-by-obj-profile"),
       listeners: {
         select: "setFilter",
       },
@@ -178,7 +178,7 @@ Ext.define("NOC.core.filter.Filter", {
       restUrl: "/sa/administrativedomain/",
       isLookupField: true,
       itemId: "administrative_domain", // name of http request query param
-      fieldLabel: __("By Adm. Domain:"),
+      fieldLabel: t("label-by-adm-domain"),
       listeners: {
         clear: "setFilter",
         select: "setFilter",
@@ -189,7 +189,7 @@ Ext.define("NOC.core.filter.Filter", {
       restUrl: "/inv/networksegment/",
       isLookupField: true,
       itemId: "segment", // name of http request query param
-      fieldLabel: __("By Segment:"),
+      fieldLabel: t("label-by-segment"),
       listeners: {
         clear: "setFilter",
         select: "setFilter",
@@ -200,7 +200,7 @@ Ext.define("NOC.core.filter.Filter", {
       restUrl: "/inv/resourcegroup/",
       isLookupField: true,
       itemId: "effective_service_groups", // name of http request query param
-      fieldLabel: __("By Service Group"),
+      fieldLabel: t("label-by-service-group"),
       listeners: {
         clear: "setFilter",
         select: "setFilter",
@@ -210,7 +210,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/main/pool/lookup/",
       itemId: "pool", // name of http request query param
-      fieldLabel: __("By Pool:"),
+      fieldLabel: t("label-by-pool"),
       listeners: {
         select: "setFilter",
       },
@@ -219,7 +219,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/inv/vendor/lookup/",
       itemId: "vendor", // name of http request query param
-      fieldLabel: __("By Vendor:"),
+      fieldLabel: t("label-by-vendor"),
       listeners: {
         select: "setFilter",
       },
@@ -228,7 +228,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/inv/platform/lookup/",
       itemId: "platform", // name of http request query param
-      fieldLabel: __("By Platform:"),
+      fieldLabel: t("label-by-platform"),
       listeners: {
         select: "setFilter",
       },
@@ -237,7 +237,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "core.combo",
       restUrl: "/inv/firmware/lookup/",
       itemId: "version", // name of http request query param
-      fieldLabel: __("By Version:"),
+      fieldLabel: t("label-by-version"),
       listeners: {
         select: "setFilter",
       },
@@ -245,7 +245,7 @@ Ext.define("NOC.core.filter.Filter", {
     {
       xtype: "labelfield",
       itemId: "labels__labels",
-      fieldLabel: __("By Labels:"),
+      fieldLabel: t("label-by-labels"),
       isLookupField: true,
       toBufferTrigger: false,
       filterProtected: false,
@@ -259,7 +259,7 @@ Ext.define("NOC.core.filter.Filter", {
     {
       xtype: "textarea",
       itemId: "addresses",
-      fieldLabel: __("By IP list (max. 2000):"),
+      fieldLabel: t("label-by-ip-list-max-2000"),
       listeners: {
         change: "setFilter",
       },
@@ -269,13 +269,13 @@ Ext.define("NOC.core.filter.Filter", {
     },
     {
       xtype: "box",
-      html: __("Capability") + ":",
+      html: t("app-title-capability") + ":",
     },
     {
       xtype: "panel",
       isLookupField: true,
       itemId: "caps",
-      fieldLabel: __("Capability"),
+      fieldLabel: t("app-title-capability"),
       width: "100%",
       height: 280,
       layout: "border",
@@ -316,7 +316,7 @@ Ext.define("NOC.core.filter.Filter", {
               },
             },
             {
-              fieldLabel: __("Value"),
+              fieldLabel: t("header-value"),
               xtype: "fieldcontainer",
               layout: "vbox",
               defaultType: "checkbox",
@@ -328,18 +328,18 @@ Ext.define("NOC.core.filter.Filter", {
               },
 
               items: [{
-                boxLabel: __("Exclude"),
+                boxLabel: t("label-exclude"),
                 itemId: "exclude",
                 bind: "{capabilitiesTree.selection.typeExclude}",
               }, {
-                boxLabel: __("Include"),
+                boxLabel: t("label-include"),
                 itemId: "include",
                 bind: "{capabilitiesTree.selection.typeInclude}",
               }],
             },
             {
               xtype: "combo",
-              fieldLabel: __("Condition"),
+              fieldLabel: t("label-condition"),
               itemId: "capCondition",
               displayField: "name",
               valueField: "abbr",
@@ -359,7 +359,7 @@ Ext.define("NOC.core.filter.Filter", {
             {
               xtype: "textfield",
               itemId: "capValue",
-              fieldLabel: __("Value"),
+              fieldLabel: t("header-value"),
               bind: {
                 value: "{capabilitiesTree.selection.value}",
                 visible: "{isTypeInclude}",
@@ -368,7 +368,7 @@ Ext.define("NOC.core.filter.Filter", {
             {
               xtype: "checkbox",
               itemId: "capValueBool",
-              boxLabel: __("Yes/No"),
+              boxLabel: t("label-yes-no"),
               bind: {
                 value: "{capabilitiesTree.selection.value}",
                 visible: "{isTypeIncludeBool}",
@@ -377,7 +377,7 @@ Ext.define("NOC.core.filter.Filter", {
             {
               xtype: "checkbox",
               itemId: "capChecked",
-              boxLabel: __("Checked"),
+              boxLabel: t("label-checked"),
               bind: {
                 value: "{capabilitiesTree.selection.checked}",
                 visible: "{isLeaf}",
@@ -388,10 +388,10 @@ Ext.define("NOC.core.filter.Filter", {
       ],
       tbar: [
         {
-          text: __("Clear"),
+          text: t("btn-clear"),
           handler: "onCapabilitiesClear",
         }, {
-          text: __("Apply"),
+          text: t("btn-apply"),
           handler: "onCapabilitiesApply",
         },
       ],
@@ -400,7 +400,7 @@ Ext.define("NOC.core.filter.Filter", {
       xtype: "button",
       itemId: "clean-btn",
       minWidth: 50,
-      text: __("Clean All"),
+      text: t("btn-clean-all"),
       handler: "cleanAllFilters",
     },
   ],

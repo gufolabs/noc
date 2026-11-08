@@ -40,12 +40,12 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
     // Last update menu
     me.lastUpdateButton = Ext.create("Ext.button.Button", {
       hidden: true,
-      text: __("Show remote sync time"),
+      text: t("header-show-remote-sync-time"),
       margin: "0 5",
     });
     // Fullscreen toggle
     me.fullscreenMenu = Ext.create("Ext.menu.Item", {
-      text: __("Enter Full Screen"),
+      text: t("btn-enter-full-screen"),
       scale: "small",
       glyph: NOC.glyph.expand,
       handler: me.onFullscreenToggle,
@@ -53,13 +53,13 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
     });
     // User menu
     me.userMenuButton = Ext.create("Ext.button.Button", {
-      text: __("Anonymous"),
+      text: t("btn-anonymous"),
       scale: "small",
       glyph: NOC.glyph.user,
       hidden: true,
       menu: [
         {
-          text: __("About system ..."),
+          text: t("btn-about-system"),
           glyph: NOC.glyph.question_circle,
           scope: me.app,
           handler: me.app.onAbout,
@@ -68,14 +68,14 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
         me.fullscreenMenu,
         "-",
         {
-          text: __("User profile ..."),
+          text: t("btn-user-profile"),
           glyph: NOC.glyph.cog,
           scope: me.app,
           handler: me.app.onUserProfile,
         },
         {
           itemId: "header_menu_change_password",
-          text: __("Change password ..."),
+          text: t("btn-change-password"),
           disabled: true, // Changed on login
           glyph: NOC.glyph.lock,
           scope: me.app,
@@ -83,7 +83,7 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
         },
         "-",
         {
-          text: __("Logout"),
+          text: t("btn-logout"),
           glyph: NOC.glyph.power_off,
           scope: me.app,
           handler: me.app.onLogout,
@@ -174,13 +174,13 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
           onMouseOver: Ext.emptyFn,
           items: Ext.Array.map(data, function(e){
             return {
-              text: __(e.label + " " + e.last_successful_load),
+              text: `${e.label} ${e.last_successful_load}`,
             }
           }),
         }, true);
       },
       failure: function(){
-        NOC.error(__("Failed to get remote sync time"));
+        NOC.error(t("msg-failed-to-get-remote-sync-time"));
       },
     });
   },
@@ -189,7 +189,7 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
     var me = this.up(), // Desktop Application
       homeTab = me.workplacePanel.down("[appId=main.home]")?.up();
     if(Ext.isEmpty(homeTab)){
-      me.launchTab("NOC.main.home.Application", __("Home"), {});
+      me.launchTab("NOC.main.home.Application", t("app-title-home"), {});
     } else{
       var tabIndex = me.workplacePanel.items.indexOf(homeTab);
       me.workplacePanel.setActiveTab(tabIndex);
@@ -198,12 +198,12 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   // Toggle full-screen mode
   onFullscreenToggle: function(){
     if(document.fullscreenElement){
-      this.fullscreenMenu.setText(__("Enter Full Screen"));
+      this.fullscreenMenu.setText(t("btn-enter-full-screen"));
       document.exitFullscreen();
     } else{
       let element = document.documentElement;
       element.requestFullscreen({navigationUI: "hide"});
-      this.fullscreenMenu.setText(__("Exit Full Screen"));
+      this.fullscreenMenu.setText(t("msg-exit-full-screen"));
     }
   },
 });

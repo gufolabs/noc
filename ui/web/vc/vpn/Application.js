@@ -29,24 +29,24 @@ Ext.define("NOC.vc.vpn.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 150,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Project"),
+          text: t("label-project"),
           dataIndex: "project",
           width: 150,
           renderer: NOC.render.Lookup("project"),
@@ -57,44 +57,44 @@ Ext.define("NOC.vc.vpn.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "profile",
           xtype: "vc.vpnprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "parent",
           xtype: "vc.vpn.LookupField",
-          fieldLabel: __("Parent"),
+          fieldLabel: t("header-parent"),
           allowBlank: true,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -103,20 +103,20 @@ Ext.define("NOC.vc.vpn.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -125,7 +125,7 @@ Ext.define("NOC.vc.vpn.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_vpn": true,
@@ -134,24 +134,24 @@ Ext.define("NOC.vc.vpn.Application", {
         {
           name: "route_target",
           xtype: "gridfield",
-          fieldLabel: __("Route Target"),
+          fieldLabel: t("label-route-target"),
           allowBlank: true,
           columns: [
             {
-              text: __("RD"),
+              text: t("header-rd"),
               dataIndex: "rd",
               width: 75,
               editor: "textfield",
             },
             {
-              text: __("Object"),
+              text: t("header-object"),
               dataIndex: "managed_object",
               width: 150,
               renderer: NOC.render.Lookup("managed_object"),
               editor: "sa.managedobject.LookupField",
             },
             {
-              text: __("Operation"),
+              text: t("btn-operation"),
               dataIndex: "op",
               width: 75,
               editor: {
@@ -164,7 +164,7 @@ Ext.define("NOC.vc.vpn.Application", {
               },
             },
             {
-              text: __("Target"),
+              text: t("header-target"),
               dataIndex: "target",
               flex: 1,
               editor: "textfield",

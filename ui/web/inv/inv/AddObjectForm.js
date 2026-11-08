@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
   padding: 4,
   layout: "fit",
   defaultListenerScope: true,
-  title: __("Create new top-level object"),
+  title: t("app-title-create-new-top-level-object"),
   dockedItems: [
     {
       xtype: "toolbar",
@@ -21,24 +21,24 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
       padding: "4 4 4 0",
       items: [
         {
-          text: __("Save"),
+          text: t("btn-save"),
           glyph: NOC.glyph.save,
           handler: "onPressAdd",
         },
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.arrow_left,
           handler: "onPressClose",
         },
         "|",
         {
-          text: __("Clear"),
-          tooltip: __("Clear all rows"),
+          text: t("btn-clear"),
+          tooltip: t("help-clear-all-rows"),
           glyph: NOC.glyph.minus_circle,
           handler: "onClearAll",
         },
         {
-          text: __("Add row"),
+          text: t("btn-add-row"),
           glyph: NOC.glyph.plus,
           handler: "onAddRow",
         },
@@ -67,14 +67,14 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
           items: [
             {
               iconCls: "x-fa fa-times",
-              tooltip: __("Remove"),
+              tooltip: t("btn-remove"),
               handler: function(grid, rowIndex){
                 grid.getStore().removeAt(rowIndex);
               },
             },
             {
               iconCls: "x-fa fa-clone",
-              tooltip: __("Clone"),
+              tooltip: t("btn-clone"),
               isDisabled: function(view, rowIndex, colIndex, item, record){
                 return Ext.isEmpty(record.get("model")) || Ext.isEmpty(record.get("name"));
               },
@@ -82,7 +82,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
             },
             {
               iconCls: "x-fa fa-plus-circle",
-              tooltip: __("Clone N times"),
+              tooltip: t("help-clone-n-times"),
               isDisabled: function(view, rowIndex, colIndex, item, record){
                 return Ext.isEmpty(record.get("model")) || Ext.isEmpty(record.get("name"));
               },
@@ -91,13 +91,13 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
           ],
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           editor: "textfield",
           flex: 1,
         },
         { 
-          text: __("Model"), 
+          text: t("header-model"),
           dataIndex: "model", 
           renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
             var column = view.getGridColumns()[colIndex],
@@ -115,7 +115,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
           flex: 1, 
         },
         {
-          text: __("Serial"),
+          text: t("header-serial"),
           dataIndex: "serial",
           editor: "textfield",
           flex: 1,
@@ -169,7 +169,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
         var status = Ext.decode(response.responseText);
         me.app.showItem(me.app.ITEM_MAIN);
         if(status.status){
-          NOC.info(__("Saved"));
+          NOC.info(t("msg-saved-2"));
           if(me.groupContainer){
             me.app.store.reload({node: me.groupContainer});
             me.groupContainer.expand();
@@ -178,11 +178,11 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
             me.app.store.reload(); 
           }
         } else{
-          NOC.error(__("Failed to save"));
+          NOC.error(t("msg-failed-to-save"));
         }
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
     });
   },
@@ -190,7 +190,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
   setContainer: function(container){
     var me = this;
     me.groupContainer = container;
-    me.setTitle(__("Add object to ") + (container ? container.getPath("name") : __("Root")));
+    me.setTitle(t("msg-add-object-to-value0", {value0: container ? container.getPath("name") : t("msg-root")}));
   },
   //
   onAddRow: function(){
@@ -202,8 +202,8 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
   onClearAll: function(){
     var me = this;
     Ext.Msg.confirm(
-      __("Confirmation"),
-      __("Are you sure you want to delete all rows?"),
+      t("msg-confirmation"),
+      t("msg-are-you-sure-you-want-to-delete-all-rows"),
       function(btn){
         if(btn === "yes"){
           var store = me.down("grid").getStore();
@@ -225,13 +225,13 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
   promptCloneCount: function(grid, rowIndex){
     var me = this;
     Ext.Msg.prompt(
-      __("Clone Rows"),
-      __("Enter the number of rows to clone:"),
+      t("msg-clone-rows"),
+      t("msg-enter-the-number-of-rows-to-clone"),
       function(btn, text){
         if(btn === "ok"){
           var count = parseInt(text, 10);
           if(!/^\d+$/.test(text) || isNaN(count) || count <= 0){
-            Ext.Msg.alert(__("Invalid Input"), __("Please enter a valid number."), function(){
+            Ext.Msg.alert(t("msg-invalid-input"), t("msg-please-enter-a-valid-number"), function(){
               me.promptCloneCount(grid, rowIndex);
             });
             return;

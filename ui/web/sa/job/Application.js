@@ -18,27 +18,27 @@ Ext.define("NOC.sa.job.Application", {
   xtype: "sajob",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
     {
-      text: __("Created"),
+      text: t("header-created"),
       dataIndex: "created_at",
       width: 250,
     },
     {
-      text: __("Action"),
+      text: t("app-title-action"),
       dataIndex: "action",
       width: 100,
     },
     {
-      text: __("Status"),
+      text: t("header-status"),
       dataIndex: "status",
       width: 150,
       renderer: NOC.render.JobStatus,
@@ -46,24 +46,24 @@ Ext.define("NOC.sa.job.Application", {
   ],
   detail: {
     xtype: "panel",
-    title: __("Job Details"),
+    title: t("app-title-job-details"),
     layout: "border",
     tbar: [
       {
-        text: __("Close"),
+        text: t("btn-close"),
         glyph: NOC.glyph.arrow_left,
         handler: "onCloseDetail",
       },
       {
         glyph: NOC.glyph.arrow_up,
         itemId: "goToParentBtn",
-        tooltip: __("Go to Parent"),
+        tooltip: t("help-go-to-parent"),
         disabled: true,
         handler: "onGoToParent",
       },
       {
         glyph: NOC.glyph.refresh,
-        tooltip: __("Refresh"),
+        tooltip: t("help-refresh"),
         handler: "onRefresh",
       },
       {
@@ -73,7 +73,7 @@ Ext.define("NOC.sa.job.Application", {
       {
         xtype: "button",
         itemId: "downloadSVGBtn",
-        tooltip: __("Download image as SVG"),
+        tooltip: t("help-download-image-as-svg"),
         glyph: NOC.glyph.download,
         handler: "onDownloadSVG",
       },
@@ -121,32 +121,32 @@ Ext.define("NOC.sa.job.Application", {
           {
             xtype: "displayfield",
             name: "status",
-            fieldLabel: __("Status"),
+            fieldLabel: t("header-status"),
             renderer: NOC.render.JobStatus,
           },
           {
             xtype: "displayfield",
             name: "name",
-            fieldLabel: __("Name"),
+            fieldLabel: t("header-name"),
           },
           {
             xtype: "displayfield",
             name: "action",
-            fieldLabel: __("Action"),
+            fieldLabel: t("app-title-action"),
           },
           {
             xtype: "displayfield",
             name: "description",
-            fieldLabel: __("Description"),
+            fieldLabel: t("label-description"),
           },
           {
             xtype: "grid",
-            title: __("Inputs"),
+            title: t("app-title-inputs"),
             name: "inputs",
             visible: false,
             columns: [
-              {text: __("Name"), dataIndex: "name", flex: 1},
-              {text: __("Value"), dataIndex: "value", flex: 1},
+              {text: t("header-name"), dataIndex: "name", flex: 1},
+              {text: t("header-value"), dataIndex: "value", flex: 1},
             ],
             store: {
               fields: ["name", "value"],
@@ -156,12 +156,12 @@ Ext.define("NOC.sa.job.Application", {
           },
           {
             xtype: "grid",
-            title: __("Environment"),
+            title: t("label-environment"),
             name: "environment",
             visible: false,
             columns: [
-              {text: __("Name"), dataIndex: "name", flex: 1},
-              {text: __("Value"), dataIndex: "value", flex: 1},
+              {text: t("header-name"), dataIndex: "name", flex: 1},
+              {text: t("header-value"), dataIndex: "value", flex: 1},
             ],
             store: {
               fields: ["name", "value"],
@@ -340,7 +340,7 @@ Ext.define("NOC.sa.job.Application", {
       method: "GET",
       success: callBack,
       failure: function(response){
-        NOC.error(__("Failed to get data for job") + ": " + response.status);
+        NOC.error(t("msg-failed-to-get-data-for-job-value0", {value0: response.status}));
       },
     });
   },

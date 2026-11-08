@@ -15,9 +15,9 @@ Ext.define("NOC.cm.objectnotify.LookupField", {
   store: {
     fields: ["value", "text"],
     data: [
-      {"value": "dns", "text": __("DNS")},
-      {"value": "prefix-list", "text": __("Prefix List")},
-      {"value": "rpsl", "text": __("RPSL")},
+      {"value": "dns", "text": t("app-group-dns")},
+      {"value": "prefix-list", "text": t("label-prefix-list")},
+      {"value": "rpsl", "text": t("label-rpsl")},
     ],
   },
 });

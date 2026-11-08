@@ -45,7 +45,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
       items: [
         {
           xtype: "container",
-          title: __("Overview"),
+          title: t("app-title-reportoverview"),
           scrollable: true,
           bind: {
             html: "{overviewPanel}",
@@ -53,7 +53,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
         },
         {
           xtype: "container",
-          title: __("Help"),
+          title: t("app-title-help"),
           scrollable: true,
           bind: {
             html: "{helpPanel}",
@@ -62,7 +62,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
         },
         {
           xtype: "container",
-          title: __("Data"),
+          title: t("app-title-data"),
           scrollable: true,
           bind: {
             html: "{dataPanel}",
@@ -72,7 +72,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
         {
           xtype: "grid",
           reference: "fm-alarm-log",
-          title: __("Log"),
+          title: t("header-log"),
           scrollable: true,
           bind: {
             store: "{selectedLog}",
@@ -80,25 +80,25 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
           columns: [
             {
               dataIndex: "timestamp",
-              text: __("Time"),
+              text: t("header-time"),
               renderer: NOC.render.DateTime,
               width: 120,
             },
             {
               dataIndex: "from_status",
-              text: __("From"),
+              text: t("btn-from"),
               renderer: "onRenderStatus",
               width: 50,
             },
             {
               dataIndex: "to_status",
-              text: __("To"),
+              text: t("btn-to"),
               renderer: "onRenderStatus",
               width: 50,
             },
             {
               dataIndex: "message",
-              text: __("Message"),
+              text: t("btn-message"),
               flex: 1,
             },
           ],
@@ -109,7 +109,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
               items: [
                 {
                   xtype: "textfield",
-                  fieldLabel: __("New message"),
+                  fieldLabel: t("label-new-message"),
                   labelStyle: "white-space: nowrap;",
                   labelPad: 10,
                   fieldStyle: "margin: 0 4px;",
@@ -128,7 +128,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
         {
           xtype: "grid",
           reference: "fm-alarm-events",
-          title: __("Events"),
+          title: t("app-title-event"),
           scrollable: true,
           bind: {
             store: "{selectedEvents}",
@@ -136,31 +136,31 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
           columns: [
             {
               dataIndex: "id",
-              text: __("ID"),
+              text: t("header-id"),
               width: 150,
             },
             {
               dataIndex: "timestamp",
-              text: __("Time"),
+              text: t("header-time"),
               renderer: NOC.render.DateTime,
               width: 120,
             },
             {
               dataIndex: "event_class",
-              text: __("Class"),
+              text: t("header-class"),
               renderer: NOC.render.Lookup("event_class"),
               width: 200,
             },
             {
               dataIndex: "subject",
-              text: __("Subject"),
+              text: t("header-subject"),
               flex: 1,
             },
           ],
         },
         {
           xtype: "treepanel",
-          title: __("Alarms"),
+          title: t("header-alarms"),
           bind: {
             store: "{selectedAlarms}",
             disabled: "{!hasAlarms}",
@@ -171,29 +171,29 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
             {
               xtype: "treecolumn",
               dataIndex: "id",
-              text: __("ID"),
+              text: t("header-id"),
               width: 200,
             },
             {
               dataIndex: "timestamp",
-              text: __("Time"),
+              text: t("header-time"),
               width: 120,
               renderer: NOC.render.DateTime,
             },
             {
               dataIndex: "managed_object",
-              text: __("Managed Object"),
+              text: t("header-managed-object-62561c"),
               width: 200,
               renderer: NOC.render.Lookup("managed_object"),
             },
             {
               dataIndex: "alarm_class",
-              text: __("Class"),
+              text: t("header-class"),
               renderer: NOC.render.Lookup("alarm_class"),
             },
             {
               dataIndex: "subject",
-              text: __("Subject"),
+              text: t("header-subject"),
               flex: 1,
             },
           ],
@@ -205,7 +205,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
         {
           xtype: "grid",
           reference: "fm-alarm-groups",
-          title: __("Groups"),
+          title: t("app-title-group"),
           scrollable: true,
           bind: {
             store: "{selectedGroups}",
@@ -213,24 +213,24 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
           columns: [
             {
               dataIndex: "id",
-              text: __("ID"),
+              text: t("header-id"),
               width: 150,
             },
             {
               dataIndex: "timestamp",
-              text: __("Time"),
+              text: t("header-time"),
               renderer: NOC.render.DateTime,
               width: 120,
             },
             {
               dataIndex: "alarm_class",
-              text: __("Class"),
+              text: t("header-class"),
               renderer: NOC.render.Lookup("alarm_class"),
               width: 200,
             },
             {
               dataIndex: "subject",
-              text: __("Subject"),
+              text: t("header-subject"),
               flex: 1,
             },
           ],
@@ -240,8 +240,8 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
   ],
   tbar: [
     {
-      text: __("Close"),
-      tooltip: __("Close without saving"),
+      text: t("btn-close"),
+      tooltip: t("help-close-without-saving"),
       glyph: NOC.glyph.arrow_left,
       handler: "onClose",
     },
@@ -251,35 +251,35 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
     },
     "-",
     {
-      text: __("Escalate"),
+      text: t("btn-escalate"),
       glyph: NOC.glyph.ambulance,
-      tooltip: __("Escalate"),
+      tooltip: t("btn-escalate"),
       bind: {
         disabled: "{isClosed}",
       },
       handler: "onEscalateObject",
     },
     {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       handler: "onShowCard",
     },
     {
       itemId: "showMapBtn",
       xtype: "splitbutton",
-      text: __("Show Map"),
+      text: t("btn-show-map"),
       glyph: NOC.glyph.globe,
       menu: [ // Dynamically add items, in showMapHandler from Controller
       ],
     },
     {
-      text: __("Show Object"),
+      text: t("btn-show-object"),
       glyph: NOC.glyph.pencil,
       handler: "onShowObject",
     },
     "-",
     {
-      text: __("Clear"),
+      text: t("btn-clear"),
       glyph: NOC.glyph.eraser,
       handler: "onClear",
       bind: {
@@ -298,7 +298,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
       handler: "onAddRemoveFav",
     },
     {
-      text: __("Watch"),
+      text: t("btn-watch"),
       enableToggle: true,
       bind: {
         pressed: "{isSubscribe}",
@@ -308,7 +308,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
       handler: "onWatch",
     },
     {
-      text: __("Set Root"),
+      text: t("btn-set-root"),
       glyph: NOC.glyph.paperclip,
       handler: "onSetRoot",
       bind: {
@@ -327,7 +327,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
     "->",
     {
       xtype: "displayfield",
-      fieldLabel: __("ID"),
+      fieldLabel: t("header-id"),
       labelWidth: 20,
       labelClsExtra: "noc-label-required",
       bind: {

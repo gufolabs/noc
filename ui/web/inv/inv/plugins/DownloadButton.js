@@ -59,11 +59,11 @@ Ext.define("NOC.inv.inv.plugins.DownloadButton", {
       var buttonText = this.selectedMenuItem === "csvMenuItem" ? "CSV" : "SVG";
       item.setChecked(item.itemId === this.selectedMenuItem);
       this.setText(buttonText);
-      this.setTooltip(__("Download") + " " + buttonText);
+      this.setTooltip(t("msg-download-value0", {value0: buttonText}));
     }, this);
   },
   onButtonClick: function(){
-    NOC.info(__("Download button clicked") + " " + this.selectedMenuItem);
+    NOC.info(t("msg-download-button-clicked-value0", {value0: this.selectedMenuItem}));
     if(this.selectedMenuItem === "csvMenuItem"){
       Ext.bind(this.exportCSV, this.up("vizscheme"))();
     } else if(this.selectedMenuItem === "svgMenuItem"){

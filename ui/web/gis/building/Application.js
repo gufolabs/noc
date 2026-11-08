@@ -24,30 +24,30 @@ Ext.define("NOC.gis.building.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Address"),
+          text: t("app-title-address"),
           dataIndex: "full_path",
           flex: 1,
         },
         {
-          text: __("Floors"),
+          text: t("header-floors"),
           dataIndex: "floors",
           width: 75,
           align: "right",
         },
         {
-          text: __("Homes"),
+          text: t("header-homes"),
           dataIndex: "homes",
           width: 75,
           align: "right",
         },
         {
-          text: __("Remote System"),
+          text: t("app-title-remotesystem"),
           dataIndex: "remote_system",
           flex: 1,
           sort: false,
         },
         {
-          text: __("Remote Id"),
+          text: t("header-remote-id"),
           dataIndex: "remote_id",
           flex: 1,
           sort: false,
@@ -57,18 +57,18 @@ Ext.define("NOC.gis.building.Application", {
         {
           name: "full_path",
           xtype: "displayfield",
-          fieldLabel: __("Address"),
+          fieldLabel: t("app-title-address"),
         },
         {
           name: "adm_division",
           xtype: "gis.division.LookupField",
-          fieldLabel: __("Administrative Division"),
+          fieldLabel: t("label-administrative-division"),
           allowBlank: false,
         },
         {
           name: "status",
           xtype: "combobox",
-          fieldLabel: __("Status"),
+          fieldLabel: t("header-status"),
           allowBlank: false,
           store: [
             ["P", "PROJECT"],
@@ -82,19 +82,19 @@ Ext.define("NOC.gis.building.Application", {
         {
           name: "postal_code",
           xtype: "textfield",
-          fieldLabel: __("Postal Code"),
+          fieldLabel: t("label-postal-code"),
           allowBlank: true,
         },
         {
           name: "floors",
           xtype: "numberfield",
-          fieldLabel: __("Floors"),
+          fieldLabel: t("header-floors"),
           allowBlank: true,
         },
         {
           name: "homes",
           xtype: "numberfield",
-          fieldLabel: __("Homes"),
+          fieldLabel: t("header-homes"),
           allowBlank: true,
         },
         {
@@ -104,63 +104,63 @@ Ext.define("NOC.gis.building.Application", {
             {
               name: "has_cellar",
               xtype: "checkboxfield",
-              boxLabel: __("Cellar"),
+              boxLabel: t("label-cellar"),
             },
             {
               name: "has_attric",
               xtype: "checkboxfield",
-              boxLabel: __("Attic"),
+              boxLabel: t("label-attic"),
             },
             {
               name: "is_administrative",
               xtype: "checkboxfield",
-              boxLabel: __("Administrative"),
+              boxLabel: t("label-administrative"),
             },
             {
               name: "is_habitated",
               xtype: "checkboxfield",
-              boxLabel: __("Habitated"),
+              boxLabel: t("label-habitated"),
             },
           ],
         },
         {
           xtype: "dictfield",
           name: "data",
-          fieldLabel: __("Data"),
+          fieldLabel: t("app-title-data"),
           allowBlank: true,
         },
         {
           xtype: "gridfield",
           name: "entrances",
-          fieldLabel: __("Entrances"),
+          fieldLabel: t("label-entrances"),
           allowBlank: true,
           columns: [
             {
-              text: __("Number"),
+              text: t("header-number"),
               dataIndex: "number",
               width: 75,
               editor: "textfield",
             },
             {
-              text: __("First Floor"),
+              text: t("header-first-floor"),
               dataIndex: "first_floor",
               width: 75,
               editor: "textfield",
             },
             {
-              text: __("Last Floor"),
+              text: t("header-last-floor"),
               dataIndex: "last_floor",
               width: 75,
               editor: "textfield",
             },
             {
-              text: __("First Home"),
+              text: t("header-first-home"),
               dataIndex: "first_home",
               width: 75,
               editor: "textfield",
             },
             {
-              text: __("Last Home"),
+              text: t("header-last-home"),
               dataIndex: "last_home",
               width: 75,
               editor: "textfield",
@@ -168,7 +168,7 @@ Ext.define("NOC.gis.building.Application", {
           ],
           toolbar: [
             {
-              text: __("Fill Entrances"),
+              text: t("btn-fill-entrances"),
               glyph: NOC.glyph.plus_square,
               scope: me,
               handler: me.onFillEntrances,
@@ -178,11 +178,11 @@ Ext.define("NOC.gis.building.Application", {
       ],
       inlines: [
         {
-          title: __("Addresses"),
+          title: t("header-addresses"),
           model: "NOC.gis.building.AddressesModel",
           columns: [
             {
-              text: __("Primary"),
+              text: t("header-primary"),
               dataIndex: "is_primary",
               width: 50,
               renderer: NOC.render.Bool,
@@ -195,7 +195,7 @@ Ext.define("NOC.gis.building.Application", {
               },
             },
             {
-              text: __("Street"),
+              text: t("app-title-street"),
               dataIndex: "street",
               width: 150,
               renderer: NOC.render.Lookup("street"),
@@ -206,73 +206,73 @@ Ext.define("NOC.gis.building.Application", {
               },
             },
             {
-              text: __("Num"),
+              text: t("header-num"),
               dataIndex: "num",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Num2"),
+              text: t("header-num2"),
               dataIndex: "num2",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Num Letter"),
+              text: t("header-num-letter"),
               dataIndex: "num_letter",
               width: 50,
               editor: "textfield",
             },
             {
-              text: __("Build"),
+              text: t("header-build"),
               dataIndex: "build",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Build Letter"),
+              text: t("header-build-letter"),
               dataIndex: "build_letter",
               width: 50,
               editor: "textfield",
             },
             {
-              text: __("Struct"),
+              text: t("header-struct"),
               dataIndex: "struct",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Struct2"),
+              text: t("header-struct2"),
               dataIndex: "struct2",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Struct Letter"),
+              text: t("header-struct-letter"),
               dataIndex: "struct_letter",
               width: 50,
               editor: "textfield",
             },
             {
-              text: __("Estate"),
+              text: t("header-estate"),
               dataIndex: "estate",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Estate2"),
+              text: t("header-estate2"),
               dataIndex: "estate2",
               width: 50,
               editor: "numberfield",
             },
             {
-              text: __("Est. Letter"),
+              text: t("header-est-letter"),
               dataIndex: "estate_letter",
               width: 50,
               editor: "textfield",
             },
             {
-              text: __("Full Number"),
+              text: t("header-full-number"),
               dataIndex: "text_address",
               flex: 1,
             },
@@ -284,7 +284,7 @@ Ext.define("NOC.gis.building.Application", {
   },
   filters: [
     {
-      title: __("By Parent"),
+      title: t("app-title-by-parent"),
       name: "adm_division",
       ftype: "lookup",
       lookup: "gis.division",

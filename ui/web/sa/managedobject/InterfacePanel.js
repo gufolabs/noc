@@ -29,7 +29,7 @@ Ext.define("NOC.sa.managedobject.InterfacePanel", {
     me.currentObject = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -100,7 +100,7 @@ Ext.define("NOC.sa.managedobject.InterfacePanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    me.setTitle(`${record.get("name")} ${__("Interfaces")}`);
+    me.setTitle(`${record.get("name")} ${t("header-interfaces")}`);
     NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/interface/",
       method: "GET",
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.managedobject.InterfacePanel", {
         me.tabPanel.setActiveTab(0);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

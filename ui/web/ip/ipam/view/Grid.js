@@ -32,7 +32,7 @@ Ext.define("NOC.ip.ipam.view.Grid", {
       items: [
         {
           glyph: NOC.glyph.star,
-          tooltip: __("Mark/Unmark"),
+          tooltip: t("help-mark-unmark"),
           getColor: function(cls, meta, r){
             return r.get("fav_status") ? NOC.colors.starred : NOC.colors.unstarred;
           },
@@ -41,56 +41,56 @@ Ext.define("NOC.ip.ipam.view.Grid", {
         {
           glyph: NOC.glyph.edit,
           color: NOC.colors.edit,
-          tooltip: __("Edit"),
+          tooltip: t("app-title-edit"),
           handler: "onEditItem",
         },
         {
           glyph: NOC.glyph.id_card_o,
           color: NOC.colors.edit,
-          tooltip: __("Open card"),
+          tooltip: t("help-open-card"),
           handler: "onOpenCard",
         },
       ],
     },
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("State"),
+      text: t("header-state"),
       dataIndex: "state",
       renderer: NOC.render.Lookup("state"),
     },
     {
-      text: __("Group"),
+      text: t("header-group"),
       dataIndex: "vrf_group",
       renderer: NOC.render.Lookup("vrf_group"),
     },
     {
-      text: __("Profile"),
+      text: t("header-profile"),
       dataIndex: "profile",
       renderer: NOC.render.Lookup("profile"),
     },
     {
-      text: __("Project"),
+      text: t("label-project"),
       dataIndex: "project",
       renderer: NOC.render.Lookup("project"),
     },
     {
-      text: __("RD"),
+      text: t("header-rd"),
       dataIndex: "rd",
       width: 100,
     },
     {
-      text: __("VPN ID"),
+      text: t("header-vpn-id"),
       dataIndex: "vpn_id",
       width: 100,
     },
     {
       xtype: "actioncolumn",
-      text: __("IPv4"),
+      text: t("choice-ipv4"),
       items: [{
-        tooltip: __("To see the prefix contents"),
+        tooltip: t("help-to-see-the-prefix-contents"),
         getClass: function(v, _, record){
           return "x-fa fa-" + (record.get("afi_ipv4") ? "eye pointer-cursor" : "times default-cursor");
         },
@@ -100,11 +100,11 @@ Ext.define("NOC.ip.ipam.view.Grid", {
     },
     {
       xtype: "actioncolumn",
-      text: __("IPv6"),
+      text: t("choice-ipv6"),
       items: [{
-        tooltip: __("To see the prefix contents"),
+        tooltip: t("help-to-see-the-prefix-contents"),
         getTip: function(value, metadata, record){
-          return record.get("afi_ipv6") ? __("View Detail") : "";
+          return record.get("afi_ipv6") ? t("msg-view-detail") : "";
         },
         getClass: function(v, _, record){
           return "x-fa fa-" + (record.get("afi_ipv6") ? "eye pointer-cursor" : "times default-cursor");
@@ -114,12 +114,12 @@ Ext.define("NOC.ip.ipam.view.Grid", {
       width: 50,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
     {
-      text: __("Labels"),
+      text: t("header-labels"),
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
     },

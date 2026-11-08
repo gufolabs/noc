@@ -16,17 +16,17 @@ Ext.define("NOC.dns.dnsserver.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 100,
     },
     {
-      text: __("IP"),
+      text: t("header-ip"),
       dataIndex: "ip",
       width: 100,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -35,19 +35,19 @@ Ext.define("NOC.dns.dnsserver.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "ip",
       xtype: "textfield",
-      fieldLabel: __("IP"),
+      fieldLabel: t("header-ip"),
       allowBlank: true,
     },
     {
       name: "description",
       xtype: "textfield",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
   ],

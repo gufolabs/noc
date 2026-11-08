@@ -8,7 +8,7 @@ console.debug("Defining NOC.support.account.ChangeCredentials");
 
 Ext.define("NOC.support.account.ChangeCredentials", {
   extend: "Ext.Window",
-  title: __("Change Password"),
+  title: t("app-title-change-password"),
   layout: "fit",
   autoShow: true,
   draggable: false,
@@ -38,14 +38,14 @@ Ext.define("NOC.support.account.ChangeCredentials", {
         {
           xtype: "textfield",
           name: "old_password",
-          fieldLabel: __("Old Password"),
+          fieldLabel: t("label-old-password"),
           allowBlank: false,
           inputType: "password",
         },
         {
           xtype: "textfield",
           name: "new_password",
-          fieldLabel: __("New Password"),
+          fieldLabel: t("label-new-password"),
           allowBlank: false,
           inputType: "password",
           minLength: me.minPasswordLength,
@@ -53,7 +53,7 @@ Ext.define("NOC.support.account.ChangeCredentials", {
         {
           xtype: "textfield",
           name: "new_password2",
-          fieldLabel: __("New Password (Retype)"),
+          fieldLabel: t("label-new-password-retype"),
           allowBlank: false,
           inputType: "password",
           vtype: "password",
@@ -64,19 +64,19 @@ Ext.define("NOC.support.account.ChangeCredentials", {
       buttonAlign: "center",
       buttons: [
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.times,
           scope: me,
           handler: me.onClose,
         },
         {
-          text: __("Reset"),
+          text: t("btn-reset"),
           glyph: NOC.glyph.undo,
           scope: me,
           handler: me.onReset,
         },
         {
-          text: __("Change"),
+          text: t("header-change"),
           glyph: NOC.glyph.save,
           disabled: true,
           formBind: true,
@@ -137,7 +137,7 @@ Ext.define("NOC.support.account.ChangeCredentials", {
       },
       failure: function(response){
         var status = Ext.decode(response.responseText);
-        NOC.error(__("Failed to change credentials:") + " " + status.error);
+        NOC.error(t("msg-failed-to-change-credentials-value0-4", {value0: status.error}));
       },
     });
   },

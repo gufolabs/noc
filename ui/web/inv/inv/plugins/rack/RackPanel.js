@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
     "NOC.inv.inv.plugins.rack.RackController",
   ],
   itemId: "rackPanel",
-  title: __("Rack"),
+  title: t("app-title-rack"),
   layout: "border",
   scrollable: false,
   controller: "rack",
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
     this.svgUrlTemplate = new Ext.XTemplate("/inv/inv/{id}/plugin/{name}/{side}.svg");
     // Add Edit button to tbar
     tbarItems.splice(tbarItems.length - 1, 0, {
-      text: __("Edit"),
+      text: t("app-title-edit"),
       glyph: NOC.glyph.edit,
       enableToggle: true,
       bind: {
@@ -46,23 +46,23 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
       width: 500,
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model",
           width: 200,
         },
         {
-          text: __("Units"),
+          text: t("btn-units"),
           dataIndex: "units",
           width: 50,
         },
         {
-          text: __("Front"),
-          tooltip: __("Position Front"),
+          text: t("btn-front"),
+          tooltip: t("help-position-front"),
           dataIndex: "position_front",
           width: 50,
           editor: {
@@ -79,8 +79,8 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
           },
         },
         {
-          text: __("Rear"),
-          tooltip: __("Position Rear"),
+          text: t("btn-rear"),
+          tooltip: t("help-position-rear"),
           dataIndex: "position_rear",
           width: 50,
           editor: {
@@ -97,7 +97,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
           },
         },
         {
-          text: __("Shift"),
+          text: t("header-shift"),
           dataIndex: "shift",
           width: 70,
           editor: {

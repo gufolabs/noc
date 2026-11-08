@@ -19,7 +19,7 @@ Ext.define("NOC.inv.connectionrule.Application", {
 
   actions: [
     {
-      title: __("Get JSON"),
+      title: t("app-title-get-json"),
       action: "json",
       glyph: NOC.glyph.file,
       resultTemplate: "JSON",
@@ -40,19 +40,19 @@ Ext.define("NOC.inv.connectionrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -60,39 +60,39 @@ Ext.define("NOC.inv.connectionrule.Application", {
       fields: [
         {
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           xtype: "textfield",
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "context",
           xtype: "gridfield",
-          fieldLabel: __("Context"),
+          fieldLabel: t("label-context"),
           columns: [
             {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               width: 70,
               editor: "textfield",
             },
             {
-              text: __("Reset Scopes"),
+              text: t("header-reset-scopes"),
               dataIndex: "reset_scopes",
               flex: 1,
               editor: "stringlistfield",
@@ -102,40 +102,40 @@ Ext.define("NOC.inv.connectionrule.Application", {
         {
           name: "rules",
           xtype: "gridfield",
-          fieldLabel: __("Rules"),
+          fieldLabel: t("header-rules"),
           columns: [
             {
-              text: __("Match Type"),
+              text: t("header-match-type"),
               dataIndex: "match_type",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Match Connection"),
+              text: t("header-match-connection"),
               dataIndex: "match_connection",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               width: 50,
               editor: "textfield",
             },
             {
-              text: __("Target Type"),
+              text: t("header-target-type"),
               dataIndex: "target_type",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Target Number"),
+              text: t("header-target-number"),
               dataIndex: "target_number",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Target Connection"),
+              text: t("header-target-connection"),
               dataIndex: "target_connection",
               width: 100,
               editor: "textfield",
@@ -145,9 +145,9 @@ Ext.define("NOC.inv.connectionrule.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -159,7 +159,7 @@ Ext.define("NOC.inv.connectionrule.Application", {
 
   filters: [
     {
-      title: __("By Is Builtin"),
+      title: t("app-title-by-is-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },

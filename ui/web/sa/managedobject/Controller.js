@@ -123,7 +123,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         return;
       }
       case "N_ROWS": {
-        Ext.Msg.prompt(__("Select rows"), __("Please enter number:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-rows"), t("msg-please-enter-number"), function(btn, text){
           if(btn === "ok"){
             this.getNRows("0", text);
           }
@@ -131,7 +131,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         break;
       }
       case "PERIOD": {
-        Ext.Msg.prompt(__("Select period"), __("Please enter period (start,qty), first pos is 0:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-period"), t("msg-please-enter-period-start-qty-first-pos-is-0"), function(btn, text){
           if(btn === "ok"){
             this.getNRows(text.split(",")[0], text.split(",")[1]);
           }
@@ -183,7 +183,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
           xclass: "NOC.sa.action.LookupField",
           reference: "saManagedobjectActionField",
           name: "modeId",
-          fieldLabel: __("Actions"),
+          fieldLabel: t("nav-action"),
           allowBlank: false,
           editable: false,
           listeners: {
@@ -197,7 +197,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
           xclass: "NOC.sa.commandsnippet.LookupField",
           reference: "saManagedobjectFnippetField",
           name: "modeId",
-          fieldLabel: __("Snippets"),
+          fieldLabel: t("label-snippets"),
           allowBlank: false,
           editable: false,
           listeners: {
@@ -211,7 +211,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
           xtype: "textareafield",
           reference: "saManagedobjectCommandField",
           name: "cmd",
-          fieldLabel: __("Commands"),
+          fieldLabel: t("label-commands"),
           labelAlign: "top",
           allowBlank: false,
           height: 500,
@@ -278,11 +278,11 @@ Ext.define("NOC.sa.managedobject.Controller", {
           if(commands.length > 0){
             me.sendCommands(mode, commands);
           } else{
-            NOC.error(__("Empty command"))
+            NOC.error(t("msg-empty-command"))
           }
         },
         failure: function(response){
-          NOC.error(__("server-side failure with status code " + response.status));
+          NOC.error(t("msg-server-side-failure-status", {status: response.status}));
         },
       });
     };
@@ -375,7 +375,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
           commandForm.add(obj);
         },
         failure: function(response){
-          NOC.error(__("server-side failure with status code " + response.status));
+          NOC.error(t("msg-server-side-failure-status", {status: response.status}));
         },
       });
     }
@@ -534,7 +534,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         },
       );
 
-      selectionGrid.mask(__("Loading"));
+      selectionGrid.mask(t("msg-loading"));
       NOC.api.requestLegacy({
         url: this.lookupReference("saManagedobjectSelectionGrid").getStore().rest_url,
         method: "POST",
@@ -551,7 +551,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         },
         failure: function(){
           selectionGrid.unmask();
-          NOC.error(__("Failed to get data"));
+          NOC.error(t("msg-failed-to-get-data"));
         },
       });
 
@@ -572,13 +572,14 @@ Ext.define("NOC.sa.managedobject.Controller", {
       groupEditFields = Ext.Array.filter(form.getFields().items, function(field){return field.groupEdit}),
       parentCmp = this.lookupReference("saManagedobjectSelectedGrid1").up();
     Ext.Array.each(disabledFields, function(field){field.setDisabled(true)});
-    this.view.down("[itemId=formTitle]").update(Ext.String.format(
-      formPanel.up().groupChangeTitle, selectedIds.length, formPanel.up("[itemId=sa-managedobject]").appTitle,
-    ));
+    this.view.down("[itemId=formTitle]").update(t(formPanel.up().groupChangeTitle, {
+      count: selectedIds.length,
+      name: formPanel.up("[itemId=sa-managedobject]").appTitle,
+    }));
     this.displayButtons(["closeBtn", "groupSaveBtn", "groupApplyBtn"]);
     formPanel.ids = selectedIds;
     this.clearForm(form);
-    parentCmp.mask(__("Loading"));
+    parentCmp.mask(t("msg-loading"));
     NOC.api.requestLegacy({
       url: this.url + "full/",
       method: "POST",
@@ -623,7 +624,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
       },
       failure: function(){
         parentCmp.unmask();
-        NOC.error(__("Failed get group MO detail"));
+        NOC.error(t("msg-failed-get-group-mo-detail"));
       },
     });
   },
@@ -641,7 +642,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
       objects = Ext.Array.map(basketStore.getData().items, function(record){return {object: record.id, object__label: record.get("name")}}),
       args = {
         direct_objects: objects,
-        subject: __("created from managed objects list at ") + Ext.Date.format(new Date(), "d.m.Y H:i P"),
+        subject: t("msg-created-from-managed-objects-list-at-value0", {value0: Ext.Date.format(new Date(), "d.m.Y H:i P")}),
         contacts: NOC.email ? NOC.email : NOC.username,
         start_date: Ext.Date.format(new Date(), "d.m.Y"),
         start_time: Ext.Date.format(new Date(), "H:i"),
@@ -668,7 +669,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var basketStore = this.lookupReference("saManagedobjectSelectedGrid1").getStore();
     NOC.run(
       "NOC.inv.map.Maintenance",
-      __("Add To Maintenance"),
+      t("btn-add-to-maintenance"),
       {
         args: [
           {mode: "Object"},
@@ -708,7 +709,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
       view = this.getView();
 
     if(gridView){
-      gridView.mask(__("Loading"));
+      gridView.mask(t("msg-loading"));
     }
     NOC.api.requestLegacy({
       url: url,
@@ -799,7 +800,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         if(gridView){
           gridView.unmask();
         }
-        NOC.error(__("Failed get MO detail"));
+        NOC.error(t("msg-failed-get-mo-detail"));
       },
     });
   },
@@ -813,7 +814,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   // Set edit form title
   setFormTitle: function(tpl, data){
-    var t = "<b>" + Ext.String.format(tpl, this.view.appTitle) + "</b>",
+    var title = "<b>" + t(tpl, {name: this.view.appTitle}) + "</b>",
       formTitle = this.view.down("[itemId=formTitle]"),
       itemId = data.id;
     if(itemId !== "NEW" && itemId !== "CLONE"){
@@ -821,11 +822,11 @@ Ext.define("NOC.sa.managedobject.Controller", {
     } else{
       itemId = "<b>" + itemId + "</b>";
     }
-    t += "<span style='float:right'>" + itemId + "</span>";
+    title += "<span style='float:right'>" + itemId + "</span>";
     if(data.is_wiping){
-      t += "<br/><span style='float:left'>" + __("Device is wiping and will be removed soon") + "</span>";
+      title += "<br/><span style='float:left'>" + t("app-title-device-is-wiping-and-will-be-removed-soon") + "</span>";
     }
-    formTitle.update(t);
+    formTitle.update(title);
   },
   resetInlineStore: function(formPanel, defaults){
     Ext.each(formPanel.query("[itemId$=-inline]"),
@@ -883,7 +884,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         });
       },
       failure: function(){
-        NOC.error(__("Show Map Button : Failed to get data"));
+        NOC.error(t("msg-show-map-button-failed-to-get-data"));
       },
     });
   },
@@ -913,7 +914,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         NOC.info(Ext.decode(response.responseText) || "OK");
       },
       failure: function(){
-        NOC.error(__("Action") + " " + actionName + " " + __("failed"));
+        NOC.error(t("msg-action-value0-failed", {value0: actionName}));
       },
     });
   },
@@ -921,14 +922,14 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var mainGrid = this.getView().down("[reference=saManagedobjectSelectionGrid]"),
       basketGrid = this.getView().down("[reference=saManagedobjectSelectedGrid1]"),
       ids = Ext.Array.map(basketGrid.getStore().getData().items, function(record){return record.id});
-    mainGrid.mask(__("Loading"));
+    mainGrid.mask(t("msg-loading"));
     mainGrid.getStore().reload({
       callback: function(){
         mainGrid.unmask();
       },
     });
     if(ids.length > 0){
-      basketGrid.mask(__("Loading"));
+      basketGrid.mask(t("msg-loading"));
       NOC.api.requestLegacy({
         url: this.url + "full/",
         method: "POST",
@@ -943,7 +944,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
         },
         failure: function(){
           basketGrid.unmask();
-          NOC.error(__("Failed refresh basket"));
+          NOC.error(t("msg-failed-refresh-basket"));
         },
       });
     }

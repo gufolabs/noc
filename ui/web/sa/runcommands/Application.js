@@ -21,10 +21,10 @@ Ext.define("NOC.sa.runcommands.Application", {
   ],
 
   stateMap: {
-    w: __("Waiting"),
-    r: __("Running"),
-    s: __("Success"),
-    f: __("Failed"),
+    w: t("msg-waiting"),
+    r: t("msg-running"),
+    s: t("msg-success"),
+    f: t("msg-failed"),
   },
 
   defaults: {
@@ -56,7 +56,7 @@ Ext.define("NOC.sa.runcommands.Application", {
               pageSize: 0,
               border: false,
               scrollable: true,
-              emptyText: __("Not Found"),
+              emptyText: t("label-not-found"),
               bind: {
                 store: "{selectionStore}",
                 selection: "{selectionRow}",
@@ -74,7 +74,7 @@ Ext.define("NOC.sa.runcommands.Application", {
                 tbar: {
                   items: [{ // @todo: Search
                     glyph: NOC.glyph.refresh,
-                    tooltip: __("Refresh data"),
+                    tooltip: t("help-refresh-data"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -83,15 +83,15 @@ Ext.define("NOC.sa.runcommands.Application", {
                     xtype: "combo",
                     editable: false,
                     minWidth: 225,
-                    emptyText: __("Group select"),
+                    emptyText: t("label-group-select"),
                     store: {
                       fields: ["cmd", "title"],
                       data: [
-                        {"cmd": "SCREEN", "title": __("All devices on screen")},
-                        {"cmd": "FIRST_50", "title": __("First 50")},
-                        {"cmd": "FIRST_100", "title": __("First 100")},
-                        {"cmd": "N_ROWS", "title": __("First N")},
-                        {"cmd": "PERIOD", "title": __("Period start,qty")},
+                        {"cmd": "SCREEN", "title": t("app-title-all-devices-on-screen")},
+                        {"cmd": "FIRST_50", "title": t("app-title-first-50")},
+                        {"cmd": "FIRST_100", "title": t("app-title-first-100")},
+                        {"cmd": "N_ROWS", "title": t("app-title-first-n")},
+                        {"cmd": "PERIOD", "title": t("app-title-period-start-qty")},
                       ],
                     },
                     queryMode: "local",
@@ -101,9 +101,9 @@ Ext.define("NOC.sa.runcommands.Application", {
                       select: "onSelectionSelectAll",
                     },
                   }, {
-                    text: __("Unselect All"),
+                    text: t("btn-unselect-all"),
                     glyph: NOC.glyph.minus_circle,
-                    tooltip: __("Unselect all devices"),
+                    tooltip: t("help-unselect-all-devices"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -112,9 +112,9 @@ Ext.define("NOC.sa.runcommands.Application", {
                     },
                     handler: "onSelectionUnselectAll",
                   }, "->", {
-                    text: __("Add"),
+                    text: t("btn-add"),
                     glyph: NOC.glyph.cart_plus,
-                    tooltip: __("Move all selected devices to the basket"),
+                    tooltip: t("help-move-all-selected-devices-to-the-basket"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.runcommands.Application", {
                     handler: "onSelectionAddChecked",
                   }, "|", {
                     glyph: NOC.glyph.shopping_cart,
-                    tooltip: __("Show/Hide Basket"),
+                    tooltip: t("help-show-hide-basket-2"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -139,7 +139,7 @@ Ext.define("NOC.sa.runcommands.Application", {
                   }, "|", {
                     xtype: "box",
                     bind: {
-                      html: __("Selected : {total.selection}"),
+                      html: t("msg-selected-total-selection"),
                     },
                   }],
                 },
@@ -164,7 +164,7 @@ Ext.define("NOC.sa.runcommands.Application", {
               pageSize: 0,
               border: false,
               scrollable: true,
-              emptyText: __("nothing checked"),
+              emptyText: t("label-nothing-checked"),
               split: {
                 xtype: "splitter",
               },
@@ -179,9 +179,9 @@ Ext.define("NOC.sa.runcommands.Application", {
               dockedItems: [{
                 tbar: {
                   items: [{
-                    text: __("Remove All"),
+                    text: t("btn-remove-all"),
                     glyph: NOC.glyph.minus_circle,
-                    tooltip: __("Remove all devices from right panel"),
+                    tooltip: t("help-remove-all-devices-from-right-panel"),
                     style: {
                       pointerEvents: "all",
                     },
@@ -198,8 +198,8 @@ Ext.define("NOC.sa.runcommands.Application", {
                       pointerEvents: "all",
                     },
                     bind: {
-                      text: __("Total : {total.selected}"),
-                      tooltip: __("Hide basket"),
+                      text: t("msg-total-total-selected"),
+                      tooltip: t("help-hide-basket"),
                       style: {
                         cursor: "{cursorIcon}",
                       },
@@ -233,16 +233,16 @@ Ext.define("NOC.sa.runcommands.Application", {
         tbar: {
           items: [
             {
-              text: __("Filtering List"),
+              text: t("btn-filtering-list"),
               glyph: NOC.glyph.filter,
-              tooltip: __("Show/Hide Filter"),
+              tooltip: t("help-show-hide-filter"),
               style: {
                 pointerEvents: "all",
               },
               handler: "collapseFilter",
             }, {
-              text: __("Do Checked"),
-              tooltip: __("Go to next step"),
+              text: t("btn-do-checked"),
+              tooltip: t("help-go-to-next-step"),
               style: {
                 pointerEvents: "all",
               },
@@ -296,19 +296,19 @@ Ext.define("NOC.sa.runcommands.Application", {
                 {
                   xtype: "checkboxfield",
                   reference: "ignoreCliErrors",
-                  boxLabel: __("Ignore CLI errors"),
+                  boxLabel: t("label-ignore-cli-errors"),
                   checked: true,
                 },
                 {
                   xtype: "checkboxfield",
                   reference: "dryRun",
-                  boxLabel: __("Dry Run (not execute command)"),
+                  boxLabel: t("label-dry-run-not-execute-command"),
                   checked: false,
                 },
                 {
                   xtype: "combo",
                   reference: "saRunCommandsMode",
-                  fieldLabel: __("Mode"),
+                  fieldLabel: t("label-mode"),
                   labelWidth: 50,
                   queryMode: "local",
                   displayField: "name",
@@ -316,9 +316,9 @@ Ext.define("NOC.sa.runcommands.Application", {
                   editable: false,
                   store: {
                     data: [
-                      {value: "commands", name: __("Run Commands")},
-                      {value: "snippet", name: __("Run Snippet")},
-                      {value: "action", name: __("Run Action")},
+                      {value: "commands", name: t("app-title-runcommands")},
+                      {value: "snippet", name: t("btn-run-snippet")},
+                      {value: "action", name: t("btn-run-action")},
                     ],
                   },
                   listeners: {
@@ -351,7 +351,7 @@ Ext.define("NOC.sa.runcommands.Application", {
                 items: [
                   {xtype: "component", flex: 1},
                   {
-                    xtype: "button", text: __("Run"),
+                    xtype: "button", text: t("btn-run"),
                     glyph: NOC.glyph.play,
                     disabled: true,
                     formBind: true,
@@ -368,7 +368,7 @@ Ext.define("NOC.sa.runcommands.Application", {
           items: [
             {
               glyph: NOC.glyph.arrow_left,
-              tooltip: __("Back"),
+              tooltip: t("help-back"),
               style: {
                 pointerEvents: "all",
               },
@@ -412,28 +412,28 @@ Ext.define("NOC.sa.runcommands.Application", {
                   pressed: true,
                   value: "w",
                   bind: {
-                    text: "<span>" + __("Waiting") + '&nbsp;<span class="noc-badge noc-badge-waiting">{progressState.w}</span></span>',
+                    text: "<span>" + t("msg-waiting") + '&nbsp;<span class="noc-badge noc-badge-waiting">{progressState.w}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "r",
                   bind: {
-                    text: "<span>" + __("Running") + '&nbsp;<span class="noc-badge noc-badge-running">{progressState.r}</span></span>',
+                    text: "<span>" + t("msg-running") + '&nbsp;<span class="noc-badge noc-badge-running">{progressState.r}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "f",
                   bind: {
-                    text: "<span>" + __("Failed") + '&nbsp;<span class="noc-badge noc-badge-failed">{progressState.f}</span></span>',
+                    text: "<span>" + t("msg-failed") + '&nbsp;<span class="noc-badge noc-badge-failed">{progressState.f}</span></span>',
                   },
                 },
                 {
                   pressed: true,
                   value: "s",
                   bind: {
-                    text: "<span>" + __("Success") + '&nbsp;<span class="noc-badge noc-badge-success">{progressState.s}</span></span>',
+                    text: "<span>" + t("msg-success") + '&nbsp;<span class="noc-badge noc-badge-success">{progressState.s}</span></span>',
                   },
                 },
               ],
@@ -467,7 +467,7 @@ Ext.define("NOC.sa.runcommands.Application", {
           items: [
             {
               glyph: NOC.glyph.arrow_left,
-              tooltip: __("Back"),
+              tooltip: t("help-back"),
               style: {
                 pointerEvents: "all",
               },
@@ -477,7 +477,7 @@ Ext.define("NOC.sa.runcommands.Application", {
               },
             }, {
               glyph: NOC.glyph.print,
-              tooltip: __("Report"),
+              tooltip: t("msg-report"),
               style: {
                 pointerEvents: "all",
               },
@@ -504,7 +504,7 @@ Ext.define("NOC.sa.runcommands.Application", {
         items: [
           {
             glyph: NOC.glyph.arrow_left,
-            tooltip: __("Back"),
+            tooltip: t("help-back"),
             style: {
               pointerEvents: "all",
             },
@@ -512,7 +512,7 @@ Ext.define("NOC.sa.runcommands.Application", {
           },
           {
             glyph: NOC.glyph.download,
-            tooltip: __("Download results"),
+            tooltip: t("help-download-results"),
             style: {
               pointerEvents: "all",
             },

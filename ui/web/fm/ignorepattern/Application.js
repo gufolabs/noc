@@ -19,23 +19,23 @@ Ext.define("NOC.fm.ignorepattern.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Source"),
+          text: t("header-source"),
           dataIndex: "source",
           width: 75,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Pattern"),
+          text: t("header-pattern"),
           dataIndex: "pattern",
           flex: 1,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -44,7 +44,7 @@ Ext.define("NOC.fm.ignorepattern.Application", {
         {
           name: "source",
           xtype: "combobox",
-          fieldLabel: __("Source"),
+          fieldLabel: t("header-source"),
           allowBlank: false,
           store: [
             ["syslog", "SYSLOG"],
@@ -54,18 +54,18 @@ Ext.define("NOC.fm.ignorepattern.Application", {
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "pattern",
           xtype: "textfield",
-          fieldLabel: __("Pattern (RE)"),
+          fieldLabel: t("label-pattern-re"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
       ],
@@ -107,7 +107,7 @@ Ext.define("NOC.fm.ignorepattern.Application", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to create ignore pattern from event"));
+        NOC.error(t("msg-failed-to-create-ignore-pattern-from-event"));
       },
     });
   },

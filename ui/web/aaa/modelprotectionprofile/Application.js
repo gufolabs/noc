@@ -21,15 +21,15 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model",
         },
       ],
@@ -37,7 +37,7 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           autoFocus: true,
           tabIndex: 10,
@@ -46,7 +46,7 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
         {
           name: "model",
           xtype: "textfield",
-          fieldLabel: __("Model"),
+          fieldLabel: t("header-model"),
           allowBlank: false,
           tabIndex: 20,
           uiStyle: "large",
@@ -54,23 +54,23 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           tabIndex: 30,
           uiStyle: "expand",
         },
         {
           xtype: "fieldcontainer",
-          fieldLabel: __("Groups"),
+          fieldLabel: t("app-title-group"),
           items: [
             {
               xtype: "multiselector",
               name: "groups",
-              title: __("Selected Groups"),
+              title: t("app-title-selected-groups"),
               fieldName: "label",
               viewConfig: {
                 deferEmptyText: false,
-                emptyText: __("No group selected"),
+                emptyText: t("label-no-group-selected"),
               },
 
               search: {
@@ -101,10 +101,10 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
         {
           name: "field_access",
           xtype: "gridfield",
-          fieldLabel: __("Field Access"),
+          fieldLabel: t("label-field-access"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 150,
               renderer: NOC.render.Lookup("name"),
@@ -113,16 +113,16 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
               },
             },
             {
-              text: __("Access"),
+              text: t("label-access"),
               dataIndex: "permission",
               width: 150,
               editor: {
                 xtype: "combobox",
                 store: [
-                  [0, __("Hidden")],
-                  [1, __("Disabled")],
-                  [2, __("Read-Only")],
-                  [3, __("Editable")],
+                  [0, t("msg-hidden")],
+                  [1, t("msg-disabled")],
+                  [2, t("msg-read-only")],
+                  [3, t("msg-editable")],
                 ],
                 queryMode: "local",
               },
@@ -155,7 +155,7 @@ Ext.define("NOC.aaa.modelprotectionprofile.Application", {
     this.callParent();
   },
   onReset: function(){
-    var me = this, msg = __("Reset");
+    var me = this, msg = t("btn-reset");
     me.mask(msg);
     Ext.TaskManager.start({
       run: function(){

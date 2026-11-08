@@ -47,7 +47,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackController", {
         me.onReload();
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
       callback: function(){
         maskComponent.hide(messageId);

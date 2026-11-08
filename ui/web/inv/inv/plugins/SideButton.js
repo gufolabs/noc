@@ -16,7 +16,7 @@ Ext.define("NOC.inv.inv.plugins.SideButton", {
   items: [
     {
       glyph: NOC.glyph.hand_o_right,
-      text: __("Front"),
+      text: t("btn-front"),
       toggleGroup: "side",
       bind: {
         pressed: "{isFrontPressed}",
@@ -25,7 +25,7 @@ Ext.define("NOC.inv.inv.plugins.SideButton", {
     },
     {
       glyph: NOC.glyph.hand_o_left,
-      text: __("Rear"),
+      text: t("btn-rear"),
       toggleGroup: "side",
       bind: {
         pressed: "{isRearPressed}",

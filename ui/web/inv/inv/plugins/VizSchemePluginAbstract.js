@@ -34,7 +34,7 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
     },
     formulas: {
       detailsButtonText: function(get){
-        return get("showDetails") ? __("Hide details") : __("Show details");
+        return get("showDetails") ? t("btn-hide-details") : t("btn-show-details");
       },
       detailsButtonGlyph: function(get){
         return get("showDetails") ? "xf06e@FontAwesome" : "xf070@FontAwesome";
@@ -45,7 +45,7 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
     {
       itemId: "reloadButton",
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       handler: "onReload",
     },
     {
@@ -78,7 +78,7 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
         paddingRight: "20px",
       },
       bind: {
-        html: __("Total") + ": {totalCount}",
+        html: t("header-total") + ": {totalCount}",
       },
     },
   ],
@@ -93,7 +93,7 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
       bind: {
         hidden: "{!showDetails}",
       },
-      emptyText: __("No data"),
+      emptyText: t("label-no-data"),
       allowDeselect: true,
       split: true,
       columns: [],
@@ -202,14 +202,14 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
       pluginName = me.itemId.replace("Panel", ""),
       currentId = me.getViewModel().get("currentId"),
       maskComponent = me.up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("fetching", [pluginName]);
+      messageId = maskComponent.show("fetching", {name: pluginName});
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/" + pluginName + "/",
       method: "GET",
       scope: me,
       success: cb,
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
       callback: function(){
         maskComponent.hide(messageId);

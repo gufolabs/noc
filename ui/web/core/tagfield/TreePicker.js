@@ -36,7 +36,7 @@ Ext.define("NOC.core.tagfield.TreePicker", {
     {
       xtype: "searchfield",
       width: "90%",
-      emptyText: __("pattern"),
+      emptyText: t("label-pattern"),
       enableKeyEvents: true,
       triggers: {
         clear: {
@@ -52,7 +52,7 @@ Ext.define("NOC.core.tagfield.TreePicker", {
     "->",
     {
       glyph: NOC.glyph.times_circle,
-      tooltip: __("Close"),
+      tooltip: t("btn-close"),
       handler: "onClosePanel",
     },
   ],

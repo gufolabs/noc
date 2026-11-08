@@ -35,12 +35,12 @@ Ext.define("NOC.wf.workflow.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
@@ -51,31 +51,31 @@ Ext.define("NOC.wf.workflow.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           xtype: "core.tagfield",
           url: "/main/ref/modelid/lookup/",
-          fieldLabel: __("Allowed models"),
-          tooltip: __("Models allowed set workflow"),
+          fieldLabel: t("label-allowed-models-2"),
+          tooltip: t("help-models-allowed-set-workflow"),
           name: "allowed_models",
           listeners: {
             render: me.addTooltip,
@@ -84,7 +84,7 @@ Ext.define("NOC.wf.workflow.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -93,20 +93,20 @@ Ext.define("NOC.wf.workflow.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -115,9 +115,9 @@ Ext.define("NOC.wf.workflow.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -143,10 +143,10 @@ Ext.define("NOC.wf.workflow.Application", {
         success: function(response){
           var data = Ext.decode(response.responseText);
           me.restoreHistory([data.id]);
-          NOC.info(__("Cloned"));
+          NOC.info(t("msg-cloned"));
         },
         failure: function(){
-          NOC.error(__("Failed to clone"))
+          NOC.error(t("msg-failed-to-clone"))
         },
       });
     }

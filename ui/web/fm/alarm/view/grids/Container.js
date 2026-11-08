@@ -28,9 +28,9 @@ Ext.define("NOC.fm.alarm.view.grids.Container", {
       handler: "onRefresh",
     },
     {
-      text: __("Filtering List"),
+      text: t("btn-filtering-list"),
       glyph: NOC.glyph.filter,
-      tooltip: __("Show/Hide Filter"),
+      tooltip: t("help-show-hide-filter"),
       style: {
         pointerEvents: "all",
       },
@@ -38,8 +38,8 @@ Ext.define("NOC.fm.alarm.view.grids.Container", {
     },
     {
       glyph: NOC.glyph.download,
-      text: __("Group actions"),
-      tooltip: __("Group actions"),
+      text: t("btn-group-actions"),
+      tooltip: t("btn-group-actions"),
       itemId: "alarm_action_menu",
       bind: {
         disabled: "{isActiveAlarmsSelected}",
@@ -49,43 +49,43 @@ Ext.define("NOC.fm.alarm.view.grids.Container", {
         plain: true,
         items: [
           {
-            text: __("Group comment"),
+            text: t("btn-group-comment"),
             listeners: {
               click: "addGroupComment",
             },
           },
           {
-            text: __("Escalate"),
+            text: t("btn-escalate"),
             listeners: {
               click: "addGroupEscalate",
             },
           },
           {
-            text: __("New Maintaince"),
+            text: t("btn-new-maintaince"),
             listeners: {
               click: "createMaintenance",
             },
           },
           {
-            text: __("Alarm Detail Report"),
+            text: t("btn-alarm-detail-report"),
             listeners: {
               click: "openAlarmDetailReport",
             },
           },
           {
-            text: __("Mark to favorites"),
+            text: t("btn-mark-to-favorites"),
             listeners: {
               click: "onGroupMarkFavorites",
             },
           },
           {
-            text: __("Unmark from favorites"),
+            text: t("btn-unmark-from-favorites"),
             listeners: {
               click: "onGroupUnmarkFavorites",
             },
           },
           {
-            text: __("Clear alarms"),
+            text: t("app-title-clear-alarms"),
             bind: {
               disabled: "{activeFilterIsClosed}",
             },
@@ -97,7 +97,7 @@ Ext.define("NOC.fm.alarm.view.grids.Container", {
       },
     },
     {
-      text: __("Reload"),
+      text: t("btn-reload"),
       iconAlign: "right",
       enableToggle: true,
       bind: {

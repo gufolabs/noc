@@ -26,7 +26,7 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
 
   actions: [
     {
-      title: __("Get JSON"),
+      title: t("app-title-get-json"),
       action: "json",
       glyph: NOC.glyph.file,
       resultTemplate: "JSON",
@@ -47,19 +47,19 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -67,47 +67,47 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
       fields: [
         {
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           xtype: "textfield",
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "connection_rules",
           xtype: "gridfield",
-          fieldLabel: __("Connection Rules"),
+          fieldLabel: t("app-title-connectionrule"),
           columns: [
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               editor: "cm.configurationscope.LookupField",
               width: 200,
               renderer: NOC.render.Lookup("scope"),
             },
             {
-              text: __("Match Slot/Ctx"),
+              text: t("header-match-slot-ctx"),
               dataIndex: "match_context",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Connection Type"),
+              text: t("header-connection-type"),
               dataIndex: "match_connection_type",
               editor: "inv.connectiontype.LookupField",
               width: 200,
               renderer: NOC.render.Lookup("match_connection_type"),
             },
             {
-              text: __("Protocols"),
+              text: t("nav-protocol"),
               dataIndex: "match_protocols",
               width: 200,
               editor: {
@@ -117,7 +117,7 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
               renderer: me.comboBoxRenderer,
             },
             {
-              text: __("Allow Params"),
+              text: t("header-allow-params"),
               dataIndex: "allowed_params",
               width: 200,
               editor: {
@@ -127,7 +127,7 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
               renderer: me.comboBoxRenderer,
             },
             {
-              text: __("Deny Params"),
+              text: t("header-deny-params"),
               dataIndex: "deny_params",
               width: 200,
               editor: {
@@ -141,10 +141,10 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
         {
           name: "param_rules",
           xtype: "gridfield",
-          fieldLabel: __("Param Rules"),
+          fieldLabel: t("label-param-rules"),
           columns: [
             {
-              text: __("Param"),
+              text: t("btn-param"),
               dataIndex: "param",
               editor: "cm.configurationparam.LookupField",
               width: 200,
@@ -152,7 +152,7 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
               sortable: false,
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               editor: "cm.configurationscope.LookupField",
               width: 200,
@@ -160,21 +160,21 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
               sortable: false,
             },
             {
-              text: __("Hide"),
+              text: t("label-hide"),
               dataIndex: "is_hide",
               width: 30,
               renderer: NOC.render.Bool,
               sortable: false,
             },
             {
-              text: __("Read Only"),
+              text: t("header-read-only"),
               dataIndex: "is_readonly",
               width: 30,
               renderer: NOC.render.Bool,
               sortable: false,
             },
             {
-              text: __("Dependency Param"),
+              text: t("header-dependency-param"),
               dataIndex: "dependency_param",
               editor: "cm.configurationparam.LookupField",
               width: 200,
@@ -182,14 +182,14 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
               sortable: false,
             },
             {
-              text: __("Dependency Param Values"),
+              text: t("header-dependency-param-values"),
               dataIndex: "dependency_param_values",
               width: 100,
               editor: "textfield",
               sortable: false,
             },
             {
-              text: __("Choices"),
+              text: t("header-choices"),
               dataIndex: "choices",
               width: 150,
               editor: "textfield",
@@ -200,9 +200,9 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -214,7 +214,7 @@ Ext.define("NOC.inv.objectconfigurationrule.Application", {
 
   filters: [
     {
-      title: __("By Is Builtin"),
+      title: t("app-title-by-is-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },

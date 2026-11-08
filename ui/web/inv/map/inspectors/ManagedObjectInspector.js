@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.ManagedObjectInspector");
 
 Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("Object Inspector"),
+  title: t("app-title-object-inspector"),
   inspectorName: "managedobject",
 
   tpl: [
@@ -30,7 +30,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.lookButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.pencil,
       scope: this,
-      tooltip: __("Object settings"),
+      tooltip: t("help-object-settings"),
       handler: this.onLook,
       disabled: true,
     });
@@ -38,7 +38,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.cardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.eye,
       scope: this,
-      tooltip: __("View card"),
+      tooltip: t("help-view-card"),
       handler: this.onMOCard,
       disabled: true,
     });
@@ -46,7 +46,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.segmentButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.location_arrow,
       scope: this,
-      tooltip: __("Jump to Segment"),
+      tooltip: t("help-jump-to-segment"),
       handler: this.onJumpSegment,
       disabled: true,
     });
@@ -54,7 +54,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.dashboardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.line_chart,
       scope: this,
-      tooltip: __("Show dashboard"),
+      tooltip: t("btn-show-dashboard-2"),
       handler: this.onDashboard,
       disabled: true,
     });
@@ -62,7 +62,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.consoleButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.terminal,
       scope: this,
-      tooltip: __("Console"),
+      tooltip: t("help-console"),
       handler: this.onConsole,
       disabled: true,
     });
@@ -70,7 +70,7 @@ Ext.define("NOC.inv.map.inspectors.ManagedObjectInspector", {
     this.viewMapButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.globe,
       scope: this,
-      tooltip: __("Topology Neighbors"),
+      tooltip: t("label-topology-neighbors"),
       handler: this.onNeighborsMap,
       disabled: true,
     });

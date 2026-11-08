@@ -24,13 +24,13 @@ Ext.define("NOC.fm.alarm.view.grids.DurationFilterRow", {
       durationStore: {
         fields: ["value", "text"],
         data: [
-          {"value": 1, "text": "1 " + __("min")},
-          {"value": 5, "text": "5 " + __("min")},
-          {"value": 10, "text": "10 " + __("min")},
-          {"value": 15, "text": "15 " + __("min")},
-          {"value": 30, "text": "30 " + __("min")},
-          {"value": 60, "text": "60 " + __("min")},
-          {"value": 1440, "text": "1440 " + __("min")},
+          {"value": 1, "text": t("label-duration-minutes", {count: 1})},
+          {"value": 5, "text": t("label-duration-minutes", {count: 5})},
+          {"value": 10, "text": t("label-duration-minutes", {count: 10})},
+          {"value": 15, "text": t("label-duration-minutes", {count: 15})},
+          {"value": 30, "text": t("label-duration-minutes", {count: 30})},
+          {"value": 60, "text": t("label-duration-minutes", {count: 60})},
+          {"value": 1440, "text": t("label-duration-minutes", {count: 1440})},
         ],
       },
       opacityStore: {
@@ -79,7 +79,7 @@ Ext.define("NOC.fm.alarm.view.grids.DurationFilterRow", {
           xtype: "displayfield",
           width: 137,
           padding: "0 5 0 0",
-          value: __("Other"),
+          value: t("header-other"),
         },
       ].concat(this.items);
     } else{
@@ -98,7 +98,7 @@ Ext.define("NOC.fm.alarm.view.grids.DurationFilterRow", {
           },
           editable: false,
           validator: function(value){
-            var num = Number(value.replace(__("min"), "").trim());
+            var num = Number(value.replace(t("label-min"), "").trim());
             return !isNaN(num) && num > 0;
           },
           listeners: {

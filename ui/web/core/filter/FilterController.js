@@ -108,7 +108,7 @@ Ext.define("NOC.core.filter.FilterController", {
                 });
 
       if(value.length > 2000){
-        NOC.msg.failed(__("Too many IP, max 2000"));
+        NOC.msg.failed(t("msg-too-many-ip-max-2000"));
         return;
       }
     }

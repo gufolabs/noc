@@ -31,18 +31,18 @@ Ext.define("NOC.inv.objectmodel.Application", {
   treeFilter: "category",
   filters: [
     {
-      title: __("By Is Builtin"),
+      title: t("app-title-by-is-builtin"),
       name: "is_builtin",
       ftype: "boolean",
     },
     {
-      title: __("By Vendor"),
+      title: t("app-title-by-vendor"),
       name: "vendor",
       ftype: "lookup",
       lookup: "inv.vendor",
     },
     {
-      title: __("By Container Type"),
+      title: t("app-title-by-container-type"),
       name: "container_type",
       ftype: "lookup",
       lookup: "main.ref.containertype",
@@ -51,7 +51,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
 
   actions: [
     {
-      title: __("Get JSON"),
+      title: t("app-title-get-json"),
       action: "json",
       glyph: NOC.glyph.file,
       resultTemplate: new Ext.XTemplate("<pre>{data}</pre>"),
@@ -79,7 +79,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
     });
     //
     me.crossModeCombo = Ext.create("Ext.form.ComboBox", {
-      fieldLabel: __("Mode"),
+      fieldLabel: t("label-mode"),
       labelWidth: 55,
       store: {
         fields: ["text", "value"],
@@ -110,7 +110,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
     //
     me.viewDiagramBtn = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.eye,
-      tooltip: __("View connection diagram"),
+      tooltip: t("help-view-connection-diagram"),
       enableToggle: true,
       scope: me,
       toggleHandler: me.diagramToggleHandler,
@@ -120,7 +120,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Glyph"),
+          text: t("app-title-glyph"),
           dataIndex: "glyph",
           width: 32,
           renderer: (value, meta, record) => value && record.get("glyph__label")
@@ -128,51 +128,51 @@ Ext.define("NOC.inv.objectmodel.Application", {
             : "",
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
           sortable: false,
         },
         {
-          text: __("Vendor"),
+          text: t("header-vendor"),
           dataIndex: "vendor",
           renderer: NOC.render.Lookup("vendor"),
           width: 150,
         },
         {
-          text: __("Short Label"),
+          text: t("header-short-label"),
           dataIndex: "short_label",
           width: 150,
         },
         {
-          text: __("Connection Rule"),
+          text: t("header-connection-rule"),
           dataIndex: "connection_rule",
           renderer: NOC.render.Lookup("connection_rule"),
           width: 100,
         },
         {
-          text: __("CR. Context"),
+          text: t("header-cr-context"),
           dataIndex: "cr_context",
           width: 70,
         },
         {
-          text: __("Container Type"),
+          text: t("header-container-type"),
           dataIndex: "container_type",
           width: 70,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           flex: 1,
           renderer: NOC.render.LabelField,
@@ -182,48 +182,48 @@ Ext.define("NOC.inv.objectmodel.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "vendor",
           xtype: "inv.vendor.LookupField",
-          fieldLabel: __("Vendor"),
+          fieldLabel: t("header-vendor"),
           allowBlank: false,
         },
         {
           name: "container_type",
           xtype: "main.ref.containertype.LookupField",
-          fieldLabel: __("Container Type"),
+          fieldLabel: t("header-container-type"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: {type: "hbox"},
-          title: __("Visual"),
+          title: t("app-title-visual"),
           items: [
             {
               name: "short_label",
               xtype: "textfield",
-              fieldLabel: __("Short Label"),
+              fieldLabel: t("header-short-label"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "glyph",
               xtype: "main.glyph.LookupField",
-              fieldLabel: __("Glyph"),
+              fieldLabel: t("app-title-glyph"),
               allowBlank: true,
             },
           ],
@@ -243,7 +243,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
             {
               name: "front_facade",
               xtype: "inv.facade.LookupField",
-              fieldLabel: __("Front Facade"),
+              fieldLabel: t("label-front-facade"),
               allowBlank: true,
               listeners: {
                 change: this.changeTemplateButtonState,
@@ -253,7 +253,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
               xtype: "button",
               itemId: "front_facadeBtn",
               glyph: NOC.glyph.download,
-              text: __("Template"),
+              text: t("header-template"),
               margin: "0 0 0 5",
               handler: this.templateCheck,
             },
@@ -274,7 +274,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
             {
               name: "rear_facade",
               xtype: "inv.facade.LookupField",
-              fieldLabel: __("Rear Facade"),
+              fieldLabel: t("label-rear-facade"),
               allowBlank: true,
               listeners: {
                 change: this.changeTemplateButtonState,
@@ -284,7 +284,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
               xtype: "button",
               itemId: "rear_facadeBtn",
               glyph: NOC.glyph.download,
-              text: __("Template"),
+              text: t("header-template"),
               margin: "0 0 0 5",
               handler: this.templateCheck,
             },
@@ -293,32 +293,32 @@ Ext.define("NOC.inv.objectmodel.Application", {
         {
           name: "configuration_rule",
           xtype: "inv.objectconfigurationrule.LookupField",
-          fieldLabel: __("Configuration Rule"),
+          fieldLabel: t("label-configuration-rule"),
           allowBlank: true,
         },
         {
           name: "connection_rule",
           xtype: "inv.connectionrule.LookupField",
-          fieldLabel: __("Connection Rule"),
+          fieldLabel: t("header-connection-rule"),
           allowBlank: true,
         },
         {
           name: "cr_context",
           xtype: "textfield",
-          fieldLabel: __("Connection Context"),
+          fieldLabel: t("label-connection-context"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "plugins",
           xtype: "tagsfield",
-          fieldLabel: __("Plugins"),
+          fieldLabel: t("app-title-plugins"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             allow_models: ["inv.ObjectModel"],
@@ -326,12 +326,12 @@ Ext.define("NOC.inv.objectmodel.Application", {
         },
         {
           name: "data",
-          fieldLabel: __("Data"),
+          fieldLabel: t("app-title-data"),
           xtype: "gridfield",
           allowBlank: true,
           columns: [
             {
-              text: __("Interface"),
+              text: t("header-interface"),
               dataIndex: "interface",
               width: 150,
               editor: {
@@ -341,25 +341,25 @@ Ext.define("NOC.inv.objectmodel.Application", {
               },
             },
             {
-              text: __("Key"),
+              text: t("header-key"),
               dataIndex: "attr",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "textfield",
             },
             {
-              text: __("Connection"),
+              text: t("header-connection"),
               dataIndex: "connection",
               flex: 1,
               editor: "textfield",
             },
             {
-              text: __("Protocol"),
+              text: t("header-protocol"),
               dataIndex: "protocol",
               flex: 1,
               editor: "textfield",
@@ -369,16 +369,16 @@ Ext.define("NOC.inv.objectmodel.Application", {
         {
           name: "modes",
           xtype: "gridfield",
-          fieldLabel: __("Modes"),
+          fieldLabel: t("label-modes"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 200,
               editor: "textfield",
             },
             {
-              text: __("Is Default"),
+              text: t("header-is-default"),
               dataIndex: "is_default",
               width: 50,
               radioRow: true,
@@ -386,7 +386,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
               editor: "checkboxfield",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
               editor: "textfield",
@@ -396,10 +396,10 @@ Ext.define("NOC.inv.objectmodel.Application", {
         {
           name: "connections",
           xtype: "gridfield",
-          fieldLabel: __("Connections"),
+          fieldLabel: t("label-connections"),
           columns: [
             {
-              text: __("Facade"),
+              text: t("app-title-facade-2"),
               dataIndex: "facade",
               width: 25,
               renderer: function(v){
@@ -411,32 +411,32 @@ Ext.define("NOC.inv.objectmodel.Application", {
               },
             },
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               editor: "textfield",
               width: 100,
             },
             {
-              text: __("Connection Type"),
+              text: t("header-connection-type"),
               dataIndex: "type",
               editor: "inv.connectiontype.LookupField",
               width: 200,
               renderer: NOC.render.Lookup("type"),
             },
             {
-              text: __("Combo"),
+              text: t("header-combo"),
               dataIndex: "combo",
               editor: "textfield",
               width: 50,
             },
             {
-              text: __("Cfg Ctx."),
+              text: t("header-cfg-ctx"),
               dataIndex: "cfg_context",
               editor: "textfield",
               width: 50,
             },
             {
-              text: __("Direction"),
+              text: t("header-direction"),
               dataIndex: "direction",
               editor: {
                 xtype: "combobox",
@@ -450,14 +450,14 @@ Ext.define("NOC.inv.objectmodel.Application", {
               width: 50,
               renderer: function(v){
                 return {
-                  i: "<i class='fa fa-arrow-down' title='" + __("Inner") + "'></i>",
-                  o: "<i class='fa fa-arrow-up' title='" + __("Outer") + "'></i>",
-                  s: "<i class='fa fa-arrows-h' title='" + __("Connection") + "'></i>",
+                  i: "<i class='fa fa-arrow-down' title='" + t("msg-inner") + "'></i>",
+                  o: "<i class='fa fa-arrow-up' title='" + t("msg-outer") + "'></i>",
+                  s: "<i class='fa fa-arrows-h' title='" + t("header-connection") + "'></i>",
                 }[v];
               },
             },
             {
-              text: __("Gender"),
+              text: t("header-gender"),
               dataIndex: "gender",
               editor: {
                 xtype: "combobox",
@@ -471,37 +471,37 @@ Ext.define("NOC.inv.objectmodel.Application", {
               width: 50,
               renderer: function(v){
                 return {
-                  m: "<i class='fa fa-mars' title='" + __("Male") + "'></i>",
-                  f: "<i class='fa fa-venus' title='" + __("Female") + "'></i>",
-                  s: "<i class='fa fa-genderless' title='" + __("Genderless") + "'></i>",
+                  m: "<i class='fa fa-mars' title='" + t("msg-male") + "'></i>",
+                  f: "<i class='fa fa-venus' title='" + t("msg-female") + "'></i>",
+                  s: "<i class='fa fa-genderless' title='" + t("msg-genderless") + "'></i>",
                 }[v];
               },
 
             },
             {
-              text: __("Composite"),
+              text: t("header-composite"),
               dataIndex: "composite",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Composite pins"),
+              text: t("header-composite-pins"),
               dataIndex: "composite_pins",
               width: 50,
               editor: {
                 xtype: "textfield",
                 regex: /^\d+-\d+$/,
-                regexText: __("Regex error!"),
+                regexText: t("msg-regex-error"),
               },
             },
             {
-              text: __("Group"),
+              text: t("header-group"),
               dataIndex: "group",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Cross"),
+              text: t("app-title-cross"),
               dataIndex: "cross_direction",
               editor: {
                 xtype: "combobox",
@@ -514,19 +514,19 @@ Ext.define("NOC.inv.objectmodel.Application", {
               width: 50,
             },
             {
-              text: __("Protocols"),
+              text: t("nav-protocol"),
               dataIndex: "protocols",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Internal name"),
+              text: t("header-internal-name"),
               dataIndex: "internal_name",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               editor: "textfield",
               flex: 1,
@@ -548,13 +548,13 @@ Ext.define("NOC.inv.objectmodel.Application", {
             {
               xtype: "gridfield",
               name: "cross",
-              fieldLabel: __("Cross"),
+              fieldLabel: t("app-title-cross"),
               allowBlank: true,
               region: "center",
               toolbar: [me.crossModeCombo, me.viewDiagramBtn],
               columns: [
                 {
-                  text: __("Input"),
+                  text: t("header-input"),
                   dataIndex: "input",
                   forceFit: true,
                   editor: {
@@ -566,13 +566,13 @@ Ext.define("NOC.inv.objectmodel.Application", {
                   },
                 },
                 {
-                  text: __("Input Discriminator"),
+                  text: t("header-input-discriminator"),
                   dataIndex: "input_discriminator",
                   forceFit: true,
                   editor: "textfield",
                 },
                 {
-                  text: __("Output"),
+                  text: t("header-output"),
                   dataIndex: "output",
                   forceFit: true,
                   editor: {
@@ -584,13 +584,13 @@ Ext.define("NOC.inv.objectmodel.Application", {
                   },
                 },
                 {
-                  text: __("Output Discriminator"),
+                  text: t("header-output-discriminator"),
                   dataIndex: "output_discriminator",
                   forceFit: true,
                   editor: "textfield",
                 },
                 {
-                  text: __("Gain (dB)"),
+                  text: t("header-gain-db"),
                   dataIndex: "gain_db",
                   editor: "textfield",
                   forceFit: true,
@@ -633,7 +633,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
                 me.up().down("[itemId=diagram]").selectConnection(record);
               },
               setValue: function(v){
-                const defaultValue = {text: __("Default"), value: me.emptyValue};
+                const defaultValue = {text: t("header-default"), value: me.emptyValue};
                 if(v === undefined || v === ""){
                   v = [];
                 } else{
@@ -694,37 +694,37 @@ Ext.define("NOC.inv.objectmodel.Application", {
         },
         {
           name: "sensors",
-          fieldLabel: __("Sensors"),
+          fieldLabel: t("label-sensors"),
           xtype: "gridfield",
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               width: 200,
               editor: "textfield",
             },
             {
-              text: __("Units"),
+              text: t("btn-units"),
               dataIndex: "units",
               width: 100,
               editor: "pm.measurementunits.LookupField",
               renderer: NOC.render.Lookup("units"),
             },
             {
-              text: __("Modbus Register"),
+              text: t("header-modbus-register"),
               dataIndex: "modbus_register",
               width: 100,
               editor: "numberfield",
             },
             {
-              text: __("Modbus Value Format"),
+              text: t("header-modbus-value-format"),
               dataIndex: "modbus_format",
               width: 100,
               editor: {
@@ -748,7 +748,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
               },
             },
             {
-              text: __("SNMP OID"),
+              text: t("header-snmp-oid"),
               dataIndex: "snmp_oid",
               flex: 1,
               editor: {
@@ -761,17 +761,17 @@ Ext.define("NOC.inv.objectmodel.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
         },
         {
-          text: __("Test"),
+          text: t("btn-test"),
           glyph: NOC.glyph.question,
-          tooltip: __("Test compatible types"),
+          tooltip: t("help-test-compatible-types"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onTest,
@@ -802,7 +802,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
         me.showItem(me.ITEM_TEST).preview(me.currentRecord, data);
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
@@ -872,11 +872,11 @@ Ext.define("NOC.inv.objectmodel.Application", {
           a.click();
           document.body.removeChild(a);
         } else{
-          NOC.error(__("Dimensions must be set to generate template"));
+          NOC.error(t("msg-dimensions-must-be-set-to-generate-template"));
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

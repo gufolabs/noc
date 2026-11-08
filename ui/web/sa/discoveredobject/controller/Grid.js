@@ -19,7 +19,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Grid", {
 
       result.push("<span style='" + border + background + "padding:1;margin:2;'>" + text + "</span>");
     });
-    return result.join("") || __("N/A");
+    return result.join("") || t("label-n-a");
   },
   afterrenderHandler: function(grid){
     grid.up().lookup("sa-discovered-sidebar").getController().reload();
@@ -41,7 +41,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Grid", {
         return;
       }
       case "N_ROWS": {
-        Ext.Msg.prompt(__("Select rows"), __("Please enter number:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-rows"), t("msg-please-enter-number"), function(btn, text){
           if(btn === "ok"){
             this.getNRows(grid, "0", text);
           }
@@ -49,7 +49,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Grid", {
         break;
       }
       case "PERIOD": {
-        Ext.Msg.prompt(__("Select period"), __("Please enter period (start,qty), first pos is 0:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-period"), t("msg-please-enter-period-start-qty-first-pos-is-0"), function(btn, text){
           if(btn === "ok"){
             this.getNRows(grid, text.split(",")[0], text.split(",")[1]);
           }
@@ -69,7 +69,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Grid", {
     this.getViewModel().set("total.selected", selModel.getCount());
   },
   onGridRefresh: function(){
-    this.getView().mask(__("Loading"));
+    this.getView().mask(t("msg-loading"));
     this.getView().getStore().reload({
       callback: function(){
         this.getView().unmask();
@@ -81,7 +81,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Grid", {
     var limit = Number.parseInt(n),
       start = Number.parseInt(m);
     if(Number.isInteger(limit) && Number.isInteger(start)){
-      selectionGrid.mask(__("Loading"));
+      selectionGrid.mask(t("msg-loading"));
       selectionGrid.getStore().reload({
         callback: function(){
           selectionGrid.unmask();

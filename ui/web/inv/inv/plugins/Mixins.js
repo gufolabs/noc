@@ -69,7 +69,7 @@ Ext.define("NOC.inv.inv.plugins.Mixins", {
     if(controller.checkVisibility(this.isIntersecting)){
       Ext.Function.bind(callback, controller)();
     } else{
-      vm.set("icon", controller.generateIcon(true, "stop-circle-o", "grey", __("suspend")));
+      vm.set("icon", controller.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend")));
     }
   },
   generateIcon(isUpdatable, icon, color, msg){

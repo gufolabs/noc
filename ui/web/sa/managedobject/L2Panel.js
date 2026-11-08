@@ -8,7 +8,7 @@ console.debug("Defining NOC.sa.managedobject.L2Panel");
 
 Ext.define("NOC.sa.managedobject.L2Panel", {
   extend: "Ext.panel.Panel",
-  title: __("Switchports"),
+  title: t("app-title-switchports"),
   closable: false,
   layout: "fit",
 
@@ -26,25 +26,25 @@ Ext.define("NOC.sa.managedobject.L2Panel", {
           store: me.store,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
             },
             {
-              text: __("Untag."),
+              text: t("btn-untag"),
               dataIndex: "untagged_vlan",
               width: 50,
             },
             {
-              text: __("Tagged"),
+              text: t("header-tagged"),
               dataIndex: "tagged_vlans",
               hidden: true,
             },
             {
-              text: __("Tagged (Ranges)"),
+              text: t("btn-tagged-ranges"),
               dataIndex: "tagged_range",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
             },

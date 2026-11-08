@@ -5,7 +5,7 @@ Ext.define("Ext.ux.form.SearchField", {
 
   scope: null,
   handler: null,
-  emptyText: __("Search..."),
+  emptyText: t("btn-search"),
   // Auto-select
   typeAhead: false,
   typeAheadDelay: 200,

@@ -20,13 +20,13 @@ Ext.define("NOC.main.metricstream.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Scope"),
+          text: t("header-scope"),
           dataIndex: "scope",
           width: 200,
           renderer: NOC.render.Lookup("scope"),
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
@@ -37,21 +37,21 @@ Ext.define("NOC.main.metricstream.Application", {
         {
           name: "scope",
           xtype: "pm.metricscope.LookupField",
-          fieldLabel: __("Scope"),
+          fieldLabel: t("header-scope"),
           allowBlank: false,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "fields",
           xtype: "gridfield",
-          fieldLabel: __("Fields"),
+          fieldLabel: t("label-fields"),
           columns: [
             {
-              text: __("Metric Type"),
+              text: t("app-title-metrictype"),
               dataIndex: "metric_type",
               width: 150,
               editor: {
@@ -61,19 +61,19 @@ Ext.define("NOC.main.metricstream.Application", {
             },
             {
               dataIndex: "external_alias",
-              text: __("External Alias"),
+              text: t("header-external-alias"),
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Expose MX"),
+              text: t("header-expose-mx"),
               dataIndex: "expose_mx",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Expose Condition"),
+              text: t("header-expose-condition"),
               dataIndex: "expose_condition",
               width: 50,
               renderer: NOC.render.Bool,
@@ -88,7 +88,7 @@ Ext.define("NOC.main.metricstream.Application", {
   },
   filters: [
     {
-      title: __("By Active"),
+      title: t("app-title-by-active"),
       name: "is_active",
       ftype: "boolean",
     },

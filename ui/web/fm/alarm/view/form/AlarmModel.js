@@ -122,7 +122,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmModel", {
     favoriteText: {
       bind: "{selected.fav_status}",
       get: function(value){
-        return (value == true) ? __("Remove from Favorites") : __("Add to Favorites");
+        return (value == true) ? t("btn-remove-from-favorites") : t("btn-add-to-favorites");
       },
     }, 
     favIconCls: {
@@ -132,7 +132,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmModel", {
       },
     },
     acknowledgeText: function(get){
-      return get("isAcknowledge") ? get("selected.ack_user") : __("Ack");
+      return get("isAcknowledge") ? get("selected.ack_user") : t("msg-ack");
     },
     isAcknowledgeDisabled: {
       bind: "{selected.status}",
@@ -220,7 +220,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmModel", {
         var data = value.alarms;
         if(!Object.hasOwn(value, "alarms")){
           data = {
-            text: __("."),
+            text: t("header-text"),
             children: [],
           };
         }

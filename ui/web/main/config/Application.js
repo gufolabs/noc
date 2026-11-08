@@ -39,7 +39,7 @@ Ext.define("NOC.main.config.Application", {
 
     me.saveButton = Ext.create("Ext.button.Button", {
       name: "save",
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       disabled: true,
       scope: me,
@@ -64,22 +64,22 @@ Ext.define("NOC.main.config.Application", {
       }],
       columns: [
         {
-          text: __("Section"),
+          text: t("header-section"),
           dataIndex: "section",
           hidden: true,
         },
         {
-          text: __("Key"),
+          text: t("header-key"),
           dataIndex: "key",
           width: 300,
         },
         {
-          text: __("Default"),
+          text: t("header-default"),
           dataIndex: "default",
           flex: 1,
         },
         {
-          text: __("Value"),
+          text: t("header-value"),
           dataIndex: "value",
           editor: "textfield",
           flex: 1,
@@ -96,7 +96,7 @@ Ext.define("NOC.main.config.Application", {
               name: "config",
               itemId: "config",
               width: 150,
-              emptytext: __("Select Config ..."),
+              emptytext: t("btn-select-config"),
               store: me.configListStore,
               queryMode: "local",
               displayField: "name",
@@ -125,7 +125,7 @@ Ext.define("NOC.main.config.Application", {
       scope: me,
       success: me.onGetConfigList,
       failure: function(){
-        NOC.error(__("Failed to get configs list"));
+        NOC.error(t("msg-failed-to-get-configs-list"));
       },
     });
   },
@@ -145,7 +145,7 @@ Ext.define("NOC.main.config.Application", {
       scope: me,
       success: me.onConfigLoad,
       failure: function(){
-        NOC.error(__("Failed to get config"));
+        NOC.error(t("msg-failed-to-get-config"));
         me.resetAll();
       },
     });
@@ -192,10 +192,10 @@ Ext.define("NOC.main.config.Application", {
       jsonData: data,
       success: function(){
         this.loadConfig();
-        NOC.info(__("Config saved"));
+        NOC.info(t("msg-config-saved"));
       },
       failure: function(){
-        NOC.error(__("Failed to save config"));
+        NOC.error(t("msg-failed-to-save-config"));
       },
     });
   },

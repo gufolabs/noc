@@ -10,12 +10,12 @@ Ext.define("NOC.sa.managedobject.scripts.ShowMAC", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("MAC"),
+      text: t("header-mac"),
       dataIndex: "mac",
       width: 120,
     },
     {
-      text: __("Type"),
+      text: t("header-type"),
       dataIndex: "type",
       width: 70,
       renderer: NOC.render.Choices({
@@ -25,12 +25,12 @@ Ext.define("NOC.sa.managedobject.scripts.ShowMAC", {
       }),
     },
     {
-      text: __("VLAN"),
+      text: t("app-title-vlan"),
       dataIndex: "vlan_id",
       width: 50,
     },
     {
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interfaces",
       flex: 1,
       renderer: NOC.render.Join(", "),

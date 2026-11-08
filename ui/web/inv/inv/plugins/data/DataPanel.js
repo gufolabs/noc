@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
   requires: [
     "NOC.inv.inv.plugins.data.DataModel",
   ],
-  title: __("Data"),
+  title: t("app-title-data"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -38,7 +38,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
         {
           xtype: "textfield",
           itemId: "searchText",
-          emptyText: __("Search..."),
+          emptyText: t("btn-search"),
           width: 400,
           bind: {
             value: "{searchText}",
@@ -74,7 +74,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
             paddingRight: "20px",
           },
           bind: {
-            html: __("Total") + ": {totalCount}",
+            html: t("header-total") + ": {totalCount}",
           },
         },
       ],
@@ -87,26 +87,26 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
           stateId: "inv.inv-data-grid",
           bufferedRenderer: false,
           store: me.store,
-          emptyText: __("No data found"),
+          emptyText: t("label-no-data-found"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
             },
             {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "textfield",
@@ -190,7 +190,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
@@ -216,7 +216,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
       callback: function(){
         maskComponent.hide(messageId);
@@ -246,13 +246,13 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
   //
   onValueRender: function(value, meta, record){
     if(record.get("name") === "Managed Object"){
-      return this.up("panel").addIcon(value, "eye", __("Edit MO"), "sa.managedobject", record.get("item_id"));      
+      return this.up("panel").addIcon(value, "eye", t("btn-edit-mo"), "sa.managedobject", record.get("item_id"));
     }
     if(record.get("name") === "Model"){
-      return this.up("panel").addIcon(value, "eye", __("Edit model"), "inv.objectmodel", record.get("item_id"));
+      return this.up("panel").addIcon(value, "eye", t("btn-edit-model"), "inv.objectmodel", record.get("item_id"));
     }
     if(record.get("is_const")){
-      value = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + __("Read only") + "'></i>" + value;
+      value = "<i class='fa fa-lock' style='padding-right: 4px;' title='" + t("msg-read-only-2") + "'></i>" + value;
     } else{
       value = "<i class='fa fa-pencil' style='padding-right: 4px;'></i>" + (value || ""); 
     }

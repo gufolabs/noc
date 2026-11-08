@@ -20,7 +20,7 @@ Ext.define("NOC.main.desktop.Report", {
     var me = this;
 
     me.formTitle = Ext.create("Ext.container.Container", {
-      html: __("Report"),
+      html: t("msg-report"),
       style: {
         padding: "10",
         fontSize: "1.2em",
@@ -86,7 +86,7 @@ Ext.define("NOC.main.desktop.Report", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to get params form"));
+        NOC.error(t("msg-failed-to-get-params-form"));
       },
     });
     me.callParent();
@@ -131,7 +131,7 @@ Ext.define("NOC.main.desktop.Report", {
         shadowDOM.innerHTML = response.responseText;
       },
       failure: function(){
-        NOC.error(__("Failed to run report"));
+        NOC.error(t("msg-failed-to-run-report"));
       },
     });
   },

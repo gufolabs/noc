@@ -10,43 +10,43 @@ Ext.define("NOC.sa.managedobject.scripts.ShowInventory", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("Type"),
+      text: t("header-type"),
       dataIndex: "type",
       width: 90,
     },
     {
-      text: __("Number"),
+      text: t("header-number"),
       dataIndex: "number",
       width: 50,
     },
     {
-      text: __("Builtin"),
+      text: t("header-builtin"),
       dataIndex: "builtin",
       width: 50,
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Vendor"),
+      text: t("header-vendor"),
       dataIndex: "vendor",
       width: 90,
     },
     {
-      text: __("Part No"),
+      text: t("header-part-no"),
       dataIndex: "part_no",
       width: 230,
     },
     {
-      text: __("Revision"),
+      text: t("header-revision"),
       dataIndex: "revision",
       width: 70,
     },
     {
-      text: __("Serial No"),
+      text: t("header-serial-no"),
       dataIndex: "serial",
       width: 120,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },

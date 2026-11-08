@@ -24,14 +24,14 @@ Ext.define("NOC.core.M2MField", {
     });
 
     me.addButton = Ext.create("Ext.button.Button", {
-      text: __("Add"),
+      text: t("btn-add"),
       glyph: NOC.glyph.plus,
       scope: me,
       handler: me.onAddRecord,
     });
 
     me.deleteButton = Ext.create("Ext.button.Button", {
-      text: __("Delete"),
+      text: t("btn-delete"),
       glyph: NOC.glyph.minus,
       disabled: true,
       scope: me,

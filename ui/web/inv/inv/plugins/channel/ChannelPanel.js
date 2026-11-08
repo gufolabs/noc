@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.channel.ChannelPanel");
 
 Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
   extend: "NOC.inv.inv.plugins.VizSchemePluginAbstract",
-  title: __("Channels"),
+  title: t("app-title-channel"),
   itemId: "channelPanel",
   layout: "card",
   scrollable: false,
@@ -23,8 +23,8 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
   viewModel: {
     data: {
       createInvChannelBtnDisabled: true,
-      createInvChannelBtnText: __("Create"),
-      panelTitle: __("Create new channel"),
+      createInvChannelBtnText: t("app-title-create"),
+      panelTitle: t("app-title-create-new-channel"),
     },
   },
   gridColumns: [
@@ -35,7 +35,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       items: [
         {
           glyph: NOC.glyph.star,
-          tooltip: __("Mark/Unmark"),
+          tooltip: t("help-mark-unmark"),
           getColor: function(cls, meta, r){
             return r.get("fav_status") ? NOC.colors.starred : NOC.colors.unstarred;
           },
@@ -43,13 +43,13 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
         },
         {
           glyph: NOC.glyph.edit,
-          tooltip: __("Edit"),
+          tooltip: t("app-title-edit"),
           handler: "onEdit",
         },
       ],
     },
     {
-      text: __("Alarm"),
+      text: t("app-title-alarm"),
       dataIndex: "is_alarm",
       width: 50,
       renderer: function(value){
@@ -61,43 +61,43 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       },
     },
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Tech Domain"),
+      text: t("app-title-techdomain"),
       dataIndex: "tech_domain",
       width: 150,
       renderer: NOC.render.Lookup("tech_domain"),
     },
     {
-      text: __("Kind"),
+      text: t("header-kind"),
       dataIndex: "kind",
       width: 50,
     },
     {
-      text: __("Topo"),
+      text: t("header-topo"),
       dataIndex: "topology",
       width: 120,
     },
     {
-      text: __("Discriminator"),
+      text: t("label-discriminator"),
       dataIndex: "discriminator",
       width: 100,
     },
     {
-      text: __("From"),
+      text: t("btn-from"),
       dataIndex: "from_endpoint",
       flex: 1,
     },
     {
-      text: __("To"),
+      text: t("btn-to"),
       dataIndex: "to_endpoint",
       flex: 1,
     },
     {
-      text: __("Job"),
+      text: t("header-job"),
       dataIndex: "job_status",
       width: 30,
       renderer: function(value, metaData, record){
@@ -143,14 +143,14 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       grid = parentItems[0], 
       tbarItems = Ext.clone(this.tbar),
       closeBtn = {
-        text: __("Close"),
+        text: t("btn-close"),
         itemId: "closeInvChannelBtn",
         glyph: NOC.glyph.arrow_left,
         hidden: true,
         handler: "showChannelPanel",
       },
       magicBtn = {
-        text: __("Magic"),
+        text: t("btn-magic"),
         itemId: "adhocInvChannelBtn",
         glyph: NOC.glyph.magic,
         handler: "onAdHoc",
@@ -250,7 +250,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
           panel.close();
         }
       };
-    this.mask(__("Loading job panel ..."));
+    this.mask(t("msg-loading-job-panel"));
     NOC.launch("sa.job", "history", {
       "args": [recordId],
       "override": [
@@ -275,7 +275,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
     var currentId = this.getViewModel().get("currentId"),
       url = "/inv/inv/" + currentId + "/plugin/channel/adhoc/",
       maskComponent = this.up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show(__("Fetching data for ad-hoc channels"));
+      messageId = maskComponent.show(t("msg-fetching-data-for-ad-hoc-channels"));
     this.getViewModel().set("createInvChannelBtnDisabled", true);
     NOC.api.requestLegacy({
       url: url,
@@ -284,14 +284,14 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       success: function(response){
         var obj = Ext.decode(response.responseText);
         if(Ext.isEmpty(obj)){
-          NOC.info(__("No ad-hoc channels available"));
+          NOC.info(t("msg-no-ad-hoc-channels-available"));
         } else{
           this.down("[xtype=invchannelmagic] grid").getStore().loadData(obj);
           this.showMagicPanel();
         }
       },
       failure: function(response){
-        NOC.error(__("Failed to get data") + ": " + response.status);
+        NOC.error(t("msg-failed-to-get-data-value0", {value0: response.status}));
       },
       callback: function(){
         maskComponent.hide(messageId);
@@ -305,7 +305,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       var recordData = selected[0].getData(),
         url = "/inv/channel/" + recordData.id + "/viz/",
         maskComponent = this.up("[appId=inv.inv]").maskComponent,
-        messageId = maskComponent.show(__("Fetching data for draw scheme ..."));
+        messageId = maskComponent.show(t("msg-fetching-data-for-draw-scheme"));
       this.getViewModel().set("downloadSvgItemDisabled", false);
       NOC.api.requestLegacy({
         url: url,
@@ -316,7 +316,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
           this.renderScheme(obj.data);
         },
         failure: function(response){
-          NOC.error(__("Failed to get data") + ": " + response.status);
+          NOC.error(t("msg-failed-to-get-data-value0-2", {value0: response.status}));
         },
         callback: function(){
           maskComponent.hide(messageId);
@@ -333,7 +333,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
     var currentId = this.getViewModel().get("currentId"),
       selectedRecord = this.getSelectedRow(),
       maskComponent = this.up("[appId=inv.inv]").maskComponent,
-      message = Ext.isDefined(params.channel_id) ? __("Create new channel ..."): __("Update channel"),
+      message = Ext.isDefined(params.channel_id) ? t("btn-create-new-channel"): t("btn-update-channel"),
       messageId = maskComponent.show(message); 
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/channel/adhoc/",
@@ -366,7 +366,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       formPanel = panel.down("form"), 
       selectedRecord = this.getSelectedRow();
     if(Ext.isEmpty(selectedRecord)){
-      NOC.error(__("Please select a row"));
+      NOC.error(t("msg-please-select-a-row"));
       return;
     }
     this.addFields(formPanel, selectedRecord);
@@ -382,7 +382,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
     panel.add({
       xtype: "textfield",
       name: "name",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
       value: record.get("channel_name"),
     });
@@ -392,7 +392,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       name: "dry_run",
       inputValue: true,
       uncheckedValue: false,
-      fieldLabel: __("Dry Run"),
+      fieldLabel: t("label-dry-run"),
     });
   },
   //
@@ -401,7 +401,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       var field = {
         xtype: "textfield", // default field type
         name: "params." + param.name,
-        fieldLabel: param.label || param.key || __("Unknowns"),
+        fieldLabel: param.label || param.key || t("label-unknowns"),
         disabled: param.readonly,
         value: param.value || "",
         allowBlank: !param.required || false,
@@ -459,7 +459,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       id = r.get("id"),
       action = r.get("fav_status") ? "reset" : "set",
       maskComponent = this.up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show(__("Favorite status updating ...")),
+      messageId = maskComponent.show(t("msg-favorite-status-updating")),
       url = "/inv/channel/favorites/item/" + id + "/" + action + "/";
 
     NOC.api.requestLegacy({
@@ -472,7 +472,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
         grid.refresh();
       },
       failure: function(response){
-        NOC.error(__("Failed to get data") + ": " + response.status);
+        NOC.error(t("msg-failed-to-get-data-value0-3", {value0: response.status}));
       },
       callback: function(){
         maskComponent.hide(messageId);
@@ -532,8 +532,8 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
     this.down("#downloadButton").hide();
     this.down("#createInvChannelBtn").show();
     this.down("#closeInvChannelBtn").show();
-    vm.set("panelTitle", __("Create new channel"));
-    vm.set("createInvChannelBtnText", __("Create"));
+    vm.set("panelTitle", t("app-title-create-new-channel"));
+    vm.set("createInvChannelBtnText", t("app-title-create"));
     this.getLayout().setActiveItem(1);
     if(!Ext.isEmpty(channelGrid.getSelection())){
       var record = magicGrid.getStore().findRecord("channel_id", channelGrid.getSelection()[0].id);
@@ -550,11 +550,11 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
 
       if(Ext.isEmpty(query)){
         store.clearFilter();
-        view.emptyText = __("No records to display");
+        view.emptyText = t("btn-no-records-to-display");
         return;
       }
 
-      view.emptyText = __("No records found matching: ") + query;
+      view.emptyText = t("msg-no-records-found-matching-value0", {value0: query});
     
       if(grid.itemId === "invChannelMagicGrid"){
         store.filterBy(function(record){

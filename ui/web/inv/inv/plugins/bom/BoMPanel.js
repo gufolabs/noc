@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
     "NOC.inv.inv.plugins.bom.BoMController",
   ],
   itemId: "invinvbom",
-  title: __("BoM"),
+  title: t("app-title-bom"),
   closable: false,
   controller: "bom",
   layout: "fit",
@@ -28,13 +28,13 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
   tbar: [
     {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       handler: "onReload",
     },
     {
       xtype: "textfield",
       itemId: "searchText",
-      emptyText: __("Search..."),
+      emptyText: t("btn-search"),
       width: 400,
       bind: {
         value: "{searchText}",
@@ -65,7 +65,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
     },
     {
       glyph: NOC.glyph.download,
-      tooltip: __("Export to CSV"),
+      tooltip: t("help-export-to-csv"),
       handler: "onExport",
     },
     "->",
@@ -75,7 +75,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
         paddingRight: "20px",
       },
       bind: {
-        html: __("Total") + ": {totalCount}",
+        html: t("header-total") + ": {totalCount}",
       },
     },
   ],
@@ -102,7 +102,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
           width: 25,
           items: [
             {
-              tooltip: __("View"),
+              tooltip: t("btn-view"),
               handler: function(view, rowIndex, colIndex, item, e, record){
                 var app = view.up("[appId=inv.inv]"),
                   plugin = view.up("#invinvbom");
@@ -150,17 +150,17 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
           },
         },
         {
-          text: __("Vendor"),
+          text: t("header-vendor"),
           dataIndex: "vendor",
           width: 150,
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model",
           width: 250,
         },
         {
-          text: __("Location"),
+          text: t("header-location-d219c6"),
           dataIndex: "location",
           flex: 1,
           renderer: function(v){
@@ -177,22 +177,22 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
           },  
         },
         {
-          text: __("Serial"),
+          text: t("header-serial"),
           dataIndex: "serial",
           width: 150,
         },
         {
-          text: __("Asset#"),
+          text: t("btn-asset"),
           dataIndex: "asset_no",
           width: 150,
         },
         {
-          text: __("Revision"),
+          text: t("header-revision"),
           dataIndex: "revision",
           width: 100,
         },
         {
-          text: __("Version"),
+          text: t("header-version"),
           dataIndex: "fw_version",
           width: 100,
         },

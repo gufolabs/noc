@@ -34,7 +34,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     me.blankMenu = Ext.create("Ext.menu.Menu", {
       items: [
         {
-          text: __("Add State"),
+          text: t("btn-add-state"),
           glyph: NOC.glyph.plus,
           scope: me,
           handler: me.onAddState,
@@ -61,7 +61,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
       },
       buttons: [
         {
-          text: __("Submit"),
+          text: t("btn-submit"),
           disabled: true,
           formBind: true,
           scope: me,
@@ -75,16 +75,16 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         "-",
         {
           xtype: "button",
-          tooltip: __("Delete Workflow"),
-          text: __("Delete"),
+          tooltip: t("help-delete-workflow"),
+          text: t("btn-delete"),
           glyph: NOC.glyph.remove,
           scope: this,
           handler: this.onDeleteClick,
         },
         {
           xtype: "button",
-          tooltip: __("Save Workflow"),
-          text: __("Save"),
+          tooltip: t("help-save-workflow"),
+          text: t("btn-save"),
           glyph: NOC.glyph.save,
           scope: this,
           handler: this.onSaveClick,
@@ -93,8 +93,8 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           xtype: "button",
           itemId: "undoButton",
-          tooltip: __("Undo"),
-          text: __("Undo"),
+          tooltip: t("help-undo"),
+          text: t("help-undo"),
           disabled: true,
           glyph: NOC.glyph.undo,
           scope: this,
@@ -103,8 +103,8 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           xtype: "button",
           itemId: "redoButton",
-          tooltip: __("Redo"),
-          text: __("Redo"),
+          tooltip: t("help-redo"),
+          text: t("help-redo"),
           disabled: true,
           glyph: NOC.glyph.repeat,
           scope: this,
@@ -162,7 +162,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
   getEditorModule: function(){
     var module = window.map;
     if(!module || !module.WorkflowEditor){
-      NOC.error(__("Workflow editor module is not loaded"));
+      NOC.error(t("msg-workflow-editor-module-is-not-loaded"));
       return null;
     }
     return module;
@@ -216,7 +216,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
           me.draw(Ext.decode(response.responseText));
         },
         failure: function(){
-          NOC.error(__("Failed to get data"));
+          NOC.error(t("msg-failed-to-get-data"));
         },
       });
     } else{
@@ -251,8 +251,8 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     }
     if(me.isInspectorDirty){
       Ext.Msg.show({
-        title: __("Unsaved data"),
-        msg: __("You have unsaved changes in inspector. Save or cancel the changes."),
+        title: t("app-title-unsaved-data"),
+        msg: t("msg-you-have-unsaved-changes-in-inspector-save-or-cancel-the-changes"),
         buttons: Ext.Msg.YESNOCANCEL,
         icon: Ext.MessageBox.WARNING,
         modal: true,
@@ -384,7 +384,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
       record;
 
     if(!modelName){
-      NOC.error(__("Unknown type: ") + data.type);
+      NOC.error(t("msg-unknown-type-value0", {value0: data.type}));
       return;
     }
     record = Ext.create(modelName);
@@ -416,31 +416,31 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "allowed_models",
           xtype: "core.tagfield",
           url: "/main/ref/modelid/lookup/",
-          fieldLabel: __("Allowed models"),
-          tooltip: __("Models allowed set workflow"),
+          fieldLabel: t("label-allowed-models-2"),
+          tooltip: t("help-models-allowed-set-workflow"),
         },
         {
           xtype: "fieldset",
           layout: "vbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -450,25 +450,25 @@ Ext.define("NOC.wf.workflow.WFEditor", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
             },
           ],
         },
       ];
-    me.showInspector(data, fields, __("Workflow Inspector"));
+    me.showInspector(data, fields, t("msg-workflow-inspector"));
   },
   showStateInspector: function(data){
     var me = this,
@@ -476,62 +476,62 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "is_default",
           xtype: "checkbox",
-          boxLabel: __("Default"),
+          boxLabel: t("header-default"),
         },
         {
           name: "is_productive",
           xtype: "checkbox",
-          boxLabel: __("Productive"),
+          boxLabel: t("header-productive"),
         },
         {
           name: "is_wiping",
           xtype: "checkbox",
-          boxLabel: __("Wiping"),
+          boxLabel: t("header-wiping"),
         },
         {
           name: "update_last_seen",
           xtype: "checkbox",
-          boxLabel: __("Update Last Seen"),
+          boxLabel: t("header-update-last-seen"),
         },
         {
           name: "ttl",
           xtype: "numberfield",
-          fieldLabel: __("TTL"),
+          fieldLabel: t("header-ttl"),
           allowBlank: true,
           minValue: 0,
-          emptyText: __("Not Limited"),
+          emptyText: t("label-not-limited"),
         },
         {
           name: "update_expired",
           xtype: "checkbox",
-          boxLabel: __("Update Expiration"),
+          boxLabel: t("label-update-expiration"),
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
         },
         {
           name: "job_handler",
           xtype: "textfield",
-          fieldLabel: __("Job Handler"),
+          fieldLabel: t("label-job-handler"),
         },
         {
           xtype: "fieldset",
           layout: "vbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -541,19 +541,19 @@ Ext.define("NOC.wf.workflow.WFEditor", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
             },
           ],
@@ -561,17 +561,17 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           name: "on_enter_handlers",
           xtype: "stringsfield",
-          fieldLabel: __("On Enter Handlers"),
+          fieldLabel: t("label-on-enter-handlers"),
           allowBlank: true,
         },
         {
           name: "on_leave_handlers",
           xtype: "stringsfield",
-          fieldLabel: __("On Leave Handlers"),
+          fieldLabel: t("label-on-leave-handlers"),
           allowBlank: true,
         },
       ];
-    me.showInspector(data, fields, __("State Inspector"));
+    me.showInspector(data, fields, t("msg-state-inspector"));
   },
   showTransitionInspector: function(data){
     var me = this,
@@ -579,35 +579,35 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           name: "label",
           xtype: "textfield",
-          fieldLabel: __("Label"),
+          fieldLabel: t("header-label"),
           allowBlank: false,
         },
         {
           name: "event",
           xtype: "textfield",
-          fieldLabel: __("Event"),
+          fieldLabel: t("msg-event"),
           allowBlank: true,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           name: "enable_manual",
           xtype: "checkbox",
-          boxLabel: __("Enable Manual"),
+          boxLabel: t("label-enable-manual"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "vbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -617,19 +617,19 @@ Ext.define("NOC.wf.workflow.WFEditor", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
             },
           ],
@@ -637,11 +637,11 @@ Ext.define("NOC.wf.workflow.WFEditor", {
         {
           name: "handlers",
           xtype: "stringsfield",
-          fieldLabel: __("Handlers"),
+          fieldLabel: t("nav-handler"),
           allowBlank: true,
         },
       ];
-    me.showInspector(data, fields, __("Transition Inspector"));
+    me.showInspector(data, fields, t("msg-transition-inspector"));
   },
   onSubmitInspector: function(){
     var me = this,
@@ -681,8 +681,8 @@ Ext.define("NOC.wf.workflow.WFEditor", {
   onDeleteClick: function(){
     var me = this;
     Ext.Msg.show({
-      title: __("Delete Workflow?"),
-      msg: __("Do you wish to delete Workflow? This operation cannot be undone!"),
+      title: t("app-title-delete-workflow"),
+      msg: t("msg-do-you-wish-to-delete-workflow-this-operation-cannot-be-undone"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -702,11 +702,11 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     var me = this,
       ret;
     if(!me.configId){
-      NOC.error(__("Create new diagram not implement"));
+      NOC.error(t("btn-create-new-diagram-not-implement"));
       return;
     }
     if(!me.editor){
-      NOC.error(__("Workflow editor is not initialized"));
+      NOC.error(t("msg-workflow-editor-is-not-initialized"));
       return;
     }
 
@@ -718,10 +718,10 @@ Ext.define("NOC.wf.workflow.WFEditor", {
       scope: me,
       success: function(){
         me.onClose();
-        NOC.info(__("Config saved"));
+        NOC.info(t("msg-config-saved"));
       },
       failure: function(){
-        NOC.error(__("Failed save data"));
+        NOC.error(t("msg-failed-save-data"));
       },
     });
   },
@@ -836,8 +836,8 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     var me = this;
     if(me.isInspectorDirty){
       Ext.Msg.show({
-        title: __("Unsaved data"),
-        msg: __("You have unsaved changes in inspector. Save or cancel the changes."),
+        title: t("app-title-unsaved-data"),
+        msg: t("msg-you-have-unsaved-changes-in-inspector-save-or-cancel-the-changes"),
         buttons: Ext.Msg.YESNOCANCEL,
         icon: Ext.MessageBox.WARNING,
         modal: true,

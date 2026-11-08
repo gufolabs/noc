@@ -33,7 +33,7 @@ Ext.define("NOC.inv.inv.plugins.channel.MagicPanel", {
           items: [
             {
               glyph: NOC.glyph.plus,
-              tooltip: __("Create or update channel"),
+              tooltip: t("help-create-or-update-channel"),
               handler: function(view, rowIndex){
                 var grid = view.up("grid"),
                   selectionModel = grid.getSelectionModel();
@@ -50,7 +50,7 @@ Ext.define("NOC.inv.inv.plugins.channel.MagicPanel", {
               glyph = Ext.isEmpty(record.get("channel_id")) ? NOC.glyph.plus : NOC.glyph.edit,
               glyphFontFamily = Ext._glyphFontFamily;
 
-            item.tooltip = Ext.isEmpty(record.get("channel_id")) ? __("Create channel") : __("Update channel");
+            item.tooltip = Ext.isEmpty(record.get("channel_id")) ? t("btn-create-channel") : t("btn-update-channel");
             ret = Ext.isFunction(this.origRenderer) ? this.origRenderer.apply(scope, arguments) || "" : "";
 
             meta.tdCls += " " + Ext.baseCSSPrefix + "action-col-cell";
@@ -77,36 +77,36 @@ Ext.define("NOC.inv.inv.plugins.channel.MagicPanel", {
           },
         },
         {
-          text: __("Channel"),
+          text: t("header-channel"),
           dataIndex: "channel_name",
           width: 250,
           renderer: function(v){
             if(v){
               return v;
             }
-            return "<i>" + __("Create new...") + "</i>";
+            return "<i>" + t("btn-create-new") + "</i>";
           },
         },
         {
-          text: __("Start"),
+          text: t("header-start"),
           dataIndex: "start_endpoint",
           flex: 1,
           renderer: NOC.render.Lookup("start_endpoint"),
         },
         {
-          text: __("End"),
+          text: t("btn-end"),
           dataIndex: "end_endpoint",
           flex: 1,
           renderer: NOC.render.Lookup("end_endpoint"),
         },
         {
-          text: __("Controller"),
+          text: t("label-controller"),
           dataIndex: "controller",
           renderer: NOC.render.Lookup("controller"),
           width: 150,
         },
         {
-          text: __("Status"),
+          text: t("header-status"),
           dataIndex: "status",
           width: 50,
           renderer: function(v){
@@ -135,11 +135,11 @@ Ext.define("NOC.inv.inv.plugins.channel.MagicPanel", {
   onSelectionChange: function(selModel, selections){
     if(selections.length > 0){
       var isNew = Ext.isEmpty(selections[0].get("channel_id")),
-        title = isNew ? __("Create new channel") : __("Update channel") + " " + selections[0].get("channel_name");
-      this.fireEvent("magicselectionchange", false, isNew ? __("Create") : __("Update"), title);
+        title = isNew ? t("app-title-create-new-channel") : t("msg-update-channel-value0", {value0: selections[0].get("channel_name")});
+      this.fireEvent("magicselectionchange", false, isNew ? t("app-title-create") : t("status-update"), title);
     }
   },
   onDeselectChange: function(){
-    this.fireEvent("magicselectionchange", true, __("Create"), __("Create new channel"));
+    this.fireEvent("magicselectionchange", true, t("app-title-create"), t("app-title-create-new-channel"));
   },
 });

@@ -24,14 +24,14 @@ Ext.define("NOC.core.SVGField", {
     '<label for="{cmpId}-inputEl-fileInputEl" class="x-btn x-btn-default-toolbar-small" style="height:32px">',
     '<span style="font-family:FontAwesome" class="x-btn-glyph x-btn-icon-el-default-toolbar-small">{uploadIcon}</span>',
     '<span class="x-btn-innner x-btn-inner-default-toolbar-small">',
-    __("Select Image..."),
+    t("btn-select-image"),
     "</span>",
     "</label>",
     '<input id="{cmpId}-inputEl-fileDownloadEl" type="button" style="display:none">',
     '<label for="{cmpId}-inputEl-fileDownloadEl" class="x-btn x-btn-default-toolbar-small x-item-disabled x-btn-disabled" style="height:32px">',
     '<span style="font-family:FontAwesome" class="x-btn-glyph x-btn-icon-el-default-toolbar-small">{downloadIcon}</span>',
     '<span class="x-btn-innner x-btn-inner-default-toolbar-small">',
-    __("Download Image..."),
+    t("btn-download-image"),
     "</span>",
     "</label>",
     "</div>",
@@ -91,7 +91,7 @@ Ext.define("NOC.core.SVGField", {
       me.fireEvent("change", me, contents);
     };
     reader.onerror = function(){
-      NOC.error(__("Cannot read file"));
+      NOC.error(t("msg-cannot-read-file"));
     };
     reader.readAsText(file);
   },

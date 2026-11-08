@@ -38,7 +38,7 @@ Ext.define("NOC.inv.interface.Application", {
           items: [
             {
               scope: me,
-              tooltip: __("Show MACs"),
+              tooltip: t("help-show-macs"),
               glyph: NOC.glyph.play,
               handler: me.showMAC,
               disabled: !me.permissions.get_mac,
@@ -51,10 +51,10 @@ Ext.define("NOC.inv.interface.Application", {
           renderer: function(val, metadata, record){
             if(record.get("link")){
               this.items[0].glyph = NOC.glyph.unlink;
-              this.items[0].tooltip = __("Unlink");
+              this.items[0].tooltip = t("msg-unlink");
             } else{
               this.items[0].glyph = NOC.glyph.link;
-              this.items[0].tooltip = __("Link");
+              this.items[0].tooltip = t("msg-link");
             }
             metadata.style = "cursor: pointer;";
             return val;
@@ -68,36 +68,36 @@ Ext.define("NOC.inv.interface.Application", {
           ],
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
         },
         {
-          text: __("MAC"),
+          text: t("header-mac"),
           dataIndex: "mac",
         },
         {
-          text: __("LAG"),
+          text: t("header-lag"),
           dataIndex: "lag",
         },
         {
-          text: __("Link"),
+          text: t("msg-link"),
           dataIndex: "link",
           renderer: NOC.render.Lookup("link"),
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           renderer: NOC.render.Lookup("profile"),
           editor: "inv.interfaceprofile.LookupField",
         },
         {
-          text: __("Project"),
+          text: t("label-project"),
           dataIndex: "project",
           renderer: NOC.render.Lookup("project"),
           editor: "project.project.LookupField",
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           editor: {
             xtype: "statefield",
@@ -106,17 +106,17 @@ Ext.define("NOC.inv.interface.Application", {
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Service"),
+          text: t("header-service"),
           dataIndex: "service",
           renderer: NOC.render.Lookup("service"),
           editor: "sa.service.LookupField",
         },
         {
-          text: __("Protocols"),
+          text: t("nav-protocol"),
           dataIndex: "enabled_protocols",
         },
         {
-          text: __("Caps"),
+          text: t("header-caps"),
           dataIndex: "caps",
           onClick: me.onCapsClick,
           renderer: function(value){
@@ -128,12 +128,12 @@ Ext.define("NOC.inv.interface.Application", {
           },
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 200,
         },
         {
-          text: __("ifIndex"),
+          text: t("header-ifindex"),
           dataIndex: "ifindex",
           hidden: false,
         },
@@ -143,53 +143,53 @@ Ext.define("NOC.inv.interface.Application", {
           ptype: "subtable",
           association: "subinterfaces",
           headerWidth: 32,
-          emptyText: __("No SubInterfaces"),
+          emptyText: t("label-no-subinterfaces"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
             },
             {
-              text: __("Untagged"),
+              text: t("header-untagged"),
               dataIndex: "untagged_vlan",
             },
             {
-              text: __("Tagged"),
+              text: t("header-tagged"),
               dataIndex: "tagged_vlans",
             },
             {
-              text: __("L2 Domain"),
+              text: t("header-l2-domain"),
               dataIndex: "l2_domain",
               renderer: NOC.render.ObjectLookup("l2_domain"),
             },
             {
-              text: __("VFR"),
+              text: t("header-vfr"),
               dataIndex: "vrf",
             },
             {
-              text: __("IPv4"),
+              text: t("choice-ipv4"),
               dataIndex: "ipv4_addresses",
               renderer: NOC.render.Join(","),
             },
             {
-              text: __("IPv6"),
+              text: t("choice-ipv6"),
               dataIndex: "ipv6_addresses",
               renderer: NOC.render.Join(","),
             },
             {
-              text: __("Project"),
+              text: t("label-project"),
               dataIndex: "project",
               renderer: NOC.render.ObjectLookup("project"),
               editor: "project.project.LookupField",
             },
             {
-              text: __("Service"),
+              text: t("header-service"),
               dataIndex: "service",
               renderer: NOC.render.ObjectLookup("service"),
               editor: "sa.service.LookupField",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
             },
           ],
@@ -212,19 +212,19 @@ Ext.define("NOC.inv.interface.Application", {
   },
   filters: [
     {
-      title: __("By Object"),
+      title: t("app-title-by-object"),
       name: "managed_object",
       ftype: "lookup",
       lookup: "sa.managedobject",
     },
     {
-      title: __("By Labels"),
+      title: t("choice-by-labels"),
       name: "labels",
       ftype: "label",
       filterProtected: false,
     },
     {
-      title: __("By Type"),
+      title: t("app-title-by-type"),
       name: "type",
       ftype: "lookup",
       lookup: "inv.interface.type",
@@ -260,13 +260,13 @@ Ext.define("NOC.inv.interface.Application", {
       success: function(){
         me.app.onRefresh();
         if(isNewRecord){
-          NOC.info(__("Created interface: ") + r.get("name"));
+          NOC.info(t("msg-created-interface-value0", {value0: r.get("name")}));
         } else{
-          NOC.info(__("Saved"));
+          NOC.info(t("msg-saved-2"));
         }
       },
       failure: function(){
-        NOC.error(__("Failed to set data"));
+        NOC.error(t("msg-failed-to-set-data"));
       },
     });
   },
@@ -292,7 +292,7 @@ Ext.define("NOC.inv.interface.Application", {
   unlinkInterface: function(ifaceId, ifaceName){
     var me = this;
     Ext.Msg.show({
-      title: __("Unlink interface"),
+      title: t("app-title-unlink-interface"),
       msg: `Do you wish to unlink interface ${ifaceName}?`,
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
@@ -323,7 +323,7 @@ Ext.define("NOC.inv.interface.Application", {
   linkInterface: function(ifaceId, ifaceName){
     var me = this;
     Ext.create("NOC.inv.interface.LinkForm", {
-      title: Ext.String.format(__("Link") + " {0} " + __("with"), ifaceName),
+      title: t("msg-link-interface-with", {name: ifaceName}),
       app: me,
       ifaceId: ifaceId,
     });
@@ -357,7 +357,7 @@ Ext.define("NOC.inv.interface.Application", {
           },
         },
       ],
-      errorMsg: __("Failed to get MACs"),
+      errorMsg: t("msg-failed-to-get-macs"),
       cb: me.showMACForm,
     });
   },
@@ -371,13 +371,13 @@ Ext.define("NOC.inv.interface.Application", {
         title: `MACs on ${scope.currentRecord.get("name")}`,
       });
     } else{
-      NOC.error(__("Failed to get data"));
+      NOC.error(t("msg-failed-to-get-data"));
     }
   },
   //
   onCapsClick: function(record){
     Ext.create("NOC.sa.managedobject.CapsForm", {
-      title: Ext.String.format(__("Capabilities of") + " {0}", record.get("name")),
+      title: t("msg-capabilities-of", {name: record.get("name")}),
       app: this,
       rowId: record.get("id"),
       dataCaps: record.get("caps"),

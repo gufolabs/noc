@@ -24,7 +24,7 @@ Ext.define("NOC.inv.protocol.Application", {
     var me = this;
 
     // me.cardButton = Ext.create("Ext.button.Button", {
-    //     text: __("Card"),
+    //     text: t("Card"),
     //     glyph: NOC.glyph.eye,
     //     scope: me,
     //     handler: me.onCard
@@ -41,30 +41,30 @@ Ext.define("NOC.inv.protocol.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Technology"),
+          text: t("header-technology"),
           dataIndex: "technology",
           width: 150,
           renderer: NOC.render.Lookup("technology"),
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 100,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 30,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Connection Schema"),
+          text: t("header-connection-schema"),
           dataIndex: "connection_schema",
           width: 100,
         },
@@ -74,56 +74,56 @@ Ext.define("NOC.inv.protocol.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: false,
         },
         {
           name: "technology",
           xtype: "inv.technology.LookupField",
-          fieldLabel: __("Technology"),
+          fieldLabel: t("header-technology"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "connection_schema",
           xtype: "combobox",
-          fieldLabel: __("Connection Schema"),
+          fieldLabel: t("header-connection-schema"),
           allowBlank: true,
           labelWidth: 200,
           defaultValue: "BD",
           store: [
-            ["U", __("Unidirectional")],
-            ["BO", __("Bidirectional over One Connection")],
-            ["BD", __("Bidirectional over Differ Connection")],
+            ["U", t("msg-unidirectional")],
+            ["BO", t("msg-bidirectional-over-one-connection")],
+            ["BD", t("msg-bidirectional-over-differ-connection")],
           ],
           uiStyle: "medium",
         },
         {
           name: "data",
-          fieldLabel: __("Data"),
+          fieldLabel: t("app-title-data"),
           xtype: "gridfield",
           allowBlank: true,
           columns: [
             {
-              text: __("Interface"),
+              text: t("header-interface"),
               dataIndex: "interface",
               editor: {
                 xtype: "inv.modelinterface.LookupField",
@@ -132,12 +132,12 @@ Ext.define("NOC.inv.protocol.Application", {
               },
             },
             {
-              text: __("Key"),
+              text: t("header-key"),
               dataIndex: "attr",
               editor: "textfield",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               editor: "textfield",
             },
@@ -147,35 +147,35 @@ Ext.define("NOC.inv.protocol.Application", {
         {
           name: "discriminator",
           xtype: "combobox",
-          fieldLabel: __("Discriminator"),
+          fieldLabel: t("label-discriminator"),
           allowBlank: true,
           store: [
-            ["loader", __("From Loader")],
-            ["lambda", __("Optical Lambda")],
-            ["odu", __("OTN ODU")],
-            ["vlan", __("VLAN")],
+            ["loader", t("msg-from-loader")],
+            ["lambda", t("msg-optical-lambda")],
+            ["odu", t("msg-otn-odu")],
+            ["vlan", t("app-title-vlan")],
           ],
           uiStyle: "medium",
         },
         {
           name: "discriminator_loader",
           xtype: "main.ref.protocoldiscriminatorsource.LookupField",
-          fieldLabel: __("Discriminator Source"),
+          fieldLabel: t("label-discriminator-source"),
           allowBlank: true,
         },
         {
           name: "discriminator_default",
           xtype: "textfield",
-          fieldLabel: __("Discriminator Default"),
+          fieldLabel: t("label-discriminator-default"),
           allowBlank: true,
         },
       ],
 
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -184,7 +184,7 @@ Ext.define("NOC.inv.protocol.Application", {
 
       filters: [
         {
-          title: __("By Technology"),
+          title: t("app-title-by-technology"),
           name: "technology",
           ftype: "lookup",
           lookup: "inv.technology",

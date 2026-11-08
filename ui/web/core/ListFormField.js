@@ -23,21 +23,21 @@ Ext.define("NOC.core.ListFormField", {
     me.fields = me.getClonedFieldConfigs(Ext.clone(this.items));
 
     me.appendButton = Ext.create("Ext.button.Button", {
-      text: __("Append"),
+      text: t("btn-append"),
       glyph: NOC.glyph.plus,
       scope: me,
       handler: Ext.pass(me.onAddRecord, true),
     });
 
     me.insertButton = Ext.create("Ext.button.Button", {
-      text: __("Insert"),
+      text: t("btn-insert"),
       glyph: NOC.glyph.indent,
       scope: me,
       handler: Ext.pass(me.onAddRecord),
     });
 
     me.deleteButton = Ext.create("Ext.button.Button", {
-      text: __("Delete"),
+      text: t("btn-delete"),
       glyph: NOC.glyph.minus,
       disabled: true,
       scope: me,
@@ -45,7 +45,7 @@ Ext.define("NOC.core.ListFormField", {
     });
 
     me.cloneButton = Ext.create("Ext.button.Button", {
-      text: __("Clone"),
+      text: t("btn-clone"),
       glyph: NOC.glyph.copy,
       disabled: true,
       scope: me,
@@ -53,14 +53,14 @@ Ext.define("NOC.core.ListFormField", {
     });
 
     me.moveUpButton = Ext.create("Ext.button.Button", {
-      text: __("Move Up"),
+      text: t("btn-move-up"),
       glyph: NOC.glyph.caret_up,
       scope: me,
       handler: me.onMoveUp,
     });
 
     me.moveDownButton = Ext.create("Ext.button.Button", {
-      text: __("Move Down"),
+      text: t("btn-move-down"),
       glyph: NOC.glyph.caret_down,
       scope: me,
       handler: me.onMoveDown,

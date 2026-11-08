@@ -56,7 +56,7 @@ Ext.define("NOC.sa.monitor.Application", {
       region: "south",
       reference: "logPanel",
       collapsed: true,
-      title: __("Discovery Job Log"),
+      title: t("app-title-discovery-job-log"),
       height: "50%",
     },
   ],

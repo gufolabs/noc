@@ -28,14 +28,14 @@ Ext.define("NOC.vc.l2domain.Application", {
     var me = this;
 
     me.showMapButton = Ext.create("Ext.button.Button", {
-      text: __("Show Map"),
+      text: t("btn-show-map"),
       glyph: NOC.glyph.globe,
       scope: me,
       handler: me.onShowMap,
     });
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -44,18 +44,18 @@ Ext.define("NOC.vc.l2domain.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 150,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Obj."),
+          text: t("header-obj"),
           dataIndex: "count",
           width: 30,
           align: "right",
@@ -68,44 +68,44 @@ Ext.define("NOC.vc.l2domain.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "profile",
           xtype: "vc.l2domainprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: false,
         },
         {
           name: "vlan_template",
           xtype: "vc.vlantemplate.LookupField",
-          fieldLabel: __("VLAN Template"),
+          fieldLabel: t("app-title-vlantemplate"),
           allowBlank: true,
         },
         {
           name: "default_vlan_profile",
           xtype: "vc.vlanprofile.LookupField",
-          fieldLabel: __("Default VLAN Profile"),
+          fieldLabel: t("label-default-vlan-profile"),
           allowBlank: true,
         },
         {
           name: "vlan_discovery_policy",
           xtype: "combobox",
-          fieldLabel: __("VLAN Discovery Policy"),
+          fieldLabel: t("label-vlan-discovery-policy"),
           allowBlank: false,
           uiStyle: "medium",
           value: "P",
@@ -119,16 +119,16 @@ Ext.define("NOC.vc.l2domain.Application", {
         {
           name: "vlan_discovery_filter",
           xtype: "vc.vlanfilter.LookupField",
-          fieldLabel: __("VLAN Discovery Filter"),
+          fieldLabel: t("label-vlan-discovery-filter"),
           allowBlank: true,
         },
         {
           name: "pools",
           xtype: "gridfield",
-          fieldLabel: __("VLAN Pools"),
+          fieldLabel: t("label-vlan-pools"),
           columns: [
             {
-              text: __("Pool"),
+              text: t("label-pool"),
               dataIndex: "pool",
               width: 200,
               editor: {
@@ -138,12 +138,12 @@ Ext.define("NOC.vc.l2domain.Application", {
             },
             {
               dataIndex: "description",
-              text: __("Description"),
+              text: t("label-description"),
               editor: "textfield",
               width: 150,
             },
             {
-              text: __("VLAN Filter"),
+              text: t("app-title-vlanfilter"),
               dataIndex: "vlan_filter",
               width: 200,
               editor: {
@@ -156,7 +156,7 @@ Ext.define("NOC.vc.l2domain.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -165,20 +165,20 @@ Ext.define("NOC.vc.l2domain.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -187,7 +187,7 @@ Ext.define("NOC.vc.l2domain.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["vc.L2Domain"],

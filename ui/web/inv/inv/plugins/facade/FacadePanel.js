@@ -9,5 +9,5 @@ console.debug("Defining NOC.inv.inv.plugins.facade.FacadePanel");
 Ext.define("NOC.inv.inv.plugins.facade.FacadePanel", {
   extend: "NOC.inv.inv.plugins.FileSchemePluginAbstract",
   itemId: "facadePanel",
-  title: __("Facade"),
+  title: t("app-title-facade-2"),
 });

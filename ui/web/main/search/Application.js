@@ -16,7 +16,7 @@ Ext.define("NOC.main.search.Application", {
     var me = this;
     me.store = Ext.create("NOC.main.search.SearchStore");
     me.searchField = Ext.create("Ext.ux.form.SearchField", {
-      fieldLabel: __("Search"),
+      fieldLabel: t("app-title-search"),
       labelWidth: 40,
       width: "500",
       explicitSubmit: true,
@@ -28,7 +28,7 @@ Ext.define("NOC.main.search.Application", {
       store: me.store,
       columns: [
         {
-          text: __("Result"),
+          text: t("header-result"),
           xtype: "templatecolumn",
           flex: 1,
           tpl: "<div class='noc-search-title'>{title}</div>" +
@@ -81,7 +81,7 @@ Ext.define("NOC.main.search.Application", {
   //
   doSearch: function(query){
     var me = this;
-    NOC.msg.started(__("Starting search"));
+    NOC.msg.started(t("msg-starting-search"));
     me.mask();
     NOC.api.requestLegacy({
       url: "/main/search/",
@@ -92,12 +92,12 @@ Ext.define("NOC.main.search.Application", {
       scope: me,
       success: function(response){
         me.unmask();
-        NOC.msg.complete(__("Search complete"));
+        NOC.msg.complete(t("msg-search-complete"));
         me.showResult(Ext.decode(response.responseText));
       },
       failure: function(){
         me.unmask();
-        NOC.msg.failed(__("Failed to search"));
+        NOC.msg.failed(t("msg-failed-to-search"));
       },
     });
   },
@@ -106,7 +106,7 @@ Ext.define("NOC.main.search.Application", {
     var me = this;
     me.searchField.focus();
     me.store.loadData(result);
-    me.totalField.setValue(__("Total: ") + result.length);
+    me.totalField.setValue(t("msg-total-value0-4", {value0: result.length}));
   },
   //
   onSelect: function(model, record){

@@ -19,12 +19,12 @@ Ext.define("NOC.main.imagestore.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 150,
         },
@@ -34,14 +34,14 @@ Ext.define("NOC.main.imagestore.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "meduim",
         },
         {
           name: "content_type",
           xtype: "displayfield",
-          fieldLabel: __("Content Type"),
+          fieldLabel: t("label-content-type"),
           allowBlank: true,
           uiStyle: "meduim",
         },
@@ -52,7 +52,7 @@ Ext.define("NOC.main.imagestore.Application", {
             {
               xtype: "displayfield",
               name: "filename",
-              fieldLabel: __("File name"),
+              fieldLabel: t("label-file-name"),
               allowBlank: true,
               width: 400,
             },
@@ -62,7 +62,7 @@ Ext.define("NOC.main.imagestore.Application", {
               flex: 1,
               buttonOnly: true,
               hideLabel: true,
-              buttonText: __("Select File..."),
+              buttonText: t("label-select-file-2"),
               listeners: {
                 change: me.setAttachmentName,
               },
@@ -96,10 +96,10 @@ Ext.define("NOC.main.imagestore.Application", {
         var me = this;
         me.showItem(me.ITEM_GRID);
         me.reloadStore();
-        NOC.info(__("Records has been saved"));
+        NOC.info(t("msg-records-has-been-saved"));
       },
       failure: function(){
-        NOC.error(__("Failed"));
+        NOC.error(t("msg-failed"));
       },
     });
   },

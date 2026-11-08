@@ -21,12 +21,12 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
       objectId: null,
       autoReload: true,
       autoReloadIcon: "xf021", // NOC.glyph.refresh
-      autoReloadText: __("Auto reload : ON"),
-      icon: `<i class='fa fa-circle' style='color:${NOC.colors.yes};width:16px;' data-qtip='${__("online")}'></i>`,
+      autoReloadText: t("label-auto-reload-on"),
+      icon: `<i class='fa fa-circle' style='color:${NOC.colors.yes};width:16px;' data-qtip='${t("msg-online")}'></i>`,
     },
   },
   //
-  title: __("Alarms"),
+  title: t("header-alarms"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -35,7 +35,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
     var me = this;
 
     me.defaultRoot = {
-      text: __("."),
+      text: t("header-text"),
       children: [],
     };
 
@@ -50,10 +50,10 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
       useArrows: true,
       stateful: true,
       stateId: "inv.inv-alarm-alarm",
-      emptyText: __("No Alarms"),
+      emptyText: t("label-no-alarms"),
       tbar: [
         {
-          text: __("Reload"),
+          text: t("btn-reload"),
           iconAlign: "right",
           enableToggle: true,
           bind: {
@@ -83,7 +83,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
           items: [
             {
               glyph: NOC.glyph.eye,
-              tooltip: __("Show alarm detail"),
+              tooltip: t("help-show-alarm-detail"),
               handler: function(){
                 NOC.launch("fm.alarm", "history", {
                   args: [arguments[5].id], // record
@@ -103,17 +103,17 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
         {
           xtype: "treecolumn",
           dataIndex: "title",
-          text: __("Title"),
+          text: t("label-title"),
           width: 400,
         },
         {
-          text: __("Alarm Class"),
+          text: t("app-title-alarmclass"),
           dataIndex: "alarm_class",
           width: 300,
           renderer: NOC.render.Lookup("alarm_class"),
         },
         {
-          text: __("Severity"),
+          text: t("header-severity"),
           dataIndex: "severity",
           width: 70,
           renderer: function(v, _, record){
@@ -123,7 +123,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
           },
         },
         {
-          text: __("Time/Duration"),
+          text: t("header-time-duration"),
           dataIndex: "timestamp",
           width: 120,
           renderer: function(v, _, record){
@@ -133,7 +133,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
           },
         },
         {
-          text: __("Channel"),
+          text: t("header-channel"),
           dataIndex: "channel",
           width: 300,
           renderer: function(v, _, record){
@@ -147,7 +147,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
           },
         },
         {
-          text: __("Object"),
+          text: t("header-object"),
           dataIndex: "object",
           flex: 1,
           renderer: function(v){
@@ -230,7 +230,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
     this.autoReloadIcon(self.pressed);
     this.autoReloadText(self.pressed);
     if(this.getViewModel()){
-      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, __("online")));
+      this.getViewModel().set("icon", this.generateIcon(self.pressed, "circle", NOC.colors.yes, t("msg-online")));
     }
     if(self.pressed){
       this.startPolling();
@@ -245,7 +245,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
   },
   //
   autoReloadText: function(isReloading){
-    this.getViewModel().set("autoReloadText", __("Auto reload : ") + (isReloading ? __("ON") : __("OFF")));
+    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0-3", {value0: isReloading ? t("msg-on") : t("msg-off")}));
   },
   //
   pollingTask: function(){
@@ -261,9 +261,9 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
     let icon;
     this.alarmPanel.setDisabled(state);
     if(state){
-      icon = this.generateIcon(true, "stop-circle-o", "grey", __("suspend"));
+      icon = this.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend"));
     } else{
-      icon = this.generateIcon(true, "circle", NOC.colors.yes, __("online"));
+      icon = this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online"));
     }
     if(this.getViewModel()){
       this.getViewModel().set("icon", icon);
@@ -287,7 +287,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
     
     this.isUpdating = true;
     
-    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
+    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", t("msg-loading-4")));
     
     NOC.api.requestLegacy({
       url: `/inv/inv/${objectId}/plugin/alarm/`,
@@ -300,12 +300,12 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
       },
       failure: function(){
         if(!this.destroyed){
-          NOC.error(__("Failed to update alarm"));
+          NOC.error(t("msg-failed-to-update-alarm"));
         }
       },
       callback: function(){
         if(!this.destroyed){
-          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+          this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
           this.isUpdating = false;
         }
       },

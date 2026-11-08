@@ -17,45 +17,45 @@ Ext.define("NOC.sa.commandsnippet.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
       dataIndex: "is_enabled",
-      text: __("Enabled"),
+      text: t("header-enabled"),
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Resource Group"),
+      text: t("label-resource-group"),
       dataIndex: "resource_group",
       renderer: NOC.render.Lookup("resource_group"),
       width: 200,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
     },
     {
       dataIndex: "require_confirmation",
-      text: __("Require Confirmation"),
+      text: t("header-require-confirmation"),
       renderer: NOC.render.Bool,
     },
     {
       dataIndex: "ignore_cli_errors",
-      text: __("Ignore CLI Errors"),
+      text: t("header-ignore-cli-errors"),
       renderer: NOC.render.Bool, 
     },
     {
-      text: __("Permission"),    
+      text: t("header-permission"),
       dataIndex: "permission_name",
     },
     {   
       dataIndex: "display_in_menu",   
-      text: __("Show in menu"), 
+      text: t("header-show-in-menu"),
       renderer: NOC.render.Bool,
     },
     {
-      text: __("Tags"),
+      text: t("header-tags"),
       dataIndex: "tags",
       renderer: NOC.render.Tags,
     },
@@ -64,13 +64,13 @@ Ext.define("NOC.sa.commandsnippet.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textareafield",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: false,
       anchor: "100%",
       fieldStyle: {
@@ -80,7 +80,7 @@ Ext.define("NOC.sa.commandsnippet.Application", {
     {
       name: "snippet",
       xtype: "textareafield",
-      fieldLabel: __("Snippet"),
+      fieldLabel: t("label-snippet"),
       allowBlank: false,
       anchor: "100%",
       height: 200,
@@ -91,13 +91,13 @@ Ext.define("NOC.sa.commandsnippet.Application", {
     {
       name: "change_configuration",
       xtype: "checkboxfield",
-      boxLabel: __("Change configuration"),
+      boxLabel: t("label-change-configuration"),
     },
     {
       name: "resource_group",
       xtype: "noc.core.combotree",
       restUrl: "/inv/resourcegroup/",
-      fieldLabel: __("Resource Group"),
+      fieldLabel: t("label-resource-group"),
       listWidth: 1,
       listAlign: "left",
       labelAlign: "left",
@@ -106,38 +106,38 @@ Ext.define("NOC.sa.commandsnippet.Application", {
     {
       name: "is_enabled",
       xtype: "checkboxfield",
-      boxLabel: __("Is Enabled"),
+      boxLabel: t("label-is-enabled"),
     },
     {
       name: "timeout",
       xtype: "numberfield",
-      fieldLabel: __("Timeout(sec)"),
+      fieldLabel: t("label-timeout-sec"),
       allowBlank: false,
     },
     {
       name: "require_confirmation",
       xtype: "checkboxfield",
-      boxLabel: __("Require Confirmation"),
+      boxLabel: t("header-require-confirmation"),
     },
     {
       name: "ignore_cli_errors",
       xtype: "checkboxfield",
-      boxLabel: __("Ignore CLI Errors"),
+      boxLabel: t("header-ignore-cli-errors"),
     },
     {
       name: "permission_name",
       xtype: "textfield",
-      fieldLabel: __("Permission Name"),
+      fieldLabel: t("label-permission-name-2"),
     },
     {
       name: "display_in_menu",
       xtype: "checkboxfield",
-      boxLabel: __("Show in menu"),
+      boxLabel: t("header-show-in-menu"),
     },
     {
       name: "labels",
       xtype: "labelfield",
-      fieldLabel: __("Labels"),
+      fieldLabel: t("header-labels"),
       allowBlank: true,
       query: {
         "enable_commandsnippet": true,
@@ -146,17 +146,17 @@ Ext.define("NOC.sa.commandsnippet.Application", {
   ],
   filters: [
     {
-      title: __("By Is Enabled"),
+      title: t("app-title-by-is-enabled"),
       name: "is_enabled",
       ftype: "boolean",
       // },
       // {
-      //     title: __("By Require Confirmation"),
+      //     title: t("By Require Confirmation"),
       //     name: "require_confirmation",
       //     ftype: "boolean"
       // },
       // {
-      //     title: __("By Ignore CLI Errors"),
+      //     title: t("By Ignore CLI Errors"),
       //     name: "ignore_cli_errors",
       //     ftype: "boolean"
     }, 

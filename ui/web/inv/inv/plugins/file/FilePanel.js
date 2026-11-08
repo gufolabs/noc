@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
   requires: [
     "NOC.inv.inv.plugins.file.FileModel",
   ],
-  title: __("Files"),
+  title: t("app-title-files"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -25,14 +25,14 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
     });
 
     me.uploadButton = Ext.create("Ext.button.Button", {
-      text: __("Upload"),
+      text: t("btn-upload"),
       glyph: NOC.glyph.upload,
       scope: me,
       handler: me.onUpload,
     });
 
     me.deleteButton = Ext.create("Ext.button.Button", {
-      text: __("Delete"),
+      text: t("btn-delete"),
       glyph: NOC.glyph.times,
       scope: me,
       handler: me.onDelete,
@@ -45,24 +45,24 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
       stateId: "inv.inv-file-grid",
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Date"),
+          text: t("header-date"),
           dataIndex: "ts",
           width: 120,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Size"),
+          text: t("header-size"),
           dataIndex: "size",
           width: 50,
           renderer: NOC.render.Size,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -112,7 +112,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
@@ -139,7 +139,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
               me.refresh();
             },
             failure: function(){
-              NOC.error(__("Failed to delete file"));
+              NOC.error(t("msg-failed-to-delete-file"));
             },
           });
         }

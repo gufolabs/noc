@@ -23,12 +23,12 @@ Ext.define("NOC.main.pyrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Full Name"),
+          text: t("header-full-name"),
           dataIndex: "full_name",
           flex: 1,
         },
@@ -37,19 +37,19 @@ Ext.define("NOC.main.pyrule.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "source",
           xtype: "codeviewer",
-          fieldLabel: __("Source"),
+          fieldLabel: t("header-source"),
           allowBlank: true,
           flex: 1,
           language: "python",

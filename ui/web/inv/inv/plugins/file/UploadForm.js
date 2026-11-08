@@ -11,7 +11,7 @@ Ext.define("NOC.inv.inv.plugins.file.UploadForm", {
   autoShow: true,
   modal: true,
   app: undefined,
-  title: __("Upload Files"),
+  title: t("app-title-upload-files"),
   layout: "fit",
 
   initComponent: function(){
@@ -21,16 +21,16 @@ Ext.define("NOC.inv.inv.plugins.file.UploadForm", {
       me.fields.push(
         Ext.create("Ext.form.field.File", {
           name: "file_" + i,
-          fieldLabel: __("File #") + i,
+          fieldLabel: t("msg-file-value0", {value0: i}),
           labelWidth: 90,
           width: 500,
-          buttontext: __("Select file..."),
+          buttontext: t("label-select-file"),
         }),
       );
       me.fields.push({
         xtype: "textfield",
         name: "description_" + i,
-        fieldLabel: __("Description #") + i,
+        fieldLabel: t("msg-description-value0", {value0: i}),
         labelWidth: 90,
         width: 500,
       });
@@ -44,7 +44,7 @@ Ext.define("NOC.inv.inv.plugins.file.UploadForm", {
           dock: "bottom",
           items: [
             {
-              text: __("Upload"),
+              text: t("btn-upload"),
               glyph: NOC.glyph.upload,
               scope: me,
               handler: me.onUpload,
@@ -70,12 +70,12 @@ Ext.define("NOC.inv.inv.plugins.file.UploadForm", {
         url: "/inv/inv/" + me.app.currentId + "/plugin/file/upload/",
         waitMsg: "Uploading files...",
         success: function(){
-          NOC.info(__("Files has been uploaded"));
+          NOC.info(t("msg-files-has-been-uploaded"));
           me.close();
           me.app.refresh();
         },
         failure: function(){
-          NOC.error(__("Failed to upload files"));
+          NOC.error(t("msg-failed-to-upload-files"));
         },
       });
     }

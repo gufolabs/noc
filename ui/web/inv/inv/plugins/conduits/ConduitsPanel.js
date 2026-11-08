@@ -10,7 +10,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsPanel", {
   extend: "Ext.panel.Panel",
   requires: [
   ],
-  title: __("Conduits"),
+  title: t("app-title-conduits"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -43,7 +43,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsPanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     })
   },

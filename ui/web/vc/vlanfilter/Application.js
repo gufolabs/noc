@@ -19,16 +19,16 @@ Ext.define("NOC.vc.vlanfilter.Application", {
 
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("Include Expression"),
+      text: t("header-include-expression"),
       dataIndex: "include_expression",
       flex: 1,
     },
     {
-      text: __("Exclude Expression"),
+      text: t("header-exclude-expression"),
       dataIndex: "exclude_expression",
       flex: 1,
     },
@@ -37,37 +37,37 @@ Ext.define("NOC.vc.vlanfilter.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "include_expression",
       xtype: "textfield",
-      fieldLabel: __("Include Expression"),
+      fieldLabel: t("header-include-expression"),
       allowBlank: false,
       regex: /^\s*\d+\s*(-\d+\s*)?(,\s*\d+\s*(-\d+)?)*$/,
     },
     {
       name: "exclude_expression",
       xtype: "textfield",
-      fieldLabel: __("Exclude Expression"),
+      fieldLabel: t("header-exclude-expression"),
       allowBlank: true,
       regex: /^\s*\d+\s*(-\d+\s*)?(,\s*\d+\s*(-\d+)?)*$/,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
     {
       name: "match_labels",
       xtype: "gridfield",
-      fieldLabel: __("Match Labels"),
+      fieldLabel: t("label-match-labels"),
       disabled: true,
       columns: [
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           editor: {
@@ -77,7 +77,7 @@ Ext.define("NOC.vc.vlanfilter.Application", {
         },
         {
           dataIndex: "scope",
-          text: __("Scope"),
+          text: t("header-scope"),
           editor: "textfield",
           width: 150,
         },
@@ -86,7 +86,7 @@ Ext.define("NOC.vc.vlanfilter.Application", {
   ],
   filters: [
     {
-      title: __("By VLAN"),
+      title: t("app-title-by-vlan"),
       name: "include_expression",
       ftype: "vc",
     },

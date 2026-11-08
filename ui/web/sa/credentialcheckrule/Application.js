@@ -19,26 +19,26 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
   model: "NOC.sa.credentialcheckrule.Model",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 200,
     },
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       renderer: NOC.render.Bool,
       width: 40,
       align: "left",
     },
     {
-      text: __("Pref."),
+      text: t("header-pref-2"),
       // tooltip: "Preference", - broken in ExtJS 5.1
       dataIndex: "preference",
       width: 40,
       align: "right",
     },
     {
-      text: __("Match Expression"),
+      text: t("header-match-expression"),
       dataIndex: "match_expression",
       width: 400,
       renderer: function(v){
@@ -60,7 +60,7 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
       },
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       width: 200,
     },
@@ -69,41 +69,41 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
     {
       name: "is_active",
       xtype: "checkbox",
-      boxLabel: __("Active"),
+      boxLabel: t("header-active"),
     },
     {
       name: "preference",
       xtype: "numberfield",
-      fieldLabel: __("Preference"),
+      fieldLabel: t("label-preference"),
       allowBlank: true,
       uiStyle: "small",
     },
     {
       name: "suggest_snmp",
-      fieldLabel: __("Suggest SNMP"),
+      fieldLabel: t("label-suggest-snmp"),
       xtype: "gridfield",
       allowBlank: true,
       columns: [
         {
-          text: __("SNMP RO"),
+          text: t("header-snmp-ro"),
           dataIndex: "snmp_ro",
           width: 200,
           editor: "textfield",
         },
         {
-          text: __("SNMP RW"),
+          text: t("header-snmp-rw"),
           dataIndex: "snmp_rw",
           editor: "textfield",
           flex: 200,
@@ -112,24 +112,24 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     },
     {
       name: "suggest_credential",
-      fieldLabel: __("Suggest CLI"),
+      fieldLabel: t("label-suggest-cli"),
       xtype: "gridfield",
       allowBlank: true,
       columns: [
         {
-          text: __("User"),
+          text: t("header-user"),
           dataIndex: "user",
           width: 200,
           editor: "textfield",
         },
         {
-          text: __("Password"),
+          text: t("label-password"),
           dataIndex: "password",
           width: 200,
           editor: "textfield",
         },
         {
-          text: __("Super Password"),
+          text: t("label-super-password"),
           dataIndex: "super_password",
           flex: 200,
           editor: "textfield",
@@ -138,12 +138,12 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     },
     {
       name: "suggest_auth_profile",
-      fieldLabel: __("Suggest Auth Profile"),
+      fieldLabel: t("label-suggest-auth-profile"),
       xtype: "gridfield",
       allowBlank: true,
       columns: [
         {
-          text: __("Auth Profile"),
+          text: t("app-title-authprofile"),
           dataIndex: "auth_profile",
           width: 200,
           editor: {
@@ -156,10 +156,10 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     {
       name: "suggest_protocols",
       xtype: "gridfield",
-      fieldLabel: __("Topology methods"),
+      fieldLabel: t("label-topology-methods"),
       columns: [
         {
-          text: __("Protocol"),
+          text: t("header-protocol"),
           dataIndex: "protocol",
           width: 100,
           sortable: false,
@@ -181,10 +181,10 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     {
       name: "suggest_snmp_oids",
       xtype: "gridfield",
-      fieldLabel: __("Suggest SNMP OIDs"),
+      fieldLabel: t("label-suggest-snmp-oids"),
       columns: [
         {
-          text: __("Oid"),
+          text: t("header-oid-2"),
           dataIndex: "oid",
           width: 300,
           sortable: false,
@@ -197,13 +197,13 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
     {
       name: "match",
       xtype: "listform",
-      fieldLabel: __("Match Rules"),
+      fieldLabel: t("label-match-rules"),
       rows: 2,
       items: [
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Match Labels"),
+          fieldLabel: t("label-match-labels"),
           allowBlank: true,
           isTree: true,
           filterProtected: false,
@@ -216,7 +216,7 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
         {
           name: "exclude_labels",
           xtype: "labelfield",
-          fieldLabel: __("Exclude Match Labels"),
+          fieldLabel: t("label-exclude-match-labels"),
           allowBlank: true,
           isTree: true,
           filterProtected: false,
@@ -231,7 +231,7 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
   ],
   filters: [
     {
-      title: __("By Match Rules Labels"),
+      title: t("app-title-by-match-rules-labels"),
       name: "match",
       ftype: "label",
       lookup: "main.handler.LookupField",
@@ -244,7 +244,7 @@ Ext.define("NOC.sa.credentialcheckrule.Application", {
       },
     },
     {
-      title: __("By Object"),
+      title: t("app-title-by-object"),
       name: "managed_object",
       ftype: "lookup",
       lookup: "sa.managedobject",

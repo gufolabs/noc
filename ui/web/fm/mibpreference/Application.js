@@ -29,17 +29,17 @@ Ext.define("NOC.fm.mibpreference.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("MIB"),
+          text: t("header-mib"),
           dataIndex: "mib",
           width: 300,
         },
         {
-          text: __("Pref."),
+          text: t("header-pref-2"),
           dataIndex: "preference",
           width: 100,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
@@ -50,26 +50,26 @@ Ext.define("NOC.fm.mibpreference.Application", {
         {
           name: "mib",
           xtype: "textfield",
-          fieldLabel: __("MIB"),
+          fieldLabel: t("header-mib"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "preference",
           xtype: "numberfield",
-          fieldLabel: __("Preference"),
+          fieldLabel: t("label-preference"),
           allowBlank: false,
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

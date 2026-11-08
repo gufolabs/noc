@@ -18,23 +18,23 @@ Ext.define("NOC.sa.runcommands.Controller", {
     var selectedGrid3 = app.lookupReference("sa-run-commands-selected-grid-3");
     var defaultCols = [
       {
-        text: __("Name"),
+        text: t("header-name"),
         dataIndex: "name",
         width: 200,
       }, {
-        text: __("Address"),
+        text: t("app-title-address"),
         dataIndex: "address",
         width: 100,
       }, {
-        text: __("Profile"),
+        text: t("header-profile"),
         dataIndex: "profile",
         width: 100,
       }, {
-        text: __("Platform"),
+        text: t("app-title-platform"),
         dataIndex: "platform",
         flex: 1,
       }, {
-        text: __("Version"),
+        text: t("header-version"),
         dataIndex: "version",
         flex: 1,
       },
@@ -78,14 +78,14 @@ Ext.define("NOC.sa.runcommands.Controller", {
     selectedGrid2.getView().refresh();
     // page 3 init selected grid
     Ext.Array.each(defaultCols.concat({
-      text: __("Status"),
+      text: t("header-status"),
       dataIndex: "status",
       width: 70,
       renderer: NOC.render.Choices({
-        w: __("Waiting"),
-        r: __("Running"),
-        f: __("Failed"),
-        s: __("Success"),
+        w: t("msg-waiting"),
+        r: t("msg-running"),
+        f: t("msg-failed"),
+        s: t("msg-success"),
       }),
     }), function(col, index){
       selectedGrid3.headerCt.insert(index + 1, col);
@@ -185,7 +185,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
         return;
       }
       case "N_ROWS": {
-        Ext.Msg.prompt(__("Select rows"), __("Please enter number:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-rows"), t("msg-please-enter-number"), function(btn, text){
           if(btn === "ok"){
             this.getNRows("0", text);
           }
@@ -193,7 +193,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
         break;
       }
       case "PERIOD": {
-        Ext.Msg.prompt(__("Select period"), __("Please enter period (start,qty), first pos is 0:"), function(btn, text){
+        Ext.Msg.prompt(t("btn-select-period"), t("msg-please-enter-period-start-qty-first-pos-is-0"), function(btn, text){
           if(btn === "ok"){
             this.getNRows(text.split(",")[0], text.split(",")[1]);
           }
@@ -244,7 +244,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
           xclass: "NOC.sa.action.LookupField",
           reference: "sa-run-commands-action-field",
           name: "modeId",
-          fieldLabel: __("Actions"),
+          fieldLabel: t("nav-action"),
           allowBlank: false,
           editable: false,
           listeners: {
@@ -258,7 +258,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
           xclass: "NOC.sa.commandsnippet.LookupField",
           reference: "sa-run-commands-snippet-field",
           name: "modeId",
-          fieldLabel: __("Snippets"),
+          fieldLabel: t("label-snippets"),
           allowBlank: false,
           editable: false,
           listeners: {
@@ -272,7 +272,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
           xtype: "textareafield",
           reference: "saRunCommandsCommandField",
           name: "cmd",
-          fieldLabel: __("Commands"),
+          fieldLabel: t("label-commands"),
           labelAlign: "top",
           allowBlank: false,
           height: 500,
@@ -339,12 +339,12 @@ Ext.define("NOC.sa.runcommands.Controller", {
           if(commands.length > 0){
             me.sendCommands(mode, commands);
           } else{
-            NOC.error(__("Empty command"))
+            NOC.error(t("msg-empty-command"))
           }
         },
 
         failure: function(response){
-          NOC.error(__("server-side failure with status code " + response.status));
+          NOC.error(t("msg-server-side-failure-status", {status: response.status}));
         },
       });
     };
@@ -431,7 +431,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
         },
 
         failure: function(response){
-          NOC.error(__("server-side failure with status code " + response.status));
+          NOC.error(t("msg-server-side-failure-status", {status: response.status}));
         },
       });
     }
@@ -590,7 +590,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
         },
       );
 
-      selectionGrid.mask(__("Loading"));
+      selectionGrid.mask(t("msg-loading"));
       NOC.api.requestLegacy({
         url: this.lookupReference("sa-run-commands-selection-grid").getStore().rest_url,
         method: "POST",
@@ -605,7 +605,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
         },
         failure: function(){
           selectionGrid.unmask();
-          NOC.error(__("Failed to get data"));
+          NOC.error(t("msg-failed-to-get-data"));
         },
       });
 

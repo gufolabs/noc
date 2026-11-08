@@ -10,12 +10,12 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDomStatus", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interface",
       width: 120,
     },
     {
-      text: __("Temp, C"),
+      text: t("header-temp-c"),
       dataIndex: "temp_c",
       xtype: "numbercolumn",
       format: "0.0000",
@@ -23,7 +23,7 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDomStatus", {
       align: "right",
     },
     {
-      text: __("Voltage, V"),
+      text: t("header-voltage-v"),
       dataIndex: "voltage_v",
       xtype: "numbercolumn",
       format: "0.0000",
@@ -31,7 +31,7 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDomStatus", {
       align: "right",
     },
     {
-      text: __("Current, mA"),
+      text: t("header-current-ma"),
       dataIndex: "current_ma",
       xtype: "numbercolumn",
       format: "0.0000",
@@ -39,7 +39,7 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDomStatus", {
       align: "right",
     },
     {
-      text: __("Optical Tx, dBm"),
+      text: t("header-optical-tx-dbm"),
       dataIndex: "optical_tx_dbm",
       xtype: "numbercolumn",
       format: "0.0000",
@@ -47,7 +47,7 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDomStatus", {
       align: "right",
     },
     {
-      text: __("Optical Rx, dBm"),
+      text: t("header-optical-rx-dbm"),
       dataIndex: "optical_rx_dbm",
       xtype: "numbercolumn",
       format: "0.0000",

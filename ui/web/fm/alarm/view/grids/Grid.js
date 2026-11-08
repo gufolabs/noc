@@ -17,7 +17,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
   stateful: true,
   columns: [
     {
-      text: __("ID"),
+      text: t("header-id"),
       dataIndex: "id",
       width: 150,
       hidden: true,
@@ -29,7 +29,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       items: [
         {
           glyph: NOC.glyph.star,
-          tooltip: __("Mark/Unmark"),
+          tooltip: t("help-mark-unmark"),
           getColor: function(cls, meta, r){
             return r.get("fav_status") ? NOC.colors.starred : NOC.colors.unstarred;
           },
@@ -37,23 +37,23 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
         },
         {
           glyph: NOC.glyph.globe,
-          tooltip: __("Show map"),
+          tooltip: t("help-show-map"),
           handler: "onShowMap",
         },
         {
           glyph: NOC.glyph.map_o,
-          tooltip: __("Show neighbor map"),
+          tooltip: t("help-show-neighbor-map"),
           handler: "onShowNeighborMap",
         },
         {
           glyph: NOC.glyph.eye,
-          tooltip: __("Show object"),
+          tooltip: t("help-show-object"),
           handler: "onShowObject",
         },
       ],
     },
     {
-      text: __("Status"),
+      text: t("header-status"),
       dataIndex: "status",
       width: 60,
       renderer: function(v, _, record){
@@ -62,14 +62,14 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
             C: "Archived",
           },
           value = NOC.render.Choices(STATUS_MAP)(v);
-        if(record.get("isInMaintenance")) value = '<span title="' + __("Under maintaintance") + '">' +
+        if(record.get("isInMaintenance")) value = '<span title="' + t("msg-under-maintaintance") + '">' +
                     '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;' + value + "</span>";
         return value;
       },
       hidden: true,
     },
     {
-      text: __("Time/Duration"),
+      text: t("header-time-duration"),
       dataIndex: "timestamp",
       width: 120,
       renderer: function(v, _, record){
@@ -79,14 +79,14 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Start"),
+      text: t("header-start"),
       dataIndex: "timestamp",
       width: 120,
       hidden: true,
       renderer: NOC.render.DateTime,
     },
     {
-      text: __("Stop"),
+      text: t("header-stop"),
       dataIndex: "clear_timestamp",
       width: 120,
       hidden: true,
@@ -99,14 +99,14 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Duration"),
+      text: t("header-duration"),
       dataIndex: "duration",
       width: 120,
       hidden: true,
       renderer: NOC.render.Duration,
     },
     {
-      text: __("Object/Segment"),
+      text: t("header-object-segment-2"),
       dataIndex: "managed_object",
       width: 250,
       renderer: function(v, _, record){
@@ -114,7 +114,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Location"),
+      text: t("header-location-d219c6"),
       dataIndex: "location",
       width: 250,
       renderer: function(v, _, record){
@@ -122,7 +122,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Address/Platform"),
+      text: t("header-address-platform"),
       dataIndex: "address",
       width: 120,
       renderer: function(v, _, record){
@@ -132,7 +132,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Severity"),
+      text: t("header-severity"),
       dataIndex: "severity",
       width: 70,
       renderer: function(v, _, record){
@@ -143,7 +143,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
     },
     {
       xtype: "actioncolumn",
-      text: __("Ack"),
+      text: t("msg-ack"),
       flex: 1,
       innerCls: undefined,
       defaultRenderer: function(v, cellValues, record, rowIdx, colIdx, store, view){
@@ -214,7 +214,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       ],
     },
     {
-      text: __("Comments Qty"),
+      text: t("header-comments-qty"),
       width: 40,
       renderer: function(v, _, record){
         var commentsLength = record.get("logs").length;
@@ -225,7 +225,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Subject/Class"),
+      text: t("header-subject-class"),
       dataIndex: "subject",
       flex: 1,
       sortable: false,
@@ -236,7 +236,7 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Summary/TT"),
+      text: t("header-summary-tt"),
       dataIndex: "summary",
       width: 150,
       sortable: false,
@@ -273,21 +273,21 @@ Ext.define("NOC.fm.alarm.view.grids.Grid", {
       },
     },
     {
-      text: __("Objects"),
+      text: t("header-objects-72a83a"),
       dataIndex: "total_objects",
       width: 30,
       align: "right",
       sortable: false,
     },
     {
-      text: __("Events"),
+      text: t("app-title-event"),
       dataIndex: "events",
       width: 30,
       align: "right",
       sortable: false,
     },
     {
-      text: __("Grouped"),
+      text: t("header-grouped"),
       dataIndex: "total_grouped",
       width: 30,
       align: "right",

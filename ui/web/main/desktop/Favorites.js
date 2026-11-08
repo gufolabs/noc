@@ -8,7 +8,7 @@ console.debug("Defining NOC.main.desktop.Favorites");
 
 Ext.define("NOC.main.desktop.Favorites", {
   extend: "Ext.Panel",
-  title: __("Favorites"),
+  title: t("app-title-favorites"),
   iconCls: "icon_star",
 
   initComponent: function(){

@@ -19,7 +19,7 @@ Ext.define("NOC.pm.agentprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
@@ -29,19 +29,19 @@ Ext.define("NOC.pm.agentprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Config"),
+          title: t("btn-config"),
           defaults: {
             padding: 4,
           },
@@ -49,20 +49,20 @@ Ext.define("NOC.pm.agentprofile.Application", {
             {
               name: "zk_check_interval",
               xtype: "numberfield",
-              fieldLabel: __("Check Interval"),
+              fieldLabel: t("label-check-interval"),
               allowBlank: false,
             },
             {
               name: "update_addresses",
               xtype: "checkbox",
-              boxLabel: __("Update Addresses"),
+              boxLabel: t("label-update-addresses"),
             },
           ],
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: true,
         },
       ],

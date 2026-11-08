@@ -15,15 +15,15 @@ Ext.define("NOC.main.language.Application", {
     
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("Native Name"),
+      text: t("header-native-name"),
       dataIndex: "native_name",
     },
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       renderer: NOC.render.Bool,
     },
@@ -32,21 +32,21 @@ Ext.define("NOC.main.language.Application", {
   fields: [
     {
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       name: "name",
       allowBlank: false,
     },
 
     {
       xtype: "textfield",
-      fieldLabel: __("Native Name"),
+      fieldLabel: t("header-native-name"),
       name: "native_name",
       allowBlank: false,
     },
         
     {
       xtype: "checkboxfield",
-      boxLabel: __("Is Active"),
+      boxLabel: t("header-is-active"),
       name: "is_active",
       inputValue: true,
     },
@@ -54,7 +54,7 @@ Ext.define("NOC.main.language.Application", {
 
   filters: [
     {
-      title: __("By Is Active"),
+      title: t("app-title-by-is-active"),
       ftype: "boolean",
       name: "is_active",
     },

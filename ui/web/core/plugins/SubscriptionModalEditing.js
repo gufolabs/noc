@@ -24,10 +24,10 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
       this.objectId = view.up("[appId]").currentRecordId;
       if(column && this.dataIndexes.includes(column.dataIndex)){
         if(column.dataIndex === "users"){
-          this.titleSuffix = __("Users");
+          this.titleSuffix = t("app-title-user");
         }
         if(column.dataIndex === "crm_users"){
-          this.titleSuffix = __("CRM Users");
+          this.titleSuffix = t("msg-crm-users");
         }
         this.dataIndex = column.dataIndex;
         this.lookupUrl = column.lookupUrl || "lookUrl_not_set";
@@ -42,9 +42,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
     if(!record.get("allow_edit")) return;
     this.record = record;
     var formItems = this.getFormItems(record),
-      title = __("Group") + ": "
-        + record.get("notification_group__label")
-        + " " + (Ext.isEmpty(this.titleSuffix) ? "" : this.titleSuffix);
+      title = t("msg-group-value0-value1", {value0: record.get("notification_group__label"), value1: Ext.isEmpty(this.titleSuffix) ? "" : this.titleSuffix});
     this.formPanel = Ext.create("Ext.form.Panel", {
       bodyPadding: 10,
       border: false,
@@ -64,16 +62,16 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
       autoShow: true,
       items: this.formPanel,
       buttons: [{
-        text: __("Cancel"),
+        text: t("btn-cancel"),
         handler: function(){
           this.up("window").close();
         },
       }, {
-        text: __("Reset"),
+        text: t("btn-reset"),
         scope: this,
         handler: this.resetForm,
       }, {
-        text: __("Save"),
+        text: t("btn-save"),
         scope: this,
         handler: function(button){
           this.request("POST", button);
@@ -116,7 +114,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
         name: "suppress",
         xtype: "checkbox",
         margin: "0 0 0 10",
-        boxLabel: __("Suppress"),
+        boxLabel: t("btn-suppress"),
         checked: Ext.isEmpty(value) ? false : value.suppress,
         disabled: !allow_suppress,
       };
@@ -140,7 +138,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
       scroller = this.formPanel.getScrollable();      
       
     button.setGlyph(NOC.glyph.minus);
-    button.setTooltip(__("Remove User"));
+    button.setTooltip(t("btn-remove-user"));
     button.setHandler(this.removeRowHandler);
     
     this.formPanel.suspendLayouts();
@@ -182,7 +180,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
   },
   //
   getButtonConfig: function(type, disabled){
-    var tooltip = type === "add" ? __("Add User") : __("Remove User"),
+    var tooltip = type === "add" ? t("btn-add-user") : t("btn-remove-user"),
       glyph = type === "add" ? NOC.glyph.plus : NOC.glyph.minus,
       config = {
         xtype: "button",
@@ -202,8 +200,8 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
   //
   resetForm: function(){
     Ext.Msg.show({
-      title: __("Confirm Reset"),
-      message: __("Are you sure you want to reset all values?"),
+      title: t("app-title-confirm-reset"),
+      message: t("msg-are-you-sure-you-want-to-reset-all-values"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.Msg.QUESTION,
       scope: this,
@@ -221,7 +219,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
   request: function(method, button){
     var url = this.makeUrl(this.appId, this.objectId, this.record.get("notification_group")),
       data = this.getValues();
-    button.up("window").mask(__("Saving..."));
+    button.up("window").mask(t("msg-saving-2"));
     NOC.api.requestLegacy({
       url: url,
       method: method,
@@ -233,15 +231,15 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
           this.record.set(result.data);
           this.record.commit();
           button.up("window").close();
-          NOC.info(__("Subscription updated successfully"));
+          NOC.info(t("msg-subscription-updated-successfully"));
         } else{
-          NOC.error(__("Error") + ": " + (result.message || __("Failed to update subscription")));
+          NOC.error(t("msg-error-value0-2", {value0: result.message || t("msg-failed-to-update-subscription")}));
         }
       },
       failure: function(response){
         var result = Ext.decode(response.responseText);
         button.up("window").unmask();
-        NOC.error(__("Error") + ": " + (result.errors || __("Server error occurred")));
+        NOC.error(t("msg-error-value0-3", {value0: result.errors || t("msg-server-error-occurred")}));
       },
     });
   },

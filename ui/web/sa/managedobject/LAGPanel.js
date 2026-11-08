@@ -27,30 +27,30 @@ Ext.define("NOC.sa.managedobject.LAGPanel", {
           store: me.store,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
             },
             {
-              text: __("Status"),
+              text: t("header-status"),
               dataIndex: "status",
               width: 100,
             },
             {
-              text: __("Count"),
+              text: t("header-count"),
               dataIndex: "count",
             },
             {
-              text: __("Members"),
+              text: t("header-members"),
               dataIndex: "members",
             },
             {
-              text: __("Profile"),
+              text: t("header-profile"),
               dataIndex: "profile",
               renderer: NOC.render.Lookup("profile"),
               editor: "inv.interfaceprofile.LookupField",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
             },

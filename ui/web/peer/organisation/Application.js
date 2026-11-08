@@ -16,18 +16,18 @@ Ext.define("NOC.peer.organisation.Application", {
   search: true,
   columns: [
     {
-      text: __("Organisation"),
+      text: t("label-organisation"),
       dataIndex: "organisation",
       flex: 1,
     },
 
     {
-      text: __("Org. Name"),
+      text: t("header-org-name"),
       dataIndex: "org_name",
       flex: 1,
     },
     {
-      text: __("Org. Type"),
+      text: t("header-org-type"),
       dataIndex: "org_type",
       flex: 1,
     },
@@ -36,35 +36,35 @@ Ext.define("NOC.peer.organisation.Application", {
     {
       name: "organisation",
       xtype: "textfield",
-      fieldLabel: __("Organisation"),
+      fieldLabel: t("label-organisation"),
       allowBlank: false,
       width: 300,
     },
     {
       name: "org_name",
       xtype: "textfield",
-      fieldLabel: __("Org. Name"),
+      fieldLabel: t("header-org-name"),
       allowBlank: false,
       width: 300,
     },
     {
       name: "org_type",
       xtype: "combobox",
-      fieldLabel: __("Org. Type"),
+      fieldLabel: t("header-org-type"),
       allowBlank: false,
       store: ["IANA", "RIR", "NIR", "LIR", "OTHER"],
     },
     {
       name: "address",
       xtype: "textareafield",
-      fieldLabel: __("Address"),
+      fieldLabel: t("app-title-address"),
       allowBlank: false,
       anchor: "70%",
     },
     {
       name: "mnt_ref",
       xtype: "peer.maintainer.LookupField",
-      fieldLabel: __("Mnt. Ref"),
+      fieldLabel: t("label-mnt-ref"),
       allowBlank: false,
     },
   ],

@@ -13,7 +13,7 @@ Ext.define("NOC.inv.map.SelectIconForm", {
   requires: [
     "NOC.main.glyph.LookupField",
   ],
-  title: __("Select Shape"),
+  title: t("app-title-select-shape"),
   autoShow: true,
   modal: true,
   app: null,
@@ -29,7 +29,7 @@ Ext.define("NOC.inv.map.SelectIconForm", {
             {
               xtype: "main.glyph.LookupField",
               name: "shape",
-              fieldLabel: __("Shape"),
+              fieldLabel: t("app-title-shape"),
               labelWidth: 40,
               minWidth: 300,
               labelAlign: "left",
@@ -40,7 +40,7 @@ Ext.define("NOC.inv.map.SelectIconForm", {
       ],
       buttons: [
         {
-          text: __("Set"),
+          text: t("btn-set"),
           itemId: "set",
           glyph: NOC.glyph.check,
           scope: me,

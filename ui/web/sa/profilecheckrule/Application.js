@@ -28,12 +28,12 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Profile Check Rule Name"),
+          text: t("header-profile-check-rule-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Blt"),
+          text: t("header-blt"),
           // tooltip: "Built-in", - broken in ExtJS 5.1
           dataIndex: "is_builtin",
           width: 40,
@@ -41,40 +41,40 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
           align: "center",
         },
         {
-          text: __("Pref."),
+          text: t("header-pref-2"),
           // tooltip: "Preference", - broken in ExtJS 5.1
           dataIndex: "preference",
           width: 40,
           align: "right",
         },
         {
-          text: __("Method"),
+          text: t("header-method"),
           dataIndex: "method",
           width: 100,
         },
         {
-          text: __("Parameter"),
+          text: t("header-parameter"),
           dataIndex: "param",
           width: 180,
         },
         {
-          text: __("Match"),
+          text: t("app-title-match"),
           dataIndex: "match_method",
           width: 50,
           align: "center",
         },
         {
-          text: __("Value"),
+          text: t("header-value"),
           dataIndex: "value",
           width: 200,
         },
         {
-          text: __("Action"),
+          text: t("app-title-action"),
           dataIndex: "action",
           width: 50,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           flex: 1,
           width: 150,
@@ -86,30 +86,30 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           xtype: "displayfield",
           name: "uuid",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "preference",
           xtype: "numberfield",
-          fieldLabel: __("Preference"),
+          fieldLabel: t("label-preference"),
           allowBlank: true,
           uiStyle: "small",
         },
         {
           xtype: "fieldset",
-          title: __("Match"),
+          title: t("app-title-match"),
           layout: "hbox",
           items: [
             {
@@ -133,7 +133,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
                     {
                       name: "method",
                       xtype: "combobox",
-                      fieldLabel: __("Method"),
+                      fieldLabel: t("header-method"),
                       store: [
                         ["snmp_v2c_get", "snmp_v2c_get"],
                         ["http_get", "http_get"],
@@ -160,7 +160,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
                     {
                       name: "param",
                       xtype: "textfield",
-                      fieldLabel: __("Parameter"),
+                      fieldLabel: t("header-parameter"),
                       allowBlank: false,
                       flex: 1,
                     },
@@ -176,7 +176,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
                     {
                       name: "match_method",
                       xtype: "combobox",
-                      fieldLabel: __("Match"),
+                      fieldLabel: t("app-title-match"),
                       store: [
                         ["eq", "equals"],
                         ["contains", "contains"],
@@ -190,7 +190,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
                     {
                       name: "value",
                       xtype: "textfield",
-                      fieldLabel: __("Value"),
+                      fieldLabel: t("header-value"),
                       allowBlank: false,
                       flex: 1,
                       validator: function(v){
@@ -205,7 +205,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
                         if(method === "snmp_v2c_get"){
                           var oidRe = /^\.?\d+(?:\.\d+)*$/;
                           if(!oidRe.test((v || "").trim())){
-                            return __("For snmp_v2c_get, Value must be a valid OID (e.g. .1.3.6.1.2.1)");
+                            return t("msg-for-snmp-v2c-get-value-must-be-a-valid-oid-e-g-1-3-6-1-2-1");
                           }
                         }
                         return true;
@@ -219,7 +219,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Action"),
+          title: t("app-title-action"),
           layout: "hbox",
           defaults: {
             labelAlign: "top",
@@ -229,7 +229,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
             {
               name: "action",
               xtype: "combobox",
-              fieldLabel: __("Action"),
+              fieldLabel: t("app-title-action"),
               store: [
                 ["match", "Match"],
                 ["maybe", "Maybe"],
@@ -242,7 +242,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
             {
               name: "profile",
               xtype: "sa.profile.LookupField",
-              fieldLabel: __("Profile"),
+              fieldLabel: t("header-profile"),
               allowBlank: false,
               uiStyle: "medium",
             },
@@ -251,9 +251,9 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -261,7 +261,7 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
       ],
       filters: [
         {
-          title: __("By Profile"),
+          title: t("choice-by-profile"),
           name: "profile",
           ftype: "lookup",
           lookup: "sa.profile",

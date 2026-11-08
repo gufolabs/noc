@@ -42,19 +42,19 @@ Ext.define("NOC.sa.service.Application", {
     Ext.apply(this, {
       columns: [
         {
-          text: __("S"),
+          text: t("header-s"),
           dataIndex: "oper_status",
           sortable: false,
           width: 30,
           renderer: function(value, metaData, record){
             var color;
             metaData.tdAttr = "data-qtip='<table style=\"font-size: 11px;\">" +
-                            "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background: grey;\"></div></td><td>" + __("Unknown") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: green;\"></div></td><td>" + __("UP") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: yellow;\"></div></td><td>" + __("SLIGHTLY_DEGRADED") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: orange;\"></div></td><td>" + __("DEGRADED") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: red;\"></div></td><td>" + __("DOWN") + "</td></tr>" +
-                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: linear-gradient(to right, green 50%, brown 50%);\"></div></td><td>" + __("In maintenance") + "</td></tr>" +
+                            "<tr><td style=\"padding-right: 10px;\"><div class=\"noc-object-oper-state\" style=\"background: grey;\"></div></td><td>" + t("status-unknown") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: green;\"></div></td><td>" + t("msg-up") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: yellow;\"></div></td><td>" + t("msg-slightly-degraded") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: orange;\"></div></td><td>" + t("msg-degraded") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: red;\"></div></td><td>" + t("msg-down") + "</td></tr>" +
+                            "<tr><td><div class=\"noc-object-oper-state\" style=\"background: linear-gradient(to right, green 50%, brown 50%);\"></div></td><td>" + t("msg-in-maintenance") + "</td></tr>" +
                 "</table>'";
             switch(value){
               case "0":
@@ -94,12 +94,12 @@ Ext.define("NOC.sa.service.Application", {
         },
         {
           text: "<i class='fa fa-bell'></i>",
-          tooltip: __("Subscription"),
+          tooltip: t("help-subscription"),
           dataIndex: "allow_subscribe",
           renderer: NOC.render.Subscribe,
         },
         {
-          text: __("Instances"),
+          text: t("header-instances"),
           dataIndex: "instance_count",
           renderer: function(value, metaData){
             metaData.tdStyle = "text-decoration-line: underline;cursor: pointer;";
@@ -107,30 +107,30 @@ Ext.define("NOC.sa.service.Application", {
           },
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 200,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("Label"),
+          text: t("header-label"),
           dataIndex: "label",
           width: 260,
         },
         {
-          text: __("Subscriber"),
+          text: t("header-subscriber"),
           dataIndex: "subscriber",
           width: 250,
           renderer: NOC.render.Lookup("subscriber"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Parent"),
+          text: t("header-parent"),
           dataIndex: "parent",
           flex: 1,
         },
@@ -157,7 +157,7 @@ Ext.define("NOC.sa.service.Application", {
                 {
                   name: "name_template",
                   xtype: "textfield",
-                  fieldLabel: __("Name Template"),
+                  fieldLabel: t("label-name-template"),
                   tabIndex: 10,
                   minWidth: 200,
                   labelWidth: labelWidth,
@@ -166,7 +166,7 @@ Ext.define("NOC.sa.service.Application", {
                 {
                   name: "profile",
                   xtype: "sa.serviceprofile.LookupField",
-                  fieldLabel: __("Profile"),
+                  fieldLabel: t("header-profile"),
                   tabIndex: 20,
                   minWidth: 200,
                   labelWidth: labelWidth,
@@ -176,7 +176,7 @@ Ext.define("NOC.sa.service.Application", {
                 {
                   name: "description",
                   xtype: "textarea",
-                  fieldLabel: __("Description"),
+                  fieldLabel: t("label-description"),
                   labelWidth: labelWidth,
                   allowBlank: true,
                   tabIndex: 30,
@@ -188,13 +188,13 @@ Ext.define("NOC.sa.service.Application", {
               items: [ // second column
                 {
                   name: "diagnostics",
-                  fieldLabel: __("Diag"),
+                  fieldLabel: t("label-diag"),
                   xtype: "statusfield",
                   allowBlank: true,
                 },
                 {
                   name: "labels",
-                  fieldLabel: __("Labels"),
+                  fieldLabel: t("header-labels"),
                   tabIndex: 40,
                   xtype: "labelfield",
                   allowBlank: true,
@@ -206,14 +206,14 @@ Ext.define("NOC.sa.service.Application", {
                 {
                   name: "bi_id",
                   xtype: "displayfield",
-                  fieldLabel: __("BI ID"),
+                  fieldLabel: t("label-bi-id"),
                   allowBlank: true,
                   renderer: NOC.clipboard,
                 },
                 {
                   name: "mappings",
                   xtype: "displayfield",
-                  fieldLabel: __("Mappings"),
+                  fieldLabel: t("label-mappings"),
                   allowBlank: true,
                   renderer: function(values){
                     if(values === undefined || values === null || Ext.isEmpty(values)){
@@ -238,14 +238,14 @@ Ext.define("NOC.sa.service.Application", {
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           labelWidth: labelWidth,
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Referenced"),
+          title: t("app-title-referenced"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -254,19 +254,19 @@ Ext.define("NOC.sa.service.Application", {
             {
               name: "parent",
               xtype: "sa.service.LookupField",
-              fieldLabel: __("Parent"),
+              fieldLabel: t("header-parent"),
               allowBlank: true,
             },
             {
               name: "subscriber",
               xtype: "crm.subscriber.LookupField",
-              fieldLabel: __("Subscriber"),
+              fieldLabel: t("header-subscriber"),
               allowBlank: true,
             },
             {
               name: "supplier",
               xtype: "crm.supplier.LookupField",
-              fieldLabel: __("Supplier"),
+              fieldLabel: t("header-supplier"),
               allowBlank: true,
             },
           ],
@@ -274,7 +274,7 @@ Ext.define("NOC.sa.service.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Agreement"),
+          title: t("app-title-agreement"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -283,21 +283,21 @@ Ext.define("NOC.sa.service.Application", {
             {
               name: "agreement_id",
               xtype: "textfield",
-              fieldLabel: __("Agreement ID"),
+              fieldLabel: t("label-agreement-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "account_id",
               xtype: "textfield",
-              fieldLabel: __("Account ID"),
+              fieldLabel: t("label-account-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "address",
               xtype: "textfield",
-              fieldLabel: __("Address"),
+              fieldLabel: t("app-title-address"),
               allowBlank: true,
               uiStyle: "large",
             },
@@ -306,7 +306,7 @@ Ext.define("NOC.sa.service.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("CPE"),
+          title: t("header-cpe"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -315,14 +315,14 @@ Ext.define("NOC.sa.service.Application", {
             {
               name: "cpe_serial",
               xtype: "textfield",
-              fieldLabel: __("Serial"),
+              fieldLabel: t("header-serial"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "cpe_mac",
               xtype: "textfield",
-              fieldLabel: __("MAC"),
+              fieldLabel: t("header-mac"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -330,7 +330,7 @@ Ext.define("NOC.sa.service.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Resource Groups"),
+          title: t("nav-resourcegroup"),
           layout: "column",
           minWidth: this.formMinWidth,
           maxWidth: this.formMaxWidth,
@@ -347,7 +347,7 @@ Ext.define("NOC.sa.service.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Static Service Groups"),
+                  text: t("btn-static-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -362,7 +362,7 @@ Ext.define("NOC.sa.service.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Service Groups"),
+                  text: t("btn-effective-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -377,7 +377,7 @@ Ext.define("NOC.sa.service.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Static Client Groups"),
+                  text: t("btn-static-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -392,7 +392,7 @@ Ext.define("NOC.sa.service.Application", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Client Groups"),
+                  text: t("btn-effective-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -405,7 +405,7 @@ Ext.define("NOC.sa.service.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Oper Status Transfer"),
+          title: t("app-title-oper-status-transfer"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -414,17 +414,13 @@ Ext.define("NOC.sa.service.Application", {
             {
               name: "status_transfer_policy",
               xtype: "combobox",
-              fieldLabel: __("Status Transfer Policy"),
-              tooltip: __("Transfer Oper Statuses to Adjacent Services <br/>" +
-                  "D - Disable Status Transfer<br/>" +
-                  "T - Transfer to All Adjacent<br/>" +
-                  "R - Transfer By Rule<br/>" +
-                  "P - From Profile"),
+              fieldLabel: t("label-status-transfer-policy"),
+              tooltip: t("help-transfer-oper-statuses-to-adjacent-services-br-d-disable-status-"),
               store: [
-                ["D", __("Disable")],
-                ["P", __("By Profile")],
-                ["T", __("Transparent")],
-                ["R", __("By Rule")],
+                ["D", t("status-disable")],
+                ["P", t("choice-by-profile")],
+                ["T", t("msg-transparent")],
+                ["R", t("msg-by-rule")],
               ],
               allowBlank: true,
               value: "P",
@@ -435,12 +431,12 @@ Ext.define("NOC.sa.service.Application", {
             },
             {
               name: "dependency_services",
-              fieldLabel: __("Service Dependencies"),
+              fieldLabel: t("label-service-dependencies"),
               xtype: "gridfield",
               allowBlank: true,
               columns: [
                 {
-                  text: __("Service"),
+                  text: t("header-service"),
                   dataIndex: "service",
                   width: 200,
                   editor: "sa.service.LookupField",
@@ -448,7 +444,7 @@ Ext.define("NOC.sa.service.Application", {
                   renderer: NOC.render.Lookup("service"),
                 },
                 {
-                  text: __("Group"),
+                  text: t("header-group"),
                   dataIndex: "group",
                   renderer: NOC.render.Lookup("group"),
                   width: 200,
@@ -457,7 +453,7 @@ Ext.define("NOC.sa.service.Application", {
                   },
                 },
                 {
-                  text: __("Type"),
+                  text: t("header-type"),
                   dataIndex: "type",
                   width: 100,
                   editor: {
@@ -477,7 +473,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Status Transfer"),
+                  text: t("btn-status-transfer"),
                   dataIndex: "oper_status_transfer",
                   width: 100,
                   editor: {
@@ -495,7 +491,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Min. Status"),
+                  text: t("btn-min-status"),
                   dataIndex: "min_status",
                   width: 100,
                   editor: {
@@ -517,7 +513,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Max. Status"),
+                  text: t("btn-max-status"),
                   dataIndex: "max_status",
                   width: 100,
                   editor: {
@@ -539,7 +535,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Set Status"),
+                  text: t("btn-set-status"),
                   dataIndex: "set_status",
                   width: 100,
                   editor: {
@@ -561,21 +557,21 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Reg. Instance"),
+                  text: t("btn-reg-instance"),
                   dataIndex: "register_instance",
                   width: 75,
                   renderer: NOC.render.Bool,
                   editor: "checkbox",
                 },
                 {
-                  text: __("Include Res."),
+                  text: t("btn-include-res"),
                   dataIndex: "include_resources",
                   width: 75,
                   renderer: NOC.render.Bool,
                   editor: "checkbox",
                 },
                 {
-                  text: __("Instances"),
+                  text: t("header-instances"),
                   dataIndex: "active_instances",
                   width: 75,
                   editor: {
@@ -583,7 +579,7 @@ Ext.define("NOC.sa.service.Application", {
                   },
                 },
                 {
-                  text: __("Reserved"),
+                  text: t("btn-reserved"),
                   dataIndex: "reserve_instances",
                   width: 75,
                   editor: {
@@ -591,13 +587,13 @@ Ext.define("NOC.sa.service.Application", {
                   },
                 },
                 {
-                  text: __("Name"),
+                  text: t("header-name"),
                   dataIndex: "textfield",
                   width: 200,
                   editor: "textfield",
                 },
                 {
-                  text: __("Port Range"),
+                  text: t("btn-port-range"),
                   dataIndex: "port_range",
                   width: 75,
                   editor: "textfield",
@@ -608,7 +604,7 @@ Ext.define("NOC.sa.service.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Calculate Oper Status"),
+          title: t("app-title-calculate-oper-status"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -617,17 +613,14 @@ Ext.define("NOC.sa.service.Application", {
             {
               name: "calculate_status_function",
               xtype: "combobox",
-              fieldLabel: __("Calculate Oper Status Policy"),
-              tooltip: __("Calculate Oper Status <br/>" +
-                  "D - Disable Status Transfer<br/>" +
-                  "R - Transfer By Rule<br/>" +
-                  "P - From Profile"),
+              fieldLabel: t("label-calculate-oper-status-policy"),
+              tooltip: t("help-calculate-oper-status-br-d-disable-status-transfer-br-r-transfer"),
               store: [
-                ["D", __("Disable")],
-                ["P", __("By Profile")],
-                ["MX", __("By Max Status")],
-                ["MN", __("By Min Status")],
-                ["R", __("By Rule")],
+                ["D", t("status-disable")],
+                ["P", t("choice-by-profile")],
+                ["MX", t("msg-by-max-status")],
+                ["MN", t("msg-by-min-status")],
+                ["R", t("msg-by-rule")],
               ],
               allowBlank: true,
               value: "P",
@@ -638,12 +631,12 @@ Ext.define("NOC.sa.service.Application", {
             },
             {
               name: "calculate_status_rules",
-              fieldLabel: __("Calculate Status Rules"),
+              fieldLabel: t("label-calculate-status-rules"),
               xtype: "gridfield",
               allowBlank: true,
               columns: [
                 {
-                  text: __("Function"),
+                  text: t("btn-function"),
                   dataIndex: "weight_function",
                   width: 100,
                   editor: {
@@ -663,7 +656,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Op"),
+                  text: t("btn-op"),
                   dataIndex: "op",
                   width: 100,
                   editor: {
@@ -681,14 +674,14 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Weight"),
+                  text: t("btn-weight"),
                   dataIndex: "weight",
                   editor: {
                     xtype: "numberfield",
                   },
                 },
                 {
-                  text: __("Min. Status"),
+                  text: t("btn-min-status"),
                   dataIndex: "min_status",
                   width: 100,
                   editor: {
@@ -710,7 +703,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("Max. Status"),
+                  text: t("btn-max-status"),
                   dataIndex: "max_status",
                   width: 100,
                   editor: {
@@ -732,7 +725,7 @@ Ext.define("NOC.sa.service.Application", {
                   }),
                 },
                 {
-                  text: __("To Status"),
+                  text: t("btn-to-status"),
                   dataIndex: "set_status",
                   width: 100,
                   editor: {
@@ -761,7 +754,7 @@ Ext.define("NOC.sa.service.Application", {
       inlines: [
         {
           xtype: "inlinegrid",
-          title: __("Capabilities"),
+          title: t("header-capabilities"),
           collapsible: true,
           collapsed: false,
           itemId: "sa-service-caps-inline",
@@ -778,28 +771,28 @@ Ext.define("NOC.sa.service.Application", {
           ],
           columns: [
             {
-              text: __("Capability"),
+              text: t("app-title-capability"),
               dataIndex: "capability",
               width: 200,
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               useModalEditor: true,
               urlPrefix: "/sa/service",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               width: 80,
             },
             {
-              text: __("Source"),
+              text: t("header-source"),
               dataIndex: "source",
               width: 70,
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
             },
@@ -808,7 +801,7 @@ Ext.define("NOC.sa.service.Application", {
       ],
       formToolbar: [
         {
-          text: __("Instances"),
+          text: t("header-instances"),
           scope: this,
           handler: this.onInstances,
         },
@@ -820,37 +813,37 @@ Ext.define("NOC.sa.service.Application", {
   //
   filters: [
     {
-      title: __("By Service"),
+      title: t("app-title-by-service"),
       name: "parent",
       ftype: "tree",
       lookup: "sa.service",
     },
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "sa.serviceprofile",
     },
     {
-      title: __("By Service Group"),
+      title: t("label-by-service-group"),
       name: "effective_service_groups",
       ftype: "tree",
       lookup: "inv.resourcegroup",
     },
     {
-      title: __("By Subscriber"),
+      title: t("app-title-by-subscriber"),
       name: "subscriber",
       ftype: "lookup",
       lookup: "crm.subscriber",
     },
     {
-      title: __("By Supplier"),
+      title: t("app-title-by-supplier"),
       name: "supplier",
       ftype: "lookup",
       lookup: "crm.supplier",
     },
     {
-      title: __("By State"),
+      title: t("app-title-by-state"),
       name: "state",
       ftype: "lookup",
       lookup: "wf.state",
@@ -861,7 +854,7 @@ Ext.define("NOC.sa.service.Application", {
     icon: NOC.glyph.level_down,
     color: NOC.colors.level_down,
     filter: "parent",
-    tooltip: __("Parent Filter"),
+    tooltip: t("help-parent-filter-2"),
   },
   //
   onPreview: function(record){

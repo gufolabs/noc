@@ -19,7 +19,7 @@ Ext.define("Ext.ux.form.ColorField", {
   colorPickerMode: "auto", // 'auto' | 'custom' | 'native'
   width: 190,
   regex: /^(#|0x)?[0-9A-Fa-f]+$/,
-  regexText: __("Enter hex value starting with # or 0x"),
+  regexText: t("msg-enter-hex-value-starting-with-or-0x"),
 
   afterRender: function(){
     this.callParent(arguments);

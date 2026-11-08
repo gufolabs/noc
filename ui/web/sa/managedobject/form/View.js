@@ -108,7 +108,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "name",
                   xtype: "textfield",
-                  fieldLabel: __("Name"),
+                  fieldLabel: t("header-name"),
                   tabIndex: 10,
                   allowBlank: false,
                   autoFocus: true,
@@ -116,7 +116,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "description",
                   xtype: "textarea",
-                  fieldLabel: __("Description"),
+                  fieldLabel: t("label-description"),
                   allowBlank: true,
                   tabIndex: 20,
                   groupEdit: true,
@@ -124,7 +124,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "is_managed",
                   xtype: "displayfield",
-                  fieldLabel: __("Is Managed"),
+                  fieldLabel: t("msg-is-managed"),
                   allowBlank: true,
                   renderer: NOC.render.Bool,
                 },
@@ -134,13 +134,13 @@ Ext.define("NOC.sa.managedobject.form.View", {
               items: [ // second column
                 {
                   name: "diagnostics",
-                  fieldLabel: __("Diag"),
+                  fieldLabel: t("label-diag"),
                   xtype: "statusfield",
                   allowBlank: true,
                 },
                 {
                   name: "labels",
-                  fieldLabel: __("Labels"),
+                  fieldLabel: t("header-labels"),
                   tabIndex: 40,
                   xtype: "labelfield",
                   allowBlank: true,
@@ -152,14 +152,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "bi_id",
                   xtype: "displayfield",
-                  fieldLabel: __("BI ID"),
+                  fieldLabel: t("label-bi-id"),
                   allowBlank: true,
                   renderer: NOC.clipboard,
                 },
                 {
                   name: "mappings",
                   xtype: "displayfield",
-                  fieldLabel: __("Mappings"),
+                  fieldLabel: t("label-mappings"),
                   allowBlank: true,
                   renderer: function(values){
                     if(values === undefined || values === null || Ext.isEmpty(values)){
@@ -184,14 +184,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           tabIndex: 50,
           restUrl: "sa/managedobject/",
           allowBlank: false,
         },
         {
           xtype: "fieldset",
-          title: __("Effective Labels"),
+          title: t("app-title-effective-labels"),
           collapsible: true,
           collapsed: true,
           items: [
@@ -201,7 +201,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "effective_labels",
                   xtype: "labeldisplay",
-                  fieldLabel: __("Effective"),
+                  fieldLabel: t("label-effective"),
                   allowBlank: true,
                 },
               ],
@@ -210,7 +210,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Role"),
+          title: t("header-role"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -222,12 +222,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/sa/managedobjectprofile/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Object Profile"),
+                  fieldLabel: t("msg-object-profile"),
                   tabIndex: 60,
-                  tooltip: __(
-                    "More settings for worked with devices. <br/>" +
-                                        "Place on Service Activation -> Setup -> Object Profile.",
-                  ),
+                  tooltip: t("help-more-settings-for-worked-with-devices-br-place-on-service-activa"),
                   itemId: "object_profile",
                   allowBlank: false,
                   groupEdit: true,
@@ -240,7 +237,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "main.glyph.LookupField",
                   restUrl: "/main/glyph/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Glyph"),
+                  fieldLabel: t("app-title-glyph"),
                   tabIndex: 70,
                   allowBlank: true,
                   groupEdit: true,
@@ -250,7 +247,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "main.glyph.LookupField",
                   restUrl: "/main/glyph/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Overlay Glyph"),
+                  fieldLabel: t("label-overlay-glyph"),
                   tabIndex: 80,
                   allowBlank: true,
                 },
@@ -261,7 +258,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "shape_overlay_position",
                   xtype: "main.ref.soposition.LookupField",
-                  fieldLabel: __("Position"),
+                  fieldLabel: t("label-position"),
                   tabIndex: 90,
                   allowBlank: true,
                 },
@@ -269,14 +266,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   name: "shape_overlay_form",
                   xtype: "main.ref.soform.LookupField",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Form"),
+                  fieldLabel: t("label-form"),
                   tabIndex: 100,
                   allowBlank: true,
                 },
                 {
                   name: "shape_title_template",
                   xtype: "textfield",
-                  fieldLabel: __("Shape Name template"),
+                  fieldLabel: t("label-shape-name-template"),
                   tabIndex: 110,
                   allowBlank: true,
                 },
@@ -286,7 +283,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Platform"),
+          title: t("app-title-platform"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -298,11 +295,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/inv/vendor/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Vendor"),
+                  fieldLabel: t("header-vendor"),
                   tabIndex: 120,
-                  tooltip: __(
-                    "Set after Version Discovery. Not for manual set",
-                  ),
+                  tooltip: t("help-set-after-version-discovery-not-for-manual-set"),
                   allowBlank: true,
                   listeners: {
                     render: "addTooltip",
@@ -312,11 +307,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/inv/platform/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Platform"),
+                  fieldLabel: t("app-title-platform"),
                   tabIndex: 130,
-                  tooltip: __(
-                    "Set after Version Discovery. Not for manual set",
-                  ),
+                  tooltip: t("help-set-after-version-discovery-not-for-manual-set"),
                   allowBlank: true,
                   listeners: {
                     render: "addTooltip",
@@ -330,13 +323,13 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/inv/firmware/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Version"),
+                  fieldLabel: t("header-version"),
                   tabIndex: 140,
                   allowBlank: true,
                 }, {
                   name: "software_image",
                   xtype: "displayfield",
-                  fieldLabel: __("Software Image"),
+                  fieldLabel: t("label-software-image"),
                   tabIndex: 150,
                   allowBlank: true,
                 },
@@ -346,7 +339,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Access"),
+          title: t("label-access"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -358,13 +351,10 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/sa/profile/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("SA Profile"),
+                  fieldLabel: t("header-sa-profile"),
                   tabIndex: 160,
                   labelStyle: "font-weight:bold",
-                  tooltip: __(
-                    "Profile (Adapter) for device work. <br/>" +
-                                        "!! Auto detect profile by SNMP if Object Profile -> Box -> Profile is set. <br/>",
-                  ),
+                  tooltip: t("help-profile-adapter-for-device-work-br-auto-detect-profile-by-snmp-i"),
                   allowBlank: true,
                   groupEdit: true,
                   listeners: {
@@ -374,7 +364,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "scheme",
                   xtype: "sa.managedobject.SchemeLookupField",
-                  fieldLabel: __("Scheme"),
+                  fieldLabel: t("label-scheme"),
                   tabIndex: 170,
                   allowBlank: false,
                   groupEdit: true,
@@ -382,7 +372,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "address",
                   xtype: "textfield",
-                  fieldLabel: __("Address"),
+                  fieldLabel: t("app-title-address"),
                   tabIndex: 180,
                   allowBlank: true,
                   groupEdit: true,
@@ -391,24 +381,16 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "access_preference",
                   xtype: "combobox",
-                  fieldLabel: __("Access Preference"),
+                  fieldLabel: t("label-access-preference"),
                   tabIndex: 190,
-                  tooltip: __(
-                    "Preference mode with worked profile script. <br/>" +
-                                        "!! Work if Device Profile supported. <br/>" +
-                                        "Profile (default) - use Object Profile settings <br/>" +
-                                        "S - Use only SNMP when access to device" +
-                                        "CLI Only - Use only CLI when access to device" +
-                                        "SNMP, CLI - Use SNMP, if not avail switch to CLI" +
-                                        "CLI, SNMP - Use CLI, if not avail switch to SNMP",
-                  ),
+                  tooltip: t("help-preference-mode-with-worked-profile-script-br-work-if-device-pro-2"),
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["S", __("SNMP Only")],
-                    ["C", __("CLI Only")],
-                    ["SC", __("SNMP, CLI")],
-                    ["CS", __("CLI, SNMP")],
+                    ["P", t("header-profile")],
+                    ["S", t("msg-snmp-only")],
+                    ["C", t("msg-cli-only")],
+                    ["SC", t("msg-snmp-cli")],
+                    ["CS", t("msg-cli-snmp")],
                   ],
                   groupEdit: true,
                   listeners: {
@@ -418,7 +400,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "port",
                   xtype: "numberfield",
-                  fieldLabel: __("Port"),
+                  fieldLabel: t("header-port"),
                   tabIndex: 200,
                   allowBlank: true,
                   minValue: 0,
@@ -429,18 +411,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "cli_session_policy",
                   xtype: "combobox",
-                  fieldLabel: __("CLI Session Policy"),
+                  fieldLabel: t("label-cli-session-policy"),
                   tabIndex: 210,
-                  tooltip: __(
-                    "Use one session worked on device. <br/>" +
-                                        "Profile (default) - use Object Profile settings <br/>" +
-                                        "Enable - login when start job, logout after end." +
-                                        "Disable - worked one script - one login. Logout after script end."),
+                  tooltip: t("help-use-one-session-worked-on-device-br-profile-default-use-object-p"),
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   groupEdit: true,
                   listeners: {
@@ -450,18 +428,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "cli_privilege_policy",
                   xtype: "combobox",
-                  fieldLabel: __("CLI Privilege Policy"),
+                  fieldLabel: t("label-cli-privilege-policy"),
                   tabIndex: 220,
-                  tooltip: __(
-                    "Do enable if login unprivileged mode on device. <br/>" +
-                                        "Raise Privileges - send enable<br/>" +
-                                        "Do not raise - work on current mode (immediately after login)",
-                  ),
+                  tooltip: t("help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg"),
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Raise Privileges")],
-                    ["D", __("Don't Raise")],
+                    ["P", t("header-profile")],
+                    ["E", t("msg-raise-privileges")],
+                    ["D", t("msg-don-t-raise")],
                   ],
                   groupEdit: true,
                   listeners: {
@@ -475,7 +449,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "remote_path",
                   xtype: "textfield",
-                  fieldLabel: __("Path"),
+                  fieldLabel: t("header-path"),
                   tabIndex: 230,
                   allowBlank: true,
                   groupEdit: true,
@@ -485,13 +459,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/sa/authprofile/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Auth Profile"),
+                  fieldLabel: t("app-title-authprofile"),
                   tabIndex: 240,
-                  tooltip: __(
-                    "Get credentials (user, pass, snmp etc.) from Auth profile.<br/> " +
-                                        " Service Activation -> Setup -> Auth Profile. If set - " +
-                                        "value in field user, password, snmp community will be IGNORED",
-                  ),
+                  tooltip: t("help-get-credentials-user-pass-snmp-etc-from-auth-profile-br-service-"),
                   allowBlank: true,
                   groupEdit: true,
                   listeners: {
@@ -501,7 +471,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "user",
                   xtype: "textfield",
-                  fieldLabel: __("User"),
+                  fieldLabel: t("header-user"),
                   tabIndex: 250,
                   allowBlank: true,
                   groupEdit: true,
@@ -509,7 +479,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "password",
                   xtype: "password",
-                  fieldLabel: __("Password"),
+                  fieldLabel: t("label-password"),
                   tabIndex: 260,
                   allowBlank: true,
                   inputType: "password",
@@ -518,7 +488,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "super_password",
                   xtype: "password",
-                  fieldLabel: __("Super Password"),
+                  fieldLabel: t("label-super-password"),
                   tabIndex: 270,
                   allowBlank: true,
                   inputType: "password",
@@ -527,7 +497,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "max_scripts",
                   xtype: "numberfield",
-                  fieldLabel: __("Max. Scripts"),
+                  fieldLabel: t("label-max-scripts"),
                   tabIndex: 280,
                   allowBlank: true,
                   hideTrigger: true,
@@ -540,12 +510,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/timepattern/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Time Pattern"),
+                  fieldLabel: t("header-time-pattern"),
                   tabIndex: 300,
-                  tooltip: __(
-                    "Use this field if you want disable ping check on specified time.<br/> " +
-                                        " Main -> Setup -> Time Patterns",
-                  ),
+                  tooltip: t("help-use-this-field-if-you-want-disable-ping-check-on-specified-time-"),
                   allowBlank: true,
                   groupEdit: true,
                   listeners: {
@@ -558,7 +525,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("SNMP"),
+          title: t("app-title-snmp"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -568,7 +535,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_security_level",
                   xtype: "combobox",
-                  fieldLabel: __("Security Level"),
+                  fieldLabel: t("label-security-level"),
                   tabIndex: 305,
                   groupEdit: true,
                   store: [
@@ -586,7 +553,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_ro",
                   xtype: "password",
-                  fieldLabel: __("RO Community"),
+                  fieldLabel: t("label-ro-community"),
                   tabIndex: 310,
                   readOnlyCls: "x-item-disabled",
                   allowBlank: true,
@@ -595,7 +562,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_rw",
                   xtype: "password",
-                  fieldLabel: __("RW Community"),
+                  fieldLabel: t("label-rw-community"),
                   tabIndex: 320,
                   readOnlyCls: "x-item-disabled",
                   allowBlank: true,
@@ -608,7 +575,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_username",
                   xtype: "textfield",
-                  fieldLabel: __("Username"),
+                  fieldLabel: t("header-username"),
                   tabIndex: 322,
                   readOnlyCls: "x-item-disabled",
                   allowBlank: true,
@@ -617,7 +584,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_ctx_name",
                   xtype: "textfield",
-                  fieldLabel: __("Context Name"),
+                  fieldLabel: t("label-context-name"),
                   tabIndex: 324,
                   readOnlyCls: "x-item-disabled",
                   allowBlank: true,
@@ -626,11 +593,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "snmp_rate_limit",
                   xtype: "numberfield",
-                  fieldLabel: __("Rate limit"),
+                  fieldLabel: t("label-rate-limit"),
                   tabIndex: 325,
-                  tooltip: __(
-                    "Limit SNMP (Query per second).",
-                  ),
+                  tooltip: t("help-limit-snmp-query-per-second"),
                   allowBlank: true,
                   hideTrigger: true,
                   minValue: 0,
@@ -643,7 +608,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   xtype: "fieldcontainer",
                   itemId: "snmp_auth_proto",
-                  fieldLabel: __("Auth Proto"),
+                  fieldLabel: t("label-auth-proto"),
                   visible: false,
                   defaultType: "radiofield",
                   defaults: {
@@ -670,7 +635,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 },
                 {
                   xtype: "password",
-                  fieldLabel: __("Auth Key"),
+                  fieldLabel: t("label-auth-key"),
                   tabIndex: 327,
                   visible: false,
                   name: "snmp_auth_key",
@@ -680,7 +645,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   xtype: "fieldcontainer",
                   itemId: "snmp_priv_proto",
-                  fieldLabel: __("Priv Proto"),
+                  fieldLabel: t("label-priv-proto"),
                   visible: false,
                   defaultType: "radiofield",
                   defaults: {
@@ -707,7 +672,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 },
                 {
                   xtype: "password",
-                  fieldLabel: __("Priv Key"),
+                  fieldLabel: t("label-priv-key"),
                   tabIndex: 330,
                   visible: false,
                   name: "snmp_priv_key",
@@ -720,7 +685,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Location"),
+          title: t("header-location-d219c6"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -732,13 +697,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "noc.core.combotree",
                   restUrl: "/sa/administrativedomain/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Administrative Domain"),
+                  fieldLabel: t("header-administrative-domain-d113be"),
                   tabIndex: 335,
-                  tooltip: __(
-                    "Use for setup User permission on Object. <br/>" +
-                                        "Place on Service Activation -> Setup -> Administrative Domain.<br/>" +
-                                        "Permission on Activation -> Setup -> Group Access/User Access.<br/>",
-                  ),
+                  tooltip: t("help-use-for-setup-user-permission-on-object-br-place-on-service-acti"),
                   allowBlank: false,
                   groupEdit: true,
                   listeners: {
@@ -749,7 +710,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   name: "segment",
                   xtype: "noc.core.combotree",
                   restUrl: "/inv/networksegment/",
-                  fieldLabel: __("Segment"),
+                  fieldLabel: t("header-segment-44986c"),
                   tabIndex: 340,
                   allowBlank: false,
                   groupEdit: true,
@@ -759,12 +720,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/pool/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Pool"),
+                  fieldLabel: t("label-pool"),
                   tabIndex: 350,
-                  tooltip: __(
-                    "Use for shard devices over intersection IP Address spaces. <br/>" +
-                                        "Create and Set on Tower<br/>",
-                  ),
+                  tooltip: t("help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre"),
                   allowBlank: false,
                   groupEdit: true,
                   listeners: {
@@ -776,7 +734,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/project/project/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Project"),
+                  fieldLabel: t("label-project"),
                   tabIndex: 360,
                   allowBlank: true,
                   groupEdit: true,
@@ -787,13 +745,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "fqdn",
                   xtype: "textfield",
-                  fieldLabel: __("FQDN"),
+                  fieldLabel: t("label-fqdn"),
                   tabIndex: 370,
-                  tooltip: __(
-                    "Set device name. If FQDN suffix is not set use dot after name: NAME.<br/>" +
-                                        "FQND suffix set on Object Profile: " +
-                                        "Service Activation -> Setup -> Object Profile -> Common<br/>",
-                  ),
+                  tooltip: t("help-set-device-name-if-fqdn-suffix-is-not-set-use-dot-after-name-nam"),
                   allowBlank: true,
                   uiStyle: "medium",
                   listeners: {
@@ -808,7 +762,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/ip/vrf/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("VRF"),
+                  fieldLabel: t("header-vrf"),
                   tabIndex: 380,
                   allowBlank: true,
                   groupEdit: true,
@@ -818,7 +772,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/vc/l2domain/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("L2 Domain"),
+                  fieldLabel: t("header-l2-domain"),
                   tabIndex: 390,
                   allowBlank: true,
                   groupEdit: true,
@@ -826,35 +780,29 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "autosegmentation_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Autosegmentation Policy"),
+                  fieldLabel: t("label-autosegmentation-policy"),
                   tabIndex: 400,
                   allowBlank: true,
                   groupEdit: true,
                   store: [
-                    ["p", __("Profile")],
-                    ["d", __("Do not segmentate")],
-                    ["e", __("Allow autosegmentation")],
-                    ["o", __("Segmentate to existing segment")],
-                    ["c", __("Segmentate to child segment")],
+                    ["p", t("header-profile")],
+                    ["d", t("msg-do-not-segmentate")],
+                    ["e", t("msg-allow-autosegmentation")],
+                    ["o", t("msg-segmentate-to-existing-segment")],
+                    ["c", t("msg-segmentate-to-child-segment")],
                   ],
                 },
                 {
                   name: "address_resolution_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Address Resolution Policy"),
+                  fieldLabel: t("label-address-resolution-policy"),
                   tabIndex: 410,
-                  tooltip: __(
-                    "Activate resolve Address by FQND field (or other handler).<br/> " +
-                                        "Profile - Use profile settings<br/>" +
-                                        "Disable - Do not resolve FQDN into Address field<br/>" +
-                                        "Once - Once resolve FQDN (after success settings will be set to Disable)<br/>" +
-                                        "Enable - Enable resolve address before running Job<br/>",
-                  ),
+                  tooltip: t("help-activate-resolve-address-by-fqnd-field-or-other-handler-br-profi"),
                   store: [
-                    ["P", __("Profile")],
-                    ["D", __("Disabled")],
-                    ["O", __("Once")],
-                    ["E", __("Enabled")],
+                    ["P", t("header-profile")],
+                    ["D", t("msg-disabled")],
+                    ["O", t("msg-once")],
+                    ["E", t("header-enabled")],
                   ],
                   allowBlank: false,
                   uiStyle: "medium",
@@ -867,7 +815,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "noc.core.combotree",
                   restUrl: "/inv/container/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Container"),
+                  fieldLabel: t("label-container-2"),
                   tabIndex: 420,
                   allowBlank: true,
                   groupEdit: true,
@@ -878,7 +826,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Discovery Policy"),
+          title: t("app-title-discovery-policy"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -887,52 +835,52 @@ Ext.define("NOC.sa.managedobject.form.View", {
               name: "config_policy",
               xtype: "combobox",
               reference: "configPolicy",
-              fieldLabel: __("Config"),
+              fieldLabel: t("btn-config"),
               tabIndex: 430,
               allowBlank: false,
-              tooltip: __("Select method of config gathering"),
+              tooltip: t("help-select-method-of-config-gathering"),
               displayField: "label",
               valueField: "id",
               store: {
                 fields: ["id", "label"],
                 data: [
-                  {"id": "P", "label": __("Profile")},
-                  {"id": "s", "label": __("Script")},
-                  {"id": "S", "label": __("Script, Download")},
-                  {"id": "D", "label": __("Download, Script")},
-                  {"id": "d", "label": __("Download")},
+                  {"id": "P", "label": t("header-profile")},
+                  {"id": "s", "label": t("label-script")},
+                  {"id": "S", "label": t("msg-script-download")},
+                  {"id": "D", "label": t("btn-download-script")},
+                  {"id": "d", "label": t("btn-download")},
                 ],
               },
             },
             {
               name: "config_fetch_policy",
               xtype: "combobox",
-              fieldLabel: __("Config fetch"),
+              fieldLabel: t("label-config-fetch"),
               tabIndex: 440,
               allowBlank: false,
-              tooltip: __("Select method of config fetching"),
+              tooltip: t("help-select-method-of-config-fetching"),
               displayField: "label",
               valueField: "id",
               store: {
                 fields: ["id", "label"],
                 data: [
-                  {"id": "P", "label": __("Profile")},
-                  {"id": "s", "label": __("Prefer Startup")},
-                  {"id": "r", "label": __("Prefer Running")},
+                  {"id": "P", "label": t("header-profile")},
+                  {"id": "s", "label": t("msg-prefer-startup")},
+                  {"id": "r", "label": t("msg-prefer-running")},
                 ],
               },
             },
             {
               name: "caps_discovery_policy",
               xtype: "combobox",
-              fieldLabel: __("Caps"),
+              fieldLabel: t("header-caps"),
               tabIndex: 450,
               store: [
-                ["P", __("Profile")],
-                ["s", __("Script")],
-                ["S", __("Script, ConfDB")],
-                ["C", __("ConfDB, Script")],
-                ["c", __("ConfDB")],
+                ["P", t("header-profile")],
+                ["s", t("label-script")],
+                ["S", t("msg-script-confdb")],
+                ["C", t("msg-confdb-script")],
+                ["c", t("msg-confdb")],
               ],
               allowBlank: false,
               uiStyle: "medium",
@@ -940,14 +888,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
             {
               name: "interface_discovery_policy",
               xtype: "combobox",
-              fieldLabel: __("Interface"),
+              fieldLabel: t("header-interface"),
               tabIndex: 460,
               store: [
-                ["P", __("Profile")],
-                ["s", __("Script")],
-                ["S", __("Script, ConfDB")],
-                ["C", __("ConfDB, Script")],
-                ["c", __("ConfDB")],
+                ["P", t("header-profile")],
+                ["s", t("label-script")],
+                ["S", t("msg-script-confdb")],
+                ["C", t("msg-confdb-script")],
+                ["c", t("msg-confdb")],
               ],
               allowBlank: false,
               uiStyle: "medium",
@@ -955,14 +903,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
             {
               name: "vlan_discovery_policy",
               xtype: "combobox",
-              fieldLabel: __("VLAN"),
+              fieldLabel: t("app-title-vlan"),
               tabIndex: 470,
               store: [
-                ["P", __("Profile")],
-                ["s", __("Script")],
-                ["S", __("Script, ConfDB")],
-                ["C", __("ConfDB, Script")],
-                ["c", __("ConfDB")],
+                ["P", t("header-profile")],
+                ["s", t("label-script")],
+                ["S", t("msg-script-confdb")],
+                ["C", t("msg-confdb-script")],
+                ["c", t("msg-confdb")],
               ],
               allowBlank: false,
               uiStyle: "medium",
@@ -971,7 +919,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("ConfDB"),
+          title: t("msg-confdb"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -979,12 +927,12 @@ Ext.define("NOC.sa.managedobject.form.View", {
             {
               name: "confdb_raw_policy",
               xtype: "combobox",
-              fieldLabel: __("Raw Policy"),
+              fieldLabel: t("label-raw-policy"),
               tabIndex: 480,
               store: [
-                ["P", __("Profile")],
-                ["E", __("Enable")],
-                ["D", __("Disable")],
+                ["P", t("header-profile")],
+                ["E", t("label-enable")],
+                ["D", t("status-disable")],
               ],
               allowBlank: false,
               groupEdit: true,
@@ -993,7 +941,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Event Sources"),
+          title: t("app-title-event-sources"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1005,11 +953,9 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/pool/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("FM Pool"),
+                  fieldLabel: t("label-fm-pool"),
                   tabIndex: 490,
-                  tooltip: __(
-                    "Use to override pool for events processing",
-                  ),
+                  tooltip: t("help-use-to-override-pool-for-events-processing"),
                   allowBlank: true,
                   groupEdit: true,
                   listeners: {
@@ -1019,12 +965,12 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "event_processing_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Event Policy"),
+                  fieldLabel: t("label-event-policy"),
                   tabIndex: 500,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   allowBlank: false,
                   groupEdit: true,
@@ -1032,14 +978,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "trap_source_type",
                   xtype: "combobox",
-                  fieldLabel: __("Trap Source"),
+                  fieldLabel: t("label-trap-source"),
                   tabIndex: 510,
                   store: [
-                    ["d", __("Disable")],
-                    ["m", __("Management Address")],
-                    ["s", __("Specify address")],
-                    ["l", __("Loopback address")],
-                    ["a", __("All interface addresses")],
+                    ["d", t("status-disable")],
+                    ["m", t("msg-management-address")],
+                    ["s", t("msg-specify-address")],
+                    ["l", t("msg-loopback-address")],
+                    ["a", t("msg-all-interface-addresses")],
                   ],
                   listeners: {
                     scope: this,
@@ -1055,7 +1001,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "trap_source_ip",
                   xtype: "textfield",
-                  fieldLabel: __("Trap Source IP"),
+                  fieldLabel: t("label-trap-source-ip"),
                   tabIndex: 520,
                   allowBlank: true,
                   groupEdit: true,
@@ -1063,12 +1009,12 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "syslog_archive_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Syslog Archive Policy"),
+                  fieldLabel: t("label-syslog-archive-policy"),
                   tabIndex: 530,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   allowBlank: false,
                   groupEdit: true,
@@ -1079,14 +1025,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "syslog_source_type",
                   xtype: "combobox",
-                  fieldLabel: __("Syslog Source"),
+                  fieldLabel: t("label-syslog-source"),
                   tabIndex: 540,
                   store: [
-                    ["d", __("Disable")],
-                    ["m", __("Management Address")],
-                    ["s", __("Specify address")],
-                    ["l", __("Loopback address")],
-                    ["a", __("All interface addresses")],
+                    ["d", t("status-disable")],
+                    ["m", t("msg-management-address")],
+                    ["s", t("msg-specify-address")],
+                    ["l", t("msg-loopback-address")],
+                    ["a", t("msg-all-interface-addresses")],
                   ],
                   listeners: {
                     scope: this,
@@ -1102,7 +1048,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "syslog_source_ip",
                   xtype: "textfield",
-                  fieldLabel: __("Syslog Source IP"),
+                  fieldLabel: t("label-syslog-source-ip"),
                   tabIndex: 550,
                   allowBlank: true,
                   groupEdit: true,
@@ -1110,7 +1056,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "trap_community",
                   xtype: "password",
-                  fieldLabel: __("Trap Community"),
+                  fieldLabel: t("label-trap-community"),
                   tabIndex: 560,
                   allowBlank: true,
                   groupEdit: true,
@@ -1121,7 +1067,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Resource Groups"),
+          title: t("nav-resourcegroup"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1138,7 +1084,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 //     items: [
                 //         {
                 //             glyph: NOC.glyph.search,
-                //             tooltip: __("Show Card"),
+                //             tooltip: t("Show Card"),
                 //             scope: this,
                 //             handler: this.onShowResourceGroup
                 //         }
@@ -1146,7 +1092,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 // },
                 {
                   dataIndex: "group",
-                  text: __("Static Service Groups"),
+                  text: t("btn-static-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -1163,7 +1109,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Service Groups"),
+                  text: t("btn-effective-service-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -1179,7 +1125,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Static Client Groups"),
+                  text: t("btn-static-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -1195,7 +1141,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
               columns: [
                 {
                   dataIndex: "group",
-                  text: __("Effective Client Groups"),
+                  text: t("btn-effective-client-groups"),
                   width: 350,
                   renderer: NOC.render.Lookup("group"),
                   editor: {
@@ -1209,7 +1155,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("CPE"),
+          title: t("header-cpe"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1222,7 +1168,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/sa/managedobject/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Controller"),
+                  fieldLabel: t("label-controller"),
                   tabIndex: 570,
                   allowBlank: true,
                   groupEdit: true,
@@ -1230,7 +1176,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "local_cpe_id",
                   xtype: "textfield",
-                  fieldLabel: __("Local CPE Id"),
+                  fieldLabel: t("label-local-cpe-id"),
                   tabIndex: 580,
                   allowBlank: true,
                 }],
@@ -1240,14 +1186,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "global_cpe_id",
                   xtype: "textfield",
-                  fieldLabel: __("Global CPE Id"),
+                  fieldLabel: t("label-global-cpe-id"),
                   tabIndex: 590,
                   allowBlank: true,
                 },
                 {
                   name: "last_seen",
                   xtype: "displayfield",
-                  fieldLabel: __("Last Seen"),
+                  fieldLabel: t("header-last-seen-20c226"),
                   tabIndex: 600,
                   allowBlank: true,
                 }],
@@ -1256,7 +1202,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Rules"),
+          title: t("header-rules"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1269,7 +1215,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/handler/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Config Filter Handler"),
+                  fieldLabel: t("label-config-filter-handler"),
                   tabIndex: 610,
                   allowBlank: true,
                   groupEdit: true,
@@ -1282,7 +1228,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/handler/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Config Diff Filter Handler"),
+                  fieldLabel: t("label-config-diff-filter-handler"),
                   tabIndex: 620,
                   allowBlank: true,
                   groupEdit: true,
@@ -1297,7 +1243,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/handler/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Config Validation Handler"),
+                  fieldLabel: t("label-config-validation-handler"),
                   tabIndex: 630,
                   allowBlank: true,
                   groupEdit: true,
@@ -1310,7 +1256,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Escalation"),
+          title: t("header-escalation"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1321,14 +1267,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "escalation_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Escalation Policy"),
+                  fieldLabel: t("label-escalation-policy"),
                   tabIndex: 660,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
-                    ["R", __("As Depended")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
+                    ["R", t("msg-as-depended")],
                   ],
                   groupEdit: true,
                 },
@@ -1337,7 +1283,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/fm/ttsystem/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("TT System"),
+                  fieldLabel: t("app-title-ttsystem"),
                   tabIndex: 670,
                   allowBlank: true,
                   groupEdit: true,
@@ -1347,7 +1293,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "tt_queue",
                   xtype: "textfield",
-                  fieldLabel: __("TT Queue"),
+                  fieldLabel: t("header-tt-queue"),
                   tabIndex: 680,
                   allowBlank: true,
                   groupEdit: true,
@@ -1355,7 +1301,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "tt_system_id",
                   xtype: "textfield",
-                  fieldLabel: __("TT System ID"),
+                  fieldLabel: t("label-tt-system-id"),
                   tabIndex: 690,
                   allowBlank: true,
                 },
@@ -1365,7 +1311,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Discovery Alarm"),
+          title: t("app-title-discovery-alarm"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1376,13 +1322,13 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "box_discovery_alarm_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Box Alarm"),
+                  fieldLabel: t("label-box-alarm"),
                   tabIndex: 700,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   groupEdit: true,
                 }],
@@ -1392,13 +1338,13 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "periodic_discovery_alarm_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Periodic Alarm"),
+                  fieldLabel: t("label-periodic-alarm"),
                   tabIndex: 710,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   groupEdit: true,
                 }],
@@ -1408,15 +1354,15 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "denied_firmware_policy",
                   xtype: "combobox",
-                  fieldLabel: __("On Denied Firmware"),
+                  fieldLabel: t("label-on-denied-firmware"),
                   tabIndex: 720,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["I", __("Ignore")],
-                    ["s", __("Ignore&Stop")],
-                    ["A", __("Raise Alarm")],
-                    ["S", __("Raise Alarm&Stop")],
+                    ["P", t("header-profile")],
+                    ["I", t("choice-ignore")],
+                    ["s", t("msg-ignore-stop")],
+                    ["A", t("msg-raise-alarm")],
+                    ["S", t("msg-raise-alarm-stop")],
                   ],
                   groupEdit: true,
                 }],
@@ -1425,7 +1371,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         },
         {
           xtype: "fieldset",
-          title: __("Telemetry"),
+          title: t("app-title-telemetry"),
           layout: "column",
           defaults: this.fieldSetDefaults,
           collapsible: true,
@@ -1436,20 +1382,20 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "box_discovery_telemetry_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Box Telemetry"),
+                  fieldLabel: t("label-box-telemetry"),
                   tabIndex: 730,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   groupEdit: true,
                 },
                 {
                   name: "box_discovery_telemetry_sample",
                   xtype: "numberfield",
-                  fieldLabel: __("Box Sample"),
+                  fieldLabel: t("label-box-sample"),
                   tabIndex: 740,
                   groupEdit: true,
                 }],
@@ -1458,20 +1404,20 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 {
                   name: "periodic_discovery_telemetry_policy",
                   xtype: "combobox",
-                  fieldLabel: __("Periodic Telemetry"),
+                  fieldLabel: t("label-periodic-telemetry"),
                   tabIndex: 750,
                   allowBlank: true,
                   store: [
-                    ["P", __("Profile")],
-                    ["E", __("Enable")],
-                    ["D", __("Disable")],
+                    ["P", t("header-profile")],
+                    ["E", t("label-enable")],
+                    ["D", t("status-disable")],
                   ],
                   groupEdit: true,
                 },
                 {
                   name: "periodic_discovery_telemetry_sample",
                   xtype: "numberfield",
-                  fieldLabel: __("Periodic Sample"),
+                  fieldLabel: t("label-periodic-sample"),
                   tabIndex: 760,
                   groupEdit: true,
                 }],
@@ -1482,7 +1428,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
           xtype: "fieldset",
           anchor: "100%",
           minHeight: 130,
-          title: __("Attributes"),
+          title: t("app-title-attributes"),
           collapsible: true,
           collapsed: true,
           items: [
@@ -1492,13 +1438,13 @@ Ext.define("NOC.sa.managedobject.form.View", {
               model: "NOC.sa.managedobject.AttributesModel",
               columns: [
                 {
-                  text: __("Key"),
+                  text: t("header-key"),
                   dataIndex: "key",
                   width: 100,
                   editor: "textfield",
                 },
                 {
-                  text: __("Value"),
+                  text: t("header-value"),
                   dataIndex: "value",
                   editor: "textfield",
                   flex: 1,
@@ -1511,7 +1457,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
           xtype: "fieldset",
           anchor: "100%",
           minHeight: 130,
-          title: __("Capabilities"),
+          title: t("header-capabilities"),
           collapsible: true,
           collapsed: false,
           items: [
@@ -1531,29 +1477,29 @@ Ext.define("NOC.sa.managedobject.form.View", {
               ],
               columns: [
                 {
-                  text: __("Capability"),
+                  text: t("app-title-capability"),
                   dataIndex: "capability",
                   width: 300,
                 },
                 {
-                  text: __("Value"),
+                  text: t("header-value"),
                   dataIndex: "value",
                   useModalEditor: true,
                   width: 280,
                   urlPrefix: "/sa/managedobject",
                 },
                 {
-                  text: __("Scope"),
+                  text: t("header-scope"),
                   dataIndex: "scope",
                   width: 80,
                 },
                 {
-                  text: __("Source"),
+                  text: t("header-source"),
                   dataIndex: "source",
                   width: 80,
                 },
                 {
-                  text: __("Description"),
+                  text: t("label-description"),
                   dataIndex: "description",
                   flex: 1,
                 },
@@ -1695,66 +1641,66 @@ Ext.define("NOC.sa.managedobject.form.View", {
     items: [
       {
         itemId: "saveBtn",
-        text: __("Save"),
-        tooltip: __("Save changes"),
+        text: t("btn-save"),
+        tooltip: t("help-save-changes"),
         glyph: NOC.glyph.save,
         handler: "onSaveRecord",
       },
       {
         itemId: "applyBtn",
-        text: __("Apply"),
-        tooltip: __("Apply changes"),
+        text: t("btn-apply"),
+        tooltip: t("help-apply-changes"),
         glyph: NOC.glyph.save,
         handler: "onApplyRecord",
       },
       {
         itemId: "groupSaveBtn",
-        text: __("Save"),
-        tooltip: __("Save changes"),
+        text: t("btn-save"),
+        tooltip: t("help-save-changes"),
         glyph: NOC.glyph.save,
         handler: "onSaveRecords",
       },
       {
         itemId: "groupApplyBtn",
-        text: __("Apply"),
-        tooltip: __("Apply changes"),
+        text: t("btn-apply"),
+        tooltip: t("help-apply-changes"),
         glyph: NOC.glyph.save,
         handler: "onApplyRecords",
       },
       {
         itemId: "closeBtn",
-        text: __("Close"),
-        tooltip: __("Close without saving"),
+        text: t("btn-close"),
+        tooltip: t("help-close-without-saving"),
         glyph: NOC.glyph.arrow_left,
         handler: "toMain",
       },
       "-",
       {
         itemId: "resetBtn",
-        text: __("Reset"),
-        tooltip: __("Reset to default values"),
+        text: t("btn-reset"),
+        tooltip: t("help-reset-to-default-values"),
         glyph: NOC.glyph.undo,
         handler: "onResetRecord",
       },
       {
         itemId: "deleteBtn",
-        text: __("Delete"),
-        tooltip: __("Delete object"),
+        text: t("btn-delete"),
+        tooltip: t("help-delete-object"),
         glyph: NOC.glyph.times,
         handler: "onDeleteRecord",
       },
       "-",
       {
         itemId: "createBtn",
-        text: __("Add"),
+        text: t("btn-add"),
         glyph: NOC.glyph.plus,
-        tooltip: __("Add new record"),
+        tooltip: t("help-add-new-record"),
         handler: "onNewRecord",
       },
       {
         itemId: "cloneBtn",
-        text: __("Clone"),
-        tooltip: __("Copy existing values to a new object"),
+        text: t("btn-clone"),
+        tooltip: t("help-copy-existing-values-to-a-new-object"),
         glyph: NOC.glyph.copy,
         handler: "onCloneRecord",
       },
@@ -1762,122 +1708,122 @@ Ext.define("NOC.sa.managedobject.form.View", {
       {
         itemId: "showMapBtn",
         xtype: "splitbutton",
-        text: __("Show Map"),
+        text: t("btn-show-map"),
         glyph: NOC.glyph.globe,
         menu: [ // Dynamically add items, in showMapHandler from Controller
         ],
       },
       {
         itemId: "configBtn",
-        text: __("Config"),
+        text: t("btn-config"),
         glyph: NOC.glyph.file,
         handler: "onConfig",
       },
       {
         itemId: "confDBBtn",
-        text: __("ConfDB"),
+        text: t("msg-confdb"),
         glyph: NOC.glyph.file_code_o,
         handler: "onConfDB",
       },
       {
         itemId: "cardBtn",
-        text: __("Card"),
+        text: t("btn-card"),
         glyph: NOC.glyph.eye,
         handler: "onCard",
       },
       {
         itemId: "dashboardBtn",
-        text: __("Dashboard"),
+        text: t("app-title-dashboard"),
         glyph: NOC.glyph.line_chart,
-        tooltip: __("Show dashboard"),
+        tooltip: t("btn-show-dashboard-2"),
         handler: "onDashboard",
       },
       {
         itemId: "consoleBtn",
-        text: __("Console"),
+        text: t("help-console"),
         glyph: NOC.glyph.terminal,
         handler: "onConsole",
       },
       {
         itemId: "scriptsBtn",
-        text: __("Scripts"),
+        text: t("btn-scripts"),
         glyph: NOC.glyph.play,
         handler: "onScripts",
       },
       {
         itemId: "interfacesBtn",
-        text: __("Interfaces"),
+        text: t("header-interfaces"),
         glyph: NOC.glyph.reorder,
         handler: "onInterfaces",
       },
       {
         itemId: "sensorsBtn",
-        text: __("Sensors"),
+        text: t("label-sensors"),
         glyph: NOC.glyph.thermometer_full,
         handler: "onSensors",
       },
       // {
-      //     text: __("CPE"),
+      //     text: t("CPE"),
       //     glyph: NOC.glyph.share_alt,
       //     handler: "onCPE"
       // },
       {
         itemId: "linksBtn",
-        text: __("Links"),
+        text: t("app-title-links"),
         glyph: NOC.glyph.link,
         handler: "onLinks",
       },
       {
         itemId: "discoverBtn",
-        text: __("Discovery"),
+        text: t("header-discovery"),
         glyph: NOC.glyph.search,
         handler: "onDiscovery",
       },
       {
         itemId: "alarmsBtn",
-        text: __("Alarms"),
+        text: t("header-alarms"),
         glyph: NOC.glyph.exclamation_triangle,
         handler: "onAlarm",
       },
       // {
-      //     text: __("New Maintenance"),
+      //     text: t("New Maintenance"),
       //     glyph: NOC.glyph.wrench,
       //     handler: "onMaintenance"
       // },
       {
         itemId: "inventoryBtn",
-        text: __("Inventory"),
+        text: t("app-title-inv"),
         glyph: NOC.glyph.list,
         handler: "onInventory",
       },
       {
         itemId: "cmdBtn",
-        text: __("Command Log"),
+        text: t("btn-command-log"),
         glyph: NOC.glyph.film,
         handler: "onInteractions",
       },
       {
         itemId: "mappingBtn",
-        text: __("Mapping"),
+        text: t("btn-mapping"),
         glyph: NOC.glyph.file,
         handler: "onMapping",
       },
       // {
-      //     text: __("Validation"),
+      //     text: t("Validation"),
       //     glyph: NOC.glyph.file,
       //     handler: "onValidationSettings"
       // },
       // {
-      //     text: __("Capabilities"),
+      //     text: t("Capabilities"),
       //     glyph: NOC.glyph.file,
       //     handler: "onCaps"
       // },
       "->",
       {
         itemId: "helpBtn",
-        text: __("Help"),
+        text: t("app-title-help"),
         glyph: NOC.glyph.question_circle,
-        tooltip: __("Form Help"),
+        tooltip: t("help-form-help"),
         handler: "onHelpOpener",
 
       },
@@ -1892,7 +1838,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
         xtype: "fieldset",
         anchor: "100%",
         minHeight: 130,
-        title: __("Custom Fields"),
+        title: t("app-title-customfield"),
         collapsible: true,
         collapsed: false,
         items: cust_fields,

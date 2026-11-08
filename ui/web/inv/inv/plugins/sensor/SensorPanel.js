@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.sensor.SensorPanel");
 
 Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
   extend: "Ext.panel.Panel",
-  title: __("Sensors"),
+  title: t("label-sensors"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -27,11 +27,11 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
       columns: [
         {
           dataIndex: "local_id",
-          text: __("Name"),
+          text: t("header-name"),
         },
         {
           dataIndex: "profile",
-          text: __("Profile"),
+          text: t("header-profile"),
           renderer: NOC.render.Lookup("profile"),
           editor: {
             xtype: "inv.sensorprofile.LookupField",
@@ -39,7 +39,7 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
         },
         {
           dataIndex: "units",
-          text: __("Units"),
+          text: t("btn-units"),
           renderer: NOC.render.Lookup("units"),
           editor: {
             xtype: "pm.measurementunits.LookupField",
@@ -47,29 +47,29 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
         },
         {
           dataIndex: "object__label",
-          text: __("Object"),
+          text: t("header-object"),
           width: 220,
         },
         {
           dataIndex: "state",
-          text: __("State"),
+          text: t("header-state"),
           renderer: NOC.render.Lookup("state"),
         },
         {
           dataIndex: "modbus_register",
-          text: __("Modbus Register"),
+          text: t("header-modbus-register"),
         },
         {
           dataIndex: "modbus_format",
-          text: __("Modbus Format"),
+          text: t("header-modbus-format"),
         },
         {
           dataIndex: "protocol",
-          text: __("Protocol"),
+          text: t("header-protocol"),
         },
         {
           dataIndex: "snmp_oid",
-          text: __("SNMP OID"),
+          text: t("header-snmp-oid"),
           width: 200,
         },
       ],
@@ -82,7 +82,7 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
           e.record.set(e.field + "__label", ed.rawValue);
         }
         data[e.field] = e.value;
-        grid.mask(__("Saving ..."));
+        grid.mask(t("msg-saving-3"));
         NOC.api.requestLegacy({
           url: "/inv/inv/" + e.record.data.id + "/plugin/sensor/",
           method: "POST",
@@ -91,10 +91,10 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
           success: function(){
             grid.unmask();
             e.record.commit();
-            NOC.msg.complete(__("Saved"));
+            NOC.msg.complete(t("msg-saved-2"));
           },
           failure: function(response){
-            var message = __("Not saved");
+            var message = t("msg-not-saved");
             if(response.responseText){
               try{
                 message = Ext.decode(response.responseText).message

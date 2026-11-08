@@ -39,20 +39,20 @@ Ext.define("NOC.pm.metricscope.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "table_name",
           xtype: "textfield",
-          fieldLabel: __("Table"),
+          fieldLabel: t("header-table"),
           allowBlank: false,
           uiStyle: "medium",
           regex: /[a-zA-Z][0-9a-zA-Z_]*/,
@@ -60,24 +60,24 @@ Ext.define("NOC.pm.metricscope.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "key_fields",
           xtype: "gridfield",
-          fieldLabel: __("Key Fields"),
+          fieldLabel: t("label-key-fields"),
           allowBlank: false,
           columns: [
             {
               dataIndex: "field_name",
-              text: __("Field"),
+              text: t("btn-field"),
               width: 150,
               editor: "textfield",
             },
             {
               dataIndex: "model",
-              text: __("Model"),
+              text: t("header-model"),
               flex: 1,
               editor: "textfield",
             },
@@ -86,59 +86,59 @@ Ext.define("NOC.pm.metricscope.Application", {
         {
           name: "labels",
           xtype: "gridfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           columns: [
             {
               dataIndex: "label",
-              text: __("Label"),
+              text: t("header-label"),
               width: 150,
               editor: "textfield",
             },
             {
               dataIndex: "is_required",
-              text: __("Required"),
+              text: t("header-required"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
               dataIndex: "is_key_label",
-              text: __("Include key Label"),
+              text: t("header-include-key-label"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
               dataIndex: "is_primary_key",
-              text: __("Primary Key"),
+              text: t("header-primary-key"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
               dataIndex: "is_order_key",
-              text: __("Order Key"),
+              text: t("header-order-key"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
               dataIndex: "is_path",
-              text: __("Path"),
+              text: t("header-path"),
               width: 50,
               editor: "checkbox",
               renderer: NOC.render.Bool,
             },
             {
               dataIndex: "store_column",
-              text: __("Store Column"),
+              text: t("header-store-column"),
               flex: 1,
               editor: "textfield",
             },
             {
               dataIndex: "view_column",
-              text: __("View Column"),
+              text: t("header-view-column"),
               flex: 1,
               editor: "textfield",
             },
@@ -147,11 +147,8 @@ Ext.define("NOC.pm.metricscope.Application", {
         {
           name: "enable_timedelta",
           xtype: "checkbox",
-          boxLabel: __("Enable Time Delta (Require migration)"),
-          tooltip: __(
-            "Required run migration metric Database after changed." +
-                        "That enabled only by deploy.",
-          ),
+          boxLabel: t("label-enable-time-delta-require-migration"),
+          tooltip: t("help-required-run-migration-metric-database-after-changed-that-enable"),
           disabled: true,
           listeners: {
             render: me.addTooltip,
@@ -160,9 +157,9 @@ Ext.define("NOC.pm.metricscope.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

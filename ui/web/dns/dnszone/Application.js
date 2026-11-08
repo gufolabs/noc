@@ -27,45 +27,45 @@ Ext.define("NOC.dns.dnszone.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Gen."),
+          text: t("header-gen"),
           dataIndex: "is_auto_generated",
           renderer: NOC.render.Bool,
           width: 30,
         },
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           renderer: NOC.render.Choices({
-            "F": __("Fwd"),
-            "4": __("Rev IPv4"),
-            "6": __("Rev IPv6"),
+            "F": t("msg-fwd"),
+            "4": t("msg-rev-ipv4"),
+            "6": t("msg-rev-ipv6"),
           }),
           width: 30,
         },
         {
-          text: __("Serial"),
+          text: t("header-serial"),
           dataIndex: "serial",
           width: 75,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           renderer: NOC.render.Lookup("profile"),
           width: 100,
         },
         {
-          text: __("Project"),
+          text: t("label-project"),
           dataIndex: "project",
           renderer: NOC.render.Lookup("project"),
           width: 150,
         },
         {
-          text: __("Paid Till"),
+          text: t("header-paid-till"),
           dataIndex: "paid_till",
           width: 100,
           format: "Y-m-d",
@@ -73,18 +73,18 @@ Ext.define("NOC.dns.dnszone.Application", {
           renderer: NOC.render.Date,
         },
         {
-          text: __("Notification"),
+          text: t("header-notification"),
           dataIndex: "notification_group",
           renderer: NOC.render.Lookup("notification_group"),
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
         },
@@ -93,57 +93,57 @@ Ext.define("NOC.dns.dnszone.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Domain"),
+          fieldLabel: t("header-domain"),
           allowBlank: false,
           autoFocus: true,
         },
         {
           name: "description",
           xtype: "textfield",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "is_auto_generated",
           xtype: "checkboxfield",
-          boxLabel: __("Auto generated?"),
+          boxLabel: t("label-auto-generated"),
           allowBlank: false,
         },
         {
           name: "serial",
           xtype: "displayfield",
-          fieldLabel: __("Serial"),
+          fieldLabel: t("header-serial"),
           allowBlank: false,
         },
         {
           name: "profile",
           xtype: "dns.dnszoneprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           name: "notification_group",
           xtype: "main.notificationgroup.LookupField",
-          fieldLabel: __("Notification Group"),
+          fieldLabel: t("app-title-notificationgroup"),
           allowBlank: true,
         },
         {
           name: "paid_till",
           xtype: "datefield",
           startDay: 1,
-          fieldLabel: __("Paid Till"),
+          fieldLabel: t("header-paid-till"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["dns.DNSZone"],
@@ -152,24 +152,24 @@ Ext.define("NOC.dns.dnszone.Application", {
       ],
       inlines: [
         {
-          title: __("Records"),
+          title: t("header-records"),
           model: "NOC.dns.dnszone.RecordsModel",
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("TTL"),
+              text: t("header-ttl"),
               dataIndex: "ttl",
               width: 110,
               align: "right",
               editor: "numberfield",
             },
             {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
               width: 100,
               editor: {
@@ -181,14 +181,14 @@ Ext.define("NOC.dns.dnszone.Application", {
               },
             },
             {
-              text: __("Prio."),
+              text: t("header-prio"),
               dataIndex: "priority",
               width: 75,
               align: "right",
               editor: "numberfield",
             },
             {
-              text: __("Content"),
+              text: t("header-content"),
               dataIndex: "content",
               flex: 1,
               editor: {
@@ -197,7 +197,7 @@ Ext.define("NOC.dns.dnszone.Application", {
               },
             },
             {
-              text: __("Labels"),
+              text: t("header-labels"),
               dataIndex: "labels",
               width: 150,
               editor: "labelfield",
@@ -207,9 +207,9 @@ Ext.define("NOC.dns.dnszone.Application", {
       ],
       formToolbar: [
         {
-          text: __("Preview"),
+          text: t("help-preview"),
           glyph: NOC.glyph.search,
-          tooltip: __("Preview zone"),
+          tooltip: t("help-preview-zone"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onPreviewZone,
@@ -220,35 +220,35 @@ Ext.define("NOC.dns.dnszone.Application", {
   },
   filters: [
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "dns.dnszoneprofile",
     },
     {
-      title: __("By Type"),
+      title: t("app-title-by-type"),
       name: "type",
       ftype: "choices",
       store: [
-        ["F", __("Forward")],
-        ["4", __("IPv4 Reverse")],
-        ["6", __("IPv6 Reverse")],
+        ["F", t("msg-forward")],
+        ["4", t("msg-ipv4-reverse")],
+        ["6", t("msg-ipv6-reverse")],
       ],
     },
     {
-      title: __("By Project"),
+      title: t("app-title-by-project"),
       name: "project",
       ftype: "lookup",
       lookup: "project.project",
     },
     {
-      title: __("By Notification"),
+      title: t("app-title-by-notification"),
       name: "notification_group",
       ftype: "lookup",
       lookup: "main.notificationgroup",
     },
     {
-      title: __("By Labels"),
+      title: t("choice-by-labels"),
       name: "labels",
       ftype: "label",
     },

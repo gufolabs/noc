@@ -38,7 +38,7 @@ Ext.define("NOC.fm.event.ApplicationController", {
     var grid = this.getView().gridPanel,
       store = grid.getStore(),
       filter = this.serialize(data);
-    grid.mask(__("Loading..."));
+    grid.mask(t("msg-loading-3"));
     store.getProxy().setExtraParams(filter);
     store.load({
       params: filter,

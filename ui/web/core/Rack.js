@@ -153,7 +153,7 @@ Ext.define("NOC.core.Rack", {
     if(label){
       out.push({
         type: "text",
-        text: __("Rack: ") + label,
+        text: t("msg-rack-value0", {value0: label}),
         x: x + e_width - me.TEXT_PADDING_HORIZONTAL - me.SIDE_WIDTH,
         y: y + me.U_HEIGH - me.TEXT_PADDING_VERTICAL,
         fill: me.RACK_LABEL_FILL,

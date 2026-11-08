@@ -18,7 +18,7 @@ Ext.define("NOC.sa.managedobject.CPEPanel", {
     me.currentObject = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -89,51 +89,51 @@ Ext.define("NOC.sa.managedobject.CPEPanel", {
         store: me.store,
         columns: [
           {
-            text: __("Address"),
+            text: t("app-title-address"),
             dataIndex: "address",
           },
           {
-            text: __("Description"),
+            text: t("label-description"),
             dataIndex: "description",
           },
           {
-            text: __("Global Id"),
+            text: t("label-global-id"),
             dataIndex: "global_id",
           },
           {
-            text: __("Interface"),
+            text: t("header-interface"),
             dataIndex: "interface",
           },
           {
-            text: __("Loca Id"),
+            text: t("header-loca-id"),
             dataIndex: "local_id",
           },
           {
-            text: __("Location"),
+            text: t("header-location-d219c6"),
             dataIndex: "location",
           },
           {
-            text: __("Mac"),
+            text: t("header-mac-2"),
             dataIndex: "mac",
           },
           {
-            text: __("Model"),
+            text: t("header-model"),
             dataIndex: "model",
           },
           {
-            text: __("Name"),
+            text: t("header-name"),
             dataIndex: "name",
           },
           {
-            text: __("Serial"),
+            text: t("header-serial"),
             dataIndex: "serial",
           },
           {
-            text: __("Status"),
+            text: t("header-status"),
             dataIndex: "status",
           },
           {
-            text: __("Version"),
+            text: t("header-version"),
             dataIndex: "version",
           },
         ],
@@ -172,7 +172,7 @@ Ext.define("NOC.sa.managedobject.CPEPanel", {
         me.store.loadData(data.cpe || []);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

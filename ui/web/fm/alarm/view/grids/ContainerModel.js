@@ -24,7 +24,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerModel", {
   },
   formulas: {
     alarmsTotal: function(get){
-      return __("Total: ") + get("total.alarmsTotal");
+      return t("msg-total-value0-2", {value0: get("total.alarmsTotal")});
     },
     summaryTotal: function(get){
       var selected = get("total.selected"),
@@ -65,14 +65,14 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerModel", {
       return get("volume") ? "xf028" : "xf026";
     },
     volumeIconText: function(get){
-      return __("Sound: ") + (get("volume") ? __("ON") : __("OFF"));
+      return t("msg-sound-value0", {value0: get("volume") ? t("msg-on") : t("msg-off")});
     },
     autoReloadIcon: function(get){
       //  NOC.glyph.refresh or NOC.glyph.ban
       return get("autoReload") ? "xf021" : "xf05e";
     },
     autoReloadText: function(get){
-      return __("Auto reload : ") + (get("autoReload") ? __("ON") : __("OFF"));
+      return t("msg-auto-reload-value0", {value0: get("autoReload") ? t("msg-on") : t("msg-off")});
     },
   },
 });

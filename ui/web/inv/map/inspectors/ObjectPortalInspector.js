@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.ObjectPortalInspector");
 
 Ext.define("NOC.inv.map.inspectors.ObjectPortalInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("Portal Inspector"),
+  title: t("app-title-portal-inspector"),
   inspectorName: "objectportal",
 
   tpl: [
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.map.inspectors.ObjectPortalInspector", {
     this.portalButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.location_arrow,
       scope: this,
-      tooltip: __("Jump to Portal"),
+      tooltip: t("help-jump-to-portal"),
       handler: this.onJumpPortal,
       disabled: true,
     });

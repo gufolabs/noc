@@ -17,7 +17,7 @@ Ext.define("NOC.sa.service.RegisterForm", {
   modal: true,
   layout: "fit",
   defaultListenerScope: true,
-  title: __("Register Instance"),
+  title: t("app-title-register-instance"),
   items: [
     {
       xtype: "form",
@@ -33,7 +33,7 @@ Ext.define("NOC.sa.service.RegisterForm", {
         },
         {
           xtype: "core.combo",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           name: "type",
           allowBlank: false,
           editable: false,
@@ -44,18 +44,18 @@ Ext.define("NOC.sa.service.RegisterForm", {
         },
         {
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           name: "name",
         },
         {
           xtype: "textfield",
-          fieldLabel: __("FQDN"),
+          fieldLabel: t("label-fqdn"),
           name: "fqdn",
         },
       ],
       buttons: [
         {
-          text: __("Register"),
+          text: t("btn-register"),
           formBind: true,
           handler: "buttonHandler",
         },

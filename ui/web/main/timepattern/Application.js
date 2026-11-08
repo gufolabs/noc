@@ -16,12 +16,12 @@ Ext.define("NOC.main.timepattern.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
       width: 100,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -30,23 +30,23 @@ Ext.define("NOC.main.timepattern.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
   ],
   inlines: [
     {
-      title: __("Time Patterns"),
+      title: t("nav-timepattern"),
       model: "NOC.main.timepattern.TermModel",
       columns: [
         {
-          text: __("Pattern"),
+          text: t("header-pattern"),
           dataIndex: "term",
           flex: 1,
           editor: "textfield",
@@ -56,7 +56,7 @@ Ext.define("NOC.main.timepattern.Application", {
   ],
   "actions": [
     {
-      title: __("Test selected patterns"),
+      title: t("app-title-test-selected-patterns"),
       action: "test",
       resultTemplate: new Ext.XTemplate('<b>Date:</b> {ts}\n<table border="1">\n    <tr><th>TimePattern</th><th>Result</th></tr>\n    <tpl foreach="result">\n    <tr><td>{name}</td><td><tpl if="result">+<tpl else>-</tpl></td></tr>\n    </tpl>\n</table>'),
       form: [
@@ -64,14 +64,14 @@ Ext.define("NOC.main.timepattern.Application", {
           name: "date",
           xtype: "datefield",
           startDay: 1,
-          fieldLabel: __("Date"),
+          fieldLabel: t("header-date"),
           allowBlank: false,
           format: "Y-m-d",
         },
         {
           name: "time",
           xtype: "timefield",
-          fieldLabel: __("Time"),
+          fieldLabel: t("header-time"),
           allowBlank: true,
           format: "H:i",
         },

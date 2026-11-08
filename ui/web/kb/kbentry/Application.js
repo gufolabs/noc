@@ -25,7 +25,7 @@ Ext.define("NOC.kb.kbentry.Application", {
     var me = this;
 
     me.historyButton = Ext.create("Ext.button.Button", {
-      text: __("History"),
+      text: t("app-title-reporthistory"),
       glyph: NOC.glyph.history,
       scope: me,
       handler: me.onHistory,
@@ -37,7 +37,7 @@ Ext.define("NOC.kb.kbentry.Application", {
       xtype: "listform",
       name: "attachments",
       rows: 5,
-      fieldLabel: __("Attachments"),
+      fieldLabel: t("header-attachments"),
       onDeleteRecord: me.deleteFromList,
       items:
                 [
@@ -48,7 +48,7 @@ Ext.define("NOC.kb.kbentry.Application", {
                       {
                         xtype: "displayfield",
                         name: "name",
-                        fieldLabel: __("File name"),
+                        fieldLabel: t("label-file-name"),
                         allowBlank: true,
                         flex: 3,
                       },
@@ -58,7 +58,7 @@ Ext.define("NOC.kb.kbentry.Application", {
                         flex: 1,
                         buttonOnly: true,
                         hideLabel: true,
-                        buttonText: __("Select File..."),
+                        buttonText: t("label-select-file-2"),
                         listeners: {
                           change: me.setAttachmentName,
                         },
@@ -68,13 +68,13 @@ Ext.define("NOC.kb.kbentry.Application", {
                   {
                     xtype: "textfield",
                     name: "description",
-                    fieldLabel: __("Description"),
+                    fieldLabel: t("label-description"),
                     width: "75%",
                   },
                   {
                     xtype: "checkboxfield",
                     name: "is_hidden",
-                    fieldLabel: __("Is Hidden"),
+                    fieldLabel: t("label-is-hidden"),
                     width: "75%",
                     allowBlank: true,
                   },
@@ -90,22 +90,22 @@ Ext.define("NOC.kb.kbentry.Application", {
           items: [
             {
               glyph: NOC.glyph.eye,
-              tooltip: __("Show KB"),
+              tooltip: t("help-show-kb"),
               handler: me.onShowKB,
             },
           ],
         },
         {
-          text: __("Subject"),
+          text: t("header-subject"),
           dataIndex: "subject",
         },
         {
-          text: __("Language"),
+          text: t("header-language"),
           dataIndex: "language",
           renderer: NOC.render.Lookup("language"),
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
         },
@@ -114,19 +114,19 @@ Ext.define("NOC.kb.kbentry.Application", {
         {
           name: "subject",
           xtype: "textfield",
-          fieldLabel: __("Subject"),
+          fieldLabel: t("header-subject"),
           allowBlank: false,
         },
         {
           name: "body",
           xtype: "htmleditor",
-          fieldLabel: __("Body"),
+          fieldLabel: t("header-body"),
           allowBlank: false,
         },
         {
           name: "language",
           xtype: "main.language.LookupField",
-          fieldLabel: __("Language"),
+          fieldLabel: t("header-language"),
           allowBlank: false,
           query: {
             "is_active": true,
@@ -135,13 +135,13 @@ Ext.define("NOC.kb.kbentry.Application", {
         {
           name: "markup_language",
           xtype: "main.ref.kbparser.LookupField",
-          fieldLabel: __("Markup Language"),
+          fieldLabel: t("label-markup-language"),
           allowBlank: false,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "enable_kbentry": true,
@@ -190,10 +190,10 @@ Ext.define("NOC.kb.kbentry.Application", {
         var me = this;
         me.showItem(me.ITEM_GRID);
         me.reloadStore();
-        NOC.info(__("Records has been saved"));
+        NOC.info(t("msg-records-has-been-saved"));
       },
       failure: function(){
-        NOC.error(__("Failed"));
+        NOC.error(t("msg-failed"));
       },
     });
   },
@@ -210,10 +210,10 @@ Ext.define("NOC.kb.kbentry.Application", {
       url: app.base_url + app.currentRecord.id + "/attachment/" + filename + "/",
       success: function(){
         me.deleteRecord();
-        NOC.info(__("Attachment deleted"));
+        NOC.info(t("msg-attachment-deleted"));
       },
       failure: function(){
-        NOC.error(__("Failed"));
+        NOC.error(t("msg-failed"));
       },
     });
   },

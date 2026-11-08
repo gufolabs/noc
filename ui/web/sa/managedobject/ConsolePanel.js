@@ -23,7 +23,7 @@ Ext.define("NOC.sa.managedobject.ConsolePanel", {
 
     me.cmdField = Ext.create("Ext.form.field.Text", {
       anchor: "100%",
-      fieldLabel: __(">"),
+      fieldLabel: t("msg-text-3"),
       labelWidth: 16,
       itemId: "cmdfield",
       listeners: {
@@ -37,14 +37,14 @@ Ext.define("NOC.sa.managedobject.ConsolePanel", {
     });
 
     me.closeButton = Ext.create("Ext.button.Button", {
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.onClose,
     });
 
     me.clearButton = Ext.create("Ext.button.Button", {
-      text: __("Clear"),
+      text: t("btn-clear"),
       glyph: NOC.glyph.eraser,
       scope: me,
       handler: me.clearBody,
@@ -151,7 +151,7 @@ Ext.define("NOC.sa.managedobject.ConsolePanel", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to run command"));
+        NOC.error(t("msg-failed-to-run-command"));
       },
     });
   },

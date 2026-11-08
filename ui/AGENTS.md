@@ -25,14 +25,14 @@ ui/
 │   ├── css/                      # shared UI stylesheets (ExtJS overrides, card layouts)
 │   ├── js/                       # shared JS utilities and patches for ExtJS core
 │   ├── core/                     # base components extending ExtJS framework base
-│   ├── locale/                   # localized strings (gettext .po/.mo files processed by gettext.js)
+│   ├── locale/                   # localized runtime i18n bootstrap generated from YAML catalogs
 │   ├── translations/             # translation bundles (EN/RU)
 │   ├── ux/                       # ExtJS custom extensions (plugins, widgets)
 │   └── img/                      # static images/icons for the UI
 ├── card/                         # ExtJS card templates — reusable component layouts
 │   ├── css/                      # alarmheat.css, outage.css, path.css, monmap.css…
 │   └── ...                       # individual card definition files per domain
-├── common/                       # shared utility JS (gettext, diff_match_patch, map_layer_creator)
+├── common/                       # shared utility JS (diff_match_patch, map_layer_creator)
 ├── pkg/                          # CDN-vendored packages: backbone.min.js, bootstrap, others
 ├── packages/                     # pnpm workspace packages (e.g., topo-map visualizer)
 │   └── topo-map/                 # topology map library — only built dependency per workspace
@@ -133,8 +133,9 @@ Each `web/<app>/` directory contains:
 
 ### Language & Localization
 
-- UI strings go in `web/locale/` as gettext `.po` files for EN/RU translation
-- Runtime localization uses `web/common/gettext.js` — use `ngettext()` or `_()` helper functions in ExtJS code
+- UI strings use the shared YAML catalogs in `src/noc/i18n/{en,ru,pt_BR}.yml`
+- Runtime localization uses `t(key, values)` from `web/locale/gettext.js`; the build overlays the selected language on English
+- Use named ICU arguments and plural forms for dynamic messages instead of concatenating translated fragments with strings
 - Never hardcode user-visible text directly in `.js` or `.css`
 
 ### Dependency Management

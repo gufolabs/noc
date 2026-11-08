@@ -23,7 +23,7 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
@@ -33,20 +33,20 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "filter_query",
           xtype: "cm.confdbquery.LookupField",
-          fieldLabel: __("Filter Query"),
+          fieldLabel: t("label-filter-query"),
           query: {
             allow_interface_filter: true,
           },
@@ -55,12 +55,12 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
         {
           name: "rules",
           xtype: "listform",
-          fieldLabel: __("Rules"),
+          fieldLabel: t("header-rules"),
           items: [
             {
               name: "query",
               xtype: "cm.confdbquery.LookupField",
-              fieldLabel: __("Query"),
+              fieldLabel: t("label-query"),
               query: {
                 allow_interface_validation: true,
               },
@@ -72,32 +72,32 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
             {
               name: "query_params",
               xtype: "gridfield",
-              fieldLabel: __("Query Parameters"),
+              fieldLabel: t("label-query-parameters"),
               columns: [
                 {
                   dataIndex: "name",
-                  text: __("Name"),
+                  text: t("header-name"),
                   width: 150,
                 },
                 {
                   dataIndex: "type",
-                  text: __("Type"),
+                  text: t("header-type"),
                   width: 70,
                 },
                 {
                   dataIndex: "value",
-                  text: __("Value"),
+                  text: t("header-value"),
                   editor: "textfield",
                   width: 200,
                 },
                 {
                   dataIndex: "default",
-                  text: __("Default"),
+                  text: t("header-default"),
                   width: 100,
                 },
                 {
                   dataIndex: "description",
-                  text: __("Description"),
+                  text: t("label-description"),
                   flex: 1,
                 },
               ],
@@ -105,7 +105,7 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
             {
               name: "filter_query",
               xtype: "cm.confdbquery.LookupField",
-              fieldLabel: __("Filter Query"),
+              fieldLabel: t("label-filter-query"),
               allowBlank: true,
               query: {
                 allow_interface_filter: true,
@@ -114,18 +114,18 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
             {
               name: "is_active",
               xtype: "checkbox",
-              boxLabel: __("Active"),
+              boxLabel: t("header-active"),
             },
             {
               name: "error_code",
               xtype: "textfield",
-              fieldLabel: __("Code"),
+              fieldLabel: t("label-code"),
               allowBlank: true,
             },
             {
               name: "error_text_template",
               xtype: "textfield",
-              fieldLabel: __("Error template"),
+              fieldLabel: t("label-error-template"),
               placeHolder: "{{error}}",
               allowBlank: true,
               uiStyle: "extra",
@@ -133,13 +133,13 @@ Ext.define("NOC.cm.interfacevalidationpolicy.Application", {
             {
               name: "alarm_class",
               xtype: "fm.alarmclass.LookupField",
-              fieldLabel: __("Alarm Class"),
+              fieldLabel: t("app-title-alarmclass"),
               allowBlank: true,
             },
             {
               name: "is_fatal",
               xtype: "checkbox",
-              boxLabel: __("Fatal"),
+              boxLabel: t("label-fatal"),
             },
           ],
         },

@@ -26,42 +26,42 @@ Ext.define("NOC.sa.managedobject.L3Panel", {
           store: me.store,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
             },
             {
-              text: __("VRF"),
+              text: t("header-vrf"),
               dataIndex: "vrf",
             },
             {
-              text: __("IP"),
+              text: t("header-ip"),
               dataIndex: "ip",
             },
             {
-              text: __("IPv4"),
+              text: t("choice-ipv4"),
               dataIndex: "ipv4_addresses",
               hidden: true,
             },
             {
-              text: __("IPv6"),
+              text: t("choice-ipv6"),
               dataIndex: "ipv6_addresses",
               hidden: true,
             },
             {
-              text: __("Protocols"),
+              text: t("nav-protocol"),
               dataIndex: "enabled_protocols",
             },
             {
-              text: __("VLAN"),
+              text: t("app-title-vlan"),
               dataIndex: "vlan",
             },
             {
-              text: __("MAC"),
+              text: t("header-mac"),
               dataIndex: "mac",
               width: 120,
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
             },

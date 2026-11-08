@@ -29,7 +29,7 @@ Ext.define("NOC.pm.metricaction.Application", {
             itemId: itemId,
             name: itemId + ".window_function",
             labelAlign: "top",
-            fieldLabel: __("Window Function"),
+            fieldLabel: t("label-window-function"),
             allowBlank: true,
             store: [
               // ["disable", "Disable"],
@@ -89,7 +89,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 decimalPrecision: 0,
                 value: 1,
                 labelAlign: "top",
-                fieldLabel: __("Min  Windows"),
+                fieldLabel: t("label-min-windows"),
               },
               {
                 xtype: "numberfield",
@@ -101,7 +101,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 decimalPrecision: 0,
                 value: 1,
                 labelAlign: "top",
-                fieldLabel: __("Max  Windows"),
+                fieldLabel: t("label-max-windows"),
               },
               {
                 xtype: "radiogroup",
@@ -139,7 +139,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 forcePrecision: true,
                 decimalPrecision: 1,
                 labelAlign: "top",
-                fieldLabel: __("Factor"),
+                fieldLabel: t("label-factor"),
                 disabled: true,
               },
               {
@@ -150,7 +150,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 minValue: 0,
                 maxValue: 100,
                 value: 50,
-                fieldLabel: __("Percentile"),
+                fieldLabel: t("label-percentile"),
                 disabled: true,
               },
               {
@@ -160,7 +160,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 minValue: 1,
                 emptyText: 1,
                 labelAlign: "top",
-                fieldLabel: __("Step  Number"),
+                fieldLabel: t("label-step-number"),
                 disabled: true,
               },
             ],
@@ -174,7 +174,7 @@ Ext.define("NOC.pm.metricaction.Application", {
             itemId: itemId,
             name: itemId + ".activation_function",
             labelAlign: "top",
-            fieldLabel: __("Activation Function"),
+            fieldLabel: t("label-activation-function"),
             allowBlank: true,
             store: [
               [null, "Disable"],
@@ -209,7 +209,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 name: itemId + ".activation_config.factor",
                 labelAlign: "top",
                 emptyText: 1,
-                fieldLabel: __("Factor"),
+                fieldLabel: t("label-factor"),
                 disabled: true,
               },
               {
@@ -218,7 +218,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 name: itemId + ".activation_config.true_level",
                 emptyText: 1.0,
                 labelAlign: "top",
-                fieldLabel: __("True Level"),
+                fieldLabel: t("label-true-level"),
                 disabled: true,
               },
               {
@@ -227,7 +227,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 name: itemId + ".activation_config.false_level",
                 emptyText: 1.0,
                 labelAlign: "top",
-                fieldLabel: __("False Level"),
+                fieldLabel: t("label-false-level"),
                 disabled: true,
               },
               {
@@ -240,7 +240,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 forcePrecision: true,
                 decimalPrecision: 2,
                 labelAlign: "top",
-                fieldLabel: __("Lying"),
+                fieldLabel: t("label-lying"),
                 disabled: true,
               },
               {
@@ -251,7 +251,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 forcePrecision: true,
                 decimalPrecision: 2,
                 labelAlign: "top",
-                fieldLabel: __("Step  Ness"),
+                fieldLabel: t("label-step-ness"),
                 disabled: true,
               },
             ],
@@ -271,19 +271,19 @@ Ext.define("NOC.pm.metricaction.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -305,19 +305,19 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   name: "name",
                   xtype: "textfield",
-                  fieldLabel: __("Name"),
+                  fieldLabel: t("header-name"),
                   margin: "10 0 0 0",
                   regex: /^[a-zA-Z0-9\-_ ]+( \| [a-zA-Z0-9\-_ ]+)*$/,
                 },
                 {
                   name: "uuid",
                   xtype: "displayfield",
-                  fieldLabel: __("UUID"),
+                  fieldLabel: t("label-uuid"),
                 },
                 {
                   name: "description",
                   xtype: "textarea",
-                  fieldLabel: __("Description"),
+                  fieldLabel: t("label-description"),
                   allowBlank: true,
                 },
               ],
@@ -332,19 +332,19 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   name: "params",
                   xtype: "gridfield",
-                  fieldLabel: __("Parameters"),
+                  fieldLabel: t("label-parameters"),
                   labelAlign: "top",
                   width: me.formMinWidth,
                   columns: [
                     {
                       dataIndex: "name",
-                      text: __("Name"),
+                      text: t("header-name"),
                       editor: "textfield",
                       width: 150,
                     },
                     {
                       dataIndex: "type",
-                      text: __("Type"),
+                      text: t("header-type"),
                       width: 70,
                       editor: {
                         xtype: "combobox",
@@ -358,7 +358,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                     },
                     {
                       dataIndex: "min_value",
-                      text: __("Min. Value"),
+                      text: t("btn-min-value"),
                       editor: {
                         xtype: "numberfield",
                         forcePrecision: true,
@@ -368,7 +368,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                     },
                     {
                       dataIndex: "max_value",
-                      text: __("Max. Value"),
+                      text: t("btn-max-value"),
                       editor: {
                         xtype: "numberfield",
                         forcePrecision: true,
@@ -378,13 +378,13 @@ Ext.define("NOC.pm.metricaction.Application", {
                     },
                     {
                       dataIndex: "default",
-                      text: __("Default"),
+                      text: t("header-default"),
                       editor: "textfield",
                       width: 75,
                     },
                     {
                       dataIndex: "description",
-                      text: __("Description"),
+                      text: t("label-description"),
                       editor: "textfield",
                       flex: 1,
                     },
@@ -401,7 +401,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   xtype: "fieldset",
                   itemId: "input-container",
-                  title: __("Input"),
+                  title: t("header-input"),
                   columnWidth: 0.5,
                   margin: "0 20 0 0",
                   padding: "0 10 5 10",
@@ -416,7 +416,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                         {
                           xtype: "button",
                           glyph: NOC.glyph.plus,
-                          tooltip: __("Add Input"),
+                          tooltip: t("help-add-input"),
                           scope: me,
                           handler: me.addInput,
                         },
@@ -425,7 +425,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                           name: "metric_type0",
                           restUrl: "/pm/metrictype/lookup/",
                           labelAlign: "top",
-                          fieldLabel: __("Metric Type"),
+                          fieldLabel: t("app-title-metrictype"),
                           padding: "0 22 0 0", // 22 - addition button width
                           allowBlank: true,
                         },
@@ -436,7 +436,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   xtype: "fieldset",
                   itemId: "compose-set",
-                  title: __("Compose"),
+                  title: t("app-title-compose"),
                   disabled: true,
                   columnWidth: 0.4,
                   items: [
@@ -445,7 +445,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                       name: "compose_expression",
                       labelAlign: "top",
                       width: "100%",
-                      fieldLabel: __("Compose Expression"),
+                      fieldLabel: t("label-compose-expression"),
                       allowBlank: true,
                     },
                   ],
@@ -460,7 +460,7 @@ Ext.define("NOC.pm.metricaction.Application", {
               items: [
                 {
                   xtype: "fieldset",
-                  title: __("Activation Window"),
+                  title: t("app-title-activation-window"),
                   layout: {
                     type: "vbox",
                     align: "stretch",
@@ -473,7 +473,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   xtype: "fieldset",
                   itemId: "deactivation-window",
-                  title: __("Deactivation Window"),
+                  title: t("app-title-deactivation-window"),
                   disabled: false,
                   layout: {
                     type: "vbox",
@@ -492,7 +492,7 @@ Ext.define("NOC.pm.metricaction.Application", {
               items: [
                 {
                   xtype: "fieldset",
-                  title: __("Activation"),
+                  title: t("app-title-activation"),
                   width: 380,
                   margin: "0 20 0 0",
                   items: activationSet("activation_config"),
@@ -500,7 +500,7 @@ Ext.define("NOC.pm.metricaction.Application", {
                 {
                   xtype: "fieldset",
                   itemId: "deactivation-activation",
-                  title: __("Deactivation"),
+                  title: t("app-title-deactivation"),
                   disabled: false,
                   width: 400,
                   items: activationSet("deactivation_config"),
@@ -515,7 +515,7 @@ Ext.define("NOC.pm.metricaction.Application", {
               items: [
                 {
                   xtype: "fieldset",
-                  title: __("Alarm"),
+                  title: t("app-title-alarm"),
                   columnWidth: 0.4,
                   margin: "0 20 0 0",
                   items: [
@@ -524,20 +524,20 @@ Ext.define("NOC.pm.metricaction.Application", {
                       name: "alarm_config.alarm_class",
                       restUrl: "/fm/alarmclass/lookup/",
                       labelAlign: "top",
-                      fieldLabel: __("Alarm Class"),
+                      fieldLabel: t("app-title-alarmclass"),
                       allowBlank: true,
                     },
                     {
                       xtype: "textfield",
                       name: "alarm_config.reference",
                       labelAlign: "top",
-                      fieldLabel: __("Reference"),
+                      fieldLabel: t("label-reference"),
                     },
                   ],
                 },
                 {
                   xtype: "fieldset",
-                  title: __("Key"),
+                  title: t("header-key"),
                   columnWidth: 0.4,
                   items: [
                     {
@@ -545,14 +545,14 @@ Ext.define("NOC.pm.metricaction.Application", {
                       name: "compose_metric_type",
                       restUrl: "/pm/metrictype/lookup/",
                       labelAlign: "top",
-                      fieldLabel: __("Compose Metric Type"),
+                      fieldLabel: t("label-compose-metric-type"),
                       allowBlank: true,
                     },
                     {
                       xtype: "textarea",
                       name: "key_expression",
                       labelAlign: "top",
-                      fieldLabel: __("Key Expression"),
+                      fieldLabel: t("label-key-expression"),
                       allowBlank: true,
                     },
                   ],
@@ -564,9 +564,9 @@ Ext.define("NOC.pm.metricaction.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -646,7 +646,7 @@ Ext.define("NOC.pm.metricaction.Application", {
             return !(Object.hasOwn(store, "isLocal") && store.isLocal);
           }));
         me.unmask();
-        NOC.msg.complete(__("Saved"));
+        NOC.msg.complete(t("msg-saved-2"));
       },
       failure: function(response){
         var message = "Error saving record";
@@ -786,7 +786,7 @@ Ext.define("NOC.pm.metricaction.Application", {
             {
               xtype: "button",
               glyph: NOC.glyph.minus,
-              tooltip: __("Remove Input"),
+              tooltip: t("help-remove-input"),
               scope: me,
               handler: me.removeInput,
             },

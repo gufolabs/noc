@@ -12,7 +12,7 @@ Ext.define("NOC.main.desktop.ChangePassword", {
   autoShow: true,
   closable: false,
   resizable: false,
-  title: __("Change Password"),
+  title: t("app-title-change-password"),
   layout: "fit",
   modal: true,
   defaultListenerScope: true,
@@ -48,25 +48,25 @@ Ext.define("NOC.main.desktop.ChangePassword", {
         itemId: "oldPass",
         name: "oldPass",
         bind: "{oldPass}",
-        fieldLabel: __("Old Password"),
-        blankText: __("Old Password cannot be empty"),
+        fieldLabel: t("label-old-password"),
+        blankText: t("label-old-password-cannot-be-empty"),
       },
       {
         itemId: "newPass",
         name: "newPass",
         bind: "{newPass}",
-        fieldLabel: __("New Password"),
-        blankText: __("New Password cannot be empty"),
+        fieldLabel: t("label-new-password"),
+        blankText: t("label-new-password-cannot-be-empty"),
       },
       {
         itemId: "confirmPass",
         name: "confirmPass",
         bind: "{confirmPass}",
-        fieldLabel: __("Confirm New Password"),
-        blankText: __("Please confirm your new password"),
+        fieldLabel: t("label-confirm-new-password"),
+        blankText: t("label-please-confirm-your-new-password"),
         validator: function(value){
           var newPass = this.up("form").down("#newPass").getValue();
-          return value === newPass ? true : __("Passwords do not match");
+          return value === newPass ? true : t("msg-passwords-do-not-match");
         },
       },
     ],
@@ -75,7 +75,7 @@ Ext.define("NOC.main.desktop.ChangePassword", {
         reference: "changeButton",
         formBind: true,
         handler: "onChangeClick",
-        text: __("Change"),
+        text: t("header-change"),
         glyph: "xf090@FontAwesome",
       },
     ],
@@ -97,15 +97,15 @@ Ext.define("NOC.main.desktop.ChangePassword", {
         success: function(response){
           var data = Ext.decode(response.responseText);
           if(data.status){
-            NOC.msg.complete(__("Password changed"));
+            NOC.msg.complete(t("msg-password-changed"));
             panel.close();
             this.applicationOpen();
           } else{
-            NOC.error(__("Failed to change credentials: ") + data.message);
+            NOC.error(t("msg-failed-to-change-credentials-value0-3", {value0: data.message}));
           }
         },
         failure: function(){
-          NOC.error(__("Error changing password"));
+          NOC.error(t("msg-error-changing-password"));
         },
         callback: function(){
           panel.setDisabled(false);

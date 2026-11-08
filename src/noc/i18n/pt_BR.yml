@@ -2,103 +2,406 @@ app-group-aaa: AAA
 app-group-bi: BI
 app-group-cm: Gerência de Configuração
 app-group-crm: CRM
+app-group-dev: Development
 app-group-dns: DNS
 app-group-fm: Gerência de Falhas
+app-group-gis: GIS
 app-group-inv: Inventário
 app-group-ip: IPAM
 app-group-kb: Base de Conhecimento
 app-group-main: Principal
 app-group-maintenance: Manutenção
 app-group-peer: Gerência de BGP
+app-group-phone: Telefone
 app-group-pm: Gerência de Performance
 app-group-project: Gerência de Projeto
+app-group-reports: Reports
 app-group-sa: Ativação de Serviço
 app-group-setup: Configurar
 app-group-sla: SLA
 app-group-support: Suporte
 app-group-vc: Gerência de VC
+app-group-wf: Fluxos de Trabalho
+app-title-abduct-detection: Abduct Detection
+app-title-about-system: Sobre o sistema ...
 app-title-account: Conta
 app-title-action: Ação
 app-title-actioncommands: Comando de Ação
+app-title-activation: Validação
+app-title-activation-window: Janelas de Desduplicação
+app-title-add-conduits: Conduítes
+app-title-add-vlan: Add VLAN
 app-title-address: IP
+app-title-addressprofile: Família do IP
 app-title-addressrange: Intervalos de IP
 app-title-administrativedomain: Domínios Administrativos
+app-title-agent: Alvo
+app-title-agentprofile: Agent Profile
+app-title-agreement: Gerência
 app-title-alarm: Alerta
+app-title-alarm-transfer: Alerta elevado
 app-title-alarmclass: Classe de Alerta
 app-title-alarmclassconfig: Configuração de Classe de Alerta
+app-title-alarmdiagnosticconfig: Alarm Diagnostic Config
 app-title-alarmescalation: Escalação de Alerta
+app-title-alarmrule: Alarm Rules
+app-title-alarms-type: Alarms type
 app-title-alarmseverity: Criticidade de Alerta
 app-title-alarmtrigger: Gatilhos de Alerta
+app-title-all-devices-on-screen: All devices on screen
+app-title-allocationgroup: AllocationGroup
+app-title-allow: Seguir
+app-title-apikey: API Key
 app-title-as: AS
+app-title-asprofile: AS Profile
 app-title-asset: Conjuntos de AS
+app-title-asset-sync-settings: Asset Sync Settings
+app-title-attach-to: Padrões
+app-title-attributes: Attributes
 app-title-audittrail: Trilha de Auditoria
+app-title-authldapdomain: LDAP Domain
 app-title-authprofile: Perfil de Autenticação
+app-title-autosegmentation: Autosegmentation
+app-title-badge: Badge
+app-title-band-format: Band Format
+app-title-basket: Patrimônio
+app-title-bind-addresses: IP
+app-title-biosegmentation: Biosegmentation
+app-title-bom: BoM
+app-title-box: Box
+app-title-box-discovery: Box de descoberta
+app-title-box-discovery-intervals: Box de descoberta
 app-title-building: Prédio
+app-title-by-action: Ação
+app-title-by-active: Ativo
+app-title-by-adm-domain: Por Dom. Administrativo
+app-title-by-afi: By AFI
+app-title-by-builtin: Nativo
+app-title-by-can-change: Pode Modificar
+app-title-by-can-view: Pode Visualizar
+app-title-by-category: By Category
+app-title-by-community-type: Comunidade RW
+app-title-by-container-type: By Container Type
+app-title-by-default: Padrão
+app-title-by-delayed: By Delayed
+app-title-by-dialplan: By Dialplan
+app-title-by-dynamic-client-labels: By Dynamic Client Labels
+app-title-by-dynamic-service-labels: By Dynamic Service Labels
+app-title-by-enabled: Habilitado
+app-title-by-event-class: Classe do Evento
+app-title-by-filtered: Filtrável
+app-title-by-from: By From
+app-title-by-group: Grupo
+app-title-by-hidden: Está Escondido
+app-title-by-immediately: By Immediately
+app-title-by-ipv4: By IPv4
+app-title-by-ipv6: By IPv6
+app-title-by-is-active: Ativo
+app-title-by-is-builtin: É Nativo
+app-title-by-is-enabled: Ativo
+app-title-by-is-locked: Bloqueado
+app-title-by-l2-domain: Por Dom. Administrativo
+app-title-by-link-event: Ligar ao Evento
+app-title-by-match-rules-labels: By Match Rules Labels
+app-title-by-notification: Notificação
+app-title-by-notify-group: By Notify Group
+app-title-by-object: Mostrar objeto
+app-title-by-parent: Nível Superior
+app-title-by-productive: By Productive
+app-title-by-project: projeto
+app-title-by-protocol: Protocolo
+app-title-by-range: By Range
+app-title-by-resourcegroup: By ResourceGroup
+app-title-by-sa-profile: Por Perfil de AS
+app-title-by-searchable: Buscável
+app-title-by-segment: Segmento
+app-title-by-service: serviço
+app-title-by-state: Estado
+app-title-by-subscriber: By Subscriber
+app-title-by-supplier: By Supplier
+app-title-by-tech-domai: Por Dom. Administrativo
+app-title-by-technology: Tecnologias
+app-title-by-to: By To
+app-title-by-type: tipo
+app-title-by-user: By User
+app-title-by-vendor: Fabricante
+app-title-by-vlan: By VLAN
+app-title-by-vrf: By VRF
+app-title-by-vrf-group: By VRF Group
+app-title-by-workflow: Fluxos de Trabalho
+app-title-calculate-oper-status: Status da interface
 app-title-calculator: Calculadores
+app-title-capabilities-of: Capabilities of
 app-title-capability: Capacidade
+app-title-capsprofile: Perfil de Usuário
+app-title-card: Cards
+app-title-change-password: Alterar Senha
+app-title-change-records: Alterar senha
+app-title-channel: Mudanças
+app-title-chpolicy: CHPolicy
 app-title-classificationrule: Regra de Classificação
+app-title-clear-alarms: Apagar alerta?
+app-title-clear-links: Limpar links
+app-title-clone-item: Clonar {name}
+app-title-clone-object: projeto
+app-title-cloud-inspector: Inspeto de Objeto
+app-title-collector-settings: Collector Settings
+app-title-colors: Cor
 app-title-commandsnippet: Comando Snippet
+app-title-common: Comentário
 app-title-community: Comunidades
 app-title-communitytype: Tipos de Comunidade
+app-title-commutation: Comentário
+app-title-components: Components
+app-title-compose: Escopo
+app-title-conduits: Conduítes
+app-title-confdbquery: ConfDBQuery
+app-title-config-fetching: Configuração alterada
+app-title-config-handler: Configuração alterada
+app-title-config-policy: Violação na política de configuração
+app-title-config-validation: Validação de Configuração pyRule
+app-title-configurationparam: Configuration Param
+app-title-configurationscope: Configuration Scope
+app-title-configuredmap: Configured Map
+app-title-confirm-reset: Configurar
 app-title-connectionrule: Regras de Conexão
 app-title-connectiontype: Tipos de Conexão
 app-title-coverage: Cobertura
+app-title-covered-buildings: Covered Buildings
+app-title-covered-objects: Objetos Combinados
+app-title-cpe: CPEs
+app-title-cpe-inspector: Inspeto de Objeto
+app-title-cpeprofile: CPE Profile
+app-title-crashinfo: Crashinfo
+app-title-create: Criar
+app-title-create-internal-connection-from: Conexão de Correspondência
+app-title-create-item: Criar {name}
+app-title-create-new: Criar Regra
+app-title-create-new-channel: Endereço Remoto
+app-title-create-new-top-level-object: Create new top-level object
+app-title-credentialcheckrule: Credential Check Rule
+app-title-crontab: Frente
+app-title-cross: Cross
+app-title-crossing: Aprovisionamento
 app-title-csv: Exportar/Importar de CSV
 app-title-customfield: Campos Personalizados
 app-title-customfieldenumgroup: Grupos Enumeráveis
+app-title-dashboard: Dashboard
+app-title-dashboardlayout: Dashboard Layout
+app-title-data: Dados
+app-title-data-sources: Fonte de Dados
+app-title-datastream-handlers: DataStream handlers
+app-title-datastreamconfig: DataStream Config
 app-title-ddash: Dashboard Dinâmico
+app-title-deactivation: Validação
+app-title-deactivation-window: Janelas de Desduplicação
+app-title-delete-address: Endereço Remoto
+app-title-delete-record: Delete record?
+app-title-delete-workflow: Delete Workflow?
+app-title-device-is-wiping-and-will-be-removed-soon: Device is wiping and will be removed soon
+app-title-dialplan: DialPlan
+app-title-discoveredobject: Discovered Object
+app-title-discovery-alarm: Descoberta
+app-title-discovery-job-log: Política de Descoberta
+app-title-discovery-policy: Política de Descoberta
+app-title-discovery-prefix: Discovery (Prefix)
+app-title-display: Display
+app-title-display-filters: Filtro de Bind
+app-title-display-settings: Display Settings
 app-title-division: Divisão
 app-title-dnsserver: Servidor de DNS
 app-title-dnszone: Zona de DNS
 app-title-dnszoneprofile: Perfis de Zona
+app-title-edit: Editar
+app-title-edit-item: Editar {name}
+app-title-edit-items: "{count, plural, one {Editar # {name}} other {Editar # {name}}}"
+app-title-edit-thresholds: Até o IP
+app-title-edit-value: Desabilitar
+app-title-effective-labels: Configurações Efetivas
+app-title-endpoint: Nível Superior
+app-title-escalationprofile: Escalações
 app-title-event: Eventos
+app-title-event-inspector: Inspetor de Segmento
+app-title-event-sources: Recursos
 app-title-eventclass: Classe de Evento
 app-title-eventtrigger: Gatilhos de Evento
+app-title-extractors-loaders: Extractors/Loaders
+app-title-extstorage: Ext. Storage
+app-title-facade: Facades
+app-title-facade-2: Código
+app-title-favorites: Favorites
+app-title-files: Perfil
+app-title-filters: Filtrar
+app-title-firmware: Firmware
 app-title-firmwarepolicy: Política de Firmware
+app-title-first-100: First 100
+app-title-first-50: First 50
+app-title-first-n: First N
+app-title-fm: FM
+app-title-fm-handlers: FM Handlers
+app-title-get-json: Som de alternância
 app-title-getnow: Buscar Agora
+app-title-glyph: Glifo
 app-title-group: Grupos
 app-title-groupaccess: Permissão de Grupo
+app-title-handler: Handler
 app-title-heatmap: Mapa de Calor
+app-title-help: Ajuda
+app-title-hierarchy: Busca
+app-title-home: Home
+app-title-housekeeping: Housekeeping
+app-title-ifdesc-policy: Política de Descoberta
+app-title-ifdesc-settings: Configurações Efetivas
+app-title-ifdescpatterns: IfDesc Patterns
 app-title-ignoreeventrule: Ignorar Regras de Evento
 app-title-ignorepattern: Ignorar Padrões
+app-title-imagestore: Images
+app-title-industries: Industries
+app-title-info: Janela
+app-title-inputs: Interfaces
+app-title-instance-policy: Instance Policy
+app-title-integration: Operação
+app-title-interface: Interfaces
+app-title-interface-bind: Nome interno
 app-title-interfaceprofile: Perfil de Interface
+app-title-interfacevalidationpolicy: Interface Validation Policy
 app-title-inv: Inventário
+app-title-inv-reportdiscoveryproblem: Discovery Topology Problems
 app-title-inv-reportobjectsummary: Resumo de Inventário Objeto
+app-title-invalid-connections: Conexões
+app-title-ip-dns: IP / DNS
+app-title-ipam: Assigned Addresses
+app-title-ipam-address: Até o IP
+app-title-ipam-field: Falha no script
+app-title-ipam-prefix: IPAM (Prefix)
+app-title-ipam-vpn: IPAM (VPN)
+app-title-is-active: Ativo
+app-title-is-matching: Is Matching
+app-title-job: Jobs
+app-title-job-details: Configurações
 app-title-jsonimport: Importar JSON
 app-title-kb: Base de Conhecimento
+app-title-kbentry: Entries
+app-title-kbentrytemplate: Nome do template
+app-title-l2: L2
+app-title-l2domain: Domínio Administrativo
+app-title-l2domainprofile: L2Domain Profile
+app-title-label: Rótulo
 app-title-language: Idiomas
 app-title-layer: Camadas
+app-title-line-style: Estilo de Linha
+app-title-link-inspector: Inspetor de Link
+app-title-links: Links
+app-title-localization: Validação
+app-title-macblacklist: MAC Blacklist
 app-title-macdb: Banco de Dados de MAC
 app-title-maintainer: Mantenedores
 app-title-maintenance: Manutenção
 app-title-maintenancetype: Tipo de Manutenção
+app-title-managed-object-profile-handlers: Managed Object Profile handlers
 app-title-managedobject: Objetos Gerenciados
+app-title-managedobject-2: Objeto gerenciado
+app-title-managedobject-sync-settings: ManagedObject Sync Settings
 app-title-managedobjectprofile: Perfil de Objeto Gerenciado
+app-title-manual: Manual
+app-title-manual-scan: Manual Scan
 app-title-map: Topologia de Rede
+app-title-map-settings: Configurações
+app-title-match: Combinar
+app-title-math-rule: Regras de Correspondência
+app-title-measurementunits: MeasurementUnits
+app-title-merge-downlinks: Limpar links
+app-title-messageroute: Message Route
+app-title-metric-threshold-bind: Tipo de Métrica
+app-title-metricaction: Notificação
+app-title-metricrule: Metric Rule
+app-title-metricscope: MetricScope
+app-title-metricstream: MetricStream
 app-title-metrictype: Tipo de Métrica
 app-title-mib: MIB
 app-title-mibpreference: Preferência de MIB
 app-title-mimetype: Tipos de MIME
 app-title-modelinterface: Modelo de Interface
 app-title-modelmapping: Modelo de Mapeamento
+app-title-modelprotectionprofile: ModelProtection Profile
+app-title-modeltemplate: Model Template
+app-title-monitor: Monitor
+app-title-monmap: Monmap
+app-title-mx-handlers: MX handlers
+app-title-navigation: Navegação
+app-title-network-resources: Recursos
 app-title-networksegment: Segmento de Rede
+app-title-networksegmentprofile: Network Segment Profile
+app-title-noc-login: Último Piso
+app-title-nodes: Gêneros
+app-title-notification-contacts: Contatos de Notificação
+app-title-notification-group-settings: Grupo de Notificação
 app-title-notificationgroup: Grupo de Notificação
+app-title-numbercategory: Number Category
+app-title-object-connections: Conexões
+app-title-object-inspector: Inspeto de Objeto
+app-title-objectconfigurationrule: Configuration Rules
+app-title-objectdiagnosticconfig: Object Diagnostic Config
+app-title-objectdiscoveryrule: Object Discovered Rules
+app-title-objectgroup-inspector: Inspeto de Objeto
 app-title-objectmodel: Modelos de Objeto
 app-title-objectnotification: Notificação de Objeto
 app-title-objectnotify: Notificações de Objeto
+app-title-objectsegment-inspector: Inspetor de Segmento
+app-title-objectvalidationpolicy: Object Validation Policy
 app-title-oidalias: Rótulo de OID
+app-title-on-clear: Limpar
+app-title-on-raise: On Raise
+app-title-oper-status-transfer: Status da interface
+app-title-oper-status-transfer-2: Notificação de Modificação de Status
+app-title-opm: Fim
 app-title-organisation: Organizações
 app-title-outage: Interrupções
+app-title-peer: Peers
 app-title-peergroup: Grupos de Peers
+app-title-peeringpoint: Peering Points
+app-title-peerprofile: Perfil de AS
+app-title-period-start-qty: Period start,qty
+app-title-periodic-discovery: Descoberta periódica
+app-title-periodic-discovery-intervals: Descoberta periódica
 app-title-person: Pessoas/Papéis
+app-title-phonenumber: Phone Number
+app-title-phonenumberprofile: Number Profile
+app-title-phonerange: Phone Range
+app-title-phonerangeprofile: Phone Range Profile
+app-title-ping-check: Ping Check
+app-title-ping-discovery-intervals: Ping discovery intervals
+app-title-ping-series-settings: Ping series settings
 app-title-platform: Plataforma
+app-title-platform-version: Platform & Version
+app-title-plugins: Plugins
+app-title-point-style: Estilo de Linha
+app-title-pool: Pool
+app-title-portal: Relatório
+app-title-portal-inspector: Inspeto de Objeto
 app-title-prefix: Prefixo
 app-title-prefixaccess: Permissão do Prefixo
 app-title-prefixlistbuilder: Construtor de Prefix List
+app-title-prefixprofile: Perfil de Usuário
 app-title-prefixtable: Tabela de Prefixo
+app-title-process-telemetry: Descoberta periódica
 app-title-profile: Perfil
 app-title-profilecheckrule: Regra de Verificação de Perfil
 app-title-project: Projeto
+app-title-protocol: Protocolo
+app-title-pyrule: PyRule
+app-title-quiz: Quiz
+app-title-rack: Traçar
+app-title-reactionrule: Reaction Rules
+app-title-referenced: Preferência
+app-title-register-instance: Interface Remota
+app-title-remote-mapping: IP Remoto
+app-title-remotesystem: Sobre o sistema ...
+app-title-remove-conduits-to: Remove conduits to
+app-title-remove-interface: Interface Remota
+app-title-replace-rule: Criar Regra
+app-title-reportaddressfilter: Filter Address
+app-title-reportalarmcomments: Alarm Comments Detail
 app-title-reportalarmdetail: Detalhamento de Alerta
 app-title-reportallocated: Blocos Alocados
 app-title-reportavailability: Disponibilidade
@@ -106,223 +409,3484 @@ app-title-reportclassificationquality: Qualidade de Classificação
 app-title-reportclassificationrule: Regras de Classificação
 app-title-reportcompare: Comparar Especificações
 app-title-reportcone: Análise de Cone
+app-title-reportconfig: Report Configs
 app-title-reportdbsummary: Resumo de banco de dados
 app-title-reportdiscovery: Resumo de Descoberta
+app-title-reportdiscoverycaps: Discovery Object Caps
+app-title-reportdiscoverypoison: Discovery ID cache poison
 app-title-reportduplicatedfqdns: FQDNs Duplicados
 app-title-reportescalations: Escalações
+app-title-reportexpanded: All Allocated Blocks
 app-title-reportexpiringdomains: Domínios Expirando
+app-title-reportfilter: Filtrar
 app-title-reportfree: Blocos Livres
 app-title-reporthierarchy: Hierarquias de Eventos e de Alertas
+app-title-reporthistory: Descoberta
+app-title-reportifacestatus: Interface Status
+app-title-reportipamsummary: IPAM Summary
+app-title-reportipusage: IP Usage
 app-title-reportlatestchanges: Últimas Modificações
+app-title-reportlinkdetail: Link Detail
 app-title-reportlocalrules: Regras de Classificação Local (JSON)
+app-title-reportmaxmetrics: Load Metrics max
+app-title-reportmetrics: Load Metrics
 app-title-reportmibs: MIBs Instaladas
 app-title-reportmissedmibs: MIBs Não Instaladas
 app-title-reportmissedp2p: Endereços de Links Perdidos
 app-title-reportmissedreverse: Zonas Reversas Perdidas
+app-title-reportmovedmac: Moved MACs
 app-title-reportnszonesummary: Resumo de Zona de NS
+app-title-reportobjectdetail: Object Detail
+app-title-reportobjectsserial: Managed Object Serial Number
 app-title-reportoutages: Interrupções
 app-title-reportoverlappedoids: OIDs de MIBs Sobrepostos
+app-title-reportoverview: Visão geral
+app-title-reportpartnumbers: Part Numbers
+app-title-reportpendinglinks: Pending Links
+app-title-reportreboots: Reboots
 app-title-reportrulesbyprofile: Regras por Perfil
-app-title-reportrulesetsummary: 'Resumo de Conjunto de Regras '
+app-title-reportrulesetsummary: "Resumo de Conjunto de Regras "
 app-title-reportstalediscovery: Descoberta Stale
+app-title-reportsubscription: Report Subscription
+app-title-reportsummary: Block Summary
 app-title-reporttaggedmodels: Modelos com tag
+app-title-reportttsystemstat: TT system statistics
 app-title-reportunknownsummary: Resumo de Modelos Desconhecidos
+app-title-reportvpnstatus: VPN Status
+app-title-reset-layout: Redefinir Layout
+app-title-resourcegroup: ResourceGroup
+app-title-resourcepool: ResourcePool
 app-title-resourcestate: Estados de Recurso
 app-title-rir: RIR
+app-title-root-band: Root Band
+app-title-run-policy: Política
 app-title-runcommands: Rodar Comandos
+app-title-sa-reportdiscoveryproblem: Política de Descoberta
 app-title-sa-reportobjectsummary: Resumo de Objetos Gerenciados
+app-title-scale: Desabilitar
+app-title-scoped-value-colors: Scoped Value Colors
 app-title-search: Busca
+app-title-segment-inspector: Inspetor de Segmento
+app-title-segments: Segmentos
+app-title-select-shape: Select Shape
+app-title-selected-groups: Selected Groups
+app-title-sensor: Fabricante
+app-title-sensorprofile: SensorProfile
+app-title-service: Services
 app-title-serviceprofile: Perfil de Serviço
+app-title-session-expired: Expiração
+app-title-severity-policy: Severity Policy
+app-title-shape: Formato
+app-title-shape-overlay: Shape Overlay
+app-title-share-contribution: Iniciando
+app-title-share-item: Share item?
+app-title-show-recently-closed: Show recently closed
+app-title-slaprobe: SLA Probe
+app-title-slaprofile: Perfil de Usuário
+app-title-snmp: SNMP
+app-title-spec: Spec
+app-title-state: States
 app-title-street: Rua
 app-title-style: Estilo
 app-title-subscriber: Assinante
 app-title-subscriberprofile: Perfil de Assinante
 app-title-supplier: Fornecedor
 app-title-supplierprofile: Perfil de Fornecedor
+app-title-switchports: Switchports
+app-title-sync-settings: Configurações Efetivas
+app-title-synd-data: Sintaxe
 app-title-systemnotification: Notificações de Sistema
 app-title-systemtemplate: Templates de Sistema
+app-title-techdomain: Domínio
 app-title-technology: Tecnologia
+app-title-telemetry: Telemetry
+app-title-template: Nome do template
+app-title-test-selected-groups: Test selected groups
+app-title-test-selected-patterns: Test selected patterns
+app-title-test-selected-prefix-tables: Test selected prefix tables ...
+app-title-text: Texto
+app-title-text-style: Estilo de Linha
+app-title-threshold-profiles-handlers: Threshold Profiles Handlers
+app-title-thresholds: Thresholds
 app-title-timepattern: Padrão de Tempo
+app-title-timing: Mesmo Nível
+app-title-to: Até
 app-title-tools: Ferramentas
+app-title-topology: Topologia
+app-title-topology-discovery: Box de descoberta
+app-title-topology-handlers: Topology handlers
 app-title-totaloutage: Total de Interrupções
+app-title-transition: Transitions
+app-title-transmute: Transmute
+app-title-trap-collector-storm-settings: Trap Collector Storm Settings
+app-title-ttl-policy: TTL Policy
 app-title-ttsystem: Sistema de TT
 app-title-unknownmodel: Modelos Desconhecidos
+app-title-unlink-interface: Desconectar interface
+app-title-unsaved-data: Unsaved data
+app-title-update-or-modify-internal-connection-from: Update or modify internal connection from
+app-title-upload-files: Upload Files
 app-title-user: Usuários
 app-title-useraccess: Permissão de Usuário
 app-title-userprofile: Perfil de Usuário
+app-title-validation: Validação
+app-title-variables: Buscável
+app-title-vc: VC
 app-title-vendor: Fabricante
+app-title-visual: Desabilitar
 app-title-vlan: VLAN
+app-title-vlanfilter: Filtro de Bind
+app-title-vlanprofile: Perfil de AS
+app-title-vlantemplate: Nome do template
 app-title-vpn: VPN
+app-title-vpnprofile: VPN Profiles
 app-title-vrf: VRF
 app-title-vrfgroup: Grupos de VRF
+app-title-wfmigration: WF Migration
+app-title-with: with
+app-title-workflow: Workflows
+app-title-zoom: Zoom
+app-title-zoom-in: Zoom in...
+app-title-zoom-out: Diminuir Zoom
+btn-1-100-000: 1:100 000
+btn-about-system: Sobre o sistema ...
+btn-add: Adicionar
+btn-add-2: Adicionar
+btn-add-address: Até o IP
+btn-add-all-objects-to-group: Add all objects to group
+btn-add-attributes-bootprom-version: "Add. attributes: BootPROM Version"
+btn-add-attributes-hw-version: "Add. attributes: HW Version"
+btn-add-attributes-sw-patch: "Add. attributes: sw. patch"
+btn-add-interface: Adicionar Interfaces
+btn-add-mapping: Domínio Administrativo
+btn-add-object-to: Objeto gerenciado
+btn-add-objects: Objeto gerenciado
+btn-add-prefix: Prefixo
+btn-add-row: Adicionar
+btn-add-state: Estado
+btn-add-to-favorites: Esconder manutenção
+btn-add-to-favorites-2: Esconder manutenção
+btn-add-to-group: Add to group
+btn-add-to-maintenance: Esconder manutenção
+btn-add-to-maintenance-2: Esconder manutenção
+btn-add-user: Filtro de Bind
+btn-admin-down: Janela
+btn-affected-instance: Interface Remota
+btn-alarm-detail-report: Alarm Detail Report
+btn-alarm-labels: Classe de Alerta
+btn-align: Align
+btn-allocate-vlan: Ocupado até
+btn-allow-register: Allow Register
+btn-allow-resources: Permissão
+btn-anonymous: Anônimo
+btn-append: Append
+btn-apply: Aplicar
+btn-argument: Alvo
+btn-asset: Patrimônio
+btn-asset-group: Asset. Group
+btn-attach: Seguir
+btn-attach-account: Anexar conta
+btn-attach-existing-account: Incluir conta existente
+btn-balance: balance
+btn-bind: Prédio
+btn-calcified-profile: Calcified Profile
+btn-cancel: Modificar
+btn-cancel-sort: Modificar
+btn-card: Ficha
+btn-change-password: Alterar senha ...
+btn-change-password-2: Alterar senha
+btn-clean-all: Clean All
+btn-clear: Limpar
+btn-clear-alarm: Apagar alerta?
+btn-clear-alarm-2: Apagar alerta?
+btn-clear-alarm-if-admin-down: Clear Alarm if Admin Down
+btn-clear-value: Apagar alerta?
+btn-clone: Copiar
+btn-close: Fechar
+btn-collapse-all: Recolher painéis
+btn-command-log: Log de Comandos
+btn-completed-at: Completo
+btn-condition-param: Condition/Param
+btn-condition-values: Condition/Values
+btn-config: Configurar
+btn-connect: Conectar
+btn-copy-to-clipboard: Copy to clipboard
+btn-create-block: Criar Bloco
+btn-create-channel: Criar Regra
+btn-create-ignore: Criar Regra
+btn-create-new: Criar Regra
+btn-create-new-channel: Endereço Remoto
+btn-create-new-diagram-not-implement: Create new diagram not implement
+btn-create-rule: Criar Regra
+btn-created-at: Criar
+btn-crm-users-contacts: CRM Users (Contacts)
+btn-csv: CSV
+btn-csv-zip: CSV+ZIP
+btn-data-unavailable: data unavailable
+btn-datasource: Fonte de Dados
+btn-default-labels: Default Labels
+btn-delete: Excluir
+btn-delete-prefix: Delete Prefix
+btn-dhcp: DHCP
+btn-disable-if-admin-down: Disable if Admin Down
+btn-disable-if-oper-down: Disable if Oper Down
+btn-disable-scope: Disable Scope
+btn-disconnect: Desconectar
+btn-do-checked: Do Checked
+btn-download: Download
+btn-download-button-clicked: Download button clicked
+btn-download-image: Download Image...
+btn-download-script: Download, Script
+btn-edit-address: Até o IP
+btn-edit-mo: Editar mapa
+btn-edit-model: Nome do Objeto
+btn-edit-prefix: Edit Prefix
+btn-effective-client-groups: Configurações Efetivas
+btn-effective-service-groups: Configurações Efetivas
+btn-effective-settings: Configurações Efetivas
+btn-enable-for-topology: Enable for Topology
+btn-enable-message: Nova mensagem
+btn-enable-ping-but-don-t-follow-status: Enable ping but don't follow status
+btn-enable-scope: Enable Scope
+btn-end: Som
+btn-enter-full-screen: Enter Full Screen
+btn-escalate: Revalidar
+btn-etl: Definir
+btn-excel: Excel
+btn-expand-all: Expandir painéis
+btn-export: Relatório
+btn-field: Campo
+btn-fill-entrances: Preencher Entradas
+btn-filtering-list: Filtering List
+btn-fit-page: Primeira Entrada
+btn-fix: Corrigir
+btn-follow: Seguir
+btn-from: De
+btn-front: Frente
+btn-function: Duração
+btn-generate: Gerado automaticamente?
+btn-generate-key: Generate key
+btn-get-config-now: Buscar configuração AGORA
+btn-group-actions: Group actions
+btn-group-comment: Alerta comentado
+btn-group-operation: Operação
+btn-hide-details: Configurações
+btn-hide-free: Hide Free
+btn-include-res: Include Res.
+btn-insert: Usuário
+btn-instance-type: Instâncias
+btn-ipmi-id: IPMI ID
+btn-is-required: Obrigatório
+btn-is-stored: É Filtrável
+btn-json: JSON
+btn-json-data: Json Data
+btn-launch: Ramo
+btn-link-bandwidth-style: Link bandwidth style
+btn-link-status-style: Link status style
+btn-link-utilization-style: Link utilization style
+btn-logout: Sair
+btn-magic: Domínio
+btn-map: Map
+btn-mapping: Domínio
+btn-mark-to-favorites: Mark to favorites
+btn-mass: Tarefas
+btn-match-condition: Condição de Correspondência
+btn-match-level: Regras de Correspondência
+btn-match-state: Tipo de Correspondência
+btn-max-attacker-lvl: Max Attacker Lvl
+btn-max-severity: Criticidade
+btn-max-status: Status do Alerta
+btn-max-value: Max. Value
+btn-max-value-2: Max.Value
+btn-message: Mensagem
+btn-min-attacker-lvl: Min Attacker Lvl
+btn-min-severity: Criticidade
+btn-min-status: Status do Alerta
+btn-min-value: Min. Value
+btn-min-value-2: Min.Value
+btn-modify-api-key: Corpo
+btn-move-down: Move Down
+btn-move-up: Excluir
+btn-mpls: MPLS
+btn-new-maintaince: Esconder manutenção
+btn-new-maintenance: Esconder manutenção
+btn-next: Texto
+btn-no-leaf-selected: No leaf selected
+btn-no-link: No link
+btn-no-matches-found: Mostrar carga de interface
+btn-no-records-found-matching: "No records found matching: "
+btn-no-records-to-display: No records to display
+btn-object-settings: Objetos
+btn-object-status-style: Object status style
+btn-ok: Ok
+btn-only-one-instance: Only One Instance
+btn-op: Fim
+btn-open-in-browser: Open in Browser
+btn-open-prefix-card: Open Prefix Card
+btn-oper-down: oper down
+btn-operation: Operação
+btn-param: Parâmetro
+btn-port-range: Port Range
+btn-print: Print
+btn-rear: Fundos
+btn-rebase: Criar
+btn-reclassify: Reclassificar
+btn-ref-only: Ref. Only
+btn-ref-source: Ref. Source
+btn-reg-instance: Reg. Instance
+btn-register: Tentativas
+btn-relative: Criar
+btn-reload: Recarregar
+btn-remove: Excluir
+btn-remove-all: Excluir
+btn-remove-all-connections: Conexões
+btn-remove-from-favorites: Remove from Favorites
+btn-remove-from-favorites-2: Remove from favorites
+btn-remove-group: Remove group '
+btn-remove-group-2: Grupo Peer
+btn-remove-mapping: Excluir
+btn-remove-this-item: Remove this item.
+btn-remove-user: Excluir
+btn-reserved: Reserved
+btn-reset: Redefinir
+btn-reset-filter: Limpar filtro
+btn-resources: Fonte
+btn-rid: RID
+btn-run: Executar
+btn-run-action: Duração
+btn-run-discovery: Box de descoberta
+btn-run-discovery-now: Box de descoberta
+btn-run-snippet: Run Snippet
+btn-save: Salvar
+btn-scan: Desabilitar
+btn-scripts: Scripts
+btn-search: Pesquisar
+btn-segment-power-function: Segment power function
+btn-select-all: Select All
+btn-select-config: Selecionar a configuração...
+btn-select-dictionary: Seção
+btn-select-image: Selecione um arquivo...
+btn-select-managed-object: Selecionar objeto gerenciado ...
+btn-select-period: Excluído
+btn-select-rows: Seletores
+btn-send: Som
+btn-send-approve-to-res: Perfil de Usuário
+btn-set: Definir
+btn-set-managed: É Gerenciado?
+btn-set-password: Confirme a senha
+btn-set-root: Definir causa raiz
+btn-set-status: Último Status
+btn-set-unmanaged: É Gerenciado?
+btn-share: Formato
+btn-show-dashboard: Ver dashboard
+btn-show-dashboard-2: Ver dashboard
+btn-show-details: Mostrar Rótulos
+btn-show-free: Show Free
+btn-show-map: Mostrar Mapa
+btn-show-object: Mostrar Objeto
+btn-show-prefix: Show Prefix
+btn-start-zone-transfer: Start zone transfer
+btn-static-client-groups: Grupos compatíveis
+btn-static-service-groups: Static Service Groups
+btn-status-transfer: Status Transfer
+btn-stop-polling: Stop Polling
+btn-stp-blocked: Bloqueado
+btn-submit: Submit
+btn-subscribe: Perfil de Usuário
+btn-suppress: Suprimir
+btn-suppression: Expressão
+btn-sync-record: Seletores
+btn-system: Sistema
+btn-tagged-ranges: Tagged (Intervalos)
+btn-test: Teste
+btn-test-sound: Testar Som
+btn-text: 
+btn-text-2: 
+btn-text-3: 
+btn-text-4: 
+btn-to: Até
+btn-to-maintaince-mode: To maintaince mode
+btn-to-status: Estado
+btn-type: tipo
+btn-unbind: Rodando
+btn-units: Units
+btn-unknown: unknown
+btn-unmark-from-favorites: Unmark from favorites
+btn-unregister: Unregister
+btn-unselect-all: Instalar
+btn-untag: Untag.
+btn-update-channel: última mudança
+btn-update-unlink: Atraso
+btn-upload: Carregar
+btn-user-profile: Perfil de Usuário
+btn-var: Var
+btn-var-map: Var.  Map.
+btn-view: Panorama
+btn-view-card: Ver Ficha
+btn-vlan-db: Vlan DB
+btn-vlan-interfaces: Interfaces de VC
+btn-wait: Wait
+btn-watch: Seguir
+btn-weight: RE Direita
+btn-whois: Whois
+btn-window: Janela
 choice-1-day: 1 dia
 choice-1-month: 1 mês
 choice-1-week: 1 semana
+choice-addresses-unique-per-vrf: Addresses are unique per VRF
+choice-addresses-unique-per-vrf-group: Addresses are unique per VRF Group
+choice-all: Todos
 choice-by-administrative-domain: Por Domínio Administrativo
 choice-by-administrative-domain-and-profile: Por Domínio Administrativo e Perfil
+choice-by-labels: Mostrar Rótulos
 choice-by-platform: Por Plataforma
 choice-by-profile: Por Perfil
 choice-by-version: Por Versão
+choice-cisco-ios-policer: Cisco IOS policer
+choice-cisco-ios-rate-limit: Cisco IOS rate-limit
+choice-config: config
+choice-dbm: dBm
+choice-disable-ping: Mesmo Nível
 choice-dns: DNS
+choice-do-nothing: Do nothing
+choice-enable-ping-but-dont-follow-status: Enable ping but dont follow status
+choice-escalation-error-details: Escalation Error Details
+choice-generate-fqdns: Generate FQDNs
+choice-ignore: Ignore
 choice-ipv4: IPv4
 choice-ipv6: IPv6
+choice-juniper-junos-policer: Juniper JUNOS policer
+choice-mw: mW
+choice-partial-reverse-zone-delegation: Partial reverse zone delegation
 choice-range: Intervalo
+choice-require-if-enabled: Require if enabled
+choice-require-up: Obrigatório
+choice-statistics: Statistics
+header-acl-policy: Acl Policy
+header-act: Agir
 header-action: Ação
+header-active: Ativo
+header-active-2: Ativo?
+header-add-log: Add log
+header-add-to-subscription: Falha ao executar tarefas
 header-address: IP
+header-address-platform: IP/Plataforma
+header-addresses: IP
+header-adm-domain: Domínio Adm.
+header-adm-domain-2: Domínio Administrativo
+header-adm-path1: ADM_PATH1
+header-admin: Admin
+header-admin-domain-2b0276: ADMIN_DOMAIN
+header-admin-domain-610498: Domínio Administrativo
+header-administrative-domain-07d5e8: Administrative domain
 header-administrative-domain-d113be: Domínio Administrativo
+header-affected-objects: Affected objects
+header-afi: AFI
 header-alarm: Alerta
+header-alarm-class: ALARM_CLASS
+header-alarm-class-re: Classe de Alerta RE
+header-alarm-cleared: Alerta Excluído
+header-alarm-commented: Alerta Comentado
+header-alarm-disposition: Disposição
+header-alarm-from-ts: ALARM_FROM_TS
+header-alarm-reopened: Alerta Reaberto
+header-alarm-risen: Alerta Elevado
+header-alarm-subject: ALARM_SUBJECT
+header-alarm-to-ts: ALARM_TO_TS
+header-alarm-tt: ALARM_TT
 header-alarms: Alertas
+header-aliases: Classe
+header-allocated-5cf7f4: allocated
+header-allocated-c249df: Ocupado até
+header-allow-children: Allow Children
+header-allow-fail: Allow Fail
+header-allow-manual: Parâmetro
+header-allow-params: Parâmetro
+header-allow-part: Allow Part.
+header-allow-subscribe: Ocupado até
+header-api: Formato
 header-as: AS
+header-as-set: as-set
+header-asn: ASN
+header-assigned-user: Assigned User
+header-att: Padrão
+header-attachments: Padrões
+header-attribute: Attribute
+header-auth-profile: AUTH_PROFILE
+header-auto-confirm: Auto-confirm
+header-avail-059853: AVAIL
+header-avail-389d90: E-mail
 header-availability: Disponibilidade
+header-avg-load-in-mbps: AVG_LOAD_IN, Mbps
+header-avg-load-out-mbps: AVG_LOAD_OUT, Mbps
+header-base: Base
+header-bearing: Comportamento
+header-blt: Nativo
+header-body: Corpo
+header-box-completed-time: Box Completed Time
+header-box-discovery: Box de descoberta
+header-box-duration: Duração
+header-box-last-status: Último Status
+header-box-last-success: Box Last success
+header-box-status: Box Status
+header-branch: Ramo
+header-build: Prédio
+header-build-letter: Identificação Prédio
+header-builtin: Nativo
 header-capabilities: Capacidades
+header-caps: Caps
+header-category: Category
+header-cfg-ctx: Cfg Ctx.
+header-change: Modificar
+header-changed: Modificado
+header-channel: Modificar
+header-chassis: Chassis
+header-check: Check
+header-checks: Checks
+header-children: Children
+header-choices: Tecnologias
+header-chosen-name: Chosen Name
+header-class: Classe
+header-classified: Classified
+header-clear-template: Limpar Template
+header-client: Gênero
+header-client-model: Client Model
+header-close-template: Nome do template
+header-close-tt: Fechar
+header-collector: Seletor
+header-color: Cor
+header-combo: Combo
+header-command: Command
 header-comment: Comentário
+header-comments: Comments
+header-comments-qty: Comentário
+header-composite: Composite
+header-composite-pins: Composite pins
+header-cond: Cond.
+header-cone-power: Cone Power
+header-config-changed: Modificação de Configuração
+header-config-policy-violation: Violação na Política de Configuração
+header-connect-timeout: Conectar a
+header-connection: Conexão
+header-connection-rule: Regra de Conexão
+header-connection-schema: Conexões
+header-connection-type: Tipo de Conexão
+header-const: Const.
+header-constraint: Limitação
+header-consume-resources: Consume Resources
+header-consumes-resources: Consumes Resources
+header-contacts: Contatos
+header-container: CONTAINER
+header-container-address: CONTAINER_ADDRESS
+header-container-type: Container Type
+header-content: Conteúdo
+header-control-time-0: Controle de Tempo 0
+header-control-time-1: Controle de Tempo 1
+header-control-time-n: Controle de Tempo N
+header-count: Contagem
+header-count-outages: Count outages
 header-cpe: CPE
+header-cr-context: Contexto CR.
+header-created: Criar
+header-credentials: Credenciais
+header-current-ma: Corrente, mA
+header-d: D
+header-date: Data
+header-deescalation-trace: Deescalation trace
+header-def-zoom: Def. Zoom
+header-default: Padrão
+header-default-action: Seção
+header-default-expression: Expressão
+header-default-value: Intervalo (s)
+header-delayed: Atrasar
+header-deny-params: Parâmetro
+header-dependency-param: Dependency Param
+header-dependency-param-values: Dependency Param Values
+header-depends-on: Depends on
 header-description: Descrição
+header-detail: Detail
+header-device: Device
+header-diagnostic: Diagnostic
+header-dialplan: Dialplan
+header-dictionary: Direção
+header-direction: Direção
+header-discovery: Descoberta
+header-discr: Discr.
+header-discrimiator: Fonte de Dados
+header-dispose: Disposição
+header-disposition: Disposição
 header-dns-zone: Zona de DNS
 header-domain: Domínio
+header-domain-ctx: Domain Ctx
+header-domain-scopes: Domain Scopes
+header-dotall: Instalar
+header-downs: Downs
+header-downtime: Downtime
+header-duplex: Duplex
+header-duplicate: Duplicate
+header-duration: Duração
+header-duration-sec: DURATION_SEC
+header-duration-us: Duration (us)
+header-e-mail-address: Até o IP
+header-enabled: Habilitado
+header-end-of-ext-support: End of Ext. Support
+header-end-of-extended-support: End of Extended Support
+header-end-of-sale: Falha ao salvar
+header-end-of-support: End of Support
+header-enter-scope: Enter Scope
+header-entrance: Entrada
+header-entries: Entries
 header-enum: ENUM
+header-enum-group: Grupo Enum
+header-error: Error
+header-error-code: Error code
+header-error-text: Error text
+header-error-type: Tipo de Erro
+header-errors: Errors
+header-errors-in: Errors In
+header-errors-out: Errors Out
+header-escalation: Escalações
+header-escalation-error: Escalation Error
 header-escalation-timestamp: Escalação de Timestamp
+header-escalation-trace: Escalation trace
+header-escalation-ts: ESCALATION_TS
+header-est-letter: Sigla do Estado
+header-estate: Estado
+header-estate2: Estado 2
+header-event-class-re: Classe do Evento RE
+header-event-type: EVENT_TYPE
+header-exclude-expression: Expressão
+header-execute: Execute
+header-exit-command: Exit Command
+header-expiration-time: Data de expiração
 header-expired: Expirado
+header-expired-at: Expiração
+header-expires: Expiração
+header-export-filter: Exportar Filtro
+header-expose: Expose
+header-expose-caps: Expose Caps
+header-expose-condition: Condição
+header-expose-mx: Expose MX
+header-expresseion: Expressão
+header-extend-ctx: Extend Ctx
+header-extension: Extensão
+header-external-alias: External Alias
+header-extra-small: Extra Small
+header-failed-interval: Falha no intervalo
+header-failed-request-count: Failed request count
+header-failed-status: Failed Status
+header-file-name: Nome de usuário
+header-filter: Filtrar
+header-filtered: Filtrável
+header-final-reason: Final Reason
 header-firmware-policy: Política de Firmware
+header-first-discovered: Visto pela Primeira Vez
+header-first-floor: Primeiro Piso
+header-first-home: First Home
+header-first-mac: Primeira Entrada
+header-first-name: Primeira Entrada
+header-floors: Pisos
+header-format: Plataforma
 header-fqdn: FQDN
+header-free: Free
+header-free-blocks: Free Blocks
+header-from-address: Do IP
+header-from-iface-down: FROM_IFACE_DOWN
+header-from-iface-name: FROM_IFACE_NAME
+header-from-number: Do Roteador
+header-from-serial: Do serial
+header-from-state: Estado
+header-from-ts: FROM_TS
+header-full-duplex: Full Duplex
+header-full-name: nome
+header-full-number: Número Completo
+header-gain-db: Gain (dB)
+header-gate-id: ID do Portão
+header-gen: Gerado
+header-gender: Gênero
+header-genders: Gêneros
+header-global-id: Limite global
+header-graph: Formato
+header-group: Grupo
+header-grouped: Grupo
+header-gtt: GTT
+header-h: H
+header-height: Height
+header-hide-records: Hide Records
+header-hint: Interfaces
+header-homes: Homes
+header-hostname: nome
+header-hw-revision: HW Revision
 header-id: ID
+header-iface-description: IFACE_DESCRIPTION
+header-iface-name: IFACE_NAME
+header-iface-speed: IFACE_SPEED
+header-ifindex: ifIndex
+header-ignore-cli-errors: Ignorar Erros da CLI
+header-immediately: Immediately
+header-import-communities: Comunidades de Importação
+header-import-filter: Importar Filtro
+header-in-kbit-s: In (kbit/s)
+header-include-expression: Expressão
+header-include-key-label: Include key Label
+header-indexed: Indexado
+header-input: Input
+header-input-discriminator: Input Discriminator
+header-instances: Instâncias
+header-int: Interfaces
+header-interaction: Operação
+header-interface: Interface
+header-interfaces: Interfaces
+header-internal-name: Nome interno
+header-interval-sec: Intervalo (s)
+header-introduced: Incluído
 header-ip: IP
+header-ip-free: IP Free
+header-ip-scan-discovery: Box de descoberta
+header-ip-total: IP Total
+header-ip-used: IP Used
+header-is-active: Ativo
+header-is-affilated: Is affilated
+header-is-builtin: É Nativo
+header-is-default: Padrão
+header-is-dirty: Is Dirty
+header-is-hide: Está Escondido
+header-is-managed: is managed
+header-is-root: Raiz
+header-is-synced: É Filtrável
+header-job: Tarefa
+header-key: Chave
+header-key-re: Chave RE
+header-kind: "zÍndice "
+header-l2-domain: Domínio Administrativo
 header-l3: L3
+header-label: Rótulo
+header-labels: Rótulo
+header-lag: LAG
+header-language: Idioma
+header-large: Alvo
 header-last-changed: Última Modificação
+header-last-config-ts: LAST_CONFIG_TS
+header-last-floor: Último Piso
+header-last-home: Last Home
+header-last-login: Último Piso
+header-last-mac: última mudança
+header-last-name: última mudança
+header-last-run: Última Execução
+header-last-seen: Visto pela Última Vez
+header-last-seen-17bff7: LAST_SEEN
+header-last-seen-20c226: Visto pela Última Vez
+header-last-status: Último Status
+header-last-status-2: Último Status
+header-last-success: Last Success
+header-last-success-2: Last success
+header-last-successful-discovery: Last successful discovery
+header-last-update: Última Atualização
+header-last-updated: Última Atualização
+header-ldap-group-dn: LDAP Group DN
+header-left-re: RE Esquerda
+header-level: Nível
+header-link-count: LINK_COUNT
+header-link-events: Ligar Eventos
+header-link-proto: LINK_PROTO
+header-link-status: LINK_STATUS
+header-links-count: Links count
+header-load-in: Load In
+header-load-out: Load Out
+header-loca-id: Carregar
+header-local: Local
+header-local-address: Endereço Local
+header-local-as: AS Local
+header-local-description: Local description
+header-local-description-2: Descrição Local
+header-local-group: Grupos compatíveis
+header-local-id: IP Local
+header-local-id-2: IP Local
+header-local-interface: Interface Local
+header-local-name: AS Local
+header-local-object: Mostrar objeto
+header-local-port: Local port
+header-localid: IP Local
+header-location-40c332: LOCATION
+header-location-d219c6: Localização
+header-locked: Bloqueado?
+header-log: Log
+header-log-message: LOG_MESSAGE
+header-log-source: LOG_SOURCE
+header-log-timestamp: LOG_TIMESTAMP
+header-login: Login
+header-lvl: Lvl
 header-mac: MAC
+header-mac-2: Mac
+header-mac-address: Mac Address
+header-mac-vendor: MAC Vendor
+header-maintainer: Mantenedor
+header-maintenance-81e0be: MAINTENANCE
 header-maintenance-94de30: Manutenção
+header-managed: Gerenciado
+header-managed-object: Objeto gerenciado
 header-managed-object-62561c: Objeto Gerenciado
+header-managed-object-f070ef: MANAGED_OBJECT
 header-managed-objects: Objetos Gerenciados
+header-managed-objects-administrative-domain-for-config-only: Managed Objects Administrative Domain (for config only)
+header-managed-objects-group-selector: Managed Objects Group (Selector)
+header-managed-objects-pool: Managed Objects Pool
+header-managed-objects-pools: Managed Objects Pools
+header-managed-objects-profile: Managed Objects Profile
+header-management: Gerência
+header-map-distange-m: Mapa de Distância (m)
+header-mask: Tarefas
+header-master: Master
+header-masters: Masters
+header-match-ack: Match Ack
+header-match-connection: Conexão de Correspondência
+header-match-expression: Expressão
+header-match-slot-ctx: Conexão de Correspondência
+header-match-type: Tipo de Correspondência
+header-max-links: Limpar links
+header-max-load-in-mbps: MAX_LOAD_IN, Mbps
+header-max-load-in-time: MAX_LOAD_IN_TIME
+header-max-load-out-mbps: MAX_LOAD_OUT, Mbps
+header-max-load-out-time: MAX_LOAD_OUT_TIME
+header-max-ms: max (ms)
+header-max-objects: Objetos
+header-max-zoom: Zoom Máximo
+header-max-zoom-2: Zoom Máximo
+header-maximum-alarms: Maximum alarms
+header-measurment-unit: Measurment Unit
+header-medium: Medium
+header-members: Membros
+header-message-type: Mensagem
+header-method: Método
+header-metric: Métrica
 header-mib: MIB
+header-migrate-ts: MIGRATE_TS
+header-mime-type: Tipos de MIME
+header-min-weight: Peso mínimo
+header-min-zoom: Zoom Mínimo
+header-min-zoom-2: Zoom Mínimo
+header-minimum-alarms: Minimum alarms
+header-mo-count: MO Count
+header-modbus-format: Modbus Format
+header-modbus-register: Modbus Register
+header-modbus-value-format: Modbus Value Format
+header-model: Modelo
+header-modelid: Modelo
+header-modified: Modified
+header-modified-by: Modified by
+header-module: Module
+header-multi: Multi
+header-multiline: Nativo
+header-n: N
+header-name: Nome
+header-name-2: nome
+header-native-name: Nome Nativo
+header-ne: NE
+header-neighbor: Vizinho
+header-nested-groups: Nested Groups
+header-network: Selecionar Segmento...
+header-new: Novo
+header-next-run: Próxima Execução
+header-nic-hdl: Nic-hdl
+header-notification: Notificação
+header-notification-delay: Atraso de Notificação
+header-notify-changed: Configuração alterada
+header-ns: NS
+header-num: Número
+header-num-letter: Complemento 2
+header-num2: Complemento
+header-number: Número
+header-numbers: Numbers
+header-obj: Obj.
+header-obj-profile: Perfil de Objeto
+header-object: Objeto
+header-object-action: Object Action
+header-object-address: OBJECT_ADDRESS
+header-object-adm-domain: OBJECT_ADM_DOMAIN
+header-object-admdomain: OBJECT_ADMDOMAIN
+header-object-attr-patch: OBJECT_ATTR_PATCH
+header-object-bootprom: OBJECT_BOOTPROM
+header-object-hostname: OBJECT_HOSTNAME
+header-object-hwversion: OBJECT_HWVERSION
+header-object-labels: OBJECT_LABELS
+header-object-model: OBJECT_MODEL
+header-object-name: OBJECT_NAME
+header-object-platform: OBJECT_PLATFORM
+header-object-profile: OBJECT_PROFILE
+header-object-project: OBJECT_PROJECT
+header-object-segment: OBJECT_SEGMENT
+header-object-segment-2: Objeto/Segmento
+header-object-serial: OBJECT_SERIAL
+header-object-software: OBJECT_SOFTWARE
+header-object-status: OBJECT_STATUS
+header-object-vendor: OBJECT_VENDOR
+header-object-version: OBJECT_VERSION
+header-object1-address: OBJECT1_ADDRESS
+header-object1-admin-domain: OBJECT1_ADMIN_DOMAIN
+header-object1-descr: OBJECT1_DESCR
+header-object1-iface: OBJECT1_IFACE
+header-object1-name: OBJECT1_NAME
+header-object1-platform: OBJECT1_PLATFORM
+header-object1-segment: OBJECT1_SEGMENT
+header-object1-speed: OBJECT1_SPEED
+header-object1-tags: OBJECT1_TAGS
+header-object2-address: OBJECT2_ADDRESS
+header-object2-admin-domain: OBJECT2_ADMIN_DOMAIN
+header-object2-descr: OBJECT2_DESCR
+header-object2-iface: OBJECT2_IFACE
+header-object2-name: OBJECT2_NAME
+header-object2-platform: OBJECT2_PLATFORM
+header-object2-segment: OBJECT2_SEGMENT
+header-object2-speed: OBJECT2_SPEED
+header-object2-tags: OBJECT2_TAGS
+header-objects-72a83a: Objetos
+header-objects-83ccf1: OBJECTS
 header-oid: OID
+header-oid-2: Para OID
+header-old: Antigo
+header-open-template: Abrir Template
+header-oper: Oper
+header-oper-status: Status da interface
+header-optical-rx-dbm: Optical Rx, dBm
+header-optical-tx-dbm: Optical Tx, dBm
+header-order: Ordenar
+header-order-key: Order Key
+header-org-name: Nome da Organização
+header-org-type: Tipo da Organização
+header-other: Mês
+header-out-kbit-s: Out (kbit/s)
+header-output: Output
+header-output-discriminator: Output Discriminator
+header-over-topology: Over Topology
+header-overr-existing: Overr. Existing
+header-p95-ms: p95 (ms)
+header-pages: Pages
 header-paid-till: Licenciado Até
-header-percent: '%'
-header-percentage: "Percentual"
+header-pair: Parâmetro
+header-parameter: Parâmetro
+header-params-map: Params Map
+header-parent: Nível Superior
+header-parent-vlan: Parent VLAN
+header-part-no: Part No
+header-part-number-0: Part Number 0
+header-part-number-1: Part Number 1
+header-part-number-2: Part Number 2
+header-part-number-3: Part Number 3
+header-path: Caminho
+header-pattern: Padrão
+header-peer: Reverter
+header-peering-point: Peering Point
+header-percent: "%"
+header-percent-at-all: Percent at All
+header-percentage: Percentual
+header-periodic-completed-time: Busca realizada
+header-periodic-discovery: Descoberta periódica
+header-periodic-duration: Descoberta periódica
+header-periodic-last-status: Periodic Last status
+header-periodic-last-success: Periodic Last success
+header-periodic-status: Status da interface
+header-periodic-time-start: Periodic Time start
+header-permission: Permissão
+header-person-role-name: Nome da Pessoa/Papel
+header-phone-number: Phone Number
+header-phone-range: Phone Range
+header-phys-interface-count: PHYS_INTERFACE_COUNT
+header-ping: Ping
 header-platform: Plataforma
+header-platform-regex: Plataforma (Regex)
+header-plugin: Plugin
+header-points-of-presence: Points of presence
+header-policy: Política
+header-pool: Pool
+header-port: Porta
+header-port-duplex: PORT_DUPLEX
+header-port-name: PORT_NAME
+header-port-profile-name: PORT_PROFILE_NAME
+header-port-speed: PORT_SPEED
+header-port-status: PORT_STATUS
+header-port-tagged-vlans: PORT_TAGGED_VLANS
+header-port-untagged-vlan: PORT_UNTAGGED_VLAN
+header-pp: PP
+header-pre-reason: Razão Inicial
+header-pref: Preferência
+header-pref-2: Pref.
+header-preferred: Preferência
+header-preferred-method: Idioma Preferido
 header-prefix: Prefixo
+header-prefix-scope: Prefixos
+header-prefixes: Prefixos
+header-primary: Principal
+header-primary-key: é primário
+header-prio: Prioridade
+header-priority: Prioridade
+header-probable-causes: Possíveis Causas
+header-problem: Problem
+header-process: Processo
+header-productive: Ativo
 header-profile: Perfil
+header-profile-check-rule-name: Nome da Regra de Verificação de Perfil
+header-profile-name: PROFILE_NAME
+header-proj-distange-m: Projeto de Distância (m)
+header-project-16eeaf: PROJECT
 header-project-f6f4da: Projeto
+header-protected: projeto
+header-proto: projeto
+header-protocol: Protocolo
+header-provide-resources: Provide Resources
+header-provides-resources: Provides Resources
+header-provisioned: Aprovisionado
+header-provisioning: Aprovisionamento
+header-q1-ms: Q1 (ms)
+header-q2-ms: Q2 (ms)
+header-q3-ms: Q3 (ms)
+header-quality: Quality
 header-quantity: Quantidade
+header-racks: Racks
 header-range: Intervalo
+header-ranges: Modificar
+header-rd: RD
+header-read-only: Razão Inicial
+header-reason: Razão Inicial
+header-reboots: Reboots
+header-recommended-actions: Ações Recomendadas
+header-records: Seletores
+header-redundancy: Redundancy
+header-reference-template: Abrir Template
+header-references: References
+header-regex: REGEX
+header-regex-scope: Regex Scope
+header-register-msg: Register Msg.
+header-remote-address: Endereço Remoto
+header-remote-as: AS Remoto
+header-remote-chassis: Remote Chassis
+header-remote-description-6d7f6e: Remote description
+header-remote-description-987a22: Descrição Remota
+header-remote-hostname: Remote Hostname
+header-remote-id: IP Remoto
+header-remote-interface: Interface Remota
+header-remote-name: AS Remoto
+header-remote-object-d33f14: Remote object
+header-remote-object-e48a25: Selecionar objeto gerenciado ...
+header-remote-port: Remote port
+header-remove-policy: Papel do Evento
+header-repeat: Repeat
+header-req: Obrigatório
+header-request-count: Request count
+header-require-confirmation: Solicitar Confirmação
+header-required: Obrigatório
+header-reset-scopes: Redefinir Escopos
+header-resource: Fonte
+header-result: Resultado
+header-revision: Revisão
+header-rewrite-oid: Reescrever OID
+header-right-re: RE Direita
+header-role: Perfil
+header-root-cause: Definir causa raiz
+header-root-id: ROOT_ID
+header-router-id: ID do Roteador
+header-row: Row
+header-rows: Rows
+header-rt-export: Relatório
+header-rt-import: Importar
+header-ru: RU
+header-rule: Regras
+header-rules: Regras
+header-s: S
+header-sa-profile: Perfil de AS
+header-sample: Sample
+header-scope: Escopo
+header-scope-command: Scope Command
+header-scope-exit: Scope Exit
+header-script-failed: Falha no Script
+header-searchable: Buscável
+header-section: Seção
 header-segment-44986c: Segmento
+header-segment-aeb83a: SEGMENT
+header-sender: Sender
+header-serial: Serial
+header-serial-no: Serial No
+header-server: Server
+header-service: serviço
+header-service-expression: Expressão
+header-service-model: serviço
+header-services: Services
+header-session: Session
+header-set-context: Set Context
+header-set-label: Nome do Objeto
+header-set-var: Início
+header-severity: Criticidade
+header-shift: Shift
+header-short: Abreviação
+header-short-label: Mostrar Rótulos
+header-show-in-menu: Mostrar no Menu
+header-show-remote-sync-time: Show remote sync time
+header-single-client: Single Client
+header-single-service: serviço
+header-site: Site
 header-size: Tamanho
+header-size-usage: Size (Usage)
+header-slave: Slave
+header-slaves: Slaves
+header-small: Instalar
+header-sn-changed: SN_CHANGED
+header-snmp-oid: SNMP OID
+header-snmp-ro: SNMP RO
+header-snmp-rw: SNMP RW
+header-snmp-sysobjectid: SNMP sysObjectId
+header-snmp-traps: SNMP Traps
+header-source: Fonte
+header-speed: Speed
+header-stage: Stage
+header-start: Início
+header-start-of-sale: Start of Sale
+header-starting: Iniciando
+header-state: Estado
+header-status: Status
+header-step-to: Alterar para
+header-stop: Fim
+header-store-column: Store Column
+header-stored: Stored
+header-strict: Início
+header-struct: Struct
+header-struct-letter: Identificação do Bloco
+header-struct2: Struct2
+header-sub-interface: Sub.Interface
+header-sub-interfaces: Sub.Interfaces
+header-subject: Assunto
+header-subject-class: Assunto/Classe
 header-subscriber: Assinante
-header-subscribers: "Assinantes"
+header-subscribers: Assinantes
 header-subscribers-6f13df: Assinantes
+header-subscribers-97ec75: SUBSCRIBERS
+header-success-request: Success request (%)
+header-success-request-count: Success request count
+header-summary: Resumo
+header-summary-tt: Resumo/Chamado
+header-superuser: Superuser
 header-supplier: Fornecedor
+header-suppress-action: Suppress Action
+header-sw: SW
+header-sw-version: Versão
+header-symptoms: Sintomas
+header-syntax: Sintaxe
+header-syslog: Syslog
+header-sysobjectid: sysObjectID
+header-table: Tabela
+header-tablespace: Tablespace
+header-tagged: Tagged
+header-tags: Tags
+header-target: Alvo
+header-target-connection: Conexão do Alvo
+header-target-number: Número do Alvo
+header-target-type: Tipo de Alvo
+header-tech-contact: Tech Contact
+header-tech-contact-phone: Tech Contact Phone
 header-technology: Tecnologia
+header-temp-c: Temp, °C
+header-template: Template
+header-terminator: Terminator
+header-terms: Terms
+header-text: .
+header-threshold: Threshold
+header-time: Hora
+header-time-duration: Tempo/Duração
 header-time-pattern: Padrão de Tempo
+header-time-sec: Tempo (s)
+header-time-start: Time start
+header-timestamp: Timestamp
+header-tip: Dica
+header-title-tag: Estilo
+header-title-template: Template de Título
+header-to-address: Até o IP
+header-to-iface-down: TO_IFACE_DOWN
+header-to-iface-name: TO_IFACE_NAME
+header-to-number: Número
+header-to-oid: Para OID
+header-to-serial: Até o serial
+header-to-state: Estado
+header-to-ts: TO_TS
+header-topo: Fim
+header-total: Total
+header-total-in-mbyte: TOTAL_IN, Mbyte
+header-total-objects: Total objects
+header-total-out-mbyte: TOTAL_OUT, Mbyte
+header-total-unavail-sec: Total unavail (sec)
+header-translation: Translation
 header-tt: TT
+header-tt-id: TT ID
+header-tt-queue: TT Queue
+header-ttl: TTL
+header-type: Tipo
+header-uniq-cone-power: Uniq. Cone Power
+header-unique: Único
+header-untagged: Untagged
+header-update-expired: Update Expired
+header-update-last-seen: Visto pela Última Vez
+header-uplink-avg-load-in-mbps: UPLINK_AVG_LOAD_IN, Mbps
+header-uplink-avg-load-out-mbps: UPLINK_AVG_LOAD_OUT, Mbps
+header-uplink-iface-description: UPLINK_IFACE_DESCRIPTION
+header-uplink-iface-name: UPLINK_IFACE_NAME
+header-uplink-iface-speed: UPLINK_IFACE_SPEED
+header-uplink-max-load-in-mbps: UPLINK_MAX_LOAD_IN, Mbps
+header-uplink-max-load-out-mbps: UPLINK_MAX_LOAD_OUT, Mbps
+header-uplink-max-time-in: UPLINK_MAX_TIME_IN
+header-uplink-max-time-out: UPLINK_MAX_TIME_OUT
+header-uplink-total-in-mbyte: UPLINK_TOTAL_IN, Mbyte
+header-uplink-total-out-mbyte: UPLINK_TOTAL_OUT, Mbyte
+header-url: URL
+header-usage: Mensagem
+header-use-tls: Use TLS
+header-used: "% Used"
+header-used-by: Used by
+header-user: Usuário
+header-user-clearable: User clearable
+header-user-name: Nome de usuário
+header-username: Nome de usuário
+header-validataion-expr: Validação
+header-value: Valor
+header-value-re: Valor RE
+header-vars: Variáveis
 header-vendor: Fabricante
+header-vendor-mac: VENDOR_MAC
 header-version: Versão
+header-version-changed: Versão Alterada
+header-version-regex: Versão (Regex)
+header-vfr: VFR
+header-view-column: View Column
+header-views: Views
 header-vlan-560367: VLAN
+header-vlan-6c174b: Vlan
+header-vlan-discovery: Box de descoberta
+header-vlan-translation: transição ipv6
+header-vlans: Classe
+header-voltage-v: Voltagem, V
 header-vpn: VPN
+header-vpn-id: VPN ID
 header-vrf: VRF
+header-vrfs: VRFs
+header-w: W
+header-weight-kg: Weight (kg)
+header-when-do: Fabricante
+header-whois: whois
+header-wildcard: Wildcard
+header-window-sec: Tempo (s)
+header-wiping: Mesmo Nível
+header-zindex: "zÍndice "
 header-zone: Zona
-help-cir-bps-k-m-and-g-suffixes-can-be-used: "Sufixos CIR(bps). K, M e G podem ser usados"
+help-action-when-discovery-firmware-denied-on-firmwarepolice-inventor: Action when discovery firmware denied on FirmwarePolice.Inventory -> Setup -> FirmwarePolicy <br/>Ignore - Ignore and do next discovery<br/>Ignore&Stop - Ignore and stop discovery<br/>Raise Alarm - Raise alarm on ManagedObject and do next discovery<br/>Raise Alarm&Stop - Raise alarm on ManagedObject and stop discovery
+help-action-when-discovery-new-platform-on-version-discovery-br-creat: Action when discovery new platform on version discovery. <br/>Create - Create platform and set it on device<br/>Alarm - Do not create platform and raise alarm
+help-activate-resolve-address-by-fqnd-field-or-other-handler-br-profi: Activate resolve Address by FQND field (or other handler).<br/> Profile - Use profile settings<br/>Disable - Do not resolve FQDN into Address field<br/>Once - Once resolve FQDN (after success settings will be set to Disable)<br/>Enable - Enable resolve address before running Job<br/>
+help-add-input: Add Input
+help-add-me-to-this-subscription: Add me to this subscription
+help-add-new-record: Add new record
+help-add-setting-labels-to-raised-alarm-label-must-b-enable-alarm-b-s: Add setting labels to Raised Alarm. Label must <b>enable_alarm</b> setting
+help-add-to-exist-maintaince: Add to exist maintaince
+help-append-raw-section-to-confdb: Append raw section to confdb
+help-application-help: Regra de Validação
+help-apply-changes: última mudança
+help-back: Back
+help-cache-neighbors-get-x-neighbors-script-result-br-when-informatio: Cache neighbors (get_X_neighbors script result). <br/>When information cached script not execute on device <br/>0 - do not cache
+help-calculate-oper-status-br-d-disable-calculate-status-br-r-calcula: Calculate Oper Status <br/>D - Disable Calculate Status<br/>R - Calculate By Rule<br/>MN - From Min Status<br/>MX - From Max Status
+help-calculate-oper-status-br-d-disable-status-transfer-br-r-transfer: Calculate Oper Status <br/>D - Disable Status Transfer<br/>R - Transfer By Rule<br/>P - From Profile
+help-center-to-object: Objeto gerenciado
+help-check-device-snmp-trap-storm-policy-br-check-trap-message-count-: Check Device SNMP Trap storm policy <br/>check trap message count over 60s <br/>B - Block receive trap from ManagedObject Address<br/>R - Raise Alarm to ManagedObject and not block<br/>A - Raise Alarm to ManagedObject and block trap receive<br/>D - Disable Storm Check
+help-cir-bps-k-m-and-g-suffixes-can-be-used: Sufixos CIR(bps). K, M e G podem ser usados
+help-clean-basket: projeto
+help-clear-all-rows: Apagar alerta?
+help-clear-objects: projeto
+help-clipboard: Ficha
+help-clone-n-times: Comentário
+help-close-form: Close form
+help-close-query: Close Query
+help-close-without-deleting: Close without deleting
+help-close-without-saving: Close without saving
+help-collapse: Escopo
+help-collapse-panels: Recolher painéis
 help-common-values-are-tc-1-5-for-rate-limit-and-tc-0-25-for-policing-0-25-is-default: "Valores usuais são: Tc=1.5 para rate-limit e Tc=0.25 para política (0.25 é o padrão)"
-help-dns-zone-name-to-transfer: "Nome da Zona de DNS a transferir"
-help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: "Endereço IP do servidor de nomes. NS deve ter uma zona de transferência habilitada para o NOC"
+help-compose-expression-for-metrictype-worked-only-same-scopeon-expre: Compose expression for MetricType. Worked only SAME ScopeOn expression use MetricType field_name as variable name
+help-condition-running-diagnostic-br-always-always-run-diagnostic-on-: Condition running diagnostic <br/>Always - Always run diagnostic on Discovery<br/>Failed - Run only Diagnoscti has Unknown or Failed state
+help-connect-ports: Conectar a
+help-consequence-recover-time-root-cause-will-be-detached-if-conseque: Consequence recover time. Root cause will be detached if consequence alarm will not clear itself in *recover_time*
+help-console: Console
+help-control-time-to-reopen-alarm-after-1-reopen: Controle de tempo (1 reabertura)
+help-control-time-to-reopen-alarm-after-1-reopen-2: Control time to reopen alarm after >1 reopen
+help-control-time-to-reopen-alarm-instead-of-creating-new: Control time to reopen alarm instead of creating new
+help-copy-existing-values-to-a-new-object: Copy existing values to a new object
+help-create-new-maintaince: Create new maintaince
+help-create-or-update-channel: Criar Regra
+help-default-state-when-set-diagnostic: Default state when set Diagnostic
+help-delete-object: Selecionar objeto gerenciado ...
+help-delete-object-s: Delete object(s)
+help-delete-workflow: Delete Workflow
+help-depended-diagnostic-for-calculate-state: Depended Diagnostic for calculate state
+help-display-check-state-on-object-form: Display check state on Object Form
+help-dns-zone-name-to-transfer: Nome da Zona de DNS a transferir
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable<br/>Do not raise - work on current mode (immediately after login)
+help-do-enable-if-login-unprivileged-mode-on-device-br-raise-privileg-2: Do enable if login unprivileged mode on device. <br/>Raise Privileges - send enable, Do not raise - work on current mode <br/>(immediately after login)
+help-download-content: Conteúdo
+help-download-image-as-svg: Download image as SVG
+help-download-list-of-allocated-ip-addresses-in-csv-format: Download list of allocated IP addresses in CSV format
+help-download-results: Download results
+help-edit-map: Editar mapa
+help-enable-allow-to-escalate-alarm-for-managedobject-br-as-depended-: Enable - allow to escalate alarm for ManagedObject. <br/>As Depended - allow to escalate ManagedObject only as depend (not root) on alarm
+help-enable-or-disable-ping-if-working-hour-on-object-is-set-br-enabl: Enable or disable ping if working hour on object is set. <br/>Enable - Calc RTT, but do not raise alarm, Disable ping - do not send ICMP
+help-enable-send-syslog-message-to-clickhouse-b-syslog-b-table-br-may: Enable send syslog message to ClickHouse </b>syslog</b> table. <br/>May be overwritten by ManageObject <b>syslog_archive_policy</b> setting. <br/>E - Send syslog message to ClickHouse<br/>D - Do not send syslog message to ClickHouse
+help-export-all-records-from-buffer-screen: Export all records from buffer (screen)
+help-export-to-csv: Relatório
+help-external-storage-for-config-downloading-setup-in-main-setup-ext-: External storage for config downloading. Setup in Main -> Setup -> Ext. storage
+help-external-storage-for-config-save-setup-in-main-setup-ext-storage: External storage for config save. Setup in Main -> Setup -> Ext. storage
+help-field-on-this-use-in-etl-process-sync-on-external-system-br-do-n: Field on this use in ETL process (sync on external system). <br/>Do not Edit field directly!
+help-flap-detection: Flap detection
+help-form-help: Form Help
+help-get-credentials-user-pass-snmp-etc-from-auth-profile-br-service-: Get credentials (user, pass, snmp etc.) from Auth profile.<br/>  Service Activation -> Setup -> Auth Profile. If set - value in field user, password, snmp community will be IGNORED
+help-go-to-channel: Go to channel
+help-go-to-next-step: Go to next step
+help-go-to-object: Go to object
+help-go-to-parent: Nível Superior
+help-hide-basket: Hide basket
+help-hide-from-display: Hide from display
+help-how-bind-resources-to-service-instance-br-d-disable-br-a-allowed: How bind resources to Service Instance <br/>D - Disable <br/>A - Allowed AnyC - By Config
+help-i-collect-macs-only-for-allowed-interfaces-br-mac-discovery-poli: I - Collect MACs only for allowed interfaces. <br/>(MAC Discovery Policy on Inventory -> Setup -> Interface Profile) <br/>
+help-if-check-use-credential-check-rules-service-activation-setup-cre: If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/> for suggest credential
+help-if-checked-discovery-try-find-port-by-object-id-hostname-address: If checked discovery try find port by object_id (Hostname, Address, Name) contains in description
+help-if-empty-active-true: If empty active=True
+help-if-empty-exhaus-true: If empty exhaus=True
+help-if-set-credential-on-profile-will-replace-credential-on-device: If set - Credential on Profile will replace credential on Device
+help-if-set-raise-alarm-when-diagnostic-to-failed-state: If set - Raise Alarm when diagnostic to Failed state
+help-include-exclude-profile-from-list: Include/Exclude profile from list
+help-include-special-addresses-network-broadcast-for-ipv4-br-in-prefi: Include special addresses (Network & Broadcast for IPv4) <br/>in prefix range
+help-insert-mac-address-to-this-field-one-of-format-li-full-aa-aa-aa-: "Insert MAC address to this field one of format:<li>FULL: AA:AA:AA:AA:AA:AA</li><li>Left part: AA:AA:</li><li>Right part: :AA:AA</li>"
+help-jinja-template-for-creating-segment-name-br-worked-with-segmenta: Jinja template for creating segment name. <br/>Worked with "Segmentate for object's segment" and "Segmentate for child segment" options
+help-jump-to-group: Grupo Enum
+help-jump-to-portal: Jump to Portal
+help-jump-to-segment: Ir para o Segmento
+help-level-up: Nível
+help-limit-snmp-query-per-second: Limit SNMP (Query per second).
+help-load-chart: Load Chart
+help-management-console: Gerência
+help-mark-unmark: Mark/Unmark
+help-max-level-common-level-there-will-be-changed-segment-br-autosegm: Max level (Common -> Level) there will be changed segment. <br/>(Autosegmentation not worked with ManagedObject less this level
+help-metric-type-inputs: Tipo de Métrica
+help-metric-type-inputs-to-expression: Metric Type inputs to Expression
+help-mirror-collected-config-after-config-discovery-br-always-mirror-: Mirror collected config after Config discovery. <br/>Always Mirror - mirror every discovery run <br/>Mirror on Change - save only if detect config changed
+help-models-allowed-set-workflow: Models allowed set workflow
+help-more-settings-for-worked-with-devices-br-place-on-service-activa: More settings for worked with devices. <br/>Place on Service Activation -> Setup -> Object Profile.
+help-move-all-selected-devices-to-the-basket: Move all selected devices to the basket
+help-name-ip-device: Name/IP device
+help-name-server-ip-address-ns-must-have-zone-transfer-enabled-for-noc-host: Endereço IP do servidor de nomes. NS deve ter uma zona de transferência habilitada para o NOC
+help-new-layout: Novo layout
+help-next-change: última mudança
+help-no-comments: Comentário
+help-number-of-flaps-while-close-flap-window: Number of flaps while close Flap Window
+help-object-settings: Objetos
+help-open-card: Ver ficha
+help-open-sfp: Open SFP
+help-open-tools: Protocolos
+help-order-run-diagnostic-in-discovery-process-br-on-start-before-dis: Order run diagnostic in Discovery process. <br/>On Start - Before Discovery checks run<br/>On End - After Discovery checks run
+help-parent-filter: Limpar filtro
+help-parent-filter-2: Limpar filtro
+help-policy-detect-diagnostic-success-or-failed-state-br-all-all-chec: Policy detect diagnostic Success or Failed state <br/>ALL - ALL Checks and Depended Discovery must Success for Enable state<br/>ANY - ANY Checks and Depended Discovery mush Success for Enable state
+help-position-front: Disposição
+help-position-rear: Disposição
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro: Preference mode with worked profile script. <br/>!! Work if Device Profile supported. <br/>Profile (default) - use Object Profile settings <br/>S - Use only SNMP when access to deviceCLI Only - Use only CLI when access to deviceSNMP, CLI - Use SNMP, if not avail swithc to CLICLI, SNMP - Use CLI, if not avail swithc to SNMP
+help-preference-mode-with-worked-profile-script-br-work-if-device-pro-2: Preference mode with worked profile script. <br/>!! Work if Device Profile supported. <br/>Profile (default) - use Object Profile settings <br/>S - Use only SNMP when access to deviceCLI Only - Use only CLI when access to deviceSNMP, CLI - Use SNMP, if not avail switch to CLICLI, SNMP - Use CLI, if not avail switch to SNMP
+help-preview: Visualizar
+help-preview-zone: Visualizar
+help-previous-change: Versão alterada
+help-processed-syslog-snmp-trap-message-to-classifier-service-br-e-se: Processed syslog/snmp trap message to Classifier service <br/>E - Send message to Classifier<br/>D - Do not send message to Classifier
+help-profile-adapter-for-device-work-br-auto-detect-profile-by-snmp-i: Profile (Adapter) for device work. <br/>!! Auto detect profile by SNMP if Object Profile -> Box -> Profile is set. <br/>
+help-protocol-priority-worked-on-device-br-warning-device-profile-sa-: Protocol priority worked on device. <br/>Warning! Device profile (SA Profile) should support worked in selected mode
+help-rebase-prefix-to-a-new-location: Rebase prefix to a new location
+help-redo: Redo
+help-refresh: Atualizar
+help-refresh-data: Atualizar
+help-reload-and-it-has-been-since-the-last-update: Reload and It has been since the last update
+help-reload-data: Falha ao carregar dados
+help-remove-all-devices-from-right-panel: Remove all devices from right panel
+help-remove-input: Remove Input
+help-remove-me-to-this-subscription: Descrição Remota
+help-repaint: Nível Superior
+help-required-run-migration-metric-database-after-changed-that-enable: Required run migration metric Database after changed.That enabled only by deploy.
+help-reset-changes: última mudança
+help-reset-filters: Limpar filtro
+help-reset-title-permissions: Reset title permissions
+help-reset-to-default-values: Reset to default values
+help-reset-values: Credenciais
+help-revert: Reverter
+help-rotate: Estado
+help-run-config-validate-process-br-always-validate-every-discovery-r: "Run config validate process: <br/>Always Validate - every discovery run<br/>Validate on Change - only if detect config changed"
+help-run-vpn-trace: Run VPN Trace
+help-sa-profiles-for-match-rules: SA Profiles, for match rules
+help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Sampling value for Box discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry, <br/> 0,99 ... 0,1 - chance to save
+help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Sampling value for Periodic discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry,  0,99 ... 0,1 - chance to save
+help-save-all-from-basket: Save all from basket
+help-save-changes: última mudança
+help-save-changes-and-continue-editing: Notificação de Modificação de Status
+help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form.Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
+help-save-screen: Visto pela Última Vez
+help-save-workflow: Fluxos de Trabalho
+help-select-action: Seção
+help-select-all-records-from-buffer-screen: Select all records from buffer (screen)
+help-select-method-of-config-fetching: Select method of config fetching
+help-select-method-of-config-gathering: Select method of config gathering
+help-set-after-version-discovery-not-for-manual-set: Set after Version Discovery. Not for manual set
+help-set-all-permissions: Permissão
+help-set-device-name-if-fqdn-suffix-is-not-set-use-dot-after-name-nam: "Set device name. If FQDN suffix is not set use dot after name: NAME.<br/>FQND suffix set on Object Profile: Service Activation -> Setup -> Object Profile -> Common<br/>"
+help-set-measurements-unit-for-metrictype-used-for-conversation-value: Set Measurements Unit for MetricType. Used for conversation value
+help-set-position: Disposição
+help-set-which-caps-will-be-check-in-caps-discovery-br-service-activa: Set which CAPS will be check in Caps discovery. <br/>Service Activation -> Setup -> Caps Profiles
+help-set-which-caps-will-be-check-in-caps-discovery-br-vc-setup-vlan-: Set which CAPS will be check in Caps discovery. <br/>VC -> Setup -> VLAN Filter
+help-set-which-peer-profile-will-be-set-when-created-br-peer-setup-pe: Set which Peer Profile will be set when Created. <br/>Peer -> Setup -> Peer Profiles
+help-settings: Configurações
+help-settings-for-autosegmentation-process-br-automatically-detect-se: "Settings for autosegmentation process: <br/>Automatically detect segment for ManagedObject with this ObjectProfile.<br/>Uses MAC and needed MAC enable in Box"
+help-settings-policy-for-config-discovery-validation-and-mirroring-co: "Settings policy for config discovery: Validation and mirroring config"
+help-setup-colleted-metric-on-devices-not-interface-br-interface-metr: Setup colleted metric on devices (not Interface!). <br/>(Interface Metrics settings Inventory -> Setup -> Interface Profile)
+help-show-alarm-detail: Show alarm detail
+help-show-config: Show Config
+help-show-hide-basket: Show/Hide basket
+help-show-hide-basket-2: Show/Hide Basket
+help-show-hide-filter: Filtro de Bind
+help-show-hide-legend: Show/Hide legend
+help-show-hide-minimap: Show/Hide miniMap
+help-show-hide-search-popup: Show/Hide search popup
+help-show-interface-load: Mostrar carga de interface
+help-show-ipsla-dashboard: Ver dashboard
+help-show-json: Mostrar JSON
+help-show-kb: Show KB
+help-show-macs: Mostrar mapa
+help-show-map: Mostrar mapa
+help-show-neighbor-map: Mostrar mapa
+help-show-object: Mostrar objeto
+help-show-static-map: Mostrar mapa estático
+help-show-stp-topology: Mostrar topologia STP
+help-show-vlan-interfaces: Mostrar carga de interface
+help-subscription: Descrição
+help-suppress-me-to-this-subscription: Suppress me to this subscription
+help-swap-contents: Conteúdo
+help-switch-to-breadcrumb-view: Alterar para visualização aninhada
+help-switch-to-tree-view: Alterar para visualização aninhada
+help-test-compatible-types: Grupos compatíveis
+help-test-rule: Criar Regra
+help-this-grid-is-currently-disabled-fill-all-required-fields-and-pre: This grid is currently disabled. Fill all required fields and press 'Apply' button to enable it.
+help-time-in-seconds-to-delay-alarm-risen-notification: Time in seconds to delay alarm risen notification
+help-time-in-seconds-while-waiting-of-reopen: Time in seconds, while waiting of reopen
+help-to-default-value: to default value
+help-to-see-the-prefix-contents: To see the prefix contents
+help-transfer-alarm-to-operstatus-br-d-disable-alarm-transfer-br-b-se: Transfer alarm to OperStatus <br/>D - Disable Alarm Transfer<br/>B - Service Component on Alarm<br/>B - Instance Filter<br/>O - Only By Filter Rule (Empty - Disable)
+help-transfer-children-status-to-operstatus-br-d-disable-status-trans: Transfer children Status to OperStatus <br/>D - Disable Status Transfer<br/>T - All Status transferS - Self Status
+help-transfer-oper-statuses-to-adjacent-services-br-d-disable-status-: Transfer Oper Statuses to Adjacent Services <br/>D - Disable Status Transfer<br/>T - Transfer to All Adjacent<br/>R - Transfer By Rule<br/>P - From Profile
+help-undo: Undo
+help-unselect-all-devices: Unselect all devices
+help-upload-list-of-allocated-ip-addresses-from-existing-dns-servers-: Upload list of allocated IP addresses from existing DNS servers via AXFR request
+help-use-for-setup-user-permission-on-object-br-place-on-service-acti: Use for setup User permission on Object. <br/>Place on Service Activation -> Setup -> Administrative Domain.<br/>Permission on Activation -> Setup -> Group Access/User Access.<br/>
+help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre: Use for shard devices over intersection IP Address spaces. <br/>Create and Set on Tower<br/>
+help-use-name-network-ex-10-0-0-0-8-or-mac: Use name, network (ex 10.0.0.0/8) or MAC
+help-use-one-session-worked-on-device-br-if-disabled-worked-one-scrip: Use one session worked on device. <br/>If disabled - worked one script - one login. Logout after script end.
+help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end.Disable - worked one script - one login. Logout after script end.
+help-use-this-field-if-you-want-disable-ping-check-on-specified-time-: Use this field if you want disable ping check on specified time.<br/>  Main -> Setup -> Time Patterns
+help-use-to-override-pool-for-events-processing: Use to override pool for events processing
+help-view-as-json: View as JSON
+help-view-card: Ver ficha
+help-view-connection-diagram: View connection diagram
+help-worked-with-devices-settings: Worked with devices settings
+help-zoom-to-level: Zoom to level
+label-15-min: L1 (mín)
+label-3-h: 3 h
+label-30-min: 30 min
+label-5-min: L2 (mín)
+label-60-min: 60 min
+label-abduct-detection-threshold: Abduct Detection Threshold
+label-abduct-detection-window: Janelas de Desduplicação
+label-access: Permissão
+label-access-level: Nível de Acesso
+label-access-preference: Preferência
+label-account-id: Contagem
+label-acl: ACL
+label-action-params: Action Params
+label-action-set: Action Set
+label-activation-function: Activation Function
+label-active-alarms: Mostrar alertas ativos
+label-add-linked-nodes: Add Linked Nodes
+label-add-nested-nodes: Add nested nodes
+label-add-topology-links: Add Topology links
+label-address-constraint: Limitação de IP
+label-address-discovery: Status da Descoberta
+label-address-discovery-policy: Política de Descoberta
 label-address-family: Família de IP
+label-address-pools: Família do IP
+label-address-resolution-policy: Address Resolution Policy
+label-admin-c: Admin-c
+label-administrative: Administrativo
+label-administrative-division: Divisão Administrativa
 label-administrative-domain: Domínio Administrativo
-label-alarms: "Alertas"
+label-administrative-territorial-division: Divisão Administrativa
+label-affected: Affected
+label-affected-rules: Affected Rules
+label-agent-collector: Conexão do Alvo
+label-agent-param: Agent Param
+label-agreement-id: Gerência
+label-alarm-affected-policy: Alarm Affected Policy
+label-alarm-class-re: Classe de alerta RE
+label-alarm-commented: Alerta comentado
+label-alarm-group: Alerta reaberto
+label-alarm-reopened: Alerta reaberto
+label-alarm-risen: Alerta elevado
+label-alarm-status-rules: Status do Alerta
+label-alarm-weight: Peso do alarme
+label-alarm-weight-2: Peso do Alerta
+label-alarms: Alertas
+label-alarms-source: Fonte de Dados
+label-allocate-numbers: Allocate Numbers
+label-allocate-strategy: Allocate Strategy
+label-allocated-till: Ocupado até
+label-allocation-group: Grupo de Notificação
+label-allow-action-command: Allow Action (Command)
+label-allow-alarm: Allow Alarm
+label-allow-auto-create: Ocupado até
+label-allow-autosegmentation: Allow Autosegmentation
+label-allow-bunch: Seguir
+label-allow-config-diff: Allow Config Diff
+label-allow-config-diff-filter: Regra de Filtragem de Comparação de Configuração
+label-allow-config-filter: Allow Config Filter
+label-allow-config-validation: Validação de Configuração pyRule
+label-allow-datastream-filter: Allow DataStream filter
+label-allow-diagnostics-check: Allow Diagnostics Check
+label-allow-event: Allow Event
+label-allow-housekeeping: Allow housekeeping
+label-allow-ifdesc: Allow IfDesc
+label-allow-lag-mismatch: Allow LAG mismatch
+label-allow-match-rule: Allow Match Rule
+label-allow-multiple-values-list: Allow multiple values (List)
+label-allow-mx-transmutation: Allow MX Transmutation
+label-allow-p2mp: Parâmetro
+label-allow-p2p: Seguir
+label-allow-parent: Parâmetro
+label-allow-reaction: Allow Reaction
+label-allow-resolver: Allow Resolver
+label-allow-resource: Allow Resource
+label-allow-star: Parâmetro
+label-allow-threshold-alarm: Allow Threshold Alarm
+label-allow-threshold-handler: Allow Threshold Handler
+label-allow-threshold-value-handler: Allow Threshold Value Handler
+label-allow-unidirectional-p2mp: Direção
+label-allow-unidirectional-p2p: Direção
+label-allow-vacuum-bulling: Allow Vacuum Bulling
+label-allowed-models: Allowed Models
+label-allowed-models-2: Allowed models
+label-allowing-manual-editor: Allowing Manual Editor
+label-alterable-output: Alterable output
+label-alternative-path: Alternative path
+label-answers: Camadas
+label-api-code: API Code
+label-api-key: Api Key
+label-api-role: API Role
+label-apply-after-sec: Apply After (sec.)
+label-apply-metrics-to-subinterfaces: Apply metrics to subinterfaces
+label-archive-last-25: Archive (last 25)
+label-archived-alarms: Mostrar alertar arquivados
+label-args: Variáveis
 label-as-number: Número de AS
+label-as-set: AS-SET
+label-asset: Patrimônio
+label-attic: Sótão
+label-attrs: Atributos
+label-auth-key: Perfil de Autenticação
+label-auth-proto: Perfil de Autenticação
+label-author: Caminho
+label-auto-generated: Gerado automaticamente?
+label-auto-reload: Carregamento automático de alternância
+label-auto-reload-off: "Auto reload : OFF"
+label-auto-reload-on: "Auto reload : ON"
+label-autocreated-profile: Autocreated Profile
+label-autogenerated: Gerado automaticamente?
+label-autosegmentation-policy: Autosegmentation Policy
+label-background: Cor de Fundo
+label-background-image: Cor de Fundo
+label-band-name: nome
+label-bands: Comandos
+label-base-measurement-units: Base Measurement Units
+label-basket-empty: basket empty
+label-beef-policy: Beef Policy
+label-bfd: BFD
+label-bgp: BGP
+label-bgp-peer: Reverter
+label-bgp-peer-profile: Perfil de Usuário
+label-bi-id: BI ID
+label-bind-password: Senha Atual
+label-bind-user: Filtro de Bind
+label-blank-map-layer: Camada vazia
+label-body-template: Corpo do Template
+label-bold: Negrito
+label-both: Mês
+label-box-alarm: Box Alarm
+label-box-sample: Box Sample
+label-box-telemetry: Box Telemetry
+label-by-adm-domain: Por Dom. Administrativo
+label-by-adm-domain-2: Por Dom. Administrativo
+label-by-date: Por Data
+label-by-geo-address: Até o IP
+label-by-interface-profile: Perfil de Interface
+label-by-ip-list-max-2000: "By IP list (max. 2000):"
+label-by-ip-list-max-2000-2: By IP, list (max. 2000)
+label-by-labels: "By Labels:"
+label-by-last-update: Última Atualização
+label-by-obj-profile: Perfil de Objeto
+label-by-platform: Plataforma
+label-by-pool: "By Pool:"
+label-by-reference: By Reference
+label-by-resource-group-selector: By Resource Group (Selector)
+label-by-rule: Regras
+label-by-sa-profile: Por Perfil de AS
+label-by-segment: Segmento
+label-by-service-group: serviço
+label-by-state: Estado
+label-by-vendor: Fabricante
+label-by-version: Versão
+label-cable: Tabela
+label-cache-neighbors-for: Cache neighbors for
+label-calcified-name-template: Nome do template
+label-calculate-oper-status-policy: Calculate Oper Status Policy
+label-calculate-status-rules: Último Status
+label-can-change: Pode Modificar
+label-can-view: Pode Visualizar
+label-card-template: Template da Ficha
+label-card-title-template: Template do Card de Título
+label-cdp: CDP
+label-cellar: Porão
+label-cells: Cells
+label-change-configuration: Modificar a configuração
+label-changeset: Changeset
+label-channel-discriminators: Fonte de Dados
+label-check: Método
+label-check-interval: Falha no intervalo
+label-check-match: Combinar
+label-check-on-config-change-after: "Verficiar mudança na configuração após "
+label-check-on-system-start-after: "Verificar o início do sistema após "
+label-check-update-interval-sec: Intervalo (s)
+label-check-updates-interval: Check Updates Interval
+label-checked: Método
+label-children: Children
+label-cleanup: Cleanup
+label-clear-after-sec: Clear After (sec.)
+label-clear-handlers: Apagar alerta?
+label-cli-privilege-policy: CLI Privilege Policy
+label-cli-session-policy: CLI Session Policy
+label-clone-connections: Conexões
+label-closed: Fechar
+label-code: Código
+label-code-hex: Code (HEX)
+label-collect-interval: Falha no intervalo
+label-collector-mappings: Collector Mappings
+label-collision-policy: Collision Policy
+label-column-formats: Column Formats
+label-columns: Colunas
+label-commands: Comandos
+label-company: Companhia
+label-compare: Comparar
+label-compatible-groups: Grupos compatíveis
+label-component-scope: Recursos
+label-compose-expression: Expressão
+label-compose-metric-type: Tipo de Métrica
+label-condition: Condição
+label-condition-op-vars: Condição
+label-condition-param: Condição
+label-condition-value: Condição
+label-config-changed: Configuração alterada
+label-config-diff-filter-handler: Regra de Filtragem de Comparação de Configuração
+label-config-fetch: Configuração alterada
+label-config-fetch-policy: Config Fetch Policy
+label-config-filter-handler: Filtro de Configuração pyRule
+label-config-mode: Modo de Configuração
+label-config-policy-violation: Violação na política de configuração
+label-config-validation-handler: Validação de Configuração pyRule
+label-configuration-rule: Regra de Conexão
+label-configuration-scopes: Modificar a configuração
 label-configured-map-container: "Contêiner do mapa configurado: {name}"
+label-confirm-new-password: Nova Senha
+label-connect-to: Conectar a
+label-connection-context: Contexto de Conexão
+label-connections: Conexões
+label-constraints: Limitação
+label-consumes-resources: Consumes Resources
+label-contact: Contato
+label-contacts: Contatos
+label-container-2: Mantenedor
+label-container-3: Mantenedor
 label-container-name: "Contêiner: {name}"
+label-content-type: Conteúdo
+label-context: Contexto
+label-context-name: Contexto
+label-contribution-url: Iniciando
+label-control-time-0-sec: Controle de Tempo 0
+label-control-time-1-reopen: Controle de tempo (1 reabertura)
+label-control-time-1-sec: Controle de tempo (1 reabertura)
+label-control-time-multiple-reopens: Controle de tempo (múltiplas reaberturas)
+label-control-time-n-sec: Controle de tempo (1 reabertura)
+label-control-time-no-reopens: Controle de tempo (sem reaberturas)
+label-controller: Cor da Fonte
+label-controllers: Cor da Fonte
+label-convert-form-for-baseunit: Convert form for BaseUnit
+label-convert-username: Convert Username
+label-country: País
+label-cpe-status: Status da interface
+label-cpe-type: CPE Type
+label-create-maintenance: Esconder manutenção
+label-custom-zoom: Zoom Mínimo
+label-dashboard: Dashboard
+label-dashboard-label: Ver dashboard
+label-dashboard-series-color: Dashboard Series Color
+label-data-match: Combinar
+label-date-from-yyyy-mm-dd: Date from (YYYY-MM-DD)
+label-date-of-joined: Date of joined
+label-date-to-yyyy-mm-dd: Date to (YYYY-MM-DD)
+label-days: Days
+label-days-expr: Days Expr.
+label-dd-mm-yyyy: dd.mm.yyyy
+label-deduplication-window: Janelas de Desduplicação
+label-default-address-profile: Família do IP
+label-default-domain: Domínio Administrativo
+label-default-interval-sec: Intervalo (s)
+label-default-number-profile: Default Number Profile
+label-default-prefix-profile: Default Prefix Profile
+label-default-state: Intervalo (s)
+label-default-template: Nome do template
+label-default-vlan-profile: Default VLAN Profile
+label-delay: Atrasar
+label-delete-prefix-and-all-nested-prefixes-addresses-and-permissions: Delete prefix and all nested prefixes, addresses and permissions?
+label-delete-prefix-and-save-and-relink-the-nested-prefixes-and-addres: Delete prefix and save and relink the nested prefixes and addresses?
+label-delta-value: Delta Value
+label-deny-group: Grupo Peer
 label-description: Descrição
+label-description-2: "Descrição #"
+label-diag: Diag
+label-diagnostics: Diagnostics
+label-diagnostics-config: Diagnostics Config
+label-diameter-mm: Diâmetro (mm)
+label-disable-all-interaction: Disable All Interaction
+label-disable-when-change: Disable When Change
+label-disclaimer: Disclaimer
+label-discovered: Descoberta
+label-discovery-interval: Falha no intervalo
+label-discriminator: Discriminator
+label-discriminator-default: Discriminator Default
+label-discriminator-from: Discriminator From
+label-discriminator-source: Fonte de Dados
+label-discriminator-to: Discriminator To
+label-display-order: Nome de Exibição
+label-dispose-alarm: Descoberta
+label-do-not-delete: Pós-Excluir
+label-don-t-show: don't show
+label-dry-run: Dry Run
+label-dry-run-not-execute-command: Dry Run (not execute command)
+label-duplex: Duplex
+label-duplicated: Janelas de Desduplicação
+label-duration: Duração
+label-duration-minutes: "{count, plural, one {# minuto} other {# minutos}}"
+label-dynamic: Dynamic
+label-dynamic-classification-policy: Dynamic Classification Policy
+label-dynamic-client-labels: Dynamic Client Labels
+label-dynamic-order: Dynamic Order
+label-dynamic-service-labels: Dynamic Service Labels
+label-effective: Ativo
+label-email: E-mail
+label-empty-list: empty list
+label-enable: Habilitar
+label-enable-abduct-detection: Enable Abduct Detection
+label-enable-autocreation: Enable Autocreation
+label-enable-box: Habilitar
+label-enable-collect: Enable Collect
+label-enable-excel-column-autowidth: Enable Excel column autowidth
+label-enable-fm-event: Nova mensagem
+label-enable-horizontal-transit: Enable Horizontal Transit
+label-enable-ip-scan-discovery: Descoberta
+label-enable-l2: Habilitar
+label-enable-l3: Habilitar
+label-enable-lost-redundancy-check: Enable lost redundancy check
+label-enable-manual: Enable Manual
+label-enable-metrics: Enable Metrics
+label-enable-node-portal: Enable Node Portal
+label-enable-periodic: Enable Periodic
+label-enable-prefix-list-provisioning: Habilitar Provisionamento da Prefix-List
+label-enable-provisioning: Habilitar Aprovisionamento
+label-enable-received: Enable received
+label-enable-snmp: Enable SNMP
+label-enable-suggets-by-rule: Enable Suggets By Rule
+label-enable-time-delta-require-migration: Enable Time Delta (Require migration)
+label-enable-vlan-discovery: Enable VLAN Discovery
+label-end-condition: End Condition
+label-end-of-sale: Falha ao salvar
+label-end-of-support: End of Support
+label-endpoint-discriminators: Fonte de Dados
+label-enter-an-optional-description-for-your-contribution: Enter an optional description for your contribution
+label-enter-hex-number: Enter HEX number
+label-enter-search-text-and-press-enter: enter search text and press <Enter>
+label-enter-your-gitlab-api-key: Enter your GitLab API key
+label-entrances: Entradas
+label-enumeration: Duração
+label-environment: Environment
+label-ephemeral: Ephemeral
+label-error-template: Nome do template
+label-errors: Errors
+label-errors-policy: Errors Policy
+label-escalate-alarm-consequence-policy: Escalate Alarm Consequence Policy
+label-escalate-items-add-policy: Escalate Items Add Policy
+label-escalate-maintenance-policy: Escalate Maintenance Policy
+label-escalate-to: Escalações
+label-escalation-policy: Escalações
+label-escalation-retries: Escalações
+label-event-class-re: Classe do evento RE
+label-event-id-or-json-code: ID do evendo ou código JSON
+label-event-policy: Papel do Evento
+label-event-sync-interval-sec: Intervalo (s)
+label-event-sync-mode: Event Sync Mode
+label-event-ttl: TTL do Evento
+label-exclude: Exclude
+label-exclude-device-if-serialnumber-changed: Exclude Device if SerialNumber changed
+label-exclude-interfaces-with-the-default-name-profile-for-selector-an: Exclude interfaces with the "default" name profile (for Selector and Administrative Domain filter)
+label-exclude-match-labels: Exclude Match Labels
+label-exclude-mo-by-resource-group-selector: Exclude MO by Resource Group (Selector)
+label-exclude-on-mac-black-list: Exclude on MAC Black List
+label-exclude-ports-in-the-status-down: Exclude ports in the status "down"
+label-exit-scope-commands: Exit Scope Commands
+label-expire: Expiração
+label-expired-ttl-sec: Expired TTL (sec)
+label-exponent: Conteúdo
+label-export-filter-name: Filtro de Exportação
+label-export-med: Exportar MED
+label-exposed-caps-to-objects: Exposed Caps to Objects
+label-extend: Ampliar
+label-extra: Extra
+label-factor: Factor
+label-failed-interval-sec: Falha no Intervalo (s)
+label-failure-cooldown: Failure Cooldown
+label-false-level: False Level
+label-fatal: Dados
+label-fatal-alarm-weight: Peso do alarme
+label-fax-no: Fax
+label-fdp: FDP
+label-female-facade: Female Facade
+label-field-access: Field Access
+label-field-data: Field Data
+label-field-name: Nome de usuário
+label-field-type: Estilo de Linha
+label-fields: Campo
+label-file: "Arquivo #"
+label-file-name: Nome de usuário
+label-filename-pattern: Padrão de Tempo
+label-fill-color: Cor de Preenchimento
+label-filter-by-description-regexp: Filtrar por Descrição (REGEXP)
+label-filter-by-ping-status: Filter by Ping status
+label-filter-interface-has-zero-load: Mostrar carga de interface
+label-filter-none-problems: Filter None problems
+label-filter-pending-links: Filter Pending links
+label-filter-query: Filtrável
+label-first-entrance: Primeira Entrada
+label-first-number: Primeiro Número
+label-flap-condition: Condição
+label-flap-threshold-pcs: Aba de Threshold
+label-flap-window-sec: Aba de Janela
+label-floating-name-template: Nome do template
+label-floating-parent-segment: Floating Parent Segment
+label-fm-pool: FM Pool
+label-font: Mês
+label-footer-remarks: Footer Remarks
+label-foreground: Foreground
+label-form: Plataforma
+label-format-columns: Format Columns
+label-formats: Formats
 label-fqdn: FQDN
-label-inventory: "Inventário"
-label-maintenance: "Manutenção"
-label-managed-object: Objeto Gerenciado
+label-fqdn-suffix: FQDN Suffix
+label-fqdn-template: Template FQDN
+label-from-date: From Date
+label-from-rule: From Rule
+label-from-serial: Do Serial
+label-front-facade: Definir causa raiz
+label-full-path: Caminho Completo
+label-gain-db: Gain DB
+label-generate-rpsl: Gerado automaticamente?
+label-generator: Terminadores
+label-gitlab-api-key: GitLab API Key
+label-global-cpe-id: Global CPE Id
+label-global-id: Limite global
+label-global-limit: Limite global
+label-google-hybrid-map-layer: Google híbrido
+label-google-roadmap-map-layer: Google mapa
+label-google-satellite-map-layer: Google satélite
+label-google-terrain-map-layer: Google terreno
+label-graphic: Formato
+label-graphics: Graphics
+label-group-alarm: Suprimir alertas
+label-group-dn: Grupo
+label-group-escalation-policy: Group Escalation Policy
+label-group-reference-regex: Group Reference Regex
+label-group-search-filter: Group Search Filter
+label-group-select: Group select
+label-habitated: Habitado
+label-hanlder: Gênero
+label-has-preview: Visualizar
+label-header: Gênero
+label-header-remarks: Header Remarks
+label-headers-match: Headers Match
+label-helper-modelid: Modelo
+label-hide: Escondido
+label-hide-enabled: Hide enabled
+label-hide-report-from-ui: Hide Report from UI
+label-homes-per-entrance: Homes per Entrance
+label-horizontal-transit-policy: Horizontal Transit Policy
+label-hostname: nome
+label-hours-expr: Hours Expr.
+label-hsrp: HSRP
+label-huawei-ndp: Huawei NDP
+label-hw-timestamps: HW. Timestamps
+label-icon: Ícone
+label-ifdesc: IfDesc
+label-ignore-cli-errors: Ignorar Erros da CLI
+label-ignored: É Filtrável
+label-image: Hora
+label-import-filter-name: Filtro de Importação
+label-import-med: Importar MED
+label-in: In
+label-in-days: In Days
+label-in-labels: Rótulo
+label-include: Include
+label-include-addresses: Include Addresses
+label-include-asn-expression: Expressão
+label-include-prefixes: Include Prefixes
+label-input-metric-type: Tipo de Métrica
+label-insert-mac-address-to-search: insert MAC address to search
+label-instance-configs: Instance Configs
+label-interaction-settings: Configurações Efetivas
+label-interface: Interface
+label-interface-changed: Interface alterada
+label-interface-filter: Perfil de Interface
+label-interface-status: Status da interface
+label-interface-validation: Mostrar carga de interface
+label-interval: Intervalo
+label-interval-sec: Intervalo (s)
+label-interval-sec-2: Intervalo (s)
+label-inventory: Inventário
+label-ip: IP
+label-ip-address: Até o IP
+label-ip-discovery-ping: Box de descoberta
+label-ip-prefix-profile: Perfil de Usuário
+label-ip-vrf: Prefixo
+label-is-active: Ativo
+label-is-enabled: Ativo
+label-is-filtered: É Filtrável
+label-is-hidden: Está Escondido
+label-is-indexed: É Indexado
+label-is-locked: Bloqueado
+label-is-matching-label: Is Matching Label
+label-is-searchable: É Buscável
+label-isis: ISIS
+label-italic: Itálico
+label-job-handler: Job Handler
+label-keep-connections: Conexões
+label-key-expression: Expressão
+label-key-fields: Key Fields
+label-l2-mtu: L2 MTU
+label-label-pattern: Label Pattern
+label-lacp: LACP
+label-last-extract: última mudança
+label-last-extract-event: Last Extract Event
+label-last-load: Último Piso
+label-layout: Novo layout
+label-ldp: Antigo
+label-level-limit: Limite global
+label-link-discovery-policy: Política de Descoberta
+label-link-event: Ligar ao Evento
+label-linkgraph: LinkGraph
+label-lldp: LLDP
+label-loading: Loading ...
+label-local-backup-ip: Backup de IP Local
+label-local-cpe-id: Local CPE Id
+label-local-ip: IP Local
+label-local-pref: Prefixo Local
+label-location: Localização
+label-long-alarm-archive-more-3-months: Long Alarm Archive (more 3 months)
+label-lying: Mesmo Nível
+label-mac: MAC
+label-mac-db: Seguir
+label-mac-discovery-policy: Política de Descoberta
+label-mac-history: Descoberta
+label-mail: E-mail
+label-maintenance: Manutenção
+label-maintenances: Maintenances
+label-male-facade: Male Facade
+label-managed-object: Objeto gerenciado
 label-managed-object-container: "Contêiner do objeto gerenciado: {name}"
+label-managed-object-loader-policy: Objeto gerenciado
+label-managed-object-search-for-config-only: Managed object search (for config only)
+label-mappings: Configurações
+label-markup-language: Alterando idioma
+label-match-conditions: Condição de Correspondência
+label-match-handler: Match Handler
+label-match-labels: Regras de Correspondência
+label-match-m-units: Match M Units
+label-match-rules: Regras de Correspondência
+label-matchers: Regras de Correspondência
+label-max: Máx
+label-max-duration: Duração
+label-max-endpoints: Comprimento Máximo
+label-max-length: Comprimento Máximo
+label-max-prefixes: Prefixos Máximos
+label-max-scripts: Máximo de Scripts
+label-max-set-severity: Max./Set Severity
+label-max-threads: Max. Threads
+label-max-windows: Aba de Janela
+label-members: membros
+label-merge-window-sec: Merge Window (sec)
+label-message-pattern: Padrão de Tempo
+label-message-registry-policy: Política de Descoberta
+label-message-storm-threshold: Message Storm Threshold
+label-message-types: Mensagem
+label-metric-batch-delay-sec: Metric Batch Delay, sec
+label-metric-batch-signal: Metric Batch Signal
+label-metric-collected-policy: Metric Collected Policy
+label-metric-measurement-units: Metric Measurement Units
+label-metric-scale: Métricas
+label-metric-source: Recursos
+label-metrics: Métricas
+label-metrics-interval-buckets: Metrics interval Buckets
+label-mib: "MIB #"
+label-migrate: Migrate
+label-migrate-device-changed: Migrate (Device Changed)
+label-mikrotik-ndp: MikroTik NDP
+label-min: Mín
+label-min-2: Mín
+label-min-duration: Duração
+label-min-duration-2: Duração
+label-min-objects: Objetos
+label-min-set-severity: Min./Set Severity
+label-min-subscribers: Min. Subscribers
+label-min-windows: Min  Windows
+label-minutes-expr: Minutes Expr.
+label-mirror-policy: Política de Descoberta
+label-mnt-ref: Referência do Mantenedor
+label-mode: Código
+label-model: Modelo
+label-modes: Código
+label-months-expr: Months Expr.
+label-move-nested-objects-to: Objetos Combinados
+label-move-nested-objects-to-lost-found: Move nested objects to Lost&Found
+label-multicast-vlan: Multicast VLAN
+label-mx-policy: MX Policy
+label-n-a: N/A
+label-name: Nome
+label-name-template: Nome do template
+label-name-template-2: Nome do template
+label-neighbors: Neighbors
+label-network-ranges: Recursos
+label-new-event-notification: Notificação
+label-new-homes: New Homes
+label-new-message: Nova mensagem
+label-new-password: Nova Senha
+label-new-password-cannot-be-empty: Senha
+label-new-password-retype: Nova Senha (Confirme)
+label-no-active-alarms: No active alarms
+label-no-alarms: No Alarms
+label-no-data: No data
+label-no-data-found: No data found
+label-no-events: No events
+label-no-group-selected: No group selected
+label-no-jobs: Mostrar objeto
+label-no-macs-collected: No MACs collected
+label-no-matching: No matching
+label-no-possible-transitions: transição ipv6
+label-no-recently-closed-alarms: No recently closed alarms
+label-no-records: No records
+label-no-results: No results.
+label-no-subinterfaces: Interfaces de VC
+label-not-configured: Not Configured
+label-not-found: Testar Som
+label-not-limited: Limite global
+label-nothing-checked: nothing checked
+label-nothing-was-found: Testar Som
+label-notification-delay-s: Atrados de Notificação
+label-notification-delay-sec: Atrados de Notificação
+label-notify-delayed: Notify Delayed
+label-notify-immediately: Notify Immediately
+label-nri: NRI
+label-ns: NS
+label-number-packets-on-test: Number Packets on Test
+label-oam: OAM
+label-object-class: Object Class
+label-object-filter: Perfil de Objeto
+label-object-groups: Objetos
+label-object-metrics: Object Metrics
+label-object-name: Nome do Objeto
+label-object-url-template: Assunto do Template
+label-object-validation: Validação
+label-old-password: Senha Atual
+label-old-password-cannot-be-empty: Senha
+label-on-denied-firmware: On Denied Firmware
+label-on-enter-handlers: On Enter Handlers
+label-on-leave-handlers: On Leave Handlers
+label-on-new-platform: Plataforma
+label-on-platform-change: Na mudança de plataforma
+label-only: Apenas
+label-only-not-completed: Only not Completed
+label-only-root: Mostrar apenas causas raiz
+label-opacity: Opacity
+label-openstreetmap-map-layer: OpenStreetMap
+label-operations: Operations
+label-organisation: Organização
+label-orientation: Localização
+label-ospf: OSPF
+label-ospf-v3: OSPF v3
+label-out: Out
+label-outages-summary: Outages Summary
+label-output-type: Output Type
+label-overlay-glyph: Overlay Glyph
+label-packet-size-bytes: Packet size, bytes
+label-packets: Packets
+label-packets-count: Packets count
+label-param-name: Abreviação
+label-param-rules: Parâmetro
+label-parameter-choices: Parâmetro
+label-parameters: Parâmetro
+label-parameters-schema: Parâmetro
+label-params: Parâmetro
+label-params-form: Parâmetro
+label-password: Senha
+label-password-cannot-be-empty: Senha
+label-path-template: Nome do template
+label-pattern: Padrão
+label-pattern-re: Padrão (RE)
+label-patterns: Padrões
+label-peer-data: Reverter
+label-peer-discovery: Descoberta periódica
+label-peer-status: Status da interface
+label-percentile: Percentile
+label-periodic-alarm: Apagar alerta?
+label-periodic-sample: Descoberta periódica
+label-periodic-telemetry: Descoberta periódica
+label-permission-name: nome_da_permissão
+label-permission-name-2: Nome da Permissão
+label-permissions: Permissão
+label-persistent: Persistent
+label-phone-number: Número de telefone
+label-phone-range: Faixa de números
+label-ping-policy: Ping Policy
+label-platform-name: Platform Name
+label-please-confirm-your-new-password: Please confirm your new password
+label-plugin: plugin
+label-pm-agent: PM Agent
+label-point-radius: Raio do Ponto
+label-policy-off-hours: Policy Off Hours
+label-pool: Pool
+label-pool-active: Ativo
+label-pool-exhaust: Pool Exhaust
+label-pool-strategy: Pool Strategy
+label-pormapper-name: Pormapper Name
+label-portmapper: Portmapper
+label-position: Disposição
+label-postal-code: Código Postal
+label-pre-reasons: Razões Iniciais
+label-preference: Preferência
+label-preferred-language: Idioma Preferido
+label-preferred-profile-credential: Preferred Profile Credential
 label-prefix: Prefixo
+label-prefix-discovery: Box de descoberta
+label-prefix-discovery-policy: Política de Descoberta
+label-prefix-label: Prefixos
+label-prefix-list: Nome da Prefix-List ...
+label-prefix-list-notification-group: Grupo de Notificação da Prefix-List
+label-priv-key: é primário
+label-priv-proto: projeto
 label-profile: Perfil
-label-project: "Projeto"
+label-profile-check-only: Profile check only
+label-profile-sa: Profile SA
+label-project: Projeto
+label-project-distance-m: Distância do projeto (m)
+label-provides-resources: Provides Resources
+label-query: Tentativas
+label-query-parameters: Parâmetro
+label-question: Versão
+label-questions: Versão
+label-quick-jump: Quick Jump...
+label-rack: "Rack: "
+label-raise-alarm-to-target: Raise Alarm to target
+label-rate-limit: Limite global
+label-raw-policy: Política
+label-raw-vars: Variáveis
+label-rear-facade: Rear Facade
+label-recent-alarms-time-opacity: Recent Alarms (time/opacity)
+label-recommended: Recommended
 label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Modo recomendado para o cálculo de valores de políticas de mapa é: normal-burst-bytes=bits-per-second*Tc/8. Modo recomendado para a taxa-limite de valores de cálculo é: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
-label-segment-2: "Segmento"
-label-segment-3: "Segmento"
+label-recover-time-sec: Tempo (s)
+label-reference: Preferência
+label-regex-label: Regex Label
+label-regexp: Regexp
+label-register-as-notification: Register as Notification
+label-remote: Excluir
+label-remote-backup-ip: Backup de IP Remoto
+label-remote-id: IP Remoto
+label-remote-ip: IP Remoto
+label-remove-nested-objects: Objetos Combinados
+label-render-template: Abrir Template
+label-rep: REP
+label-repeat-delay: Repeat Delay
+label-repeat-escalations: Repeat Escalations
+label-replace-policy: Política
+label-report-format: Report Format
+label-report-formatter: Origem de Trap
+label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: Report more than 1 year not allowed. If nedeed - request it from Administrator
+label-report-ping-attempts: Reportar RTT de ping
+label-report-ping-rtt: Reportar RTT de ping
+label-report-source: Origem de Trap
+label-report-type: Report Type
+label-require-any-group: Require any group
+label-require-group: Grupo Peer
+label-required-rules: Obrigatório
+label-resolver-handler: Resolver Handler
+label-resource-group: Recursos
+label-resource-map-policy: Recursos
+label-restrict-mac-to-management-vlan: Restrict MAC to management vlan
+label-retry: Tentativas
+label-retype-new-password: Confirme a Nova Senha
+label-retype-password: Confirme a senha
+label-reverse-nses: NSes Reversos
+label-right-re: RE Direita
+label-ro-community: Comunidade RO
+label-route-maintainers: Mantenedor
+label-route-target: Route Target
+label-rpsl: RPSL
+label-rpsl-footer: Rodapé RPSL
+label-rpsl-header: Cabeçalho RPSL
+label-rpsl-remark: Remarcar RPSL
+label-rsvp: RSVP
+label-rule-action: Rule Action
+label-run-actions: Run Actions
+label-run-as: Run As
+label-run-order: Run Order
+label-run-sync-at: Run Sync At
+label-running-policy: Running Policy
+label-rw-community: Comunidade RW
+label-save-history: Save History
+label-scheme: Método
+label-scopes: Scopes
+label-script: Script
+label-script-failed: Falha no script
+label-search: Busca ...
+label-search-by-ip: Search by ip
+label-search-by-prefix: Search by prefix
+label-search-by-user: Search by user
+label-search-text: Digite o texto para pesquisar
+label-seconds-expr: Seconds Expr.
+label-security-level: Resumo
+label-seen-propagation: Seen propagation
+label-segment-2: Segmento
+label-segment-3: Segmento
 label-segment-name: "Segmento: {name}"
-label-service: "Serviço"
-label-service-range: "Intervalo de serviço"
-label-time-pattern: "Padrão de Tempo"
+label-segment-name-2: Nome de usuário
+label-select-band: Seção
+label-select-bookmark: Seletor
+label-select-file: Selecione um arquivo...
+label-select-file-2: Selecione um arquivo...
+label-select-group: Seletores
+label-select-mib: Selecionar MIB...
+label-select-parent: Selecionar Segmento...
+label-select-pool: Excluído
+label-select-segment: Selecionar Segmento...
+label-select-sibling: Selecione um arquivo...
+label-sensor-alias-template: Sensor Alias Template
+label-sensor-measurement-units: Sensor Measurement Units
+label-sensors: Recursos
+label-servers: serviço
+label-service: Serviço
+label-service-binding: serviço
+label-service-dependencies: Service Dependencies
+label-service-range: Intervalo de serviço
+label-service-weight: serviço
+label-set-headers: Set Headers
+label-shape-name-template: Nome do template
+label-shard: Ficha
+label-short-name: Abreviação
+label-show: Mostrar
+label-show-in-form: Mostrar no Menu
+label-show-in-summary: Mostrar no resumo
+label-show-labels: Mostrar Rótulos
+label-show-other-problems: Show other problems
+label-show-problem-on-already-linked: Show problem on already linked
+label-sibling: Mesmo Nível
+label-slots: Resultado
+label-snippet: Snippet
+label-snippets: Snippets
+label-snmp-auth-key: SNMP Auth Key
+label-snmp-auth-proto: SNMP Auth Proto
+label-snmp-context-name: Abreviação
+label-snmp-credentials: Credenciais
+label-snmp-priv-key: SNMP Priv Key
+label-snmp-priv-proto: Prioridade
+label-snmp-rate-limit: SNMP Rate limit
+label-snmp-ro-community: Comunidade RO
+label-snmp-rw-community: Comunidade RW
+label-snmp-security-level: Resumo
+label-snmp-username: Nome de usuário
+label-snmp-v1: SNMP v1
+label-snmp-v2c: SNMP v2c
+label-soa: SOA
+label-soft-version: Soft Version
+label-software-image: Software Image
+label-sound: Som
+label-source-node: Recursos
+label-sources: Fonte
+label-special-addresses: Endereço Local
+label-speed: Speed
+label-state: Estado
+label-state-policy: State Policy
+label-static: Static
+label-static-members: membros
+label-status-alarm-policy: Status Alarm Policy
+label-status-change-notification: Notificação de Modificação de Status
+label-status-discovery: Status da Descoberta
+label-status-transfer-policy: Status Transfer Policy
+label-step-ness: Step  Ness
+label-step-number: Primeiro Número
+label-stop-processing-rules: Expressão
+label-storage: Estado
+label-storm-policy: Política de Descoberta
+label-stp: STP
+label-stream: Sistema
+label-stroke-color: Cor da Linha
+label-stroke-width: Espessura da Linha
+label-subinterface: Interfaces de VC
+label-subinterface-apply-policy: Perfil de Interface
+label-subject-template: Assunto do Template
+label-subscribers-that-sum: Subscribers that Sum
+label-subscription-settings: Configurações Efetivas
+label-suggest-auth-profile: Perfil de Autenticação
+label-suggest-cli: Suggest CLI
+label-suggest-snmp: Suggest SNMP
+label-suggest-snmp-oids: Suggest SNMP OIDs
+label-super-password: Senha de Superusuário
+label-superuser-status: Status da interface
+label-suppress-alarms: Suprimir alertas
+label-suppress-alarms-2: Suprimir Alertas
+label-suppression-window: Suppression Window
+label-switch-off: Switch Off
+label-symmetric-check: Symmetric Check
+label-sync-approved-records: Seletores
+label-sync-asset: Sync Asset
+label-sync-interval-sec: Intervalo (s)
+label-sync-managedobject: Objeto gerenciado
+label-sync-notification-policy: Notificação
+label-sync-policy: Política
+label-synchronize-mail: Synchronize mail
+label-synchronize-name: Synchronize name
+label-syslog-archive-policy: Syslog Archive Policy
+label-syslog-source: Origem do Syslog
+label-syslog-source-ip: IP da Origem do Syslog
+label-target-nodes: Tipo de Alvo
+label-tech-c: Tech-c
+label-telemetry-sample: Telemetry Sample
+label-tememetry-sample: Tememetry Sample
+label-test-cases: última mudança
+label-threshold-type: Estilo de Linha
+label-time-params: Time Params
+label-time-pattern: Padrão de Tempo
+label-timeout: Timeout
+label-timeout-msec: Timeout (s)
+label-timeout-sec: Timeout (s)
+label-title: Estilo
+label-to-date: To Date
+label-to-prefix: Prefixo
+label-to-serial: Até o Serial
+label-to-vrf: To VRF
+label-topology-methods: Topology methods
+label-topology-neighbors: Falha ao obter alerta
+label-tos: TOS
+label-transition: transição ipv6
+label-trap-community: Comunidade de Trap
+label-trap-source: Origem de Trap
+label-trap-source-ip: IP da Origem de Trap
+label-trapid: Formato
+label-true-level: True Level
+label-tt: TT
+label-tt-policy: TT Policy
+label-tt-system-config: TT System Config
+label-tt-system-id: Sobre o sistema ...
+label-ttl-days: TTL (days)
+label-udld: UDLD
+label-underlined: Sublinhado
+label-unique-resource: Unique Resource
+label-unique-value: Unique Value
+label-unknowns: Unknowns
+label-update-addresses: Até o IP
+label-update-expiration: Operação
+label-uplink-policy: Uplink Policy
+label-uptime: Tempo de atividade
+label-use-aggregated-datasource: Use aggregated Datasource
+label-use-connections-from: Conexões
+label-use-object-as-port-token: Use object as Port Token
+label-user-clearable: Usuário Eliminável
+label-user-dn: User_DN
+label-user-interface: Interfaces de VC
+label-user-name-cannot-be-empty: User name cannot be empty
+label-user-permissions: Permissão
+label-user-search-filter: Limpar filtro
+label-utilization: Utilization
+label-uuid: UUID
+label-validation-as-field: Validação
+label-validation-policy: Regra de Validação
+label-values: Valor
+label-vc-l2-domain: Por Dom. Administrativo
+label-version-changed: Versão alterada
+label-vlan-border: VLAN Border
+label-vlan-discovery-filter: VLAN Discovery Filter
+label-vlan-discovery-policy: Política de Descoberta
+label-vlan-label: VLAN Label
+label-vlan-pools: VLAN Pools
+label-vlan-provisioning-policy: VLAN Provisioning Policy
+label-volume: Volume
 label-vrf: VRF
+label-vrf-group: Grupo de VRF
+label-vrrp: VRRP
+label-vrrp-v3: VRRP v3
+label-wait-tt: Aguardar TT
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-addresses: WARNING!!!&nbsp;This prefix is empty! Please add nested addresses.
+label-warning-nbsp-this-prefix-is-empty-please-add-nested-prefixes: WARNING!!!&nbsp;This prefix is empty! Please add nested prefixes.
+label-weekdays-expr: Weekdays Expr.
+label-wf-states: WF States
+label-when: When
+label-width: Width
+label-window-function: Window Function
+label-workflow: Fluxos de Trabalho
+label-xmac: xMAC
+label-yandex-hybrid-map-layer: Yandex híbrido
+label-yandex-roadmap-map-layer: Yandex mapa
+label-yandex-satellite-map-layer: Yandex satélite
+label-years-expr: Years Expr.
+label-yes-no: Yes/No
 label-zone: Zona
+msg-absolute: Valor
+msg-account-is-not-registred-please-register-account-to-get-access-t: Conta não registrada. Por favor, registre sua conta para ter acesso ao suporte e a serviços adicionais
+msg-account-is-registred-you-have-access-to-additional-support-and-s: Conta registrada. Você tem acesso ao suporte e a serviços adicionais
+msg-ack: Ack
+msg-ack-subscriber: Ack Subscriber
+msg-ack-user: Ack User
+msg-acknowledge: Acknowledge
+msg-action-value0-failed: Ação {value0} Falhou
+msg-active: Ativo
+msg-add-object-to-value0: Objeto gerenciado{value0}
+msg-add-value0: Adicionar{value0}
+msg-address-usage: Até o IP
+msg-address-value0-successfully: IP {value0} Permissão
+msg-adm-path: Adm Path
+msg-affected-based-severity-preferred: Affected Based Severity Preferred
+msg-affected-limit: Objetos Combinados
+msg-affected-objects: Objetos Combinados
+msg-affected-subscriber: Affected Subscriber
+msg-after-create: After Create
+msg-after-update: After Update
+msg-aggregated: Criar
+msg-alarm-cleared: Alerta excluído
+msg-alarm-subject: Assunto
+msg-alarm-tt: Status do Alerta
+msg-alarms-cleared-successfully: Alerta Excluído
+msg-all: Todos
+msg-all-interface-addresses: Mostrar carga de interface
+msg-all-maps: AS Local
+msg-all-message: Nova mensagem
+msg-all-polling: All polling
+msg-all-segment-objects: All Segment Objects
+msg-all-success: All Success
+msg-allocated-prefixes: Ocupado até
+msg-allow-autosegmentation: Allow autosegmentation
+msg-allowed-any: Allowed Any
+msg-always: Always
+msg-always-collect: Always Collect
+msg-always-enable: Ativo
+msg-always-mirror: Always Mirror
+msg-always-run: Always Run
+msg-always-validate: Revalidar
+msg-and: Comandos
+msg-any: Dia
+msg-any-2: QUALQUER
+msg-api-key-found: API key found
+msg-api-key-required: Obrigatório
+msg-api-key-required-2: Obrigatório
+msg-api-key-saved: Perfil salvo
+msg-are-you-sure-you-want-to-delete-all-rows: Are you sure you want to delete all rows?
+msg-are-you-sure-you-want-to-delete-this-wire: Are you sure you want to delete this wire
+msg-are-you-sure-you-want-to-reset-all-values: Are you sure you want to reset all values?
+msg-as-depended: Alerta reaberto
+msg-as-discovered: Descoberta
+msg-as-managed-object: Objeto gerenciado
+msg-as-new: Novo
+msg-as-or-as-set: AS ou AS-set
+msg-as-set-members-cache-is-empty-please-update-whois-cache: AS-SET members cache is empty. Please update Whois Cache
+msg-asset-peer: Visto pela Última Vez
+msg-attachment-deleted: Attachment deleted
+msg-auto-reload-value0: Carregamento automático de alternância{value0}
+msg-auto-reload-value0-2: Carregamento automático de alternância{value0}
+msg-auto-reload-value0-3: Carregamento automático de alternância{value0}
+msg-auto-reload-value0-4: Carregamento automático de alternância{value0}
+msg-average-level: Average level
+msg-avg-load-in: AVG Load In
+msg-avg-load-out: AVG Load Out
+msg-backend-failed-to-clear-alarms: Falha ao apagar alerta
+msg-beef: Beef
+msg-beef-test: Beef Test
+msg-beef-test-config: Buscar configuração AGORA
+msg-bidirectional-over-differ-connection: Bidirectional over Differ Connection
+msg-bidirectional-over-one-connection: Conexão do Alvo
+msg-block: Block
+msg-block-raise-alarm: Block & Raise Alarm
+msg-bool: Bool
+msg-buffer-size: "Tamanho do buffer: {size}"
+msg-building: Building...
+msg-by-config: By Config
+msg-by-instance: Instâncias
+msg-by-max-status: Status do Alerta
+msg-by-min-status: Status do Alerta
+msg-by-rule: By Rule
+msg-by-service-component: By Service Component
+msg-by-tokens: Ação
+msg-by-types: tipo
+msg-by-username-snmp-ro: By Username/SNMP RO
+msg-calcify: Calcify
+msg-calculate: Calculate
+msg-cannot-read-file: Cannot read file
+msg-cannot-resolve-as-set-prefixes: Cannot resolve AS-SET prefixes
+msg-capabilities-of: Capacidades de {name}
+msg-center: Gênero
+msg-chained-downlink: Chained Downlink
+msg-change-address: Até o IP
+msg-change-prefix: "Change prefix "
+msg-change-prefix-value0: Change prefix {value0}
+msg-changes: Mudanças
+msg-changes-2: changes
+msg-changes-saved-successfully: Até o IP
+msg-changes-value0: Mudanças {value0}
+msg-changing-language: Alterando idioma
+msg-checking-api-key: Checking API key...
+msg-choice: Arquivar
+msg-choice-combo: Arquivar
+msg-choice-radio: Arquivar
+msg-circle: Circle
+msg-class-based-policy: Política de Descoberta
+msg-clearing-alarms: Apagar alerta?
+msg-cli-only: CLI Only
+msg-cli-snmp: CLI, SNMP
+msg-clone-rows: Copiar
+msg-cloned: Copiar
+msg-cloud-downlink: Cloud Downlink
+msg-collect-on-change: Versão alterada
+msg-command-snippet: Comandos
+msg-comment-message: Nova mensagem
+msg-comment-source: Recursos
+msg-comment-time: Comentário
+msg-compare-with: Comparar
+msg-completed: Completo
+msg-confdb: Ícone
+msg-confdb-script: ConfDB, Script
+msg-config-mirror: Alerta Alto de Erro
+msg-config-saved: Perfil salvo
+msg-config-upload: Modo de Configuração
+msg-confirm: Configurar
+msg-confirm-delete-wire: Deseja excluir esta conexão {from}=>{to}?
+msg-confirm-transition: Deseja executar a transição '{transition}'? Esta operação não pode ser desfeita!
+msg-confirmation: Condição
+msg-connect: Conectar
+msg-connections-removed: Regra de Conexão
+msg-container-level-1: Container (Level 1)
+msg-container-level-2: Container (Level 2)
+msg-container-level-3: Container (Level 3)
+msg-container-level-4: Container (Level 4)
+msg-container-level-5: Container (Level 5)
+msg-container-level-6: Container (Level 6)
+msg-container-level-7: Container (Level 7)
+msg-contains: Mantenedor
+msg-continue: Continue
+msg-contribution-details: Iniciando
+msg-contribution-sent: Iniciando
+msg-cpu-usage: CPU Usage
+msg-create-internal-connection-from-value0-to-value1: Conexão de Correspondência {value0} Até {value1}
+msg-create-model: Criar Regra
+msg-create-new-address: Endereço Remoto
+msg-create-new-prefix: Create new prefix
+msg-create-new-value0: Criar Regra {value0}
+msg-created-from-alarm-list-at: "created from alarm list at "
+msg-created-from-alarm-list-at-value0: created from alarm list at {value0}
+msg-created-from-alarms-list-at: "created from alarms list at "
+msg-created-from-alarms-list-at-value0: created from alarms list at {value0}
+msg-created-from-managed-objects-list-at: "created from managed objects list at "
+msg-created-from-managed-objects-list-at-value0: created from managed objects list at {value0}
+msg-created-from-map-at: "created from map at "
+msg-created-from-map-at-value0: created from map at {value0}
+msg-created-interface: Interface Remota
+msg-created-interface-value0: Interface Remota{value0}
+msg-created-interface-value0-2: Interface Remota{value0}
+msg-credentials-has-been-changed: Credenciais alteradas  com sucesso
+msg-crm-users: Usuário
+msg-datastream: Fonte de Dados
+msg-date-interval: Date Interval
+msg-date-interval-with-align: Date Interval with Align
+msg-degraded: Atrasar
+msg-deleted: Excluído
+msg-deleted-2: Excluído
+msg-deleting: Selecionar a configuração...
+msg-deleting-2: Selecionar a configuração...
+msg-deny: Atrasar
+msg-description-value0: "Descrição #{value0}"
+msg-device-has-alarm: Device has alarm
+msg-device-is-normal: Device is normal
+msg-device-neighbors: serviço
+msg-device-sn-changed-by-bi: última modificação feita por
+msg-dictionary-not-found: Testar Som
+msg-diff-level: Diff level
+msg-dimensions-must-be-set-to-generate-template: Dimensions must be set to generate template
+msg-direct-alarm: Direct Alarm
+msg-direct-downlink: Direct Downlink
+msg-direct-uplink: Direção
+msg-disabled: Desabilitar
+msg-discards-in-packets-s: Discards In (packets/s)
+msg-discards-out-packets-s: Discards Out (packets/s)
+msg-dns-zone-record: DNS Zone Record
+msg-do-not-convert: Do not convert
+msg-do-not-raise: Do not raise
+msg-do-not-segmentate: Do not segmentate
+msg-do-you-want-to-remove-all-connections-within-object-this-operati: Do you want to remove all connections within object? This operation cannot be undone!
+msg-do-you-wish-to-delete-address-this-operation-cannot-be-undone: Do you wish to delete address? This operation cannot be undone!
+msg-do-you-wish-to-delete-record-this-operation-cannot-be-undone: Do you wish to delete record? This operation cannot be undone!
+msg-do-you-wish-to-delete-workflow-this-operation-cannot-be-undone: Do you wish to delete Workflow? This operation cannot be undone!
+msg-do-you-wish-to-unlink-interface: Deseja desvincular a interface {name}? Esta operação não pode ser desfeita!
+msg-don-t-raise: Raio do Ponto
+msg-down: Janela
+msg-download-button-clicked-value0: Download button clicked {value0}
+msg-download-value0: Download {value0}
+msg-drag-and-drop-to-reorganize: Arraste e solte para reorganizar
+msg-drag-other-object-from-left-tree: Drag other object from left tree
+msg-drop-alarm: Apagar alerta?
+msg-duplicate-managed-object: Duplicate MO
 msg-duration-about-hours: "{count, plural, one {cerca de # hora} other {cerca de # horas}}"
-msg-duration-about-month: "cerca de 1 mês"
-msg-duration-about-year: "cerca de 1 ano"
+msg-duration-about-month: cerca de 1 mês
+msg-duration-about-year: cerca de 1 ano
 msg-duration-about-years: "{count, plural, one {cerca de # ano} other {cerca de # anos}}"
-msg-duration-almost-two-years: "quase 2 anos"
+msg-duration-almost-two-years: quase 2 anos
 msg-duration-almost-years: "{count, plural, one {quase # ano} other {quase # anos}}"
 msg-duration-days: "{count, plural, one {# dia} other {# dias}}"
-msg-duration-less-than-minute: "menos de um minuto"
+msg-duration-less-than-minute: menos de um minuto
 msg-duration-minutes: "{count, plural, one {# minuto} other {# minutos}}"
 msg-duration-months: "{count, plural, one {# mês} other {# meses}}"
-msg-duration-never: "Nunca"
-msg-duration-over-year: "mais de 1 ano"
+msg-duration-never: Nunca
+msg-duration-over-year: mais de 1 ano
 msg-duration-over-years: "{count, plural, one {mais de # ano} other {mais de # anos}}"
-msg-integer-is-required: "Inteiro requerido"
-msg-main: "Principal"
-msg-no-interfaces: "Nenhuma interface"
-msg-no-links: "Nenhum link"
-msg-no-uplinks: "Nenhum uplink"
-msg-password-min-lowercase: "A senha deve conter pelo menos {count} letras minúsculas"
-msg-password-min-numbers: "A senha deve conter pelo menos {count} números"
-msg-password-min-specials: "A senha deve conter pelo menos {count} símbolos especiais"
-msg-password-min-uppercase: "A senha deve conter pelo menos {count} letras maiúsculas"
-msg-password-too-short: "A senha é muito curta. Deve ter pelo menos {count} caracteres"
-msg-permission-denied: "Permissão negada"
-msg-permission-denined: "Permissão negada"
-msg-prefix-not-found: "Prefixo não encontrado"
-msg-profile-check-failed: "Falha na verificação de perfil"
-msg-report-data-source-not-found: "Fonte de dados do relatório {data_source} não encontrada"
-msg-vrf-required: "VRF Requerida"
+msg-dynamic-order-must-be-unique: Dynamic Order must be unique
+msg-eat: Definir
+msg-editable: Desabilitar
+msg-empty-command: Empty command
+msg-enter-a-valid-username: Enter a valid username.
+msg-enter-hex-value-starting-with-or-0x: "Enter hex value starting with # or 0x"
+msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-: Digite uma lista válida ASnumber (ex., AS1234) ou ASsets (ex. AS-MEGASET, AS-MEGA-SET)
+msg-enter-the-number-of-rows-to-clone: "Enter the number of rows to clone:"
+msg-equal: E-mail
+msg-error-changing-password: Alterar senha
+msg-error-getting-information: Falha ao conectar interfaces
+msg-error-in-data: Error in data
+msg-error-loading-data: Falha ao carregar dados
+msg-error-saving-changes: Erro {failure} alterações
+msg-error-saving-record: Error saving record
+msg-error-updating-statuses: Falha ao carregar dados
+msg-error-value0: "Error : {value0}"
+msg-error-value0-2: "Error: {value0}"
+msg-error-value0-3: "Error: {value0}"
+msg-error-value0-4: "Error : {value0}"
+msg-error-value0-5: "Error: {value0}"
+msg-error-value0-6: "Error: {value0}"
+msg-error-value0-7: "Error : {value0}"
+msg-error-value0-8: "Error : {value0}"
+msg-errors-in-packets-s: Errors In (packets/s)
+msg-errors-in-summary: Mostrar no resumo
+msg-errors-out-packets-s: Errors Out (packets/s)
+msg-errors-out-summary: Errors Out (Summary)
+msg-escalate-failed: Falha no script
+msg-escalate-failed-2: Falha no script
+msg-escalate-failed-value0: Falha no script{value0}
+msg-escalate-failed-value0-2: Falha no script{value0}
+msg-escalated: Revalidar
+msg-escalation-time: Escalações
+msg-established: Habilitado
+msg-event: Reverter
+msg-event-reclassified: Classe do Evento
+msg-event-type-migrate-duplicate: Event Type (Migrate/Duplicate)
+msg-exists: Exists
+msg-exit-full-screen: Exit Full Screen
+msg-expand-panels: Expandir painéis
+msg-extend-condition: Condição
+msg-failed: Falhou
+msg-failed-2: Falhou
+msg-failed-3: Falhou
+msg-failed-add-custom-fields-to-form: "Failed add custom fields to form "
+msg-failed-get-group-mo-detail: Failed get group MO detail
+msg-failed-get-map-menu: Falha ao carregar dados
+msg-failed-get-mo-detail: Falha ao carregar dados
+msg-failed-refresh-basket: Failed refresh basket
+msg-failed-save-data: Falha ao carregar dados
+msg-failed-to-add-vlan: Falha ao carregar dados
+msg-failed-to-change-credentials: Falha ao alterar as credenciais
+msg-failed-to-change-credentials-2: Falha ao alterar as credenciais
+msg-failed-to-change-credentials-value0: Falha ao alterar as credenciais{value0}
+msg-failed-to-change-credentials-value0-2: Falha ao alterar as credenciais{value0}
+msg-failed-to-change-credentials-value0-3: Falha ao alterar as credenciais{value0}
+msg-failed-to-change-credentials-value0-4: Falha ao alterar as credenciais {value0}
+msg-failed-to-change-layer-settings: Falha ao alterar as credenciais
+msg-failed-to-clear-alarm: Falha ao apagar alerta
+msg-failed-to-clear-alarms: Falha ao apagar alerta
+msg-failed-to-clone: Falha ao salvar
+msg-failed-to-clone-object: Falha ao conectar interfaces
+msg-failed-to-connect-interfaces: Falha ao conectar interfaces
+msg-failed-to-connect-objects: Falha ao conectar interfaces
+msg-failed-to-connect-objects-value0: Falha ao conectar interfaces{value0}
+msg-failed-to-connect-objects-value0-2: Falha ao conectar interfaces{value0}
+msg-failed-to-create-ignore-pattern-from-event: Failed to create ignore pattern from event
+msg-failed-to-create-rule-from-event: Failed to create rule from event
+msg-failed-to-delete: Falha ao salvar
+msg-failed-to-delete-file: Falha ao obter alerta
+msg-failed-to-delete-group: Falha ao definir a causa raiz
+msg-failed-to-delete-value0: Falha ao salvar{value0}
+msg-failed-to-disable-tasks: Falha ao executar tarefas
+msg-failed-to-disconnect-objects: Falha ao conectar interfaces
+msg-failed-to-disconnect-objects-value0: Falha ao conectar interfaces{value0}
+msg-failed-to-fetch-data: Falha ao carregar dados
+msg-failed-to-find-node: Falha ao corrigir
+msg-failed-to-fix: Falha ao corrigir
+msg-failed-to-get-alarm: Falha ao obter alerta
+msg-failed-to-get-config: Falha ao carregar dados
+msg-failed-to-get-configs-list: Falha ao buscar a lista de interfaces
+msg-failed-to-get-connection-information: Falha ao conectar interfaces
+msg-failed-to-get-data: Falha ao carregar dados
+msg-failed-to-get-data-for-job: Falha ao carregar dados
+msg-failed-to-get-data-for-job-value0: "Falha ao carregar dados: {value0}"
+msg-failed-to-get-data-for-menu-items: Falha ao carregar dados
+msg-failed-to-get-data-for-plugin: Falha ao carregar dados
+msg-failed-to-get-data-for-plugin-value0: Falha ao carregar dados {value0}
+msg-failed-to-get-data-value0: "Falha ao carregar dados: {value0}"
+msg-failed-to-get-data-value0-2: "Falha ao carregar dados: {value0}"
+msg-failed-to-get-data-value0-3: "Falha ao carregar dados: {value0}"
+msg-failed-to-get-home-data: Falha ao carregar dados
+msg-failed-to-get-interfaces: Falha ao buscar a lista de interfaces
+msg-failed-to-get-interfaces-list: Falha ao buscar a lista de interfaces
+msg-failed-to-get-json: Falha ao carregar dados
+msg-failed-to-get-layer: Falha ao obter alerta
+msg-failed-to-get-mac-history: Falha ao buscar a lista de interfaces
+msg-failed-to-get-macs: Falha ao carregar dados
+msg-failed-to-get-neighbors: Falha ao obter alerta
+msg-failed-to-get-object-data: Falha ao carregar dados
+msg-failed-to-get-params-form: Falha ao obter alerta
+msg-failed-to-get-path: Falha ao carregar dados
+msg-failed-to-get-remote-sync-time: Falha ao definir a causa raiz
+msg-failed-to-get-revisions: Falha ao obter alerta
+msg-failed-to-get-shared-info: Falha ao carregar dados
+msg-failed-to-get-shared-info-value0: Falha ao carregar dados{value0}
+msg-failed-to-get-stp-status: Falha ao obter o status STP
+msg-failed-to-get-text: Falha ao carregar dados
+msg-failed-to-get-user-settings: Falha ao obter o status STP
+msg-failed-to-get-vendor-information: Falha ao carregar dados
+msg-failed-to-launch-application: Failed to launch application
+msg-failed-to-launch-application-2: "Failed to launch application "
+msg-failed-to-launch-application-value0: Failed to launch application {value0}
+msg-failed-to-launch-application-value0-2: Failed to launch application  {value0}
+msg-failed-to-load-capabilities: Failed to load capabilities
+msg-failed-to-load-data: Falha ao carregar dados
+msg-failed-to-load-data-value0: "Falha ao carregar dados: {value0}"
+msg-failed-to-load-event: "Failed to load event "
+msg-failed-to-load-event-value0: Failed to load event {value0}
+msg-failed-to-load-instances: Falha ao carregar dados
+msg-failed-to-load-map-resources: Falha ao carregar os recursos do mapa
+msg-failed-to-log-in: Falha ao salvar
+msg-failed-to-post-message: Falha ao enviar mensagem
+msg-failed-to-reclassify: Falha ao executar tarefas
+msg-failed-to-remove-connections: Falha ao conectar interfaces
+msg-failed-to-remove-connections-value0: Falha ao conectar interfaces{value0}
+msg-failed-to-remove-interface: Falha ao conectar interfaces
+msg-failed-to-reset-layout: Falha ao carregar dados
+msg-failed-to-run-command: Falha ao executar tarefas
+msg-failed-to-run-report: Falha ao executar tarefas
+msg-failed-to-run-script: Falha ao executar tarefas
+msg-failed-to-run-tasks: Falha ao executar tarefas
+msg-failed-to-save: Falha ao salvar
+msg-failed-to-save-api-key: Falha ao carregar dados
+msg-failed-to-save-api-key-value0: Falha ao carregar dados{value0}
+msg-failed-to-save-changes: Falha ao salvar
+msg-failed-to-save-conduits: Falha ao salvar
+msg-failed-to-save-config: Falha ao salvar
+msg-failed-to-save-data: Falha ao carregar dados
+msg-failed-to-save-group-comment: Falha ao definir a causa raiz
+msg-failed-to-save-json: Falha ao carregar dados
+msg-failed-to-search: Falha ao buscar
+msg-failed-to-send-contribution: Falha ao definir a causa raiz
+msg-failed-to-send-contribution-value0: Falha ao definir a causa raiz{value0}
+msg-failed-to-set-acknowledgedun-acknowledged: Failed to set acknowledgedun/acknowledged
+msg-failed-to-set-data: Falha ao carregar dados
+msg-failed-to-set-parameter: Falha ao definir seguidor
+msg-failed-to-set-password: Falha ao definir seguidor
+msg-failed-to-set-position: Falha ao definir a causa raiz
+msg-failed-to-set-root-cause: Falha ao definir a causa raiz
+msg-failed-to-set-watcher: Falha ao definir seguidor
+msg-failed-to-test-rule: Falha ao definir a causa raiz
+msg-failed-to-update-alarm: Failed to update alarm
+msg-failed-to-update-favorites: Falha ao {action} favoritos
+msg-failed-to-update-instance: Falha ao buscar a lista de interfaces
+msg-failed-to-update-statuses: Failed to update statuses
+msg-failed-to-update-subscription: Falha ao executar tarefas
+msg-failed-to-upload-files: Falha ao carregar dados
+msg-failed-to-upload-mib: Falha ao carregar dados
+msg-failed-value0: "Falhou : {value0}"
+msg-favorite-status-updating: Favorite status updating ...
+msg-feed: Feed
+msg-female: E-mail
+msg-fetching-data-for-ad-hoc-channels: Fetching data for ad-hoc channels
+msg-fetching-data-for-draw-scheme: Fetching data for draw scheme ...
+msg-fetching-data-for-item: "Buscando dados de {name}..."
+msg-field-max-length: "O comprimento máximo deste campo é {maxLength}"
+msg-fields-selector: Seletor
+msg-file-value0: "Arquivo #{value0}"
+msg-files-has-been-uploaded: Files has been uploaded
+msg-fire-event: Fire Event
+msg-first: First
+msg-first-success: First Success
+msg-fit-height: Peso mínimo
+msg-fit-width: Espessura da Linha
+msg-float: Float
+msg-floating: Iniciando
+msg-for-snmp-v2c-get-value-must-be-a-valid-oid-e-g-1-3-6-1-2-1: For snmp_v2c_get, Value must be a valid OID (e.g. .1.3.6.1.2.1)
+msg-forward: Forward
+msg-free-slot: Resultado
+msg-free-vlan-not-found: Free VLAN not found
+msg-from-interface-down: Mostrar carga de interface
+msg-from-interface-name: Mostrar carga de interface
+msg-from-loader: Do IP
+msg-fwd: Fwd
+msg-genderless: Gêneros
+msg-getting-additional-information: Getting additional information...
+msg-getting-api-key-please-wait: Getting API key, please wait...
+msg-getting-information: Falha ao conectar interfaces
+msg-gis-division: divisão
+msg-greater: Criar
+msg-greater-equal: Criar Regra
+msg-greater-management-address: Greater Management Address
+msg-group-value0-value1: "Grupo: {value0} {value1}"
+msg-gw: GW
+msg-hidden: Escondido
+msg-history: Descoberta
+msg-horizontal: Horizontal
+msg-html: HTML
+msg-http-request-failed: HTTP request failed.
+msg-http-status: "HTTP status : "
+msg-http-status-value0: "HTTP status : {value0}"
+msg-idle: Escondido
+msg-ignore-stop: Ignore&Stop
+msg-in-maintenance: Esconder manutenção
+msg-incremental: Incremental
+msg-information-received: Information received
+msg-inner: Usuário
+msg-inner-of-scope: Inner-of-Scope
+msg-instance-updated-successfully: Instance updated successfully
+msg-instances-loaded: Instâncias
+msg-integer: Filtrar
+msg-integer-is-required: Inteiro requerido
+msg-interface-count-by-type: Interface alterada
+msg-interface-description: Descrição Remota
+msg-interface-flap-count: Mostrar carga de interface
+msg-interface-last-change-days: Interface alterada
+msg-interface-load-url: Mostrar carga de interface
+msg-interface-name: Nome interno
+msg-interface-speed: Interface alterada
+msg-interface1: Interfaces de VC
+msg-interface1-description: Descrição Remota
+msg-interface1-speed: Interface alterada
+msg-interface2: Interfaces de VC
+msg-interface2-description: Descrição Remota
+msg-interface2-speed: Interface alterada
+msg-internal-cross-was-successfully-disconnected: Internal cross was successfully disconnected
+msg-internal-error: Nome interno
+msg-internal-error-2: Nome interno
+msg-invalid-connections-will-be-deleted: Invalid Connections will be deleted
+msg-invalid-data: Revalidar
+msg-invalid-hex-format: Invalid HEX format
+msg-invalid-input: Revalidar
+msg-invalid-ip-address-format: Até o IP
+msg-invalid-password: Invalid password
+msg-invalid-regular-expression: Invalid regular expression
+msg-invalid-response-format: Invalid response format
+msg-invalid-server-response: Invalid server response
+msg-invalid-username: Invalid username
+msg-inventory-object: Inventory object
+msg-ip-address: Até o IP
+msg-ip-address-profile: IP Address Profile
+msg-ip-address-range: Até o IP
+msg-ip-prefix: Prefixo
+msg-ip1: Dica
+msg-ip2: Dica
+msg-ipv4-reverse: IPv4 Reverse
+msg-ipv6-reverse: IPv6 Reverse
+msg-is-managed: É Gerenciado?
+msg-is-managed-object-type-defined: Is Managed, object type defined
+msg-is-managed-object-type-defined-bad-cli-credential: Is Managed, object type defined bad CLI Credential
+msg-is-managed-object-type-undefined: Is Managed, object type undefined
+msg-is-managed-object-type-undefined-bad-snmp-credential: Is Managed, object type undefined bad SNMP Credential
+msg-is-managed-object-type-undefined-for-various-reasons: Is Managed, object type undefined for various reasons
+msg-is-managed-object-type-undefined-has-ping-response: Is Managed, object type undefined has ping response
+msg-is-managed-object-type-undefined-not-ping-response: Is Managed, object type undefined not ping response
+msg-is-monitoring-object-type-undefined-only-availability-check: Is monitoring, object type undefined, only availability check
+msg-job-scheduled-to-start: Tarefa agendada para iniciar
+msg-json-saved: Salvos
+msg-kb-entry: Tentativas
+msg-keep: Keep
+msg-last-config-get-timestamp: Last Config get Timestamp
+msg-left: Excluir
+msg-legend: Segmento
+msg-less: Regras
+msg-less-equal: E-mail
+msg-lesser-management-address: Lesser Management Address
+msg-link: Link
+msg-link-count: Ligar ao Evento
+msg-link-interface-with: Vincular {name} com
+msg-link-last-seen: Visto pela Última Vez
+msg-link-managed-object: Objeto gerenciado
+msg-link-proto: Link Proto
+msg-link-status: Status do Alerta
+msg-load-in-90-percentile: Load In (90% percentile)
+msg-load-in-average: Load In (Average)
+msg-load-in-bandwith: Load In (% Bandwith)
+msg-load-out-90-percentile: Load Out (90% percentile)
+msg-load-out-average: Load Out (Average)
+msg-load-out-bandwith: Load Out (% Bandwith)
+msg-loading: Construção
+msg-loading-2: loading ...
+msg-loading-3: Loading...
+msg-loading-4: Construção
+msg-loading-5: loading...
+msg-loading-application: "Carregando aplicação {name}, aguarde..."
+msg-loading-capabilities: Loading capabilities...
+msg-loading-job-panel: Construção
+msg-loading-plugin: "Carregando plugin {name}, aguarde..."
+msg-loading-tab-with: Construção
+msg-loading-tab-with-value0: Construção {value0} ...
+msg-logged-in-as: "Logged in as "
+msg-logged-in-as-value0: Logged in as {value0}
+msg-logged-out-for-inactivity: Logged out for inactivity
+msg-loopback: Loopback
+msg-loopback-address: Até o IP
+msg-lowercase: Lowercase
+msg-mac-counter: Anexar conta
+msg-main: Principal
+msg-male: E-mail
+msg-managed-object-address: Objeto gerenciado
+msg-managed-object-description: Seletor de Objeto Gerenciado
+msg-managed-object-level: Objeto gerenciado
+msg-managed-object-name: Objeto gerenciado
+msg-managed-object-value0-successfully: Objeto gerenciado {value0} Permissão
+msg-managed-object-was-moved: MO is move
+msg-management-address: Gerência
+msg-management-vlan: Gerência
+msg-manual-scan-failed: Falha no script
+msg-manual-scan-failed-value0: "Falha no script : {value0}"
+msg-map-has-been-saved: Credenciais alteradas  com sucesso
+msg-map-loading: Map loading ...
+msg-map-module-is-not-loaded: Map module is not loaded
+msg-mapping-was-performed-successfully: Mapping was performed successfully
+msg-mappings-only: Mappings Only
+msg-matched: Seguir
+msg-matched-nbsp-value0: Seguir:&nbsp;{value0}
+msg-matching-row: "Matching row:"
+msg-max-critical: Máximo de Scripts
+msg-max-level: Max level
+msg-max-warning: Duração
+msg-maximum-load-in: Maximum Load In
+msg-maximum-load-in-time: Maximum Load In Time
+msg-maximum-load-out: Maximum Load Out
+msg-maximum-load-out-time: Maximum Load Out Time
+msg-memory-usage: Memory Usage
+msg-merge: Merge
+msg-mib-value0: "MIB #{value0}"
+msg-mibs-has-been-uploaded: Credenciais alteradas  com sucesso
+msg-migrate-ts: Migrate TS
+msg-min-critical: Duração
+msg-min-level: Min level
+msg-min-warning: Peso mínimo
+msg-mirror-on-change: Versão alterada
+msg-model-lookup: Model Lookup
+msg-model-multi-choice: Model Multi Choice
+msg-modify: Corpo
+msg-more-3: More 3
+msg-move-nested-objects-to-value0: Objetos Combinados {value0}
+msg-must-contain-only-numbers: Must contain only numbers
+msg-network-interface: Network Interface
+msg-network-scan: Selecionar Segmento...
+msg-never: never
+msg-no-ad-hoc-channels-available: No ad-hoc channels available
+msg-no-api-token-found: Testar Som
+msg-no-connection-information: No connection information
+msg-no-groups: Grupo
+msg-no-interfaces: Nenhuma interface
+msg-no-interfaces-found: Mostrar carga de interface
+msg-no-links: Nenhum link
+msg-no-local-rules: No local rules
+msg-no-mac-history-found: No MAC history found
+msg-no-outages-detected: No outages detected
+msg-no-records-found-matching-value0: "No records found matching: {value0}"
+msg-no-tables: Tabela
+msg-no-uplinks: Nenhum uplink
+msg-no-vlan-propagation: No VLAN propagation
+msg-noc-agent: NOC Agent
+msg-none: Telefone
+msg-none-2: Telefone
+msg-not-acknowledge: Not Acknowledge
+msg-not-equal: E-mail
+msg-not-found: Testar Som
+msg-not-managed: Not Managed
+msg-not-object-found-for-set-report-param: Not object found for set Report Param.
+msg-not-saved: Salvos
+msg-nothing: Nothing
+msg-nothing-to-copy: Configuração alterada
+msg-object-address: Até o IP
+msg-object-adm-domain: Domínio Administrativo
+msg-object-administrative-domain: Domínio Administrativo
+msg-object-capabilities: Capacidades
+msg-object-geo-address: Até o IP
+msg-object-has-been-loaded: Credenciais alteradas  com sucesso
+msg-object-hostname: Nome do Objeto
+msg-object-labels: Nome do Objeto
+msg-object-model: Nome do Objeto
+msg-object-platform: Seletor de Objeto
+msg-object-profile: Perfil de Objeto
+msg-object-segment: Objeto/Segmento
+msg-object-software: Perfil de Objeto
+msg-object-status: Objetos
+msg-object1-name: Nome do Objeto
+msg-object1-platform: Seletor de Objeto
+msg-object1-segment: Objeto/Segmento
+msg-object1-tags: Objetos
+msg-object2-name: Nome do Objeto
+msg-object2-platform: Seletor de Objeto
+msg-object2-segment: Objeto/Segmento
+msg-object2-tags: Objetos
+msg-objects-statuses-failure: Objects statuses failure!
+msg-objects-was-successfully-connected: Objects was successfully connected
+msg-occupied-slot: Occupied slot
+msg-off: "Desligado"
+msg-offline: Perfil
+msg-on: "Ligado"
+msg-on-alarm-clear: Alerta excluído
+msg-on-alarm-raise: Alerta elevado
+msg-on-end: Conteúdo
+msg-on-start: Contato
+msg-on-update: On Update
+msg-once: Telefone
+msg-one-params-from-date-to-date-or-ids-required: One params - FROM_DATE/TO_DATE or IDS required
+msg-online: Rodando
+msg-only-by-filter: Only By Filter
+msg-only-changed: Configuração alterada
+msg-only-favorites: Mostrar apenas causas raiz
+msg-only-watch: Seguir
+msg-openconfirm: Configurar
+msg-opensent: Nível Superior
+msg-operation-completed: Busca realizada
+msg-operation-failed: Operação
+msg-operational-status-last: Operational status (Last)
+msg-optical-lambda: Optical Lambda
+msg-or: Porta
+msg-origin-routes-cache-is-empty-please-update-whois-cache: Origin routes cache is empty. Please update Whois Cache
+msg-other: Mês
+msg-other-data: Other Data
+msg-otn-odu: Anexar conta
+msg-out-of-scope: Out-of-Scope
+msg-outer: Mês
+msg-parameter-has-been-set: Credenciais alteradas  com sucesso
+msg-password-changed: Última Mudança
+msg-password-empty: Senha
+msg-password-is-already-used: Password is already used
+msg-password-min-lowercase: A senha deve conter pelo menos {count} letras minúsculas
+msg-password-min-numbers: A senha deve conter pelo menos {count} números
+msg-password-min-specials: A senha deve conter pelo menos {count} símbolos especiais
+msg-password-min-uppercase: A senha deve conter pelo menos {count} letras maiúsculas
+msg-password-mismatch: Password mismatch
+msg-password-too-short: A senha é muito curta. Deve ter pelo menos {count} caracteres
+msg-passwords-do-not-match: Senha
+msg-periodic: Periodic
+msg-permission-denied: Permissão negada
+msg-permission-denined: Permissão negada
+msg-permissions-were-reset: Permissions were reset
+msg-permissions-were-set: nome_da_permissão
+msg-physical: Physical
+msg-physical-iface-count: Physical Iface Count
+msg-ping-attempts: Ping Attempts
+msg-ping-fail: Filtro de Bind
+msg-ping-rtt: Ping RTT
+msg-platfrom: Plataforma
+msg-please-confirm-the-alarm-is-closed-and-must-be-cleared: Por favor, verifique que o alerta está fechado e precisa ser apagado
+msg-please-enter-a-valid-number: Alerta comentado
+msg-please-enter-comment: Alerta comentado
+msg-please-enter-number: "Please enter number:"
+msg-please-enter-period-start-qty-first-pos-is-0: "Please enter period (start,qty), first pos is 0:"
+msg-please-enter-root-cause-alarm-id: Por favor, digite o id da causa raiz do alerta
+msg-please-enter-your-gitlab-api-key-to-continue: Please enter your GitLab API key to continue.
+msg-please-provide-a-description-for-your-contribution: Please provide a description for your contribution.
+msg-please-select-a-row: Seletores
+msg-port-duplex: Port duplex
+msg-port-name: Abreviação
+msg-port-profile-name: Filtro de Importação
+msg-port-speed: Port speed
+msg-port-status: Último Status
+msg-port-tagged-vlans: Port tagged vlans
+msg-port-untagged-vlan: Port untagged vlan
+msg-prefer-running: Prefer Running
+msg-prefer-startup: Prefer Startup
+msg-prefix-deleted: Pré-Excluir
+msg-prefix-list-built: Prefix List built
+msg-prefix-list-generator-is-not-implemented-for-this-profile: Prefix-list generator is not implemented for this profile
+msg-prefix-list-name: Nome da Prefix-List ...
+msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: O nome da Prefix-List deve conter apenas 0-9, a-z, A-Z, -, _
+msg-prefix-not-found: Prefixo não encontrado
+msg-preparing-contribution: Iniciando
+msg-prev-failed: Prev Failed
+msg-prev-success: Prev Success
+msg-prev-successy: Prev Successy
+msg-processing-items-for: "Processando itens de {name}..."
+msg-profile-check-failed: Falha na verificação de perfil
+msg-profile-saved: Perfil salvo
+msg-propagate: Propagate
+msg-push-collector: Push (Collector)
+msg-query-failure: Query failure
+msg-querying: Querying ...
+msg-rack-value0: "Rack: {value0}"
+msg-raise: Traçar
+msg-raise-alarm: Mostrar alertas ativos
+msg-raise-alarm-stop: Raise Alarm&Stop
+msg-raise-clear-alarm: Falha ao apagar alerta
+msg-raise-privileges: Raise Privileges
+msg-random: De
+msg-raw-vars: Variáveis
+msg-read-only: Read-Only
+msg-read-only-2: Razão Inicial
+msg-ready-to-share: Ready to share...
+msg-rebase-prefix: "Rebase prefix "
+msg-rebase-prefix-value0: Rebase prefix {value0}
+msg-rebased: Processado
+msg-rebasing: Rebasing ...
+msg-record-reload-error: Record reload error.
+msg-records-has-been-saved: Credenciais alteradas  com sucesso
+msg-records-has-been-updated: Credenciais alteradas  com sucesso
+msg-regex: Redefinir
+msg-regex-error: Regex error!
+msg-reloading: Construção
+msg-reloading-item: "Recarregando {name}..."
+msg-remote-value0: "Excluir : {value0}"
+msg-remove-conduits-to-value0: Remove conduits to {value0}?
+msg-remove-group-value0: Remove group '{value0}'?
+msg-report: Relatório
+msg-report-data-source-not-found: Fonte de dados do relatório {data_source} não encontrada
+msg-request-failed-with-status: Falha ao obter o status STP
+msg-request-failed-with-status-value0: Falha ao obter o status STP :{value0}
+msg-request-failure: Limpar filtro
+msg-require-up-if-ping-enabled: Require Up if ping enabled
+msg-required-field: Obrigatório
+msg-resource-value0-successfully: Fonte {value0} Permissão
+msg-retrieving-additional-information-please-wait: Retrieving additional information, please wait...
+msg-rev-ipv4: Rev IPv4
+msg-rev-ipv6: Rev IPv6
+msg-rewrite: Rewrite
+msg-right: RE Direita
+msg-rollback: Rollback
+msg-root: Raiz
+msg-root-group-only-root-severvice: Root Group (Only Root Severvice)
+msg-root-id: Root ID
+msg-round-robin: Round Robin
+msg-row-read-only: Razão Inicial
+msg-running: Rodando
+msg-sa-object: SA Object
+msg-saved: Salvos
+msg-saved-2: Salvos
+msg-saving: Construção
+msg-saving-2: Construção
+msg-saving-3: Saving ...
+msg-saving-item: "Salvando {name}..."
+msg-script-confdb: Descrição
+msg-script-download: Script, Download
+msg-search: Busca...
+msg-search-complete: Busca realizada
+msg-sec: serviço
+msg-segment-hierarchy: Segment Hierarchy
+msg-segment-level-1: Segment (Level 1)
+msg-segment-level-2: Segment (Level 2)
+msg-segment-level-3: Segment (Level 3)
+msg-segment-level-4: Segment (Level 4)
+msg-segment-level-5: Segment (Level 5)
+msg-segment-level-6: Segment (Level 6)
+msg-segment-level-7: Segment (Level 7)
+msg-segmentate-for-child-segment: Segmentate for child segment
+msg-segmentate-for-object-s-segment: Segmentate for object's segment
+msg-segmentate-to-child-segment: Segmentate to child segment
+msg-segmentate-to-existing-segment: Segmentate to existing segment
+msg-selected: Excluído
+msg-selected-filter: "Selecionado ({type}): {path}"
+msg-selected-total-selected: "Selected : '{total.selected}'"
+msg-selected-total-selection: "Selected : '{total.selection}'"
+msg-self-status: Status da interface
+msg-send-approve: Perfil de Usuário
+msg-send-ignore: Send Ignore
+msg-sending-contribution: Iniciando
+msg-sensor-local-id: Sensor Local ID
+msg-sensor-profile: Perfil de Usuário
+msg-serial-number: Nome de usuário
+msg-server-error-occurred: Server error occurred
+msg-server-side-failed-to-get-default-dictionary: Server-side failed to get default dictionary
+msg-server-side-failed-to-get-default-dictionary-value0: "Server-side failed to get default dictionary : {value0}"
+msg-server-side-failed-to-get-fields: Falha ao carregar dados
+msg-server-side-failed-to-get-fields-value0: "Falha ao carregar dados : {value0}"
+msg-server-side-failure-status: Falha no servidor com código {status}
+msg-server-side-failure-with-status-code: "server-side failure with status code "
+msg-server-side-failure-with-status-code-value0: server-side failure with status code {value0}
+msg-serviceactivation: ServiceActivation
+msg-session-timeout: Escalações
+msg-set-alarm-as-acknowledged: Set alarm as acknowledged
+msg-set-alarm-as-unacknowledged: Set alarm as unacknowledged
+msg-set-group-comment: Set group comment
+msg-set-root: Definir causa raiz
+msg-show-map-button-failed-to-get-data: Falha ao carregar dados
+msg-skip-rule: Criar Regra
+msg-slightly-degraded: SLIGHTLY_DEGRADED
+msg-slot: Resultado
+msg-snapshot: Snapshot
+msg-snmp-cli: SNMP, CLI
+msg-snmp-only: SNMP Only
+msg-snmp-trap: SNMP_TRAP
+msg-sorted-labels: Sorted Labels
+msg-sound: "Sound: "
+msg-sound-value0: "Sound: {value0}"
+msg-specify-address: Até o IP
+msg-square: Square
+msg-srv: serviço
+msg-ssv: SSV
+msg-starting-application: "Iniciando \"{application}\""
+msg-starting-search: Iniciando a busca
+msg-state-inspector: Inspeto de Objeto
+msg-state-only: Apenas raiz
+msg-string: Iniciando
+msg-sub: SUB
+msg-subinterface-ip-address: SubInterface IP Address
+msg-subinterface-tagged-vlans: Interface alterada
+msg-subinterface-untagged-vlan: Interface alterada
+msg-subscription-updated-successfully: Subscription updated successfully
+msg-success: Permissão
+msg-success-2: Permissão
+msg-successfully: Permissão
+msg-sum: Número
+msg-summary-level: Resumo
+msg-suspend: Som
+msg-suspend-2: Suspend
+msg-svi: serviço
+msg-syslog: Origem do Syslog
+msg-system-is-not-registred-please-register-your-system-to-get-acces: O sistema não está registrado. Por favor, registre seu sistema para ter acesso ao suporte e a serviços adicionais
+msg-system-is-registred-you-have-access-to-additional-support-and-se: Sistema registrado. Você tem acesso ao suporte e a serviços adicionais
+msg-temporary-unavailable: Temporary unavailable
+msg-text: <
+msg-text-2: <=
+msg-text-3: ">"
+msg-text-4: ">="
+msg-thank-you: Thank You!
+msg-the-data-was-successfully-loaded: The data was successfully loaded
+msg-the-data-was-successfully-updated: The data was successfully updated
+msg-there-is-unsaved-data-do-you-really-want-to-clean: There is unsaved data, do you really want to clean?
+msg-there-is-unsaved-data-do-you-really-want-to-close-the-applicatio: There is unsaved data, do you really want to close the application?
+msg-there-is-unsaved-data-do-you-really-want-to-load-the-object: There is unsaved data, do you really want to load the object?
+msg-there-was-an-error-sharing-your-contribution: There was an error sharing your contribution.
+msg-this-message-will-automatically-close-in-5-seconds: This message will automatically close in 5 seconds.
+msg-thresholds-has-been-updated: Credenciais alteradas  com sucesso
+msg-thresholds-update-failed: Falha no script
+msg-time-interval: Time Interval
+msg-to-interface-down: Mostrar carga de interface
+msg-to-interface-name: Mostrar carga de interface
+msg-to-maintenance: Esconder manutenção
+msg-too-many-ip-max-2000: Too many IP, max 2000
+msg-too-many-vendors-found: Too many vendors found!
+msg-tools: Protocolos
+msg-total: "Total: "
+msg-total-in: Total In
+msg-total-nbsp-value0: Total:&nbsp;{value0}
+msg-total-out: Anexar conta
+msg-total-total-all: "Total : '{total.all}'"
+msg-total-total-selected: "Total : '{total.selected}'"
+msg-total-value0: "Total: {value0}"
+msg-total-value0-2: "Total: {value0}"
+msg-total-value0-3: "Total: {value0}"
+msg-total-value0-4: "Total: {value0}"
+msg-traffic-in-sum-by-period-in-mb: Traffic In (Sum by period in MB)
+msg-traffic-out-sum-by-period-in-mb: Traffic Out (Sum by period in MB)
+msg-transit: transição ipv6
+msg-transition-inspector: Inspetor de Link
+msg-transition-started: transição ipv6
+msg-transparent: Nível Superior
+msg-type-mac-address-to-search: type MAC address to search
+msg-type-username-and-password: Confirme a Nova Senha
+msg-unack: UnAck
+msg-undefined: Sublinhado
+msg-under-maintaintance: Esconder manutenção
+msg-unidirectional: Direção
+msg-unknown-as-set: Unknown AS-SET
+msg-unknown-error: Unknown error
+msg-unknown-or-failed: Unknown or Failed
+msg-unknown-type: "Unknown type: "
+msg-unknown-type-value0: "Unknown type: {value0}"
+msg-unlink: Rodando
+msg-unlink-failure: Desconectar interface
+msg-unmanaged: Gerenciado
+msg-unmanaged-or-ping-is-disabled: Unmanaged or ping is disabled
+msg-up: UP
+msg-update-channel-value0: última mudança {value0}
+msg-update-or-modify-internal-connection-from-value0-to-value1: Update or modify internal connection from {value0} Até {value1}
+msg-update-unlink-value0: Atraso {value0}
+msg-updating: Selecionar a configuração...
+msg-uplink-avg-load-in: Uplink AVG Load In
+msg-uplink-avg-load-out: Uplink AVG Load Out
+msg-uplink-interface-description: Desconectar interface
+msg-uplink-interface-name: Desconectar interface
+msg-uplink-interface-speed: Desconectar interface
+msg-uplink-maximum-load-in: Uplink Maximum Load In
+msg-uplink-maximum-load-in-time: Uplink Maximum Load In Time
+msg-uplink-maximum-load-out: Uplink Maximum Load Out
+msg-uplink-maximum-load-out-time: Uplink Maximum Load Out Time
+msg-uplink-total-in: Uplink Total In
+msg-uplink-total-out: Uplink Total Out
+msg-uppercase: Uppercase
+msg-user-account-is-blocked: User account is blocked
+msg-user-does-not-exists: User does not exists
+msg-validate-on-change: última mudança
+msg-validating-api-key: Regra de Validação
+msg-valn-allocated: VALN Allocated
+msg-value-deleted: Excluído
+msg-value-saved: Valor RE
+msg-value0-failed: "{value0}Falhou"
+msg-value0-failed-to-get-data-for-menu-items: "{value0}Falha ao carregar dados"
+msg-value0-failed-value1: "{value0}Falhou : {value1}"
+msg-value0-history: "{value0} - Descoberta"
+msg-value0-sec: "{value0} serviço"
+msg-value0-success: "{value0}Permissão"
+msg-vendor-mac: Fabricante
+msg-vendor-not-found: Vendor not found!
+msg-version-set: Version Set
+msg-vertical: Vertical
+msg-view-detail: View Detail
+msg-vlan-sync: VLAN Sync
+msg-vpn-profile: Perfil de AS
+msg-vrf-required: VRF Requerida
+msg-waiting: Iniciando
+msg-waiting-for-api-key: Waiting for API key...
+msg-whole: Perfil
+msg-wire-was-successfully-disconnected: Wire was successfully disconnected
+msg-workflow-editor-is-not-initialized: Workflow editor is not initialized
+msg-workflow-editor-module-is-not-loaded: Workflow editor module is not loaded
+msg-workflow-inspector: Workflow Inspector
+msg-workflow-state: Fluxos de Trabalho
+msg-would-you-like-remove-interface: "Would you like remove interface "
+msg-would-you-like-remove-interface-value0: Would you like remove interface {value0}
+msg-would-you-like-to-remove-group: Would you like to remove group?
+msg-would-you-like-to-reset-current-layout-and-generate-new: Você tem certeza que deseja redefinir o layout atual e gerar um novo?
+msg-would-you-like-to-share-item-and-contribute-to-open-source-proje: Would you like to share item and contribute to Open-Source project?
+msg-xlsx: XLSX
+msg-you-have-unsaved-changes-in-inspector-save-or-cancel-the-changes: You have unsaved changes in inspector. Save or cancel the changes.
+msg-your-contribution-has-been-shared-successfully: Your contribution has been shared successfully.
+msg-your-must-select-maintenance: Your must select maintenance!
+msg-zabbix: Zabbix
 msg-zone-transfer-upload-results: "Endereços IP enviados por transferência de zona: {created} criados e {changed} alterados."
 nav-account: Conta
 nav-action: Ações
 nav-actioncommands: Comandos de Ação
+nav-addressprofile: Address Profiles
 nav-addressrange: Intervalos de IP
 nav-administrativedomain: Domínios Administrativos
+nav-agent: Alvo
+nav-agentprofile: Agent Profiles
 nav-alarm: Alertas
 nav-alarmclass: Classes de Alerta
 nav-alarmclassconfig: Configuração de Classe de Alerta
+nav-alarmdiagnosticconfig: Alarm Diagnostic
 nav-alarmescalation: Escalação de Alerta
+nav-alarmrule: Alarm Rules
 nav-alarmseverity: Criticidades de Alerta
 nav-alarmtrigger: Gatilhos de Alerta
+nav-allocationgroup: Allocation Groups
+nav-apikey: API Keys
+nav-as: ASes
+nav-asprofile: AS Profiles
 nav-asset: Conjuntos de AS
 nav-audittrail: Trilha de Auditoria
+nav-authldapdomain: LDAP Domains
 nav-authprofile: Perfis de Autenticação
 nav-building: Prédios
 nav-capability: Capacidades
+nav-capsprofile: Caps Profiles
+nav-card: Cards
+nav-channel: Mudanças
+nav-chpolicy: CH Policies
 nav-classificationrule: Regras de Classificação
 nav-commandsnippet: Comando Snippet
 nav-community: Comunidades
 nav-communitytype: Tipos de Comunidade
+nav-confdbquery: ConfDB Queries
+nav-configurationparam: Configuration Params
+nav-configurationscope: Configuration Scope
+nav-configuredmap: Configured Maps
 nav-connectionrule: Regras de Conexão
 nav-connectiontype: Tipos de Conexão
 nav-coverage: Cobertura
+nav-cpe: CPEs
+nav-cpeprofile: CPE Profiles
+nav-crashinfo: Crashinfo
+nav-credentialcheckrule: Credential Check Rules
+nav-crontab: CronTabs
 nav-csv: Exportar/Importar de CSV
 nav-customfield: Campos Personalizados
 nav-customfieldenumgroup: Grupos Enumeráveis
+nav-dashboard: Dashboard
+nav-dashboardlayout: Dashboard Layout
+nav-datastreamconfig: DataStream Config
+nav-dialplan: DialPlan
+nav-discoveredobject: Discovered Object
 nav-division: Divisões
 nav-dnsserver: Servidores de DNS
 nav-dnszone: Zonas
 nav-dnszoneprofile: Perfis de Zona
+nav-endpoint: Nível Superior
+nav-escalationprofile: Escalações
 nav-event: Eventos
 nav-eventclass: Classes de Evento
 nav-eventtrigger: Gatilhos de Evento
+nav-extstorage: Ext. Storages
+nav-facade: Facades
+nav-firmware: Firmware
 nav-firmwarepolicy: Política de Firmware
 nav-getnow: Buscar Agora
+nav-glyph: Glyphs
 nav-group: Grupos
+nav-group-edit: Editar Grupo
 nav-groupaccess: Permissão de Grupo
+nav-handler: Handlers
 nav-heatmap: Mapa de Calor
+nav-ifdescpatterns: IfDesc Patterns
 nav-ignoreeventrule: Ignorar Regras de Evento
 nav-ignorepattern: Ignorar Padrões
+nav-imagestore: Images
+nav-interface: Interfaces
 nav-interfaceprofile: Perfis de Interface
+nav-interfacevalidationpolicy: Interface Validation Policies
 nav-inv: Inventário
+nav-ipam: Assigned Addresses
+nav-job: Jobs
 nav-jsonimport: Importar JSON
 nav-kb: Base de Conhecimento
+nav-kbentry: Entries
+nav-kbentrytemplate: Nome do template
+nav-l2domain: Domínio Administrativo
+nav-l2domainprofile: L2Domain Profiles
+nav-label: Rótulo
 nav-language: Idiomas
 nav-layer: Camadas
+nav-macblacklist: MAC Blacklist
 nav-macdb: Banco de Dados de MAC
 nav-maintainer: Mantenedores
 nav-maintenance: Manutenção
@@ -330,31 +3894,84 @@ nav-maintenancetype: Tipos de Manutenção
 nav-managedobject: Objetos Gerenciados
 nav-managedobjectprofile: Perfis de Objeto Gerenciado
 nav-map: Topologia de Rede
+nav-measurementunits: Measurement Units
+nav-messageroute: Message Routes
+nav-metricaction: Metric Actions
+nav-metricrule: Metric Rules
+nav-metricscope: Metric Scopes
+nav-metricstream: Metric Stream
 nav-metrictype: Tipos de Métrica
 nav-mib: MIB
 nav-mibpreference: Preferência de MIB
 nav-mimetype: Tipos de MIME
 nav-modelinterface: Modelos de Interface
 nav-modelmapping: Modelo de Mapeamento
+nav-modelprotectionprofile: ModelProtection Profile
+nav-modeltemplate: Model Templates
+nav-monitor: Monitor
+nav-monmap: Monmap
 nav-networksegment: Segmentos de Rede
+nav-networksegmentprofile: Network Segment Profiles
 nav-notificationgroup: Grupos de Notificação
+nav-numbercategory: Number Categories
+nav-objectconfigurationrule: Configuration Rules
+nav-objectdiagnosticconfig: Object Diagnostic Configs
+nav-objectdiscoveryrule: Object Discovered Rules
 nav-objectmodel: Modelos de Objeto
 nav-objectnotification: Notificação de Objeto
 nav-objectnotify: Notificações de Objeto
+nav-objectvalidationpolicy: Object Validation Policies
 nav-oidalias: Rótulo de OID
 nav-organisation: Organizações
 nav-outage: Interrupções
+nav-peer: Peers
 nav-peergroup: Grupos de Peers
+nav-peeringpoint: Peering Points
+nav-peerprofile: Peer Profiles
 nav-person: Pessoas
+nav-phonenumber: Phone Number
+nav-phonenumberprofile: Number Profiles
+nav-phonerange: Phone Ranges
+nav-phonerangeprofile: Range Profile
+nav-platform: Platforms
+nav-pool: Pools
 nav-prefixaccess: Permissão do Prefixo
 nav-prefixlistbuilder: Construtor de Prefix List
+nav-prefixprofile: Prefix Profiles
 nav-prefixtable: Tabelas de Prefixos
+nav-profile: Perfil
 nav-profilecheckrule: Regras de Verificação de Perfil
 nav-project: Projetos
+nav-protocol: Protocolos
+nav-pyrule: PyRule
+nav-quiz: Quiz
+nav-reactionrule: Reaction Rule
+nav-remotesystem: Remote Systems
+nav-reportalarmcomments: Alarm Comments
 nav-reportalarmdetail: Detalhamento de Alerta
+nav-reportconfig: Report Config
+nav-reportifacestatus: Interface Status
+nav-reportlinkdetail: Link Detail
+nav-reportmaxmetrics: Load Metrics max
+nav-reportmetrics: Load Metrics
+nav-reportmovedmac: Moved MACs
+nav-reportobjectdetail: Object Detail
+nav-reportsubscription: Report Subscription
+nav-resourcegroup: Recursos
+nav-resourcepool: Recursos
 nav-resourcestate: Estados de Recurso
+nav-rir: RIRs
+nav-runcommands: Run Commands (On Group Edit option)
+nav-scale: Desabilitar
 nav-search: Busca
+nav-sensor: Fabricante
+nav-sensorprofile: Sensor Profiles
+nav-service: Services
 nav-serviceprofile: Perfis de Serviço
+nav-slaprobe: SLA Probes
+nav-slaprofile: SLA Profiles
+nav-spec: Specs
+nav-state: States
 nav-street: Ruas
 nav-style: Estilos
 nav-subscriber: Assinantes
@@ -363,23 +3980,83 @@ nav-supplier: Fornecedor
 nav-supplierprofile: Perfis de Fornecedor
 nav-systemnotification: Notificações de Sistema
 nav-systemtemplate: Templates de Sistema
+nav-techdomain: Tech Domains
 nav-technology: Tecnologias
+nav-template: Nome do template
 nav-timepattern: Padrões de Tempo
 nav-totaloutage: Total de Interrupções
+nav-transition: Transitions
 nav-ttsystem: Sistema de TT
 nav-unknownmodel: Modelos Desconhecidos
 nav-user: Usuários
 nav-useraccess: Permissão de Usuário
 nav-vendor: Fabricantes
 nav-vlan: VLAN
+nav-vlanfilter: VLAN Filters
+nav-vlanprofile: VLAN Profiles
+nav-vlantemplate: VLAN Templates
 nav-vpn: VPN
+nav-vpnprofile: VPN Profiles
 nav-vrf: VRF
 nav-vrfgroup: Grupos de VRF
-status-cleaned: "Apagado"
-title-all-allocated-blocks-in-vrf: "Todos os blocos alocados em VRF {vrf} (IPv{afi}), {prefix}"
-title-allocated-blocks-in-vrf: "Blocos alocados em VRF {vrf} (IPv{afi}), {prefix}"
-title-cir-car-bps-to-burst-rate: "CIR/CAR(bps) para Burst-rate"
-title-free-blocks-in-vrf: "Blocos livres em VRF {vrf} (IPv{afi}), {prefix}"
+nav-wfmigration: Migrations
+nav-workflow: Fluxos de Trabalho
+status-cleaned: Apagado
+status-disable: Desabilitar
+status-down: Down
+status-fail: Falhou
+status-failed-discovery-only: Failed discovery only
+status-lost-redundancy: Lost redundancy
+status-no: "Não"
+status-no-redundancy: No redundancy
+status-ok: OK
+status-redundant: Redundant
+status-skip: Skip
+status-skip-full-available: Skip full available
+status-skip-zero-access-port: Skip zero access port
+status-skip-zero-available: Skip zero available
+status-unknown: Unknown
+status-up: Up
+status-update: Atraso
+status-warning: Warning
+status-yes: "Sim"
+title-all-allocated-blocks-in-vrf: Todos os blocos alocados em VRF {vrf} (IPv{afi}), {prefix}
+title-allocated-blocks-in-vrf: Blocos alocados em VRF {vrf} (IPv{afi}), {prefix}
+title-availability-last-day: Availability (last day)
+title-availability-last-month: Availability (last month)
+title-availability-last-week: Availability (last week)
+title-channels: Mudanças
+title-cir-car-bps-to-burst-rate: CIR/CAR(bps) para Burst-rate
+title-community: Comunidade
+title-configured-map: Configured Map
+title-escalations-1-day: Escalations (1 day)
+title-escalations-30-day: Escalations (30 day)
+title-escalations-7-days: Escalations (7 days)
+title-free-blocks-in-vrf: Blocos livres em VRF {vrf} (IPv{afi}), {prefix}
+title-inventory-summary: Inventory summary
+title-l2-domains: L2 Domains
+title-managed-object-summary: Managed Object Summary
+title-managed-objects-summary-domain: Managed Objects Summary (domain)
+title-managed-objects-summary-domain-profile: Managed Objects Summary (domain-profile)
+title-managed-objects-summary-label: Managed Objects Summary (label)
+title-managed-objects-summary-platform: Managed Objects Summary (platform)
+title-managed-objects-summary-profile: Managed Objects Summary (profile)
+title-managed-objects-summary-version: Managed Objects Summary (version)
+title-network-segment-schemas: Network Segment Schemas
+title-object-containers-map: Object Containers Map
+title-object-group-schemas: Object Group Schemas
+title-object-level-neighbor-schemas: Object Level Neighbor Schemas
+title-outages-1-day: Outages (1 day)
+title-outages-30-day: Outages (30 day)
+title-outages-7-days: Outages (7 days)
 title-problem-discovery-pool: "Problemas de descoberta (pool): {pool}"
+title-reboot-30-day: Reboot (30 day)
+title-reboots-1-day: Reboots (1 day)
+title-reboots-7-days: Reboots (7 days)
 title-summary-for-vrf: "Resumo da VRF {vrf} (IPv{afi}): {prefix}"
-title-welcome: "Bem-vindo ao {brand}"
+title-total-alarms: Total Alarms
+title-ttsystem-errors-1-day: TTSystem Errors (1 day)
+title-ttsystem-stat-1-day: TTSystem Stat (1 day)
+title-ttsystem-stat-30-day: TTSystem Stat (30 day)
+title-ttsystem-stat-7-days: TTSystem Stat (7 days)
+title-welcome: Bem-vindo ao {brand}

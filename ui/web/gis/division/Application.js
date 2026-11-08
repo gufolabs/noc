@@ -21,7 +21,7 @@ Ext.define("NOC.gis.division.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 100,
           renderer: NOC.render.Choices({
@@ -29,35 +29,35 @@ Ext.define("NOC.gis.division.Application", {
           }),
         },
         {
-          text: __("Short"),
+          text: t("header-short"),
           dataIndex: "short_name",
           width: 50,
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 25,
         },
         {
-          text: __("Parent"),
+          text: t("header-parent"),
           dataIndex: "full_parent",
           flex: 1,
           sort: false,
         },
         {
-          text: __("Remote System"),
+          text: t("app-title-remotesystem"),
           dataIndex: "remote_system",
           flex: 1,
           sort: false,
         },
         {
-          text: __("Remote Id"),
+          text: t("header-remote-id"),
           dataIndex: "remote_id",
           flex: 1,
           sort: false,
@@ -67,12 +67,12 @@ Ext.define("NOC.gis.division.Application", {
         {
           name: "full_path",
           xtype: "displayfield",
-          fieldLabel: __("Full Path"),
+          fieldLabel: t("label-full-path"),
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           allowBlank: false,
           store: [
             ["A", "Administrative"],
@@ -82,29 +82,29 @@ Ext.define("NOC.gis.division.Application", {
         {
           name: "parent",
           xtype: "gis.division.LookupField",
-          fieldLabel: __("Parent"),
+          fieldLabel: t("header-parent"),
         },
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "short_name",
           xtype: "textfield",
-          fieldLabel: __("Short Name"),
+          fieldLabel: t("label-short-name"),
           allowBlank: true,
         },
         {
           name: "is_active",
           xtype: "checkboxfield",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         },
         {
           xtype: "dictfield",
           name: "data",
-          fieldLabel: __("Data"),
+          fieldLabel: t("app-title-data"),
           allowBlank: true,
         },
       ],
@@ -113,7 +113,7 @@ Ext.define("NOC.gis.division.Application", {
   },
   filters: [
     {
-      title: __("By Parent"),
+      title: t("app-title-by-parent"),
       name: "parent",
       ftype: "lookup",
       lookup: "gis.division",

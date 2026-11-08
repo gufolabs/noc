@@ -41,7 +41,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
@@ -51,7 +51,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
@@ -75,12 +75,12 @@ Ext.define("NOC.inv.configuredmap.Application", {
           },
           items: [
             {
-              title: __("Common"),
+              title: t("app-title-common"),
               items: [
                 {
                   name: "layout",
                   xtype: "combobox",
-                  fieldLabel: __("Layout"),
+                  fieldLabel: t("label-layout"),
                   allowBlank: false,
                   uiStyle: "medium",
                   store: [
@@ -92,7 +92,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                 },
                 {
                   xtype: "fieldset",
-                  title: __("Map settings"),
+                  title: t("app-title-map-settings"),
                   layout: "hbox",
                   defaults: {
                     padding: 4,
@@ -101,7 +101,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     {
                       name: "width",
                       xtype: "numberfield",
-                      fieldLabel: __("Width"),
+                      fieldLabel: t("label-width"),
                       labelAlign: "top",
                       allowBlank: true,
                       minValue: 1,
@@ -110,7 +110,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     {
                       name: "height",
                       xtype: "numberfield",
-                      fieldLabel: __("Height"),
+                      fieldLabel: t("header-height"),
                       labelAlign: "top",
                       allowBlank: true,
                       minValue: 1,
@@ -119,7 +119,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     {
                       name: "background_opacity",
                       xtype: "numberfield",
-                      fieldLabel: __("Opacity"),
+                      fieldLabel: t("label-opacity"),
                       labelAlign: "top",
                       allowBlank: true,
                       minValue: 0,
@@ -129,7 +129,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     {
                       name: "background_image",
                       xtype: "main.imagestore.LookupField",
-                      fieldLabel: __("Background Image"),
+                      fieldLabel: t("label-background-image"),
                       labelAlign: "top",
                       allowBlank: true,
                     },
@@ -138,9 +138,8 @@ Ext.define("NOC.inv.configuredmap.Application", {
                 {
                   name: "add_linked_node",
                   xtype: "checkboxfield",
-                  boxLabel: __("Add Linked Nodes"),
-                  tooltip: __("If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/>" +
-                                        " for suggest credential"),
+                  boxLabel: t("label-add-linked-nodes"),
+                  tooltip: t("help-if-check-use-credential-check-rules-service-activation-setup-cre"),
                   allowBlank: true,
                   listeners: {
                     render: me.addTooltip,
@@ -149,9 +148,8 @@ Ext.define("NOC.inv.configuredmap.Application", {
                 {
                   name: "add_topology_links",
                   xtype: "checkboxfield",
-                  boxLabel: __("Add Topology links"),
-                  tooltip: __("If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/>" +
-                                        " for suggest credential"),
+                  boxLabel: t("label-add-topology-links"),
+                  tooltip: t("help-if-check-use-credential-check-rules-service-activation-setup-cre"),
                   allowBlank: true,
                   listeners: {
                     render: me.addTooltip,
@@ -160,9 +158,8 @@ Ext.define("NOC.inv.configuredmap.Application", {
                 {
                   name: "enable_node_portal",
                   xtype: "checkboxfield",
-                  boxLabel: __("Enable Node Portal"),
-                  tooltip: __("If check - use Credential Check Rules (Service Activation -> Setup -> Credential Check Rules)<br/>" +
-                                        " for suggest credential"),
+                  boxLabel: t("label-enable-node-portal"),
+                  tooltip: t("help-if-check-use-credential-check-rules-service-activation-setup-cre"),
                   allowBlank: true,
                   listeners: {
                     render: me.addTooltip,
@@ -171,7 +168,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
               ],
             },
             {
-              title: __("Nodes"),
+              title: t("app-title-nodes"),
               items: [
                 {
                   name: "nodes",
@@ -187,7 +184,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     {
                       name: "node_type",
                       xtype: "combobox",
-                      fieldLabel: __("Type"),
+                      fieldLabel: t("header-type"),
                       allowBlank: false,
                       uiStyle: "medium",
                       store: [
@@ -204,7 +201,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     },
                     {
                       xtype: "fieldset",
-                      title: __("Reference"),
+                      title: t("label-reference"),
                       layout: "hbox",
                       defaults: {
                         padding: 4,
@@ -214,7 +211,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                           name: "resource_group",
                           xtype: "noc.core.combotree",
                           restUrl: "/inv/resourcegroup/",
-                          fieldLabel: __("Resource Group"),
+                          fieldLabel: t("label-resource-group"),
                           listWidth: 1,
                           listAlign: "left",
                           labelAlign: "top",
@@ -225,7 +222,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                           xtype: "noc.core.combotree",
                           restUrl: "/inv/networksegment/",
                           name: "segment",
-                          fieldLabel: __("Segment"),
+                          fieldLabel: t("header-segment-44986c"),
                           allowBlank: true,
                           labelAlign: "top",
                           disabled: true,
@@ -234,7 +231,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "managed_object",
                           xtype: "sa.managedobject.LookupField",
-                          fieldLabel: __("Managed Object"),
+                          fieldLabel: t("header-managed-object-62561c"),
                           allowBlank: true,
                           labelAlign: "top",
                           disabled: true,
@@ -246,7 +243,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                           xtype: "noc.core.combotree",
                           restUrl: "/inv/container/",
                           uiStyle: "medium-combo",
-                          fieldLabel: __("Container"),
+                          fieldLabel: t("label-container-2"),
                           labelAlign: "top",
                           tabIndex: 220,
                           allowBlank: true,
@@ -255,8 +252,8 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "add_nested",
                           xtype: "checkbox",
-                          boxLabel: __("Add nested nodes"),
-                          tooltip: __("Display check state on Object Form"),
+                          boxLabel: t("label-add-nested-nodes"),
+                          tooltip: t("help-display-check-state-on-object-form"),
                           allowBlank: true,
                           listeners: {
                             render: me.addTooltip,
@@ -266,7 +263,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     },
                     {
                       xtype: "fieldset",
-                      title: __("Shape"),
+                      title: t("app-title-shape"),
                       layout: "hbox",
                       defaults: {
                         padding: 4,
@@ -275,7 +272,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "shape",
                           xtype: "combobox",
-                          fieldLabel: __("Type"),
+                          fieldLabel: t("header-type"),
                           labelAlign: "top",
                           allowBlank: true,
                           width: 50,
@@ -289,7 +286,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "stencil",
                           xtype: "main.glyph.LookupField",
-                          fieldLabel: __("Shape"),
+                          fieldLabel: t("app-title-shape"),
                           labelAlign: "top",
                           width: 100,
                           allowBlank: true,
@@ -297,7 +294,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "title",
                           xtype: "textfield",
-                          fieldLabel: __("Title"),
+                          fieldLabel: t("label-title"),
                           labelAlign: "top",
                           allowBlank: true,
                           width: 200,
@@ -307,7 +304,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                     },
                     {
                       xtype: "fieldset",
-                      title: __("Portal"),
+                      title: t("app-title-portal"),
                       layout: "hbox",
                       collapsible: true,
                       collapsed: true,
@@ -318,7 +315,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "portal_generator",
                           xtype: "main.ref.topologygen.LookupField",
-                          fieldLabel: __("Generator"),
+                          fieldLabel: t("label-generator"),
                           labelAlign: "top",
                           width: 100,
                           allowBlank: true,
@@ -326,7 +323,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         {
                           name: "map_portal",
                           xtype: "inv.configuredmap.LookupField",
-                          fieldLabel: __("Configured Map"),
+                          fieldLabel: t("app-title-configuredmap"),
                           labelAlign: "top",
                           width: 100,
                           allowBlank: true,
@@ -338,7 +335,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
               ],
             },
             {
-              title: __("Links"),
+              title: t("app-title-links"),
               items: [
                 {
                   name: "links",
@@ -347,7 +344,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                   rows: 10,
                   items: [
                     {
-                      fieldLabel: __("Source Node"),
+                      fieldLabel: t("label-source-node"),
                       labelWidth: 100,
                       name: "source_node",
                       xtype: "core.combo",
@@ -359,7 +356,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                       allowBlank: true,
                     },
                     {
-                      fieldLabel: __("Target Nodes"),
+                      fieldLabel: t("label-target-nodes"),
                       labelWidth: 100,
                       name: "target_nodes",
                       xtype: "core.tagfield",
@@ -380,15 +377,15 @@ Ext.define("NOC.inv.configuredmap.Application", {
       ],
       formToolbar: [
         {
-          text: __("Show Map"),
+          text: t("btn-show-map"),
           glyph: NOC.glyph.globe,
           scope: me,
           handler: me.onShowMap,
         },
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

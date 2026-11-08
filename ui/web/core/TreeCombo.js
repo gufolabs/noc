@@ -34,7 +34,7 @@ Ext.define("NOC.core.TreeCombo", {
   },
 
   rootNode: {
-    label: __("Root"),
+    label: t("msg-root"),
     id: "_root_",
     level: 0,
   },

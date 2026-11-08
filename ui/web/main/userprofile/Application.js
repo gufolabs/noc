@@ -26,25 +26,25 @@ Ext.define("NOC.main.userprofile.Application", {
       },
       items: [
         {
-          fieldLabel: __("Login"),
+          fieldLabel: t("header-login"),
           name: "username",
         },
         {
-          fieldLabel: __("Groups"),
+          fieldLabel: t("app-title-group"),
           name: "groups",
         },
         {
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           name: "name",
         },
         {
-          fieldLabel: __("Mail"),
+          fieldLabel: t("label-mail"),
           name: "email",
         },
         {
           xtype: "core.combo",
           restUrl: "/main/ref/ulanguage/lookup/",
-          fieldLabel: __("Language"),
+          fieldLabel: t("header-language"),
           allowBlank: false,
           typeAhead: false,
           editable: false,
@@ -53,7 +53,7 @@ Ext.define("NOC.main.userprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Notification Contacts"),
+          title: t("app-title-notification-contacts"),
           border: false,
           items: [
             {
@@ -64,7 +64,7 @@ Ext.define("NOC.main.userprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Notification Group Settings"),
+          title: t("app-title-notification-group-settings"),
           border: false,
           items: [
             {
@@ -80,7 +80,7 @@ Ext.define("NOC.main.userprofile.Application", {
           items: [
             {
               glyph: NOC.glyph.save,
-              text: __("Save"),
+              text: t("btn-save"),
               handler: function(){
                 this.up("[appId=main.userprofile]").onSave();
               },
@@ -112,7 +112,7 @@ Ext.define("NOC.main.userprofile.Application", {
         this.preferred_language = data.preferred_language;
       },
       failure: function(){
-        NOC.msg.failed(__("Failed to load data"))
+        NOC.msg.failed(t("msg-failed-to-load-data"))
       },
     });
   },
@@ -130,14 +130,14 @@ Ext.define("NOC.main.userprofile.Application", {
       scope: this,
       jsonData: data,
       success: function(){
-        NOC.msg.complete(__("Profile saved"));
+        NOC.msg.complete(t("msg-profile-saved"));
         if(this.preferred_language !== data.preferred_language){
-          NOC.app.app.restartApplication(__("Changing language"));
+          NOC.app.app.restartApplication(t("msg-changing-language"));
         }
       },
       failure: function(response){
         var message = Ext.decode(response.responseText);
-        NOC.msg.failed(message.errors || __("Failed to save"));
+        NOC.msg.failed(message.errors || t("msg-failed-to-save"));
       },
     });
   },

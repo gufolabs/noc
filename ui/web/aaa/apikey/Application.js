@@ -23,11 +23,11 @@ Ext.define("NOC.aaa.apikey.Application", {
     me.keyField = Ext.create({
       name: "key",
       xtype: "password",
-      fieldLabel: __("API Key"),
+      fieldLabel: t("app-title-apikey"),
       allowBlank: false,
       margin: "0 5 0 0",
       maxLength: 24,
-      maxLengthText: __("The maximum length for this field is {0}"),
+      maxLengthText: t("msg-field-max-length", {maxLength: 24}),
       minWidth: 390,
       uiStyle: "large",
     });
@@ -35,17 +35,17 @@ Ext.define("NOC.aaa.apikey.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         }, {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 25,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Expires"),
+          text: t("header-expires"),
           dataIndex: "expires",
           flex: 1,
         },
@@ -55,14 +55,14 @@ Ext.define("NOC.aaa.apikey.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          boxLabel: __("Active"),
+          boxLabel: t("header-active"),
         }, /*
                 {
                     name: "expires"
@@ -70,7 +70,7 @@ Ext.define("NOC.aaa.apikey.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
@@ -85,7 +85,7 @@ Ext.define("NOC.aaa.apikey.Application", {
             {
               xtype: "button",
               padding: "0 15 0 15",
-              text: __("Generate key"),
+              text: t("btn-generate-key"),
               scope: me,
               handler: me.generateKey,
             },
@@ -94,16 +94,16 @@ Ext.define("NOC.aaa.apikey.Application", {
         {
           name: "access",
           xtype: "gridfield",
-          fieldLabel: __("Access"),
+          fieldLabel: t("label-access"),
           columns: [
             {
-              text: __("API"),
+              text: t("header-api"),
               dataIndex: "api",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Role"),
+              text: t("header-role"),
               dataIndex: "role",
               width: 150,
               editor: "textfield",
@@ -113,23 +113,23 @@ Ext.define("NOC.aaa.apikey.Application", {
         {
           name: "acl",
           xtype: "gridfield",
-          fieldLabel: __("ACL"),
+          fieldLabel: t("label-acl"),
           columns: [
             {
-              text: __("Prefix"),
+              text: t("header-prefix"),
               dataIndex: "prefix",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Active"),
+              text: t("header-active"),
               dataIndex: "is_active",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "description",
               flex: 1,
               editor: "textfield",

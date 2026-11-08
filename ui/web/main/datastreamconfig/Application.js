@@ -20,7 +20,7 @@ Ext.define("NOC.main.datastreamconfig.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
@@ -30,30 +30,30 @@ Ext.define("NOC.main.datastreamconfig.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "formats",
           xtype: "gridfield",
-          fieldLabel: __("Formats"),
+          fieldLabel: t("label-formats"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 150,
               editor: "textfield",
             },
             {
-              text: __("Active"),
+              text: t("header-active"),
               dataIndex: "is_active",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Handler"),
+              text: t("app-title-handler"),
               dataIndex: "handler",
               editor: {
                 xtype: "main.handler.LookupField",
@@ -65,7 +65,7 @@ Ext.define("NOC.main.datastreamconfig.Application", {
               renderer: NOC.render.Lookup("handler"),
             },
             {
-              text: __("Role"),
+              text: t("header-role"),
               dataIndex: "role",
               editor: "textfield",
               flex: 1,

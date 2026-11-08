@@ -37,18 +37,18 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
         {
           xtype: "textfield",
           name: "name",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
       ],
       buttons: [
         {
-          text: __("Close"),
+          text: t("btn-close"),
           scope: me,
           handler: me.onPressClose,
         },
         {
-          text: __("Add"),
+          text: t("btn-add"),
           glyph: NOC.glyph.plus,
           scope: me,
           handler: me.onPressAdd,
@@ -58,7 +58,7 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
     });
 
     Ext.apply(me, {
-      title: __("Create new") + " " + me.objectModelName,
+      title: t("msg-create-new-value0", {value0: me.objectModelName}),
       items: [me.form],
     });
     me.callParent();
@@ -92,7 +92,7 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
         me.app.app.showObject(data.id, true);
       },
       failure: function(){
-        NOC.error(__("Failed to save"));
+        NOC.error(t("msg-failed-to-save"));
       },
     });
   },

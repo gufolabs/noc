@@ -33,14 +33,14 @@ Ext.define("Ext.ux.form.MultiIntervalField", {
           width: 36,
           items: [
             {
-              tooltip: __("Add"),
+              tooltip: t("btn-add"),
               glyph: NOC.glyph.plus_circle,
               color: NOC.colors.add,
               scope: me,
               handler: me.onAddRecord,
             },
             {
-              tooltip: __("Remove"),
+              tooltip: t("btn-remove"),
               glyph: NOC.glyph.minus_circle,
               color: NOC.colors.delete,
               scope: me,
@@ -49,7 +49,7 @@ Ext.define("Ext.ux.form.MultiIntervalField", {
           ],
         },
         {
-          text: __("Time (sec)"),
+          text: t("header-time-sec"),
           dataIndex: "time",
           width: 150,
           editor: "textfield",
@@ -62,7 +62,7 @@ Ext.define("Ext.ux.form.MultiIntervalField", {
           },
         },
         {
-          text: __("Interval (sec)"),
+          text: t("header-interval-sec"),
           dataIndex: "interval",
           flex: 150,
           editor: "textfield",

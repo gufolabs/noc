@@ -21,10 +21,10 @@ Ext.define("NOC.fm.mib.MIBUpload", {
       me.uploadFiles.push(
         Ext.create("Ext.form.field.File", {
           name: "mib_" + i,
-          fieldLabel: __("MIB #") + i,
+          fieldLabel: t("msg-mib-value0", {value0: i}),
           labelWidth: 50,
           width: 400,
-          buttontext: __("Select MIB..."),
+          buttontext: t("label-select-mib"),
         }),
       );
     }
@@ -36,7 +36,7 @@ Ext.define("NOC.fm.mib.MIBUpload", {
           dock: "bottom",
           items: [
             {
-              text: __("Upload"),
+              text: t("btn-upload"),
               glyph: NOC.glyph.upload,
               scope: me,
               handler: me.onUpload,
@@ -62,11 +62,11 @@ Ext.define("NOC.fm.mib.MIBUpload", {
         url: "/fm/mib/upload/",
         waitMsg: "Uploading MIBs...",
         success: function(){
-          NOC.info(__("MIBs has been uploaded"));
+          NOC.info(t("msg-mibs-has-been-uploaded"));
           me.close();
         },
         failure: function(arg1, arg2){
-          var message = __("Failed to upload MIB");
+          var message = t("msg-failed-to-upload-mib");
           var _arg2 = Ext.decode(arg2.response.responseText);
           if(_arg2 && _arg2.message){
             message = _arg2.message;

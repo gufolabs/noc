@@ -32,9 +32,9 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
 
     me.app = me.up("[itemId=ip-ipam]");
     me.rebaseButton = Ext.create("Ext.button.Button", {
-      text: __("Rebase"),
+      text: t("btn-rebase"),
       glyph: NOC.glyph.truck,
-      tooltip: __("Rebase prefix to a new location"),
+      tooltip: t("help-rebase-prefix-to-a-new-location"),
       scope: me,
       handler: me.onRebase,
       hasAccess: NOC.hasPermission("rebase"),
@@ -53,14 +53,14 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         {
           name: "vrf",
           xtype: "ip.vrf.LookupField",
-          fieldLabel: __("VRF"),
+          fieldLabel: t("header-vrf"),
           allowBlank: true,
           readOnly: true,
         },
         {
           name: "prefix",
           xtype: "combobox",
-          fieldLabel: __("Prefix"),
+          fieldLabel: t("header-prefix"),
           allowBlank: false,
           uiStyle: "medium",
           store: [],
@@ -71,44 +71,44 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "profile",
           xtype: "ip.prefixprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "afi",
           xtype: "displayfield",
-          fieldLabel: __("Address Family"),
+          fieldLabel: t("label-address-family"),
           allowBlank: true,
         },
         {
           name: "asn",
           xtype: "peer.as.LookupField",
-          fieldLabel: __("AS"),
+          fieldLabel: t("app-title-as"),
           allowBlank: true,
         },
         {
           name: "vlan",
           xtype: "vc.vlan.LookupField",
-          fieldLabel: __("VLAN"),
+          fieldLabel: t("app-title-vlan"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["ip.Prefix"],
@@ -117,13 +117,13 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         {
           name: "tt",
           xtype: "numberfield",
-          fieldLabel: __("TT"),
+          fieldLabel: t("label-tt"),
           allowBlank: true,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
           bind: {
             disabled: "{isNew}",
@@ -133,24 +133,24 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
           name: "allocated_till",
           xtype: "datefield",
           startDay: 1,
-          fieldLabel: __("Allocated till"),
+          fieldLabel: t("label-allocated-till"),
           allowBlank: true,
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           name: "prefix_discovery_policy",
           xtype: "combobox",
-          fieldLabel: __("Prefix Discovery Policy"),
+          fieldLabel: t("label-prefix-discovery-policy"),
           allowBlank: true,
           store: [
-            ["P", __("Profile")],
-            ["E", __("Enable")],
-            ["D", __("Disable")],
+            ["P", t("header-profile")],
+            ["E", t("label-enable")],
+            ["D", t("status-disable")],
           ],
           defaultValue: "P",
           labelWidth: 180,
@@ -159,12 +159,12 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         {
           name: "address_discovery_policy",
           xtype: "combobox",
-          fieldLabel: __("Address Discovery Policy"),
+          fieldLabel: t("label-address-discovery-policy"),
           allowBlank: true,
           store: [
-            ["P", __("Profile")],
-            ["E", __("Enable")],
-            ["D", __("Disable")],
+            ["P", t("header-profile")],
+            ["E", t("label-enable")],
+            ["D", t("status-disable")],
           ],
           defaultValue: "P",
           labelWidth: 180,
@@ -173,16 +173,16 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         {
           name: "default_address_profile",
           xtype: "ip.addressprofile.LookupField",
-          fieldLabel: __("Default Address Profile"),
+          fieldLabel: t("label-default-address-profile"),
           allowBlank: true,
         },
         {
           name: "pools",
           xtype: "gridfield",
-          fieldLabel: __("Address Pools"),
+          fieldLabel: t("label-address-pools"),
           columns: [
             {
-              text: __("Pool"),
+              text: t("label-pool"),
               dataIndex: "pool",
               width: 200,
               editor: {
@@ -192,7 +192,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
             },
             {
               dataIndex: "description",
-              text: __("Description"),
+              text: t("label-description"),
               editor: "textfield",
               width: 150,
             },
@@ -201,24 +201,24 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         // {
         //     name: "direct_permissions",
         //     xtype: "gridfield",
-        //     fieldLabel: __("Permissions"),
+        //     fieldLabel: t("Permissions"),
         //     columns: [
         //         {
-        //             text: __("User"),
+        //             text: t("User"),
         //             dataIndex: "user",
         //             editor: "main.user.LookupField",
         //             renderer: NOC.render.Lookup("user"),
         //             width: 100
         //         },
         //         {
-        //             text: __("Group"),
+        //             text: t("Group"),
         //             dataIndex: "group",
         //             editor: "main.group.LookupField",
         //             renderer: NOC.render.Lookup("group"),
         //             width: 150
         //         },
         //         {
-        //             text: __("Permission"),
+        //             text: t("Permission"),
         //             dataIndex: "permission",
         //             editor: {
         //                 xtype: "combobox",
@@ -268,7 +268,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
   //
   save: function(data){
     var me = this;
-    me.mask(__("Saving ..."));
+    me.mask(t("msg-saving-3"));
     NOC.api.requestLegacy({
       url: me.restUrl + (me.currentPrefixId ? me.currentPrefixId + "/" : ""),
       method: me.currentPrefixId ? "PUT" : "POST",
@@ -276,7 +276,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
       jsonData: data,
       success: function(){
         me.unmask();
-        NOC.msg.complete(__("Saved"));
+        NOC.msg.complete(t("msg-saved-2"));
         me.close();
       },
       failure: function(response){
@@ -316,11 +316,11 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
       success: function(response){
         var data = Ext.decode(response.responseText);
         me.getViewModel().set("isNew", false);
-        me.setTitle(__("Change prefix ") + data.prefix);
+        me.setTitle(t("msg-change-prefix-value0", {value0: data.prefix}));
         me.setValues(data)
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     })
   },
@@ -350,10 +350,10 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
         }
         me.getViewModel().set("isNew", true);
         me.setValues(values);
-        me.setTitle(__("Create new prefix"))
+        me.setTitle(t("msg-create-new-prefix"))
       },
       failure: function(){
-        NOC.error(__("Failed to load data"))
+        NOC.error(t("msg-failed-to-load-data"))
       },
     });
     // Set suggestions

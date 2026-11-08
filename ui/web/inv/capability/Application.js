@@ -30,19 +30,19 @@ Ext.define("NOC.inv.capability.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -52,24 +52,24 @@ Ext.define("NOC.inv.capability.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "type",
           xtype: "combobox",
-          fieldLabel: __("Type"),
+          fieldLabel: t("header-type"),
           store: [
             ["bool", "Boolean"],
             ["str", "String"],
@@ -87,22 +87,22 @@ Ext.define("NOC.inv.capability.Application", {
         {
           name: "allow_manual",
           xtype: "checkbox",
-          boxLabel: __("Allowing Manual Editor"),
+          boxLabel: t("label-allowing-manual-editor"),
         },
         {
           name: "multi",
           xtype: "checkbox",
-          boxLabel: __("Allow multiple values (List)"),
+          boxLabel: t("label-allow-multiple-values-list"),
         },
         {
           name: "values",
           xtype: "dictfield",
-          fieldLabel: __("Values"),
+          fieldLabel: t("label-values"),
         },
         {
           name: "card_template",
           xtype: "textfield",
-          fieldLabel: __("Card Template"),
+          fieldLabel: t("label-card-template"),
           allowBlank: true,
         },
         {
@@ -116,7 +116,7 @@ Ext.define("NOC.inv.capability.Application", {
               name: "agent_collector",
               xtype: "combobox",
               uiStyle: "medium",
-              fieldLabel: __("Agent Collector"),
+              fieldLabel: t("label-agent-collector"),
               store: [
                 ["cpu", "CPU"],
                 ["memory", "Memory"],
@@ -133,7 +133,7 @@ Ext.define("NOC.inv.capability.Application", {
               name: "agent_param",
               xtype: "textfield",
               uiStyle: "medium",
-              fieldLabel: __("Agent Param"),
+              fieldLabel: t("label-agent-param"),
               allowBlank: true,
             },
           ],
@@ -142,9 +142,9 @@ Ext.define("NOC.inv.capability.Application", {
 
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

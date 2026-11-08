@@ -38,7 +38,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
                  var value = v,
                    iconName = Ext.isEmpty(record.get("editor")) ? "lock" : "pencil",
                    cursorStyle = iconName === "pencil" ? "cursor: pointer;" : "",
-                   icon = `<i class='fa fa-${iconName}' style='padding-right: 4px;${cursorStyle}' title='` + __(iconName === "pencil" ? "Edit" : "Read only") + "'></i>",
+                   icon = `<i class='fa fa-${iconName}' style='padding-right: 4px;${cursorStyle}' title='` + t(iconName === "pencil" ? "btn-edit" : "label-read-only") + "'></i>",
                    copyIcon = NOC.clipboardIcon("").replace(/onclick='NOC\.toClipboard\(""\)'/, "data-action='copy'");
                  if((v === true) || (v === false)){
                    value = NOC.render.Bool(v);
@@ -57,7 +57,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
       scroller = this.formPanel.getScrollable();      
       
     button.setGlyph(NOC.glyph.minus);
-    button.setTooltip(__("Remove Mapping"));
+    button.setTooltip(t("btn-remove-mapping"));
     button.setHandler(this.removeRow);
     
     this.formPanel.suspendLayouts();
@@ -83,7 +83,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
   },
   //
   getButtonConfig: function(type){
-    var tooltip = type === "add" ? __("Add Mapping") : __("Remove Mapping"),
+    var tooltip = type === "add" ? t("btn-add-mapping") : t("btn-remove-mapping"),
       glyph = type === "add" ? NOC.glyph.plus : NOC.glyph.minus,
       config = {
         xtype: "button",
@@ -103,7 +103,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
   // 
   getDefaultField: function(formType, value, choices){
     var field = {
-      fieldLabel: __("Value"),
+      fieldLabel: t("header-value"),
       name: this.dataIndex,          
     };
     switch(formType){
@@ -222,7 +222,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
           var value = Ext.isDefined(result.data) ? result.data[this.dataIndex] : "";
           record.set(this.dataIndex, this.formatResult(value));
           button.up("window").close();
-          NOC.info(method === "PUT" ? __("Value saved.") : __("Value deleted."));
+          NOC.info(method === "PUT" ? t("msg-value-saved") : t("msg-value-deleted"));
         } else{
           NOC.error(result.message);
         }
@@ -230,10 +230,10 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
       failure: function(response){
         try{
           var result = Ext.decode(response.responseText),
-            message = Ext.isDefined(result.errors) ? result.errors : __("Request failure");
+            message = Ext.isDefined(result.errors) ? result.errors : t("msg-request-failure");
         } catch(e){
           console.error(e);
-          message = __("Invalid server response");
+          message = t("msg-invalid-server-response");
         }
         NOC.error(message);
       },
@@ -242,8 +242,8 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
   //
   resetForm: function(button){
     Ext.Msg.show({
-      title: __("Confirm Reset"),
-      message: __("Are you sure you want to reset all values?"),
+      title: t("app-title-confirm-reset"),
+      message: t("msg-are-you-sure-you-want-to-reset-all-values"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.Msg.QUESTION,
       scope: this,
@@ -280,7 +280,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
     });
         
     Ext.create("Ext.window.Window", {
-      title: __("Edit value"),
+      title: t("app-title-edit-value"),
       modal: true,
       width: this.getEditorWidth(),
       height: this.getEditorHeight(),
@@ -288,16 +288,16 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
       autoShow: true,
       items: this.formPanel,
       buttons: [{
-        text: __("Cancel"),
+        text: t("btn-cancel"),
         handler: function(){
           this.up("window").close();
         },
       }, {
-        text: __("Reset"),
+        text: t("btn-reset"),
         scope: this,
         handler: this.resetForm,
       }, {
-        text: __("Save"),
+        text: t("btn-save"),
         scope: this,
         handler: function(button){
           this.request("PUT", button);

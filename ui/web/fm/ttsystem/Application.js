@@ -18,18 +18,18 @@ Ext.define("NOC.fm.ttsystem.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Handler"),
+          text: t("app-title-handler"),
           dataIndex: "handler",
           flex: 1,
         },
@@ -39,44 +39,44 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
         },
         {
           name: "is_active",
           xtype: "checkbox",
-          fieldLabel: __("Active"),
+          fieldLabel: t("header-active"),
           allowBlank: false,
         },
         {
           name: "handler",
           xtype: "textfield",
-          fieldLabel: __("Handler"),
+          fieldLabel: t("app-title-handler"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "connection",
           xtype: "textfield",
-          fieldLabel: __("Connection"),
+          fieldLabel: t("header-connection"),
           allowBlank: false,
         },
         {
           name: "login",
           xtype: "textfield",
-          fieldLabel: __("Login"),
+          fieldLabel: t("header-login"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "shard_name",
           xtype: "textfield",
-          fieldLabel: __("Shard"),
+          fieldLabel: t("label-shard"),
           regex: /^[0-9a-zA-Z]{1,16}$/,
           allowBlank: false,
           uiStyle: "medium",
@@ -84,7 +84,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "max_threads",
           xtype: "numberfield",
-          fieldLabel: __("Max. Threads"),
+          fieldLabel: t("label-max-threads"),
           allowBlank: false,
           min: 0,
           uiStyle: "small",
@@ -92,7 +92,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "failure_cooldown",
           xtype: "numberfield",
-          fieldLabel: __("Failure Cooldown"),
+          fieldLabel: t("label-failure-cooldown"),
           allowBlank: true,
           min: 0,
           uiStyle: "small",
@@ -100,7 +100,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "alarm_consequence_policy",
           xtype: "combobox",
-          fieldLabel: __("Escalate Alarm Consequence Policy"),
+          fieldLabel: t("label-escalate-alarm-consequence-policy"),
           allowBlank: false,
           queryMode: "local",
           displayField: "label",
@@ -117,7 +117,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "promote_items",
           xtype: "combobox",
-          fieldLabel: __("Escalate Items Add Policy"),
+          fieldLabel: t("label-escalate-items-add-policy"),
           allowBlank: false,
           queryMode: "local",
           displayField: "label",
@@ -135,7 +135,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "telemetry_sample",
           xtype: "numberfield",
-          fieldLabel: __("Telemetry Sample"),
+          fieldLabel: t("label-telemetry-sample"),
           allowBlank: false,
           min: 0,
           uiStyle: "small",
@@ -143,7 +143,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           name: "check_updates_interval",
           xtype: "numberfield",
-          fieldLabel: __("Check Updates Interval"),
+          fieldLabel: t("label-check-updates-interval"),
           allowBlank: true,
           min: 0,
           uiStyle: "small",
@@ -151,7 +151,7 @@ Ext.define("NOC.fm.ttsystem.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -160,20 +160,20 @@ Ext.define("NOC.fm.ttsystem.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },

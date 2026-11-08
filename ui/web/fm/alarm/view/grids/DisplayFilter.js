@@ -22,13 +22,13 @@ Ext.define("NOC.fm.alarm.view.grids.DisplayFilter", {
   items: [
     {
       xtype: "fm.alarm.multipanel",
-      title: __("Service Profiles"),
+      title: t("nav-serviceprofile"),
       searchStore: "fm.profile",
       bind: {value: "{displayFilter.hasProfiles}"},
     },
     {
       xtype: "fm.alarm.filter.duration",
-      fieldLabel: __("Recent Alarms (time/opacity)"),
+      fieldLabel: t("label-recent-alarms-time-opacity"),
       labelAlign: "top",
       bind: {value: "{displayFilter.duration}"},
     },

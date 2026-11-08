@@ -10,22 +10,22 @@ Ext.define("NOC.sa.managedobject.scripts.ShowDHCPBinding", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("IP"),
+      text: t("header-ip"),
       dataIndex: "ip",
       width: 120,
     },
     {
-      text: __("MAC"),
+      text: t("header-mac"),
       dataIndex: "mac",
       width: 120,
     },
     {
-      text: __("Type"),
+      text: t("header-type"),
       dataIndex: "type",
       width: 50,
     },
     {
-      text: __("Expiration time"),
+      text: t("header-expiration-time"),
       dataIndex: "expiration",
       flex: 1,
     },

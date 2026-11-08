@@ -23,7 +23,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
       currentId = vm.get("currentId");
     if(Ext.isEmpty(currentId)) return;
     var isUpdatable = this.getView().down("combo[itemId=tabType]").getValue() === 2;
-    vm.set("icon", this.generateIcon(isUpdatable, "spinner", "grey", __("loading")));
+    vm.set("icon", this.generateIcon(isUpdatable, "spinner", "grey", t("msg-loading-4")));
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/pconf/data/",
       method: "GET",
@@ -37,17 +37,17 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
           gridStore = this.getView().down("grid").getStore();
         if(Ext.isEmpty(gridStore)) return;
         gridStore.loadData(data.conf);
-        vm.set("icon", this.generateIcon(isUpdatable, "circle", NOC.colors.yes, __("online")));
+        vm.set("icon", this.generateIcon(isUpdatable, "circle", NOC.colors.yes, t("msg-online")));
       },
       failure: function(){
-        vm.set("icon", this.generateIcon(isUpdatable, "circle", NOC.colors.no, __("offline")));
-        NOC.error(__("Failed to load data"));
+        vm.set("icon", this.generateIcon(isUpdatable, "circle", NOC.colors.no, t("msg-offline")));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },
   onValueChanged: function(data){
     var maskComponent = this.getView().up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("saving", "pconf"),
+      messageId = maskComponent.show("saving", {name: "pconf"}),
       currentId = this.getViewModel().get("currentId");
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/pconf/set/",
@@ -57,7 +57,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
       success: function(response){
         var data = Ext.decode(response.responseText);
         if(data.status){
-          NOC.info(__("Parameter has been set"));
+          NOC.info(t("msg-parameter-has-been-set"));
           this.getView().down("grid").findPlugin("valueedit").cancelEdit();
           this.onReload();
         } else{
@@ -65,7 +65,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to set parameter"));
+        NOC.error(t("msg-failed-to-set-parameter"));
       },
       callback: function(){
         maskComponent.hide(messageId);
@@ -145,7 +145,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
     
     if(Ext.isEmpty(status)){
       if(record.get("read_only")){
-        return "<i class='fas fa fa-lock' style='padding-right: 4px;' title='" + __("Read only") + "'></i>" + displayValue;
+        return "<i class='fas fa fa-lock' style='padding-right: 4px;' title='" + t("msg-read-only-2") + "'></i>" + displayValue;
       }
       return "<i class='fas fa fa-pencil' style='padding-right: 4px;'></i>" + displayValue; 
     }

@@ -14,20 +14,20 @@ Ext.define("NOC.main.userprofile.UserProfileContacts", {
   ],
   columns: [
     {
-      text: __("Time Pattern"),
+      text: t("header-time-pattern"),
       dataIndex: "time_pattern",
       width: 150,
       renderer: NOC.render.Lookup("time_pattern"),
       editor: "main.timepattern.LookupField",
     },
     {
-      text: __("Method"),
+      text: t("header-method"),
       dataIndex: "notification_method",
       width: 120,
       editor: "main.ref.unotificationmethod.LookupField",
     },
     {
-      text: __("Params"),
+      text: t("label-params"),
       dataIndex: "params",
       flex: 1,
       editor: "textfield",

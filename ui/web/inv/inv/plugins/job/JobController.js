@@ -21,7 +21,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobController", {
     var me = this,
       currentId = me.getViewModel().get("currentId"),
       maskComponent = me.getView().up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("fetching", ["jobs"]);
+      messageId = maskComponent.show("fetching", {name: "jobs"});
     NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/job/",
       method: "GET",
@@ -31,7 +31,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobController", {
         view.preview(data, currentId);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
       callback: function(){
         maskComponent.hide(messageId);
@@ -51,7 +51,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobController", {
   //
   viewJob: function(view, objectId){
     var grid = view.up("gridpanel");
-    grid.mask(__("Loading..."));
+    grid.mask(t("msg-loading-3"));
     NOC.launch("sa.job", "history", {"args": [objectId]});
     setTimeout(function(){
       grid.unmask();

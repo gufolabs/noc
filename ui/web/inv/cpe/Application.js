@@ -29,40 +29,40 @@ Ext.define("NOC.inv.cpe.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Global ID"),
+          text: t("header-global-id"),
           dataIndex: "global_id",
           width: 160,
         },
         {
-          text: __("Label"),
+          text: t("header-label"),
           dataIndex: "label",
           width: 160,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Controller"),
+          text: t("label-controller"),
           dataIndex: "controller",
           renderer: NOC.render.Lookup("controller"),
           width: 160,
         },
         {
-          text: __("Local ID"),
+          text: t("header-local-id-2"),
           dataIndex: "local_id",
           width: 160,
         },
         {
-          text: __("Oper Status."),
+          text: t("header-oper-status"),
           dataIndex: "oper_status",
           width: 60,
           renderer: NOC.render.Bool,
@@ -74,19 +74,19 @@ Ext.define("NOC.inv.cpe.Application", {
         {
           name: "profile",
           xtype: "inv.cpeprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           query: {
             "allow_models": ["inv.CPE"],
           },
@@ -94,26 +94,26 @@ Ext.define("NOC.inv.cpe.Application", {
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "global_id",
           xtype: "textfield",
-          fieldLabel: __("Global Id"),
+          fieldLabel: t("label-global-id"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "address",
           xtype: "textfield",
-          fieldLabel: __("Address"),
+          fieldLabel: t("app-title-address"),
           allowBlank: true,
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Network Resources"),
+          title: t("app-title-network-resources"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -122,13 +122,13 @@ Ext.define("NOC.inv.cpe.Application", {
             {
               name: "controller",
               xtype: "sa.managedobject.LookupField",
-              fieldLabel: __("Managed Object"),
+              fieldLabel: t("header-managed-object-62561c"),
               allowBlank: true,
             },
             {
               name: "local_id",
               xtype: "textfield",
-              fieldLabel: __("Local Id"),
+              fieldLabel: t("header-local-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -137,13 +137,13 @@ Ext.define("NOC.inv.cpe.Application", {
         {
           name: "bi_id",
           xtype: "displayfield",
-          fieldLabel: __("BI ID"),
+          fieldLabel: t("label-bi-id"),
           allowBlank: true,
           uiStyle: "medium",
         },
         //{
         //    xtype: "fieldset",
-        //    title: __("Resource Groups"),
+        //    title: t("Resource Groups"),
         //    layout: "column",
         //    minWidth: me.formMinWidth,
         //    maxWidth: me.formMaxWidth,
@@ -160,7 +160,7 @@ Ext.define("NOC.inv.cpe.Application", {
         //            columns: [
         //                {
         //                    dataIndex: "group",
-        //                    text: __("Static Service Groups"),
+        //                    text: t("Static Service Groups"),
         //                    width: 350,
         //                    renderer: NOC.render.Lookup("group"),
         //                    editor: {
@@ -175,7 +175,7 @@ Ext.define("NOC.inv.cpe.Application", {
         //            columns: [
         //                {
         //                    dataIndex: "group",
-        //                    text: __("Effective Service Groups"),
+        //                    text: t("Effective Service Groups"),
         //                    width: 350,
         //                    renderer: NOC.render.Lookup("group"),
         //                    editor: {
@@ -190,7 +190,7 @@ Ext.define("NOC.inv.cpe.Application", {
         //            columns: [
         //                {
         //                    dataIndex: "group",
-        //                    text: __("Static Client Groups"),
+        //                    text: t("Static Client Groups"),
         //                    width: 350,
         //                    renderer: NOC.render.Lookup("group"),
         //                    editor: {
@@ -205,7 +205,7 @@ Ext.define("NOC.inv.cpe.Application", {
         //            columns: [
         //                {
         //                    dataIndex: "group",
-        //                    text: __("Effective Client Groups"),
+        //                    text: t("Effective Client Groups"),
         //                    width: 350,
         //                    renderer: NOC.render.Lookup("group"),
         //                    editor: {
@@ -219,30 +219,30 @@ Ext.define("NOC.inv.cpe.Application", {
         {
           name: "controllers",
           xtype: "gridfield",
-          fieldLabel: __("Controllers"),
+          fieldLabel: t("label-controllers"),
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "managed_object",
               renderer: NOC.render.Lookup("managed_object"),
               width: 250,
               editor: "sa.managed_object.LookupField",
             },
             {
-              text: __("LocalID"),
+              text: t("header-localid"),
               dataIndex: "local_id",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Active"),
+              text: t("header-active"),
               dataIndex: "is_active",
               width: 25,
               renderer: NOC.render.Bool,
             },
             {
-              text: __("Interface"),
+              text: t("header-interface"),
               dataIndex: "interface",
               width: 100,
               editor: "textfield",
@@ -252,30 +252,30 @@ Ext.define("NOC.inv.cpe.Application", {
         {
           name: "caps",
           xtype: "gridfield",
-          fieldLabel: __("Capabilities"),
+          fieldLabel: t("header-capabilities"),
           allowBlank: true,
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "capability",
               renderer: NOC.render.Lookup("capability"),
               width: 250,
               editor: "inv.capability.LookupField",
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
               editor: "textfield",
             },
             {
-              text: __("Source"),
+              text: t("header-source"),
               dataIndex: "source",
               width: 100,
               editor: "textfield",
             },
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               width: 50,
               editor: "textfield",
@@ -289,19 +289,19 @@ Ext.define("NOC.inv.cpe.Application", {
 
   filters: [
     {
-      title: __("By Profile"),
+      title: t("choice-by-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "inv.cpeprofile",
     },
     {
-      title: __("By State"),
+      title: t("app-title-by-state"),
       name: "state",
       ftype: "lookup",
       lookup: "wf.state",
     },
     {
-      title: __("By Object"),
+      title: t("app-title-by-object"),
       name: "controller",
       ftype: "lookup",
       lookup: "sa.managedobject",

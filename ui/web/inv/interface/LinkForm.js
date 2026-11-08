@@ -37,8 +37,8 @@ Ext.define("NOC.inv.interface.LinkForm", {
             {
               xtype: "sa.managedobject.LookupField",
               name: "managed_object",
-              emptytext: __("Select managed object ..."),
-              fieldLabel: __("Object"),
+              emptytext: t("btn-select-managed-object"),
+              fieldLabel: t("header-object"),
               width: 360,
               allowBlank: false,
               listeners: {
@@ -49,7 +49,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
             {
               xtype: "combobox",
               name: "interface",
-              fieldLabel: __("Interface"),
+              fieldLabel: t("header-interface"),
               width: 360,
               allowBlank: false,
               displayField: "label",
@@ -61,7 +61,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
           buttonAlign: "center",
           buttons: [
             {
-              text: __("Connect"),
+              text: t("btn-connect"),
               glyph: NOC.glyph.link,
               formBind: true,
               scope: me,
@@ -87,7 +87,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
         me.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to get interfaces list"));
+        NOC.error(t("msg-failed-to-get-interfaces-list"));
       },
     });
   },
@@ -116,7 +116,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
         me.close();
       },
       failure: function(){
-        NOC.error(__("Failed to connect interfaces"));
+        NOC.error(t("msg-failed-to-connect-interfaces"));
       },
     });
   },

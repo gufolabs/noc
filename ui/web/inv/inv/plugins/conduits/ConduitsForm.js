@@ -10,7 +10,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
   extend: "Ext.panel.Panel",
   requires: [
   ],
-  title: __("Conduits"),
+  title: t("app-title-conduits"),
   closable: false,
   layout: "border",
   scrollable: true,
@@ -20,14 +20,14 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
     var me = this;
 
     me.closeButton = Ext.create("Ext.button.Button", {
-      text: __("Close"),
+      text: t("btn-close"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.onClose,
     });
 
     me.saveButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       scope: me,
       disabled: true,
@@ -35,14 +35,14 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
     });
 
     me.addButton = Ext.create("Ext.button.Button", {
-      text: __("Add"),
+      text: t("btn-add"),
       glyph: NOC.glyph.plus,
       scope: me,
       handler: me.onAddConduits,
     });
 
     me.deleteButton = Ext.create("Ext.button.Button", {
-      text: __("Remove"),
+      text: t("btn-remove"),
       glyph: NOC.glyph.minus,
       disabled: true,
       scope: me,
@@ -50,7 +50,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
     });
 
     me.followButton = Ext.create("Ext.button.Button", {
-      text: __("Follow"),
+      text: t("btn-follow"),
       glyph: NOC.glyph.long_arrow_right,
       disabled: true,
       scope: me,
@@ -90,19 +90,19 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
       }],
       columns: [
         {
-          text: __("Target"),
+          text: t("header-target"),
           dataIndex: "target_name",
           width: 100,
         },
         {
-          text: __("Map Distange (m)"),
+          text: t("header-map-distange-m"),
           dataIndex: "map_distance",
           width: 100,
           align: "right",
           renderer: me.renderSize,
         },
         {
-          text: __("Proj. Distange (m)"),
+          text: t("header-proj-distange-m"),
           dataIndex: "project_distance",
           width: 100,
           align: "right",
@@ -110,12 +110,12 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
           editor: "textfield",
         },
         {
-          text: __("Bearing"),
+          text: t("header-bearing"),
           dataIndex: "s_bearing",
           width: 50,
         },
         {
-          text: __("Conduits"),
+          text: t("app-title-conduits"),
           dataIndex: "n_conduits",
           width: 50,
           align: "right",
@@ -206,7 +206,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
         w.show();
       },
       failure: function(){
-        NOC.error(__("Failed to get neighbors"));
+        NOC.error(t("msg-failed-to-get-neighbors"));
       },
     })
   },
@@ -223,7 +223,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
       sm = me.ductsGrid.getSelectionModel(),
       selection = sm.getSelection();
     Ext.Msg.show({
-      title: __("Remove conduits to") + " " + selection[0].get("target_name") + "?",
+      title: t("msg-remove-conduits-to-value0", {value0: selection[0].get("target_name")}),
       msg: "Would you like to remove conduits?",
       buttons: Ext.Msg.YESNO,
       glyph: NOC.glyph.question_circle,
@@ -284,7 +284,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
         me.reload();
       },
       failure: function(){
-        NOC.error(__("Failed to save conduits"));
+        NOC.error(t("msg-failed-to-save-conduits"));
       },
     });
   },

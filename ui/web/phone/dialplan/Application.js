@@ -19,7 +19,7 @@ Ext.define("NOC.phone.dialplan.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -28,17 +28,17 @@ Ext.define("NOC.phone.dialplan.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Mask"),
+          text: t("header-mask"),
           dataIndex: "mask",
           width: 150,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -48,20 +48,20 @@ Ext.define("NOC.phone.dialplan.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "mask",
           xtype: "textfield",
-          fieldLabel: __("Mask"),
+          fieldLabel: t("header-mask"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
       ],

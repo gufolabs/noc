@@ -48,14 +48,14 @@ Ext.define("NOC.fm.alarm.view.grids.MultiSelector", {
   },
   bind: {store: "{multiStore}"},
   fieldName: "label",
-  fieldTitle: __("Name"),
+  fieldTitle: t("header-name"),
   height: 200,
   scrollable: "y",
   search: {
     field: "label",
     reference: "multi-search",
-    searchText: __("search..."),
-    removeRowTip: __("Remove this item."),
+    searchText: t("msg-search"),
+    removeRowTip: t("btn-remove-this-item"),
     minWidth: 300,
     listeners: {
       focusleave: function(){
@@ -167,15 +167,15 @@ Ext.define("NOC.fm.alarm.view.grids.MultiSelector", {
           leadingBufferZone: 2,
           viewConfig: {
             deferEmptyText: false,
-            emptyText: __("No results."),
+            emptyText: t("label-no-results"),
           },
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "label",
               flex: 1,
             }, {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
               flex: 1,
             },
@@ -197,11 +197,11 @@ Ext.define("NOC.fm.alarm.view.grids.MultiSelector", {
     this.viewConfig.emptyText = this.emptyText;
     this.columns = [
       {
-        text: __("Name"),
+        text: t("header-name"),
         dataIndex: "label",
         flex: 1,
       }, {
-        text: __("Type"),
+        text: t("header-type"),
         dataIndex: "type",
         flex: 1,
       }, {
@@ -244,13 +244,13 @@ Ext.define("NOC.fm.alarm.view.grids.MultiSelector", {
     this.addTool([
       {
         bind: {type: "{includeProfile}"},
-        tooltip: __("Include/Exclude profile from list"),
+        tooltip: t("help-include-exclude-profile-from-list"),
         callback: this._onShowClick,
         scope: this,
       },
       {
         bind: {type: "{popupState}"},
-        tooltip: __("Show/Hide search popup"),
+        tooltip: t("help-show-hide-search-popup"),
         callback: this._onShowSearch,
         scope: this,
       },

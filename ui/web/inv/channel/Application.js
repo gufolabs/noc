@@ -33,7 +33,7 @@ Ext.define("NOC.inv.channel.Application", {
 
     me.mapPanel = Ext.create("Ext.panel.Panel", {
       app: me,
-      title: __("Map"),
+      title: t("btn-map"),
       layout: "fit",
       items: [
         {
@@ -53,7 +53,7 @@ Ext.define("NOC.inv.channel.Application", {
       ],
       tbar: [
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.arrow_left,
           scope: me,
           handler: "onCloseMap",
@@ -68,42 +68,42 @@ Ext.define("NOC.inv.channel.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Parent"),
+          text: t("header-parent"),
           dataIndex: "parent",
           width: 200,
           renderer: NOC.render.Lookup("parent"),
         },
         {
-          text: __("Tech Domain"),
+          text: t("app-title-techdomain"),
           dataIndex: "tech_domain",
           width: 200,
           renderer: NOC.render.Lookup("tech_domain"),
         },
         {
-          text: __("Project"),
+          text: t("label-project"),
           dataIndex: "project",
           width: 200,
           renderer: NOC.render.Lookup("project"),
         },
         {
-          text: __("Subscriber"),
+          text: t("header-subscriber"),
           dataIndex: "subscriber",
           width: 200,
           renderer: NOC.render.Lookup("subscriber"),
         },
         {
-          text: __("Supplier"),
+          text: t("header-supplier"),
           dataIndex: "supplier",
           width: 200,
           renderer: NOC.render.Lookup("supplier"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -112,7 +112,7 @@ Ext.define("NOC.inv.channel.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
           autoFocus: true,
@@ -120,58 +120,58 @@ Ext.define("NOC.inv.channel.Application", {
         {
           name: "parent",
           xtype: "inv.channel.LookupField",
-          fieldLabel: __("Parent"),
+          fieldLabel: t("header-parent"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           name: "tech_domain",
           xtype: "inv.techdomain.LookupField",
-          fieldLabel: __("Tech Domain"),
+          fieldLabel: t("app-title-techdomain"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "controller",
           xtype: "textfield",
-          fieldLabel: __("Controller"),
+          fieldLabel: t("label-controller"),
           uiStyle: "medium",
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "discriminator",
           xtype: "textfield",
-          fieldLabel: __("Discriminator"),
+          fieldLabel: t("label-discriminator"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
           name: "supplier",
           xtype: "crm.supplier.LookupField",
-          fieldLabel: __("Supplier"),
+          fieldLabel: t("header-supplier"),
           allowBlank: true,
         },
         {
           name: "subscriber",
           xtype: "crm.subscriber.LookupField",
-          fieldLabel: __("Subscriber"),
+          fieldLabel: t("header-subscriber"),
           allowBlank: true,
         },
         {
           name: "labels",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           xtype: "labelfield",
           allowBlank: true,
           minWidth: 100,
@@ -181,19 +181,19 @@ Ext.define("NOC.inv.channel.Application", {
         },
         {
           name: "constraints",
-          fieldLabel: __("Constraints"),
+          fieldLabel: t("label-constraints"),
           xtype: "gridfield",
           columns: [
             {
-              text: __("Type"),
+              text: t("header-type"),
               dataIndex: "type",
               width: 100,
               renderer: function(v){
                 if(v === "i"){
-                  return __("Include");
+                  return t("label-include");
                 }
                 if(v === "e"){
-                  return __("Exclude");
+                  return t("label-exclude");
                 }
                 return "-";
               },
@@ -201,20 +201,20 @@ Ext.define("NOC.inv.channel.Application", {
                 xtype: "combobox",
                 minWidth: 200,
                 store: [
-                  ["i", __("Include")],
-                  ["e", __("Exclude")],
+                  ["i", t("label-include")],
+                  ["e", t("label-exclude")],
                 ],
               },
             },
             {
-              text: __("Strict"),
+              text: t("header-strict"),
               dataIndex: "strict",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Resource"),
+              text: t("header-resource"),
               dataIndex: "resource",
               flex: 1,
               editor: "textfield",
@@ -223,16 +223,16 @@ Ext.define("NOC.inv.channel.Application", {
         },
         {
           name: "params",
-          fieldLabel: __("Params"),
+          fieldLabel: t("label-params"),
           xtype: "gridfield",
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 100,
             },
             {
-              text: __("Value"),
+              text: t("header-value"),
               dataIndex: "value",
               flex: 1,
             },
@@ -242,14 +242,14 @@ Ext.define("NOC.inv.channel.Application", {
         {
           name: "effective_labels",
           xtype: "labeldisplay",
-          fieldLabel: __("Effective Labels"),
+          fieldLabel: t("Effective Labels"),
           allowBlank: true,
         },
         */
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -258,20 +258,20 @@ Ext.define("NOC.inv.channel.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -280,25 +280,25 @@ Ext.define("NOC.inv.channel.Application", {
       ],
       inlines: [
         {
-          title: __("Endpoints"),
+          title: t("nav-endpoint"),
           model: "NOC.inv.channel.EndpointModel",
           columns: [
             {
-              text: __("Resource"),
+              text: t("header-resource"),
               dataIndex: "resource",
               width: 200,
               editor: "textfield",
               renderer: NOC.render.Lookup("resource"),
             },
             {
-              text: __("Is Root"),
+              text: t("header-is-root"),
               dataIndex: "is_root",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Pair"),
+              text: t("header-pair"),
               dataIndex: "pair",
               width: 50,
               editor: {
@@ -307,7 +307,7 @@ Ext.define("NOC.inv.channel.Application", {
               },
             },
             {
-              text: __("Used by"),
+              text: t("header-used-by"),
               dataIndex: "used_by",
               flex: 1,
               renderer: function(v){
@@ -321,7 +321,7 @@ Ext.define("NOC.inv.channel.Application", {
               },
             },
             {
-              text: __("Constraints"),
+              text: t("label-constraints"),
               dataIndex: "constraints",
               flex: 1,
               renderer: function(v){
@@ -335,9 +335,9 @@ Ext.define("NOC.inv.channel.Application", {
       ],
       formToolbar: [
         {
-          text: __("Map"),
+          text: t("btn-map"),
           glyph: NOC.glyph.globe,
-          tooltip: __("Show Map"),
+          tooltip: t("btn-show-map"),
           scope: me,
           handler: me.onMap,
         },
@@ -348,25 +348,25 @@ Ext.define("NOC.inv.channel.Application", {
   //
   filters: [
     {
-      title: __("By Tech Domai"),
+      title: t("app-title-by-tech-domai"),
       name: "tech_domain",
       ftype: "lookup",
       lookup: "inv.techdomain",
     },
     {
-      title: __("By Project"),
+      title: t("app-title-by-project"),
       name: "project",
       ftype: "lookup",
       lookup: "project.project",
     },
     {
-      title: __("By Supplier"),
+      title: t("app-title-by-supplier"),
       name: "supplier",
       ftype: "lookup",
       lookup: "crm.supplier",
     },
     {
-      title: __("By Subscriber"),
+      title: t("app-title-by-subscriber"),
       name: "subscriber",
       ftype: "lookup",
       lookup: "crm.subscriber",

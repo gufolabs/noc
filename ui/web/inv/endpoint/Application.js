@@ -22,19 +22,19 @@ Ext.define("NOC.inv.endpoint.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Channel"),
+          text: t("header-channel"),
           dataIndex: "channel",
           width: 200,
           renderer: NOC.render.Lookup("channel"),
         },
         {
-          text: __("Resource"),
+          text: t("header-resource"),
           dataIndex: "resource",
           width: 100,
           renderer: NOC.render.Lookup("resource"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -43,42 +43,42 @@ Ext.define("NOC.inv.endpoint.Application", {
         {
           name: "channel",
           xtype: "inv.channel.LookupField",
-          fieldLabel: __("Channel"),
+          fieldLabel: t("header-channel"),
         },
         {
           name: "resource",
           xtype: "textfield",
-          fieldLabel: __("Resource"),
+          fieldLabel: t("header-resource"),
         },
         {
           name: "is_root",
           xtype: "checkbox",
-          fieldLabel: __("Is Root"),
+          fieldLabel: t("header-is-root"),
         },
         {
           name: "pair",
           xtype: "numberfield",
-          fieldLabel: __("Pair"),
+          fieldLabel: t("header-pair"),
           allowBlank: true,
         },
         {
           name: "used_by",
           xtype: "gridfield",
-          fieldLabel: __("Used by"),
+          fieldLabel: t("header-used-by"),
           columns: [
             {
-              text: __("Channel"),
+              text: t("header-channel"),
               dataIndex: "channel",
               width: 200,
               renderer: NOC.render.Lookup("channel"),
             },
             {
-              text: __("Discrimiator"),
+              text: t("header-discrimiator"),
               dataIndex: "discriminator",
               width: 200,
             },
             {
-              text: __("Direction"),
+              text: t("header-direction"),
               dataIndex: "direction",
               width: 100,
             },
@@ -87,15 +87,15 @@ Ext.define("NOC.inv.endpoint.Application", {
         {
           name: "constraints",
           xtype: "gridfield",
-          fieldLabel: __("Constraints"),
+          fieldLabel: t("label-constraints"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               width: 100,
             },
             {
-              text: __("Values"),
+              text: t("label-values"),
               dataIndex: "values",
               flex: 1,
               renderer: function(v){

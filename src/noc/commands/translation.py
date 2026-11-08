@@ -24,24 +24,16 @@ from noc.settings import LANGUAGES
 BABEL_CFG = b"""# Translation extraction config
 [python: **.py]
 
-[javascript: **.js]
-extract_messages = _, __
-
 [jinja2: **.j2]
 extensions=jinja2.ext.autoescape,jinja2.ext.with_
 """
 
 BABEL = "pybabel"
-POJSON = "pojson"
 
 
 class Command(BaseCommand):
     SERVICES = {
-        # "bi": {
-        #    "messages": ["services/bi/**.py", "services/bi/**.html.j2", "bi/models/**.py"],
-        #    "messages_js": ["ui/bi2/bi.js"],
-        # },
-        "login": {"messages": ["src/noc/services/login/**.py"], "messages_js": ["ui/login/**.js"]},
+        "login": {"messages": ["src/noc/services/login/**.py"]},
         "web": {
             "messages": [
                 "src/noc/services/web/apps/**.py",
@@ -49,7 +41,6 @@ class Command(BaseCommand):
                 "src/noc/services/web/cards/**.html.j2",
                 "src/noc/core/**.py",
             ],
-            "messages_js": ["ui/web/**.js"],
         },
     }
 
@@ -102,8 +93,6 @@ class Command(BaseCommand):
                         "-o",
                         pot,
                     ]
-                    if domain.endswith("_js"):
-                        args += ["-k", "__"]
                     for expr in self.SERVICES[svc][domain]:
                         if os.path.isfile(expr):
                             args.append(expr)
@@ -156,22 +145,13 @@ class Command(BaseCommand):
             for domain in self.SERVICES[svc]:
                 for lang in self.TRANSLATIONS:
                     po = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".po")
-                    if domain.endswith("_js"):
-                        jsp = Path("ui", svc, "translations")
-                        js = (jsp / lang).with_suffix(".json")
-                        if not os.path.isdir(jsp):
-                            os.makedirs(jsp)
-                        print(f"compiling catalog '{po}' to '{js}'", file=self.stdout)
-                        with open(js, "w") as fp:
-                            subprocess.check_call([POJSON, "-p", po], stdout=fp)
-                    else:
-                        mo = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".mo")
-                        subprocess.check_call([BABEL, "compile", "-i", str(po), "-o", str(mo)])
+                    mo = (t_dir / lang / "LC_MESSAGES" / domain).with_suffix(".mo")
+                    subprocess.check_call([BABEL, "compile", "-i", str(po), "-o", str(mo)])
 
     def handle_edit(self, service=None, language=None):
         pfx = Path("services", service[0], "translations", language[0], "LC_MESSAGES")
 
-        for po in ["messages", "messages_js"]:
+        for po in ["messages"]:
             path = (pfx / po).with_suffix(".po")
             subprocess.check_call(["open", str(path)])
 

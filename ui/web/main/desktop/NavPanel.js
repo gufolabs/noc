@@ -20,7 +20,7 @@ Ext.define("NOC.main.desktop.NavPanel", {
   singleExpand: false,
   lines: false,
   hideHeaders: true,
-  title: __("Navigation"),
+  title: t("app-title-navigation"),
   glyph: NOC.glyph.globe,
   store: null,
   header: {
@@ -51,7 +51,7 @@ Ext.define("NOC.main.desktop.NavPanel", {
         xtype: "searchfield",
         itemId: "filter",
         width: "100%",
-        emptyText: __("Search"),
+        emptyText: t("app-title-search"),
         scope: this,
         handler: this.onSearch,
         minChars: 2,
@@ -67,7 +67,7 @@ Ext.define("NOC.main.desktop.NavPanel", {
       }],
       tools: [{
         type: "up",
-        tooltip: __("Switch to breadcrumb view"),
+        tooltip: t("help-switch-to-breadcrumb-view"),
         cls: "noc-navigation-tool", 
         listeners: {
           scope: me,
@@ -171,7 +171,7 @@ Ext.define("NOC.main.desktop.NavPanel", {
       }
     }, 300, this);
     if(matchedNodes.length < 1){
-      NOC.info(__("No matches found"));
+      NOC.info(t("btn-no-matches-found"));
     }
   },
   //

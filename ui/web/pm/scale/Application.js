@@ -27,17 +27,17 @@ Ext.define("NOC.pm.scale.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 100,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 50,
         },
         {
-          text: __("Scale"),
+          text: t("app-title-scale"),
           dataIndex: "exp",
           flex: 1,
           renderer: function(value, metaData, record){
@@ -55,33 +55,33 @@ Ext.define("NOC.pm.scale.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "label",
           xtype: "textfield",
-          fieldLabel: __("Label"),
+          fieldLabel: t("header-label"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "base",
           xtype: "combobox",
-          fieldLabel: __("Base"),
+          fieldLabel: t("header-base"),
           store: [
             [2, "2"],
             [10, "10"],
@@ -91,15 +91,15 @@ Ext.define("NOC.pm.scale.Application", {
         {
           name: "exp",
           xtype: "numberfield",
-          fieldLabel: __("Exponent"),
+          fieldLabel: t("label-exponent"),
           allowBlank: false,
         },
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

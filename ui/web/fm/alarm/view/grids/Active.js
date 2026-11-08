@@ -30,7 +30,7 @@ Ext.define("NOC.fm.alarm.view.grids.Active", {
   bind: {
     selection: "{total.activeAlarmsSelected}",
   },
-  emptyText: __("No active alarms"),
+  emptyText: t("label-no-active-alarms"),
   initComponent: function(){
     var me = this;
     Ext.apply(me, {

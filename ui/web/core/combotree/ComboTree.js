@@ -151,7 +151,7 @@ Ext.define("NOC.core.combotree.ComboTree", {
       searchField = me.searchField = new Ext.create({
         xtype: "searchfield",
         width: "100%",
-        emptyText: __("pattern"),
+        emptyText: t("label-pattern"),
         enableKeyEvents: true,
         triggers: {
           clear: {
@@ -208,7 +208,7 @@ Ext.define("NOC.core.combotree.ComboTree", {
   loadChildren: function(id){
     var me = this;
     if(!me.treePicker.hidden){
-      me.treePicker.mask(__("loading ..."));
+      me.treePicker.mask(t("msg-loading-2"));
     }
     me.treeStore.load({
       params: {

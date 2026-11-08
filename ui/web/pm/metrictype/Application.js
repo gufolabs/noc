@@ -34,19 +34,19 @@ Ext.define("NOC.pm.metrictype.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 50,
           sortable: false,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -56,30 +56,30 @@ Ext.define("NOC.pm.metrictype.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           regex: /^[a-zA-Z0-9\-_ ]+( \| [a-zA-Z0-9\-_ ]+)*$/,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "scope",
           xtype: "pm.metricscope.LookupField",
-          fieldLabel: __("Scope"),
+          fieldLabel: t("header-scope"),
           allowBlank: false,
         },
         {
           name: "field_name",
           xtype: "textfield",
-          fieldLabel: __("Field Name"),
+          fieldLabel: t("label-field-name"),
           allowBlank: false,
           regex: /^[a-z][0-9a-z_]+$/,
           uiStyle: "medium",
@@ -87,7 +87,7 @@ Ext.define("NOC.pm.metrictype.Application", {
         {
           name: "field_type",
           xtype: "combobox",
-          fieldLabel: __("Field Type"),
+          fieldLabel: t("label-field-type"),
           allowBlank: false,
           store: [
             ["UInt8", "UInt8"],
@@ -106,8 +106,8 @@ Ext.define("NOC.pm.metrictype.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Measurement Units"),
-          tooltip: __("Set Measurements Unit for MetricType. Used for conversation value"),
+          title: t("nav-measurementunits"),
+          tooltip: t("help-set-measurements-unit-for-metrictype-used-for-conversation-value"),
           layout: "vbox",
           defaults: {
             labelAlign: "before",
@@ -124,19 +124,19 @@ Ext.define("NOC.pm.metrictype.Application", {
                 {
                   name: "units",
                   xtype: "pm.measurementunits.LookupField",
-                  fieldLabel: __("Metric Measurement Units"),
+                  fieldLabel: t("label-metric-measurement-units"),
                   labelWidth: 150,
                   allowBlank: true,
                 },
                 {
                   name: "scale",
                   xtype: "pm.scale.LookupField",
-                  fieldLabel: __("Metric Scale"),
+                  fieldLabel: t("label-metric-scale"),
                 },
                 {
                   name: "is_delta",
                   xtype: "checkbox",
-                  boxLabel: __("Delta Value"),
+                  boxLabel: t("label-delta-value"),
                 },
               ],
             },
@@ -147,9 +147,8 @@ Ext.define("NOC.pm.metrictype.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Compose Expression"),
-          tooltip: __("Compose expression for MetricType. Worked only SAME Scope" +
-                        "On expression use MetricType field_name as variable name"),
+          title: t("label-compose-expression"),
+          tooltip: t("help-compose-expression-for-metrictype-worked-only-same-scopeon-expre"),
           layout: "vbox",
           defaults: {
             labelAlign: "top",
@@ -167,8 +166,8 @@ Ext.define("NOC.pm.metrictype.Application", {
                 {
                   xtype: "core.tagfield",
                   url: "/pm/metrictype/lookup/",
-                  fieldLabel: __("Input Metric Type"),
-                  tooltip: __("Metric Type inputs to Expression"),
+                  fieldLabel: t("label-input-metric-type"),
+                  tooltip: t("help-metric-type-inputs-to-expression"),
                   name: "compose_inputs",
                   labelWidth: 150,
                   width: 300,
@@ -179,7 +178,7 @@ Ext.define("NOC.pm.metrictype.Application", {
                 {
                   name: "compose_expression",
                   xtype: "textarea",
-                  fieldLabel: __("Compose Expression"),
+                  fieldLabel: t("label-compose-expression"),
                   allowBlank: true,
                   labelWidth: 150,
                   uiStyle: "medium",
@@ -194,60 +193,60 @@ Ext.define("NOC.pm.metrictype.Application", {
         {
           name: "collector_mappings",
           xtype: "gridfield",
-          fieldLabel: __("Collector Mappings"),
+          fieldLabel: t("label-collector-mappings"),
           allowBlank: true,
           columns: [
             {
-              text: __("Collector"),
+              text: t("header-collector"),
               dataIndex: "collector",
               editor: "textfield",
               width: 100,
             },
             {
-              text: __("Field"),
+              text: t("btn-field"),
               dataIndex: "field",
               editor: "textfield",
               width: 100,
             },
             {
-              text: __("Allow Part."),
+              text: t("header-allow-part"),
               dataIndex: "allow_partial_match",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Sender"),
+              text: t("header-sender"),
               dataIndex: "sender",
               width: 150,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["any", __("Any")],
-                  ["noc_agent", __("NOC Agent")],
-                  ["zabbix", __("Zabbix")],
+                  ["any", t("msg-any")],
+                  ["noc_agent", t("msg-noc-agent")],
+                  ["zabbix", t("msg-zabbix")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "any": __("Any"),
-                "noc_agent": __("NOC Agent"),
-                "zabbix": __("Zabbix"),
+                "any": t("msg-any"),
+                "noc_agent": t("msg-noc-agent"),
+                "zabbix": t("msg-zabbix"),
               }),
             },
             {
-              text: __("Aliases"),
+              text: t("header-aliases"),
               dataIndex: "aliases",
               width: 300,
               editor: "stringlistfield",
             },
             {
-              text: __("Labels"),
+              text: t("header-labels"),
               dataIndex: "in_labels",
               width: 300,
               editor: "stringlistfield",
             },
             {
-              text: __("Measurment Unit"),
+              text: t("header-measurment-unit"),
               dataIndex: "unit",
               width: 200,
               editor: {
@@ -260,9 +259,9 @@ Ext.define("NOC.pm.metrictype.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

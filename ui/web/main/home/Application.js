@@ -18,7 +18,7 @@ Ext.define("NOC.main.home.Application", {
   doubleHeight: 420,
   listeners: {
     render: function(panel){
-      panel.up().mask(__("Loading..."));
+      panel.up().mask(t("msg-loading-3"));
       NOC.api.requestLegacy({
         method: "GET",
         url: "/main/home/dashboard/",
@@ -61,7 +61,7 @@ Ext.define("NOC.main.home.Application", {
           }
         },
         failure: function(){
-          NOC.error(__("Failed to get home data"));
+          NOC.error(t("msg-failed-to-get-home-data"));
         },
         callback: function(){
           panel.up().unmask();

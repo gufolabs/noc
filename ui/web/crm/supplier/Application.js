@@ -26,24 +26,24 @@ Ext.define("NOC.crm.supplier.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 200,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("State"),
+          text: t("header-state"),
           dataIndex: "state",
           width: 200,
           renderer: NOC.render.Lookup("state"),
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           width: 150,
           render: NOC.render.LabelField,
@@ -54,33 +54,33 @@ Ext.define("NOC.crm.supplier.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "profile",
           xtype: "crm.supplierprofile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "state",
           xtype: "statefield",
-          fieldLabel: __("State"),
+          fieldLabel: t("header-state"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "expand",
         },
         {
           name: "project",
           xtype: "project.project.LookupField",
-          fieldLabel: __("Project"),
+          fieldLabel: t("label-project"),
           allowBlank: true,
         },
         {
@@ -89,7 +89,7 @@ Ext.define("NOC.crm.supplier.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["crm.Supplier"],

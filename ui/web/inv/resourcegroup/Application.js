@@ -25,7 +25,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
     var me = this;
 
     me.cardButton = Ext.create("Ext.button.Button", {
-      text: __("Card"),
+      text: t("btn-card"),
       glyph: NOC.glyph.eye,
       scope: me,
       handler: me.onCard,
@@ -34,12 +34,12 @@ Ext.define("NOC.inv.resourcegroup.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
         },
         {
-          text: __("Service Expression"),
+          text: t("header-service-expression"),
           dataIndex: "service_expression",
           width: 400,
           renderer: function(v){
@@ -61,19 +61,19 @@ Ext.define("NOC.inv.resourcegroup.Application", {
           },
         },
         {
-          text: __("Parent"),
+          text: t("header-parent"),
           dataIndex: "parent",
           width: 300,
           renderer: NOC.render.Lookup("parent"),
         },
         {
-          text: __("Technology"),
+          text: t("header-technology"),
           dataIndex: "technology",
           width: 300,
           renderer: NOC.render.Lookup("technology"),
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           width: 300,
           flex: 1,
@@ -84,7 +84,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
@@ -92,7 +92,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
           name: "parent",
           xtype: "noc.core.combotree",
           restUrl: "/inv/resourcegroup/",
-          fieldLabel: __("Resource Group"),
+          fieldLabel: t("label-resource-group"),
           listWidth: 1,
           listAlign: "left",
           labelAlign: "left",
@@ -102,19 +102,19 @@ Ext.define("NOC.inv.resourcegroup.Application", {
         {
           name: "technology",
           xtype: "inv.technology.LookupField",
-          fieldLabel: __("Technology"),
+          fieldLabel: t("header-technology"),
           allowBlank: false,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "extra",
           query: {
@@ -125,13 +125,13 @@ Ext.define("NOC.inv.resourcegroup.Application", {
           name: "dynamic_service_labels",
           xtype: "listform",
           rows: 6,
-          fieldLabel: __("Dynamic Service Labels"),
+          fieldLabel: t("label-dynamic-service-labels"),
           labelAlign: "top",
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: false,
               isTree: true,
               pickerPosition: "down",
@@ -145,14 +145,14 @@ Ext.define("NOC.inv.resourcegroup.Application", {
         {
           name: "dynamic_client_labels",
           xtype: "listform",
-          fieldLabel: __("Dynamic Client Labels"),
+          fieldLabel: t("label-dynamic-client-labels"),
           rows: 6,
           labelAlign: "top",
           items: [
             {
               name: "labels",
               xtype: "labelfield",
-              fieldLabel: __("Match Labels"),
+              fieldLabel: t("label-match-labels"),
               allowBlank: false,
               isTree: true,
               pickerPosition: "down",
@@ -166,7 +166,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -175,20 +175,20 @@ Ext.define("NOC.inv.resourcegroup.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -203,19 +203,19 @@ Ext.define("NOC.inv.resourcegroup.Application", {
   },
   filters: [
     {
-      title: __("By Technology"),
+      title: t("app-title-by-technology"),
       name: "technology",
       ftype: "lookup",
       lookup: "inv.technology",
     },
     {
-      title: __("By ResourceGroup"),
+      title: t("app-title-by-resourcegroup"),
       name: "parent",
       ftype: "tree",
       lookup: "inv.resourcegroup",
     },
     {
-      title: __("By Dynamic Service Labels"),
+      title: t("app-title-by-dynamic-service-labels"),
       name: "dynamic_service_labels",
       ftype: "label",
       lookup: "main.label",
@@ -225,7 +225,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
       },
     },
     {
-      title: __("By Dynamic Client Labels"),
+      title: t("app-title-by-dynamic-client-labels"),
       name: "dynamic_client_labels",
       ftype: "label",
       lookup: "main.label",
@@ -239,7 +239,7 @@ Ext.define("NOC.inv.resourcegroup.Application", {
     icon: NOC.glyph.level_down,
     color: NOC.colors.level_down,
     filter: "parent",
-    tooltip: __("Parent filter"),
+    tooltip: t("help-parent-filter"),
   },
   //
   onCard: function(){

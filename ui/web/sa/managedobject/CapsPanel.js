@@ -16,7 +16,7 @@ Ext.define("NOC.sa.managedobject.CapsPanel", {
     var me = this;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -34,23 +34,23 @@ Ext.define("NOC.sa.managedobject.CapsPanel", {
       stateId: "sa.managedobject-caps",
       columns: [
         {
-          text: __("Capability"),
+          text: t("app-title-capability"),
           dataIndex: "capability",
           width: 300,
         },
         {
-          text: __("Value"),
+          text: t("header-value"),
           dataIndex: "value",
           width: 100,
           renderer: me.renderValue,
         },
         {
-          text: __("Source"),
+          text: t("header-source"),
           dataIndex: "source",
           width: 100,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -87,7 +87,7 @@ Ext.define("NOC.sa.managedobject.CapsPanel", {
         me.store.loadData(data);
       },
       failure: function(){
-        NOC.error(__("Failed to load data"));
+        NOC.error(t("msg-failed-to-load-data"));
       },
     });
   },

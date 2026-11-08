@@ -31,7 +31,7 @@ describe("ReplaceMethodsPlugin", () => {
           me.createMap(data);
         })
         .catch(() => {
-          NOC.error(__("Failed to load map resources"));
+          NOC.error(t("msg-failed-to-load-map-resources"));
         });
       },
     });

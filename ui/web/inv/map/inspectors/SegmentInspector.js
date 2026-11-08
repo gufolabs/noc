@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.SegmentInspector");
 
 Ext.define("NOC.inv.map.inspectors.SegmentInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("Segment Inspector"),
+  title: t("app-title-segment-inspector"),
   inspectorName: "segment",
 
   tpl: [

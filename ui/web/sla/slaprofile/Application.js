@@ -25,12 +25,12 @@ Ext.define("NOC.sla.slaprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100,
@@ -41,32 +41,32 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("WorkFlow"),
+          fieldLabel: t("label-workflow"),
           allowBlank: true,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "medium",
           query: {
@@ -83,7 +83,7 @@ Ext.define("NOC.sla.slaprofile.Application", {
             {
               name: "metrics_default_interval",
               xtype: "numberfield",
-              fieldLabel: __("Default Interval, sec"),
+              fieldLabel: t("label-default-interval-sec"),
               labelWidth: 200,
               allowBlank: false,
               uiStyle: "small",
@@ -105,7 +105,7 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           name: "metrics_interval_buckets",
           xtype: "numberfield",
-          fieldLabel: __("Metrics interval Buckets"),
+          fieldLabel: t("label-metrics-interval-buckets"),
           allowBlank: true,
           uiStyle: "medium",
           minValue: 0,
@@ -113,13 +113,13 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           name: "raise_alarm_to_target",
           xtype: "checkbox",
-          boxLabel: __("Raise Alarm to target"),
+          boxLabel: t("label-raise-alarm-to-target"),
           allowBlank: true,
         },
         {
           name: "provisioning_policy",
           xtype: "combobox",
-          fieldLabel: __("VLAN Provisioning Policy"),
+          fieldLabel: t("label-vlan-provisioning-policy"),
           allowBlank: false,
           uiStyle: "medium",
           value: "N",
@@ -132,7 +132,7 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           name: "test_packets_num",
           xtype: "numberfield",
-          fieldLabel: __("Number Packets on Test"),
+          fieldLabel: t("label-number-packets-on-test"),
           allowBlank: true,
           uiStyle: "medium",
           minValue: 1,
@@ -141,10 +141,10 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           name: "metrics",
           xtype: "gridfield",
-          fieldLabel: __("Metrics"),
+          fieldLabel: t("label-metrics"),
           columns: [
             {
-              text: __("Metric Type"),
+              text: t("app-title-metrictype"),
               dataIndex: "metric_type",
               width: 200,
               editor: {
@@ -156,14 +156,14 @@ Ext.define("NOC.sla.slaprofile.Application", {
               renderer: NOC.render.Lookup("metric_type"),
             },
             {
-              text: __("Stored"),
+              text: t("header-stored"),
               dataIndex: "is_stored",
               width: 50,
               renderer: NOC.render.Bool,
               editor: "checkbox",
             },
             {
-              text: __("Interval"),
+              text: t("label-interval"),
               dataIndex: "interval",
               editor: {
                 xtype: "numberfield",

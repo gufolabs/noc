@@ -10,36 +10,36 @@ Ext.define("NOC.sa.managedobject.scripts.ShowInterfaceStatusEx", {
   extend: "NOC.sa.managedobject.scripts.TablePreview",
   columns: [
     {
-      text: __("Interface"),
+      text: t("header-interface"),
       dataIndex: "interface",
       width: 120,
     },
     {
-      text: __("Oper"),
+      text: t("header-oper"),
       dataIndex: "oper_status",
       renderer: NOC.render.Bool,
       width: 50,
     },
     {
-      text: __("Admin"),
+      text: t("header-admin"),
       dataIndex: "admin_status",
       renderer: NOC.render.Bool,
       width: 50,
     },
     {
-      text: __("In (kbit/s)"),
+      text: t("header-in-kbit-s"),
       dataIndex: "in_speed",
       width: 70,
       align: "right",
     },
     {
-      text: __("Out (kbit/s)"),
+      text: t("header-out-kbit-s"),
       dataIndex: "out_speed",
       width: 70,
       align: "right",
     },
     {
-      text: __("Full Duplex"),
+      text: t("header-full-duplex"),
       dataIndex: "full_duplex",
       width: 70,
       renderer: NOC.render.Bool,

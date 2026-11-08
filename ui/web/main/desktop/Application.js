@@ -44,7 +44,7 @@ Ext.define("NOC.main.desktop.Application", {
     me.navStore = Ext.create("Ext.data.TreeStore", {
       root: {
         id: "root",
-        text: __("All"),
+        text: t("choice-all"),
         expanded: true,
         children: [{
           text: "[HIDDEN] Row height measurement node",
@@ -152,7 +152,7 @@ Ext.define("NOC.main.desktop.Application", {
         NOC.launch(app);
       }
     } else{ // Launch home application
-      this.launchTab("NOC.main.home.Application", __("Home"), {});
+      this.launchTab("NOC.main.home.Application", t("app-title-home"), {});
     }
   },
   // Show About screen
@@ -170,7 +170,7 @@ Ext.define("NOC.main.desktop.Application", {
         });
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
@@ -196,8 +196,8 @@ Ext.define("NOC.main.desktop.Application", {
       // Open tab
       this.workplacePanel.setActiveTab(this.launchedTabs[node]);
     } else{
-      if(title !== __("Home")){
-        NOC.msg.started(__("Starting \"{0}\""), title);
+      if(title !== t("app-title-home")){
+        NOC.msg.started(t("msg-starting-application", {application: title}));
       }
       // Launch new tab
       if(!params.app_id){
@@ -246,7 +246,7 @@ Ext.define("NOC.main.desktop.Application", {
         }
       },
       failure: function(){
-        NOC.error(__("Failed to launch application ") + " " + app);
+        NOC.error(t("msg-failed-to-launch-application-value0-2", {value0: app}));
       },
     });
   },
@@ -291,7 +291,7 @@ Ext.define("NOC.main.desktop.Application", {
         {
           xtype: "textfield",
           name: "old_password",
-          fieldLabel: __("Old Password"),
+          fieldLabel: t("label-old-password"),
           allowBlank: false,
           inputType: "password",
         },
@@ -299,7 +299,7 @@ Ext.define("NOC.main.desktop.Application", {
         {
           xtype: "textfield",
           name: "new_password",
-          fieldLabel: __("New Password"),
+          fieldLabel: t("label-new-password"),
           allowBlank: false,
           inputType: "password",
         },
@@ -307,7 +307,7 @@ Ext.define("NOC.main.desktop.Application", {
         {
           xtype: "textfield",
           name: "retype_password",
-          fieldLabel: __("Retype New Password"),
+          fieldLabel: t("label-retype-new-password"),
           allowBlank: false,
           inputType: "password",
           vtype: "password",
@@ -358,10 +358,10 @@ Ext.define("NOC.main.desktop.Application", {
         NOC.core.InactivityLogout.init(settings.idle_timeout);
         // permissions cache
         NOC.permissions$.next(this.getPermissions(settings.navigation.children));
-        NOC.info_icon("fa-sign-in", __("Logged in as ") + settings.username);
+        NOC.info_icon("fa-sign-in", t("msg-logged-in-as-value0", {value0: settings.username}));
       },
       failure: function(){
-        NOC.error(__("Failed to get user settings"));
+        NOC.error(t("msg-failed-to-get-user-settings"));
       },
     });
   },

@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.cross.CrossPanel");
 
 Ext.define("NOC.inv.inv.plugins.cross.CrossPanel", {
   extend: "Ext.panel.Panel",
-  title: __("Cross"),
+  title: t("app-title-cross"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -46,7 +46,7 @@ Ext.define("NOC.inv.inv.plugins.cross.CrossPanel", {
         me.preview(Ext.decode(response.responseText));
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },

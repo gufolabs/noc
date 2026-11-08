@@ -21,27 +21,27 @@ Ext.define("NOC.main.audittrail.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Timestamp"),
+          text: t("header-timestamp"),
           dataIndex: "timestamp",
           width: 160,
         },
         {
-          text: __("User"),
+          text: t("header-user"),
           dataIndex: "user",
           width: 100,
         },
         {
-          text: __("Model"),
+          text: t("header-model"),
           dataIndex: "model_id",
           width: 150,
         },
         {
-          text: __("Object"),
+          text: t("header-object"),
           dataIndex: "object_name",
           width: 250,
         },
         {
-          text: __("Operation"),
+          text: t("btn-operation"),
           dataIndex: "op",
           flex: 1,
           renderer: NOC.render.Choices({
@@ -55,44 +55,44 @@ Ext.define("NOC.main.audittrail.Application", {
         {
           name: "timestamp",
           xtype: "displayfield",
-          fieldLabel: __("Timestamp"),
+          fieldLabel: t("header-timestamp"),
         },
         {
           name: "user",
           xtype: "displayfield",
-          fieldLabel: __("User"),
+          fieldLabel: t("header-user"),
         },
         {
           name: "model_id",
           xtype: "displayfield",
-          fieldLabel: __("Model"),
+          fieldLabel: t("header-model"),
         },
         {
           name: "object_name",
           xtype: "displayfield",
-          fieldLabel: __("Object"),
+          fieldLabel: t("header-object"),
         },
         {
           name: "op",
           xtype: "displayfield",
-          fieldLabel: __("Operation"),
+          fieldLabel: t("btn-operation"),
         },
         {
           name: "changes",
           xtype: "displayfield",
-          fieldLabel: __("Changes"),
+          fieldLabel: t("msg-changes"),
           renderer: NOC.render.Table({
             columns: [
               {
-                text: __("Field"),
+                text: t("btn-field"),
                 dataIndex: "field",
               },
               {
-                text: __("Old"),
+                text: t("header-old"),
                 dataIndex: "old",
               },
               {
-                text: __("New"),
+                text: t("header-new"),
                 dataIndex: "new",
               },
             ],
@@ -106,21 +106,21 @@ Ext.define("NOC.main.audittrail.Application", {
   //
   filters: [
     {
-      title: __("Operation"),
+      title: t("btn-operation"),
       ftype: "lookup",
       name: "op",
       lookup: "local",
       valuesStore: {
         sorters: "label",
         data: [
-          {value: "C", label: __("Create")},
-          {value: "M", label: __("Modify")},
-          {value: "U", label: __("Update")},
-          {value: "D", label: __("Delete")},
+          {value: "C", label: t("app-title-create")},
+          {value: "M", label: t("msg-modify")},
+          {value: "U", label: t("status-update")},
+          {value: "D", label: t("btn-delete")},
         ],
       },
       // },{
-      //     title: __("By User"),
+      //     title: t("By User"),
       //     name: "user",
       //     ftype: "lookup",
       //     lookup: "main.user",

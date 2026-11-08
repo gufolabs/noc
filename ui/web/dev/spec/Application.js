@@ -32,18 +32,18 @@ Ext.define("NOC.dev.spec.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 150,
         },
         {
-          text: __("Quiz"),
+          text: t("app-title-quiz"),
           dataIndex: "quiz",
           width: 150,
           renderer: NOC.render.Lookup("quiz"),
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 150,
           renderer: NOC.render.Lookup("profile"),
@@ -54,26 +54,26 @@ Ext.define("NOC.dev.spec.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: false,
         },
         {
           name: "revision",
           xtype: "numberfield",
-          fieldLabel: __("Revision"),
+          fieldLabel: t("header-revision"),
           allowBlank: false,
           minValue: 1,
           uiStyle: "small",
@@ -81,37 +81,37 @@ Ext.define("NOC.dev.spec.Application", {
         {
           name: "quiz",
           xtype: "dev.quiz.LookupField",
-          fieldLabel: __("Quiz"),
+          fieldLabel: t("app-title-quiz"),
           allowBlank: false,
         },
         {
           name: "profile",
           xtype: "sa.profile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           allowBlank: false,
         },
         {
           name: "author",
           xtype: "textfield",
-          fieldLabel: __("Author"),
+          fieldLabel: t("label-author"),
           allowBlank: false,
         },
         {
           name: "changes",
           xtype: "listform",
-          fieldLabel: __("Changes"),
+          fieldLabel: t("msg-changes"),
           items: [
             {
               name: "date",
               xtype: "textfield",
-              fieldLabel: __("Date"),
+              fieldLabel: t("header-date"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "changes",
               xtype: "textarea",
-              fieldLabel: __("Changes"),
+              fieldLabel: t("msg-changes"),
               allowBlank: false,
               uiStyle: "extra",
             },
@@ -120,20 +120,20 @@ Ext.define("NOC.dev.spec.Application", {
         {
           name: "answers",
           xtype: "listform",
-          fieldLabel: __("Answers"),
+          fieldLabel: t("label-answers"),
           allowBlank: false,
           items: [
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "type",
               xtype: "combobox",
-              fieldLabel: __("Type"),
+              fieldLabel: t("header-type"),
               allowBlank: false,
               uiStyle: "medium",
               store: [
@@ -148,7 +148,7 @@ Ext.define("NOC.dev.spec.Application", {
             {
               name: "value",
               xtype: "textarea",
-              fieldLabel: __("Value"),
+              fieldLabel: t("header-value"),
               allowBlank: false,
               uiStyle: "extra",
             },
@@ -157,9 +157,9 @@ Ext.define("NOC.dev.spec.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

@@ -112,7 +112,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
       grid = listsView.lookupReference("fm-alarm-active"),
       store = grid.getStore(),
       filter = this.serialize(data);
-    grid.mask(__("Loading..."));
+    grid.mask(t("msg-loading-3"));
     store.getProxy().setExtraParams(filter);
     store.load({
       params: filter,
@@ -132,7 +132,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
       store = panel.getStore();
     // don't change, http params is string compare with int,  1 == "1"
     panel.setHidden(data == 0);
-    panel.mask(__("Loading..."));
+    panel.mask(t("msg-loading-3"));
     store.getProxy().setExtraParams(filter);
     store.load({
       params: filter,
@@ -422,7 +422,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
         }, this);
       },
       failure: function(){
-        NOC.error(__("Show Map Button : Failed to get data"));
+        NOC.error(t("msg-show-map-button-failed-to-get-data"));
       },
     });
   },
@@ -436,7 +436,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
         this.showMapHandler(Ext.decode(response.responseText).managed_object);
       },
       failure: function(){
-        NOC.error(__("Failed to get alarm"));
+        NOC.error(t("msg-failed-to-get-alarm"));
       },
     });
   },
@@ -448,7 +448,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     var panel = this.getView().down("[reference=fm-alarm-active]"),
       activeStore = panel.getStore();
 
-    panel.mask(__("Loading..."));
+    panel.mask(t("msg-loading-3"));
     activeStore.reload({
       callback: function(){
         panel.unmask();
@@ -517,10 +517,10 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
   },
   acknowledgeDialog: function(alarmId, isAck, successFn){
     var msg = new Ext.window.MessageBox().prompt(
-      __("Acknowledge"),
-      isAck ? __("Set alarm as unacknowledged") : __("Set alarm as acknowledged"),
+      t("msg-acknowledge"),
+      isAck ? t("msg-set-alarm-as-unacknowledged") : t("msg-set-alarm-as-acknowledged"),
       function(btn, text){
-        var msg = __("Failed to set acknowledgedun/acknowledged"),
+        var msg = t("msg-failed-to-set-acknowledgedun-acknowledged"),
           url = "/fm/alarm/" + alarmId + (isAck ? "/unacknowledge/" : "/acknowledge/");
         if(btn === "ok"){
           NOC.api.requestLegacy({
@@ -557,7 +557,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
 
   //   successFn = function(response){
   //   var data = Ext.decode(response.responseText),
-  //     msg = __("Failed to set acknowledgedun/acknowledged");
+  //     msg = t("Failed to set acknowledgedun/acknowledged");
   //   if(!data.status){
   //     Ext.MessageBox.show({
   //       title: "Error",
@@ -571,7 +571,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
 
   //   successFn = function(response){
   //   var data = Ext.decode(response.responseText),
-  //     msg = __("Failed to set acknowledgedun/acknowledged");
+  //     msg = t("Failed to set acknowledgedun/acknowledged");
   //   if(data.status){
   //     this.getViewModel().set("selected.ack_user", ackUser);
   //   } else{

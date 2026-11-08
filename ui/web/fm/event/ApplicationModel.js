@@ -15,7 +15,7 @@ Ext.define("NOC.fm.event.ApplicationModel", {
   },
   formulas: {
     eventsTotal: function(get){
-      return __("Total: ") + get("total");
+      return t("msg-total-value0-3", {value0: get("total")});
     },
   },
 });

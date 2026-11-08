@@ -17,11 +17,11 @@ Ext.define("NOC.inv.coverage.Application", {
   search: true,
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -30,53 +30,53 @@ Ext.define("NOC.inv.coverage.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
     },
   ],
   inlines: [
     {
-      title: __("Covered Buildings"),
+      title: t("app-title-covered-buildings"),
       model: "NOC.inv.coverage.BuildingModel",
       columns: [
         {
-          text: __("Pref."),
-          tooltip: __("Preference"),
+          text: t("header-pref-2"),
+          tooltip: t("label-preference"),
           dataIndex: "preference",
           width: 50,
           textAlign: "right",
         },
         {
-          text: __("Building"),
+          text: t("app-title-building"),
           dataIndex: "building",
           renderer: NOC.render.Lookup("building"),
           flex: 1,
         },
         {
-          text: __("Entrance"),
+          text: t("header-entrance"),
           dataIndex: "entrance",
           width: 100,
         },
       ],
     },
     {
-      title: __("Covered Objects"),
+      title: t("app-title-covered-objects"),
       model: "NOC.inv.coverage.ObjectModel",
       columns: [
         {
-          text: __("Pref."),
-          tooltip: __("Preference"),
+          text: t("header-pref-2"),
+          tooltip: t("label-preference"),
           dataIndex: "preference",
           width: 50,
           textAlign: "right",
         },
         {
-          text: __("Object"),
+          text: t("header-object"),
           dataIndex: "object",
           renderer: NOC.render.Lookup("object"),
           flex: 1,

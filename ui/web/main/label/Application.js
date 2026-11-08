@@ -50,7 +50,7 @@ Ext.define("NOC.main.label.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Label"),
+          text: t("header-label"),
           dataIndex: "name",
           width: 300,
           renderer: function(v, _x, item){
@@ -66,167 +66,167 @@ Ext.define("NOC.main.label.Application", {
           },
         },
         {
-          text: __("Protected"),
+          text: t("header-protected"),
           dataIndex: "is_protected",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 30,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
-          text: __("Allow"),
+          text: t("app-title-allow"),
           dataIndex: "enable_agent",
           flex: 1,
           renderer: function(_x, _y, item){
             let r = [];
             if(item.data.enable_agent){
-              r.push(__("Agent"));
+              r.push(t("app-title-agent"));
             }
             if(item.data.enable_service){
-              r.push(__("Service"));
+              r.push(t("header-service"));
             }
             if(item.data.enable_serviceprofile){
-              r.push(__("Service Profile"));
+              r.push(t("app-title-serviceprofile"));
             }
             if(item.data.enable_managedobject){
-              r.push(__("Managed Object"));
+              r.push(t("header-managed-object-62561c"));
             }
             if(item.data.enable_managedobjectprofile){
-              r.push(__("Managed Object Profile"));
+              r.push(t("app-title-managedobjectprofile"));
             }
             if(item.data.enable_administrativedomain){
-              r.push(__("Administrative Domain"));
+              r.push(t("header-administrative-domain-d113be"));
             }
             if(item.data.enable_authprofile){
-              r.push(__("Auth Profile"));
+              r.push(t("app-title-authprofile"));
             }
             if(item.data.enable_commandsnippet){
-              r.push(__("Command Snippet"));
+              r.push(t("msg-command-snippet"));
             }
             if(item.data.enable_allocationgroup){
-              r.push(__("Allocation Group"));
+              r.push(t("label-allocation-group"));
             }
             if(item.data.enable_networksegment){
-              r.push(__("Network Segment"));
+              r.push(t("app-title-networksegment"));
             }
             if(item.data.enable_object){
-              r.push(__("Object"));
+              r.push(t("header-object"));
             }
             if(item.data.enable_objectmodel){
-              r.push(__("Object Model"));
+              r.push(t("msg-object-model"));
             }
             if(item.data.enable_platform){
-              r.push(__("Platfrom"));
+              r.push(t("msg-platfrom"));
             }
             if(item.data.enable_resourcegroup){
-              r.push(__("Resource Group"));
+              r.push(t("label-resource-group"));
             }
             if(item.data.enable_sensorprofile){
-              r.push(__("Sensor Profile"));
+              r.push(t("msg-sensor-profile"));
             }
             if(item.data.enable_sensor){
-              r.push(__("Sensor"));
+              r.push(t("app-title-sensor"));
             }
             if(item.data.enable_interface){
-              r.push(__("Interface"));
+              r.push(t("header-interface"));
             }
             if(item.data.enable_subscriber){
-              r.push(__("Subscriber"));
+              r.push(t("header-subscriber"));
             }
             if(item.data.enable_supplier){
-              r.push(__("Supplier"));
+              r.push(t("header-supplier"));
             }
             if(item.data.enable_dnszone){
-              r.push(__("DNS Zone"));
+              r.push(t("app-title-dnszone"));
             }
             if(item.data.enable_dnszonerecord){
-              r.push(__("DNS Zone Record"));
+              r.push(t("msg-dns-zone-record"));
             }
             if(item.data.enable_division){
-              r.push(__("GIS Division"));
+              r.push(t("msg-gis-division"));
             }
             if(item.data.enable_kbentry){
-              r.push(__("KB Entry"));
+              r.push(t("msg-kb-entry"));
             }
             if(item.data.enable_ipaddress){
-              r.push(__("IP Address"));
+              r.push(t("label-ip-address"));
             }
             if(item.data.enable_addressprofile){
-              r.push(__("IP Address Profile"));
+              r.push(t("msg-ip-address-profile"));
             }
             if(item.data.enable_ipaddressrange){
-              r.push(__("IP Address Range"));
+              r.push(t("msg-ip-address-range"));
             }
             if(item.data.enable_ipprefix){
-              r.push(__("IP Prefix"));
+              r.push(t("msg-ip-prefix"));
             }
             if(item.data.enable_prefixprofile){
-              r.push(__("Prefix Profile"));
+              r.push(t("app-title-prefixprofile"));
             }
             if(item.data.enable_vrf){
-              r.push(__("VRF"));
+              r.push(t("header-vrf"));
             }
             if(item.data.enable_vrfgroup){
-              r.push(__("VRF Group"));
+              r.push(t("label-vrf-group"));
             }
             if(item.data.enable_asn){
-              r.push(__("AS"));
+              r.push(t("app-title-as"));
             }
             if(item.data.enable_assetpeer){
-              r.push(__("Asset Peer"));
+              r.push(t("msg-asset-peer"));
             }
             if(item.data.enable_peer){
-              r.push(__("Peer"));
+              r.push(t("header-peer"));
             }
             if(item.data.enable_vlan){
-              r.push(__("VLAN"));
+              r.push(t("app-title-vlan"));
             }
             if(item.data.enable_vlanprofile){
-              r.push(__("VLAN Profile"));
+              r.push(t("app-title-vlanprofile"));
             }
             if(item.data.enable_vpn){
-              r.push(__("VPN"));
+              r.push(t("app-title-vpn"));
             }
             if(item.data.enable_vpnprofile){
-              r.push(__("VPN Profile"));
+              r.push(t("msg-vpn-profile"));
             }
             if(item.data.enable_slaprobe){
-              r.push(__("SLA Probe"));
+              r.push(t("app-title-slaprobe"));
             }
             if(item.data.enable_slaprofile){
-              r.push(__("SLA Profile"));
+              r.push(t("app-title-slaprofile"));
             }
             if(item.data.enable_workflowstate){
-              r.push(__("Workflow State"));
+              r.push(t("msg-workflow-state"));
             }
             if(item.data.enable_firmwarepolicy){
-              r.push(__("Firmware Policy"));
+              r.push(t("app-title-firmwarepolicy"));
             }
             return r.join(", ");
           },
         },
         {
-          text: __("Expose"),
+          text: t("header-expose"),
           dataIndex: "expose_metric",
           flex: 1,
           renderer: function(_x, _y, item){
             let r = [];
             if(item.data.expose_metric){
-              r.push(__("Metric"));
+              r.push(t("header-metric"));
             }
             if(item.data.expose_datastream){
-              r.push(__("Datastream"));
+              r.push(t("msg-datastream"));
             }
             if(item.data.expose_alarm){
-              r.push(__("Alarm"));
+              r.push(t("app-title-alarm"));
             }
             if(item.data.expose_sa_object){
-              r.push(__("SA Object"));
+              r.push(t("msg-sa-object"));
             }
             return r.join(", ");
           },
@@ -236,32 +236,32 @@ Ext.define("NOC.main.label.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Label"),
+          fieldLabel: t("header-label"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
           allowBlank: true,
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
         },
         {
           name: "is_protected",
           xtype: "checkbox",
-          boxLabel: __("Protected"),
+          boxLabel: t("header-protected"),
           allowBlank: true,
         },
         {
           name: "propagate",
           xtype: "checkbox",
-          boxLabel: __("Propagate"),
+          boxLabel: t("msg-propagate"),
           allowBlank: true,
           bind: {
             disabled: "{!is_wildcard}",
@@ -273,25 +273,25 @@ Ext.define("NOC.main.label.Application", {
           bind: {
             value: "{is_wildcard}",
           },
-          boxLabel: __("Wildcard"),
+          boxLabel: t("header-wildcard"),
           hidden: true,
         },
         {
           name: "is_autogenerated",
           xtype: "checkbox",
-          boxLabel: __("Autogenerated"),
+          boxLabel: t("label-autogenerated"),
           disabled: true,
         },
         {
           name: "unique_value",
           xtype: "checkbox",
-          boxLabel: __("Unique Value"),
+          boxLabel: t("label-unique-value"),
           disabled: true,
         },
         {
           name: "is_builtin",
           xtype: "checkbox",
-          boxLabel: __("Is Builtin"),
+          boxLabel: t("header-is-builtin"),
           disabled: true,
           bind: {
             value: "{is_builtin}",
@@ -300,7 +300,7 @@ Ext.define("NOC.main.label.Application", {
         {
           name: "allow_auto_create",
           xtype: "checkbox",
-          boxLabel: __("Allow Auto Create"),
+          boxLabel: t("label-allow-auto-create"),
         },
         {
           name: "is_matching",
@@ -309,25 +309,25 @@ Ext.define("NOC.main.label.Application", {
             value: "{is_matching}",
             disabled: "{isEnableDisableRx}",
           },
-          boxLabel: __("Is Matching Label"),
+          boxLabel: t("label-is-matching-label"),
         },
         {
           name: "match_regex",
           xtype: "gridfield",
-          fieldLabel: __("Regex Label"),
+          fieldLabel: t("label-regex-label"),
           bind: {
             disabled: "{!is_matching}",
           },
           columns: [
             {
-              text: __("REGEX"),
+              text: t("header-regex"),
               dataIndex: "regexp",
               width: 300,
               editor: "textfield",
               allowBlank: false,
             },
             {
-              text: __("Multiline"),
+              text: t("header-multiline"),
               dataIndex: "flag_multiline",
               width: 50,
               checked: false,
@@ -335,7 +335,7 @@ Ext.define("NOC.main.label.Application", {
               editor: "checkbox",
             },
             {
-              text: __("DotALL"),
+              text: t("header-dotall"),
               dataIndex: "flag_dotall",
               width: 50,
               checked: false,
@@ -343,28 +343,28 @@ Ext.define("NOC.main.label.Application", {
               editor: "checkbox",
             },
             {
-              text: __("Regex Scope"),
+              text: t("header-regex-scope"),
               dataIndex: "scope",
               width: 200,
               allowBlank: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["managedobject_name", __("Managed Object Name")],
-                  ["managedobject_address", __("Managed Object Address")],
-                  ["managedobject_description", __("Managed Object Description")],
-                  ["interface_name", __("Interface Name")],
-                  ["interface_description", __("Interface Description")],
-                  ["sensor_local_id", __("Sensor Local ID")],
+                  ["managedobject_name", t("msg-managed-object-name")],
+                  ["managedobject_address", t("msg-managed-object-address")],
+                  ["managedobject_description", t("msg-managed-object-description")],
+                  ["interface_name", t("msg-interface-name")],
+                  ["interface_description", t("msg-interface-description")],
+                  ["sensor_local_id", t("msg-sensor-local-id")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "managedobject_name": __("Managed Object Name"),
-                "managedobject_address": __("Managed Object Address"),
-                "managedobject_description": __("Managed Object Description"),
-                "interface_name": __("Interface Name"),
-                "interface_description": __("Interface Description"),
-                "sensor_local_id": __("Sensor Local ID"),
+                "managedobject_name": t("msg-managed-object-name"),
+                "managedobject_address": t("msg-managed-object-address"),
+                "managedobject_description": t("msg-managed-object-description"),
+                "interface_name": t("msg-interface-name"),
+                "interface_description": t("msg-interface-description"),
+                "sensor_local_id": t("msg-sensor-local-id"),
               }),
             },
           ],
@@ -372,13 +372,13 @@ Ext.define("NOC.main.label.Application", {
         {
           name: "match_prefixfilter",
           xtype: "gridfield",
-          fieldLabel: __("Prefix Label"),
+          fieldLabel: t("label-prefix-label"),
           bind: {
             disabled: "{!is_matching}",
           },
           columns: [
             {
-              text: __("Prefix"),
+              text: t("header-prefix"),
               dataIndex: "prefix_table",
               editor: {
                 xtype: "main.prefixtable.LookupField",
@@ -388,7 +388,7 @@ Ext.define("NOC.main.label.Application", {
               width: 250,
             },
             {
-              text: __("Condition"),
+              text: t("label-condition"),
               dataIndex: "condition",
               width: 200,
               allowBlank: false,
@@ -396,30 +396,30 @@ Ext.define("NOC.main.label.Application", {
                 xtype: "combobox",
                 defaultValue: "any",
                 store: [
-                  ["all", __("ALL")],
-                  ["any", __("ANY")],
+                  ["all", t("msg-all")],
+                  ["any", t("msg-any-2")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "all": __("ALL"),
-                "any": __("ANY"),
+                "all": t("msg-all"),
+                "any": t("msg-any-2"),
               }),
             },
             {
-              text: __("Prefix Scope"),
+              text: t("header-prefix-scope"),
               dataIndex: "scope",
               width: 200,
               allowBlank: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["managedobject_address", __("Managed Object Address")],
-                  ["subinterface_ipv4_addresses", __("SubInterface IP Address")],
+                  ["managedobject_address", t("msg-managed-object-address")],
+                  ["subinterface_ipv4_addresses", t("msg-subinterface-ip-address")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "managedobject_address": __("Managed Object Address"),
-                "subinterface_ipv4_addresses": __("SubInterface IP Address"),
+                "managedobject_address": t("msg-managed-object-address"),
+                "subinterface_ipv4_addresses": t("msg-subinterface-ip-address"),
               }),
             },
           ],
@@ -427,13 +427,13 @@ Ext.define("NOC.main.label.Application", {
         {
           name: "match_vlanfilter",
           xtype: "gridfield",
-          fieldLabel: __("VLAN Label"),
+          fieldLabel: t("label-vlan-label"),
           bind: {
             disabled: "{!is_matching}",
           },
           columns: [
             {
-              text: __("VLAN Filter"),
+              text: t("app-title-vlanfilter"),
               dataIndex: "vlan_filter",
               width: 200,
               editor: {
@@ -443,7 +443,7 @@ Ext.define("NOC.main.label.Application", {
               renderer: NOC.render.Lookup("vlan_filter"),
             },
             {
-              text: __("Condition"),
+              text: t("label-condition"),
               dataIndex: "condition",
               width: 200,
               allowBlank: false,
@@ -451,30 +451,30 @@ Ext.define("NOC.main.label.Application", {
                 xtype: "combobox",
                 defaultValue: "any",
                 store: [
-                  ["all", __("ALL")],
-                  ["any", __("ANY")],
+                  ["all", t("msg-all")],
+                  ["any", t("msg-any-2")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "all": __("ALL"),
-                "any": __("ANY"),
+                "all": t("msg-all"),
+                "any": t("msg-any-2"),
               }),
             },
             {
-              text: __("Prefix Scope"),
+              text: t("header-prefix-scope"),
               dataIndex: "scope",
               width: 200,
               allowBlank: false,
               editor: {
                 xtype: "combobox",
                 store: [
-                  ["subinterface_tagged_vlans", __("SubInterface Tagged VLANs")],
-                  ["subinterface_untagged_vlan", __("SubInterface Untagged VLAN")],
+                  ["subinterface_tagged_vlans", t("msg-subinterface-tagged-vlans")],
+                  ["subinterface_untagged_vlan", t("msg-subinterface-untagged-vlan")],
                 ],
               },
               renderer: NOC.render.Choices({
-                "subinterface_tagged_vlans": __("SubInterface Tagged VLANs"),
-                "subinterface_untagged_vlan": __("SubInterface Untagged VLAN"),
+                "subinterface_tagged_vlans": t("msg-subinterface-tagged-vlans"),
+                "subinterface_untagged_vlan": t("msg-subinterface-untagged-vlan"),
               }),
             },
           ],
@@ -482,7 +482,7 @@ Ext.define("NOC.main.label.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Colors"),
+          title: t("app-title-colors"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -491,14 +491,14 @@ Ext.define("NOC.main.label.Application", {
             {
               name: "bg_color1",
               xtype: "colorfield",
-              fieldLabel: __("Background"),
+              fieldLabel: t("label-background"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "fg_color1",
               xtype: "colorfield",
-              fieldLabel: __("Foreground"),
+              fieldLabel: t("label-foreground"),
               allowBlank: false,
               uiStyle: "medium",
             },
@@ -507,7 +507,7 @@ Ext.define("NOC.main.label.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Scoped Value Colors"),
+          title: t("app-title-scoped-value-colors"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -516,14 +516,14 @@ Ext.define("NOC.main.label.Application", {
             {
               name: "bg_color2",
               xtype: "colorfield",
-              fieldLabel: __("Background"),
+              fieldLabel: t("label-background"),
               allowBlank: false,
               uiStyle: "medium",
             },
             {
               name: "fg_color2",
               xtype: "colorfield",
-              fieldLabel: __("Foreground"),
+              fieldLabel: t("label-foreground"),
               allowBlank: false,
               uiStyle: "medium",
             },
@@ -532,7 +532,7 @@ Ext.define("NOC.main.label.Application", {
         {
           name: "display_order",
           xtype: "numberfield",
-          fieldLabel: __("Display Order"),
+          fieldLabel: t("label-display-order"),
           uiStyle: "small",
           minValue: 0,
           allowBlank: false,
@@ -540,7 +540,7 @@ Ext.define("NOC.main.label.Application", {
         {
           xtype: "fieldset",
           layout: "vbox",
-          title: __("Enable"),
+          title: t("label-enable"),
           bind: {
             disabled: "{isEnableDisable}",
           },
@@ -552,7 +552,7 @@ Ext.define("NOC.main.label.Application", {
             {
               xtype: "fieldset",
               layout: "hbox",
-              title: __("ManagedObject"),
+              title: t("app-title-managedobject-2"),
               defaults: {
                 padding: 4,
                 labelAlign: "right",
@@ -561,12 +561,12 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_managedobject",
                   xtype: "checkbox",
-                  boxLabel: __("Managed Object"),
+                  boxLabel: t("header-managed-object-62561c"),
                 },
                 {
                   name: "enable_managedobjectprofile",
                   xtype: "checkbox",
-                  boxLabel: __("Managed Object Profile"),
+                  boxLabel: t("app-title-managedobjectprofile"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -574,7 +574,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_agent",
                   xtype: "checkbox",
-                  boxLabel: __("Agent"),
+                  boxLabel: t("app-title-agent"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -582,7 +582,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_firmwarepolicy",
                   xtype: "checkbox",
-                  boxLabel: __("Firmware Policy"),
+                  boxLabel: t("app-title-firmwarepolicy"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -590,7 +590,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_service",
                   xtype: "checkbox",
-                  boxLabel: __("Service"),
+                  boxLabel: t("header-service"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -598,7 +598,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_serviceprofile",
                   xtype: "checkbox",
-                  boxLabel: __("Service Profile"),
+                  boxLabel: t("app-title-serviceprofile"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -606,7 +606,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_slaprobe",
                   xtype: "checkbox",
-                  boxLabel: __("SLA Probe"),
+                  boxLabel: t("app-title-slaprobe"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -614,7 +614,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_slaprofile",
                   xtype: "checkbox",
-                  boxLabel: __("SLA Profile"),
+                  boxLabel: t("app-title-slaprofile"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -622,19 +622,19 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_interface",
                   xtype: "checkbox",
-                  boxLabel: __("Interface"),
+                  boxLabel: t("header-interface"),
                 },
                 {
                   name: "enable_alarm",
                   xtype: "checkbox",
-                  boxLabel: __("Alarm"),
+                  boxLabel: t("app-title-alarm"),
                 },
               ],
             },
             {
               xtype: "fieldset",
               layout: "hbox",
-              title: __("IP / DNS"),
+              title: t("app-title-ip-dns"),
               defaults: {
                 padding: 4,
                 labelAlign: "right",
@@ -646,69 +646,69 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_ipaddress",
                   xtype: "checkbox",
-                  boxLabel: __("IP Address"),
+                  boxLabel: t("label-ip-address"),
                 },
                 {
                   name: "enable_addressprofile",
                   xtype: "checkbox",
-                  boxLabel: __("IP Address Profile"),
+                  boxLabel: t("msg-ip-address-profile"),
                 },
                 {
                   name: "enable_ipaddressrange",
                   xtype: "checkbox",
-                  boxLabel: __("IP Address Range"),
+                  boxLabel: t("msg-ip-address-range"),
                 },
                 {
                   name: "enable_ipprefix",
                   xtype: "checkbox",
-                  boxLabel: __("IP Prefix"),
+                  boxLabel: t("msg-ip-prefix"),
                 },
                 {
                   name: "enable_prefixprofile",
                   xtype: "checkbox",
-                  boxLabel: __("Prefix Profile"),
+                  boxLabel: t("app-title-prefixprofile"),
                 },
                 {
                   name: "enable_vrf",
                   xtype: "checkbox",
-                  boxLabel: __("VRF"),
+                  boxLabel: t("header-vrf"),
                 },
                 {
                   name: "enable_vrfgroup",
                   xtype: "checkbox",
-                  boxLabel: __("VRF Group"),
+                  boxLabel: t("label-vrf-group"),
                 },
                 {
                   name: "enable_asn",
                   xtype: "checkbox",
-                  boxLabel: __("AS"),
+                  boxLabel: t("app-title-as"),
                 },
                 {
                   name: "enable_assetpeer",
                   xtype: "checkbox",
-                  boxLabel: __("Asset Peer"),
+                  boxLabel: t("msg-asset-peer"),
                 },
                 {
                   name: "enable_peer",
                   xtype: "checkbox",
-                  boxLabel: __("Peer"),
+                  boxLabel: t("header-peer"),
                 },
                 {
                   name: "enable_dnszone",
                   xtype: "checkbox",
-                  boxLabel: __("DNS Zone"),
+                  boxLabel: t("app-title-dnszone"),
                 },
                 {
                   name: "enable_dnszonerecord",
                   xtype: "checkbox",
-                  boxLabel: __("DNS Zone"),
+                  boxLabel: t("app-title-dnszone"),
                 },
               ],
             },
             {
               xtype: "fieldset",
               layout: "hbox",
-              title: __("Inventory"),
+              title: t("app-title-inv"),
               defaults: {
                 padding: 4,
                 labelAlign: "right",
@@ -717,7 +717,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_allocationgroup",
                   xtype: "checkbox",
-                  boxLabel: __("Allocation Group"),
+                  boxLabel: t("label-allocation-group"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -725,7 +725,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_networksegment",
                   xtype: "checkbox",
-                  boxLabel: __("Network Segment"),
+                  boxLabel: t("app-title-networksegment"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -733,7 +733,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_object",
                   xtype: "checkbox",
-                  boxLabel: __("Object"),
+                  boxLabel: t("header-object"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -741,7 +741,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_objectmodel",
                   xtype: "checkbox",
-                  boxLabel: __("Object Model"),
+                  boxLabel: t("msg-object-model"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -749,7 +749,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_platform",
                   xtype: "checkbox",
-                  boxLabel: __("Platform"),
+                  boxLabel: t("app-title-platform"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -757,7 +757,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_resourcegroup",
                   xtype: "checkbox",
-                  boxLabel: __("Resource Group"),
+                  boxLabel: t("label-resource-group"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -765,7 +765,7 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_sensorprofile",
                   xtype: "checkbox",
-                  boxLabel: __("Sensor Profile"),
+                  boxLabel: t("msg-sensor-profile"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -773,12 +773,12 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_sensor",
                   xtype: "checkbox",
-                  boxLabel: __("Sensor"),
+                  boxLabel: t("app-title-sensor"),
                 },
                 {
                   name: "enable_division",
                   xtype: "checkbox",
-                  boxLabel: __("GIS Division"),
+                  boxLabel: t("msg-gis-division"),
                   bind: {
                     disabled: "{is_matching}",
                   },
@@ -788,7 +788,7 @@ Ext.define("NOC.main.label.Application", {
             {
               xtype: "fieldset",
               layout: "hbox",
-              title: __("VC"),
+              title: t("app-title-vc"),
               defaults: {
                 padding: 4,
                 labelAlign: "right",
@@ -800,29 +800,29 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_vlan",
                   xtype: "checkbox",
-                  boxLabel: __("VLAN"),
+                  boxLabel: t("app-title-vlan"),
                 },
                 {
                   name: "enable_vlanprofile",
                   xtype: "checkbox",
-                  boxLabel: __("VLAN Profile"),
+                  boxLabel: t("app-title-vlanprofile"),
                 },
                 {
                   name: "enable_vpn",
                   xtype: "checkbox",
-                  boxLabel: __("VPN"),
+                  boxLabel: t("app-title-vpn"),
                 },
                 {
                   name: "enable_vpnprofile",
                   xtype: "checkbox",
-                  boxLabel: __("VPN Profile"),
+                  boxLabel: t("msg-vpn-profile"),
                 },
               ],
             },
             {
               xtype: "fieldset",
               layout: "hbox",
-              title: __("Other"),
+              title: t("header-other"),
               defaults: {
                 padding: 4,
                 labelAlign: "right",
@@ -834,37 +834,37 @@ Ext.define("NOC.main.label.Application", {
                 {
                   name: "enable_administrativedomain",
                   xtype: "checkbox",
-                  boxLabel: __("Administrative Domain"),
+                  boxLabel: t("header-administrative-domain-d113be"),
                 },
                 {
                   name: "enable_authprofile",
                   xtype: "checkbox",
-                  boxLabel: __("Auth Profile"),
+                  boxLabel: t("app-title-authprofile"),
                 },
                 {
                   name: "enable_commandsnippet",
                   xtype: "checkbox",
-                  boxLabel: __("Command Snippet"),
+                  boxLabel: t("msg-command-snippet"),
                 },
                 {
                   name: "enable_subscriber",
                   xtype: "checkbox",
-                  boxLabel: __("Subscriber"),
+                  boxLabel: t("header-subscriber"),
                 },
                 {
                   name: "enable_supplier",
                   xtype: "checkbox",
-                  boxLabel: __("Supplier"),
+                  boxLabel: t("header-supplier"),
                 },
                 {
                   name: "enable_kbentry",
                   xtype: "checkbox",
-                  boxLabel: __("KB Entry"),
+                  boxLabel: t("msg-kb-entry"),
                 },
                 {
                   name: "enable_workflowstate",
                   xtype: "checkbox",
-                  boxLabel: __("Workflow State"),
+                  boxLabel: t("msg-workflow-state"),
                 },
               ],
             },
@@ -873,7 +873,7 @@ Ext.define("NOC.main.label.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Expose"),
+          title: t("header-expose"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -882,29 +882,29 @@ Ext.define("NOC.main.label.Application", {
             {
               name: "expose_metric",
               xtype: "checkbox",
-              boxLabel: __("Metrics"),
+              boxLabel: t("label-metrics"),
             },
             {
               name: "expose_datastream",
               xtype: "checkbox",
-              boxLabel: __("Datastream"),
+              boxLabel: t("msg-datastream"),
             },
             {
               name: "expose_alarm",
               xtype: "checkbox",
-              boxLabel: __("Alarm"),
+              boxLabel: t("app-title-alarm"),
             },
             {
               name: "expose_sa_object",
               xtype: "checkbox",
-              boxLabel: __("Allowed Models"),
+              boxLabel: t("label-allowed-models"),
             },
           ],
         },
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -913,13 +913,13 @@ Ext.define("NOC.main.label.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -929,9 +929,9 @@ Ext.define("NOC.main.label.Application", {
 
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -950,17 +950,17 @@ Ext.define("NOC.main.label.Application", {
 
   filters: [
     {
-      title: __("Manual"),
+      title: t("app-title-manual"),
       name: "is_builtin_labels",
       ftype: "boolean",
     },
     {
-      title: __("Is Matching"),
+      title: t("app-title-is-matching"),
       name: "is_matching",
       ftype: "boolean",
     },
     {
-      title: __("Match"),
+      title: t("app-title-match"),
       name: "is_matched",
       ftype: "boolean",
     },

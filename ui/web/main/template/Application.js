@@ -30,24 +30,24 @@ Ext.define("NOC.main.template.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 120,
         },
         {
-          text: __("System"),
+          text: t("btn-system"),
           dataIndex: "is_system",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           renderer: NOC.render.Bool,
           width: 30,
         },
         {
-          text: __("Subject"),
+          text: t("header-subject"),
           dataIndex: "subject",
           flex: 1,
         },
@@ -60,7 +60,7 @@ Ext.define("NOC.main.template.Application", {
             {
               name: "name",
               xtype: "textfield",
-              fieldLabel: __("Name"),
+              fieldLabel: t("header-name"),
               allowBlank: false,
               uiStyle: "large",
             },
@@ -68,12 +68,12 @@ Ext.define("NOC.main.template.Application", {
               name: "uuid",
               xtype: "displayfield",
               style: "padding-left: 10px",
-              fieldLabel: __("UUID"),
+              fieldLabel: t("label-uuid"),
             },
             {
               name: "is_system",
               xtype: "checkbox",
-              boxLabel: __("System"),
+              boxLabel: t("btn-system"),
               disabled: true,
             },
           ],
@@ -81,14 +81,14 @@ Ext.define("NOC.main.template.Application", {
         {
           name: "message_type",
           xtype: "main.ref.messagetype.LookupField",
-          fieldLabel: __("Message Type"),
+          fieldLabel: t("header-message-type"),
           //labelAlign: "left",
           allowBlank: true,
         },
         {
           xtype: "core.combo",
           restUrl: "/main/ref/ulanguage/lookup/",
-          fieldLabel: __("Language"),
+          fieldLabel: t("header-language"),
           allowBlank: false,
           typeAhead: false,
           editable: false,
@@ -98,7 +98,7 @@ Ext.define("NOC.main.template.Application", {
         {
           name: "subject",
           xtype: "textareafield",
-          fieldLabel: __("Subject"),
+          fieldLabel: t("header-subject"),
           allowBlank: false,
           anchor: "100%",
           height: 100,
@@ -109,7 +109,7 @@ Ext.define("NOC.main.template.Application", {
         {
           name: "body",
           xtype: "textareafield",
-          fieldLabel: __("Body"),
+          fieldLabel: t("header-body"),
           allowBlank: true,
           anchor: "100%",
           height: 200,
@@ -120,9 +120,9 @@ Ext.define("NOC.main.template.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,

@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMPanel", {
     "NOC.inv.inv.plugins.opm.OPMDiagram",
     "NOC.inv.inv.plugins.opm.OPMRightPanel",
   ],
-  title: __("OPM"),
+  title: t("app-title-opm"),
   closable: false,
   controller: "opm",
   layout: "border",
@@ -39,8 +39,8 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMPanel", {
   tbar: [
     {
       xtype: "combobox",
-      fieldLabel: __("Groups"),
-      emptyText: __("Select group"),
+      fieldLabel: t("app-title-group"),
+      emptyText: t("label-select-group"),
       valueField: "value",
       displayField: "value",  
       bind: {
@@ -56,8 +56,8 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMPanel", {
     },
     {
       xtype: "combobox",
-      fieldLabel: __("Bands"),
-      emptyText: __("Select band"),
+      fieldLabel: t("label-bands"),
+      emptyText: t("label-select-band"),
       valueField: "value",
       displayField: "value",  
       bind: {
@@ -74,7 +74,7 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMPanel", {
     "->",
     {
       glyph: NOC.glyph.cog,
-      tooltip: __("Settings"),
+      tooltip: t("help-settings"),
       style: {
         pointerEvents: "all",
       },

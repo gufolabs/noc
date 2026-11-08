@@ -34,7 +34,7 @@ Ext.define("NOC.core.ModelApplication", {
 
   layout: "card",
   search: false,
-  searchPlaceholder: __("Search ..."),
+  searchPlaceholder: t("label-search"),
   searchTooltip: undefined,
   recordReload: false,
   filters: null,
@@ -42,10 +42,10 @@ Ext.define("NOC.core.ModelApplication", {
   formToolbar: [], // Additional form toolbar buttons
   currentRecord: null,
   appTitle: null,
-  createTitle: __("Create") + " {0}",
-  cloneTitle: __("Clone") + " {0}",
-  changeTitle: __("Edit") + " {0}",
-  groupChangeTitle: __("Edit") + " {0} {1}",
+  createTitle: "app-title-create-item",
+  cloneTitle: "app-title-clone-item",
+  changeTitle: "app-title-edit-item",
+  groupChangeTitle: "app-title-edit-items",
   rowClassField: undefined,
   actions: undefined,
   previewIcon: "icon_magnifier",
@@ -164,7 +164,7 @@ Ext.define("NOC.core.ModelApplication", {
     if(me.levelFilter){
       me.upButton = Ext.create("Ext.button.Button", {
         glyph: NOC.glyph.level_up,
-        tooltip: __("Level Up"),
+        tooltip: t("help-level-up"),
         scope: me,
         handler: me.onLevelUp,
       });
@@ -191,16 +191,16 @@ Ext.define("NOC.core.ModelApplication", {
 
     me.refreshButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Refresh"),
+      tooltip: t("help-refresh"),
       scope: me,
       handler: me.onRefresh,
     });
 
     me.createButton = Ext.create("Ext.button.Button", {
       itemId: "create",
-      text: __("Add"),
+      text: t("btn-add"),
       glyph: NOC.glyph.plus,
-      tooltip: __("Add new record"),
+      tooltip: t("help-add-new-record"),
       hasAccess: NOC.hasPermission("create"),
       scope: me,
       handler: me.onNewRecord,
@@ -208,9 +208,9 @@ Ext.define("NOC.core.ModelApplication", {
 
     me.exportButton = Ext.create("Ext.button.Button", {
       itemId: "export",
-      text: __("Export"),
+      text: t("btn-export"),
       glyph: NOC.glyph.arrow_down,
-      tooltip: __("Save screen"),
+      tooltip: t("help-save-screen"),
       scope: me,
       handler: function(){
         var date = "_" + Ext.Date.format(new Date(), "YmdHis"),
@@ -234,7 +234,7 @@ Ext.define("NOC.core.ModelApplication", {
       me.listHelpButton = Ext.create("Ext.button.Button", {
         itemId: "listHelp",
         glyph: NOC.glyph.question_circle,
-        tooltip: __("Application Help"),
+        tooltip: t("help-application-help"),
         scope: me,
         handler: NOC.helpOpener(me.listHelpId || me.helpId),
       });
@@ -248,7 +248,7 @@ Ext.define("NOC.core.ModelApplication", {
     if(me.filters){
       var fh = Ext.bind(me.onFilter, me),
         filters = [{
-          title: __("Favorites"),
+          title: t("app-title-favorites"),
           name: "fav_status",
           ftype: "favorites",
         }].concat(me.filters),
@@ -258,12 +258,12 @@ Ext.define("NOC.core.ModelApplication", {
         autoScroll: true,
         itemId: "filters",
         width: baseField.width + Ext.getScrollbarSize().width + 10,
-        title: __("Filter"),
+        title: t("app-title-reportfilter"),
         bodyPadding: 4,
         tools: [
           {
             type: "close",
-            tooltip: __("Reset filters"),
+            tooltip: t("help-reset-filters"),
             scope: me,
             handler: me.onResetFilters,
           },
@@ -316,7 +316,7 @@ Ext.define("NOC.core.ModelApplication", {
     var rowItems = [
       {
         glyph: NOC.glyph.star,
-        tooltip: __("Mark/Unmark"),
+        tooltip: t("help-mark-unmark"),
         scope: me,
         getColor: function(cls, meta, r){
           return r.get("fav_status") ? NOC.colors.starred : NOC.colors.unstarred;
@@ -328,7 +328,7 @@ Ext.define("NOC.core.ModelApplication", {
       rowItems.push({
         glyph: NOC.glyph.edit,
         color: NOC.colors.edit,
-        tooltip: __("Edit"),
+        tooltip: t("app-title-edit"),
         scope: me,
         isDisabled: function(){
           var me = this;
@@ -390,7 +390,7 @@ Ext.define("NOC.core.ModelApplication", {
         {
           glyph: NOC.glyph.search,
           color: NOC.colors.preview,
-          tooltip: __("Preview"),
+          tooltip: t("help-preview"),
           scope: me,
           handler: function(grid, rowIndex){
             var me = this;
@@ -418,7 +418,7 @@ Ext.define("NOC.core.ModelApplication", {
         {
           glyph: NOC.glyph.search,
           color: NOC.colors.preview,
-          tooltip: __("Preview"),
+          tooltip: t("help-preview"),
           scope: me,
           handler: function(grid, rowIndex){
             var me = this;
@@ -471,7 +471,7 @@ Ext.define("NOC.core.ModelApplication", {
     var gridPanel = Ext.create("Ext.grid.Panel", {
       itemId: "grid",
       store: me.store,
-      emptyText: __("No records"),
+      emptyText: t("label-no-records"),
       columns: [
         {
           xtype: "glyphactioncolumn",
@@ -481,7 +481,7 @@ Ext.define("NOC.core.ModelApplication", {
           stateId: "rowaction",
         },
         {
-          text: __("ID"),
+          text: t("header-id"),
           dataIndex: me.idField,
           hidden: true,
         },
@@ -523,8 +523,8 @@ Ext.define("NOC.core.ModelApplication", {
     //
     me.saveButton = Ext.create("Ext.button.Button", {
       itemId: "save",
-      text: __("Save"),
-      tooltip: __("Save changes"),
+      text: t("btn-save"),
+      tooltip: t("help-save-changes"),
       glyph: NOC.glyph.save,
       formBind: true,
       disabled: true,
@@ -533,8 +533,8 @@ Ext.define("NOC.core.ModelApplication", {
     });
     me.applyButton = Ext.create("Ext.button.Button", {
       itemId: "apply",
-      text: __("Apply"),
-      tooltip: __("Save changes and continue editing"),
+      text: t("btn-apply"),
+      tooltip: t("help-save-changes-and-continue-editing"),
       glyph: NOC.glyph.save,
       formBind: true,
       disabled: true,
@@ -544,8 +544,8 @@ Ext.define("NOC.core.ModelApplication", {
     //
     me.closeButton = Ext.create("Ext.button.Button", {
       itemId: "close",
-      text: __("Close"),
-      tooltip: __("Close without saving"),
+      text: t("btn-close"),
+      tooltip: t("help-close-without-saving"),
       glyph: NOC.glyph.arrow_left,
       scope: me,
       handler: me.onClose,
@@ -553,8 +553,8 @@ Ext.define("NOC.core.ModelApplication", {
     //
     me.resetButton = Ext.create("Ext.button.Button", {
       itemId: "reset",
-      text: __("Reset"),
-      tooltip: __("Reset to default values"),
+      text: t("btn-reset"),
+      tooltip: t("help-reset-to-default-values"),
       glyph: NOC.glyph.undo,
       disabled: true,
       scope: me,
@@ -563,8 +563,8 @@ Ext.define("NOC.core.ModelApplication", {
     //
     me.deleteButton = Ext.create("Ext.button.Button", {
       itemId: "delete",
-      text: __("Delete"),
-      tooltip: __("Delete object"),
+      text: t("btn-delete"),
+      tooltip: t("help-delete-object"),
       glyph: NOC.glyph.times,
       disabled: true,
       hasAccess: NOC.hasPermission("delete"),
@@ -574,8 +574,8 @@ Ext.define("NOC.core.ModelApplication", {
     //
     me.cloneButton = Ext.create("Ext.button.Button", {
       itemId: "clone",
-      text: __("Clone"),
-      tooltip: __("Copy existing values to a new object"),
+      text: t("btn-clone"),
+      tooltip: t("help-copy-existing-values-to-a-new-object"),
       glyph: NOC.glyph.copy,
       disabled: true,
       hasAccess: NOC.hasPermission("create"),
@@ -597,8 +597,8 @@ Ext.define("NOC.core.ModelApplication", {
     // Add View button
     if(me.onPreview){
       formToolbar.push({
-        text: __("View"),
-        tooltip: __("Preview"),
+        text: t("btn-view"),
+        tooltip: t("help-preview"),
         glyph: NOC.glyph.eye,
         // hasAccess:
         scope: me,
@@ -617,7 +617,7 @@ Ext.define("NOC.core.ModelApplication", {
       me.formHelpButton = Ext.create("Ext.button.Button", {
         itemId: "formHelp",
         glyph: NOC.glyph.question_circle,
-        tooltip: __("Form Help"),
+        tooltip: t("help-form-help"),
         scope: me,
         handler: NOC.helpOpener(me.formHelpId || me.helpId),
       },
@@ -788,7 +788,7 @@ Ext.define("NOC.core.ModelApplication", {
 
     if(!mv.isValid()){
       // @todo: Error report
-      NOC.error(__("Invalid data!"));
+      NOC.error(t("msg-invalid-data"));
       return;
     }
     // Normalize
@@ -842,7 +842,7 @@ Ext.define("NOC.core.ModelApplication", {
           this.store.setFilterParams(this.currentQuery);
           this.saveFilterToUrl(this.currentQuery);
         }
-        NOC.msg.complete(__("Saved"));
+        NOC.msg.complete(t("msg-saved-2"));
       },
       failure: function(response){
         var message = "Error saving record";
@@ -899,7 +899,7 @@ Ext.define("NOC.core.ModelApplication", {
           me.editRecord(Ext.create(this.model, data));
         },
         failure: function(){
-          NOC.error(__("Record reload error."));
+          NOC.error(t("msg-record-reload-error"));
         },
       });
     } else{
@@ -1037,7 +1037,7 @@ Ext.define("NOC.core.ModelApplication", {
           message = Ext.decode(response.responseText).message;
         } catch(err){
           console.error(err, response.responseText);
-          message = __("Internal error");
+          message = t("msg-internal-error");
         }
         NOC.error(message);
         me.unmask();
@@ -1153,7 +1153,7 @@ Ext.define("NOC.core.ModelApplication", {
   onSave: function(goToGrid){
     var me = this;
     if(!me.form.isValid()){
-      NOC.error(__("Error in data"));
+      NOC.error(t("msg-error-in-data"));
       return;
     }
     var v = me.getFormData();
@@ -1190,8 +1190,8 @@ Ext.define("NOC.core.ModelApplication", {
   onDelete: function(){
     var me = this;
     Ext.Msg.show({
-      title: __("Delete record?"),
-      msg: __("Do you wish to delete record? This operation cannot be undone!"),
+      title: t("app-title-delete-record"),
+      msg: t("msg-do-you-wish-to-delete-record-this-operation-cannot-be-undone"),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -1220,16 +1220,16 @@ Ext.define("NOC.core.ModelApplication", {
   // Set form title
   setFormTitle: function(tpl, itemId){
     var me = this,
-      t;
+      titleHtml;
     if(me.formTitle){
-      t = "<b>" + Ext.String.format(tpl, me.appTitle) + "</b>";
+      titleHtml = "<b>" + t(tpl, {name: me.appTitle}) + "</b>";
       if(itemId !== "NEW" && itemId !== "CLONE"){
         itemId = "<b>ID: </b>" + itemId + NOC.clipboardIcon(itemId);
       } else{
         itemId = "<b>" + itemId + "</b>";
       }
-      t += "<span style='float:right'>" + itemId + "</span>";
-      me.formTitle.update(t);
+      titleHtml += "<span style='float:right'>" + itemId + "</span>";
+      me.formTitle.update(titleHtml);
     }
   },
   //
@@ -1420,7 +1420,7 @@ Ext.define("NOC.core.ModelApplication", {
         me.reloadStore();
       },
       failure: function(){
-        NOC.error(__("Failed"));
+        NOC.error(t("msg-failed"));
       },
     });
   },
@@ -1437,12 +1437,12 @@ Ext.define("NOC.core.ModelApplication", {
         }],
         title: `${action.text} on ${records.length} records`,
         buttons: [{
-          text: __("Run"),
+          text: t("btn-run"),
           glyph: NOC.glyph.play,
           handler: function(){
             var form = w.items.first().getForm();
             if(!form.isValid()){
-              NOC.error(__("Error"));
+              NOC.error(t("header-error"));
               return;
             }
             var params = form.getValues();
@@ -1545,7 +1545,7 @@ Ext.define("NOC.core.ModelApplication", {
   onLoad: function(){
     var me = this,
       total = me.store.getTotalCount();
-    me.totalField.setText(__("Total: ") + total);
+    me.totalField.setText(t("msg-total-value0", {value0: total}));
     if(me.rendered){
       me.refreshButton.setDisabled(false);
     }
@@ -1653,7 +1653,7 @@ Ext.define("NOC.core.ModelApplication", {
                 clear: {
                   weight: 1,
                   cls: Ext.baseCSSPrefix + "form-clear-trigger",
-                  tooltip: __("to default value"),
+                  tooltip: t("help-to-default-value"),
                   hidden: true,
                   handler: me.toDefaultValueString,
                   scope: me,
@@ -1772,7 +1772,7 @@ Ext.define("NOC.core.ModelApplication", {
       };
 
     me.saveGroupButton = Ext.create("Ext.button.Button", {
-      text: __("Save"),
+      text: t("btn-save"),
       glyph: NOC.glyph.save,
       disabled: true,
       scope: me,
@@ -1807,7 +1807,7 @@ Ext.define("NOC.core.ModelApplication", {
           items: [
             me.saveGroupButton,
             {
-              text: __("Close"),
+              text: t("btn-close"),
               glyph: NOC.glyph.arrow_left,
               scope: me,
               handler: me.onGroupClose,
@@ -1826,7 +1826,7 @@ Ext.define("NOC.core.ModelApplication", {
     // Group edit
     if(me.hasGroupEdit){
       items.push({
-        text: __("Group Edit"),
+        text: t("nav-group-edit"),
         itemId: "group_edit",
         glyph: NOC.glyph.edit,
       });
@@ -1847,8 +1847,8 @@ Ext.define("NOC.core.ModelApplication", {
 
     me.actionMenu = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.download,
-      text: __("Group actions"),
-      tooltip: __("Group actions"),
+      text: t("btn-group-actions"),
+      tooltip: t("btn-group-actions"),
       hasAccess: NOC.hasPermission("update"),
       itemId: "action_menu",
       disabled: true,
@@ -1870,9 +1870,10 @@ Ext.define("NOC.core.ModelApplication", {
   showGroupEditForm: function(items){
     var me = this;
     me.groupEditItems = items;
-    me.groupFormTitle.update(Ext.String.format(
-      me.groupChangeTitle, items.length, me.appTitle,
-    ));
+    me.groupFormTitle.update(t(me.groupChangeTitle, {
+      count: items.length,
+      name: me.appTitle,
+    }));
     var selection = me.grid.getSelectionModel().getSelection();
     var r = Ext.clone(selection[0].data);
     for(var i = 1; i < selection.length; i++){
@@ -1957,7 +1958,7 @@ Ext.define("NOC.core.ModelApplication", {
       values.ids = me.groupEditItems;
       var message = `Do you wish to change ${values.ids.length} record(s): <br/><br/>${valuesTxt}<br/>This operation cannot be undone!`;
       Ext.Msg.show({
-        title: __("Change records?"),
+        title: t("app-title-change-records"),
         msg: message,
         buttons: Ext.Msg.YESNO,
         icon: Ext.window.MessageBox.QUESTION,
@@ -1970,12 +1971,12 @@ Ext.define("NOC.core.ModelApplication", {
               scope: me,
               jsonData: values,
               success: function(){
-                NOC.info(__("Records has been updated"));
+                NOC.info(t("msg-records-has-been-updated"));
                 me.showGrid();
                 me.reloadStore();
               },
               failure: function(){
-                NOC.error(__("Failed"));
+                NOC.error(t("msg-failed"));
               },
             });
           }
@@ -1988,7 +1989,7 @@ Ext.define("NOC.core.ModelApplication", {
   //
   clearTriggerToolTip: function(){
     var triggerEl = this.getTrigger("clear").el;
-    triggerEl.dom.setAttribute("data-qtip", __("to default value"));
+    triggerEl.dom.setAttribute("data-qtip", t("help-to-default-value"));
   },
   //
   onMetrics: function(record){
@@ -2064,7 +2065,7 @@ Ext.define("NOC.core.ModelApplication", {
   },
   checkStoreLoad: function(operation){
     if(operation.success === false){
-      var message = operation.getError() || __("Failed to load data");
+      var message = operation.getError() || t("msg-failed-to-load-data");
       if(Ext.isObject(message)){
         message = message.statusText;
       }
@@ -2072,7 +2073,7 @@ Ext.define("NOC.core.ModelApplication", {
       return
     }
     if(operation.getResponse().status >= 300){
-      NOC.error(__("HTTP status : ") + operation.getResponse().status);
+      NOC.error(t("msg-http-status-value0", {value0: operation.getResponse().status}));
     }
   },
 });

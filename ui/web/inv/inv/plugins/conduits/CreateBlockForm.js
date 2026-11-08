@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.inv.plugins.conduits.CreateBlockForm");
 
 Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
   extend: "Ext.Window",
-  title: __("Create Block"),
+  title: t("btn-create-block"),
   closable: true,
   layout: "fit",
   app: null,
@@ -23,7 +23,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
         {
           name: "count",
           xtype: "numberfield",
-          fieldLabel: __("Count"),
+          fieldLabel: t("header-count"),
           allowBlank: false,
           minValue: 1,
           value: 1,
@@ -31,7 +31,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
         {
           name: "w",
           xtype: "numberfield",
-          fieldLabel: __("Columns"),
+          fieldLabel: t("label-columns"),
           allowBlank: false,
           minValue: 1,
           value: 1,
@@ -39,7 +39,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
         {
           name: "d",
           xtype: "numberfield",
-          fieldLabel: __("Diameter (mm)"),
+          fieldLabel: t("label-diameter-mm"),
           value: 100,
           allowBlank: false,
           minValue: 1,
@@ -47,7 +47,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
         {
           name: "start",
           xtype: "numberfield",
-          fieldLabel: __("First Number"),
+          fieldLabel: t("label-first-number"),
           value: 1,
           allowBlank: false,
           minValue: 1,
@@ -55,14 +55,14 @@ Ext.define("NOC.inv.inv.plugins.conduits.CreateBlockForm", {
       ],
       buttons: [
         {
-          text: __("Create"),
+          text: t("app-title-create"),
           glyph: NOC.glyph.plus,
           formBind: true,
           scope: me,
           handler: me.onCreateBlock,
         },
         {
-          text: __("Close"),
+          text: t("btn-close"),
           glyph: NOC.glyph.times,
           scope: me,
           handler: me.onClose,

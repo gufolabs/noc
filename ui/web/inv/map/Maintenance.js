@@ -44,18 +44,18 @@ Ext.define("NOC.inv.map.Maintenance", {
             "padding-bottom": "10",
           },
           tpl: [
-            '<div style="padding-bottom: 5px">' + __("Add") + "&nbsp;<b>{mode}:</b><br/>" + "</div>",
+            '<div style="padding-bottom: 5px">' + t("btn-add") + "&nbsp;<b>{mode}:</b><br/>" + "</div>",
             '<tpl for="elements">',
             '<div style="padding-left: 20px">{object__label}</div>',
             "</tpl>",
-            '<div style="padding-top: 5px">' + __("to maintenance") + "</div>",
+            '<div style="padding-top: 5px">' + t("msg-to-maintenance") + "</div>",
           ],
           data: {mode: me.modeLabel, elements: me.noc.args[1]},
         },
         {
           xtype: "searchfield",
           itemId: "filterField",
-          fieldLabel: __("Filter"),
+          fieldLabel: t("app-title-reportfilter"),
           labelWidth: 50,
           width: "100%",
           triggers: {
@@ -72,7 +72,7 @@ Ext.define("NOC.inv.map.Maintenance", {
         {
           xtype: "checkboxfield",
           itemId: "isCompleted",
-          boxLabel: __("Only not Completed"),
+          boxLabel: t("label-only-not-completed"),
           name: "onlyNotCompleted",
           checked: true,
           listeners: {
@@ -82,7 +82,7 @@ Ext.define("NOC.inv.map.Maintenance", {
         {
           xtype: "component",
           itemId: "status",
-          tpl: __("Matching row:") + " {count}",
+          tpl: t("msg-matching-row") + " {count}",
           style: "margin-right:5px",
         },
       ],
@@ -97,7 +97,7 @@ Ext.define("NOC.inv.map.Maintenance", {
         showHeaderCheckbox: false,
       },
       viewConfig: {
-        emptyText: __("No matching"),
+        emptyText: t("label-no-matching"),
       },
       listeners: {
         scope: me,
@@ -105,23 +105,23 @@ Ext.define("NOC.inv.map.Maintenance", {
       },
       columns: [
         {
-          text: __("Type"),
+          text: t("header-type"),
           dataIndex: "type",
           width: 150,
           renderer: NOC.render.Lookup("type"),
         },
         {
-          text: __("Start"),
+          text: t("header-start"),
           dataIndex: "start",
           width: 120,
         },
         {
-          text: __("Stop"),
+          text: t("header-stop"),
           dataIndex: "stop",
           width: 120,
         },
         {
-          text: __("Subject"),
+          text: t("header-subject"),
           dataIndex: "subject",
           flex: 1,
         },
@@ -130,7 +130,7 @@ Ext.define("NOC.inv.map.Maintenance", {
     me.buttons = [{
       scope: me,
       handler: me.addToMaintenance,
-      text: __("Add ") + me.modeLabel,
+      text: t("msg-add-value0", {value0: me.modeLabel}),
     }];
     Ext.apply(me, {
       buttonAlign: "center",
@@ -147,7 +147,7 @@ Ext.define("NOC.inv.map.Maintenance", {
       selected = me.gridMaintenance.getSelection();
 
     if(selected.length === 0){
-      NOC.error(__("Your must select maintenance!"));
+      NOC.error(t("msg-your-must-select-maintenance"));
       return;
     }
     NOC.api.requestLegacy({
@@ -183,7 +183,7 @@ Ext.define("NOC.inv.map.Maintenance", {
         me.dockMaintenance.down("#status").update({count: data.length});
       },
       failure: function(){
-        NOC.msg.failed(__("Failed to load data"))
+        NOC.msg.failed(t("msg-failed-to-load-data"))
       },
     });
   },

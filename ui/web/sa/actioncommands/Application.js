@@ -34,24 +34,24 @@ Ext.define("NOC.sa.actioncommands.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 300,
         },
         {
-          text: __("Builtin"),
+          text: t("header-builtin"),
           dataIndex: "is_builtin",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Profile"),
+          text: t("header-profile"),
           dataIndex: "profile",
           width: 100,
           renderer: NOC.render.Lookup("profile"),
         },
         {
-          text: __("Preference"),
+          text: t("label-preference"),
           dataIndex: "preference",
           width: 100,
           align: "right",
@@ -62,54 +62,54 @@ Ext.define("NOC.sa.actioncommands.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "large",
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "action",
           xtype: "sa.action.LookupField",
-          fieldLabel: __("Action"),
+          fieldLabel: t("app-title-action"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           uiStyle: "extra",
         },
         {
           name: "profile",
           xtype: "sa.profile.LookupField",
-          fieldLabel: __("Profile"),
+          fieldLabel: t("header-profile"),
           uiStyle: "medium",
           allowBlank: false,
         },
         {
           name: "config_mode",
           xtype: "checkbox",
-          boxLabel: __("Config. Mode"),
+          boxLabel: t("label-config-mode"),
         },
         {
           name: "exit_scope_commands",
           xtype: "textfield",
-          fieldLabel: __("Exit Scope Commands"),
+          fieldLabel: t("label-exit-scope-commands"),
           uiStyle: "medium",
         },
         {
           name: "disable_when_change",
           xtype: "combobox",
-          fieldLabel: __("Disable When Change"),
+          fieldLabel: t("label-disable-when-change"),
           store: [
-            ["N", __("Nothing")],
-            ["O", __("Out-of-Scope")],
-            ["I", __("Inner-of-Scope")],
+            ["N", t("msg-nothing")],
+            ["O", t("msg-out-of-scope")],
+            ["I", t("msg-inner-of-scope")],
           ],
           value: "new",
           uiStyle: "medium",
@@ -117,27 +117,27 @@ Ext.define("NOC.sa.actioncommands.Application", {
         {
           name: "preference",
           xtype: "numberfield",
-          fieldLabel: __("Preference"),
+          fieldLabel: t("label-preference"),
           allowBlank: true,
         },
         {
           name: "timeout",
           xtype: "numberfield",
-          fieldLabel: __("Timeout"),
+          fieldLabel: t("label-timeout"),
           allowBlank: true,
         },
         {
           name: "match",
           xtype: "gridfield",
-          fieldLabel: __("Match"),
+          fieldLabel: t("app-title-match"),
           columns: [
             {
-              text: __("Platform (Regex)"),
+              text: t("header-platform-regex"),
               dataIndex: "platform_re",
               editor: "textfield",
             },
             {
-              text: __("Version (Regex)"),
+              text: t("header-version-regex"),
               dataIndex: "version_re",
               editor: "textfield",
             },
@@ -146,31 +146,31 @@ Ext.define("NOC.sa.actioncommands.Application", {
         {
           name: "scopes",
           xtype: "gridfield",
-          fieldLabel: __("Scopes"),
+          fieldLabel: t("label-scopes"),
           columns: [
             {
-              text: __("Scope"),
+              text: t("header-scope"),
               dataIndex: "scope",
               sortable: false,
               editor: "textfield",
               width: 100,
             },
             {
-              text: __("Enter Scope"),
+              text: t("header-enter-scope"),
               dataIndex: "enter_scope",
               sortable: false,
               editor: "checkbox",
               width: 70,
             },
             {
-              text: __("Command"),
+              text: t("header-command"),
               dataIndex: "command",
               sortable: false,
               editor: "textfield",
               width: 200,
             },
             {
-              text: __("Exit Command"),
+              text: t("header-exit-command"),
               dataIndex: "exit_command",
               sortable: false,
               editor: "textfield",
@@ -181,7 +181,7 @@ Ext.define("NOC.sa.actioncommands.Application", {
         {
           name: "commands",
           xtype: "textarea",
-          fieldLabel: __("Commands"),
+          fieldLabel: t("label-commands"),
           allowBlank: false,
           grow: true,
           growMin: 100, // Minimum height when growing
@@ -191,19 +191,19 @@ Ext.define("NOC.sa.actioncommands.Application", {
           name: "test_cases",
           xtype: "listform",
           rows: 3,
-          fieldLabel: __("Test cases"),
+          fieldLabel: t("label-test-cases"),
           labelAlign: "top",
           items: [
             {
               xtype: "textarea",
               name: "output",
               width: 900,
-              fieldLabel: __("Output"),
+              fieldLabel: t("header-output"),
             },
             {
               xtype: "jsonfield",
               name: "context",
-              fieldLabel: __("Context"),
+              fieldLabel: t("label-context"),
               width: 500,
               editor: "jsonfield",
               renderer: NOC.render.JSON,
@@ -213,9 +213,9 @@ Ext.define("NOC.sa.actioncommands.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
@@ -228,13 +228,13 @@ Ext.define("NOC.sa.actioncommands.Application", {
 
   filters: [
     {
-      title: __("By SA Profile"),
+      title: t("app-title-by-sa-profile"),
       name: "profile",
       ftype: "lookup",
       lookup: "sa.profile",
     },
     {
-      title: __("By Action"),
+      title: t("app-title-by-action"),
       name: "action",
       ftype: "lookup",
       lookup: "sa.action",

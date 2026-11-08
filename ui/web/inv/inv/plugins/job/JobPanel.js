@@ -12,7 +12,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
     "NOC.inv.inv.plugins.job.JobModel",
     "NOC.inv.inv.plugins.job.JobController",
   ],
-  title: __("Jobs"),
+  title: t("app-title-job"),
   closable: false,
   layout: "fit",
   scrollable: false,
@@ -27,13 +27,13 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
   tbar: [
     {
       glyph: NOC.glyph.refresh,
-      tooltip: __("Reload"),
+      tooltip: t("btn-reload"),
       handler: "onReload",
     },
     {
       xtype: "textfield",
       itemId: "searchText",
-      emptyText: __("Search..."),
+      emptyText: t("btn-search"),
       width: 400,
       bind: {
         value: "{searchText}",
@@ -78,7 +78,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
         paddingRight: "20px",
       },
       bind: {
-        html: __("Total") + ": {totalCount}",
+        html: t("header-total") + ": {totalCount}",
       },
     },
   ],
@@ -88,7 +88,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
       border: false,
       stateful: true,
       stateId: "inv.inv-job-grid",
-      emptyText: __("No jobs"),
+      emptyText: t("label-no-jobs"),
       store: {
         model: "NOC.inv.inv.plugins.job.JobModel",
         data: [],
@@ -104,35 +104,35 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
           items: [
             {
               glyph: NOC.glyph.eye,
-              tooltip: __("View"),
+              tooltip: t("btn-view"),
               handler: "onViewJob",
             },
           ],
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 2,
         },
         {
-          text: __("Created At"),
+          text: t("btn-created-at"),
           dataIndex: "created_at",
           width: 175,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Completed At"),
+          text: t("btn-completed-at"),
           dataIndex: "completed_at",
           width: 175,
           renderer: NOC.render.DateTime,
         },
         {
-          text: __("Status"),
+          text: t("header-status"),
           dataIndex: "status",
           width: 135,
           renderer: NOC.render.JobStatus,
@@ -156,7 +156,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
       vm = me.getViewModel(),
       records = data.data || [],
       maskComponent = me.up("[appId=inv.inv]").maskComponent,
-      messageId = maskComponent.show("processing", "jobs"),
+      messageId = maskComponent.show("processing", {name: "jobs"}),
       store = this.down("grid").getStore();
     vm.set("currentId", objectId);
     if(!Ext.isEmpty(store)){

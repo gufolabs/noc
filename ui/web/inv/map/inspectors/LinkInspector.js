@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.inspectors.LinkInspector");
 
 Ext.define("NOC.inv.map.inspectors.LinkInspector", {
   extend: "NOC.inv.map.inspectors.Inspector",
-  title: __("Link Inspector"),
+  title: t("app-title-link-inspector"),
   inspectorName: "link",
 
   tpl: [
@@ -38,7 +38,7 @@ Ext.define("NOC.inv.map.inspectors.LinkInspector", {
     this.dashboardButton = Ext.create("Ext.button.Button", {
       glyph: NOC.glyph.line_chart,
       scope: this,
-      tooltip: __("Show dashboard"),
+      tooltip: t("btn-show-dashboard-2"),
       handler: this.onDashboard,
       disabled: true,
     });

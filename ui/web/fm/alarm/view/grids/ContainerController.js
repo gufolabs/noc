@@ -47,7 +47,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     activeGrid.getStore().removeListener("load", this.onLoad);
   },
   onBeforeLoad: function(){
-    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
+    this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", t("msg-loading-4")));
   },
   onLoad: function(){
     var vm, app = this.getView().up("[itemId=fm-alarm]");
@@ -56,7 +56,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     }
     vm = app.getViewModel();
     if(!vm.get("containerDisabled")){
-      this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+      this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, t("msg-online")));
     }
   },
   onSoundToggle: function(self, pressed){
@@ -70,7 +70,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     vm = app.getViewModel();
     vm.set("containerDisabled", value);
     if(value){
-      this.getViewModel().set("icon", this.generateIcon(true, "stop-circle-o", "grey", __("suspend")));
+      this.getViewModel().set("icon", this.generateIcon(true, "stop-circle-o", "grey", t("msg-suspend")));
     }
   },
   onAutoReloadToggle: function(self, pressed){
@@ -287,8 +287,8 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       }),
       view = this.getView(),
       msg = new Ext.window.MessageBox().prompt(
-        __("Set group comment"),
-        __("Please enter comment"),
+        t("msg-set-group-comment"),
+        t("msg-please-enter-comment"),
         function(btn, text){
           if(btn === "ok"){
             NOC.api.requestLegacy({
@@ -300,10 +300,10 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
               },
               success: function(){
                 view.up("[itemId=fm-alarm]").getController().reloadActiveGrid();
-                NOC.info(__("Success"));
+                NOC.info(t("msg-success"));
               },
               failure: function(){
-                NOC.error(__("Failed to save group comment"));
+                NOC.error(t("msg-failed-to-save-group-comment"));
               },
             });
           }
@@ -327,13 +327,13 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       success: function(response){
         var data = Ext.decode(response.responseText);
         if(data.status){
-          NOC.info(__("Escalated"));
+          NOC.info(t("msg-escalated"));
         } else{
-          NOC.error(__("Escalate failed : ") + (Object.hasOwn(data, "error") ? data.error : "unknowns error!"));
+          NOC.error(t("msg-escalate-failed-value0-2", {value0: Object.hasOwn(data, "error") ? data.error : "unknowns error!"}));
         }
       },
       failure: function(){
-        NOC.error(__("Escalate failed"));
+        NOC.error(t("msg-escalate-failed-2"));
       },
     });
   },
@@ -350,7 +350,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       }),
       args = {
         direct_objects: objects,
-        subject: __("created from alarms list at ") + Ext.Date.format(new Date(), "d.m.Y H:i P"),
+        subject: t("msg-created-from-alarms-list-at-value0", {value0: Ext.Date.format(new Date(), "d.m.Y H:i P")}),
         contacts: NOC.email ? NOC.email : NOC.username,
         start_date: Ext.Date.format(new Date(), "d.m.Y"),
         start_time: Ext.Date.format(new Date(), "H:i"),
@@ -407,13 +407,13 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
         var data = Ext.decode(response.responseText);
         if(data.status){
           this.getView().up("[itemId=fm-alarm]").getController().reloadActiveGrid();
-          NOC.info(__("Success"));
+          NOC.info(t("msg-success"));
         } else{
-          NOC.error(__("Failed to " + action + " favorites"));
+          NOC.error(t("msg-failed-to-update-favorites", {action: action === "set" ? "add" : "remove"}));
         }
       },
       failure: function(){
-        NOC.error(__("Failed to " + action + " favorites"));
+        NOC.error(t("msg-failed-to-update-favorites", {action: action === "set" ? "add" : "remove"}));
       },
     });
   },

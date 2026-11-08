@@ -22,7 +22,7 @@ Ext.define("NOC.aaa.user.Application", {
       {
         xtype: "button",
         itemId: "password-update",
-        text: __("Set password"),
+        text: t("btn-set-password"),
         margin: "0 0 0 5",
         scope: me,
         handler: me.updatePassword,
@@ -31,39 +31,39 @@ Ext.define("NOC.aaa.user.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Username"),
+          text: t("header-username"),
           dataIndex: "username",
           width: 110,
         },
         {
-          text: __("e-mail Address"),
+          text: t("header-e-mail-address"),
           dataIndex: "email",
           width: 150,
         },
         {
-          text: __("First Name"),
+          text: t("header-first-name"),
           dataIndex: "first_name",
           width: 100,
         },
         {
-          text: __("Last Name"),
+          text: t("header-last-name"),
           dataIndex: "last_name",
           width: 100,
         },
         {
-          text: __("Active"),
+          text: t("header-active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 50,
         },
         {
-          text: __("Superuser"),
+          text: t("header-superuser"),
           dataIndex: "is_superuser",
           renderer: NOC.render.Bool,
           width: 50,
         },
         {
-          text: __("Last Login"),
+          text: t("header-last-login"),
           dataIndex: "last_login",
           renderer: NOC.render.DateTime,
           flex: 1,
@@ -73,7 +73,7 @@ Ext.define("NOC.aaa.user.Application", {
         {
           name: "username",
           xtype: "textfield",
-          fieldLabel: __("Username"),
+          fieldLabel: t("header-username"),
           autoFocus: true,
           allowBlank: false,
           uiStyle: "large",
@@ -82,7 +82,7 @@ Ext.define("NOC.aaa.user.Application", {
         {
           name: "email",
           xtype: "textfield",
-          fieldLabel: __("e-mail Address"),
+          fieldLabel: t("header-e-mail-address"),
           vtype: "email",
           allowBlank: true,
           uiStyle: "large",
@@ -90,33 +90,33 @@ Ext.define("NOC.aaa.user.Application", {
         {
           name: "first_name",
           xtype: "textfield",
-          fieldLabel: __("First Name"),
+          fieldLabel: t("header-first-name"),
           allowBlank: true,
           uiStyle: "large",
         },
         {
           name: "last_name",
           xtype: "textfield",
-          fieldLabel: __("Last Name"),
+          fieldLabel: t("header-last-name"),
           allowBlank: true,
           uiStyle: "large",
         },
         {
           name: "is_active",
           xtype: "checkboxfield",
-          fieldLabel: __("Active"),
+          fieldLabel: t("header-active"),
           allowBlank: false,
         },
         {
           name: "is_superuser",
           xtype: "checkboxfield",
-          fieldLabel: __("Superuser status"),
+          fieldLabel: t("label-superuser-status"),
           allowBlank: true,
         },
         {
           xtype: "fieldcontainer",
           itemId: "password",
-          fieldLabel: __("Password"),
+          fieldLabel: t("label-password"),
           layout: "hbox",
           items: [
             {
@@ -140,16 +140,16 @@ Ext.define("NOC.aaa.user.Application", {
         },
         {
           xtype: "fieldcontainer",
-          fieldLabel: __("Groups"),
+          fieldLabel: t("app-title-group"),
           items: [
             {
               xtype: "multiselector",
               name: "groups",
-              title: __("Selected Groups"),
+              title: t("app-title-selected-groups"),
               fieldName: "label",
               viewConfig: {
                 deferEmptyText: false,
-                emptyText: __("No group selected"),
+                emptyText: t("label-no-group-selected"),
               },
 
               search: {
@@ -180,7 +180,7 @@ Ext.define("NOC.aaa.user.Application", {
         },
         {
           xtype: "fieldcontainer",
-          fieldLabel: __("User Permissions"),
+          fieldLabel: t("label-user-permissions"),
           allowBlank: true,
           items: [
             {
@@ -192,14 +192,14 @@ Ext.define("NOC.aaa.user.Application", {
         {
           name: "last_login",
           xtype: "displayfield",
-          fieldLabel: __("Last Login"),
+          fieldLabel: t("header-last-login"),
           allowBlank: true,
           renderer: NOC.render.DateTime,
         },
         {
           name: "date_joined",
           xtype: "displayfield",
-          fieldLabel: __("Date of joined"),
+          fieldLabel: t("label-date-of-joined"),
           allowBlank: true,
           renderer: NOC.render.DateTime,
         },
@@ -209,19 +209,19 @@ Ext.define("NOC.aaa.user.Application", {
   },
   filters: [
     {
-      title: __("Active"),
+      title: t("header-active"),
       name: "is_active",
       ftype: "boolean",
     },
     {
-      title: __("Superuser"),
+      title: t("header-superuser"),
       name: "is_superuser",
       ftype: "boolean",
     },
   ],
   updatePassword: function(){
     var me = this,
-      errMsg = __("Password mismatch"),
+      errMsg = t("msg-password-mismatch"),
       passwordFieldset = me.down("[itemId=password]"),
       passwdField = me.form.findField("password"),
       passwd1Field = me.form.findField("password1");
@@ -239,11 +239,11 @@ Ext.define("NOC.aaa.user.Application", {
           }
         },
         failure: function(){
-          NOC.error(__("Failed to set password"));
+          NOC.error(t("msg-failed-to-set-password"));
         },
       });
     } else if(!passwdField.getValue().length){
-      errMsg = __("Password empty");
+      errMsg = t("msg-password-empty");
       passwdField.markInvalid(errMsg);
       passwd1Field.markInvalid(errMsg);
     } else{
@@ -292,12 +292,12 @@ Ext.define("NOC.aaa.user.Application", {
         me.newRecord({permissions: data.permissions});
       },
       failure: function(){
-        NOC.error(__("Failed to get data"));
+        NOC.error(t("msg-failed-to-get-data"));
       },
     });
   },
   onReset: function(){
-    var me = this, msg = __("Reset");
+    var me = this, msg = t("btn-reset");
     me.mask(msg);
     Ext.TaskManager.start({
       run: function(){
@@ -313,7 +313,7 @@ Ext.define("NOC.aaa.user.Application", {
   },
   usernameValidator: function(value){
     var tn = value.match(/^[\w.@+-]+$/, ""),
-      errMsg = __("Invalid username");
+      errMsg = t("msg-invalid-username");
     return tn ? true : errMsg;
   },
 });

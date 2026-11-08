@@ -70,7 +70,7 @@ Ext.define("NOC.core.TreePanel", {
       xtype: "searchfield",
       itemId: "filter",
       width: "95%",
-      emptyText: __("pattern"),
+      emptyText: t("label-pattern"),
       flex: 1,
 
       enableKeyEvents: true,
@@ -132,7 +132,7 @@ Ext.define("NOC.core.TreePanel", {
         selType: "checkboxmodel",
         showHeaderCheckbox: false,
       },
-      emptyText: __("empty list"),
+      emptyText: t("label-empty-list"),
       store: this.listStore,
       columns: [{
         dataIndex: "label",

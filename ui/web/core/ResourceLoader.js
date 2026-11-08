@@ -14,7 +14,7 @@
 //     me.createMap(data);
 // })
 // .catch((error) => {
-//     NOC.error(__('Failed to load map resources'));
+//     NOC.error(t('Failed to load map resources'));
 // });
 // load several resources
 // NOC.core.ResourceLoader.load([
@@ -27,7 +27,7 @@
 //     me.createMap(data);
 // })
 // .catch(error => {
-//     NOC.error(__('Failed to load map resources'));
+//     NOC.error(t('Failed to load map resources'));
 // });
 
 console.debug("Defining NOC.core.ResourceLoader");

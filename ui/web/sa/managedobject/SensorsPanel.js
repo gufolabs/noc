@@ -25,7 +25,7 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
     me.currentObject = null;
 
     me.refreshButton = Ext.create("Ext.button.Button", {
-      text: __("Refresh"),
+      text: t("help-refresh"),
       glyph: NOC.glyph.refresh,
       scope: me,
       handler: me.onRefresh,
@@ -56,16 +56,16 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
           store: me.sensorsStore,
           columns: [
             {
-              text: __("Local ID"),
+              text: t("header-local-id-2"),
               dataIndex: "local_id",
             },
             {
-              text: __("Description"),
+              text: t("label-description"),
               dataIndex: "label",
               width: 250,
             },
             {
-              text: __("Profile"),
+              text: t("header-profile"),
               dataIndex: "profile",
               renderer: NOC.render.Lookup("profile"),
               editor: {
@@ -75,40 +75,40 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
               },
             },
             {
-              text: __("Labels"),
+              text: t("header-labels"),
               dataIndex: "labels",
               renderer: NOC.render.LabelField,
               editor: "labelfield",
               width: 200,
             },
             {
-              text: __("Units"),
+              text: t("btn-units"),
               dataIndex: "units",
               renderer: NOC.render.Lookup("units"),
             },
             {
-              text: __("State"),
+              text: t("header-state"),
               dataIndex: "state",
               renderer: NOC.render.Lookup("state"),
               width: 200,
             },
             {
-              text: __("Last Seen"),
+              text: t("header-last-seen-20c226"),
               dataIndex: "last_seen",
               renderer: NOC.render.DateTime,
               width: 200,
             },
             {
-              text: __("SNMP OID"),
+              text: t("header-snmp-oid"),
               dataIndex: "snmp_oid",
               width: 200,
             },
             {
-              text: __("IPMI ID"),
+              text: t("btn-ipmi-id"),
               dataIndex: "ipmi_id",
             },
             {
-              text: __("Modbus Register"),
+              text: t("header-modbus-register"),
               dataIndex: "modbus_register",
             },
           ],
@@ -139,7 +139,7 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    me.setTitle(`${record.get("name")} ${__("Sensors")}`);
+    me.setTitle(`${record.get("name")} ${t("label-sensors")}`);
     NOC.api.requestLegacy({
       url: "/inv/sensor/?managed_object=" + record.get("id"),
       method: "GET",
@@ -151,7 +151,7 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
         me.sensorsStore.loadData(data || []);
       },
       failure: function(request){
-        NOC.error(__("Failed to load data") + ": " + request.statusText);
+        NOC.error(t("msg-failed-to-load-data-value0", {value0: request.statusText}));
       },
     });
   },
@@ -189,10 +189,10 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
       scope: me,
       success: function(){
         me.onRefresh();
-        NOC.info(__("Saved"));
+        NOC.info(t("msg-saved-2"));
       },
       failure: function(){
-        NOC.error(__("Failed to set data"));
+        NOC.error(t("msg-failed-to-set-data"));
       },
     });
   },

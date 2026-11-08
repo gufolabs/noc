@@ -1,6 +1,7 @@
 import type {Plugin} from "esbuild";
 import * as fs from "fs";
 import * as path from "path";
+import {parse} from "yaml";
 import type {Language} from "../builders/BaseBuilder.ts";
 
 interface LanguagePluginOptions {
@@ -14,7 +15,7 @@ interface LanguagePluginOptions {
 
 export class LanguagePlugin{
   private readonly options: LanguagePluginOptions;
-  private readonly translationsDir = "web/translations";
+  private readonly catalogDir = path.resolve(process.cwd(), "../src/noc/i18n");
   private readonly localeDir = "web/locale";
   
   constructor(options: LanguagePluginOptions){
@@ -30,10 +31,11 @@ export class LanguagePlugin{
           namespace: "locale",
         }));
         build.onLoad({filter: /.*/, namespace: "locale"}, (args) => {
-          const lang = args.path.split("-")[1];
+          const lang = args.path.slice("locale-".length);
           return {
             contents: this.generateLocaleContent(lang),
             loader: "js",
+            resolveDir: process.cwd(),
           };
         });
       },
@@ -46,41 +48,41 @@ export class LanguagePlugin{
     }
   }
 
-  private logError(error: Error, context?: string): void{
-    console.error(
-      "[LanguagePlugin] Error" + (context ? ` in ${context}` : ""),
-    );
-    console.error(error);
-  }
+  private loadTranslations(lang: string): Record<string, string>{
+    const loadCatalog = (language: string): Record<string, string> => {
+      const filePath = path.join(this.catalogDir, `${language}.yml`);
+      const catalog: unknown = parse(fs.readFileSync(filePath, "utf8"));
+      if(typeof catalog !== "object" || catalog === null || Array.isArray(catalog)){
+        throw new TypeError(`Invalid translation catalog: ${filePath}`);
+      }
+      const entries = Object.entries(catalog);
+      if(entries.some(([key, value]) => typeof key !== "string" || typeof value !== "string")){
+        throw new TypeError(`Translation catalog must contain string keys and values: ${filePath}`);
+      }
+      return Object.fromEntries(entries) as Record<string, string>;
+    };
 
-  private translateFiles(root: string, languagesDir: string, language: string): string{
-    return path.join(root,languagesDir, `${language}.json`);
+    return {
+      ...loadCatalog("en"),
+      ...(lang === "en" ? {} : loadCatalog(lang)),
+    };
   }
 
   private generateLocaleContent(lang: string): string{
-    try{
-      const projectRoot = path.resolve(process.cwd());
-      const translationPath = this.translateFiles(projectRoot, this.translationsDir, lang);
-      const gettextTemplatePath = path.join(projectRoot, this.localeDir, "gettext.js");
-      const templateContent = fs.readFileSync(gettextTemplatePath, "utf8");
-      const extLocalePath = path.join(projectRoot, this.localeDir, `${lang}/ext-locale-${lang}.js`);
-      const extLocale = fs.readFileSync(extLocalePath, "utf8") || "" + "\n";
+    const projectRoot = path.resolve(process.cwd());
+    const templatePath = path.join(projectRoot, this.localeDir, "gettext.js");
+    const templateContent = fs.readFileSync(templatePath, "utf8");
+    const extLocalePath = path.join(
+      projectRoot,
+      this.localeDir,
+      `${lang}/ext-locale-${lang}.js`,
+    );
+    const extLocale = fs.readFileSync(extLocalePath, "utf8");
+    const translations = this.loadTranslations(lang);
+    const formatLocale = lang.replaceAll("_", "-");
 
-      let translations = {};
-      if(fs.existsSync(translationPath)){
-        const translationContent = fs.readFileSync(translationPath, "utf8");
-        translations = JSON.parse(translationContent);
-        translations = Object.entries(translations).reduce((acc: Record<string, any>, [key, value]: [string, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-          acc[key] = Array.isArray(value) ? value[1] || "" : value;
-          return acc;
-        }, {});
-      }
-      return extLocale + templateContent
-        .replace(/{locale}/g, lang)
-        .replace(/"{translations}"/g, JSON.stringify(translations));
-    } catch(error){
-      this.logError(error as Error, `Failed to generate locale content for ${lang}`);
-      return "";
-    }
+    return extLocale + templateContent
+      .replaceAll('"{locale}"', JSON.stringify(formatLocale))
+      .replaceAll("{translations}", JSON.stringify(translations));
   }
 }

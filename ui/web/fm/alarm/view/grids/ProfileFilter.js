@@ -113,7 +113,7 @@ Ext.define("NOC.fm.alarm.view.grids.ProfileFilter", {
         xtype: "actioncolumn",
         width: 20,
         items: [{
-          tooltip: __("Reset values"),
+          tooltip: t("help-reset-values"),
           iconCls: "x-fa fa-times-circle",
           handler: function(view, rowIndex, colIndex, item, e, record){
             var store = view.getStore(),

@@ -25,18 +25,18 @@ Ext.define("NOC.crm.supplierprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 150,
           renderer: NOC.render.Lookup("workflow"),
         },
         {
-          text: __("Labels"),
+          text: t("header-labels"),
           dataIndex: "labels",
           width: 150,
           render: NOC.render.LabelField,
@@ -47,27 +47,27 @@ Ext.define("NOC.crm.supplierprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "expand",
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           name: "style",
           xtype: "main.style.LookupField",
-          fieldLabel: __("Style"),
+          fieldLabel: t("app-title-style"),
           allowBlank: true,
         },
         {
@@ -76,7 +76,7 @@ Ext.define("NOC.crm.supplierprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           query: {
             "allow_models": ["crm.SupplierProfile"],

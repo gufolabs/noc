@@ -16,17 +16,17 @@ Ext.define("NOC.main.style.Application", {
   rowClassField: "row_class",
   columns: [
     {
-      text: __("Name"),
+      text: t("header-name"),
       dataIndex: "name",
     },
     {
-      text: __("Active"),
+      text: t("header-active"),
       dataIndex: "is_active",
       renderer: NOC.render.Bool,
       width: 50,
     },
     {
-      text: __("Description"),
+      text: t("label-description"),
       dataIndex: "description",
       flex: 1,
     },
@@ -35,24 +35,24 @@ Ext.define("NOC.main.style.Application", {
     {
       name: "name",
       xtype: "textfield",
-      fieldLabel: __("Name"),
+      fieldLabel: t("header-name"),
       allowBlank: false,
     },
     {
       name: "is_active",
       xtype: "checkboxfield",
-      boxLabel: __("Is Active"),
+      boxLabel: t("header-is-active"),
       allowBlank: false,
     },
     {
       name: "description",
       xtype: "textarea",
-      fieldLabel: __("Description"),
+      fieldLabel: t("label-description"),
       allowBlank: true,
     },
     {
       xtype: "fieldset",
-      title: __("Colors"),
+      title: t("app-title-colors"),
       layout: "hbox",
       defaults: {
         xtype: "colorfield",
@@ -64,16 +64,16 @@ Ext.define("NOC.main.style.Application", {
       items: [
         {
           name: "font_color",
-          fieldLabel: __("Font"),
+          fieldLabel: t("label-font"),
         },
         {
           name: "background_color",
-          fieldLabel: __("Background"),
+          fieldLabel: t("label-background"),
         },
       ]},
     {
       xtype: "fieldset",
-      title: __("Style"),
+      title: t("app-title-style"),
       layout: "hbox",
       defaults: {
         margin: "0 8 0 0",
@@ -83,23 +83,23 @@ Ext.define("NOC.main.style.Application", {
         {
           name: "bold",
           xtype: "checkboxfield",
-          boxLabel: __("Bold"),
+          boxLabel: t("label-bold"),
         },
         {
           name: "italic",
           xtype: "checkboxfield",
-          boxLabel: __("Italic"),
+          boxLabel: t("label-italic"),
         },
         {
           name: "underlined",
           xtype: "checkboxfield",
-          boxLabel: __("Underlined"),
+          boxLabel: t("label-underlined"),
         },
       ]},
   ],
   filters: [
     {
-      title: __("By Active"),
+      title: t("app-title-by-active"),
       name: "is_active",
       ftype: "boolean",
     },

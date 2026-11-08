@@ -44,21 +44,21 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
         ],
         buttons: [
           {
-            text: __("Bind"),
+            text: t("btn-bind"),
             formBind: true,
             handler: this.buttonHandler("bind"),
           },
           {
-            text: __("Unbind"),
+            text: t("btn-unbind"),
             handler: this.buttonHandler("unbind"), 
           },
           {
-            text: __("Reset"),
+            text: t("btn-reset"),
             scope: this,
             handler: this.resetFormHandler,
           },
           {
-            text: __("Close"),
+            text: t("btn-close"),
             handler: function(){
               this.up("window").close();
             }, 
@@ -84,7 +84,7 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
     }    
   },
   getButtonConfig: function(type){
-    var tooltip = type === "add" ? __("Add Input") : __("Remove Input"),
+    var tooltip = type === "add" ? t("help-add-input") : t("help-remove-input"),
       glyph = type === "add" ? NOC.glyph.plus : NOC.glyph.minus,
       config = {
         xtype: "button",
@@ -106,10 +106,10 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
       xtype: "textfield",
       name: "address",
       allowBlank: false,
-      emptyText: __("Address"),
+      emptyText: t("app-title-address"),
       labelWidth: 150,
       regex: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
-      regexText: __("Invalid IP address format"),
+      regexText: t("msg-invalid-ip-address-format"),
       listeners: {
         validitychange: function(field, isValid){
           var removeBtn = field.up().down("button");
@@ -122,7 +122,7 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
     return {
       xtype: "core.combo",
       name: "pool",
-      emptyText: __("Select Pool"),
+      emptyText: t("label-select-pool"),
       restUrl: "/main/pool/lookup/",
       uiStyle: "medium-combo",
     };
@@ -189,10 +189,10 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
         if(result.success){
           this.instanceRecord.set("addresses", result.data.addresses);
           this.instanceRecord.commit();
-          NOC.info(__("Address") + " " + method + " " + __("successfully"));
+          NOC.info(t("msg-address-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(__("Error") + " : " + result.message || __("Operation failed"));
+          NOC.error(t("msg-error-value0-4", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

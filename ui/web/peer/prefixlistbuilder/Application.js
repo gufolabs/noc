@@ -49,33 +49,33 @@ Ext.define("NOC.peer.prefixlistbuilder.Application", {
       },
       items: [
         {
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           name: "name",
-          emptytext: __("Prefix list name ..."),
+          emptytext: t("msg-prefix-list-name"),
           allowBlank: true,
           regex: /^[0-9a-zA-Z_-]*$/,
-          invalidtext: __("Prefix list name must contains only 0-9,a-z,A-Z,-,_"),
+          invalidtext: t("msg-prefix-list-name-must-contains-only-0-9-a-z-a-z"),
         },
         {
           xtype: "peer.peeringpoint.LookupField",
-          fieldLabel: __("Peering Point"),
+          fieldLabel: t("header-peering-point"),
           name: "peering_point",
           allowBlank: false,
         },
         {
-          fieldLabel: __("AS-SET"),
+          fieldLabel: t("label-as-set"),
           name: "as_set",
-          emptytext: __("AS or AS-set"),
+          emptytext: t("msg-as-or-as-set"),
           allowBlank: false,
           regex: /^AS(\d+|-\w+)(-\w+)*(:\S+)?(\s+AS(\d+|-\w+)(:\S+)?)*$/,
-          invalidtext: __("Enter list valid ASnumber (ex., AS1234) or as sets (ex. AS-MEGASET, AS-MEGA-SET)"),
+          invalidtext: t("msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-"),
           plugins: ["ucfield"],
         },
       ],
       buttonAlign: "left",
       buttons: [
         {
-          text: __("Build"),
+          text: t("header-build"),
           itemId: "build",
           glyph: NOC.glyph.play,
           formBind: true,
@@ -84,7 +84,7 @@ Ext.define("NOC.peer.prefixlistbuilder.Application", {
           handler: me.onBuild,
         },
         {
-          text: __("Reset"),
+          text: t("btn-reset"),
           itemId: "reset",
           glyph: NOC.glyph.refresh,
           disabled: false,
@@ -115,7 +115,7 @@ Ext.define("NOC.peer.prefixlistbuilder.Application", {
     if(!form.isValid()){
       return;
     }
-    me.mask(__("Building..."));
+    me.mask(t("msg-building"));
     NOC.api.requestLegacy({
       url: "/peer/prefixlistbuilder/",
       method: "GET",

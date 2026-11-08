@@ -33,7 +33,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Icon"),
+          text: t("label-icon"),
           dataIndex: "glyph",
           width: 25,
           renderer: function(v){
@@ -46,29 +46,29 @@ Ext.define("NOC.sa.serviceprofile.Application", {
           },
         },
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           width: 200,
         },
         {
-          text: __("Code"),
+          text: t("label-code"),
           dataIndex: "code",
           width: 100,
         },
         {
-          text: __("Workflow"),
+          text: t("app-group-wf"),
           dataIndex: "workflow",
           width: 150,
           renderer: NOC.render.Lookup("workflow"),
         },
         {
-          text: __("Summary"),
+          text: t("header-summary"),
           dataIndex: "show_in_summary",
           width: 50,
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Description"),
+          text: t("label-description"),
           dataIndex: "description",
           flex: 1,
         },
@@ -77,40 +77,40 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
           allowBlank: false,
           uiStyle: "medium",
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
           allowBlank: true,
           uiStyle: "extra",
         },
         {
           name: "code",
           xtype: "textfield",
-          fieldLabel: __("Code"),
+          fieldLabel: t("label-code"),
           allowBlank: true,
           uiStyle: "medium",
         },
         {
           name: "card_title_template",
           xtype: "textfield",
-          fieldLabel: __("Title Template"),
+          fieldLabel: t("header-title-template"),
           uiStyle: "extra",
           allowBlank: true,
         },
         {
           name: "workflow",
           xtype: "wf.workflow.LookupField",
-          fieldLabel: __("Workflow"),
+          fieldLabel: t("app-group-wf"),
           allowBlank: false,
         },
         {
           xtype: "fieldset",
-          title: __("Display"),
+          title: t("app-title-display"),
           layout: {
             type: "vbox",
           },
@@ -118,20 +118,20 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             {
               name: "show_in_summary",
               xtype: "checkbox",
-              boxLabel: __("Show in summary"),
+              boxLabel: t("label-show-in-summary"),
               allowBlank: true,
             },
             {
               name: "glyph",
               xtype: "main.glyph.LookupField",
-              fieldLabel: __("Icon"),
+              fieldLabel: t("label-icon"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "display_order",
               xtype: "numberfield",
-              fieldLabel: __("Display Order"),
+              fieldLabel: t("label-display-order"),
               uiStyle: "small",
               minValue: 0,
               allowBlank: false,
@@ -141,9 +141,8 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         {
           name: "caps_profile",
           xtype: "sa.capsprofile.LookupField",
-          tooltip: __("Set which CAPS will be check in Caps discovery. <br/>" +
-                                    "Service Activation -> Setup -> Caps Profiles"),
-          fieldLabel: __("Caps Profile"),
+          tooltip: t("help-set-which-caps-will-be-check-in-caps-discovery-br-service-activa"),
+          fieldLabel: t("app-title-capsprofile"),
           allowBlank: true,
           listeners: {
             render: me.addTooltip,
@@ -152,51 +151,48 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         {
           name: "caps_exposed",
           xtype: "checkbox",
-          boxLabel: __("Exposed Caps to Objects"),
+          boxLabel: t("label-exposed-caps-to-objects"),
           allowBlank: true,
         },
         {
           name: "interface_profile",
           xtype: "inv.interfaceprofile.LookupField",
-          fieldLabel: __("Interface Profile"),
+          fieldLabel: t("app-title-interfaceprofile"),
           allowBlank: true,
         },
         {
           name: "weight",
           xtype: "numberfield",
-          fieldLabel: __("Service weight"),
+          fieldLabel: t("label-service-weight"),
           allowBlank: true,
           uiStyle: "small",
         },
         {
           name: "status_change_notification",
           xtype: "combobox",
-          fieldLabel: __("Status Change Notification"),
+          fieldLabel: t("label-status-change-notification"),
           allowBlank: true,
           labelWidth: 200,
           defaultValue: "d",
           store: [
-            ["d", __("Disabled")],
-            ["e", __("Enable Message")],
+            ["d", t("msg-disabled")],
+            ["e", t("btn-enable-message")],
           ],
           uiStyle: "medium",
         },
         {
           xtype: "fieldset",
-          title: __("Oper. Status Transfer"),
+          title: t("app-title-oper-status-transfer-2"),
           items: [
             {
               name: "status_transfer_policy",
               xtype: "combobox",
-              fieldLabel: __("Status Transfer Policy"),
-              tooltip: __("Transfer children Status to OperStatus <br/>" +
-                                "D - Disable Status Transfer<br/>" +
-                                "T - All Status transfer" +
-                                "S - Self Status"),
+              fieldLabel: t("label-status-transfer-policy"),
+              tooltip: t("help-transfer-children-status-to-operstatus-br-d-disable-status-trans"),
               store: [
-                ["D", __("Disable")],
-                ["T", __("Transparent")],
-                ["S", __("Self Status")],
+                ["D", t("status-disable")],
+                ["T", t("msg-transparent")],
+                ["S", t("msg-self-status")],
               ],
               allowBlank: true,
               value: "S",
@@ -210,7 +206,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Calculate Oper Status"),
+          title: t("app-title-calculate-oper-status"),
           defaults: {
             padding: 4,
             labelAlign: "top",
@@ -219,17 +215,13 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             {
               name: "calculate_status_function",
               xtype: "combobox",
-              fieldLabel: __("Calculate Oper Status Policy"),
-              tooltip: __("Calculate Oper Status <br/>" +
-                          "D - Disable Calculate Status<br/>" +
-                          "R - Calculate By Rule<br/>" +
-                          "MN - From Min Status<br/>" +
-                          "MX - From Max Status"),
+              fieldLabel: t("label-calculate-oper-status-policy"),
+              tooltip: t("help-calculate-oper-status-br-d-disable-calculate-status-br-r-calcula"),
               store: [
-                ["D", __("Disable")],
-                ["MX", __("By Max Status")],
-                ["MN", __("By Min Status")],
-                ["R", __("By Rule")],
+                ["D", t("status-disable")],
+                ["MX", t("msg-by-max-status")],
+                ["MN", t("msg-by-min-status")],
+                ["R", t("msg-by-rule")],
               ],
               allowBlank: true,
               value: "P",
@@ -240,12 +232,12 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             },
             {
               name: "calculate_status_rules",
-              fieldLabel: __("Calculate Status Rules"),
+              fieldLabel: t("label-calculate-status-rules"),
               xtype: "gridfield",
               allowBlank: true,
               columns: [
                 {
-                  text: __("Group"),
+                  text: t("header-group"),
                   dataIndex: "group",
                   renderer: NOC.render.Lookup("group"),
                   width: 200,
@@ -254,7 +246,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   },
                 },
                 {
-                  text: __("Type"),
+                  text: t("header-type"),
                   dataIndex: "type",
                   width: 100,
                   editor: {
@@ -274,7 +266,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Function"),
+                  text: t("btn-function"),
                   dataIndex: "weight_function",
                   width: 150,
                   editor: {
@@ -294,7 +286,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Op"),
+                  text: t("btn-op"),
                   dataIndex: "op",
                   width: 100,
                   editor: {
@@ -312,14 +304,14 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Weight"),
+                  text: t("btn-weight"),
                   dataIndex: "weight",
                   editor: {
                     xtype: "numberfield",
                   },
                 },
                 {
-                  text: __("Min. Status"),
+                  text: t("btn-min-status"),
                   dataIndex: "min_status",
                   width: 150,
                   editor: {
@@ -341,7 +333,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Max. Status"),
+                  text: t("btn-max-status"),
                   dataIndex: "max_status",
                   width: 150,
                   editor: {
@@ -363,7 +355,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("To Status"),
+                  text: t("btn-to-status"),
                   dataIndex: "set_status",
                   width: 150,
                   editor: {
@@ -390,22 +382,18 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Alarm Transfer"),
+          title: t("app-title-alarm-transfer"),
           items: [
             {
               name: "alarm_affected_policy",
               xtype: "combobox",
-              fieldLabel: __("Alarm Affected Policy"),
-              tooltip: __("Transfer alarm to OperStatus <br/>" +
-                                "D - Disable Alarm Transfer<br/>" +
-                                "B - Service Component on Alarm<br/>" +
-                                "B - Instance Filter<br/>" +
-                                "O - Only By Filter Rule (Empty - Disable)"),
+              fieldLabel: t("label-alarm-affected-policy"),
+              tooltip: t("help-transfer-alarm-to-operstatus-br-d-disable-alarm-transfer-br-b-se"),
               store: [
-                ["D", __("Disable")],
-                ["B", __("By Service Component")],
-                ["A", __("By Instance")],
-                ["O", __("Only By Filter")],
+                ["D", t("status-disable")],
+                ["B", t("msg-by-service-component")],
+                ["A", t("msg-by-instance")],
+                ["O", t("msg-only-by-filter")],
               ],
               allowBlank: true,
               value: "A",
@@ -416,20 +404,20 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             },
             {
               name: "alarm_status_rules",
-              fieldLabel: __("Alarm Status Rules"),
+              fieldLabel: t("label-alarm-status-rules"),
               xtype: "gridfield",
               allowBlank: true,
               //width: 350,
               columns: [
                 {
                   dataIndex: "alarm_class_template",
-                  text: __("Alarm class RE"),
+                  text: t("label-alarm-class-re"),
                   editor: "textfield",
                   width: 300,
                   allowBlank: true,
                 },
                 {
-                  text: __("Match Labels"),
+                  text: t("label-match-labels"),
                   dataIndex: "include_labels",
                   renderer: NOC.render.LabelField,
                   editor: {
@@ -441,21 +429,21 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   width: 200,
                 },
                 {
-                  text: __("Ref. Only"),
+                  text: t("btn-ref-only"),
                   dataIndex: "required_reference",
                   width: 100,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Affected Instance"),
+                  text: t("btn-affected-instance"),
                   dataIndex: "affected_instance",
                   width: 100,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Min. Severity"),
+                  text: t("btn-min-severity"),
                   dataIndex: "min_severity",
                   width: 200,
                   editor: "fm.alarmseverity.LookupField",
@@ -463,7 +451,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   renderer: NOC.render.Lookup("min_severity"),
                 },
                 {
-                  text: __("Max. Severity"),
+                  text: t("btn-max-severity"),
                   dataIndex: "max_severity",
                   width: 200,
                   editor: "fm.alarmseverity.LookupField",
@@ -471,7 +459,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   renderer: NOC.render.Lookup("max_severity"),
                 },
                 {
-                  text: __("Status"),
+                  text: t("header-status"),
                   dataIndex: "status",
                   width: 100,
                   editor: {
@@ -499,20 +487,20 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         },
         {
           name: "diagnostic_status",
-          fieldLabel: __("Diagnostics Config"),
+          fieldLabel: t("label-diagnostics-config"),
           xtype: "gridfield",
           allowBlank: true,
           //width: 350,
           columns: [
             {
-              text: __("Diagnostic"),
+              text: t("header-diagnostic"),
               dataIndex: "diagnostic",
               width: 100,
               editor: "textfield",
               allowBlank: true,
             },
             {
-              text: __("By Instance"),
+              text: t("msg-by-instance"),
               dataIndex: "instance_checks",
               width: 70,
               editor: "checkbox",
@@ -522,10 +510,10 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               editor: "stringlistfield",
               dataIndex: "ctx",
               width: 400,
-              text: __("Context"),
+              text: t("label-context"),
             },
             {
-              text: __("Handler"),
+              text: t("app-title-handler"),
               dataIndex: "handler",
               renderer: NOC.render.Lookup("handler"),
               width: 250,
@@ -537,7 +525,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               },
             },
             {
-              text: __("Failed Status"),
+              text: t("header-failed-status"),
               dataIndex: "failed_status",
               width: 100,
               editor: {
@@ -562,12 +550,12 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               dataIndex: "alarm_class",
               editor: "fm.alarmclass.LookupField",
               renderer: NOC.render.Lookup("alarm_class"),
-              text: __("Alarm Class"),
+              text: t("app-title-alarmclass"),
               width: 200,
               allowBlank: true,
             },
             {
-              text: __("Alarm Subject"),
+              text: t("msg-alarm-subject"),
               dataIndex: "alarm_subject",
               width: 100,
               editor: "textfield",
@@ -577,20 +565,17 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Instance Policy"),
+          title: t("app-title-instance-policy"),
           items: [
             {
               name: "instance_policy",
               xtype: "combobox",
-              fieldLabel: __("Resource Map Policy"),
-              tooltip: __("How bind resources to Service Instance <br/>" +
-                                "D - Disable <br/>" +
-                                "A - Allowed Any" +
-                                "C - By Config"),
+              fieldLabel: t("label-resource-map-policy"),
+              tooltip: t("help-how-bind-resources-to-service-instance-br-d-disable-br-a-allowed"),
               store: [
-                ["D", __("Disable")],
-                ["A", __("Allowed Any")],
-                ["C", __("By Config")],
+                ["D", t("status-disable")],
+                ["A", t("msg-allowed-any")],
+                ["C", t("msg-by-config")],
               ],
               allowBlank: true,
               value: "A",
@@ -601,13 +586,13 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             },
             {
               name: "instance_settings",
-              fieldLabel: __("Instance Configs"),
+              fieldLabel: t("label-instance-configs"),
               xtype: "gridfield",
               allowBlank: true,
               //width: 350,
               columns: [
                 {
-                  text: __("Instance Type"),
+                  text: t("btn-instance-type"),
                   dataIndex: "instance_type",
                   width: 100,
                   editor: {
@@ -627,7 +612,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Allow Resources"),
+                  text: t("btn-allow-resources"),
                   dataIndex: "allow_resources",
                   width: 100,
                   editor: {
@@ -643,35 +628,35 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("Allow Manual"),
+                  text: t("header-allow-manual"),
                   dataIndex: "allow_manual",
                   width: 70,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Send Approve (To Res)"),
+                  text: t("btn-send-approve-to-res"),
                   dataIndex: "send_approve",
                   width: 70,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Only One Instance"),
+                  text: t("btn-only-one-instance"),
                   dataIndex: "only_one_instance",
                   width: 70,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Allow Register"),
+                  text: t("btn-allow-register"),
                   dataIndex: "allow_register",
                   width: 70,
                   editor: "checkbox",
                   renderer: NOC.render.Bool,
                 },
                 {
-                  text: __("Network"),
+                  text: t("header-network"),
                   dataIndex: "network_type",
                   width: 70,
                   editor: {
@@ -689,7 +674,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   }),
                 },
                 {
-                  text: __("TTL"),
+                  text: t("header-ttl"),
                   dataIndex: "ttl",
                   width: 50,
                   editor: {
@@ -698,21 +683,21 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   },
                 },
                 {
-                  text: __("Name"),
+                  text: t("header-name"),
                   dataIndex: "name",
                   width: 100,
                   editor: "textfield",
                   allowBlank: true,
                 },
                 {
-                  text: __("Ref. Source"),
+                  text: t("btn-ref-source"),
                   dataIndex: "refs_caps",
                   renderer: NOC.render.Lookup("refs_caps"),
                   width: 200,
                   editor: "inv.capability.LookupField",
                 },
                 {
-                  text: __("Asset. Group"),
+                  text: t("btn-asset-group"),
                   dataIndex: "asset_group",
                   renderer: NOC.render.Lookup("asset_group"),
                   width: 250,
@@ -726,7 +711,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         },
         {
           xtype: "fieldset",
-          title: __("Action"),
+          title: t("app-title-action"),
           layout: "hbox",
           defaults: {
             labelAlign: "left",
@@ -736,12 +721,12 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             {
               name: "raise_status_alarm_policy",
               xtype: "combobox",
-              fieldLabel: __("Status Alarm Policy"),
+              fieldLabel: t("label-status-alarm-policy"),
               store: [
-                ["D", __("Disable")],
-                ["R", __("Root Group (Only Root Severvice)")],
-                ["G", __("Group")],
-                ["A", __("Direct Alarm")],
+                ["D", t("status-disable")],
+                ["R", t("msg-root-group-only-root-severvice")],
+                ["G", t("header-group")],
+                ["A", t("msg-direct-alarm")],
               ],
               value: "R",
               uiStyle: "medium",
@@ -749,7 +734,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             {
               name: "raise_alarm_class",
               xtype: "fm.alarmclass.LookupField",
-              fieldLabel: __("Alarm Class"),
+              fieldLabel: t("app-title-alarmclass"),
               uiStyle: "medium",
               allowBlank: true,
             },
@@ -759,7 +744,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         {
           xtype: "fieldset",
           layout: "hbox",
-          title: __("Integration"),
+          title: t("app-title-integration"),
           defaults: {
             padding: 4,
             labelAlign: "right",
@@ -768,20 +753,20 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             {
               name: "remote_system",
               xtype: "main.remotesystem.LookupField",
-              fieldLabel: __("Remote System"),
+              fieldLabel: t("app-title-remotesystem"),
               allowBlank: true,
             },
             {
               name: "remote_id",
               xtype: "textfield",
-              fieldLabel: __("Remote ID"),
+              fieldLabel: t("label-remote-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
             {
               name: "bi_id",
               xtype: "displayfield",
-              fieldLabel: __("BI ID"),
+              fieldLabel: t("label-bi-id"),
               allowBlank: true,
               uiStyle: "medium",
             },
@@ -790,7 +775,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
         {
           name: "labels",
           xtype: "labelfield",
-          fieldLabel: __("Labels"),
+          fieldLabel: t("header-labels"),
           allowBlank: true,
           uiStyle: "extra",
           query: {

@@ -60,7 +60,7 @@ Ext.define("NOC.core.StateField", {
           afterrender: function(field){
             Ext.tip.QuickTipManager.register({
               target: field.getId(),
-              text: __("Transition"),
+              text: t("label-transition"),
             });
           },
         },
@@ -79,7 +79,7 @@ Ext.define("NOC.core.StateField", {
             headerBorders: false,
             hideHeaders: true,
             clearRemovedOnLoad: true,
-            emptyText: __("No possible transitions"),
+            emptyText: t("label-no-possible-transitions"),
             store: {
               model: "NOC.core.StateModel",
               autoLoad: false,
@@ -102,12 +102,12 @@ Ext.define("NOC.core.StateField", {
                 },
               },
               {
-                text: __("Transition"),
+                text: t("label-transition"),
                 flex: 1,
                 dataIndex: "label",
               },
               {
-                text: __("Description"),
+                text: t("label-description"),
                 flex: 3,
                 dataIndex: "description",
               },
@@ -161,8 +161,8 @@ Ext.define("NOC.core.StateField", {
   step: function(rec){
     var me = this;
     Ext.Msg.show({
-      title: __("Transition"),
-      msg: __("Do you wish to perform '" + rec.get("label") + "' transition? This operation cannot be undone!"),
+      title: t("label-transition"),
+      msg: t("msg-confirm-transition", {transition: rec.get("label")}),
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
@@ -193,11 +193,11 @@ Ext.define("NOC.core.StateField", {
           me.currentRecord.set(me.name + "__label", data.state__label)
         }
         me.hideTransitions();
-        NOC.msg.complete(__("Transition started"))
+        NOC.msg.complete(t("msg-transition-started"))
       },
 
       failure: function(response){
-        NOC.msg.failed(__("server-side failure with status code ") + response.status);
+        NOC.msg.failed(t("msg-server-side-failure-with-status-code-value0", {value0: response.status}));
       },
     });
   },

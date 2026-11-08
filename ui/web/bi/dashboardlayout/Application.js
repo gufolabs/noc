@@ -27,7 +27,7 @@ Ext.define("NOC.bi.dashboardlayout.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: __("Name"),
+          text: t("header-name"),
           dataIndex: "name",
           flex: 1,
         },
@@ -37,61 +37,61 @@ Ext.define("NOC.bi.dashboardlayout.Application", {
         {
           name: "name",
           xtype: "textfield",
-          fieldLabel: __("Name"),
+          fieldLabel: t("header-name"),
         },
         {
           name: "uuid",
           xtype: "displayfield",
-          fieldLabel: __("UUID"),
+          fieldLabel: t("label-uuid"),
         },
         {
           name: "description",
           xtype: "textarea",
-          fieldLabel: __("Description"),
+          fieldLabel: t("label-description"),
         },
         {
           name: "cells",
           xtype: "gridfield",
-          fieldLabel: __("Cells"),
+          fieldLabel: t("label-cells"),
           columns: [
             {
-              text: __("Name"),
+              text: t("header-name"),
               dataIndex: "name",
               editor: "textfield",
               width: 150,
             },
             {
-              text: __("Row"),
+              text: t("header-row"),
               dataIndex: "row",
               editor: "numberfield",
               width: 50,
             },
             {
-              text: __("Height"),
+              text: t("header-height"),
               dataIndex: "height",
               editor: "numberfield",
               width: 50,
             },
             {
-              text: __("Extra Small"),
+              text: t("header-extra-small"),
               dataIndex: "xs",
               editor: "numberfield",
               width: 50,
             },
             {
-              text: __("Small"),
+              text: t("header-small"),
               dataIndex: "sm",
               editor: "numberfield",
               width: 50,
             },
             {
-              text: __("Medium"),
+              text: t("header-medium"),
               dataIndex: "md",
               editor: "numberfield",
               width: 50,
             },
             {
-              text: __("Large"),
+              text: t("header-large"),
               dataIndex: "lg",
               editor: "numberfield",
               width: 50,
@@ -101,9 +101,9 @@ Ext.define("NOC.bi.dashboardlayout.Application", {
       ],
       formToolbar: [
         {
-          text: __("JSON"),
+          text: t("btn-json"),
           glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
+          tooltip: t("help-show-json"),
           hasAccess: NOC.hasPermission("read"),
           scope: me,
           handler: me.onJSON,
