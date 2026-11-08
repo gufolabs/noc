@@ -96,9 +96,7 @@ Homepage = "https://getnoc.com/"
 
 [project.optional-dependencies]
 dev = [
-  "Babel==2.13.1",
   "ipython==9.5.0",
-  "pojson==0.7",
 ]
 docs = [
   "mkdocs-material==9.7.0",

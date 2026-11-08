@@ -59,7 +59,6 @@
 * [sync-mibs](sync-mibs.md)
 * [sync-perm](sync-perm.md)
 * [sync](sync.md)
-* [translation](translation.md)
 * [user](user.md)
 * [verify-model](verify-model.md)
 * [whois](whois.md)

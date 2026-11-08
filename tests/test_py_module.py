@@ -25,7 +25,6 @@ assert config.noc_base.parts[-2:] == ("src", "noc"), f"Invalid {config.noc_base}
 _ALLOW_XFAIL = {
     "noc.services.login.backends.pam",
     "noc.services.web.apps.kb.parsers.mediawiki",
-    "noc.commands.translation",
     "noc.gis.tile",
     "noc.core.etl.extractor.vcenter",
     "noc.core.etl.extractor.zabbix",

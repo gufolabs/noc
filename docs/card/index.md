@@ -26,7 +26,7 @@ Here is an explanation of the directory contents:
 
 - **templates**: This directory contains HTML templates used to create card pages. The template files have the extension `<template_name>.html.j2`. Custom templates belong in `<custom root>/services/web/cards/templates/` and take precedence over built-in templates.
 
-Card translation strings are stored with the web service in `services/web/translations/`.
+Card translations use the shared YAML catalogs in `src/noc/i18n/`. Call `t()` in Jinja templates; see the [localization guide](../language-translation-howto/index.md).
 
 !!! note
 
