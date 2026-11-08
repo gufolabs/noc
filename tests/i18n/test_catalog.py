@@ -17,6 +17,8 @@ from noc.config import Language
 from noc.core.i18n import MessageCatalog
 
 I18N_PATH = Path(__file__).parents[2] / "src" / "noc" / "i18n"
+ALL_LANGUAGES = list(Language)
+NON_EN_LANGUAGES = [l for l in ALL_LANGUAGES if l is not Language.EN]
 
 
 @pytest.fixture(scope="module")
@@ -26,7 +28,7 @@ def en_catalog() -> MessageCatalog:
     return catalog
 
 
-@pytest.mark.parametrize("language", list(Language))
+@pytest.mark.parametrize("language", ALL_LANGUAGES)
 def test_catalog_loads_all_messages(language: Language) -> None:
     """Every configured language catalog loads and compiles its messages."""
     catalog = MessageCatalog(language, I18N_PATH)
@@ -37,7 +39,7 @@ def test_catalog_loads_all_messages(language: Language) -> None:
     assert n > 0, "Catalog must not be empty"
 
 
-@pytest.mark.parametrize("language", [Language.RU, Language.PT_BR])
+@pytest.mark.parametrize("language", NON_EN_LANGUAGES)
 def test_catalog_contains_only_english_keys(language: Language, en_catalog: MessageCatalog) -> None:
     """Localized catalogs cannot introduce keys missing from English."""
     en_keys = set(en_catalog)
@@ -47,7 +49,7 @@ def test_catalog_contains_only_english_keys(language: Language, en_catalog: Mess
     assert lang_keys <= en_keys
 
 
-@pytest.mark.parametrize("language", list(Language))
+@pytest.mark.parametrize("language", ALL_LANGUAGES)
 def test_catalog_keys_are_sorted_alphabetically(language: Language) -> None:
     """Every YAML message catalog keeps its keys in alphabetical order."""
     path = I18N_PATH / f"{language.value}.yml"
