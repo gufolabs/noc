@@ -60,19 +60,6 @@ class DesktopApplication(ExtApplication):
             return config.language.value
         return request.user.preferred_language or config.language.value
 
-    @api.get("/index.html", url_name="desktop", access=True)
-    def view_desktop(self, request: HttpRequest):
-        """
-        Render application root template
-        """
-        return self.render(
-            request,
-            "desktop.html.j2",
-            language=self.get_language(request),
-            theme=config.web.theme,
-            brand=config.brand,
-        )
-
     @api.get("^settings/$", access=True)
     def api_settings(self, request: HttpRequest):
         cp = CPClient()

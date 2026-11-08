@@ -351,7 +351,6 @@ class Site:
         """
         # Collect patterns
         patterns = {}  # module -> app -> pattern
-        index_view = None
         for app in self.apps.values():
             mod_chain = patterns.get(app.module)
             if not mod_chain:
@@ -365,9 +364,6 @@ class Site:
             app_url_map = defaultdict(list)  # url -> (URL, view)
             for view in app.iter_views():
                 if isinstance(view.url, str):
-                    if view.url == "/index.html":
-                        index_view = view
-                        continue
                     view_url = URL(
                         view.url,
                         name=getattr(view, "url_name", None),
@@ -407,9 +403,6 @@ class Site:
         self.urlpatterns.append(
             path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog")
         )
-        # /index.html
-        if index_view:
-            self.urlpatterns.append(path("index.html", index_view))
 
     def register(self, app_class):
         """
