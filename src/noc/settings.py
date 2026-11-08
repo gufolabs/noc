@@ -104,7 +104,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "APP_DIRS": False,
-        "DIRS": [".", "templates"],
+        "DIRS": [str(config.noc_base), str(config.noc_base / "templates")],
     }
 ]
 
