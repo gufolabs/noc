@@ -380,4 +380,6 @@ title-all-allocated-blocks-in-vrf: "Todos os blocos alocados em VRF {vrf} (IPv{a
 title-allocated-blocks-in-vrf: "Blocos alocados em VRF {vrf} (IPv{afi}), {prefix}"
 title-cir-car-bps-to-burst-rate: "CIR/CAR(bps) para Burst-rate"
 title-free-blocks-in-vrf: "Blocos livres em VRF {vrf} (IPv{afi}), {prefix}"
+title-problem-discovery-pool: "Problemas de descoberta (pool): {pool}"
 title-summary-for-vrf: "Resumo da VRF {vrf} (IPv{afi}): {prefix}"
+title-welcome: "Bem-vindo ao {brand}"

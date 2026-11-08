@@ -510,7 +510,6 @@ label-children: "Потомок"
 label-configured-map-container: "Контейнер пользовательской карты: {name}"
 label-consumes-resources: "Потребляет ресурсы"
 label-contacts: "Контакты"
-label-container: "Локация (PoP)"
 label-container-2: "Контейнер"
 label-container-3: "Контейнер"
 label-container-name: "Контейнер: {name}"
@@ -545,7 +544,6 @@ label-maintenance: "РНР"
 label-managed-object: Объекты управления
 label-managed-object-container: "Контейнер объекта управления: {name}"
 label-managed-object-search-for-config-only: Устройство (только для конфигурации)
-label-managedobject-container: "Локация (место)"
 label-metrics: "Метрики"
 label-migrate: "Переместился"
 label-migrate-device-changed: "Переместился (со сменой устройства)"
@@ -570,7 +568,6 @@ label-recommended: "Рекомендовано"
 label-report-format: Формат отчёта
 label-report-more-than-1-year-not-allowed-if-nedeed-request-it-from-administrator: "Диапазон больше одного года не доступен для выгрузки. Если необходимо - обратитесь к администратору системы"
 label-report-type: Тип отчёта
-label-segment: "Сегмент:"
 label-segment-2: "Сегмент"
 label-segment-3: "Сегмент"
 label-segment-name: "Сегмент: {name}"
@@ -861,7 +858,7 @@ title-object-level-neighbor-schemas: "Схемы соседей объекта"
 title-outages-1-day: Оперативная обстановка (за 1 день)
 title-outages-30-day: Оперативная обстановка (за 30 дней)
 title-outages-7-days: Оперативная обстановка (за 7 дней)
-title-problem-discovery-pool: "Проблемы опроса (по пулу)"
+title-problem-discovery-pool: "Проблемы опроса (по пулу): {pool}"
 title-reboot-30-day: Перезагрузки (за 30 дней)
 title-reboots-1-day: Перезагрузки (за 1 день)
 title-reboots-7-days: Перезагрузки (за 7 дней)
@@ -871,4 +868,4 @@ title-ttsystem-errors-1-day: Ошибки эскалаций (1 день)
 title-ttsystem-stat-1-day: Статистика по эскалациям (1 день)
 title-ttsystem-stat-30-day: Статистика по эскалациям (30 дней)
 title-ttsystem-stat-7-days: Статистика по эскалациям (7 дней)
-title-welcome: "Добро пожаловать"
+title-welcome: "Добро пожаловать в {brand}"

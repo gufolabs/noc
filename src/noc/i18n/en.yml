@@ -732,10 +732,9 @@ label-alarms: "Alarms"
 label-alternative-path: "Alternative path"
 label-as-number: AS Number
 label-children: "Children"
-label-configured-map-container: "Configured Map Container: "
+label-configured-map-container: "Configured Map Container: {name}"
 label-consumes-resources: "Consumes Resources"
 label-contacts: "Contacts"
-label-container: "Container: "
 label-container-2: "Container"
 label-container-3: "Container"
 label-container-name: "Container: {name}"
@@ -776,7 +775,6 @@ label-maintenance: "Maintenance"
 label-managed-object: Managed Object
 label-managed-object-container: "ManagedObject Container: {name}"
 label-managed-object-search-for-config-only: Managed object search (for config only)
-label-managedobject-container: "ManagedObject Container: "
 label-metrics: "Metrics"
 label-migrate: "Migrate"
 label-migrate-device-changed: "Migrate (Device Changed)"
@@ -806,7 +804,6 @@ label-report-type: Report Type
 label-search-by-ip: Search by ip
 label-search-by-prefix: Search by prefix
 label-search-by-user: Search by user
-label-segment: "Segment: "
 label-segment-2: "Segment"
 label-segment-3: "Segment"
 label-segment-name: "Segment: {name}"
@@ -1144,7 +1141,7 @@ title-object-level-neighbor-schemas: "Object Level Neighbor Schemas"
 title-outages-1-day: Outages (1 day)
 title-outages-30-day: Outages (30 day)
 title-outages-7-days: Outages (7 days)
-title-problem-discovery-pool: "Problem Discovery (pool)"
+title-problem-discovery-pool: "Problem Discovery (pool): {pool}"
 title-reboot-30-day: Reboot (30 day)
 title-reboots-1-day: Reboots (1 day)
 title-reboots-7-days: Reboots (7 days)
@@ -1154,4 +1151,4 @@ title-ttsystem-errors-1-day: TTSystem Errors (1 day)
 title-ttsystem-stat-1-day: TTSystem Stat (1 day)
 title-ttsystem-stat-30-day: TTSystem Stat (30 day)
 title-ttsystem-stat-7-days: TTSystem Stat (7 days)
-title-welcome: "Welcome to "
+title-welcome: "Welcome to {brand}"
