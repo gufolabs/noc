@@ -147,6 +147,9 @@ target-version = "py313"
 # Always autofix, but never try to fix `unfixable`
 fix = true
 
+[tool.ruff.format]
+line-ending = "lf"
+
 [tool.ruff.lint]
 ignore = [
   "A001", # A001 Variable `{name}` is shadowing a python builtin
