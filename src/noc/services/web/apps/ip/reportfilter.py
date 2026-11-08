@@ -31,7 +31,7 @@ class ReportFilterApplication(SimpleReport):
             afi = forms.ChoiceField(
                 label=t("label-address-family"),
                 required=False,
-                choices=[("", t("label-all")), ("4", t("label-ipv4")), ("6", t("label-ipv6"))],
+                choices=[("", t("choice-all")), ("4", t("choice-ipv4")), ("6", t("choice-ipv6"))],
             )
             asn = forms.ModelChoiceField(
                 label=t("label-as-number"), required=False, queryset=AS.objects.order_by("asn")

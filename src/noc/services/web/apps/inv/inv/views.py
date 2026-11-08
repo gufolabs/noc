@@ -44,7 +44,6 @@ from noc.core.inv.info import info
 from noc.core.inv.remove import remote_all, remove_connections, remove_root
 from noc.core.inv.result import Result
 from noc.core.text import alnum_key
-from noc.core.translation import ugettext as _
 from noc.core.validators import is_objectid
 from noc.fm.models.activealarm import HAS_FGALARMS, ActiveAlarm
 from noc.inv.models.configuredmap import ConfiguredMap
@@ -703,7 +702,7 @@ class InvApplication(ExtApplication):
         r = [
             {
                 "id": str(o.id),
-                "label": _("ManagedObject Container: ") + str(o.name),
+                "label": t("label-managed-object-container", name=o.name or ""),
                 "is_default": True,
                 "args": ["objectcontainer", str(o.id), str(o.id)],
             }
@@ -712,7 +711,7 @@ class InvApplication(ExtApplication):
             r.append(
                 {
                     "id": str(cm.id),
-                    "label": _("Configured Map Container: ") + str(o.name),
+                    "label": t("label-configured-map-container", name=o.name or ""),
                     "is_default": False,
                     "args": ["configured", str(cm.id)],
                 }

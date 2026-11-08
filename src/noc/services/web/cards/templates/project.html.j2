@@ -28,7 +28,7 @@
                             <td>{{ s.name }}</td>
                             <td>{{ s.profile.name }}</td>
                             <td>{{ s.state.name }}</td>
-                            <td>{% if s.is_affilated%}{{ _("Yes") }}{% else %}{{ _("No") }}{% endif %}</td>
+                            <td>{% if s.is_affilated%}{{ t("status-yes") }}{% else %}{{ t("status-no") }}{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

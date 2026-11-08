@@ -13,11 +13,9 @@ import math
 from django import forms
 
 # NOC modules
+# Django Modules
 from noc.core.i18n import t
 from noc.core.ip import IP
-
-# Django Modules
-from noc.core.translation import ugettext as _
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrf import VRF
@@ -28,7 +26,7 @@ from noc.services.web.base.simplereport import SimpleReport, TableColumn
 
 class ReportForm(forms.Form):
     vrf = forms.ModelChoiceField(label=t("label-vrf"), queryset=VRF.objects.all().order_by("name"))
-    afi = forms.ChoiceField(label=t("label-address-family"), choices=[("4", t("label-ipv4"))])
+    afi = forms.ChoiceField(label=t("label-address-family"), choices=[("4", t("choice-ipv4"))])
     prefix = forms.CharField(label=t("label-prefix"))
 
     def clean_prefix(self):
@@ -42,7 +40,7 @@ class ReportForm(forms.Form):
         try:
             return Prefix.objects.get(vrf=vrf, afi=afi, prefix=prefix)
         except Prefix.DoesNotExist:
-            raise ValidationError(_("Prefix not found"))
+            raise ValidationError(t("msg-prefix-not-found"))
 
 
 class ReportSummary(SimpleReport):
@@ -75,8 +73,7 @@ class ReportSummary(SimpleReport):
                     ("Average allocated mask", avg_allocated_mask, ""),
                 ]
             return self.from_dataset(
-                title=_("Summary for VRF %(vrf)s (IPv%(afi)s): %(prefix)s")
-                % {"vrf": vrf.name, "afi": afi, "prefix": p.prefix},
+                title=t("title-summary-for-vrf", vrf=vrf.name, afi=afi, prefix=p.prefix),
                 columns=[
                     "",
                     TableColumn(t("header-size"), format="numeric", align="right"),

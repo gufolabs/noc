@@ -18,7 +18,7 @@ from .base import BaseCalculator
 class CalculatorForm(forms.Form):
     value = forms.DecimalField(required=True)
     measure = forms.ChoiceField(
-        required=True, choices=[("dbm", t("label-dbm")), ("mw", t("label-mw"))]
+        required=True, choices=[("dbm", t("choice-dbm")), ("mw", t("choice-mw"))]
     )
 
 

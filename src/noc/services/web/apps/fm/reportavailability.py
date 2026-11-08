@@ -40,18 +40,18 @@ class ReportForm(forms.Form):
         required=False,
         queryset=AdministrativeDomain.objects.order_by("name"),
     )
-    skip_avail = forms.BooleanField(label=t("label-skip-full-available"), required=False)
-    skip_zero_avail = forms.BooleanField(label=t("label-skip-zero-available"), required=False)
-    filter_zero_access = forms.BooleanField(label=t("label-skip-zero-access-port"), required=False)
+    skip_avail = forms.BooleanField(label=t("status-skip-full-available"), required=False)
+    skip_zero_avail = forms.BooleanField(label=t("status-skip-zero-available"), required=False)
+    filter_zero_access = forms.BooleanField(label=t("status-skip-zero-access-port"), required=False)
 
 
 class ReportAvailabilityApplication(SimpleReport):
     title = t("app-title-reportavailability")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(t("label-availability-last-day"), {"interval": 1}),
-        "7d": PredefinedReport(t("label-availability-last-week"), {"interval": 7}),
-        "30d": PredefinedReport(t("label-availability-last-month"), {"interval": 30}),
+        "1d": PredefinedReport(t("title-availability-last-day"), {"interval": 1}),
+        "7d": PredefinedReport(t("title-availability-last-week"), {"interval": 7}),
+        "30d": PredefinedReport(t("title-availability-last-month"), {"interval": 30}),
     }
 
     @staticmethod

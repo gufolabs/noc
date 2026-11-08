@@ -21,7 +21,6 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.core.comp import smart_text
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.inv.models.capability import Capability
 from noc.inv.models.discoveryid import DiscoveryID
 from noc.inv.models.firmware import Firmware
@@ -325,7 +324,7 @@ class ReportObjectDetailApplication(ExtApplication):
             }
         if "adm_path" in columns_filter:
             ad_path = ReportAdPath()
-            r[-1].extend([_("ADM_PATH1"), _("ADM_PATH1"), _("ADM_PATH1")])
+            r[-1].extend([t("header-adm-path1"), t("header-adm-path1"), t("header-adm-path1")])
         if "interface_type_count" in columns_filter:
             r[-1].extend(type_columns)
         capslist = [
@@ -335,7 +334,7 @@ class ReportObjectDetailApplication(ExtApplication):
         if "object_caps" in columns_filter:
             r[-1].extend([x for __, x in capslist])
         if "object_labels" in columns_filter:
-            r[-1].extend([_("OBJECT_LABELS")])
+            r[-1].extend([t("header-object-labels")])
         if "sorted_labels" in columns_filter:
             labels = set()
             for s in (
@@ -428,9 +427,11 @@ class ReportObjectDetailApplication(ExtApplication):
                             mo_serials[0].get("serial", "") or serial,
                             patch or "",
                             auth_profile,
-                            {True: _("Yes"), False: _("No"), None: _("Unknown")}[
-                                avail.get(mo_id, None)
-                            ],
+                            {
+                                True: t("status-yes"),
+                                False: t("status-no"),
+                                None: t("status-unknown"),
+                            }[avail.get(mo_id, None)],
                             ad,
                             mo_continer[0],
                             # NetworkSegment.get_by_id(m_segment) if m_segment else "",

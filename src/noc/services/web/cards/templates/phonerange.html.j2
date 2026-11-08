@@ -84,7 +84,7 @@
                     <tr>
                         <td><a href="/api/card/view/resourcegroup/{{ g["id"] }}/">{{ g["name"] }}</a></td>
                         <td><a href="/api/card/view/technology/{{ g["technology"]["id"] }}/">{{ g["technology"]["name"] }}</a></td>
-                        <td>{% if g["is_static"] %}{{ _("Static") }}{% else %}{{ _("Dynamic") }}{% endif %}</td>
+                        <td>{% if g["is_static"] %}{{ t("label-static") }}{% else %}{{ t("label-dynamic") }}{% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -107,7 +107,7 @@
                     <tr>
                         <td><a href="/api/card/view/resourcegroup/{{ g["id"] }}/">{{ g["name"] }}</a></td>
                         <td><a href="/api/card/view/technology/{{ g["technology"]["id"] }}/">{{ g["technology"]["name"] }}</a></td>
-                        <td>{% if g["is_static"] %}{{ _("Static") }}{% else %}{{ _("Dynamic") }}{% endif %}</td>
+                        <td>{% if g["is_static"] %}{{ t("label-static") }}{% else %}{{ t("label-dynamic") }}{% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

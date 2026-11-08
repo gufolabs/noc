@@ -14,10 +14,10 @@ from collections.abc import Iterable
 from bson import ObjectId
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import MapItem, PathItem, Portal
-from noc.core.translation import ugettext as _
 from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 from noc.sa.models.managedobject import ManagedObject
@@ -29,7 +29,7 @@ MAX_NEIGHBORS = 100
 
 class ObjectLevelNeighborTopology(TopologyBase):
     name = "objectlevelneighbor"
-    header = _("Object Level Neighbor Schemas")
+    header = t("title-object-level-neighbor-schemas")
 
     PARAMS = {"mo_id"}
 

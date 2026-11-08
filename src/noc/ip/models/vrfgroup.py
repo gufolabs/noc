@@ -10,9 +10,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 # NOC modules
+from noc.core.i18n import t
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
-from noc.core.translation import ugettext as _
 from noc.main.models.label import Label
 
 
@@ -37,8 +37,8 @@ class VRFGroup(NOCModel):
     address_constraint = models.CharField(
         max_length=1,
         choices=[
-            ("V", _("Addresses are unique per VRF")),
-            ("G", _("Addresses are unique per VRF Group")),
+            ("V", t("choice-addresses-unique-per-vrf")),
+            ("G", t("choice-addresses-unique-per-vrf-group")),
         ],
         default="V",
     )

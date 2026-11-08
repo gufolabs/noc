@@ -25,12 +25,12 @@ from django.db import models
 
 # NOC modules
 from noc.config import config
+from noc.core.i18n import t
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
 from noc.core.mx import NotificationContact
 from noc.core.password.check import check_password_policy
 from noc.core.password.hasher import UNUSABLE_PASSWORD, check_password, make_password, must_change
-from noc.core.translation import ugettext as _
 from noc.main.models.avatar import Avatar
 from noc.settings import LANGUAGE_CODE, LANGUAGES
 
@@ -81,7 +81,7 @@ class User(NOCModel):
         max_length=75,
         unique=True,
         validators=[
-            validators.RegexValidator(r"^[\w.@+-]+$", _("Enter a valid username."), "invalid")
+            validators.RegexValidator(r"^[\w.@+-]+$", t("msg-enter-a-valid-username"), "invalid")
         ],
     )
     first_name = models.CharField(max_length=75, blank=True)

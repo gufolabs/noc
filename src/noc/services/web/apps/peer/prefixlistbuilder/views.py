@@ -10,7 +10,6 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.peer.models.peeringpoint import PeeringPoint
 from noc.peer.models.whoiscache import WhoisCache
 from noc.sa.interfaces.base import ModelParameter, UnicodeParameter
@@ -42,21 +41,21 @@ class PrefixListBuilderApplication(ExtApplication):
                 "name": name,
                 "prefix_list": "",
                 "success": False,
-                "message": _("AS-SET members cache is empty. Please update Whois Cache"),
+                "message": t("msg-as-set-members-cache-is-empty-please-update-whois-cache"),
             }
         if not WhoisCache.has_origin_routes():
             return {
                 "name": name,
                 "prefix_list": "",
                 "success": False,
-                "message": _("Origin routes cache is empty. Please update Whois Cache"),
+                "message": t("msg-origin-routes-cache-is-empty-please-update-whois-cache"),
             }
         if not WhoisCache.has_asset(as_set):
             return {
                 "name": name,
                 "prefix_list": "",
                 "success": False,
-                "message": _("Unknown AS-SET"),
+                "message": t("msg-unknown-as-set"),
             }
         prefixes = WhoisCache.resolve_as_set_prefixes_maxlen(as_set)
         if not prefixes:
@@ -64,7 +63,7 @@ class PrefixListBuilderApplication(ExtApplication):
                 "name": name,
                 "prefix_list": "",
                 "success": False,
-                "message": _("Cannot resolve AS-SET prefixes"),
+                "message": t("msg-cannot-resolve-as-set-prefixes"),
             }
         try:
             pl = peering_point.profile.get_profile().generate_prefix_list(name, prefixes)
@@ -73,6 +72,11 @@ class PrefixListBuilderApplication(ExtApplication):
                 "name": name,
                 "prefix_list": "",
                 "success": False,
-                "message": _("Prefix-list generator is not implemented for this profile"),
+                "message": t("msg-prefix-list-generator-is-not-implemented-for-this-profile"),
             }
-        return {"name": name, "prefix_list": pl, "success": True, "message": _("Prefix List built")}
+        return {
+            "name": name,
+            "prefix_list": pl,
+            "success": True,
+            "message": t("msg-prefix-list-built"),
+        }

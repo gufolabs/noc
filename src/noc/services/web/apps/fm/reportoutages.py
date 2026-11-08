@@ -16,7 +16,6 @@ from mongoengine.queryset.visitor import Q
 
 # NOC modules
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.fm.models.outage import Outage
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess
@@ -26,10 +25,10 @@ from noc.services.web.base.simplereport import PredefinedReport, SimpleReport, T
 class ReportForm(forms.Form):
     duration = forms.ChoiceField(
         choices=[
-            (0, t("label-range")),
-            (86400, t("label-1-day")),
-            (7 * 86400, t("label-1-week")),
-            (30 * 86400, t("label-1-month")),
+            (0, t("choice-range")),
+            (86400, t("choice-1-day")),
+            (7 * 86400, t("choice-1-week")),
+            (30 * 86400, t("choice-1-month")),
         ],
         label=t("label-duration"),
     )
@@ -45,9 +44,9 @@ class ReportOutagesApplication(SimpleReport):
     title = t("app-title-reportoutages")
     form = ReportForm
     predefined_reports = {
-        "1d": PredefinedReport(t("label-outages-1-day"), {"duration": 86400}),
-        "7d": PredefinedReport(t("label-outages-7-days"), {"duration": 7 * 86400}),
-        "30d": PredefinedReport(t("label-outages-30-day"), {"duration": 30 * 86400}),
+        "1d": PredefinedReport(t("title-outages-1-day"), {"duration": 86400}),
+        "7d": PredefinedReport(t("title-outages-7-days"), {"duration": 7 * 86400}),
+        "30d": PredefinedReport(t("title-outages-30-day"), {"duration": 30 * 86400}),
     }
 
     def get_data(self, request: HttpRequest, duration, from_date=None, to_date=None, **kwargs):
@@ -114,8 +113,8 @@ class ReportOutagesApplication(SimpleReport):
                     m.address,
                     m.profile.name,
                     m.platform.name if m.platform else "",
-                    _("Yes") if m.is_managed else _("No"),
-                    _("Yes") if m.get_status() else _("No"),
+                    t("status-yes") if m.is_managed else t("status-no"),
+                    t("status-yes") if m.get_status() else t("status-no"),
                     downtime,
                     avail,
                     len(outages[o]),

@@ -19,7 +19,6 @@ from noc.aaa.models.permission import Permission
 from noc.aaa.models.user import User
 from noc.config import config
 from noc.core.i18n import t
-from noc.core.translation import ugettext as _
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.inv.models.channel import Channel
 from noc.inv.models.object import Object
@@ -88,7 +87,7 @@ class HomeAppplication(ExtApplication):
             self._welcome_text = self._render_template("Welcome.html.j2")
         return {
             "type": "text",
-            "title": _("Welcome to ") + config.brand,
+            "title": t("title-welcome", brand=config.brand),
             "data": {"text": self._welcome_text or ""},
         }
 
@@ -100,7 +99,7 @@ class HomeAppplication(ExtApplication):
             self._comminity_text = self._render_template("Community.html.j2")
         return {
             "type": "text",
-            "title": _("Community"),
+            "title": t("title-community"),
             "data": {"text": self._comminity_text or ""},
         }
 
@@ -128,15 +127,15 @@ class HomeAppplication(ExtApplication):
         # Transceivers
         return {
             "type": "summary",
-            "title": _("Inventory summary"),
+            "title": t("title-inventory-summary"),
             "items": [
                 {
-                    "text": _("Total objects"),
+                    "text": t("header-total-objects"),
                     "value": total_objects,
                 },
-                {"text": _("Points of presence"), "value": total_pops},
-                {"text": _("Racks"), "value": total_racks},
-                {"text": _("Chassis"), "value": total_chassis},
+                {"text": t("header-points-of-presence"), "value": total_pops},
+                {"text": t("header-racks"), "value": total_racks},
+                {"text": t("header-chassis"), "value": total_chassis},
             ],
         }
 
@@ -156,11 +155,11 @@ class HomeAppplication(ExtApplication):
         total_mo = mo_count_q.count()
         return {
             "type": "summary",
-            "title": _("Managed Object Summary"),
+            "title": t("title-managed-object-summary"),
             "height": "small",
             "items": [
                 {
-                    "text": _("Managed Objects"),
+                    "text": t("header-managed-objects"),
                     "value": total_mo,
                 },
             ],
@@ -180,11 +179,11 @@ class HomeAppplication(ExtApplication):
             ).count()
         return {
             "type": "summary",
-            "title": _("Total Alarms"),
+            "title": t("title-total-alarms"),
             "height": "small",
             "items": [
                 {
-                    "text": _("Alarms"),
+                    "text": t("header-alarms"),
                     "value": total_alarms,
                 },
             ],
@@ -209,4 +208,4 @@ class HomeAppplication(ExtApplication):
             {"text": td_map[k], "value": v}
             for k, v in sorted(summary.items(), key=lambda x: x[1], reverse=True)
         ]
-        return {"type": "summary", "title": _("Channels"), "height": "medium", "items": items}
+        return {"type": "summary", "title": t("title-channels"), "height": "medium", "items": items}
