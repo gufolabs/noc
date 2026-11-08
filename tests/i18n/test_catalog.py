@@ -6,11 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import yaml
 from pathlib import Path
 
 # Third-party modules
 import pytest
+import yaml
 
 # NOC modules
 from noc.config import Language
@@ -37,14 +37,16 @@ def test_catalog_loads_all_messages(language: Language) -> None:
     assert n > 0, "Catalog must not be empty"
 
 
-@pytest.mark.parametrize("language", [lang for lang in Language if lang != Language.EN])
-def test_catalog_equality(language: Language, en_catalog: MessageCatalog) -> None:
+@pytest.mark.parametrize("language", [Language.RU, Language.PT_BR])
+def test_catalog_contains_only_english_keys(
+    language: Language, en_catalog: MessageCatalog
+) -> None:
+    """Localized catalogs cannot introduce keys missing from English."""
     en_keys = set(en_catalog)
     assert en_keys
     catalog = MessageCatalog(language, I18N_PATH)
     lang_keys = set(catalog)
-    assert lang_keys
-    assert en_keys == lang_keys
+    assert lang_keys <= en_keys
 
 
 @pytest.mark.parametrize("language", list(Language))

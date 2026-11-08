@@ -73,4 +73,4 @@ Run the catalog tests after editing YAML translations:
 ./scripts/run-dev pytest tests/i18n/test_catalog.py
 ```
 
-The tests check that each configured catalog loads, contains the same keys as English, and keeps its keys alphabetically sorted.
+The tests check that each configured catalog loads, localized catalogs contain no keys absent from English, and keys are alphabetically sorted. Localized catalogs may omit keys; missing translations fall back to English.

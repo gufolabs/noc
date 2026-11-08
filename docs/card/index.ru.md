@@ -27,7 +27,7 @@ services/web/
 * **cards** — классы карточек, формирующие контекст шаблона. Пользовательские классы размещаются в `<custom root>/services/web/cards/`
 * **templates** — HTML-шаблоны карточек с расширением `<template_name>.html.j2`. Пользовательские шаблоны размещаются в `<custom root>/services/web/cards/templates/` и имеют приоритет над встроенными
 
-Переводы карточек входят в переводы web-сервиса.
+Переводы карточек хранятся в общих YAML-каталогах `src/noc/i18n/`. В Jinja-шаблонах используйте `t()`; подробности приведены в [руководстве по локализации](../language-translation-howto/index.md).
 
 <!-- prettier-ignore -->
 !!! note

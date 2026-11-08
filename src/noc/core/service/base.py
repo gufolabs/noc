@@ -108,7 +108,7 @@ class BaseService:
     process_name = "noc-%(name).10s"
     # Connect to MongoDB on activate
     use_mongo = False
-    # Initialize gettext and process *language* configuration
+    # Initialize translation support and process *language* configuration
     use_translation = False
     # Initialize jinja2 templating engine
     use_jinja = False

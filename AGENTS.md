@@ -89,17 +89,18 @@ Data seeding mechanism for reference data (MIBs, model types, workflow definitio
 ### Templates (`src/noc/templates/`)
 Jinja2 templates for card rendering in NOC UI. Each may have its own namespace for template lookup. Not Django templates — use only Jinja2 syntax. See `services/<domain>/` for card-specific template references.
 
-## Zone Files (Documentation Boundaries)
+## Zone Files (Context-Specific Instructions)
 
-These are NOT code directories — they mark logical documentation boundaries for the project:
+These files provide context-specific instructions. Load the relevant file only when working in that context:
 
 - **[tests/AGENTS.md](tests/AGENTS.md)** — pytest fixtures, infrastructure containers (Postgres/MongoDB/ClickHouse/Kafka), CI py-tests.yml
+- **[src/noc/i18n/AGENTS.md](src/noc/i18n/AGENTS.md)** — translation key prefixes, YAML catalog conventions, and key ordering
 - **[ui/AGENTS.md](ui/AGENTS.md)** — frontend TypeScript workspaces, webpack bundles, Playwright E2E testing
 - **[ansible/AGENTS.md](ansible/AGENTS.md)** — NOC provisioning roles, system_roles, custom library/lookup_plugins, Molecule test suites
 - **[src/noc/sa/profiles/AGENTS.md](src/noc/sa/profiles/AGENTS.md)** — device profiles (108+ vendors), SNMP MIB rules, custom_path cascade inheritance, OID conventions per model
 - **[docs/AGENTS.md](docs/AGENTS.md)** — MkDocs-material build chain, multi-language docs structure (en/ru), documentation style guide and contributing process
 
-Load the relevant zone file from above ONLY when working in that context. Root AGENTS.md remains the single source of truth for shared conventions.
+Root AGENTS.md remains the single source of truth for shared conventions.
 
 ## CI/CD Pipeline
 
