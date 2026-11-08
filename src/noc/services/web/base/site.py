@@ -25,7 +25,6 @@ from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.urls import URLPattern, include, path, re_path, reverse
 from django.utils.encoding import smart_str
-from django.views.i18n import JavaScriptCatalog
 
 # NOC modules
 from noc.config import config
@@ -398,11 +397,6 @@ class Site:
                 mod_includes.append(path(f"{app}/", include((patterns[module][app], app))))
             # Install module routes
             self.urlpatterns.append(path(f"{module}/", include((mod_includes, module))))
-        # Django JS Translation
-        # @todo: Remove?
-        self.urlpatterns.append(
-            path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog")
-        )
 
     def register(self, app_class):
         """
