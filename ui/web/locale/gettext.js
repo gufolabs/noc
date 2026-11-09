@@ -28,9 +28,14 @@ function t(key, args = {}){
     throw new Error(`Translation "${key}" not found`);
   }
 
-  return typeof message === "string"
-    ? message
-    : message.format(args);
+  if(typeof message === "string"){
+    return message;
+  }
+
+  const parts = message.formatToParts(args);
+  return Array.isArray(parts)
+    ? parts.map((part) => part.value).join("")
+    : String(parts ?? "");
 }
 
 window.t = t;
