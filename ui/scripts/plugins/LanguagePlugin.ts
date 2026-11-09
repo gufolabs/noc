@@ -26,6 +26,19 @@ export class LanguagePlugin{
     return {
       name: "language-plugin",
       setup: (build) => {
+        build.onEnd((result) => {
+          if(result.errors.length || !result.metafile){
+            return;
+          }
+          for(const output of Object.keys(result.metafile.outputs)){
+            const outputPath = path.resolve(output);
+            if(!/^locale-.*\.js$/.test(path.basename(outputPath))){
+              continue;
+            }
+            const contents = fs.readFileSync(outputPath, "utf8");
+            fs.writeFileSync(outputPath, `(() => {\n${contents}\n})();`);
+          }
+        });
         build.onResolve({filter: /^locale-/}, (args) => ({
           path: args.path,
           namespace: "locale",
