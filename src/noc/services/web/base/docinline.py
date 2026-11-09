@@ -267,10 +267,10 @@ class DocInline:
                 if isinstance(f, GeoPointField):
                     pass
                 elif isinstance(f, ForeignKeyField):
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                     v = v.id
                 elif isinstance(f, PlainReferenceField):
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
@@ -286,7 +286,7 @@ class DocInline:
                     if hasattr(v, "id"):
                         v = v.id
                     else:
-                        v = smart_text(v)
+                        v = smart_text(v) if isinstance(v, bytes) else str(v)
             r[n] = v
         # Add custom fields
         for f in self.custom_fields:

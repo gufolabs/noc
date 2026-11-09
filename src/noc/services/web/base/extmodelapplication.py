@@ -412,7 +412,7 @@ class ExtModelApplication(ExtApplication):
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = str(v.pk)
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                 else:
                     r[f.name] = None
                     r[f"{f.name}__label"] = ""
@@ -427,19 +427,19 @@ class ExtModelApplication(ExtApplication):
                     if isinstance(v, dt.datetime):
                         v = v.isoformat()
                     else:
-                        v = smart_text(v)
+                        v = smart_text(v) if isinstance(v, bytes) else str(v)
                 r[f.name] = v
             else:
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = v._get_pk_val()
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                 else:
                     r[f.name] = None
                     r[f"{f.name}__label"] = ""
         # Add m2m fields
         for n in self.m2m_fields:
-            r[n] = [{"id": str(mmo.pk), "label": smart_text(mmo)} for mmo in getattr(o, n).all()]
+            r[n] = [{"id": str(mmo.pk), "label": str(mmo)} for mmo in getattr(o, n).all()]
             # r[n] = list(getattr(o, n).values_list("id", flat=True))
         # Add custom fields
         for f in self.custom_fields:

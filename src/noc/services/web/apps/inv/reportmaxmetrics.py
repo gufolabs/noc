@@ -20,7 +20,6 @@ from pymongo import ReadPreference
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.mongo.connection import get_db
 from noc.inv.models.interfaceprofile import InterfaceProfile
@@ -284,9 +283,9 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                     row[6],
                     row[1],
                     row[2],
-                    smart_text(Platform.get_by_id(row[3]) if row[3] else ""),
+                    str(Platform.get_by_id(row[3])) if row[3] else "",
                     row[4],
-                    smart_text(NetworkSegment.get_by_id(row[5])) if row[5] else "",
+                    str(NetworkSegment.get_by_id(row[5])) if row[5] else "",
                     containers_address.get(row[6], "") if containers_address and row[6] else "",
                 ]
             )

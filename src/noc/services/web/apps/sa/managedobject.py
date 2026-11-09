@@ -21,7 +21,7 @@ from mongoengine.queryset import Q as MQ
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from noc.core.debug import error_report
 from noc.core.geocoder.base import geocoder_loader
 from noc.core.i18n import t
@@ -284,9 +284,7 @@ class ManagedObjectApplication(ExtModelApplication):
 
     def instance_to_dict(self, o, fields=None):
         def sg_to_list(items):
-            return [
-                {"group": x, "group__label": smart_text(ResourceGroup.get_by_id(x))} for x in items
-            ]
+            return [{"group": x, "group__label": str(ResourceGroup.get_by_id(x))} for x in items]
 
         data = super().instance_to_dict(o, fields)
         # Expand resource groups fields
@@ -732,12 +730,12 @@ class ManagedObjectApplication(ExtModelApplication):
                 "link": get_link(i),
                 "metrics": metrics.get(i.name, ""),
                 "profile": str(i.profile.id) if i.profile else None,
-                "profile__label": smart_text(i.profile) if i.profile else None,
+                "profile__label": str(i.profile) if i.profile else None,
                 "enabled_protocols": i.enabled_protocols,
                 "project": i.project.id if i.project else None,
-                "project__label": smart_text(i.project) if i.project else None,
+                "project__label": str(i.project) if i.project else None,
                 "state": str(i.state.id) if i.state else None,
-                "state__label": smart_text(i.state) if i.state else None,
+                "state__label": str(i.state) if i.state else None,
                 "caps": [
                     {"id": str(c.capability.id), "label": str(c)}
                     for c in i.iter_caps(include_default=True)
@@ -754,7 +752,7 @@ class ManagedObjectApplication(ExtModelApplication):
                 "status": i.status,
                 "description": i.description,
                 "profile": str(i.profile.id) if i.profile else None,
-                "profile__label": smart_text(i.profile) if i.profile else None,
+                "profile__label": str(i.profile) if i.profile else None,
                 "members": [
                     j.name
                     for j in Interface.objects.filter(

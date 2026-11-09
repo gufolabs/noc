@@ -9,7 +9,6 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.main.models.label import MATCH_BADGES, MATCH_OPS
@@ -111,7 +110,7 @@ class ResourceGroupApplication(ExtDocApplication):
         return r
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": str(o.id), "label": smart_text(o), "has_children": o.has_children}
+        return {"id": str(o.id), "label": str(o), "has_children": o.has_children}
 
     @api.get(r"^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
@@ -119,7 +118,7 @@ class ResourceGroupApplication(ExtDocApplication):
         path = [ResourceGroup.get_by_id(rg) for rg in o.get_path()]
         return {
             "data": [
-                {"level": level + 1, "id": str(p.id), "label": smart_text(p.name)}
+                {"level": level + 1, "id": str(p.id), "label": str(p.name)}
                 for level, p in enumerate(path)
             ]
         }

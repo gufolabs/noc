@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.models import get_model
 
@@ -34,7 +33,7 @@ class ResourceGroupCard(BaseCard):
             for i in s_model.objects.filter(
                 effective_service_groups__overlap=[str(self.object.id)]
             ):
-                services.append({"id": i.id, "card": card, "label": smart_text(i)})
+                services.append({"id": i.id, "card": card, "label": str(i)})
         else:
             services = []
         # Clients
@@ -43,7 +42,7 @@ class ResourceGroupCard(BaseCard):
             c_model = get_model(self.object.technology.client_model)
             card = self.get_card_name(self.object.technology.client_model)
             for i in c_model.objects.filter(effective_client_groups__overlap=[str(self.object.id)]):
-                clients.append({"id": i.id, "card": card, "label": smart_text(i)})
+                clients.append({"id": i.id, "card": card, "label": str(i)})
         else:
             clients = []
         # Data

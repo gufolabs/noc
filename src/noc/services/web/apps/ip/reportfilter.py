@@ -10,7 +10,6 @@ from django import forms
 from django.http import HttpRequest
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.vrf import VRF
@@ -48,7 +47,7 @@ class ReportFilterApplication(SimpleReport):
                 p.vrf.name,
                 p.prefix,
                 p.state.name,
-                smart_text(p.asn),
+                str(p.asn),
                 vlan.name if vlan else "",
             ]
             for f in cf:

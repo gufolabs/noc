@@ -360,16 +360,16 @@ class ExtDocApplication(ExtApplication):
                 elif isinstance(f, PlainReferenceListField):
                     v = [{"label": str(vv.name), "id": str(vv.id)} for vv in v]
                 elif isinstance(f, ForeignKeyField):
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                     v = v.id
                 elif isinstance(f, PlainReferenceField):
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
                         v = str(v)
                 elif isinstance(f, ReferenceField):
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
@@ -410,7 +410,7 @@ class ExtDocApplication(ExtApplication):
                     if hasattr(v, "id"):
                         v = v.id
                     else:
-                        v = smart_text(v)
+                        v = smart_text(v) if isinstance(v, bytes) else str(v)
             elif v is None and isinstance(f, ForeignKeyListField):
                 v = []
             r[n] = v

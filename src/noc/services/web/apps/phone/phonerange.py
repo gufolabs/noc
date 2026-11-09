@@ -10,7 +10,6 @@ from django.http import HttpRequest
 from mongoengine.queryset import Q
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonerange import PhoneRange
@@ -41,13 +40,12 @@ class PhoneRangeApplication(ExtDocApplication):
         return o.total_numbers
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": str(o.id), "label": smart_text(o), "has_children": o.has_children}
+        return {"id": str(o.id), "label": str(o), "has_children": o.has_children}
 
     def instance_to_dict(self, o, fields=None, nocustom=False):
         def sg_to_list(items):
             return [
-                {"group": str(x), "group__label": smart_text(ResourceGroup.get_by_id(x))}
-                for x in items
+                {"group": str(x), "group__label": str(ResourceGroup.get_by_id(x))} for x in items
             ]
 
         data = super().instance_to_dict(o, fields, nocustom)
@@ -72,8 +70,7 @@ class PhoneRangeApplication(ExtDocApplication):
         path = [PhoneRange.get_by_id(r) for r in o.get_path()]
         return {
             "data": [
-                {"id": str(p.id), "level": path.index(p) + 1, "label": smart_text(p.name)}
-                for p in path
+                {"id": str(p.id), "level": path.index(p) + 1, "label": str(p.name)} for p in path
             ]
         }
 

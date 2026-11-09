@@ -9,7 +9,6 @@
 from django import forms
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.ip import IP
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
@@ -54,7 +53,7 @@ class FreeBlocksReport(SimpleReport):
             title=t("title-free-blocks-in-vrf", vrf=vrf.name, afi=afi, prefix=prefix.prefix),
             columns=[t("header-free-blocks")],
             data=[
-                [smart_text(f)]
+                [str(f)]
                 for f in p.iter_free([IP.prefix(c.prefix) for c in prefix.children_set.all()])
             ],
         )
