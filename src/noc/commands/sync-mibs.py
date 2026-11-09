@@ -9,6 +9,7 @@
 import argparse
 import datetime as dt
 import gzip
+import io
 import os
 import re
 import time
@@ -62,14 +63,20 @@ class Command(BaseCommand):
         """
         Upload bundled MIBs
         """
+
+        def open_mib(path: str) -> io.TextIOWrapper:
+            if path.endswith(".gz"):
+                return gzip.open(path, "rt", encoding="utf-8")
+            return open(path, encoding="utf-8")
+
         connect()
         for mib_name, path in self.get_bundled_mibs():
             mib = MIB.objects.filter(name=mib_name).first()
-            if path.endswith(".gz"):
-                f = gzip.GzipFile(path, "r")
-            else:
-                f = open(path)
-            if mib:
+            with open_mib(path) as f:
+                if mib is None:
+                    self.print(f"    creating {mib_name}")
+                    self.create_mib(f.read())
+                    continue
                 data = f.read(4096)
                 match = self.rx_last_updated.search(data)
                 if not match:
@@ -96,10 +103,6 @@ class Command(BaseCommand):
                     if version > mib.version:
                         self.print(f"    updating {mib_name}")
                         self.update_mib(mib, data + f.read(), version=version)
-            else:
-                self.print(f"    creating {mib_name}")
-                self.create_mib(f.read())
-            f.close()
 
     def decode_date(self, s):
         """
