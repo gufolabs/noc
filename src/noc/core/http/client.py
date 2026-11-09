@@ -21,7 +21,7 @@ import orjson
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
 from noc.core.validators import is_ipv4
@@ -222,7 +222,7 @@ async def fetch(
             h["Content-Type"] = content_type
         if user and password:
             # Include basic auth header
-            uh = smart_text(f"{user}:{password}")
+            uh = f"{user}:{password}"
             h["Authorization"] = b"Basic %s" % codecs.encode(uh.encode("utf-8"), "base64").strip()
         if headers:
             h.update(headers)

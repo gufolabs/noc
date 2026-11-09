@@ -8,9 +8,6 @@
 # Python modules
 import binascii
 
-# NOC modules
-from noc.core.comp import smart_bytes, smart_text
-
 
 def json_escape(s: str | bool | None) -> str:
     """
@@ -35,7 +32,8 @@ def fm_escape(s: str | bytes) -> str:
     """
     Escape binary FM data to string
     """
-    return smart_text(binascii.b2a_qp(smart_bytes(s)).replace(b"=\n", b""))
+    data = s.encode() if isinstance(s, str) else s
+    return binascii.b2a_qp(data).replace(b"=\n", b"").decode()
 
 
 def fm_unescape(s: str | bytes) -> bytes:
@@ -43,4 +41,5 @@ def fm_unescape(s: str | bytes) -> bytes:
     Decode escaped FM data to a raw string
     'ab\\xffcd'
     """
-    return binascii.a2b_qp(smart_bytes(s))
+    data = s.encode() if isinstance(s, str) else s
+    return binascii.a2b_qp(data)

@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------
 # Syslog Collector service
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,6 @@ import orjson
 # NOC modules
 from noc.config import config
 from noc.core.checkers.base import register_checks
-from noc.core.comp import smart_bytes
 from noc.core.error import NOCError
 from noc.core.escape import fm_escape
 from noc.core.fm.enum import EventSource
@@ -215,7 +214,7 @@ class TrapCollectorService(BaseService):
             partition=int(cfg.id) % n_partitions,
             headers={
                 MX_MESSAGE_TYPE: MessageType.SNMPTRAP.value.encode(),
-                MX_LABELS: smart_bytes(MX_H_VALUE_SPLITTER.join(cfg.effective_labels)),
+                MX_LABELS: MX_H_VALUE_SPLITTER.join(cfg.effective_labels).encode(),
                 MX_SHARDING_KEY: str(cfg.id).encode(),
             },
         )

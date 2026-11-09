@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Upload bundled MIBs
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import argparse
 import datetime as dt
 import gzip
+import io
 import os
 import re
 import time
@@ -18,7 +19,6 @@ import orjson
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.fm.models.mib import MIB
@@ -63,24 +63,30 @@ class Command(BaseCommand):
         """
         Upload bundled MIBs
         """
+
+        def open_mib(path: str) -> io.TextIOWrapper:
+            if path.endswith(".gz"):
+                return gzip.open(path, "rt", encoding="utf-8")
+            return open(path, encoding="utf-8")
+
         connect()
         for mib_name, path in self.get_bundled_mibs():
             mib = MIB.objects.filter(name=mib_name).first()
-            if path.endswith(".gz"):
-                f = gzip.GzipFile(path, "r")
-            else:
-                f = open(path)
-            if mib:
-                data = smart_text(f.read(4096))
+            with open_mib(path) as f:
+                if mib is None:
+                    self.print(f"    creating {mib_name}")
+                    self.create_mib(f.read())
+                    continue
+                data = f.read(4096)
                 match = self.rx_last_updated.search(data)
                 if not match:
                     # Not in first chunk. Read rest
-                    data += smart_text(f.read())
+                    data += f.read()
                     match = self.rx_last_updated.search(data)
                 last_updated = self.decode_date(match.group(1))
                 if (last_updated > mib.last_updated) or force:
                     self.print(f"    updating {mib_name}")
-                    self.update_mib(mib, data + smart_text(f.read()), version=0)
+                    self.update_mib(mib, data + f.read(), version=0)
                 elif last_updated == mib.last_updated:
                     # Check internal version
                     match = self.rx_version.search(data)
@@ -88,7 +94,7 @@ class Command(BaseCommand):
                         version = int(match.group(1))
                     else:
                         # Read rest
-                        data += smart_text(f.read())
+                        data += f.read()
                         match = self.rx_version.search(data)
                         if match:
                             version = int(match.group(1))
@@ -96,11 +102,7 @@ class Command(BaseCommand):
                             version = 0
                     if version > mib.version:
                         self.print(f"    updating {mib_name}")
-                        self.update_mib(mib, data + smart_text(f.read()), version=version)
-            else:
-                self.print(f"    creating {mib_name}")
-                self.create_mib(f.read())
-            f.close()
+                        self.update_mib(mib, data + f.read(), version=version)
 
     def decode_date(self, s):
         """

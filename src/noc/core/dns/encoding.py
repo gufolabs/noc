@@ -1,13 +1,11 @@
 # ----------------------------------------------------------------------
 # IDNA utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
-from noc.core.comp import smart_bytes, smart_text
-
 IDNA_PREFIX = "xn--"
 
 
@@ -17,7 +15,7 @@ def to_idna(zone: str) -> str:
     Returns:
         Result of convert literal zone name to idna encoding.
     """
-    return smart_text(smart_text(zone).lower().encode("idna"))
+    return zone.lower().encode("idna").decode()
 
 
 def from_idna(zone: str) -> str:
@@ -28,7 +26,7 @@ def from_idna(zone: str) -> str:
     """
     if not is_idna(zone):
         return zone
-    return smart_text(smart_bytes(zone).decode("idna"))
+    return zone.encode().decode("idna")
 
 
 def is_idna(zone: str) -> bool:

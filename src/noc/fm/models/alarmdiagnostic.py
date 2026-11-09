@@ -53,7 +53,7 @@ class AlarmDiagnostic(Document):
                 {
                     "timestamp": d.timestamp,
                     "state": d.state,
-                    "data": zlib.decompress(smart_bytes(d.data)).decode(),
+                    "data": zlib.decompress(d.data).decode(),
                 }
             )
         return r

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # /api/auth/auth/ handler
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,7 +18,6 @@ from fastapi.responses import JSONResponse
 # NOC modules
 from noc.aaa.models.apikey import APIKey
 from noc.config import config
-from noc.core.comp import smart_bytes
 from noc.core.service.deps.service import get_service
 from noc.services.login.service import LoginService
 
@@ -201,7 +200,7 @@ async def auth_authorization_basic(
     HTTP Basic authorization handler
     """
     remote_ip = request.client.host
-    auth_data = codecs.decode(smart_bytes(data), "base64").decode()
+    auth_data = codecs.decode(data.encode(), "base64").decode()
     if ":" not in auth_data:
         logger.error("[Authorization|Basic][%s] Denied: Malformed data", remote_ip)
         return JSONResponse({"status": False}, status_code=401)
