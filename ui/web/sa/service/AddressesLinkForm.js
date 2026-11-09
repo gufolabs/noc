@@ -192,7 +192,7 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
           NOC.info(t("msg-address-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(t("msg-error-value0-4", {value0: result.message}) || t("msg-operation-failed"));
+          NOC.error(t("msg-error-value0", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

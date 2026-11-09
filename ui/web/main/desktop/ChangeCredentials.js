@@ -113,7 +113,7 @@ Ext.define("NOC.main.desktop.ChangeCredentials", {
       },
       failure: function(response){
         var status = Ext.decode(response.responseText);
-        NOC.error(t("msg-failed-to-change-credentials-value0-2", {value0: status.error}));
+        NOC.error(t("msg-failed-to-change-credentials-value0", {value0: status.error}));
       },
     });
   },

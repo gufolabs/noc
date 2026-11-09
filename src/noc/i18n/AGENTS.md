@@ -7,6 +7,10 @@
 - Add translations to `ru.yml` and `pt_BR.yml` when available. A missing localized key falls back to English.
 - Do not add a key to `ru.yml` or `pt_BR.yml` unless it exists in `en.yml`.
 - Keep values as strings. Use ICU MessageFormat patterns for plural forms and interpolation, with named arguments.
+- Do not put a space before an ellipsis (`...`).
+- Do not put spaces before `:`, `;`, `.`, or `,`. Add a space after those marks when prose continues; preserve technical syntax such as decimals, addresses, placeholders, and code expressions.
+- Do not leave leading or trailing whitespace in translation values.
+- Do not start text with a punctuation mark. Standalone symbols and leading percent signs in unit labels (for example, `% Used`) are allowed.
 
 ## Key Prefixes
 

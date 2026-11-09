@@ -201,12 +201,12 @@ Ext.define("NOC.pm.metricrule.Application", {
                 },
                 {
                   dataIndex: "min_value",
-                  text: t("btn-min-value-2"),
+                  text: t("btn-min-value"),
                   width: 70,
                 },
                 {
                   dataIndex: "max_value",
-                  text: t("btn-max-value-2"),
+                  text: t("btn-max-value"),
                   width: 70,
                 },
                 {

@@ -316,7 +316,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
           this.renderScheme(obj.data);
         },
         failure: function(response){
-          NOC.error(t("msg-failed-to-get-data-value0-2", {value0: response.status}));
+          NOC.error(t("msg-failed-to-get-data-value0", {value0: response.status}));
         },
         callback: function(){
           maskComponent.hide(messageId);
@@ -472,7 +472,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
         grid.refresh();
       },
       failure: function(response){
-        NOC.error(t("msg-failed-to-get-data-value0-3", {value0: response.status}));
+        NOC.error(t("msg-failed-to-get-data-value0", {value0: response.status}));
       },
       callback: function(){
         maskComponent.hide(messageId);

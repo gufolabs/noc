@@ -95,7 +95,7 @@ Ext.define("NOC.sa.service.ManagedObjectLinkForm", {
           NOC.info(t("msg-managed-object-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(t("msg-error-value0-7", {value0: result.message}) || t("msg-operation-failed"));
+          NOC.error(t("msg-error-value0", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

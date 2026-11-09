@@ -329,7 +329,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
         if(data.status){
           NOC.info(t("msg-escalated"));
         } else{
-          NOC.error(t("msg-escalate-failed-value0-2", {value0: Object.hasOwn(data, "error") ? data.error : "unknowns error!"}));
+          NOC.error(t("msg-escalate-failed-value0", {value0: Object.hasOwn(data, "error") ? data.error : "unknowns error!"}));
         }
       },
       failure: function(){

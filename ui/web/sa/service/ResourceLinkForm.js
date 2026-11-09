@@ -147,7 +147,7 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
           NOC.info(t("msg-resource-value0-successfully", {value0: method}));
           this.close();
         } else{
-          NOC.error(t("msg-error-value0-8", {value0: result.message}) || t("msg-operation-failed"));
+          NOC.error(t("msg-error-value0", {value0: result.message}) || t("msg-operation-failed"));
         }
       },
       failure: function(){

@@ -222,7 +222,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
       success: function(){
         me.app.onRefresh();
         if(isNewRecord){
-          NOC.info(t("msg-created-interface-value0-2", {value0: r.get("name")}));
+          NOC.info(t("msg-created-interface-value0", {value0: r.get("name")}));
         } else{
           NOC.info(t("msg-saved-2"));
         }

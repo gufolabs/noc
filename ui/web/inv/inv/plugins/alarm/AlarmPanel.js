@@ -245,7 +245,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
   },
   //
   autoReloadText: function(isReloading){
-    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0-3", {value0: isReloading ? t("msg-on") : t("msg-off")}));
+    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0", {value0: isReloading ? t("msg-on") : t("msg-off")}));
   },
   //
   pollingTask: function(){

@@ -24,7 +24,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerModel", {
   },
   formulas: {
     alarmsTotal: function(get){
-      return t("msg-total-value0-2", {value0: get("total.alarmsTotal")});
+      return t("msg-total-value0", {value0: get("total.alarmsTotal")});
     },
     summaryTotal: function(get){
       var selected = get("total.selected"),
