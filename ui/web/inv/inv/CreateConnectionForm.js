@@ -1214,7 +1214,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         rightSurface.renderFrame();
       },
       failure: function(response){
-        NOC.error(t("msg-failed-to-connect-objects-value0-2", {value0: response.responseText}));
+        NOC.error(t("msg-failed-to-connect-objects-value0", {value0: response.responseText}));
       },
     });
   },

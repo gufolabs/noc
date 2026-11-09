@@ -239,7 +239,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
       failure: function(response){
         var result = Ext.decode(response.responseText);
         button.up("window").unmask();
-        NOC.error(t("msg-error-value0-3", {value0: result.errors || t("msg-server-error-occurred")}));
+        NOC.error(t("msg-error-value0-2", {value0: result.errors || t("msg-server-error-occurred")}));
       },
     });
   },

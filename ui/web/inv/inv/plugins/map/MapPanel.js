@@ -595,7 +595,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   },
   //
   autoReloadText: function(isReloading){
-    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0-4", {value0: isReloading ? t("msg-on") : t("msg-off")}));
+    this.getViewModel().set("autoReloadText", t("msg-auto-reload-value0", {value0: isReloading ? t("msg-on") : t("msg-off")}));
   },
   //
   pollingTask: function(){

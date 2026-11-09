@@ -101,7 +101,7 @@ Ext.define("NOC.main.desktop.ChangePassword", {
             panel.close();
             this.applicationOpen();
           } else{
-            NOC.error(t("msg-failed-to-change-credentials-value0-3", {value0: data.message}));
+            NOC.error(t("msg-failed-to-change-credentials-value0", {value0: data.message}));
           }
         },
         failure: function(){

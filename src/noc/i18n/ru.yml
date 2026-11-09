@@ -503,7 +503,7 @@ app-title-telemetry: Отладка (телеметрия)
 app-title-template: Шаблоны
 app-title-test-selected-groups: Проверить выбранную группу
 app-title-test-selected-patterns: Проверить выбранные шаблоны
-app-title-test-selected-prefix-tables: Проверить выбранные таблицы префиксов ...
+app-title-test-selected-prefix-tables: Проверить выбранные таблицы префиксов...
 app-title-text: Текст
 app-title-text-style: Стиль текста
 app-title-threshold-profiles-handlers: Threshold Profiles Handlers
@@ -549,9 +549,9 @@ app-title-zoom: Масштаб
 app-title-zoom-in: Zoom in...
 app-title-zoom-out: Zoom out...
 btn-1-100-000: 1:100 000
-btn-about-system: О программе ...
+btn-about-system: О программе...
 btn-add: Добавить
-btn-add-2: "Добавить "
+btn-add-2: "Добавить"
 btn-add-address: Добавить Адрес
 btn-add-all-objects-to-group: Добавить все объекты в группу
 btn-add-attributes-bootprom-version: Дополнительный аттрибут (версия BootPROM)
@@ -559,7 +559,7 @@ btn-add-attributes-hw-version: Дополнительный аттрибут (HW
 btn-add-attributes-sw-patch: Дополнительный аттрибут (номер патча)
 btn-add-interface: Добавить интерфейс
 btn-add-mapping: Добавить связку
-btn-add-object-to: "Добавить объект в "
+btn-add-object-to: "Добавить объект в"
 btn-add-objects: Добавить объекты
 btn-add-prefix: Добавить Префикс
 btn-add-row: Добавить запись
@@ -593,7 +593,7 @@ btn-calcified-profile: Профиль при кальцификации
 btn-cancel: Отмена
 btn-cancel-sort: Отменить сортировку
 btn-card: Карточка
-btn-change-password: Смена пароля ...
+btn-change-password: Смена пароля...
 btn-change-password-2: Смена пароля
 btn-clean-all: Очистить все
 btn-clear: Очистить
@@ -615,7 +615,7 @@ btn-create-block: Создать блок
 btn-create-channel: Создать канал
 btn-create-ignore: Правило игнорирования
 btn-create-new: Создать...
-btn-create-new-channel: Создать новый канал ...
+btn-create-new-channel: Создать новый канал...
 btn-create-new-diagram-not-implement: Создание новой диаграммы не реализовано
 btn-create-rule: Правило классификации
 btn-created-at: Создана
@@ -697,13 +697,11 @@ btn-max-attacker-lvl: Макс. уровень атакующего
 btn-max-severity: Макс Важность
 btn-max-status: Макс. состояние
 btn-max-value: Макс. значение
-btn-max-value-2: Макс. значение
 btn-message: Сообщение
 btn-min-attacker-lvl: Мин. уровень атакующего
 btn-min-severity: Мин Важность
 btn-min-status: Мин. состояние
 btn-min-value: Мин. значение
-btn-min-value-2: Мин. значение
 btn-modify-api-key: Поменять API ключ
 btn-move-down: Опустить
 btn-move-up: Поднять
@@ -714,7 +712,7 @@ btn-next: Следующая
 btn-no-leaf-selected: Не выбран узел
 btn-no-link: No link
 btn-no-matches-found: Совпадений не найдено
-btn-no-records-found-matching: "Нет записей для условия: "
+btn-no-records-found-matching: "Нет записей для условия:"
 btn-no-records-to-display: Нет записей для отображения
 btn-object-settings: Настройки Объекта
 btn-object-status-style: Стиль статуса объекта
@@ -766,7 +764,7 @@ btn-select-all: Выбрать все
 btn-select-config: Выбрать конфиг...
 btn-select-dictionary: Выбрать справочник
 btn-select-image: Выбрать изображение...
-btn-select-managed-object: Выберите объект ...
+btn-select-managed-object: Выберите объект...
 btn-select-period: Выберите период
 btn-select-rows: Выбрать строки
 btn-send: Отправить
@@ -818,7 +816,7 @@ btn-untag: Нетэг.
 btn-update-channel: Обновить канал
 btn-update-unlink: Обновить/Отвязать
 btn-upload: Загрузка
-btn-user-profile: Профиль пользователя ...
+btn-user-profile: Профиль пользователя...
 btn-var: Переменная
 btn-var-map: Привяз. перем.
 btn-view: Просмотр
@@ -1550,7 +1548,7 @@ header-strict: Строгий
 header-struct: Строение
 header-struct-letter: Буква строения
 header-struct2: Строение2
-header-sub-interface: Sub.Interface
+header-sub-interface: Sub. Interface
 header-sub-interfaces: СабИнтерфейсы
 header-subject: Тема
 header-subject-class: Тема/Класс
@@ -1586,7 +1584,7 @@ header-temp-c: Темп, °C
 header-template: Шаблон
 header-terminator: Терминатор
 header-terms: Диапазон
-header-text: .
+header-text: Текст
 header-threshold: Порог
 header-time: Время
 header-time-duration: Время/Длительность
@@ -1817,12 +1815,12 @@ help-rotate: Повернуть
 help-run-config-validate-process-br-always-validate-every-discovery-r: "Run config validate process: <br/>Always Validate - every discovery run<br/>Validate on Change - only if detect config changed"
 help-run-vpn-trace: Run VPN Trace
 help-sa-profiles-for-match-rules: Профиль SA
-help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Настройка частоты для Полного опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99 .. 0,1 частота сохранения
-help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Настройка частоты для Периодического опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99 .. 0,1 частота сохранения
+help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Настройка частоты для Полного опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99.. 0,1 частота сохранения
+help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Настройка частоты для Периодического опроса. Интервал с 0 до 1. 1 - каждая задача сохранит операции, 0 - отключает. 0,99.. 0,1 частота сохранения
 help-save-all-from-basket: Сохранить все из корзины
 help-save-changes: Сохранить изменения
 help-save-changes-and-continue-editing: Сохранить и продолжить редактирование
-help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form.Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
+help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form. Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
 help-save-screen: Сохранить экран
 help-save-workflow: Сохранить процесс
 help-select-action: Выбрать действия
@@ -1882,7 +1880,7 @@ help-use-for-setup-user-permission-on-object-br-place-on-service-acti: Use for s
 help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre: Use for shard devices over intersection IP Address spaces. <br/>Create and Set on Tower<br/>
 help-use-name-network-ex-10-0-0-0-8-or-mac: Задайте Имя, сеть (н-р 10.0.0.0/8) или MAC адрес
 help-use-one-session-worked-on-device-br-if-disabled-worked-one-scrip: Use one session worked on device. <br/>If disabled - worked one script - one login. Logout after script end.
-help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end.Disable - worked one script - one login. Logout after script end.
+help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end. Disable - worked one script - one login. Logout after script end.
 help-use-this-field-if-you-want-disable-ping-check-on-specified-time-: Use this field if you want disable ping check on specified time.<br/>  Main -> Setup -> Time Patterns
 help-use-to-override-pool-for-events-processing: Использовать при обработке событий (вместо основного)
 help-view-as-json: Посмотреть как JSON
@@ -1994,9 +1992,9 @@ label-auth-key: Ключ аутентификации
 label-auth-proto: Протокол аутентификации
 label-author: Автор
 label-auto-generated: Создано автоматически?
-label-auto-reload: "Авто обновленое : "
-label-auto-reload-off: "Auto reload : OFF"
-label-auto-reload-on: "Auto reload : ON"
+label-auto-reload: "Авто обновленое:"
+label-auto-reload-off: "Auto reload: OFF"
+label-auto-reload-on: "Auto reload: ON"
 label-autocreated-profile: Профиль сегментов при создании
 label-autogenerated: Создана системой
 label-autosegmentation-policy: Политика автосегментации
@@ -2060,8 +2058,8 @@ label-channel-discriminators: Дискриминатор канала
 label-check: проверка
 label-check-interval: Интервал проверки
 label-check-match: Условия совпадения
-label-check-on-config-change-after: "Проверять при смене конфига через "
-label-check-on-system-start-after: "Проверять при загрузке через "
+label-check-on-config-change-after: "Проверять при смене конфига через"
+label-check-on-system-start-after: "Проверять при загрузке через"
 label-check-update-interval-sec: Интервал обновления (с)
 label-check-updates-interval: Check Updates Interval
 label-checked: Использовать
@@ -2111,7 +2109,6 @@ label-consumes-resources: Потребляет ресурсы
 label-contact: Контакт
 label-contacts: Контакты
 label-container-2: Контейнер
-label-container-3: Контейнер
 label-container-name: "Контейнер: {name}"
 label-content-type: Тип содержимого
 label-context: Контекст
@@ -2157,7 +2154,7 @@ label-delete-prefix-and-save-and-relink-the-nested-prefixes-and-addres: Удал
 label-delta-value: Считать разницу
 label-deny-group: Deny Group
 label-description: Описание
-label-description-2: № описания
+label-description-2: Описание №
 label-diag: Дагностика
 label-diagnostics: Диагностики
 label-diagnostics-config: Diagnostics Config
@@ -2270,7 +2267,7 @@ label-field-data: Field Data
 label-field-name: Имя поля
 label-field-type: Тип поля
 label-fields: Поле (метрики)
-label-file: № файла
+label-file: Файл №
 label-file-name: Имя файла
 label-filename-pattern: Маска имени файла
 label-fill-color: Цвет фона
@@ -2363,7 +2360,7 @@ label-interface-status: Статус интерфейсов
 label-interface-validation: Валидация интерфейсов
 label-interval: Интервал
 label-interval-sec: Интервал, сек
-label-interval-sec-2: Interval,sec
+label-interval-sec-2: Interval, sec
 label-inventory: Учет объектов
 label-ip: IP
 label-ip-address: IP адрес
@@ -2397,7 +2394,7 @@ label-link-discovery-policy: Политика создания линка
 label-link-event: Событие на интерфейсе
 label-linkgraph: График связи
 label-lldp: LLDP
-label-loading: Загрузка ...
+label-loading: Загрузка...
 label-local-backup-ip: Local Backup IP
 label-local-cpe-id: Local CPE Id
 label-local-ip: Локальный IP
@@ -2605,7 +2602,7 @@ label-query-parameters: Параметры запроса
 label-question: Вопрос
 label-questions: Вопросы
 label-quick-jump: Быстрый Переход...
-label-rack: "Стойка: "
+label-rack: "Стойка:"
 label-raise-alarm-to-target: Авария на ответчик
 label-rate-limit: Rate limit
 label-raw-policy: Добавить конфиг-ю в ConfDB
@@ -2613,7 +2610,7 @@ label-raw-vars: Исходные переменные
 label-rear-facade: Вид сзади
 label-recent-alarms-time-opacity: Последние аварии (время/интервал)
 label-recommended: Рекомендовано
-label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Recommended way for policy-map values calculating is: normal-burst-bytes=bits-per-second*Tc/8.Recommended way for rate-limit values calculating is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
+label-recommended-way-for-policy-map-values-calculating-is-normal-burst-bytes-bits-per-second-tc-8-recommended-way-for-rate-limit-values-calculating-is-burst-normal-bits-per-second-tc-8-burst-max-2-burst-normal: "Recommended way for policy-map values calculating is: normal-burst-bytes=bits-per-second*Tc/8. Recommended way for rate-limit values calculating is: burst-normal=bits-per-second*Tc/8, burst-max=2*burst-normal"
 label-recover-time-sec: Recover Time (sec)
 label-reference: Идентификатор
 label-regex-label: Regex Label
@@ -2668,7 +2665,7 @@ label-scheme: Схема
 label-scopes: Scopes
 label-script: Скрипт
 label-script-failed: Ошибка скрипта
-label-search: Поиск ...
+label-search: Поиск...
 label-search-by-ip: Search by ip
 label-search-by-prefix: Search by prefix
 label-search-by-user: Search by user
@@ -2677,7 +2674,6 @@ label-seconds-expr: Seconds Expr.
 label-security-level: SNMP Уровень безопасности
 label-seen-propagation: Seen на вложенные
 label-segment-2: Сегмент
-label-segment-3: Сегмент
 label-segment-name: "Сегмент: {name}"
 label-segment-name-2: Шаблон имени сегмента
 label-select-band: Выбрать Band
@@ -2919,10 +2915,7 @@ msg-as-or-as-set: AS or AS-set
 msg-as-set-members-cache-is-empty-please-update-whois-cache: AS-SET members cache is empty. Please update Whois Cache
 msg-asset-peer: Asset Peer
 msg-attachment-deleted: Вложение удалено
-msg-auto-reload-value0: "Авто обновленое : {value0}"
-msg-auto-reload-value0-2: "Авто обновленое : {value0}"
-msg-auto-reload-value0-3: "Авто обновленое : {value0}"
-msg-auto-reload-value0-4: "Авто обновленое : {value0}"
+msg-auto-reload-value0: "Авто обновленое: {value0}"
 msg-average-level: Средний уровень
 msg-avg-load-in: Средняя загрузка входящий
 msg-avg-load-out: Средняя загрузка исходящий
@@ -2954,7 +2947,7 @@ msg-capabilities-of: Возможности {name}
 msg-center: Центр
 msg-chained-downlink: Chained Downlink
 msg-change-address: Изменить IP адрес
-msg-change-prefix: "Изменить префикс "
+msg-change-prefix: "Изменить префикс"
 msg-change-prefix-value0: Изменить префикс {value0}
 msg-changes: Изменения
 msg-changes-2: changes
@@ -3010,15 +3003,14 @@ msg-create-new-prefix: Создать префикс
 msg-create-new-value0: Создать новый {value0}
 msg-created-from-alarm-list-at: создано из списка аварий
 msg-created-from-alarm-list-at-value0: создано из списка аварий{value0}
-msg-created-from-alarms-list-at: "создано из списка аварий "
+msg-created-from-alarms-list-at: "создано из списка аварий"
 msg-created-from-alarms-list-at-value0: создано из списка аварий {value0}
-msg-created-from-managed-objects-list-at: "создано из списка устройств "
+msg-created-from-managed-objects-list-at: "создано из списка устройств"
 msg-created-from-managed-objects-list-at-value0: создано из списка устройств {value0}
-msg-created-from-map-at: "создано из схемы сегмента "
+msg-created-from-map-at: "создано из схемы сегмента"
 msg-created-from-map-at-value0: создано из схемы сегмента {value0}
-msg-created-interface: "Создать интерфейс: "
+msg-created-interface: "Создать интерфейс:"
 msg-created-interface-value0: "Создать интерфейс: {value0}"
-msg-created-interface-value0-2: "Создать интерфейс: {value0}"
 msg-credentials-has-been-changed: Пароль изменен
 msg-crm-users: Абоненты
 msg-datastream: Datastream
@@ -3028,9 +3020,9 @@ msg-degraded: Частичная неработоспособность
 msg-deleted: удалено
 msg-deleted-2: Удалено
 msg-deleting: удаляется
-msg-deleting-2: Удаление ...
+msg-deleting-2: Удаление...
 msg-deny: Запретить
-msg-description-value0: № описания{value0}
+msg-description-value0: "Описание № {value0}"
 msg-device-has-alarm: На устройстве есть авария
 msg-device-is-normal: Устройство без аварий
 msg-device-neighbors: Соседи
@@ -3090,22 +3082,15 @@ msg-error-loading-data: Ошибка загрузки данных
 msg-error-saving-changes: "Ошибка: {failure} при сохранении изменений"
 msg-error-saving-record: Ошибка сохранения записи
 msg-error-updating-statuses: Ошибка обновления статусов
-msg-error-value0: "Ошибка : {value0}"
+msg-error-value0: "Ошибка: {value0}"
 msg-error-value0-2: "Ошибка: {value0}"
-msg-error-value0-3: "Ошибка: {value0}"
-msg-error-value0-4: "Ошибка : {value0}"
-msg-error-value0-5: "Ошибка: {value0}"
-msg-error-value0-6: "Ошибка: {value0}"
-msg-error-value0-7: "Ошибка : {value0}"
-msg-error-value0-8: "Ошибка : {value0}"
 msg-errors-in-packets-s: Входящие ошибки, пакеты/с
 msg-errors-in-summary: Сумма входящих ошибок, пакеты
 msg-errors-out-packets-s: Исходящие ошибки, пакеты/с
 msg-errors-out-summary: Сумма исходящих ошибок, пакеты
-msg-escalate-failed: "Сбой эскалации: "
+msg-escalate-failed: "Сбой эскалации:"
 msg-escalate-failed-2: Сбой эскалации
 msg-escalate-failed-value0: "Сбой эскалации: {value0}"
-msg-escalate-failed-value0-2: "Сбой эскалации: {value0}"
 msg-escalated: Эскалировано
 msg-escalation-time: Время эскалации
 msg-established: ESTABLISHED
@@ -3117,39 +3102,34 @@ msg-exit-full-screen: Exit Full Screen
 msg-expand-panels: Развернуть панели
 msg-extend-condition: Расширить условия
 msg-failed: Ошибка
-msg-failed-2: " - Ошибка"
 msg-failed-3: ошибка
-msg-failed-add-custom-fields-to-form: "Ошибка при добавлении custom поля в форму "
+msg-failed-add-custom-fields-to-form: "Ошибка при добавлении custom поля в форму"
 msg-failed-get-group-mo-detail: Ошибка при запросе группы
 msg-failed-get-map-menu: Ошибка запроса меню
 msg-failed-get-mo-detail: Ошибка получения данных
 msg-failed-refresh-basket: Ошибка при обновлении корзины
 msg-failed-save-data: Ошибка сохранения данных
 msg-failed-to-add-vlan: Ошибка добавления VLANа
-msg-failed-to-change-credentials: "Не удалось сменить пароль: "
+msg-failed-to-change-credentials: "Не удалось сменить пароль:"
 msg-failed-to-change-credentials-2: "Ошибка при изменении учётных данных:"
-msg-failed-to-change-credentials-value0: "Не удалось сменить пароль: {value0}"
-msg-failed-to-change-credentials-value0-2: "Не удалось сменить пароль: {value0}"
-msg-failed-to-change-credentials-value0-3: "Не удалось сменить пароль: {value0}"
-msg-failed-to-change-credentials-value0-4: "Ошибка при изменении учётных данных: {value0}"
+msg-failed-to-change-credentials-value0: "Ошибка при изменении учётных данных: {value0}"
 msg-failed-to-change-layer-settings: Ошибка при изменении настроек слоя
 msg-failed-to-clear-alarm: Не удалось закрыть аварию
 msg-failed-to-clear-alarms: Ошибка при закрытии аварий
 msg-failed-to-clone: Ошибка клонирования
 msg-failed-to-clone-object: Ошибка клонирования объекта.
 msg-failed-to-connect-interfaces: Не удалось соединить интерфейсы
-msg-failed-to-connect-objects: "Ошибка при соединении объектов: "
+msg-failed-to-connect-objects: "Ошибка при соединении объектов:"
 msg-failed-to-connect-objects-value0: "Ошибка при соединении объектов: {value0}"
-msg-failed-to-connect-objects-value0-2: "Ошибка при соединении объектов: {value0}"
 msg-failed-to-create-ignore-pattern-from-event: Ошибка при создании шаблона игнорирования из события
 msg-failed-to-create-rule-from-event: Ошибка создания правила из сообщения
-msg-failed-to-delete: "Ошибка при удалении: "
+msg-failed-to-delete: "Ошибка при удалении:"
 msg-failed-to-delete-file: Ошибка при удалении файла
 msg-failed-to-delete-group: Ошибка при удалении группы
 msg-failed-to-delete-value0: "Ошибка при удалении: {value0}"
 msg-failed-to-disable-tasks: Ошибка при отключении задачи
-msg-failed-to-disconnect-objects: "Ошибка отключения объекта : "
-msg-failed-to-disconnect-objects-value0: "Ошибка отключения объекта : {value0}"
+msg-failed-to-disconnect-objects: "Ошибка отключения объекта:"
+msg-failed-to-disconnect-objects-value0: "Ошибка отключения объекта: {value0}"
 msg-failed-to-fetch-data: Ошибка при запросе данных!
 msg-failed-to-find-node: Ошибка про поиске узла
 msg-failed-to-fix: Не удалось исправить
@@ -3160,12 +3140,9 @@ msg-failed-to-get-connection-information: Ошибка при получении
 msg-failed-to-get-data: Ошибка получения данных
 msg-failed-to-get-data-for-job: Ошибка получения данных по задаче
 msg-failed-to-get-data-for-job-value0: "Ошибка получения данных по задаче: {value0}"
-msg-failed-to-get-data-for-menu-items: " : Ошибка получения данных для меню"
 msg-failed-to-get-data-for-plugin: Ошибка получения данных для плагина
 msg-failed-to-get-data-for-plugin-value0: Ошибка получения данных для плагина {value0}
 msg-failed-to-get-data-value0: "Ошибка получения данных: {value0}"
-msg-failed-to-get-data-value0-2: "Ошибка получения данных: {value0}"
-msg-failed-to-get-data-value0-3: "Ошибка получения данных: {value0}"
 msg-failed-to-get-home-data: Ошибка при получении данных дашбордов
 msg-failed-to-get-interfaces: Ошибка при получении интерфейсов
 msg-failed-to-get-interfaces-list: Не удалось получить список интерфейсов
@@ -3180,27 +3157,27 @@ msg-failed-to-get-path: Ошибка при получении пути
 msg-failed-to-get-remote-sync-time: Ошибка при получении времени синхронизации
 msg-failed-to-get-revisions: Ошибка при получении ревизий
 msg-failed-to-get-shared-info: "Ошибка получения данных по публикации:"
-msg-failed-to-get-shared-info-value0: Ошибка получения данных по публикации:{value0}
+msg-failed-to-get-shared-info-value0: "Ошибка получения данных по публикации: {value0}"
 msg-failed-to-get-stp-status: Ошибка получения статуса STP
 msg-failed-to-get-text: Ошибка при получении текста
 msg-failed-to-get-user-settings: Ошибка получения настроек пользователя
 msg-failed-to-get-vendor-information: Ошибка получения информации по производителю
 msg-failed-to-launch-application: Ошибка при запуске приложения
-msg-failed-to-launch-application-2: "Ошибка при запуске приложения "
+msg-failed-to-launch-application-2: "Ошибка при запуске приложения"
 msg-failed-to-launch-application-value0: Ошибка при запуске приложения {value0}
 msg-failed-to-launch-application-value0-2: Ошибка при запуске приложения  {value0}
 msg-failed-to-load-capabilities: Failed to load capabilities
 msg-failed-to-load-data: Ошибка загрузки
 msg-failed-to-load-data-value0: "Ошибка загрузки: {value0}"
-msg-failed-to-load-event: "Failed to load event "
+msg-failed-to-load-event: "Failed to load event"
 msg-failed-to-load-event-value0: Failed to load event {value0}
 msg-failed-to-load-instances: Ошибка загрзуки экземпляров
 msg-failed-to-load-map-resources: Не удалось загрузить ресурсы карты
 msg-failed-to-log-in: Ошибка захода
 msg-failed-to-post-message: Не удалось отправить сообщение
 msg-failed-to-reclassify: Ошибка при обработке
-msg-failed-to-remove-connections: "Ошибка при удалении связи : "
-msg-failed-to-remove-connections-value0: "Ошибка при удалении связи : {value0}"
+msg-failed-to-remove-connections: "Ошибка при удалении связи:"
+msg-failed-to-remove-connections-value0: "Ошибка при удалении связи: {value0}"
 msg-failed-to-remove-interface: Ошибка при удалении интерфейса
 msg-failed-to-reset-layout: Ошибка при сбросе уровня
 msg-failed-to-run-command: Ошибка при запуске команды
@@ -3208,7 +3185,7 @@ msg-failed-to-run-report: Ошибка при запуске отчёта
 msg-failed-to-run-script: Ошибка при запуске скрипта
 msg-failed-to-run-tasks: Ошибка запуска
 msg-failed-to-save: Ошибка сохранения
-msg-failed-to-save-api-key: "Ошибка при сохранении ключа API: "
+msg-failed-to-save-api-key: "Ошибка при сохранении ключа API:"
 msg-failed-to-save-api-key-value0: "Ошибка при сохранении ключа API: {value0}"
 msg-failed-to-save-changes: Ошибка при записи изменений
 msg-failed-to-save-conduits: Ошибка при сохранении связей
@@ -3218,7 +3195,7 @@ msg-failed-to-save-group-comment: Ошибка при сохранении ко�
 msg-failed-to-save-json: Ошибка при сохранении
 msg-failed-to-search: Ошибка поиска
 msg-failed-to-send-contribution: "Ошибка при отправке записи:"
-msg-failed-to-send-contribution-value0: Ошибка при отправке записи:{value0}
+msg-failed-to-send-contribution-value0: "Ошибка при отправке записи: {value0}"
 msg-failed-to-set-acknowledgedun-acknowledged: Ошибка при подтверждении
 msg-failed-to-set-data: Ошибка при установке данных
 msg-failed-to-set-parameter: Ошибка при записи параметра
@@ -3234,16 +3211,16 @@ msg-failed-to-update-statuses: Failed to update statuses
 msg-failed-to-update-subscription: Ошибка при обновлении подписки
 msg-failed-to-upload-files: Ошибка при загрузке файлов
 msg-failed-to-upload-mib: Ошибка при загрузке MIB
-msg-failed-value0: "Ошибка : {value0}"
-msg-favorite-status-updating: Favorite status updating ...
+msg-failed-value0: "Ошибка: {value0}"
+msg-favorite-status-updating: Favorite status updating...
 msg-feed: Скормиться
 msg-female: Женский
 msg-fetching-data-for-ad-hoc-channels: Получение данных вложенных каналов
-msg-fetching-data-for-draw-scheme: Получение данных для отрисовки схемы ...
+msg-fetching-data-for-draw-scheme: Получение данных для отрисовки схемы...
 msg-fetching-data-for-item: "Получение данных для {name}..."
 msg-field-max-length: "Максимальная длина этого поля — {maxLength}"
 msg-fields-selector: Выбор колонок
-msg-file-value0: № файла{value0}
+msg-file-value0: "Файл № {value0}"
 msg-files-has-been-uploaded: Файлы будут загружены
 msg-fire-event: Fire Event
 msg-first: Первый свободный
@@ -3275,8 +3252,8 @@ msg-history: история
 msg-horizontal: Горизонтальная
 msg-html: HTML
 msg-http-request-failed: Ошибка запроса.
-msg-http-status: "HTTP статуы : "
-msg-http-status-value0: "HTTP статуы : {value0}"
+msg-http-status: "HTTP статуы:"
+msg-http-status-value0: "HTTP статуы: {value0}"
 msg-idle: IDLE
 msg-ignore-stop: Игнорировать и остановить опрос
 msg-in-maintenance: Проводятся работы
@@ -3356,17 +3333,17 @@ msg-load-out-90-percentile: Исходящая загрузка (90% перце�
 msg-load-out-average: Исходящая загрузка (средняя)
 msg-load-out-bandwith: Входящая загрузка (В процентах от скорости интерфейса)
 msg-loading: Загрузка
-msg-loading-2: загрузка ...
+msg-loading-2: загрузка...
 msg-loading-3: Загрузка...
 msg-loading-4: загрузка
-msg-loading-5: загрузка ...
+msg-loading-5: загрузка...
 msg-loading-application: "Загрузка приложения {name}, пожалуйста, подождите..."
 msg-loading-capabilities: Loading capabilities...
-msg-loading-job-panel: Загрузка панели задач ...
+msg-loading-job-panel: Загрузка панели задач...
 msg-loading-plugin: "Загрузка плагина {name}, пожалуйста, подождите..."
 msg-loading-tab-with: Запуск таба с
-msg-loading-tab-with-value0: Запуск таба с {value0} ...
-msg-logged-in-as: "Вошёл как "
+msg-loading-tab-with-value0: Запуск таба с {value0}...
+msg-logged-in-as: "Вошёл как"
 msg-logged-in-as-value0: Вошёл как {value0}
 msg-logged-out-for-inactivity: Выход по неактивности
 msg-loopback: Loopback
@@ -3384,9 +3361,9 @@ msg-managed-object-was-moved: Объект был перемещён
 msg-management-address: Адрес управления
 msg-management-vlan: VLAN управления
 msg-manual-scan-failed: Ошибка в ручном сканировании
-msg-manual-scan-failed-value0: "Ошибка в ручном сканировании : {value0}"
+msg-manual-scan-failed-value0: "Ошибка в ручном сканировании: {value0}"
 msg-map-has-been-saved: Карта будет сохранена
-msg-map-loading: Карта загружается ...
+msg-map-loading: Карта загружается...
 msg-map-module-is-not-loaded: Map module is not loaded
 msg-mapping-was-performed-successfully: Связка успешно установлена
 msg-mappings-only: Только ИД
@@ -3539,8 +3516,8 @@ msg-prefer-startup: Предпочитать Startup
 msg-prefix-deleted: Перефикс удалён
 msg-prefix-list-built: Prefix List built
 msg-prefix-list-generator-is-not-implemented-for-this-profile: Prefix-list generator is not implemented for this profile
-msg-prefix-list-name: Prefix list name ...
-msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: Prefix list name must contains only 0-9,a-z,A-Z,-,_
+msg-prefix-list-name: Prefix list name...
+msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: Prefix list name must contains only 0-9, a-z, A-Z, -, _
 msg-prefix-not-found: Префикс не найден
 msg-preparing-contribution: Подготовка трудов
 msg-prev-failed: Prev Failed
@@ -3552,7 +3529,7 @@ msg-profile-saved: Профиль сохранен
 msg-propagate: Распространить
 msg-push-collector: Push (Collector)
 msg-query-failure: Ошибка в запросе
-msg-querying: Запрашиваем ...
+msg-querying: Запрашиваем...
 msg-rack-value0: "Стойка: {value0}"
 msg-raise: Поднять
 msg-raise-alarm: Поднять аварию
@@ -3564,10 +3541,10 @@ msg-raw-vars: Исходные переменные
 msg-read-only: Только чтение
 msg-read-only-2: Только чтение
 msg-ready-to-share: Готово для публикации...
-msg-rebase-prefix: "Переместить префикс "
+msg-rebase-prefix: "Переместить префикс"
 msg-rebase-prefix-value0: Переместить префикс {value0}
 msg-rebased: Перемещён
-msg-rebasing: Перемещение ...
+msg-rebasing: Перемещение...
 msg-record-reload-error: Ошибка при обновлении записи.
 msg-records-has-been-saved: Запись сохранена
 msg-records-has-been-updated: Записи будут обновлены
@@ -3575,13 +3552,13 @@ msg-regex: Шаблон
 msg-regex-error: Ошибка в регулярном выражении!
 msg-reloading: Reloading...
 msg-reloading-item: "Перезагрузка {name}..."
-msg-remote-value0: "Remote : {value0}"
+msg-remote-value0: "Remote: {value0}"
 msg-remove-conduits-to-value0: Удалить подключение в {value0}?
 msg-remove-group-value0: Удалить группу '{value0}'?
 msg-report: Отчет
 msg-report-data-source-not-found: Источник данных отчёта {data_source} не найден
 msg-request-failed-with-status: Запрос выполнен с ошибкой
-msg-request-failed-with-status-value0: Запрос выполнен с ошибкой :{value0}
+msg-request-failed-with-status-value0: "Запрос выполнен с ошибкой: {value0}"
 msg-request-failure: Ошибка запроса
 msg-require-up-if-ping-enabled: Требуется доступность (если активирована проверка ICMP)
 msg-required-field: Required field
@@ -3603,7 +3580,7 @@ msg-saved: сохранено
 msg-saved-2: Сохранено
 msg-saving: сохраняется
 msg-saving-2: Созранение...
-msg-saving-3: Сохраняется ...
+msg-saving-3: Сохраняется...
 msg-saving-item: "Сохранение {name}..."
 msg-script-confdb: Скрипт, Конфиг
 msg-script-download: Script, Download
@@ -3625,7 +3602,7 @@ msg-segmentate-to-existing-segment: Перемещать соседей в те�
 msg-selected: Выбранные
 msg-selected-filter: "Выбрано ({type}): {path}"
 msg-selected-total-selected: "Выбрано: '{total.selected}'"
-msg-selected-total-selection: "Выбрано : '{total.selection}'"
+msg-selected-total-selection: "Выбрано: '{total.selection}'"
 msg-self-status: Собственное состояние
 msg-send-approve: Подтвердить
 msg-send-ignore: Послать игнорировать
@@ -3635,11 +3612,11 @@ msg-sensor-profile: Профиль сенсора
 msg-serial-number: Серийный номер
 msg-server-error-occurred: Ошибка сервера
 msg-server-side-failed-to-get-default-dictionary: Ошибка сервера при получении справочника по умолчанию
-msg-server-side-failed-to-get-default-dictionary-value0: "Ошибка сервера при получении справочника по умолчанию : {value0}"
+msg-server-side-failed-to-get-default-dictionary-value0: "Ошибка сервера при получении справочника по умолчанию: {value0}"
 msg-server-side-failed-to-get-fields: Ошибка сервера при получении списка полей
-msg-server-side-failed-to-get-fields-value0: "Ошибка сервера при получении списка полей : {value0}"
+msg-server-side-failed-to-get-fields-value0: "Ошибка сервера при получении списка полей: {value0}"
 msg-server-side-failure-status: Ошибка сервера, код {status}
-msg-server-side-failure-with-status-code: "ошибка на стороне сервера. Код "
+msg-server-side-failure-with-status-code: "ошибка на стороне сервера. Код"
 msg-server-side-failure-with-status-code-value0: ошибка на стороне сервера. Код {value0}
 msg-serviceactivation: Опрос оборудования
 msg-session-timeout: Время соединения вышло.
@@ -3656,7 +3633,7 @@ msg-snmp-cli: SNMP, CLI
 msg-snmp-only: Только SNMP
 msg-snmp-trap: SNMP_TRAP
 msg-sorted-labels: Sorted Labels
-msg-sound: "Sound: "
+msg-sound: "Sound:"
 msg-sound-value0: "Sound: {value0}"
 msg-specify-address: Заданный адрес
 msg-square: Square
@@ -3673,7 +3650,6 @@ msg-subinterface-tagged-vlans: Тэг. VLAN'ы
 msg-subinterface-untagged-vlan: Нетэг. VLAN
 msg-subscription-updated-successfully: Подписка успешно обновлена
 msg-success: Успех
-msg-success-2: " - Успех"
 msg-successfully: успешно
 msg-sum: Сумма
 msg-summary-level: Сумма уровней
@@ -3705,16 +3681,13 @@ msg-to-maintenance: в РНР
 msg-too-many-ip-max-2000: Слишком много IP, макс. 2000
 msg-too-many-vendors-found: Найдено слишком много производителей!
 msg-tools: инструменты
-msg-total: "Итого: "
+msg-total: "Итого:"
 msg-total-in: Сумма входящего трафика
 msg-total-nbsp-value0: Всего:&nbsp;{value0}
 msg-total-out: Сумма исходящего трафика
-msg-total-total-all: "Суммарно : '{total.all}'"
-msg-total-total-selected: "Суммарно : '{total.selected}'"
+msg-total-total-all: "Суммарно: '{total.all}'"
+msg-total-total-selected: "Суммарно: '{total.selected}'"
 msg-total-value0: "Итого: {value0}"
-msg-total-value0-2: "Итого: {value0}"
-msg-total-value0-3: "Итого: {value0}"
-msg-total-value0-4: "Итого: {value0}"
 msg-traffic-in-sum-by-period-in-mb: Входящий трафик (сумма за период), Мб
 msg-traffic-out-sum-by-period-in-mb: Исходящий трафик (сумма за период), Мб
 msg-transit: Транзитный
@@ -3730,7 +3703,7 @@ msg-unidirectional: Однонаправленное
 msg-unknown-as-set: Unknown AS-SET
 msg-unknown-error: Неизвестная ошибка
 msg-unknown-or-failed: Неизвестна или Ошибка
-msg-unknown-type: "Unknown type: "
+msg-unknown-type: "Unknown type:"
 msg-unknown-type-value0: "Unknown type: {value0}"
 msg-unlink: Расцепить
 msg-unlink-failure: Ошибка при расцеплении
@@ -3740,7 +3713,7 @@ msg-up: Работает
 msg-update-channel-value0: Обновить канал {value0}
 msg-update-or-modify-internal-connection-from-value0-to-value1: Обновить или изменить внутренее подключения из {value0} в {value1}
 msg-update-unlink-value0: Обновить/Отвязать {value0}
-msg-updating: Обновление ...
+msg-updating: Обновление...
 msg-uplink-avg-load-in: Средняя загрузка Uplink входящий
 msg-uplink-avg-load-out: Средняя загрузка Uplink исходящий
 msg-uplink-interface-description: Описание интерфейса Uplink
@@ -3761,8 +3734,8 @@ msg-valn-allocated: Разместить VLAN
 msg-value-deleted: Значение удалено.
 msg-value-saved: Значение сохранено.
 msg-value0-failed: "{value0} - Ошибка"
-msg-value0-failed-to-get-data-for-menu-items: "{value0} : Ошибка получения данных для меню"
-msg-value0-failed-value1: "{value0} - Ошибка : {value1}"
+msg-value0-failed-to-get-data-for-menu-items: "{value0}: Ошибка получения данных для меню"
+msg-value0-failed-value1: "{value0} - Ошибка: {value1}"
 msg-value0-history: "{value0} - история"
 msg-value0-sec: "{value0} сек"
 msg-value0-success: "{value0} - Успех"
@@ -3782,7 +3755,7 @@ msg-workflow-editor-is-not-initialized: Workflow editor is not initialized
 msg-workflow-editor-module-is-not-loaded: Workflow editor module is not loaded
 msg-workflow-inspector: Инспектор процесса
 msg-workflow-state: Workflow State
-msg-would-you-like-remove-interface: "Вы желаете удалить интерфейс? "
+msg-would-you-like-remove-interface: "Вы желаете удалить интерфейс?"
 msg-would-you-like-remove-interface-value0: Вы желаете удалить интерфейс? {value0}
 msg-would-you-like-to-remove-group: Вы хотите удалить группу?
 msg-would-you-like-to-reset-current-layout-and-generate-new: Сбросить раскладку карты и перестроить заново?

@@ -23,7 +23,7 @@ app-group-support: Suporte
 app-group-vc: Gerência de VC
 app-group-wf: Fluxos de Trabalho
 app-title-abduct-detection: Abduct Detection
-app-title-about-system: Sobre o sistema ...
+app-title-about-system: Sobre o sistema...
 app-title-account: Conta
 app-title-action: Ação
 app-title-actioncommands: Comando de Ação
@@ -361,7 +361,7 @@ app-title-peer: Peers
 app-title-peergroup: Grupos de Peers
 app-title-peeringpoint: Peering Points
 app-title-peerprofile: Perfil de AS
-app-title-period-start-qty: Period start,qty
+app-title-period-start-qty: Period start, qty
 app-title-periodic-discovery: Descoberta periódica
 app-title-periodic-discovery-intervals: Descoberta periódica
 app-title-person: Pessoas/Papéis
@@ -396,7 +396,7 @@ app-title-reactionrule: Reaction Rules
 app-title-referenced: Preferência
 app-title-register-instance: Interface Remota
 app-title-remote-mapping: IP Remoto
-app-title-remotesystem: Sobre o sistema ...
+app-title-remotesystem: Sobre o sistema...
 app-title-remove-conduits-to: Remove conduits to
 app-title-remove-interface: Interface Remota
 app-title-replace-rule: Criar Regra
@@ -445,7 +445,7 @@ app-title-reportpartnumbers: Part Numbers
 app-title-reportpendinglinks: Pending Links
 app-title-reportreboots: Reboots
 app-title-reportrulesbyprofile: Regras por Perfil
-app-title-reportrulesetsummary: "Resumo de Conjunto de Regras "
+app-title-reportrulesetsummary: "Resumo de Conjunto de Regras"
 app-title-reportstalediscovery: Descoberta Stale
 app-title-reportsubscription: Report Subscription
 app-title-reportsummary: Block Summary
@@ -503,7 +503,7 @@ app-title-telemetry: Telemetry
 app-title-template: Nome do template
 app-title-test-selected-groups: Test selected groups
 app-title-test-selected-patterns: Test selected patterns
-app-title-test-selected-prefix-tables: Test selected prefix tables ...
+app-title-test-selected-prefix-tables: Test selected prefix tables...
 app-title-text: Texto
 app-title-text-style: Estilo de Linha
 app-title-threshold-profiles-handlers: Threshold Profiles Handlers
@@ -549,7 +549,7 @@ app-title-zoom: Zoom
 app-title-zoom-in: Zoom in...
 app-title-zoom-out: Diminuir Zoom
 btn-1-100-000: 1:100 000
-btn-about-system: Sobre o sistema ...
+btn-about-system: Sobre o sistema...
 btn-add: Adicionar
 btn-add-2: Adicionar
 btn-add-address: Até o IP
@@ -593,7 +593,7 @@ btn-calcified-profile: Calcified Profile
 btn-cancel: Modificar
 btn-cancel-sort: Modificar
 btn-card: Ficha
-btn-change-password: Alterar senha ...
+btn-change-password: Alterar senha...
 btn-change-password-2: Alterar senha
 btn-clean-all: Clean All
 btn-clear: Limpar
@@ -697,13 +697,11 @@ btn-max-attacker-lvl: Max Attacker Lvl
 btn-max-severity: Criticidade
 btn-max-status: Status do Alerta
 btn-max-value: Max. Value
-btn-max-value-2: Max.Value
 btn-message: Mensagem
 btn-min-attacker-lvl: Min Attacker Lvl
 btn-min-severity: Criticidade
 btn-min-status: Status do Alerta
 btn-min-value: Min. Value
-btn-min-value-2: Min.Value
 btn-modify-api-key: Corpo
 btn-move-down: Move Down
 btn-move-up: Excluir
@@ -714,7 +712,7 @@ btn-next: Texto
 btn-no-leaf-selected: No leaf selected
 btn-no-link: No link
 btn-no-matches-found: Mostrar carga de interface
-btn-no-records-found-matching: "No records found matching: "
+btn-no-records-found-matching: "No records found matching:"
 btn-no-records-to-display: No records to display
 btn-object-settings: Objetos
 btn-object-status-style: Object status style
@@ -766,7 +764,7 @@ btn-select-all: Select All
 btn-select-config: Selecionar a configuração...
 btn-select-dictionary: Seção
 btn-select-image: Selecione um arquivo...
-btn-select-managed-object: Selecionar objeto gerenciado ...
+btn-select-managed-object: Selecionar objeto gerenciado...
 btn-select-period: Excluído
 btn-select-rows: Seletores
 btn-send: Som
@@ -1157,7 +1155,7 @@ header-is-synced: É Filtrável
 header-job: Tarefa
 header-key: Chave
 header-key-re: Chave RE
-header-kind: "zÍndice "
+header-kind: "zÍndice"
 header-l2-domain: Domínio Administrativo
 header-l3: L3
 header-label: Rótulo
@@ -1466,7 +1464,7 @@ header-remote-id: IP Remoto
 header-remote-interface: Interface Remota
 header-remote-name: AS Remoto
 header-remote-object-d33f14: Remote object
-header-remote-object-e48a25: Selecionar objeto gerenciado ...
+header-remote-object-e48a25: Selecionar objeto gerenciado...
 header-remote-port: Remote port
 header-remove-policy: Papel do Evento
 header-repeat: Repeat
@@ -1550,8 +1548,8 @@ header-strict: Início
 header-struct: Struct
 header-struct-letter: Identificação do Bloco
 header-struct2: Struct2
-header-sub-interface: Sub.Interface
-header-sub-interfaces: Sub.Interfaces
+header-sub-interface: Sub. Interface
+header-sub-interfaces: Sub. Interfaces
 header-subject: Assunto
 header-subject-class: Assunto/Classe
 header-subscriber: Assinante
@@ -1586,7 +1584,7 @@ header-temp-c: Temp, °C
 header-template: Template
 header-terminator: Terminator
 header-terms: Terms
-header-text: .
+header-text: Texto
 header-threshold: Threshold
 header-time: Hora
 header-time-duration: Tempo/Duração
@@ -1671,7 +1669,7 @@ header-whois: whois
 header-wildcard: Wildcard
 header-window-sec: Tempo (s)
 header-wiping: Mesmo Nível
-header-zindex: "zÍndice "
+header-zindex: "zÍndice"
 header-zone: Zona
 help-action-when-discovery-firmware-denied-on-firmwarepolice-inventor: Action when discovery firmware denied on FirmwarePolice.Inventory -> Setup -> FirmwarePolicy <br/>Ignore - Ignore and do next discovery<br/>Ignore&Stop - Ignore and stop discovery<br/>Raise Alarm - Raise alarm on ManagedObject and do next discovery<br/>Raise Alarm&Stop - Raise alarm on ManagedObject and stop discovery
 help-action-when-discovery-new-platform-on-version-discovery-br-creat: Action when discovery new platform on version discovery. <br/>Create - Create platform and set it on device<br/>Alarm - Do not create platform and raise alarm
@@ -1715,7 +1713,7 @@ help-copy-existing-values-to-a-new-object: Copy existing values to a new object
 help-create-new-maintaince: Create new maintaince
 help-create-or-update-channel: Criar Regra
 help-default-state-when-set-diagnostic: Default state when set Diagnostic
-help-delete-object: Selecionar objeto gerenciado ...
+help-delete-object: Selecionar objeto gerenciado...
 help-delete-object-s: Delete object(s)
 help-delete-workflow: Delete Workflow
 help-depended-diagnostic-for-calculate-state: Depended Diagnostic for calculate state
@@ -1806,7 +1804,7 @@ help-remove-all-devices-from-right-panel: Remove all devices from right panel
 help-remove-input: Remove Input
 help-remove-me-to-this-subscription: Descrição Remota
 help-repaint: Nível Superior
-help-required-run-migration-metric-database-after-changed-that-enable: Required run migration metric Database after changed.That enabled only by deploy.
+help-required-run-migration-metric-database-after-changed-that-enable: Required run migration metric Database after changed. That enabled only by deploy.
 help-reset-changes: última mudança
 help-reset-filters: Limpar filtro
 help-reset-title-permissions: Reset title permissions
@@ -1817,12 +1815,12 @@ help-rotate: Estado
 help-run-config-validate-process-br-always-validate-every-discovery-r: "Run config validate process: <br/>Always Validate - every discovery run<br/>Validate on Change - only if detect config changed"
 help-run-vpn-trace: Run VPN Trace
 help-sa-profiles-for-match-rules: SA Profiles, for match rules
-help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Sampling value for Box discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry, <br/> 0,99 ... 0,1 - chance to save
-help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Sampling value for Periodic discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry,  0,99 ... 0,1 - chance to save
+help-sampling-value-for-box-discovery-interval-from-0-to-1-br-1-all-j: Sampling value for Box discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry, <br/> 0,99... 0,1 - chance to save
+help-sampling-value-for-periodic-discovery-interval-from-0-to-1-br-1-: Sampling value for Periodic discovery. Interval from 0 to 1. <br/>1 - all jobs will saved, 0 - Not collect telemetry,  0,99... 0,1 - chance to save
 help-save-all-from-basket: Save all from basket
 help-save-changes: última mudança
 help-save-changes-and-continue-editing: Notificação de Modificação de Status
-help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form.Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
+help-save-config-path-template-setup-on-main-setup-templates-subject-: "Save config path template. Setup on Main -> Setup -> Templates, subject form. Simple is: '{{ object.name }}'.txt on subject or <br/>'{{datetime.datetime.now().strftime(\"%Y-%m-%dT%H:%M:%S\")}}' for time"
 help-save-screen: Visto pela Última Vez
 help-save-workflow: Fluxos de Trabalho
 help-select-action: Seção
@@ -1882,7 +1880,7 @@ help-use-for-setup-user-permission-on-object-br-place-on-service-acti: Use for s
 help-use-for-shard-devices-over-intersection-ip-address-spaces-br-cre: Use for shard devices over intersection IP Address spaces. <br/>Create and Set on Tower<br/>
 help-use-name-network-ex-10-0-0-0-8-or-mac: Use name, network (ex 10.0.0.0/8) or MAC
 help-use-one-session-worked-on-device-br-if-disabled-worked-one-scrip: Use one session worked on device. <br/>If disabled - worked one script - one login. Logout after script end.
-help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end.Disable - worked one script - one login. Logout after script end.
+help-use-one-session-worked-on-device-br-profile-default-use-object-p: Use one session worked on device. <br/>Profile (default) - use Object Profile settings <br/>Enable - login when start job, logout after end. Disable - worked one script - one login. Logout after script end.
 help-use-this-field-if-you-want-disable-ping-check-on-specified-time-: Use this field if you want disable ping check on specified time.<br/>  Main -> Setup -> Time Patterns
 help-use-to-override-pool-for-events-processing: Use to override pool for events processing
 help-view-as-json: View as JSON
@@ -1995,8 +1993,8 @@ label-auth-proto: Perfil de Autenticação
 label-author: Caminho
 label-auto-generated: Gerado automaticamente?
 label-auto-reload: Carregamento automático de alternância
-label-auto-reload-off: "Auto reload : OFF"
-label-auto-reload-on: "Auto reload : ON"
+label-auto-reload-off: "Auto reload: OFF"
+label-auto-reload-on: "Auto reload: ON"
 label-autocreated-profile: Autocreated Profile
 label-autogenerated: Gerado automaticamente?
 label-autosegmentation-policy: Autosegmentation Policy
@@ -2060,8 +2058,8 @@ label-channel-discriminators: Fonte de Dados
 label-check: Método
 label-check-interval: Falha no intervalo
 label-check-match: Combinar
-label-check-on-config-change-after: "Verficiar mudança na configuração após "
-label-check-on-system-start-after: "Verificar o início do sistema após "
+label-check-on-config-change-after: "Verficiar mudança na configuração após"
+label-check-on-system-start-after: "Verificar o início do sistema após"
 label-check-update-interval-sec: Intervalo (s)
 label-check-updates-interval: Check Updates Interval
 label-checked: Método
@@ -2111,7 +2109,6 @@ label-consumes-resources: Consumes Resources
 label-contact: Contato
 label-contacts: Contatos
 label-container-2: Mantenedor
-label-container-3: Mantenedor
 label-container-name: "Contêiner: {name}"
 label-content-type: Conteúdo
 label-context: Contexto
@@ -2397,7 +2394,7 @@ label-link-discovery-policy: Política de Descoberta
 label-link-event: Ligar ao Evento
 label-linkgraph: LinkGraph
 label-lldp: LLDP
-label-loading: Loading ...
+label-loading: Loading...
 label-local-backup-ip: Backup de IP Local
 label-local-cpe-id: Local CPE Id
 label-local-ip: IP Local
@@ -2590,7 +2587,7 @@ label-prefix: Prefixo
 label-prefix-discovery: Box de descoberta
 label-prefix-discovery-policy: Política de Descoberta
 label-prefix-label: Prefixos
-label-prefix-list: Nome da Prefix-List ...
+label-prefix-list: Nome da Prefix-List...
 label-prefix-list-notification-group: Grupo de Notificação da Prefix-List
 label-priv-key: é primário
 label-priv-proto: projeto
@@ -2605,7 +2602,7 @@ label-query-parameters: Parâmetro
 label-question: Versão
 label-questions: Versão
 label-quick-jump: Quick Jump...
-label-rack: "Rack: "
+label-rack: "Rack:"
 label-raise-alarm-to-target: Raise Alarm to target
 label-rate-limit: Limite global
 label-raw-policy: Política
@@ -2668,7 +2665,7 @@ label-scheme: Método
 label-scopes: Scopes
 label-script: Script
 label-script-failed: Falha no script
-label-search: Busca ...
+label-search: Busca...
 label-search-by-ip: Search by ip
 label-search-by-prefix: Search by prefix
 label-search-by-user: Search by user
@@ -2677,7 +2674,6 @@ label-seconds-expr: Seconds Expr.
 label-security-level: Resumo
 label-seen-propagation: Seen propagation
 label-segment-2: Segmento
-label-segment-3: Segmento
 label-segment-name: "Segmento: {name}"
 label-segment-name-2: Nome de usuário
 label-select-band: Seção
@@ -2806,7 +2802,7 @@ label-true-level: True Level
 label-tt: TT
 label-tt-policy: TT Policy
 label-tt-system-config: TT System Config
-label-tt-system-id: Sobre o sistema ...
+label-tt-system-id: Sobre o sistema...
 label-ttl-days: TTL (days)
 label-udld: UDLD
 label-underlined: Sublinhado
@@ -2920,9 +2916,6 @@ msg-as-set-members-cache-is-empty-please-update-whois-cache: AS-SET members cach
 msg-asset-peer: Visto pela Última Vez
 msg-attachment-deleted: Attachment deleted
 msg-auto-reload-value0: Carregamento automático de alternância{value0}
-msg-auto-reload-value0-2: Carregamento automático de alternância{value0}
-msg-auto-reload-value0-3: Carregamento automático de alternância{value0}
-msg-auto-reload-value0-4: Carregamento automático de alternância{value0}
 msg-average-level: Average level
 msg-avg-load-in: AVG Load In
 msg-avg-load-out: AVG Load Out
@@ -2954,7 +2947,7 @@ msg-capabilities-of: Capacidades de {name}
 msg-center: Gênero
 msg-chained-downlink: Chained Downlink
 msg-change-address: Até o IP
-msg-change-prefix: "Change prefix "
+msg-change-prefix: "Change prefix"
 msg-change-prefix-value0: Change prefix {value0}
 msg-changes: Mudanças
 msg-changes-2: changes
@@ -3008,17 +3001,16 @@ msg-create-model: Criar Regra
 msg-create-new-address: Endereço Remoto
 msg-create-new-prefix: Create new prefix
 msg-create-new-value0: Criar Regra {value0}
-msg-created-from-alarm-list-at: "created from alarm list at "
+msg-created-from-alarm-list-at: "created from alarm list at"
 msg-created-from-alarm-list-at-value0: created from alarm list at {value0}
-msg-created-from-alarms-list-at: "created from alarms list at "
+msg-created-from-alarms-list-at: "created from alarms list at"
 msg-created-from-alarms-list-at-value0: created from alarms list at {value0}
-msg-created-from-managed-objects-list-at: "created from managed objects list at "
+msg-created-from-managed-objects-list-at: "created from managed objects list at"
 msg-created-from-managed-objects-list-at-value0: created from managed objects list at {value0}
-msg-created-from-map-at: "created from map at "
+msg-created-from-map-at: "created from map at"
 msg-created-from-map-at-value0: created from map at {value0}
 msg-created-interface: Interface Remota
 msg-created-interface-value0: Interface Remota{value0}
-msg-created-interface-value0-2: Interface Remota{value0}
 msg-credentials-has-been-changed: Credenciais alteradas  com sucesso
 msg-crm-users: Usuário
 msg-datastream: Fonte de Dados
@@ -3080,7 +3072,7 @@ msg-editable: Desabilitar
 msg-empty-command: Empty command
 msg-enter-a-valid-username: Enter a valid username.
 msg-enter-hex-value-starting-with-or-0x: "Enter hex value starting with # or 0x"
-msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-: Digite uma lista válida ASnumber (ex., AS1234) ou ASsets (ex. AS-MEGASET, AS-MEGA-SET)
+msg-enter-list-valid-asnumber-ex-as1234-or-as-sets-ex-as-megaset-as-: Digite uma lista válida ASnumber (e.g., AS1234) ou ASsets (ex. AS-MEGASET, AS-MEGA-SET)
 msg-enter-the-number-of-rows-to-clone: "Enter the number of rows to clone:"
 msg-equal: E-mail
 msg-error-changing-password: Alterar senha
@@ -3090,14 +3082,8 @@ msg-error-loading-data: Falha ao carregar dados
 msg-error-saving-changes: Erro {failure} alterações
 msg-error-saving-record: Error saving record
 msg-error-updating-statuses: Falha ao carregar dados
-msg-error-value0: "Error : {value0}"
+msg-error-value0: "Error: {value0}"
 msg-error-value0-2: "Error: {value0}"
-msg-error-value0-3: "Error: {value0}"
-msg-error-value0-4: "Error : {value0}"
-msg-error-value0-5: "Error: {value0}"
-msg-error-value0-6: "Error: {value0}"
-msg-error-value0-7: "Error : {value0}"
-msg-error-value0-8: "Error : {value0}"
 msg-errors-in-packets-s: Errors In (packets/s)
 msg-errors-in-summary: Mostrar no resumo
 msg-errors-out-packets-s: Errors Out (packets/s)
@@ -3105,7 +3091,6 @@ msg-errors-out-summary: Errors Out (Summary)
 msg-escalate-failed: Falha no script
 msg-escalate-failed-2: Falha no script
 msg-escalate-failed-value0: Falha no script{value0}
-msg-escalate-failed-value0-2: Falha no script{value0}
 msg-escalated: Revalidar
 msg-escalation-time: Escalações
 msg-established: Habilitado
@@ -3117,9 +3102,8 @@ msg-exit-full-screen: Exit Full Screen
 msg-expand-panels: Expandir painéis
 msg-extend-condition: Condição
 msg-failed: Falhou
-msg-failed-2: Falhou
 msg-failed-3: Falhou
-msg-failed-add-custom-fields-to-form: "Failed add custom fields to form "
+msg-failed-add-custom-fields-to-form: "Failed add custom fields to form"
 msg-failed-get-group-mo-detail: Failed get group MO detail
 msg-failed-get-map-menu: Falha ao carregar dados
 msg-failed-get-mo-detail: Falha ao carregar dados
@@ -3128,10 +3112,7 @@ msg-failed-save-data: Falha ao carregar dados
 msg-failed-to-add-vlan: Falha ao carregar dados
 msg-failed-to-change-credentials: Falha ao alterar as credenciais
 msg-failed-to-change-credentials-2: Falha ao alterar as credenciais
-msg-failed-to-change-credentials-value0: Falha ao alterar as credenciais{value0}
-msg-failed-to-change-credentials-value0-2: Falha ao alterar as credenciais{value0}
-msg-failed-to-change-credentials-value0-3: Falha ao alterar as credenciais{value0}
-msg-failed-to-change-credentials-value0-4: Falha ao alterar as credenciais {value0}
+msg-failed-to-change-credentials-value0: Falha ao alterar as credenciais {value0}
 msg-failed-to-change-layer-settings: Falha ao alterar as credenciais
 msg-failed-to-clear-alarm: Falha ao apagar alerta
 msg-failed-to-clear-alarms: Falha ao apagar alerta
@@ -3140,7 +3121,6 @@ msg-failed-to-clone-object: Falha ao conectar interfaces
 msg-failed-to-connect-interfaces: Falha ao conectar interfaces
 msg-failed-to-connect-objects: Falha ao conectar interfaces
 msg-failed-to-connect-objects-value0: Falha ao conectar interfaces{value0}
-msg-failed-to-connect-objects-value0-2: Falha ao conectar interfaces{value0}
 msg-failed-to-create-ignore-pattern-from-event: Failed to create ignore pattern from event
 msg-failed-to-create-rule-from-event: Failed to create rule from event
 msg-failed-to-delete: Falha ao salvar
@@ -3160,12 +3140,9 @@ msg-failed-to-get-connection-information: Falha ao conectar interfaces
 msg-failed-to-get-data: Falha ao carregar dados
 msg-failed-to-get-data-for-job: Falha ao carregar dados
 msg-failed-to-get-data-for-job-value0: "Falha ao carregar dados: {value0}"
-msg-failed-to-get-data-for-menu-items: Falha ao carregar dados
 msg-failed-to-get-data-for-plugin: Falha ao carregar dados
 msg-failed-to-get-data-for-plugin-value0: Falha ao carregar dados {value0}
 msg-failed-to-get-data-value0: "Falha ao carregar dados: {value0}"
-msg-failed-to-get-data-value0-2: "Falha ao carregar dados: {value0}"
-msg-failed-to-get-data-value0-3: "Falha ao carregar dados: {value0}"
 msg-failed-to-get-home-data: Falha ao carregar dados
 msg-failed-to-get-interfaces: Falha ao buscar a lista de interfaces
 msg-failed-to-get-interfaces-list: Falha ao buscar a lista de interfaces
@@ -3186,13 +3163,13 @@ msg-failed-to-get-text: Falha ao carregar dados
 msg-failed-to-get-user-settings: Falha ao obter o status STP
 msg-failed-to-get-vendor-information: Falha ao carregar dados
 msg-failed-to-launch-application: Failed to launch application
-msg-failed-to-launch-application-2: "Failed to launch application "
+msg-failed-to-launch-application-2: "Failed to launch application"
 msg-failed-to-launch-application-value0: Failed to launch application {value0}
 msg-failed-to-launch-application-value0-2: Failed to launch application  {value0}
 msg-failed-to-load-capabilities: Failed to load capabilities
 msg-failed-to-load-data: Falha ao carregar dados
 msg-failed-to-load-data-value0: "Falha ao carregar dados: {value0}"
-msg-failed-to-load-event: "Failed to load event "
+msg-failed-to-load-event: "Failed to load event"
 msg-failed-to-load-event-value0: Failed to load event {value0}
 msg-failed-to-load-instances: Falha ao carregar dados
 msg-failed-to-load-map-resources: Falha ao carregar os recursos do mapa
@@ -3234,12 +3211,12 @@ msg-failed-to-update-statuses: Failed to update statuses
 msg-failed-to-update-subscription: Falha ao executar tarefas
 msg-failed-to-upload-files: Falha ao carregar dados
 msg-failed-to-upload-mib: Falha ao carregar dados
-msg-failed-value0: "Falhou : {value0}"
-msg-favorite-status-updating: Favorite status updating ...
+msg-failed-value0: "Falhou: {value0}"
+msg-favorite-status-updating: Favorite status updating...
 msg-feed: Feed
 msg-female: E-mail
 msg-fetching-data-for-ad-hoc-channels: Fetching data for ad-hoc channels
-msg-fetching-data-for-draw-scheme: Fetching data for draw scheme ...
+msg-fetching-data-for-draw-scheme: Fetching data for draw scheme...
 msg-fetching-data-for-item: "Buscando dados de {name}..."
 msg-field-max-length: "O comprimento máximo deste campo é {maxLength}"
 msg-fields-selector: Seletor
@@ -3275,8 +3252,8 @@ msg-history: Descoberta
 msg-horizontal: Horizontal
 msg-html: HTML
 msg-http-request-failed: HTTP request failed.
-msg-http-status: "HTTP status : "
-msg-http-status-value0: "HTTP status : {value0}"
+msg-http-status: "HTTP status:"
+msg-http-status-value0: "HTTP status: {value0}"
 msg-idle: Escondido
 msg-ignore-stop: Ignore&Stop
 msg-in-maintenance: Esconder manutenção
@@ -3356,7 +3333,7 @@ msg-load-out-90-percentile: Load Out (90% percentile)
 msg-load-out-average: Load Out (Average)
 msg-load-out-bandwith: Load Out (% Bandwith)
 msg-loading: Construção
-msg-loading-2: loading ...
+msg-loading-2: loading...
 msg-loading-3: Loading...
 msg-loading-4: Construção
 msg-loading-5: loading...
@@ -3365,8 +3342,8 @@ msg-loading-capabilities: Loading capabilities...
 msg-loading-job-panel: Construção
 msg-loading-plugin: "Carregando plugin {name}, aguarde..."
 msg-loading-tab-with: Construção
-msg-loading-tab-with-value0: Construção {value0} ...
-msg-logged-in-as: "Logged in as "
+msg-loading-tab-with-value0: Construção {value0}...
+msg-logged-in-as: "Logged in as"
 msg-logged-in-as-value0: Logged in as {value0}
 msg-logged-out-for-inactivity: Logged out for inactivity
 msg-loopback: Loopback
@@ -3384,9 +3361,9 @@ msg-managed-object-was-moved: MO is move
 msg-management-address: Gerência
 msg-management-vlan: Gerência
 msg-manual-scan-failed: Falha no script
-msg-manual-scan-failed-value0: "Falha no script : {value0}"
+msg-manual-scan-failed-value0: "Falha no script: {value0}"
 msg-map-has-been-saved: Credenciais alteradas  com sucesso
-msg-map-loading: Map loading ...
+msg-map-loading: Map loading...
 msg-map-module-is-not-loaded: Map module is not loaded
 msg-mapping-was-performed-successfully: Mapping was performed successfully
 msg-mappings-only: Mappings Only
@@ -3522,7 +3499,7 @@ msg-please-confirm-the-alarm-is-closed-and-must-be-cleared: Por favor, verifique
 msg-please-enter-a-valid-number: Alerta comentado
 msg-please-enter-comment: Alerta comentado
 msg-please-enter-number: "Please enter number:"
-msg-please-enter-period-start-qty-first-pos-is-0: "Please enter period (start,qty), first pos is 0:"
+msg-please-enter-period-start-qty-first-pos-is-0: "Please enter period (start, qty), first pos is 0:"
 msg-please-enter-root-cause-alarm-id: Por favor, digite o id da causa raiz do alerta
 msg-please-enter-your-gitlab-api-key-to-continue: Please enter your GitLab API key to continue.
 msg-please-provide-a-description-for-your-contribution: Please provide a description for your contribution.
@@ -3539,7 +3516,7 @@ msg-prefer-startup: Prefer Startup
 msg-prefix-deleted: Pré-Excluir
 msg-prefix-list-built: Prefix List built
 msg-prefix-list-generator-is-not-implemented-for-this-profile: Prefix-list generator is not implemented for this profile
-msg-prefix-list-name: Nome da Prefix-List ...
+msg-prefix-list-name: Nome da Prefix-List...
 msg-prefix-list-name-must-contains-only-0-9-a-z-a-z: O nome da Prefix-List deve conter apenas 0-9, a-z, A-Z, -, _
 msg-prefix-not-found: Prefixo não encontrado
 msg-preparing-contribution: Iniciando
@@ -3552,7 +3529,7 @@ msg-profile-saved: Perfil salvo
 msg-propagate: Propagate
 msg-push-collector: Push (Collector)
 msg-query-failure: Query failure
-msg-querying: Querying ...
+msg-querying: Querying...
 msg-rack-value0: "Rack: {value0}"
 msg-raise: Traçar
 msg-raise-alarm: Mostrar alertas ativos
@@ -3564,10 +3541,10 @@ msg-raw-vars: Variáveis
 msg-read-only: Read-Only
 msg-read-only-2: Razão Inicial
 msg-ready-to-share: Ready to share...
-msg-rebase-prefix: "Rebase prefix "
+msg-rebase-prefix: "Rebase prefix"
 msg-rebase-prefix-value0: Rebase prefix {value0}
 msg-rebased: Processado
-msg-rebasing: Rebasing ...
+msg-rebasing: Rebasing...
 msg-record-reload-error: Record reload error.
 msg-records-has-been-saved: Credenciais alteradas  com sucesso
 msg-records-has-been-updated: Credenciais alteradas  com sucesso
@@ -3575,13 +3552,13 @@ msg-regex: Redefinir
 msg-regex-error: Regex error!
 msg-reloading: Construção
 msg-reloading-item: "Recarregando {name}..."
-msg-remote-value0: "Excluir : {value0}"
+msg-remote-value0: "Excluir: {value0}"
 msg-remove-conduits-to-value0: Remove conduits to {value0}?
 msg-remove-group-value0: Remove group '{value0}'?
 msg-report: Relatório
 msg-report-data-source-not-found: Fonte de dados do relatório {data_source} não encontrada
 msg-request-failed-with-status: Falha ao obter o status STP
-msg-request-failed-with-status-value0: Falha ao obter o status STP :{value0}
+msg-request-failed-with-status-value0: "Falha ao obter o status STP: {value0}"
 msg-request-failure: Limpar filtro
 msg-require-up-if-ping-enabled: Require Up if ping enabled
 msg-required-field: Obrigatório
@@ -3603,7 +3580,7 @@ msg-saved: Salvos
 msg-saved-2: Salvos
 msg-saving: Construção
 msg-saving-2: Construção
-msg-saving-3: Saving ...
+msg-saving-3: Saving...
 msg-saving-item: "Salvando {name}..."
 msg-script-confdb: Descrição
 msg-script-download: Script, Download
@@ -3624,8 +3601,8 @@ msg-segmentate-to-child-segment: Segmentate to child segment
 msg-segmentate-to-existing-segment: Segmentate to existing segment
 msg-selected: Excluído
 msg-selected-filter: "Selecionado ({type}): {path}"
-msg-selected-total-selected: "Selected : '{total.selected}'"
-msg-selected-total-selection: "Selected : '{total.selection}'"
+msg-selected-total-selected: "Selected: '{total.selected}'"
+msg-selected-total-selection: "Selected: '{total.selection}'"
 msg-self-status: Status da interface
 msg-send-approve: Perfil de Usuário
 msg-send-ignore: Send Ignore
@@ -3635,11 +3612,11 @@ msg-sensor-profile: Perfil de Usuário
 msg-serial-number: Nome de usuário
 msg-server-error-occurred: Server error occurred
 msg-server-side-failed-to-get-default-dictionary: Server-side failed to get default dictionary
-msg-server-side-failed-to-get-default-dictionary-value0: "Server-side failed to get default dictionary : {value0}"
+msg-server-side-failed-to-get-default-dictionary-value0: "Server-side failed to get default dictionary: {value0}"
 msg-server-side-failed-to-get-fields: Falha ao carregar dados
-msg-server-side-failed-to-get-fields-value0: "Falha ao carregar dados : {value0}"
+msg-server-side-failed-to-get-fields-value0: "Falha ao carregar dados: {value0}"
 msg-server-side-failure-status: Falha no servidor com código {status}
-msg-server-side-failure-with-status-code: "server-side failure with status code "
+msg-server-side-failure-with-status-code: "server-side failure with status code"
 msg-server-side-failure-with-status-code-value0: server-side failure with status code {value0}
 msg-serviceactivation: ServiceActivation
 msg-session-timeout: Escalações
@@ -3656,7 +3633,7 @@ msg-snmp-cli: SNMP, CLI
 msg-snmp-only: SNMP Only
 msg-snmp-trap: SNMP_TRAP
 msg-sorted-labels: Sorted Labels
-msg-sound: "Sound: "
+msg-sound: "Sound:"
 msg-sound-value0: "Sound: {value0}"
 msg-specify-address: Até o IP
 msg-square: Square
@@ -3673,7 +3650,6 @@ msg-subinterface-tagged-vlans: Interface alterada
 msg-subinterface-untagged-vlan: Interface alterada
 msg-subscription-updated-successfully: Subscription updated successfully
 msg-success: Permissão
-msg-success-2: Permissão
 msg-successfully: Permissão
 msg-sum: Número
 msg-summary-level: Resumo
@@ -3705,16 +3681,13 @@ msg-to-maintenance: Esconder manutenção
 msg-too-many-ip-max-2000: Too many IP, max 2000
 msg-too-many-vendors-found: Too many vendors found!
 msg-tools: Protocolos
-msg-total: "Total: "
+msg-total: "Total:"
 msg-total-in: Total In
 msg-total-nbsp-value0: Total:&nbsp;{value0}
 msg-total-out: Anexar conta
-msg-total-total-all: "Total : '{total.all}'"
-msg-total-total-selected: "Total : '{total.selected}'"
+msg-total-total-all: "Total: '{total.all}'"
+msg-total-total-selected: "Total: '{total.selected}'"
 msg-total-value0: "Total: {value0}"
-msg-total-value0-2: "Total: {value0}"
-msg-total-value0-3: "Total: {value0}"
-msg-total-value0-4: "Total: {value0}"
 msg-traffic-in-sum-by-period-in-mb: Traffic In (Sum by period in MB)
 msg-traffic-out-sum-by-period-in-mb: Traffic Out (Sum by period in MB)
 msg-transit: transição ipv6
@@ -3730,7 +3703,7 @@ msg-unidirectional: Direção
 msg-unknown-as-set: Unknown AS-SET
 msg-unknown-error: Unknown error
 msg-unknown-or-failed: Unknown or Failed
-msg-unknown-type: "Unknown type: "
+msg-unknown-type: "Unknown type:"
 msg-unknown-type-value0: "Unknown type: {value0}"
 msg-unlink: Rodando
 msg-unlink-failure: Desconectar interface
@@ -3761,8 +3734,8 @@ msg-valn-allocated: VALN Allocated
 msg-value-deleted: Excluído
 msg-value-saved: Valor RE
 msg-value0-failed: "{value0}Falhou"
-msg-value0-failed-to-get-data-for-menu-items: "{value0}Falha ao carregar dados"
-msg-value0-failed-value1: "{value0}Falhou : {value1}"
+msg-value0-failed-to-get-data-for-menu-items: "{value0}: Falha ao carregar dados"
+msg-value0-failed-value1: "{value0}Falhou: {value1}"
 msg-value0-history: "{value0} - Descoberta"
 msg-value0-sec: "{value0} serviço"
 msg-value0-success: "{value0}Permissão"
@@ -3782,7 +3755,7 @@ msg-workflow-editor-is-not-initialized: Workflow editor is not initialized
 msg-workflow-editor-module-is-not-loaded: Workflow editor module is not loaded
 msg-workflow-inspector: Workflow Inspector
 msg-workflow-state: Fluxos de Trabalho
-msg-would-you-like-remove-interface: "Would you like remove interface "
+msg-would-you-like-remove-interface: "Would you like remove interface"
 msg-would-you-like-remove-interface-value0: Would you like remove interface {value0}
 msg-would-you-like-to-remove-group: Would you like to remove group?
 msg-would-you-like-to-reset-current-layout-and-generate-new: Você tem certeza que deseja redefinir o layout atual e gerar um novo?

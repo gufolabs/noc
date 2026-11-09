@@ -106,7 +106,7 @@ Ext.define("NOC.main.search.Application", {
     var me = this;
     me.searchField.focus();
     me.store.loadData(result);
-    me.totalField.setValue(t("msg-total-value0-4", {value0: result.length}));
+    me.totalField.setValue(t("msg-total-value0", {value0: result.length}));
   },
   //
   onSelect: function(model, record){

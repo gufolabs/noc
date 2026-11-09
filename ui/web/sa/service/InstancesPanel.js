@@ -413,12 +413,12 @@ Ext.define("NOC.sa.service.InstancesPanel", {
           record.set("fqdn", result.data.fqdn);
           record.set("port", result.data.port);
         } else{
-          NOC.error(t("msg-error-value0-5", {value0: result.message || t("msg-failed-to-update-instance")}));
+          NOC.error(t("msg-error-value0-2", {value0: result.message || t("msg-failed-to-update-instance")}));
         }
       },
       failure: function(response){
         var result = Ext.decode(response.responseText);
-        NOC.error(t("msg-error-value0-6", {value0: result.errors || t("msg-server-error-occurred")}));
+        NOC.error(t("msg-error-value0-2", {value0: result.errors || t("msg-server-error-occurred")}));
       },
     });
   },
