@@ -13,7 +13,6 @@ Ext.define("NOC.main.userprofile.Application", {
     "NOC.main.timepattern.LookupField",
     "NOC.main.userprofile.UserProfileContacts",
     "NOC.main.userprofile.UserProfileNotificationGroups",
-    "NOC.main.ref.ulanguage.LookupField",
   ],
   layout: "fit",
   items: [
@@ -40,16 +39,6 @@ Ext.define("NOC.main.userprofile.Application", {
         {
           fieldLabel: t("label-mail"),
           name: "email",
-        },
-        {
-          xtype: "core.combo",
-          restUrl: "/main/ref/ulanguage/lookup/",
-          fieldLabel: t("header-language"),
-          allowBlank: false,
-          typeAhead: false,
-          editable: false,
-          uiStyle: "medium-combo",
-          name: "preferred_language",
         },
         {
           xtype: "fieldset",
@@ -108,8 +97,6 @@ Ext.define("NOC.main.userprofile.Application", {
         this.down("form").getForm().setValues(data);
         // load notification Group Settings grid
         this.down("form userprofilenotification").getStore().loadData(data.subscription_settings);
-        // save for later restart if language changed
-        this.preferred_language = data.preferred_language;
       },
       failure: function(){
         NOC.msg.failed(t("msg-failed-to-load-data"))
@@ -118,10 +105,8 @@ Ext.define("NOC.main.userprofile.Application", {
   },
   //
   onSave: function(){
-    var languageField = this.down("form field[name=preferred_language]"),
-      contactsField = this.down("fieldset [name=contacts]"),
+    var contactsField = this.down("fieldset [name=contacts]"),
       data = {
-        preferred_language: languageField.getValue(),
         contacts: contactsField.getValue(),
       };
     NOC.api.requestLegacy({
@@ -131,9 +116,6 @@ Ext.define("NOC.main.userprofile.Application", {
       jsonData: data,
       success: function(){
         NOC.msg.complete(t("msg-profile-saved"));
-        if(this.preferred_language !== data.preferred_language){
-          NOC.app.app.restartApplication(t("msg-changing-language"));
-        }
       },
       failure: function(response){
         var message = Ext.decode(response.responseText);

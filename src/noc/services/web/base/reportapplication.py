@@ -9,8 +9,8 @@
 import logging
 
 # NOC modules
+from noc.config import config
 from noc.core.i18n import t
-from noc.core.middleware.tls import get_user
 
 from .access import Permission
 from .application import Application, view
@@ -125,11 +125,10 @@ class ReportByConfigApplication(Application):
 
     @property
     def title(self) -> str:
-        user = get_user()
         return (
             self.report.get_localization(
                 field="title",
-                lang=user.preferred_language if user else None,
+                lang=config.language.value,
             )
             or self.report.title
             or self.report.name

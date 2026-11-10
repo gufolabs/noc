@@ -15,7 +15,7 @@ from typing import Any
 import orjson
 
 # NOC modules
-from noc.aaa.models.user import User
+from noc.config import config
 from noc.core.datasources.base import data_source_loader
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
@@ -31,8 +31,6 @@ class Command(BaseCommand):
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("--report", "-r", help="Report to run", required=True)
-        run_parser.add_argument("--user", "-u", help="User ")
-        run_parser.add_argument("--lang", "-l", default="en", help="Report language")
         run_parser.add_argument("--out-type", "-o", default="csv", help="Report Output type")
         run_parser.add_argument(
             "arguments", nargs=argparse.REMAINDER, help="Arguments passed to script"
@@ -55,17 +53,9 @@ class Command(BaseCommand):
         self,
         report: str,
         arguments,
-        user: str | None = None,
-        lang="en",
         out_type="csv",
         **kwargs,
     ):
-        if user:
-            user = User.get_by_username(user)
-        if user:
-            pref_lang = user.preferred_language
-        else:
-            pref_lang = lang
         report = Report.get_by_id(report)
         report_engine = ReportEngine(
             report_execution_history=False,
@@ -74,7 +64,7 @@ class Command(BaseCommand):
         args = self.get_report_args(arguments)
         self.print(f"Running report with arguments: {args}")
         rp = RunParams(
-            report_config=report.get_config(pref_lang),
+            report_config=report.get_config(config.language.value),
             output_type=OutputType(out_type),
             params=args,
         )

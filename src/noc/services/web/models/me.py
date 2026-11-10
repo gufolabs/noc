@@ -29,7 +29,6 @@ class MeResponse(BaseModel):
 
     id: str
     username: str
-    language: str
     groups: list[GroupItem]
     avatar_label: str = Field(title="Avatar Label")
     avatar_label_fg: str = Field(title="Avatar Label Foreground")

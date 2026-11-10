@@ -87,7 +87,6 @@ class ReportConfigApplication(ExtDocApplication):
     def get_columns_filter(
         report: Report,
         checked: set[str] | None = None,
-        pref_lang: str | None = None,
         condition_value: str | None = None,
     ) -> list:
         """
@@ -111,7 +110,9 @@ class ReportConfigApplication(ExtDocApplication):
             if fn not in columns[q_name] and fn not in {"all", "*"}:
                 continue
             title = (
-                report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
+                report.get_localization(f"columns.{fn}", lang=config.language.value)
+                or field.get("title")
+                or fn
             )
             if condition_value:
                 id = f"{condition_value}__{field_name}"
@@ -136,10 +137,9 @@ class ReportConfigApplication(ExtDocApplication):
                     return
 
         report: Report = self.get_object_or_404(Report, id=report_id)
-        pref_lang = request.user.preferred_language
         outputs = set()
         r = {
-            "title": report.get_localization(field="title", lang=pref_lang),
+            "title": report.get_localization(field="title", lang=config.language.value),
             "description": report.description,
             "params": [],
             "preview": False,
@@ -169,7 +169,7 @@ class ReportConfigApplication(ExtDocApplication):
                 "name": param.name,
                 "fieldLabel": report.get_localization(
                     f"parameters.{param.name}",
-                    lang=pref_lang,
+                    lang=config.language.value,
                 )
                 or param.label,
                 "allowBlank": not param.required,
@@ -229,7 +229,6 @@ class ReportConfigApplication(ExtDocApplication):
                         cf = self.get_columns_filter(
                             report,
                             checked={p.strip() for p in cv.default_value.split(",")},
-                            pref_lang=pref_lang,
                             condition_value=cv.value,
                         )
                         cfs.extend(cf)
@@ -250,7 +249,6 @@ class ReportConfigApplication(ExtDocApplication):
                     cf = self.get_columns_filter(
                         report,
                         checked={p.strip() for p in param.default.split(",")},
-                        pref_lang=pref_lang,
                     )
                     cfg["store"] = {
                         "fields": [
@@ -281,14 +279,13 @@ class ReportConfigApplication(ExtDocApplication):
         :return:
         """
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
-        pref_lang = request.user.preferred_language
         report: Report = self.get_object_or_404(Report, id=report_id)
         report_engine = ReportEngine(
             report_execution_history=config.web.enable_report_history,
         )
         try:
             rp = RunParams(
-                report_config=report.get_config(pref_lang),
+                report_config=report.get_config(config.language.value),
                 output_type=OutputType(q.get("output_type")),
                 params=q,
             )

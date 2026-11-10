@@ -15,7 +15,6 @@ from noc.main.models.notificationgroup import USER_NOTIFICATION_METHOD_CHOICES, 
 from noc.main.models.timepattern import TimePattern
 from noc.sa.interfaces.base import DictParameter, ListOfParameter, ModelParameter, StringParameter
 from noc.services.web.base.extapplication import ExtApplication, PermitLogged, api
-from noc.settings import LANGUAGES
 
 
 class UserProfileApplication(ExtApplication):
@@ -29,7 +28,6 @@ class UserProfileApplication(ExtApplication):
     @api.get("^$", access=PermitLogged())
     def api_get(self, request: HttpRequest):
         user = request.user
-        language = user.preferred_language
         contacts = [
             {
                 "time_pattern": c.time_pattern.id,
@@ -76,7 +74,6 @@ class UserProfileApplication(ExtApplication):
             "username": user.username,
             "name": (" ".join(x for x in (user.first_name, user.last_name) if x)).strip(),
             "email": user.email,
-            "preferred_language": language or "en",
             "contacts": contacts,
             "groups": [g.name for g in user.groups.all().order_by("name")],
             "subscription_settings": subscription_settings,
@@ -86,7 +83,6 @@ class UserProfileApplication(ExtApplication):
         "^$",
         access=PermitLogged(),
         validate={
-            "preferred_language": StringParameter(choices=[x[0] for x in LANGUAGES]),
             "contacts": ListOfParameter(
                 element=DictParameter(
                     attrs={
@@ -100,10 +96,8 @@ class UserProfileApplication(ExtApplication):
             ),
         },
     )
-    def api_save(self, request: HttpRequest, preferred_language, contacts):
+    def api_save(self, request: HttpRequest, contacts):
         user = request.user
-        user.preferred_language = preferred_language
-        user.save()
         # Setup contacts
         UserContact.objects.filter(user=user).delete()
         for c in contacts:
