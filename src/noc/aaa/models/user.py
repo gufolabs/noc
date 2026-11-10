@@ -32,7 +32,6 @@ from noc.core.mx import NotificationContact
 from noc.core.password.check import check_password_policy
 from noc.core.password.hasher import UNUSABLE_PASSWORD, check_password, make_password, must_change
 from noc.main.models.avatar import Avatar
-from noc.settings import LANGUAGE_CODE, LANGUAGES
 
 from .group import Group
 
@@ -100,10 +99,6 @@ class User(NOCModel):
         blank=True,
         related_name="user_set",
         related_query_name="user",
-    )
-    # Custom profile
-    preferred_language = models.CharField(
-        max_length=16, null=True, blank=True, default=config.language.value, choices=LANGUAGES
     )
     # Heatmap position
     heatmap_lon = models.FloatField(blank=True, null=True, default=config.web.heatmap_lon)
@@ -280,7 +275,7 @@ class User(NOCModel):
             NotificationContact(
                 contact=c.params,
                 method=c.notification_method,
-                language=self.preferred_language or LANGUAGE_CODE,
+                language=config.language.value,
                 time_pattern=c.time_pattern.time_pattern,
             )
             for c in UserContact.objects.filter(user=self)

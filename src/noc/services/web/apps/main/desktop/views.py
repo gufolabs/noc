@@ -52,13 +52,11 @@ class DesktopApplication(ExtApplication):
             self.logger.error(f"Group '{name}' is not found")
             return None
 
-    def get_language(self, request: HttpRequest):
+    def get_language(self):
         """
-        Get language for request
+        Get configured language
         """
-        if not request.user:
-            return config.language.value
-        return request.user.preferred_language or config.language.value
+        return config.language.value
 
     @api.get("^settings/$", access=True)
     def api_settings(self, request: HttpRequest):
@@ -67,7 +65,7 @@ class DesktopApplication(ExtApplication):
             enable_search = Permission.has_perm(request.user, "main:search:launch")
         else:
             enable_search = False
-        language = self.get_language(request)
+        language = self.get_language()
         return {
             "system_uuid": cp.system_uuid or None,
             "brand": config.brand,
