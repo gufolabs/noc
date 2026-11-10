@@ -3,7 +3,7 @@
   hosts: svc-grafana-exec
   become: true
   serial: 50%
-  any_errors_fatal: "True"
+  any_errors_fatal: true
   tags:
     - grafana
     - external

@@ -2,7 +2,7 @@
 - block:
     - name: check if nginx running
       command: pgrep -x nginx -c
-      failed_when: "False"
+      failed_when: false
       changed_when: false
       register: nginx_running
       check_mode: "False"
@@ -20,7 +20,7 @@
         validate_certs: "{{ not nginx_self_signed_cerificate }}"
       register: nginx_ping
       changed_when: false
-      failed_when: "False"
+      failed_when: false
       check_mode: "False"
 
     - name: fail if nginx http iface is not reachable 1/2
@@ -46,7 +46,7 @@
         validate_certs: "{{ not nginx_self_signed_cerificate }}"
       register: nginx_ping
       changed_when: false
-      failed_when: "False"
+      failed_when: false
       check_mode: "False"
 
     - name: fail if login interface is not reachable 1/2

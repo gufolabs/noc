@@ -1,6 +1,6 @@
 ---
 - name: Install Nginx
-  pkgng:
+  community.general.pkgng:
     name: "nginx"
     state: present
   tags:

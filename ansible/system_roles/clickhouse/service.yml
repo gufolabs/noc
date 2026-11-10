@@ -2,7 +2,7 @@
 - name: clickhouse tasks
   hosts: svc-clickhouse-exec
   become: true
-  any_errors_fatal: "False"
+  any_errors_fatal: false
   gather_facts: true
   tags:
     - clickhouse

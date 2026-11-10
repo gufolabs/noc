@@ -2,7 +2,7 @@
 - name: Consul tasks
   hosts: svc-consul-template-exec
   become: true
-  any_errors_fatal: "False"
+  any_errors_fatal: false
   gather_facts: true
   tags:
     - consul-template

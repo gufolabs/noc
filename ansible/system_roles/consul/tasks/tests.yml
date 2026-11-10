@@ -2,7 +2,7 @@
 - block:
     - name: check if consul running
       command: pgrep -x consul -c
-      failed_when: "False"
+      failed_when: false
       changed_when: false
       register: consul_running
       check_mode: "False"

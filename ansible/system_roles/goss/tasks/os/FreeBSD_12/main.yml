@@ -1,6 +1,6 @@
 ---
 - name: Install Goss
-  pkgng:
+  community.general.pkgng:
     name: "goss"
     state: present
 

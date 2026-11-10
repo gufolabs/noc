@@ -1,6 +1,6 @@
 ---
 - name: Install Grafana
-  pkgng:
+  community.general.pkgng:
     name: "grafana8"
     state: present
   register: freebsd_pkg_result

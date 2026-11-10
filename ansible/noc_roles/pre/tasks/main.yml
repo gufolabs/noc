@@ -40,7 +40,7 @@
     name: "{{ noc_system_service }}"
     state: stopped
   become: true
-  failed_when: "False"
+  failed_when: false
   changed_when: false
   when: tower_stop_noc
 

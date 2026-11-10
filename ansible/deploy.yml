@@ -9,8 +9,8 @@
 
 - import_playbook: pre.yml
   vars:
-    tower_run_checks: "False"
-    has_deploy_notificator: "True"
+    tower_run_checks: false
+    has_deploy_notificator: true
 
 - name: Install NOC
   hosts: svc-noc-exec
@@ -70,5 +70,5 @@
 
 - import_playbook: post.yml
   vars:
-    tower_run_tests: "True"
-    has_deploy_notificator: "True"
+    tower_run_tests: true
+    has_deploy_notificator: true

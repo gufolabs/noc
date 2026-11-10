@@ -1,6 +1,6 @@
 ---
 - name: "Install PostgreSQL 1/2"
-  pkgng:
+  community.general.pkgng:
     name: 'postgresql{{ postgres_version|replace(".","") }}-server'
     state: present
   tags:
@@ -11,7 +11,7 @@
   until: freebsd_pkg_result is succeeded
 
 - name: "Install PostgreSQL 2/2"
-  pkgng:
+  community.general.pkgng:
     name: "{{ packages }}"
     state: present
   vars:

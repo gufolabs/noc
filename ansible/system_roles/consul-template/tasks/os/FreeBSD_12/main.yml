@@ -1,6 +1,6 @@
 ---
 - name: Install consul-template
-  pkgng:
+  community.general.pkgng:
     name: "consul-template"
     state: present
   tags:

@@ -2,7 +2,7 @@
 - block:
     - name: check if postgres running
       command: pgrep -f postgres -c
-      failed_when: "False"
+      failed_when: false
       changed_when: false
       register: postgres_running
       check_mode: "False"

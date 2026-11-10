@@ -25,7 +25,7 @@
     state: restarted
     sleep: 3
     enabled: "True"
-  changed_when: "True"
+  changed_when: true
   when:
     - (tower_stop_noc)
     - not tower_serial_restart_noc
