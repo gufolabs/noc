@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonenumber import PhoneNumber
@@ -32,13 +31,12 @@ class PhoneNumberApplication(ExtDocApplication):
     ]
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": str(o.id), "label": smart_text(o), "dialplan": o.dialplan.name}
+        return {"id": str(o.id), "label": str(o), "dialplan": o.dialplan.name}
 
     def instance_to_dict(self, o, fields=None, nocustom=False):
         def sg_to_list(items):
             return [
-                {"group": str(x), "group__label": smart_text(ResourceGroup.get_by_id(x))}
-                for x in items
+                {"group": str(x), "group__label": str(ResourceGroup.get_by_id(x))} for x in items
             ]
 
         data = super().instance_to_dict(o, fields, nocustom)

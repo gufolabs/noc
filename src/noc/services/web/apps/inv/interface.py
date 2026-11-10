@@ -11,7 +11,6 @@ from mongoengine import Q
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.text import alnum_key, list_to_ranges
 from noc.inv.models.interface import Interface
@@ -179,12 +178,12 @@ class InterfaceApplication(ExtDocApplication):
                 "lag": (i.aggregated_interface.name if i.aggregated_interface else ""),
                 "link": self.get_link(i),
                 "profile": str(i.profile.id) if i.profile else None,
-                "profile__label": smart_text(i.profile) if i.profile else None,
+                "profile__label": str(i.profile) if i.profile else None,
                 "enabled_protocols": i.enabled_protocols,
                 "project": i.project.id if i.project else None,
-                "project__label": smart_text(i.project) if i.project else None,
+                "project__label": str(i.project) if i.project else None,
                 "state": str(i.state.id) if i.state else None,
-                "state__label": smart_text(i.state) if i.state else None,
+                "state__label": str(i.state) if i.state else None,
                 "row_class": self.get_style(i),
             }
             for i in Interface.objects.filter(managed_object=o.id, type__in=["physical", "virtual"])
@@ -202,12 +201,12 @@ class InterfaceApplication(ExtDocApplication):
                     )
                 ],
                 "profile": str(i.profile.id) if i.profile else None,
-                "profile__label": smart_text(i.profile) if i.profile else None,
+                "profile__label": str(i.profile) if i.profile else None,
                 "enabled_protocols": i.enabled_protocols,
                 "project": i.project.id if i.project else None,
-                "project__label": smart_text(i.project) if i.project else None,
+                "project__label": str(i.project) if i.project else None,
                 "state": str(i.state.id) if i.state else None,
-                "state__label": smart_text(i.state) if i.state else None,
+                "state__label": str(i.state) if i.state else None,
                 "row_class": self.get_style(i),
             }
             for i in Interface.objects.filter(managed_object=o.id, type="aggregated")

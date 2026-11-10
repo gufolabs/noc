@@ -11,7 +11,6 @@ from django import forms
 from django.db.models import Q
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
@@ -61,7 +60,7 @@ class ReportAllocated(SimpleReport):
     def get_data(self, vrf, afi, prefix, **kwargs):
         def get_row(p):
             vlan = VLAN.get_by_id(p.vlan.id) if p.vlan else None
-            r = [p.prefix, p.state.name, smart_text(vlan) if vlan else ""]
+            r = [p.prefix, p.state.name, str(vlan) if vlan else ""]
             for f in cf:
                 v = getattr(p, f.name)
                 r.append(v if v is not None else "")

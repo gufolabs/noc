@@ -309,13 +309,13 @@ class ModelInline:
                     and not isinstance(v, int)
                     and not isinstance(v, (bool, list))
                 ):
-                    v = smart_text(v)
+                    v = smart_text(v) if isinstance(v, bytes) else str(v)
                 r[f.name] = v
             else:
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = v._get_pk_val()
-                    r[f"{f.name}__label"] = smart_text(v)
+                    r[f"{f.name}__label"] = str(v)
                 else:
                     r[f.name] = None
                     r[f"{f.name}__label"] = ""

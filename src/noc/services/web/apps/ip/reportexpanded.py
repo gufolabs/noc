@@ -10,7 +10,6 @@
 from django import forms
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.validators import ValidationError, check_ipv4_prefix, check_ipv6_prefix
 from noc.ip.models.prefix import Prefix
@@ -56,7 +55,7 @@ class ExpandedReport(SimpleReport):
         def get_row(p, level=0):
             vlan = VLAN.get_by_id(p.vlan.id) if p.vlan else None
             s = "--" * level
-            r = [s + p.prefix, p.state.name, smart_text(vlan) if vlan else ""]
+            r = [s + p.prefix, p.state.name, str(vlan) if vlan else ""]
             for f in cf:
                 v = getattr(p, f.name)
                 r.append(v if v is not None else "")

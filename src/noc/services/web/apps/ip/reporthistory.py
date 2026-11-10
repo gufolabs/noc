@@ -14,7 +14,6 @@ from django import forms
 from django.utils.html import escape
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.ip.models.address import Address
 from noc.ip.models.prefix import Prefix
@@ -111,7 +110,7 @@ class ReportHistoryApplication(SimpleReport):
             model = self.MODELS[ll.model_id]
             if ll.object:
                 try:
-                    obj = smart_text(model.objects.get(id=int(ll.object)))
+                    obj = str(model.objects.get(id=int(ll.object)))
                 except model.DoesNotExist:
                     obj = "UNKNOWN?"
             else:

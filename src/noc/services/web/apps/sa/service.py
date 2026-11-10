@@ -13,7 +13,6 @@ from django.http import HttpRequest
 from mongoengine.queryset import Q
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.i18n import t
 from noc.core.middleware.tls import get_user
 from noc.core.models.inputsources import InputSource
@@ -144,8 +143,7 @@ class ServiceApplication(ExtDocApplication):
     def instance_to_dict(self, o, fields=None, nocustom=False):
         def sg_to_list(items):
             return [
-                {"group": str(x), "group__label": smart_text(ResourceGroup.get_by_id(x))}
-                for x in items
+                {"group": str(x), "group__label": str(ResourceGroup.get_by_id(x))} for x in items
             ]
 
         data = super().instance_to_dict(o, fields, nocustom)
@@ -189,7 +187,7 @@ class ServiceApplication(ExtDocApplication):
         path = [Service.get_by_id(ns) for ns in o.get_path()]
         return {
             "data": [
-                {"level": level + 1, "id": str(p.id), "label": smart_text(p)}
+                {"level": level + 1, "id": str(p.id), "label": str(p)}
                 for level, p in enumerate(path)
             ]
         }
