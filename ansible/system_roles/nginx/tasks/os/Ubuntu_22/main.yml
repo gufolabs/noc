@@ -3,7 +3,7 @@
   get_url:
     url: "{{ nginx_deb_gpgkey }}"
     dest: /etc/apt/trusted.gpg.d/nginx.asc
-    mode: '0644'
+    mode: "0644"
     force: true
   environment:
     https_proxy: "{{ http_proxy }}"
@@ -37,7 +37,7 @@
 - name: Enable Nginx system service
   service:
     name: "{{ nginx_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
   notify: reload nginx
 

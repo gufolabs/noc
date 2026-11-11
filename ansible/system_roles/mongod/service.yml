@@ -3,7 +3,7 @@
   hosts: svc-mongod-exec
   become: true
   serial: 30%
-  any_errors_fatal: "True"
+  any_errors_fatal: true
   tags:
     - mongod
     - external

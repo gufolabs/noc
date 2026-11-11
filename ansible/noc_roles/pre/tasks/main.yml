@@ -29,7 +29,7 @@
   become: true
 
 - name: notify deploy started
-  run_once: "True"
+  run_once: true
   include_role:
     name: deploy_notifications
     tasks_from: start
@@ -40,7 +40,7 @@
     name: "{{ noc_system_service }}"
     state: stopped
   become: true
-  failed_when: "False"
+  failed_when: false
   changed_when: false
   when: tower_stop_noc
 

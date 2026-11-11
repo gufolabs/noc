@@ -6,18 +6,18 @@
     validate_certs: "True"
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   environment:
     https_proxy: "{{ http_proxy }}"
   when: not consul_template_own_install
 
 - name: Get Consul-template package checksum
   command: "grep {{ consul_template_pkg }} {{ consul_template_temp_file_checksum }}"
-  check_mode: "False"
+  check_mode: false
   register: consul_sha256
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   changed_when: false
   when: not consul_template_own_install
 
@@ -30,7 +30,7 @@
     validate_certs: "True"
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   environment:
     https_proxy: "{{ http_proxy }}"
   when: not consul_template_own_install

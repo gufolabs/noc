@@ -2,7 +2,7 @@
 ---
 - name: check if noc running
   command: "{{ noc_root }}/noc ctl status"
-  check_mode: "False"
+  check_mode: false
   changed_when: false
   register: noc_ctl_status
   when: (tower_serial_restart_noc)
@@ -24,14 +24,14 @@
     name: "{{ noc_system_service }}"
     state: restarted
     sleep: 3
-    enabled: "True"
-  changed_when: "True"
+    enabled: true
+  changed_when: true
   when:
     - (tower_stop_noc)
     - not tower_serial_restart_noc
 
 - name: notify deploy finished
-  run_once: "True"
+  run_once: true
   include_role:
     name: deploy_notifications
     tasks_from: stop

@@ -9,7 +9,7 @@
     - config
 
 - name: Install FreeBSD system packages
-  pkgng:
+  community.general.pkgng:
     name: "{{ packages }}"
     state: present
   become: true

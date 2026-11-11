@@ -3,7 +3,7 @@
   hosts: svc-postgres-exec:!svc-patroni-exec
   become: true
   serial: 1
-  any_errors_fatal: "True"
+  any_errors_fatal: true
   tags:
     - postgres
     - external

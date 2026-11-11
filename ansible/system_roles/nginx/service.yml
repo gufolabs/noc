@@ -7,7 +7,7 @@
     - nginx
     - web
     - external
-  any_errors_fatal: "True"
+  any_errors_fatal: true
   vars_files:
     - "vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "../../vars/main.yml"

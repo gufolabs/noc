@@ -50,7 +50,7 @@
 - name: Start Grafana service
   service:
     name: "{{ grafana_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: place consul check

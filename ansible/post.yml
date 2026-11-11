@@ -3,7 +3,7 @@
   hosts: svc-noc-exec
   become: false
   gather_facts: false
-  any_errors_fatal: "True"
+  any_errors_fatal: true
   tags:
     - post
   vars_files:

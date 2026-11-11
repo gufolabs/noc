@@ -5,7 +5,7 @@
   changed_when:
     - "'No primary detected for set' in rs_status.stdout or 'Unable to reach primary for set' in rs_status.stdout or 'RSM host selection timeout' in rs_status.stdout"
     - "'connect failed to replica set' in rs_status.stdout"
-  failed_when: "False"
+  failed_when: false
   tags:
     - config
 

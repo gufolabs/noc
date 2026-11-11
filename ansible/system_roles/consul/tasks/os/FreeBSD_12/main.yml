@@ -1,6 +1,6 @@
 ---
 - name: Install FreeBSD system packages
-  pkgng:
+  community.general.pkgng:
     name: py38-virtualenv
     state: present
   tags:

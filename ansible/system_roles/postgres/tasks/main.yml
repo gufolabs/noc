@@ -17,7 +17,7 @@
     postgres_master_node: "{{ groups['svc-postgres-master'][0] }}"
     postgres_listen_port: "{{ postgres_listen_port }}"
   delegate_to: "{{ item }}"
-  delegate_facts: "True"
+  delegate_facts: true
   loop: "{{ groups['all'] }}"
   tags:
     - config
@@ -57,7 +57,7 @@
 - name: Enable postgres system service
   service:
     name: "{{ postgres_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: lanuch various roles

@@ -2,10 +2,10 @@
 - block:
     - name: check if grafana running
       command: pgrep -x grafana-server -c
-      failed_when: "False"
+      failed_when: false
       changed_when: false
       register: grafana_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no grafana found
       debug:
@@ -19,8 +19,8 @@
       uri:
         url: http://127.0.0.1:8002/api/health
       register: grafana_ping
-      failed_when: "False"
-      check_mode: "False"
+      failed_when: false
+      check_mode: false
 
     - name: fail if grafana http iface is not reachable
       debug:
@@ -36,7 +36,7 @@
         return_content: "True"
       register: consul_req
       changed_when: false
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no grafana found
       debug:

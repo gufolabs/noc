@@ -1,6 +1,6 @@
 ---
 - name: Install Clickhouse
-  pkgng:
+  community.general.pkgng:
     name: "clickhouse-{{ clickhouse_version }}"
     state: present
   tags:

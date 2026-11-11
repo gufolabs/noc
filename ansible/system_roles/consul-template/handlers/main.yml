@@ -23,5 +23,5 @@
   become: true
   service:
     name: consul-template
-    enabled: "True"
+    enabled: true
     state: started

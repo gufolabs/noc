@@ -70,7 +70,7 @@
 - name: Enable MongoDB system service
   service:
     name: "{{ mongod_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: Create MongoDB arbiter directory
@@ -104,7 +104,7 @@
 - name: Enable MongoDB arbiter system service
   service:
     name: "{{ mongod_arbiter_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
   when:
     - "mongod_power == 'arbiter'"
@@ -155,7 +155,10 @@
     monitoring_service_procstat_value: mongod
     monitoring_config:
       gather_perdb_stats: "true"
-      servers: ["mongodb://{{ noc_mongo_admin_user }}:{{ mongod_password }}@{{ mongo_listen_addr }}:27017/?connect=direct"]
+      servers:
+        [
+          "mongodb://{{ noc_mongo_admin_user }}:{{ mongod_password }}@{{ mongo_listen_addr }}:27017/?connect=direct",
+        ]
   when: has_svc_monitoring is defined
   tags:
     - monitoring

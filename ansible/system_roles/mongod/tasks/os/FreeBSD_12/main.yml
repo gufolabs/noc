@@ -1,6 +1,6 @@
 ---
 - name: Install MongoDB
-  pkgng:
+  community.general.pkgng:
     name: "mongodb{{ mongod_version|replace('.','') }}"
     state: present
   tags:

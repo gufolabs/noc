@@ -2,7 +2,7 @@
 - name: Goss tasks
   hosts: svc-goss-exec
   become: true
-  any_errors_fatal: "False"
+  any_errors_fatal: false
   gather_facts: false
   tags:
     - goss
