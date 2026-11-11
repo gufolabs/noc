@@ -5,7 +5,7 @@
       failed_when: false
       changed_when: false
       register: supervisord_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no supervisord found
       debug:
@@ -20,7 +20,7 @@
       changed_when: false
       register: noc_status
       failed_when: false
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if noc services are down
       debug:

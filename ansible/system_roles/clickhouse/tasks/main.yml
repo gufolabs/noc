@@ -72,7 +72,7 @@
 - name: Start clickhouse service
   service:
     name: "{{ clickhouse_service_name }}"
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: create grafana ds

@@ -5,7 +5,7 @@
       failed_when: false
       changed_when: false
       register: nginx_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no nginx found
       debug:
@@ -21,7 +21,7 @@
       register: nginx_ping
       changed_when: false
       failed_when: false
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if nginx http iface is not reachable 1/2
       debug:
@@ -47,7 +47,7 @@
       register: nginx_ping
       changed_when: false
       failed_when: false
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if login interface is not reachable 1/2
       debug:

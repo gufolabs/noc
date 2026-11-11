@@ -5,7 +5,7 @@
       failed_when: false
       changed_when: false
       register: consul_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no consul found
       debug:
@@ -15,7 +15,7 @@
         - consul_running.rc != 0
 
     - name: fail if consul http iface is not reachable
-      run_once: "True"
+      run_once: true
       debug:
         msg: |
           Crosschecking node health
@@ -27,7 +27,7 @@
         url: "http://127.0.0.1:8500/v1/health/node/{{ host }}/"
       register: consul_ping
       changed_when: false
-      check_mode: "False"
+      check_mode: false
       loop_control:
         loop_var: host
       loop: "{{ groups['svc-consul-exec'] }}"

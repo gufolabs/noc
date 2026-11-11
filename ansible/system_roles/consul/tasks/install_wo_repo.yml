@@ -6,17 +6,17 @@
     validate_certs: "True"
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   environment:
     https_proxy: "{{ http_proxy }}"
 
 - name: Get Consul package checksum
   command: "grep {{ consul_pkg }} {{ consul_temp_file_checksum }}"
   register: consul_sha256
-  check_mode: "False"
+  check_mode: false
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   changed_when: false
 
 - name: Download Consul
@@ -28,7 +28,7 @@
     validate_certs: "True"
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   environment:
     https_proxy: "{{ http_proxy }}"
 

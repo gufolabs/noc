@@ -73,7 +73,7 @@
   service:
     name: consul
     state: started
-    enabled: "True"
+    enabled: true
 
 - block:
     - name: Consul HTTP API reachable? wait for port 8500 for 60 seconds

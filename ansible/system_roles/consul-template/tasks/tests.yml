@@ -5,7 +5,7 @@
       failed_when: false
       changed_when: false
       register: consul_template_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no consul_template found
       debug:

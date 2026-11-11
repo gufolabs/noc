@@ -6,7 +6,7 @@
     validate_certs: "True"
   delegate_to: 127.0.0.1
   become: false
-  run_once: "True"
+  run_once: true
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ http_proxy }}"

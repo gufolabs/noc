@@ -29,7 +29,7 @@
   become: true
 
 - name: notify deploy started
-  run_once: "True"
+  run_once: true
   include_role:
     name: deploy_notifications
     tasks_from: start

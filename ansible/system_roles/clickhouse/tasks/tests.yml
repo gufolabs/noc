@@ -5,7 +5,7 @@
       failed_when: false
       changed_when: false
       register: clickhouse_server_running
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if no consul found
       debug:
@@ -20,7 +20,7 @@
         url: http://127.0.0.1:8123/
       register: clickhouse_ping
       failed_when: false
-      check_mode: "False"
+      check_mode: false
 
     - name: fail if clickhouse http iface is not reachable
       debug:

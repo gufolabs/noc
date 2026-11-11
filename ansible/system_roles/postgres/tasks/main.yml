@@ -57,7 +57,7 @@
 - name: Enable postgres system service
   service:
     name: "{{ postgres_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: lanuch various roles

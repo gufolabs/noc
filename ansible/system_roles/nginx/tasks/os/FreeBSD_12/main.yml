@@ -13,7 +13,7 @@
 - name: Enable Nginx system service
   service:
     name: "{{ nginx_system_service }}"
-    enabled: "True"
+    enabled: true
     state: started
   notify: reload nginx
 

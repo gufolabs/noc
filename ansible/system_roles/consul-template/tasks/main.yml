@@ -45,7 +45,7 @@
 - name: start consul-template service
   service:
     name: consul-template
-    enabled: "True"
+    enabled: true
     state: started
 
 - name: Install consul-template monitoring

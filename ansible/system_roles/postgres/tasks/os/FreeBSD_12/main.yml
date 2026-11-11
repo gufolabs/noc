@@ -16,7 +16,7 @@
     state: present
   vars:
     packages:
-      - 'py38-psycopg2'
+      - "py38-psycopg2"
       - 'postgresql{{ postgres_version|replace(".","") }}-contrib'
   tags:
     - requirements
@@ -28,7 +28,7 @@
 - name: Enable postgres system service
   service:
     name: "{{ postgres_system_service }}"
-    enabled: "True"
+    enabled: true
 
 - name: PostgreSQL init db
   command: service postgresql initdb
@@ -40,4 +40,4 @@
   # pg_ctl: could not read file "/usr/local/pgsql/data/postmaster.opts"
   command: service postgresql start
   args:
-    creates: '{{ postgres_data_dir }}/postmaster.opts'
+    creates: "{{ postgres_data_dir }}/postmaster.opts"
