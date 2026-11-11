@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import os
 import re
 from typing import Any
 
@@ -66,7 +65,6 @@ class ExtApplication(Application):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.document_root = os.path.join("services", "web", "apps", self.module, self.app)
         self.row_limit = config.web.api_row_limit
         self.unlimited_row_limit = config.web.api_unlimited_row_limit
         self.pk = "id"
