@@ -39,7 +39,7 @@
     path: "{{ consul_configd_path }}/.consul_bootstrapped"
   register: bootstrap_marker
   when: consul_power == 'bootstrap'
-  ignore_errors: "True"
+  ignore_errors: true
   tags: always
 
 - name: Include dir settings
