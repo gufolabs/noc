@@ -17,7 +17,7 @@
     postgres_master_node: "{{ groups['svc-postgres-master'][0] }}"
     postgres_listen_port: "{{ postgres_listen_port }}"
   delegate_to: "{{ item }}"
-  delegate_facts: "True"
+  delegate_facts: true
   loop: "{{ groups['all'] }}"
   tags:
     - config
