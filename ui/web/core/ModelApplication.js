@@ -838,10 +838,6 @@ Ext.define("NOC.core.ModelApplication", {
         }
         this.query("inlinegrid").forEach(function(grid){grid.setDisabled(false)});
         Ext.each(me.inlineStores, function(store){ store.setParent(me.currentRecord.get(me.idField))});
-        if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-          this.store.setFilterParams(this.currentQuery);
-          this.saveFilterToUrl(this.currentQuery);
-        }
         NOC.msg.complete(t("msg-saved-2"));
       },
       failure: function(response){
@@ -1025,10 +1021,6 @@ Ext.define("NOC.core.ModelApplication", {
           me.reloadStore();
           me.unmask();
           me.showGrid();
-          if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-            this.store.setFilterParams(this.currentQuery);
-            this.saveFilterToUrl(this.currentQuery);
-          }
         }
       },
       onFailure = function(response){
@@ -1055,13 +1047,13 @@ Ext.define("NOC.core.ModelApplication", {
   },
   // Reload store with current query
   reloadStore: function(){
-    this.store.setFilterParams(this.currentQuery);
-    this.saveFilterToUrl(this.currentQuery);
+    var query = Ext.clone(this.currentQuery);
+    this.store.setFilterParams(query);
     // Reload store
     // ExtJS 5.0.0 WARNING:
     // me.store.reload() sometimes leaves empty grid
     // so we must use load() instead
-    this.loadStore();
+    this.loadStore(query);
   },
   // Search
   onSearch: function(query){
@@ -1073,20 +1065,35 @@ Ext.define("NOC.core.ModelApplication", {
     }
     me.reloadStore();
   },
+  getNextToken: function(filter, currentToken){
+    var index = currentToken.indexOf("?")
+      , app = index === -1 ? currentToken : currentToken.substr(0, index)
+      , params = Ext.Object.toQueryString(filter, true);
+    return params ? app + "?" + params : app;
+  },
+  isSearchOnlyChange: function(filter, currentToken){
+    var index = currentToken.indexOf("?")
+      , currentFilter = index === -1 ? {} : Ext.Object.fromQueryString(currentToken.substr(index + 1), true)
+      , nextFilter = Ext.apply({}, filter)
+      , currentSearch = currentFilter.__query
+      , nextSearch = nextFilter.__query;
+    delete currentFilter.__query;
+    delete nextFilter.__query;
+    return currentSearch !== nextSearch &&
+      Ext.Object.toQueryString(currentFilter, true) === Ext.Object.toQueryString(nextFilter, true);
+  },
   saveFilterToUrl: function(filter){
-    var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = NOC.navigation.getToken()
-      , index = currentHash.indexOf("?")
-      , app;
-    if(index === -1){
-      app = currentHash;
-    } else{
-      app = currentHash.substr(0, index);
+    var currentToken = NOC.navigation.getToken()
+      , nextToken = this.getNextToken(filter, currentToken);
+    if(nextToken === currentToken){
+      return;
     }
-    if(params){
-      NOC.navigation.navigate(app + "?" + params);
+    if(this.isSearchOnlyChange(filter, currentToken)){
+      // Search text is transient state: update the address bar without
+      // triggering navigation, which would reset focus to the document body.
+      NOC.navigation.replace(nextToken);
     } else{
-      NOC.navigation.navigate(app);
+      NOC.navigation.navigate(nextToken);
     }
   },
   // Filter
@@ -1282,10 +1289,6 @@ Ext.define("NOC.core.ModelApplication", {
     }
     me.clearNavTabTooltip();
     me.showGrid();
-    if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-      this.store.setFilterParams(this.currentQuery);
-      this.saveFilterToUrl(this.currentQuery);
-    }
     if(toReload){
       me.reloadStore();
     }
@@ -2055,11 +2058,16 @@ Ext.define("NOC.core.ModelApplication", {
       });
     }
   },
-  loadStore: function(){
-    var me = this;
+  loadStore: function(query){
+    var me = this,
+      filter = Ext.clone(query || me.currentQuery),
+      filterParams = Ext.Object.toQueryString(filter, true);
     me.store.load({
       callback: function(records, operation){
-        me.checkStoreLoad(operation)
+        me.checkStoreLoad(operation);
+        if(operation.success && Ext.Object.toQueryString(me.currentQuery, true) === filterParams){
+          me.saveFilterToUrl(filter);
+        }
       },
     });
   },
