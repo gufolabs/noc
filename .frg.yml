@@ -1,0 +1,6 @@
+# Federated Requirements Graph (FRG) configuration
+requirements: requirements/
+entrypoints:
+  - index
+language:
+  canonical: en
