@@ -203,7 +203,54 @@ Ext.define("NOC.core.Application", {
     if(Ext.Object.isEmpty(filter)){
       return
     }
-    this.getController().saveFilterToUrl(filter);
+    this.saveFilterToUrl(filter);
+  },
+  getNextToken: function(filter, currentToken){
+    var index = currentToken.indexOf("?")
+      , app = index === -1 ? currentToken : currentToken.substr(0, index)
+      , params = Ext.Object.toQueryString(filter, true);
+    return params ? app + "?" + params : app;
+  },
+  isFilterEqual: function(filterA, filterB){
+    var getSignature = function(filter){
+      return Ext.Object.toQueryString(filter, true).split("&").map(function(param, index){
+        var separator = param.indexOf("=");
+        return {
+          key: separator === -1 ? param : param.substr(0, separator),
+          param: param,
+          index: index,
+        };
+      }).sort(function(a, b){
+        return a.key < b.key ? -1 : a.key > b.key ? 1 : a.index - b.index;
+      }).map(function(item){
+        return item.param;
+      }).join("&");
+    };
+    return getSignature(filterA) === getSignature(filterB);
+  },
+  isSearchOnlyChange: function(filter, currentToken){
+    var index = currentToken.indexOf("?")
+      , currentFilter = index === -1 ? {} : Ext.Object.fromQueryString(currentToken.substr(index + 1), true)
+      , nextFilter = Ext.apply({}, filter)
+      , currentSearch = currentFilter.__query
+      , nextSearch = nextFilter.__query;
+    delete currentFilter.__query;
+    delete nextFilter.__query;
+    return currentSearch !== nextSearch && this.isFilterEqual(currentFilter, nextFilter);
+  },
+  saveFilterToUrl: function(filter){
+    var currentToken = NOC.navigation.getToken()
+      , nextToken = this.getNextToken(filter, currentToken);
+    if(nextToken === currentToken){
+      return;
+    }
+    if(this.isSearchOnlyChange(filter, currentToken)){
+      // Search text is transient state: update the address bar without
+      // triggering navigation, which would reset focus to the document body.
+      NOC.navigation.replace(nextToken);
+    } else{
+      NOC.navigation.navigate(nextToken);
+    }
   },
   //
   onCloseApp: function(){},

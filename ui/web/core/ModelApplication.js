@@ -1065,37 +1065,6 @@ Ext.define("NOC.core.ModelApplication", {
     }
     me.reloadStore();
   },
-  getNextToken: function(filter, currentToken){
-    var index = currentToken.indexOf("?")
-      , app = index === -1 ? currentToken : currentToken.substr(0, index)
-      , params = Ext.Object.toQueryString(filter, true);
-    return params ? app + "?" + params : app;
-  },
-  isSearchOnlyChange: function(filter, currentToken){
-    var index = currentToken.indexOf("?")
-      , currentFilter = index === -1 ? {} : Ext.Object.fromQueryString(currentToken.substr(index + 1), true)
-      , nextFilter = Ext.apply({}, filter)
-      , currentSearch = currentFilter.__query
-      , nextSearch = nextFilter.__query;
-    delete currentFilter.__query;
-    delete nextFilter.__query;
-    return currentSearch !== nextSearch &&
-      Ext.Object.toQueryString(currentFilter, true) === Ext.Object.toQueryString(nextFilter, true);
-  },
-  saveFilterToUrl: function(filter){
-    var currentToken = NOC.navigation.getToken()
-      , nextToken = this.getNextToken(filter, currentToken);
-    if(nextToken === currentToken){
-      return;
-    }
-    if(this.isSearchOnlyChange(filter, currentToken)){
-      // Search text is transient state: update the address bar without
-      // triggering navigation, which would reset focus to the document body.
-      NOC.navigation.replace(nextToken);
-    } else{
-      NOC.navigation.navigate(nextToken);
-    }
-  },
   // Filter
   onFilter: function(){
     var me = this,
@@ -2060,12 +2029,11 @@ Ext.define("NOC.core.ModelApplication", {
   },
   loadStore: function(query){
     var me = this,
-      filter = Ext.clone(query || me.currentQuery),
-      filterParams = Ext.Object.toQueryString(filter, true);
+      filter = Ext.clone(query || me.currentQuery);
     me.store.load({
       callback: function(records, operation){
         me.checkStoreLoad(operation);
-        if(operation.success && Ext.Object.toQueryString(me.currentQuery, true) === filterParams){
+        if(operation.success && me.isFilterEqual(me.currentQuery, filter)){
           me.saveFilterToUrl(filter);
         }
       },
