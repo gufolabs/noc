@@ -99,6 +99,20 @@ export const navigation = {
     return true;
   },
 
+  // Replace the current URL without starting a navigation. This is useful
+  // for state changes such as live search, where the URL should be updated
+  // without resetting focus or notifying route subscribers.
+  replace(token){
+    const next = this._normalize(token);
+    if(this._silent || next === this.getToken()){
+      return false;
+    }
+    window.history.replaceState(window.history.state, "", this._buildUrl(next));
+    this._current = next;
+    this._programmaticToken = null;
+    return true;
+  },
+
   // Enter replace mode for the duration of the initial app launch/restore.
   beginReplaceMode(){
     this._replaceMode = true;

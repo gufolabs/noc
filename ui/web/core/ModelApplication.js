@@ -838,10 +838,6 @@ Ext.define("NOC.core.ModelApplication", {
         }
         this.query("inlinegrid").forEach(function(grid){grid.setDisabled(false)});
         Ext.each(me.inlineStores, function(store){ store.setParent(me.currentRecord.get(me.idField))});
-        if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-          this.store.setFilterParams(this.currentQuery);
-          this.saveFilterToUrl(this.currentQuery);
-        }
         NOC.msg.complete(t("msg-saved-2"));
       },
       failure: function(response){
@@ -1025,10 +1021,6 @@ Ext.define("NOC.core.ModelApplication", {
           me.reloadStore();
           me.unmask();
           me.showGrid();
-          if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-            this.store.setFilterParams(this.currentQuery);
-            this.saveFilterToUrl(this.currentQuery);
-          }
         }
       },
       onFailure = function(response){
@@ -1055,13 +1047,13 @@ Ext.define("NOC.core.ModelApplication", {
   },
   // Reload store with current query
   reloadStore: function(){
-    this.store.setFilterParams(this.currentQuery);
-    this.saveFilterToUrl(this.currentQuery);
+    var query = Ext.clone(this.currentQuery);
+    this.store.setFilterParams(query);
     // Reload store
     // ExtJS 5.0.0 WARNING:
     // me.store.reload() sometimes leaves empty grid
     // so we must use load() instead
-    this.loadStore();
+    this.loadStore(query);
   },
   // Search
   onSearch: function(query){
@@ -1072,22 +1064,6 @@ Ext.define("NOC.core.ModelApplication", {
       delete me.currentQuery.__query;
     }
     me.reloadStore();
-  },
-  saveFilterToUrl: function(filter){
-    var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = NOC.navigation.getToken()
-      , index = currentHash.indexOf("?")
-      , app;
-    if(index === -1){
-      app = currentHash;
-    } else{
-      app = currentHash.substr(0, index);
-    }
-    if(params){
-      NOC.navigation.navigate(app + "?" + params);
-    } else{
-      NOC.navigation.navigate(app);
-    }
   },
   // Filter
   onFilter: function(){
@@ -1282,10 +1258,6 @@ Ext.define("NOC.core.ModelApplication", {
     }
     me.clearNavTabTooltip();
     me.showGrid();
-    if(!Ext.Object.isEmpty(this.currentQuery)){ // Apply updated filter and fix url
-      this.store.setFilterParams(this.currentQuery);
-      this.saveFilterToUrl(this.currentQuery);
-    }
     if(toReload){
       me.reloadStore();
     }
@@ -2055,11 +2027,15 @@ Ext.define("NOC.core.ModelApplication", {
       });
     }
   },
-  loadStore: function(){
-    var me = this;
+  loadStore: function(query){
+    var me = this,
+      filter = Ext.clone(query || me.currentQuery);
     me.store.load({
       callback: function(records, operation){
-        me.checkStoreLoad(operation)
+        me.checkStoreLoad(operation);
+        if(operation.success && me.isFilterEqual(me.currentQuery, filter)){
+          me.saveFilterToUrl(filter);
+        }
       },
     });
   },

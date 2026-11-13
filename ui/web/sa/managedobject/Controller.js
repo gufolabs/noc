@@ -992,20 +992,4 @@ Ext.define("NOC.sa.managedobject.Controller", {
       field.setValue(null);
     });
   },
-  saveFilterToUrl: function(filter){
-    var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = NOC.navigation.getToken()
-      , index = currentHash.indexOf("?")
-      , app;
-    if(index === -1){
-      app = currentHash;
-    } else{
-      app = currentHash.substr(0, index);
-    }
-    if(params){
-      NOC.navigation.navigate(app + "?" + params);
-    } else{
-      NOC.navigation.navigate(app);
-    }
-  },
 });
