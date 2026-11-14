@@ -15,6 +15,7 @@ Example:
 ```python
 from typing import Never
 
+
 def fatal_error(message: str) -> Never:
     raise RuntimeError(message)
 ```

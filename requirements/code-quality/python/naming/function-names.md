@@ -15,14 +15,13 @@ Examples:
 Valid:
 
 ```python
-def get_user_name() -> str:
-    ...
+def get_user_name() -> str: ...
 
-def calculate_retry_count() -> int:
-    ...
 
-def _load_configuration() -> dict:
-    ...
+def calculate_retry_count() -> int: ...
+
+
+def _load_configuration() -> dict: ...
 ```
 
 Invalid:

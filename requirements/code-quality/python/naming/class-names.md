@@ -20,11 +20,14 @@ Valid:
 class UserProfile:
     pass
 
+
 class IPv4Address:
     pass
 
+
 class HTTPClient:
     pass
+
 
 class SNMPv3Client:
     pass
