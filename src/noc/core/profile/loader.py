@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Profile loader
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -49,13 +49,7 @@ class ProfileLoader(BaseLoader):
                     path = os.path.join(p or str(files("noc")), "sa", "profiles", *name.split("."))
                     if not os.path.exists(os.path.join(path, "profile.py")):
                         continue
-                    if p:
-                        # Custom script
-                        base_name = os.path.basename(os.path.dirname(p))
-                        module_name = f"{base_name}.sa.profiles.{name}"
-                    else:
-                        # Common script
-                        module_name = f"noc.sa.profiles.{name}"
+                    module_name = f"noc.{'custom.' if p else ''}sa.profiles.{name}"
                     profile = self.find_class(f"{module_name}.profile", BaseProfile, name)
                     if profile:
                         profile.initialize()
