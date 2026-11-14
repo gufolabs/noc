@@ -13,6 +13,7 @@ from typing import Any
 
 # Third-party modules
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from django.http import HttpRequest
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from bson import ObjectId
@@ -42,6 +43,7 @@ from noc.core.pm.utils import get_interface_metrics, MetricProxy
 from noc.core.translation import ugettext as _
 from noc.core.cache.decorator import cachedmethod
 from noc.core.topology.loader import loader
+from noc.sa.models.useraccess import UserAccess
 
 tags_lock = threading.RLock()
 
@@ -69,6 +71,12 @@ class MapApplication(ExtApplication):
     ST_DOWN = 4  # Object is down
     ST_MAINTENANCE = 32  # Maintenance bit
 
+    def get_segment_for_user(self, request: HttpRequest, segment_id: str) -> NetworkSegment:
+        filters = {"id": segment_id}
+        if not request.user.is_superuser:
+            filters["adm_domains__in"] = UserAccess.get_domains(request.user)
+        return self.get_object_or_404(NetworkSegment, **filters)
+
     @view(
         r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
         method=["GET"],
@@ -84,6 +92,8 @@ class MapApplication(ExtApplication):
         :return:
         """
         try:
+            if gen_type == "segment":
+                self.get_segment_for_user(request, gen_id)
             return MapSettings.get_map(
                 gen_type=gen_type, gen_id=gen_id, force_spring=request.GET.get("force") == "spring"
             )
@@ -163,7 +173,7 @@ class MapApplication(ExtApplication):
         }
 
     def inspector_objectsegment(self, request, id, rg_id):
-        object = self.get_object_or_404(NetworkSegment, id=rg_id)
+        object = self.get_segment_for_user(request, rg_id)
         return {
             "id": str(object.id),
             "name": object.name,
@@ -292,7 +302,7 @@ class MapApplication(ExtApplication):
 
     @view(url=r"^info/segment/(?P<id>[0-9a-f]{24})/$", method=["GET"], access="read", api=True)
     def api_info_segment(self, request, id):
-        segment = self.get_object_or_404(NetworkSegment, id=id)
+        segment = self.get_segment_for_user(request, id)
         return {
             "name": segment.name,
             "description": segment.description,
@@ -339,13 +349,16 @@ class MapApplication(ExtApplication):
             )
         # Search for maps
         r = []
-        for mi in gen.iter_maps(
-            parent=parent if gen.name != parent else None,
-            query=g.get(self.query_param, ""),
-            limit=int(g.get(self.limit_param, 500)),
-            start=int(g.get(self.start_param, 0)),
-            page=int(g.get(self.page_param, 1)),
-        ):
+        map_params: dict[str, Any] = {
+            "parent": parent if gen.name != parent else None,
+            "query": g.get(self.query_param, ""),
+            "limit": int(g.get(self.limit_param, 500)),
+            "start": int(g.get(self.start_param, 0)),
+            "page": int(g.get(self.page_param, 1)),
+        }
+        if gen.name == "segment":
+            map_params["user"] = request.user
+        for mi in gen.iter_maps(**map_params):
             r.append(
                 {
                     "label": mi.title,
@@ -378,6 +391,8 @@ class MapApplication(ExtApplication):
                 {"success": False, "message": f"Unknown generator: {q[self.gen_param]}"},
                 status=self.NOT_FOUND,
             )
+        if gen.name == "segment":
+            self.get_segment_for_user(request, gen_id)
         return {
             "data": [{"level": 0, "id": 0, "generator": gen.name, "label": gen.header}]
             + [
