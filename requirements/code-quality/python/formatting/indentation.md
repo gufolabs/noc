@@ -23,7 +23,7 @@ Invalid:
 
 ```python
 if ready:
-	process()
+    process()
 ```
 
 ## Why?
