@@ -309,6 +309,18 @@ class NOCImportRouter(importlib.abc.MetaPathFinder):
 
         self._check_custom = bool(custom_path and os.path.exists(custom_path))
 
+    def set_custom_path(self, custom_path: str | Path | None) -> None:
+        """Set the custom module root and update custom import routing.
+
+        Args:
+            custom_path: Filesystem root for custom modules, or ``None`` to
+                disable custom module routing.
+        """
+        if custom_path is not None:
+            custom_path = str(custom_path)
+        config.path.custom_path = custom_path
+        self._check_custom = bool(custom_path and os.path.exists(custom_path))
+
     def find_spec(
         self,
         fullname: str,
