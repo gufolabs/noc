@@ -49,7 +49,8 @@ class ProfileLoader(BaseLoader):
                     path = os.path.join(p or str(files("noc")), "sa", "profiles", *name.split("."))
                     if not os.path.exists(os.path.join(path, "profile.py")):
                         continue
-                    module_name = f"noc.{'custom.' if p else ''}sa.profiles.{name}"
+                    base_name = "noc.custom" if p else "noc"
+                    module_name = f"{base_name}.sa.profiles.{name}"
                     profile = self.find_class(f"{module_name}.profile", BaseProfile, name)
                     if profile:
                         profile.initialize()
