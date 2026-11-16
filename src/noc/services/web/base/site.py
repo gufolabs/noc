@@ -586,24 +586,22 @@ class Site:
     @cachetools.cachedmethod(operator.attrgetter("_perms_cache"), lock=lambda _: _perms_lock)
     def get_app_permissions_list(self) -> list[AppPermission]:
         """
-        Get AppPermission for all installed apps.
+        Get AppPermission for all discovered apps.
         """
         # NOC modules
         from noc.aaa.models.permission import Permission
 
+        self.autodiscover()
         r = []
-        perms = Permission.objects.values_list("name", flat=True)
-        apps = list(self.apps)
-        for module in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
-            mod = module[4:]
-            m = importlib.import_module(f"noc.services.web.apps.{mod}")
-            module_name = m.MODULE_NAME
-            for app in [app for app in apps if app.startswith(mod + ".")]:
-                app_perms = sorted([p for p in perms if p.startswith(app.replace(".", ":") + ":")])
-                if app_perms:
-                    a = self.apps[app]
-                    for p in app_perms:
-                        r.append(AppPermission(module=module_name, title=str(a.title), name=p))
+        perms = set(Permission.objects.values_list("name", flat=True))
+        for app_id, app in self.apps.items():
+            app_prefix = f"{app_id.replace('.', ':')}:"
+            app_perms = sorted(p for p in perms if p.startswith(app_prefix))
+            if not app_perms:
+                continue
+            title = str(getattr(app, "title", app_id))
+            for p in app_perms:
+                r.append(AppPermission(module=app.module_title, title=title, name=p))
         return r
 
 
