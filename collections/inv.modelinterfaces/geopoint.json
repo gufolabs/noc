@@ -11,13 +11,6 @@
             "is_const": true
         },
         {
-            "name": "srid",
-            "type": "str",
-            "description": "Spatial reference system, autority:code or LOCAL",
-            "required": true,
-            "is_const": false
-        },
-        {
             "name": "zoom",
             "type": "int",
             "description": "Default zoom level (override layer's default)",
@@ -27,14 +20,14 @@
         {
             "name": "x",
             "type": "float",
-            "description": "x coordinate, in SRS units",
+            "description": "Longitude in WGS84 degrees",
             "required": true,
             "is_const": false
         },
         {
             "name": "y",
             "type": "float",
-            "description": "y coordinate, in SRS units",
+            "description": "Latitude in WGS84 degrees",
             "required": true,
             "is_const": false
         },

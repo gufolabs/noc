@@ -38,7 +38,6 @@ ENV \
     NOC_THREAD_STACK_SIZE=524288 \
     NOC_PYTHON_INTERPRETER=/usr/local/bin/python3 \
     NOC_API_LISTEN="auto:1200" \
-    PROJ_DIR=/usr \
     PYTHONPATH=/opt/noc/src
 COPY . /opt/noc/
 COPY --from=build-ui /opt/noc/ui/dist/ /opt/noc/src/noc/ui/
@@ -59,7 +58,6 @@ ENV \
     NOC_PYTHON_INTERPRETER=/usr/local/bin/python3 \
     NOC_API_LISTEN="auto:1200" \
     PYTHONPATH=/workspaces/noc/src \
-    PROJ_DIR=/usr\
     NODE_OPTIONS=--max-old-space-size=8192\
     PATH=$PATH:/workspaces/node_modules/.bin
 COPY . /workspaces/noc/

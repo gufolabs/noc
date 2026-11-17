@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Map
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,6 @@
 
 # Third-party modules
 import geojson
-from pyproj import Transformer
 
 # NOC modules
 from noc.core.geo import distance, get_bbox
@@ -20,31 +19,16 @@ from noc.inv.models.objectconnection import ObjectConnection
 
 class Map:
     CONDUITS_LAYERS = ["manholes", "cableentries"]
+    GEOJSON_CRS = "EPSG:4326"
 
     def __init__(self) -> None:
         self.layers = {}
-        self.srid_map = {}
-        # Database projection
-        self.db_srid = "EPSG:4326"
-        # Cache for transformers
-        self.transformers: dict[tuple[str, str], Transformer] = {}
 
-    def get_transformer(self, src_srid, dst_srid):
-        srids = src_srid, dst_srid
-        tr = self.transformers.get(srids)
-        if not tr:
-            tr = Transformer.from_crs(src_srid, dst_srid)
-            self.transformers[srids] = tr
-        return tr
-
-    def get_db_point(self, x, y, srid=None):
+    def get_db_point(self, x: float, y: float) -> geojson.Point:
         """
-        Return GeoJSON Point translated to database projection
-        :return:
+        Return a GeoJSON Point in WGS84 coordinates.
         """
-        srid = srid or self.db_srid
-        pd = geojson.Point(coordinates=[x, y])
-        return self.transform(pd, srid, self.db_srid)
+        return geojson.Point(coordinates=[x, y])
 
     def get_layer(self, name):
         if name in self.layers:
@@ -66,13 +50,10 @@ class Map:
                 return zl
         return layer.default_zoom
 
-    def get_bbox(self, x0: float, y0: float, x1: float, y1: float, srid: str):
-        transformer = self.get_transformer(srid, self.db_srid)
-        cx0, cy0 = transformer.transform(x0, y0)
-        cx1, cy1 = transformer.transform(x1, y1)
-        return get_bbox(cx0, cx1, cy0, cy1)
+    def get_bbox(self, x0: float, y0: float, x1: float, y1: float):
+        return get_bbox(x0, x1, y0, y1)
 
-    def get_layer_objects(self, layer: str, x0: float, y0: float, x1: float, y1: float, srid: str):
+    def get_layer_objects(self, layer: str, x0: float, y0: float, x1: float, y1: float):
         """
         Extract GeoJSON from bounding box
         """
@@ -80,13 +61,13 @@ class Map:
         if not lr:
             return {}
         try:
-            bbox = self.get_bbox(x0, y0, x1, y1, srid)
+            bbox = self.get_bbox(x0, y0, x1, y1)
         except ValueError:
             return {}
         features = [
             geojson.Feature(
                 id=str(d["_id"]),
-                geometry=self.transform(d["point"], self.db_srid, srid),
+                geometry=d["point"],
                 properties={
                     "object": str(d["_id"]),
                     "label": d.get("name", ""),
@@ -98,7 +79,7 @@ class Map:
                 {"_id": 1, "point": 1, "name": 1},
             )
         ]
-        return geojson.FeatureCollection(features=features, crs=srid)
+        return geojson.FeatureCollection(features=features, crs=self.GEOJSON_CRS)
 
     def get_conduits_layers(self):
         """
@@ -111,30 +92,18 @@ class Map:
             ).values_list("id")
         return self._conduit_layers_ids
 
-    def transform(self, data, src_srid: str, dst_srid: str):
-        if src_srid == dst_srid:
-            return data
-        transformer = self.get_transformer(src_srid, dst_srid)
-        if data["type"] == "Point":
-            data["coordinates"] = transformer.transform(*data["coordinates"])
-        elif data["type"] == "LineString":
-            data["coordinates"] = [transformer.transform(x, y) for x, y in data["coordinates"]]
-        return data
-
-    def get_connection_layer(
-        self, layer: Layer, x0: float, y0: float, x1: float, y1: float, srid: str
-    ):
+    def get_connection_layer(self, layer: Layer, x0: float, y0: float, x1: float, y1: float):
         """
         Build line connections
         """
         try:
-            bbox = self.get_bbox(x0, y0, x1, y1, srid)
+            bbox = self.get_bbox(x0, y0, x1, y1)
         except ValueError:
             return {}
         features = [
             geojson.Feature(
                 id="-".join(str(c["object"]) for c in d["connection"]),
-                geometry=self.transform(d["line"], self.db_srid, srid),
+                geometry=d["line"],
             )
             for d in ObjectConnection._get_collection().find(
                 {
@@ -147,19 +116,17 @@ class Map:
                 {"_id": 1, "connection": 1, "line": 1},
             )
         ]
-        return geojson.FeatureCollection(features=features, crs=srid)
+        return geojson.FeatureCollection(features=features, crs=self.GEOJSON_CRS)
 
     def find_nearest(self, point, layers):
         """
         Find and return nearest object
-        :param point: GeoJSON Point or tuple of (x, y) or (x, y, srid)
+        :param point: GeoJSON Point or tuple of (longitude, latitude)
         :param layers: List of layer instances or layer names
         """
         # Normalize point
         if isinstance(point, tuple):
             point = geojson.Point(coordinates=[point[0], point[1]])
-            if len(point) == 3:
-                point = self.transform(point, point[2], self.db_srid)
         q = {"point__near": point}
         if isinstance(layers, list):
             q["layer__in"] = layers
@@ -175,8 +142,6 @@ class Map:
         """
         if isinstance(point, tuple):
             point = geojson.Point(coordinates=[point[0], point[1]])
-            if len(point) == 3:
-                point = self.transform(point, point[2], self.db_srid)
         o = self.find_nearest(point, layers)
         if o:
             return o, distance(point, o.point)

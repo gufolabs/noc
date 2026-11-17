@@ -31,6 +31,10 @@ The codebase follows a modular architecture similar to Django apps — each "app
 
 NOC uses UTF-8 for all text data — no `smart_text()` needed. All strings, HTTP responses, ClickHouse query results, and file I/O are UTF-8. Python `.decode()` with the default UTF-8 encoding is sufficient; never fall back to `smart_text` as a "safe" alternative.
 
+## Geography
+
+All geographic coordinates on the server use WGS84 (EPSG:4326), represented as longitude and latitude in degrees.
+
 ## Architecture
 
 ### Applications (Django-style)

@@ -286,7 +286,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   },
   //
   getQuery: function(layerCode){
-    return Ext.String.format(layerCode + "/?bbox={0},EPSG%3A4326", this.map.getBounds().toBBoxString());
+    return Ext.String.format(layerCode + "/?bbox={0}", this.map.getBounds().toBBoxString());
   },
   //
   onRefresh: function(){
@@ -499,7 +499,6 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
         lon: me.event.latlng.lng,
         lat: me.event.latlng.lat,
       },
-      positionSRID: "EPSG:4326",
     }).show();
   },
   //
@@ -527,7 +526,6 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
         url: "/inv/inv/" + me.currentId + "/plugin/map/set_geopoint/",
         method: "POST",
         jsonData: {
-          srid: "EPSG:4326",
           x: e.latlng.lng,
           y: e.latlng.lat,
         },

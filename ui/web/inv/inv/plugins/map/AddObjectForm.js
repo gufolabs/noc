@@ -14,7 +14,6 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
   objectModelId: null,
   objectModelName: null,
   newPosition: null,
-  positionSRID: null,
   app: null,
   width: 400,
   layout: "fit",
@@ -81,7 +80,6 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
       jsonData: {
         model: me.objectModelId,
         name: values.name,
-        srid: me.positionSRID,
         x: me.newPosition.lon,
         y: me.newPosition.lat,
       },
