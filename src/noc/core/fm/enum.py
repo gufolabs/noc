@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # FM enumerations
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ class EventAction(enum.Enum):
     DROP_MX = 5
 
     @classmethod
-    def from_rule(cls, action: str) -> "EventAction":
+    def from_rule(cls, action: str) -> EventAction:
         """Convert rule value to Action"""
         if action in ["raise", "clear", "R", "C"]:
             return EventAction.DISPOSITION
@@ -102,7 +102,7 @@ class EventAction(enum.Enum):
         """Check event to disposition"""
         return self == EventAction.DISPOSITION
 
-    def is_priority(self, other: "EventAction") -> bool:
+    def is_priority(self, other: EventAction) -> bool:
         """"""
         if not other:
             return True

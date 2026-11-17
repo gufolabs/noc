@@ -20,11 +20,11 @@ class PortMapperBase(type):
     """
 
     def __new__(
-        mcs: "type[PortMapperBase]",
+        mcs: type[PortMapperBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BasePortMapper"]:
+    ) -> type[BasePortMapper]:
         n = cast(type["BasePortMapper"], type.__new__(mcs, name, bases, attrs))
         for m in dir(n):
             mm = getattr(n, m)

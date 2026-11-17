@@ -19,11 +19,11 @@ RESERVED_NAMES = {"returns", "form", "preview", "check"}
 
 class BaseInterfaceMetaclass(type):
     def __new__(
-        mcs: "type[BaseInterfaceMetaclass]",
+        mcs: type[BaseInterfaceMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseInterface"]:
+    ) -> type[BaseInterface]:
         n = cast(type["BaseInterface"], type.__new__(mcs, name, bases, attrs))
         n._INPUT_PARAMS = []  # Populated by metaclass
         n._INPUT_MAP = {}  # name -> parameter, Populated by metaclass

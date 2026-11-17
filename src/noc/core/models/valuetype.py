@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Variable types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ class HTTPURLModel(BaseModel):
     url: HttpUrl
 
     @classmethod
-    def normalize(cls, value) -> "HttpUrl":
+    def normalize(cls, value) -> HttpUrl:
         """https://xxxx"""
         return HTTPURLModel(url=value)
 
@@ -67,7 +67,7 @@ class HostNameModel(BaseModel):
         return v
 
     @classmethod
-    def normalize(cls, value) -> "HttpUrl":
+    def normalize(cls, value) -> HttpUrl:
         """https://xxxx"""
         return HostNameModel(hostname=value)
 

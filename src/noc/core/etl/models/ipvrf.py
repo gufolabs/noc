@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # IP VRF Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -28,5 +28,5 @@ class IPVRF(BaseModel):
     description: str | None = None
     afi_ipv4: bool = True
     afi_ipv6: bool = False
-    project: Reference["Project"] | None = None
+    project: Reference[Project] | None = None
     labels: list[str] | None = None

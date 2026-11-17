@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # NetworkSegment dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class NetworkSegment(DictionaryModel):
     parent = ReferenceField("self")
 
     @classmethod
-    def extract(cls, item: "NetworkSegmentModel"):
+    def extract(cls, item: NetworkSegmentModel):
         return {
             "id": str(item.id),
             "name": item.name,

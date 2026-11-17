@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Collection utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ class Collection:
                 yield path
 
     @classmethod
-    def iter_collections(cls) -> "Iterable[Collection]":
+    def iter_collections(cls) -> Iterable[Collection]:
         # NOC modules
         from noc.models import COLLECTIONS, get_model
 
@@ -372,7 +372,7 @@ class Collection:
         try:
             o.save()
             return True
-        except (NotUniqueError, IntegrityError):
+        except NotUniqueError, IntegrityError:
             if is_document(self.model):
                 union_meta = self.model._meta
             else:

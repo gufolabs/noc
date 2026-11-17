@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Action
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ class ScopeConfig:
     before_exit: str | None = None
     enter: bool = True
 
-    def update_config(self, config: "ScopeConfig"):
+    def update_config(self, config: ScopeConfig):
         if config.command is not None:
             self.command = config.command
         # if config.exit_command is not None:

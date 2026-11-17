@@ -195,7 +195,7 @@ class ReportPermit(Permission):
     Always permit
     """
 
-    def check(self, app: "ReportByConfigApplication", user, obj=None) -> bool:
+    def check(self, app: ReportByConfigApplication, user, obj=None) -> bool:
         # NOC modules
         from noc.main.models.report import Report
 

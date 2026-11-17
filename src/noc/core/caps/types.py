@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Capabilities types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ class CapsValue:
     def name(self) -> str:
         return self.capability.name
 
-    def set_value(self, value: Any) -> "CapsValue":
+    def set_value(self, value: Any) -> CapsValue:
         """Update value"""
         return CapsValue(
             capability=self.capability,

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ManagedObject's dynamic dashboard
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ class MODashboard(JinjaDashboard):
         return super().__new__(dash)
 
     @classmethod
-    def resolve_object(cls, object_id) -> "ManagedObject":
+    def resolve_object(cls, object_id) -> ManagedObject:
         o = ManagedObject.objects.filter(Q(id=object_id) | Q(bi_id=object_id)).first()
         if not o:
             raise cls.NotFound()

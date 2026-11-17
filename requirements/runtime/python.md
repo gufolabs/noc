@@ -8,8 +8,6 @@ Python runtime environments required for development, deployment and operation o
 
 NOC **MUST** support execution on the following Python versions:
 
-- Python 3.12;
-- Python 3.13;
 - Python 3.14.
 
 Python runtime compatibility **MUST** be maintained for all supported Python versions.

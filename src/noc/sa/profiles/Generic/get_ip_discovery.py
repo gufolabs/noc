@@ -26,7 +26,7 @@ class Script(BaseScript):
         if "get_mpls_vpn" in self.scripts:
             try:
                 r = self.scripts.get_mpls_vpn()
-            except (self.CLISyntaxError, self.NotSupportedError):
+            except self.CLISyntaxError, self.NotSupportedError:
                 r = []
             for v in r:
                 if v["status"] and v["type"].lower() == "vrf":
@@ -43,7 +43,7 @@ class Script(BaseScript):
         if "get_ipv6_neighbor" in self.scripts:
             try:
                 r = self.scripts.get_ipv6_neighbor()
-            except (self.CLISyntaxError, self.NotSupportedError):
+            except self.CLISyntaxError, self.NotSupportedError:
                 r = []
             if r:
                 for x in r:

@@ -158,7 +158,7 @@ class ServiceApplication(ExtDocApplication):
         return data
 
     @staticmethod
-    def service_instance_to_dict(o: "ServiceInstance"):
+    def service_instance_to_dict(o: ServiceInstance):
         r = {
             "name": o.name,
             "address": ";".join(a.address for a in o.addresses),

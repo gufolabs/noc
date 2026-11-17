@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseConstraint class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -68,13 +68,13 @@ class BaseConstraint:
         """
         return self.is_valid_interface(interface)
 
-    def __neg__(self: "BaseConstraint") -> "BaseConstraint":
+    def __neg__(self: BaseConstraint) -> BaseConstraint:
         return NotConstraint(self)
 
-    def __and__(self, other: "BaseConstraint") -> "BaseConstraint":
+    def __and__(self, other: BaseConstraint) -> BaseConstraint:
         return AndConstraint(self, other)
 
-    def __or__(self, other: "BaseConstraint") -> "BaseConstraint":
+    def __or__(self, other: BaseConstraint) -> BaseConstraint:
         return OrConstraint(self, other)
 
 

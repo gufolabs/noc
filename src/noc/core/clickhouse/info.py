@@ -31,7 +31,7 @@ class TableInfo:
     table_ttl: int | None = None
 
     @classmethod
-    def from_sql(cls, sql: str) -> "TableInfo":
+    def from_sql(cls, sql: str) -> TableInfo:
         """
         Parse ClickHouse DDL SQL.
 
@@ -71,7 +71,7 @@ class TableInfo:
         return TableInfo(name=table_name, table_ttl=table_ttl)
 
     @classmethod
-    def iter_for_tables(cls, tables: Iterable[str]) -> "Iterable[TableInfo]":
+    def iter_for_tables(cls, tables: Iterable[str]) -> Iterable[TableInfo]:
         """
         Iterate TableInfo for given tables.
 

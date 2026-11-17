@@ -48,7 +48,7 @@ class Script(BaseScript):
                     r["platform"] = match.group("platform")
                     break
             return r
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             raise self.NotSupportedError
 
     def execute_cli(self, **kwargs):

@@ -29,7 +29,7 @@ class ProtocolApplication(ExtDocApplication):
     query_fields = ["code__icontains", "name__icontains", "description__icontains"]
     default_ordering = ["code"]
 
-    def instance_to_dict(self, o: "Protocol", fields=None, nocustom=False):
+    def instance_to_dict(self, o: Protocol, fields=None, nocustom=False):
         r = super().instance_to_dict(o, fields=fields, nocustom=nocustom)
         # discriminator_interface, discriminator_attr, discriminators (code, value)
         if not r.get("discriminators"):

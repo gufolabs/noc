@@ -69,7 +69,7 @@ class Script(BaseScript):
                 for oid, s in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
                     if s:
                         break
-            except (self.snmp.TimeOutError, self.snmp.SNMPError):
+            except self.snmp.TimeOutError, self.snmp.SNMPError:
                 pass
         if s:
             r["attributes"]["Serial Number"] = s

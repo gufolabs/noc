@@ -1,5 +1,5 @@
 # Basic Python image
-FROM python:3.13-slim-trixie AS python
+FROM python:3.14-slim-trixie AS python
 ENV \
     DEBIAN_FRONTEND=noninteractive \
     PYTHONPYCACHEPREFIX=/tmp/noc-pycache

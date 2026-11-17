@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # AdministrativeDomainModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ from .typing import Reference
 class AdministrativeDomain(BaseModel):
     id: str
     name: str
-    parent: Reference["AdministrativeDomain"] | None = None
+    parent: Reference[AdministrativeDomain] | None = None
     default_pool: str | None = None
 
     _csv_fields = ["id", "name", "parent", "default_pool"]

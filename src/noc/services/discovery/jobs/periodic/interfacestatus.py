@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Interface Status check
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -31,10 +31,10 @@ class InterfaceStatusCheck(DiscoveryCheck):
 
     @staticmethod
     @cachetools.cached({})
-    def get_ac_link_down() -> "AlarmClass":
+    def get_ac_link_down() -> AlarmClass:
         return AlarmClass.get_by_name("Network | Link | Link Down")
 
-    def iface_alarm(self, o_status: bool, a_status: bool, iface: "Interface", timestamp):
+    def iface_alarm(self, o_status: bool, a_status: bool, iface: Interface, timestamp):
         """
         Sync 'Network | Link | Link Down' Alarm Class to correlator
         * c - Send `clear` message for 'Link Down' message if Oper -> Up

@@ -131,7 +131,7 @@ class Item:
         return r
 
     @classmethod
-    def from_dict(cls, row: dict[str, Any]) -> "Item":
+    def from_dict(cls, row: dict[str, Any]) -> Item:
         # Determine type
         name = row["nam"]
         options = row.get("EM")
@@ -165,7 +165,7 @@ class ParsedData:
     mgmt_url: str | None = None
 
     @classmethod
-    def empty(cls) -> "ParsedData":
+    def empty(cls) -> ParsedData:
         return ParsedData(groups=[], conf=[])
 
 

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SensorModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -21,9 +21,9 @@ class Sensor(BaseModel):
     local_id: str
     label: str | None = None
     units: str | None = None
-    object: Reference["Object"] | None = None
-    managed_object: Reference["ManagedObject"] | None = None
-    agent: Reference["PMAgent"] | None = None
+    object: Reference[Object] | None = None
+    managed_object: Reference[ManagedObject] | None = None
+    agent: Reference[PMAgent] | None = None
     remote_host: str | None = None
     protocol: SensorProtocol = SensorProtocol.OTHER
     # Workflow state

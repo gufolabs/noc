@@ -151,11 +151,11 @@ class HorizonMixin:
 
 class ChannelMetaclass(type):
     def __new__(
-        mcs: "type[ChannelMetaclass]",
+        mcs: type[ChannelMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["ChannelMixin"]:
+    ) -> type[ChannelMixin]:
         attrs["_SETUP_HANDLERS"] = {}
         attrs["_CLEANUP_HANDLERS"] = {}
         for v in attrs.values():

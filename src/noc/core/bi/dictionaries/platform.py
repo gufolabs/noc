@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # platform dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class Platform(DictionaryModel):
     full_name = StringField()
 
     @classmethod
-    def extract(cls, item: "PlatformModel"):
+    def extract(cls, item: PlatformModel):
         return {
             "id": str(item.id),
             "name": ch_escape(item.name),

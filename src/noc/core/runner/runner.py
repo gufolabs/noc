@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Runner implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ class Runner:
         await self.apply_group(job)
         self.prune_jobs(job)
 
-    def prune_jobs(self, job: "Job") -> None:
+    def prune_jobs(self, job: Job) -> None:
         """
         Remove all jobs
         """

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @mappings decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ class RemoteMappingValue:
 
     def set_remote_id(
         self, remote_id: Any, source: InputSource | None = None
-    ) -> "RemoteMappingValue":
+    ) -> RemoteMappingValue:
         """Update value"""
         sources = self.sources
         if source and source not in self.sources:

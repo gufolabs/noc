@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ActionCommands
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -100,9 +100,9 @@ class ActionCommands(Document):
     }
     name = StringField(unique=True)
     uuid = UUIDField(unique=True)
-    action: "Action" = ReferenceField(Action, required=True)
+    action: Action = ReferenceField(Action, required=True)
     description = StringField()
-    profile: "Profile" = PlainReferenceField(Profile)
+    profile: Profile = PlainReferenceField(Profile)
     # Config Scopes
     config_mode = BooleanField(default=False)
     disable_when_change = StringField(
@@ -172,7 +172,7 @@ class ActionCommands(Document):
             ],
         )
 
-    def get_config(self, scopes: list[ScopeConfig]) -> "ActionCommandConfig":
+    def get_config(self, scopes: list[ScopeConfig]) -> ActionCommandConfig:
         """Get commands config"""
         profile = self.profile.get_profile()
         cfg = self.get_scope_configs()

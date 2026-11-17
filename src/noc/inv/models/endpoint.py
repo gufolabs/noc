@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Endpoint
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ class Endpoint(Document):
         return f"{self.channel.name}:{self.resource}"
 
     @classmethod
-    def _update_root_resource(cls, sender, document: "Endpoint", **kwargs) -> None:
+    def _update_root_resource(cls, sender, document: Endpoint, **kwargs) -> None:
         """
         Calculate root_resource field.
         """

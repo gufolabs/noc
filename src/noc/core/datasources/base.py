@@ -620,7 +620,7 @@ class BaseDataSource:
         return f"d_report_{cls.name}"
 
     @classmethod
-    def ensure_columns(cls, connect: "ClickhouseClient", table_name: str) -> bool:
+    def ensure_columns(cls, connect: ClickhouseClient, table_name: str) -> bool:
         """
         Create necessary table columns
         Args:

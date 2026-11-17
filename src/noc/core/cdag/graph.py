@@ -79,7 +79,7 @@ class CDAG:
             r[node_id] = ns.model_dump()
         return r
 
-    def merge(self, other: "CDAG", prefix: str | None = "") -> "CDAG":
+    def merge(self, other: CDAG, prefix: str | None = "") -> CDAG:
         """
         Merge other graph into this one
         Args:

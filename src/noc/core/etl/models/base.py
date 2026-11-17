@@ -43,7 +43,7 @@ class BaseModel(_BaseModel):
         return False
 
     @classmethod
-    def from_iter(cls, value: Iterable[Any]) -> "BaseModel":
+    def from_iter(cls, value: Iterable[Any]) -> BaseModel:
         """
         Convert tuple or list from legacy CSV to BaseModel instance
         Returns:

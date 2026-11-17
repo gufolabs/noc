@@ -44,15 +44,15 @@ class ManagedObject(BaseModel):
     state_changed: dt.datetime | None = None
     # Workflow event
     event: str | None = None
-    container: Reference["Object"] | None = None
-    administrative_domain: Reference["AdministrativeDomain"]
+    container: Reference[Object] | None = None
+    administrative_domain: Reference[AdministrativeDomain]
     pool: str
     fm_pool: str | None = None
-    segment: Reference["NetworkSegment"]
+    segment: Reference[NetworkSegment]
     profile: str | None = None
-    object_profile: Reference["ManagedObjectProfile"]
-    static_client_groups: list[Reference["ResourceGroup"]] | None = None
-    static_service_groups: list[Reference["ResourceGroup"]] | None = None
+    object_profile: Reference[ManagedObjectProfile]
+    static_client_groups: list[Reference[ResourceGroup]] | None = None
+    static_service_groups: list[Reference[ResourceGroup]] | None = None
     scheme: str
     address: str | None = None
     fqdn: DomainName | None = None
@@ -66,15 +66,15 @@ class ManagedObject(BaseModel):
     syslog_source_type: SourceType | None = SourceType.d
     syslog_source_ip: str | None = None
     description: str | None = None
-    auth_profile: Reference["AuthProfile"] | None = None
-    controller: Reference["ManagedObject"] | None = None
-    l2_domain: Reference["L2Domain"] | None = None
-    vrf: Reference["IPVRF"] | None = None
+    auth_profile: Reference[AuthProfile] | None = None
+    controller: Reference[ManagedObject] | None = None
+    l2_domain: Reference[L2Domain] | None = None
+    vrf: Reference[IPVRF] | None = None
     labels: list[str] | None = None
-    tt_system: Reference["TTSystem"] | None = None
+    tt_system: Reference[TTSystem] | None = None
     tt_queue: str | None = None
     tt_system_id: str | None = None
-    project: Reference["Project"] | None = None
+    project: Reference[Project] | None = None
     capabilities: list[CapsItem] | None = None
     checkpoint: str | None = None
     mappings: list[MappingItem] | None = None

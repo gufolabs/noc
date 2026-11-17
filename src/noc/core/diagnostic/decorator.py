@@ -94,7 +94,7 @@ def diagnostic(cls):
      If model supported diagnostic (diagnostics field) add DiagnosticHub
     """
 
-    def diagnostic(self) -> "DiagnosticHub":
+    def diagnostic(self) -> DiagnosticHub:
         diagnostics = getattr(self, "_diagnostics", None)
         if diagnostics:
             return diagnostics

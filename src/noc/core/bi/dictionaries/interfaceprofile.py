@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Interface Profile dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class InterfaceProfile(DictionaryModel):
     is_uni = UInt8Field()
 
     @classmethod
-    def extract(cls, item: "InterfaceProfileModel"):
+    def extract(cls, item: InterfaceProfileModel):
         return {
             "id": str(item.id),
             "name": item.name,

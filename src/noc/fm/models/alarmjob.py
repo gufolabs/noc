@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Alarm Job
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -197,7 +197,7 @@ class AlarmJob(Document):
         return f"{self.name}::{self.status}"
 
     @classmethod
-    def iter_last_for_entities(cls, entities: Iterable[str]) -> Iterable["AlarmJob"]:
+    def iter_last_for_entities(cls, entities: Iterable[str]) -> Iterable[AlarmJob]:
         """
         Iterate last jobs for entities.
 

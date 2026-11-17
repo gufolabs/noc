@@ -25,11 +25,11 @@ from noc.sa.interfaces.base import InterfaceTypeError
 
 class BaseProfileMetaclass(type):
     def __new__(
-        mcs: "type[BaseProfileMetaclass]",
+        mcs: type[BaseProfileMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseProfile"]:
+    ) -> type[BaseProfile]:
         n = cast(type["BaseProfile"], type.__new__(mcs, name, bases, attrs))
         n.rogue_char_cleaners = n._get_rogue_chars_cleaners()
         if "command_more" in attrs:

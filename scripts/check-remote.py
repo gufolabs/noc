@@ -39,7 +39,7 @@ def get_remote() -> str | None:
             ).stdout.strip()
             or None
         )
-    except (FileNotFoundError, subprocess.CalledProcessError):
+    except FileNotFoundError, subprocess.CalledProcessError:
         return None
 
 

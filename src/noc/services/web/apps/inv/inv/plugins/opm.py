@@ -63,7 +63,7 @@ class PowerToken(BaseToken):
     power: float
 
     @staticmethod
-    def parse(ch: str, value: str) -> "PowerToken":
+    def parse(ch: str, value: str) -> PowerToken:
         if "." in ch:
             channel, n = ch.split(".", 1)
             return PowerToken(channel=channel, subchannel=int(n), power=float(value))

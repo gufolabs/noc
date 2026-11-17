@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Attach to module
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ class ModulePosition:
         return f"o:{self.obj.id}:{self.name}"
 
     @classmethod
-    def from_resource(cls, res: str) -> "ModulePosition | None":
+    def from_resource(cls, res: str) -> ModulePosition | None:
         """
         Get position from resource.
         """

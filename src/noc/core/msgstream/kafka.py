@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Kafka client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ class KafkaClient:
             self.bootstrap = run_sync(self.resolve_broker)
         return self.bootstrap
 
-    async def __aenter__(self) -> "KafkaClient":
+    async def __aenter__(self) -> KafkaClient:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

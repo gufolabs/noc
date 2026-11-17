@@ -53,7 +53,7 @@ class Script(BaseScript):
             macs = parse_table(self.cli("show mac-addr-table vlan 1"))
             try:
                 mac_gw = MACAddressParameter().clean(macs[0][0])
-            except (ValueError, IndexError):
+            except ValueError, IndexError:
                 macs = parse_table(self.cli(f"show mac-addr-table vlan {gw_vlan[0]}"))
                 if len(macs[0]) == 3:
                     # Only mac, iface, type

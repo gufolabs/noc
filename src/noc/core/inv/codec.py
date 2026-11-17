@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Encode and decode Inventory Objects and Connections
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ def encode(iter: Iterable[Object]) -> (InvData, EncodeResultInfo):
     - connections between all found objects
     """
 
-    def iter_object_tree(object: Object, exclude_cables: bool) -> Iterable["Object"]:
+    def iter_object_tree(object: Object, exclude_cables: bool) -> Iterable[Object]:
         """Get full tree with all descendants for object"""
         if exclude_cables and object.is_wire:
             return

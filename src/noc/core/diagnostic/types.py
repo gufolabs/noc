@@ -52,7 +52,7 @@ class CtxItem:
     set_method: str | None = None
 
     @classmethod
-    def from_string(cls, value: str) -> "CtxItem":
+    def from_string(cls, value: str) -> CtxItem:
         """"""
         name, *v = value.split(":")
         if v:
@@ -159,7 +159,7 @@ class CheckStatus(BaseModel):
         cls,
         cr: CheckResult,
         source: InputSource = InputSource.UNKNOWN,
-    ) -> "CheckStatus":
+    ) -> CheckStatus:
         expired = None
         if cr.ttl:
             expired = dt.datetime.now().replace(microsecond=0) + dt.timedelta(seconds=cr.ttl)

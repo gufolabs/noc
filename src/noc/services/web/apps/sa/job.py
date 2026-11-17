@@ -94,7 +94,7 @@ class Node:
     id: str
     name: str
     status: JobStatus
-    children: "list[Node] | None" = None
+    children: list[Node] | None = None
     depends_on: list[str] | None = None
 
     @property
@@ -105,7 +105,7 @@ class Node:
         return self.status.get_color(self.status.value)
 
     @classmethod
-    def from_job(cls, job: Job) -> "Node":
+    def from_job(cls, job: Job) -> Node:
         """Create node from Job record."""
         return Node(
             id=str(job.id),
@@ -114,12 +114,12 @@ class Node:
             depends_on=[str(j) for j in job.depends_on] if job.depends_on else None,
         )
 
-    def add_child(self, node: "Node") -> None:
+    def add_child(self, node: Node) -> None:
         if self.children is None:
             self.children = []
         self.children.append(node)
 
-    def iter_all(self) -> Iterable["Node"]:
+    def iter_all(self) -> Iterable[Node]:
         """
         Iterate all nested nodes.
         """

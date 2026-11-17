@@ -85,7 +85,7 @@ class EnumParameter[T: Enum](BaseParameter[T]):
             return v
         try:
             return self.enum(v)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             msg = f"Invalid value: {v}"
             raise ValueError(msg) from None
 

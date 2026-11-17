@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Profile dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class Profile(DictionaryModel):
     name = StringField()
 
     @classmethod
-    def extract(cls, item: "ProfileModel"):
+    def extract(cls, item: ProfileModel):
         return {
             "id": str(item.id),
             "name": item.name,
