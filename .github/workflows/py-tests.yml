@@ -127,7 +127,7 @@ jobs:
         run: uv pip install --system -e .[test,testing]
 
       - name: Run Tests (with coverage)
-        run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
+        run: pytest -vv -s -o faulthandler_timeout=180 --maxfail=10 --cov --cov-branch --cov-report=xml tests/
         if: >
           (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
           (github.event_name == 'pull_request' && contains(join(github.event.pull_request.labels.*.name, ','), 'coverage'))
