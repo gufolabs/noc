@@ -13,19 +13,18 @@ from noc.sa.interfaces.base import StringParameter
 
 
 class DateTimeParameter(StringParameter):
-    formats = ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%d"]
-
     def clean(self, value):
         if value is None and self.default is not None:
             return self.default
         if isinstance(value, dt.datetime):
             return value
-        for f in self.formats:
-            try:
-                return dt.datetime.strptime(value, f)
-            except ValueError:
-                pass
-        self.raise_error("Invalid DateTime")
+        try:
+            value = dt.datetime.fromisoformat(value)
+        except (TypeError, ValueError):
+            self.raise_error("Invalid DateTime")
+        if value.tzinfo is not None:
+            value = value.astimezone(dt.UTC).replace(tzinfo=None)
+        return value
 
 
 class DateParameter(DateTimeParameter):
