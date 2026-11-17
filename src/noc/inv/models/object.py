@@ -279,7 +279,7 @@ class Object(Document):
         self.layer = None
         self.point = None
         # Get points
-        x, y, srid = self.get_data_tuple("geopoint", ("x", "y", "srid"))
+        x, y = self.get_data_tuple("geopoint", ("x", "y"))
         if x is None or y is None:
             return  # No point data
         # Get layer
@@ -291,7 +291,7 @@ class Object(Document):
             return
         # Update actual data
         self.layer = layer
-        self.point = map.get_db_point(x, y, srid=srid)
+        self.point = map.get_db_point(x, y)
 
     def on_save(self):
         def get_coordless_objects(o):

@@ -50,7 +50,7 @@ class MapPlugin(InvPlugin):
             self.api_set_geopoint,
             url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/set_geopoint/$",
             method=["POST"],
-            validate={"srid": StringParameter(), "x": FloatParameter(), "y": FloatParameter()},
+            validate={"x": FloatParameter(), "y": FloatParameter()},
         )
         self.add_view(
             f"api_plugin_{self.name}_set_layer_visibility",
@@ -68,7 +68,6 @@ class MapPlugin(InvPlugin):
             validate={
                 "model": DocumentParameter(ObjectModel),
                 "name": UnicodeParameter(),
-                "srid": StringParameter(),
                 "x": FloatParameter(),
                 "y": FloatParameter(),
             },
@@ -102,12 +101,11 @@ class MapPlugin(InvPlugin):
             }
             for layer in Layer.objects.order_by("zindex")
         ]
-        srid, x, y = o.get_data_tuple("geopoint", ("srid", "x", "y"))
-        if x is None or y is None or not srid:
+        x, y = o.get_data_tuple("geopoint", ("x", "y"))
+        if x is None or y is None:
             p = self.get_parent(o)
             if p:
-                srid, x, y = p.get_data_tuple("geopoint", ("srid", "x", "y"))
-        # @todo: Coordinates transform
+                x, y = p.get_data_tuple("geopoint", ("x", "y"))
         # Feed result
         return {
             "id": str(o.id),
@@ -125,18 +123,16 @@ class MapPlugin(InvPlugin):
         y0 = float(bbox[1])
         x1 = float(bbox[2])
         y1 = float(bbox[3])
-        srid = bbox[4]
         if layer == "conduits":
             builder = self.get_conduits_layer
         elif layer.startswith("pop_link"):
             builder = self.get_pop_links_layer
         else:
             builder = map.get_layer_objects
-        return builder(layer, x0, y0, x1, y1, srid)
+        return builder(layer, x0, y0, x1, y1)
 
-    def api_set_geopoint(self, request: HttpRequest, id, srid=None, x=None, y=None):
+    def api_set_geopoint(self, request: HttpRequest, id, x=None, y=None):
         o = self.app.get_object_or_404(Object, id=id)
-        o.set_data("geopoint", "srid", srid)
         o.set_data("geopoint", "x", x)
         o.set_data("geopoint", "y", y)
         o.save()
@@ -149,13 +145,13 @@ class MapPlugin(InvPlugin):
             mos[mo.id] = {"moname": mo.name}
         return {"id": str(o.id), "name": o.get_address_text(), "model": o.model.name, "moname": mos}
 
-    def get_conduits_layer(self, layer, x0, y0, x1, y1, srid):
+    def get_conduits_layer(self, layer, x0, y0, x1, y1):
         line = Layer.get_by_code("conduits")
-        return map.get_connection_layer(line, x0, y0, x1, y1, srid)
+        return map.get_connection_layer(line, x0, y0, x1, y1)
 
-    def get_pop_links_layer(self, layer, x0, y0, x1, y1, srid):
+    def get_pop_links_layer(self, layer, x0, y0, x1, y1):
         line = Layer.get_by_code(layer)
-        return map.get_connection_layer(line, x0, y0, x1, y1, srid)
+        return map.get_connection_layer(line, x0, y0, x1, y1)
 
     def api_set_layer_visibility(self, request: HttpRequest, layer, status):
         line = self.app.get_object_or_404(Layer, code=layer)
@@ -190,10 +186,10 @@ class MapPlugin(InvPlugin):
             m[parts[-1]] = str(mt.id)
         return get_menu_item(d)
 
-    def api_create(self, request: HttpRequest, model=None, name=None, srid=None, x=None, y=None):
+    def api_create(self, request: HttpRequest, model=None, name=None, x=None, y=None):
         # Find suitable container
         to_pop = model.name == "Ducts | Cable Entry"
-        p = (x, y, srid)
+        p = (x, y)
         if to_pop:
             # Cable entries are attached to nearest PoP
             pop_layers = list(Layer.objects.filter(code__startswith="pop_"))
@@ -223,7 +219,6 @@ class MapPlugin(InvPlugin):
             model=model,
             parent=parent,
             data=[
-                ObjectAttr(scope="", interface="geopoint", attr="srid", value=srid),
                 ObjectAttr(scope="", interface="geopoint", attr="x", value=x),
                 ObjectAttr(scope="", interface="geopoint", attr="y", value=y),
             ],
