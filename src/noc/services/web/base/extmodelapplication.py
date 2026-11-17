@@ -176,24 +176,26 @@ class ExtModelApplication(ExtApplication):
         # NOC modules
         from noc.core.model.fields import TagsField, TextArrayField
 
-        if isinstance(field, BooleanField):
-            return BooleanParameter()
-        if isinstance(field, IntegerField):
-            return IntParameter()
-        if isinstance(field, FloatField):
-            return FloatParameter()
-        if isinstance(field, DateField):
-            return DateParameter()
-        if isinstance(field, DateTimeField):
-            return DateTimeParameter()
-        if isinstance(field, TagsField):
-            return TagsParameter(required=not field.null)
-        if isinstance(field, TextArrayField):
-            return StringListParameter(required=not field.null)
-        if isinstance(field, related.ForeignKey):
-            self.fk_fields[field.name] = field.remote_field.model
-            return ModelParameter(field.remote_field.model, required=not field.null)
-        return None
+        match field:
+            case BooleanField():
+                return BooleanParameter()
+            case IntegerField():
+                return IntParameter()
+            case FloatField():
+                return FloatParameter()
+            case DateTimeField():
+                return DateTimeParameter()
+            case DateField():
+                return DateParameter()
+            case TagsField():
+                return TagsParameter(required=not field.null)
+            case TextArrayField():
+                return StringListParameter(required=not field.null)
+            case related.ForeignKey():
+                self.fk_fields[field.name] = field.remote_field.model
+                return ModelParameter(field.remote_field.model, required=not field.null)
+            case _:
+                return None
 
     def fav_convert(self, item):
         """
