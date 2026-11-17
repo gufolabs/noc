@@ -119,7 +119,7 @@ supervisor = [
   "supervisor-wildcards==0.1.3",
 ]
 test = [
-  "pytest==9.1.1",
+  "pytest==9.2.0",
   "pytest-cov==7.1.0",
 ]
 testing = ["dbf==0.99.3"]
