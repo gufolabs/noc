@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // aaa.user Model
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2019 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.aaa.user.Model");
@@ -34,10 +34,6 @@ Ext.define("NOC.aaa.user.Model", {
     {
       name: "password",
       type: "string",
-    },
-    {
-      name: "last_login",
-      type: "date",
     },
     {
       name: "date_joined",
