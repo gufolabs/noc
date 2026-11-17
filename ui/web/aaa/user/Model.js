@@ -42,6 +42,7 @@ Ext.define("NOC.aaa.user.Model", {
     {
       name: "date_joined",
       type: "date",
+      persist: false,
     },
     {
       name: "is_superuser",
