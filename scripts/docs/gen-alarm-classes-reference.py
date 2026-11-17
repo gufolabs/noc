@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generate alarm classes reference
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ class Var:
     default: str
 
     @classmethod
-    def from_json(cls, d: dict[str, Any]) -> "Var":
+    def from_json(cls, d: dict[str, Any]) -> Var:
         """
         Read from
         """
@@ -94,7 +94,7 @@ class Action(Enum):
     IGNORE = "IGNORE"
 
     @classmethod
-    def from_action(cls, a: str) -> "Action":
+    def from_action(cls, a: str) -> Action:
         if a == "clear":
             return Action.CLOSE
         if a == "raise":
@@ -163,7 +163,7 @@ class Data:
     events: list[Event]
 
     @classmethod
-    def read(cls, path: Path) -> "Data":
+    def read(cls, path: Path) -> Data:
         """
         Read from JSON.
 
@@ -199,7 +199,7 @@ class Data:
     def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
-    def link_from(self, src: "Data") -> str:
+    def link_from(self, src: Data) -> str:
         """
         Generate MD link from source to self.
 

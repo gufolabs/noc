@@ -31,7 +31,7 @@ class AffectedItem:
     source: Literal["alarm", "dependency", "diagnostic", "manual", "other"] = "other"
 
     @classmethod
-    def from_alarm(cls, alarm, status: Status) -> "AffectedItem":
+    def from_alarm(cls, alarm, status: Status) -> AffectedItem:
         """Build item by alarm"""
         return AffectedItem(
             service_status=status,
@@ -42,7 +42,7 @@ class AffectedItem:
         )
 
     @classmethod
-    def from_diagnostic(cls, diagnostic, status: Status) -> "AffectedItem":
+    def from_diagnostic(cls, diagnostic, status: Status) -> AffectedItem:
         """Build item by diagnostic"""
         return AffectedItem(
             service_status=status,
@@ -52,7 +52,7 @@ class AffectedItem:
         )
 
     @classmethod
-    def from_dependency(cls, service, status: Status) -> "AffectedItem":
+    def from_dependency(cls, service, status: Status) -> AffectedItem:
         """Build item by Service instance"""
         return AffectedItem(
             service_status=status,

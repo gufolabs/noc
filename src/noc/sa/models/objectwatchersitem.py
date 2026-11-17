@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ObjectWatch model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ class WatchDocumentItem(EmbeddedDocument):
         return f"{self.effect}:{self.key}"
 
     @property
-    def item(self) -> "WatchItem":
+    def item(self) -> WatchItem:
         """"""
         return WatchItem(
             effect=self.effect,
@@ -56,7 +56,7 @@ class WatchDocumentItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_item(cls, item: WatchItem, remote_system: str | None = None) -> "WatchDocumentItem":
+    def from_item(cls, item: WatchItem, remote_system: str | None = None) -> WatchDocumentItem:
         """Create record from WatchItem"""
         if item.after:
             after = item.after.replace(microsecond=0)

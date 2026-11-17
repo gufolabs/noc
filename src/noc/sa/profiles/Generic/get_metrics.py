@@ -157,11 +157,11 @@ class MetricScriptBase(BaseScriptMetaclass):
     """
 
     def __new__(
-        mcs: "type[MetricScriptBase]",
+        mcs: type[MetricScriptBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["Script"]:  # type: ignore[return-value]
+    ) -> type[Script]:  # type: ignore[return-value]
         m = cast(type["Script"], super().__new__(mcs, name, bases, attrs))
         # Inject metric_type -> [handler] mappings
         m._mt_map = defaultdict(list)

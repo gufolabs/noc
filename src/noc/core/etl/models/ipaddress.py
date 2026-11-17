@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # IP Address Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,11 +22,11 @@ class IPAddress(BaseModel):
     id: str
     name: str
     address: str
-    profile: Reference["IPAddressProfile"]
+    profile: Reference[IPAddressProfile]
     fqdn: str | None = None
     # Workflow state
     prefix: Reference[IPPrefix] | None = None
-    ipv6_transition: Reference["IPAddress"] | None = None
+    ipv6_transition: Reference[IPAddress] | None = None
     state: str | None = None
     # Last state change
     state_changed: dt.datetime | None = None

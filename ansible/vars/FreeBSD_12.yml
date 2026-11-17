@@ -2,7 +2,7 @@
 ---
 ansible_shell_type: csh
 
-noc_py3_ver: "3.8"
+noc_py3_ver: "3.14"
 
 etc_prefix: /usr/local/etc
 

@@ -37,12 +37,12 @@ class Node:
     name: str
     model: str
     parent_connection: str | None
-    children: list["Node"]
+    children: list[Node]
     is_external: bool
     connections: list[ConnectionItem]
 
     @classmethod
-    def from_object(cls, obj: Object) -> "Node":
+    def from_object(cls, obj: Object) -> Node:
         return Node(
             object=obj,
             name=obj.name or "",

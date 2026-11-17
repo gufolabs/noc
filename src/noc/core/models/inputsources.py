@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Input Data Sources
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -36,12 +36,12 @@ class InputSource(enum.Enum):
     UNKNOWN = "unknown"
 
     @classmethod
-    def from_sources(cls, code) -> list["InputSource"]:
+    def from_sources(cls, code) -> list[InputSource]:
         """Convert code to InputSource List"""
         return [InputSource(CODE_SOURCE_MAP[c]) for c in code]
 
     @classmethod
-    def to_codes(cls, sources: Iterable["InputSource"]) -> str:
+    def to_codes(cls, sources: Iterable[InputSource]) -> str:
         """Convert Sources to codes"""
         return "".join(s.code for s in sources)
 

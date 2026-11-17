@@ -261,7 +261,7 @@ class AlarmClass(Document):
             for hh in alarm_class.handlers:
                 try:
                     h = get_handler(hh)
-                except (ImportError, KeyError):  # Key error for cache exception
+                except ImportError, KeyError:  # Key error for cache exception
                     h = None
                 if h:
                     handlers.append(h)
@@ -276,7 +276,7 @@ class AlarmClass(Document):
             for hh in alarm_class.clear_handlers:
                 try:
                     h = get_handler(hh)
-                except (ImportError, KeyError):  # Key error for cache exception
+                except ImportError, KeyError:  # Key error for cache exception
                     h = None
                 if h:
                     handlers.append(h)

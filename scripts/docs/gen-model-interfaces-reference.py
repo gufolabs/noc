@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generate model interfaces reference
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ class Item:
     is_const: bool
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> "Item":
+    def from_json(cls, data: dict[str, Any]) -> Item:
         """
         Read from JSON.
 
@@ -93,7 +93,7 @@ class Data:
     items: list[Item]
 
     @classmethod
-    def read(cls, path: Path) -> "Data":
+    def read(cls, path: Path) -> Data:
         """
         Read from JSON.
 

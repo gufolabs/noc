@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Pipeline Job
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -147,7 +147,7 @@ class Job(Document):
         return env
 
     @classmethod
-    def iter_last_for_entities(cls, entities: Iterable[str]) -> Iterable["Job"]:
+    def iter_last_for_entities(cls, entities: Iterable[str]) -> Iterable[Job]:
         """
         Iterate last jobs for entities.
 

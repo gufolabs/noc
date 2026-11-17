@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Report Engine Base Class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -246,7 +246,7 @@ class ReportConfig(BaseModel):
     def get_root_band(self) -> ReportBand:
         return next(b for b in self.bands if b.name == ROOT_BAND)
 
-    def get_template(self, code: str) -> "Template":
+    def get_template(self, code: str) -> Template:
         code = code or "DEFAULT"
         try:
             return self.templates[code]

@@ -15,8 +15,8 @@ from .typing import Reference
 
 class Address(BaseModel):
     id: str
-    building: Reference["Building"]
-    street: Reference["Street"]
+    building: Reference[Building]
+    street: Reference[Street]
     num: int
     num_letter: str | None = None
 

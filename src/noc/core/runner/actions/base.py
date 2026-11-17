@@ -35,11 +35,11 @@ class ActionError(NOCError):
 
 class ActionMetaclass(type):
     def __new__(
-        mcs: "type[ActionMetaclass]",
+        mcs: type[ActionMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseAction"]:
+    ) -> type[BaseAction]:
         m = cast(type["BaseAction"], type.__new__(mcs, name, bases, attrs))
         # Get inputs
         m.inputs = {}

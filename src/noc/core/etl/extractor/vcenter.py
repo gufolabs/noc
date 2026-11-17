@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # VMWare vCenter Extractors
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ class VCenterLinkExtractor(BaseExtractor):
 
     def __init__(
         self,
-        system: "VCenterRemoteSystem",
+        system: VCenterRemoteSystem,
         config=None,
         links: list[Link] | None = None,
     ):
@@ -372,7 +372,7 @@ class VCenterFMEventExtractor(VCenterExtractor):
 
     def get_object(
         self, event: vim.event.Event, content: vim.ServiceInstanceContent
-    ) -> "RemoteObject":
+    ) -> RemoteObject:
         """"""
         if event.vm:
             return RemoteObject(name=event.vm.name, remote_id=event.vm.vm.config.uuid)

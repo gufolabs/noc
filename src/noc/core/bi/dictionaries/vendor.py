@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # vendor dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class Vendor(DictionaryModel):
     name = StringField()
 
     @classmethod
-    def extract(cls, item: "VendorModel"):
+    def extract(cls, item: VendorModel):
         return {
             "id": str(item.id),
             "name": item.name,

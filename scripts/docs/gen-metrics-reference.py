@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generate connection-types-reference
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ class Metric:
     scale: str
 
     @classmethod
-    def read(cls, path: Path) -> "Metric":
+    def read(cls, path: Path) -> Metric:
         with open(path) as fp:
             data = json.load(fp)
         return Metric(
@@ -113,7 +113,7 @@ class KeyField:
     model: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> "KeyField":
+    def from_json(cls, data: dict[str, Any]) -> KeyField:
         return KeyField(field_name=data["field_name"], model=data["model"])
 
 
@@ -124,7 +124,7 @@ class Label:
     store_column: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> "Label":
+    def from_json(cls, data: dict[str, Any]) -> Label:
         return Label(
             label=data["label"],
             view_column=data.get("view_column", ""),
@@ -152,7 +152,7 @@ class Data:
     metrics: list[Metric]
 
     @classmethod
-    def read(cls, path: Path) -> "Data":
+    def read(cls, path: Path) -> Data:
         """
         Read from JSON.
 

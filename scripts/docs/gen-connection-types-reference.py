@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generate connection-types-reference
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ class Data:
     genders: str
 
     @classmethod
-    def read(cls, path: Path) -> "Data":
+    def read(cls, path: Path) -> Data:
         """
         Read from JSON.
 
@@ -95,7 +95,7 @@ class Data:
             c_group=data.get("c_group") or None,
         )
 
-    def peer_types(self, cgroup: str, cgroups: dict[str, list["Data"]]) -> list["Data"]:
+    def peer_types(self, cgroup: str, cgroups: dict[str, list[Data]]) -> list[Data]:
         items = cgroups.get(cgroup) or []
         return [x for x in items if x.genders in PEER_GENDERS[self.genders]]
 
@@ -114,7 +114,7 @@ class Data:
     def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
-    def link_from(self, src: "Data") -> str:
+    def link_from(self, src: Data) -> str:
         """
         Generate MD link from source to self.
 

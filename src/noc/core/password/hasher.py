@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Password hashers
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ class BaseHasher:
         return False
 
     @classmethod
-    def get_hasher(cls, encoded: str) -> "type[BaseHasher]":
+    def get_hasher(cls, encoded: str) -> type[BaseHasher]:
         """
         Get hasher for encoded password.
 
@@ -135,7 +135,7 @@ class BaseHasher:
         raise ValueError(msg)
 
     @classmethod
-    def get_default_hasher(cls) -> "type[BaseHasher]":
+    def get_default_hasher(cls) -> type[BaseHasher]:
         """Return default hasher"""
         return DEFAULT_HASHER
 

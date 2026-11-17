@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Map Settings
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -233,7 +233,7 @@ class MapSettings(Document):
             pass
 
     @classmethod
-    def ensure_settings(cls, gen_type: str, gen_id, **kwargs) -> "MapSettings":
+    def ensure_settings(cls, gen_type: str, gen_id, **kwargs) -> MapSettings:
         """
         Ensure MapSettings Exists and create it if not
         :return:

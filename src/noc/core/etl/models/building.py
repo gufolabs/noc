@@ -15,7 +15,7 @@ from .typing import Reference
 
 class Building(BaseModel):
     id: str
-    adm_division: Reference["AdmDiv"]
+    adm_division: Reference[AdmDiv]
     postal_code: str | None = None
     start_date: date | None = None
     end_date: date | None = None

@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Diagnostic types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime as dt
 from collections.abc import Iterable
-from typing import Any, Union
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel, PrivateAttr
@@ -45,7 +45,7 @@ class DiagnosticItem(BaseModel):
         super().__init__(**data)
         self._config: DiagnosticConfig = cfg
 
-    def __eq__(self, other: Union["DiagnosticItem", "DiagnosticValue"]) -> bool:
+    def __eq__(self, other: DiagnosticItem | DiagnosticValue) -> bool:
         """Compare diagnostic by value"""
         if self.diagnostic != other.diagnostic:
             return False
@@ -105,7 +105,7 @@ class DiagnosticItem(BaseModel):
         cls,
         cfg: DiagnosticConfig,
         value: DiagnosticValue | None = None,
-    ) -> "DiagnosticItem":
+    ) -> DiagnosticItem:
         """Create item from config"""
         checks, reason, is_dirty = None, cfg.reason, False
         if cfg.blocked:

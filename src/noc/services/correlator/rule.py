@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Rule
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ class VarTransformRule:
     update_oper_status: bool = False
 
     @classmethod
-    def from_item(cls, item, alias: str | None = None) -> "VarTransformRule":
+    def from_item(cls, item, alias: str | None = None) -> VarTransformRule:
         """Create var transform rule from config item"""
         if item.affected_model:
             model = get_model(item.affected_model)
@@ -88,7 +88,7 @@ class EventAlarmRule:
         rule: DispositionRule,
         alarm_class: AlarmClass,
         event_class: EventClass | None = None,
-    ) -> "EventAlarmRule":
+    ) -> EventAlarmRule:
         """"""
         a_vars = {v.name: v for v in alarm_class.vars}
         vars_transform = []
@@ -128,7 +128,7 @@ class EventAlarmRule:
     @classmethod
     def from_event_class_rule(
         cls, source, alarm_class: AlarmClass | None, event_class: EventClass
-    ) -> "EventAlarmRule":
+    ) -> EventAlarmRule:
         """Restore disposition rules embedded in EventClass."""
         var_mapping = source.var_mapping or {}
         mapped_vars = set(var_mapping.values())

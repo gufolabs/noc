@@ -116,7 +116,7 @@ class Script(BaseScript):
                 _oid, r = r[0]
                 r = self.rx_hw_extended_platform.search(r)
                 return r.group("platform")
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             pass
         return platform
 
@@ -132,13 +132,13 @@ class Script(BaseScript):
                     r.append(x.strip(" \x00"))
                 if r:
                     return r
-            except (self.snmp.TimeOutError, self.snmp.SNMPError):
+            except self.snmp.TimeOutError, self.snmp.SNMPError:
                 pass
         if self.has_snmp_only_access():
             return r
         try:
             v = self.cli("display elabel slot 0")
-        except (self.ScriptError, CLIError):
+        except self.ScriptError, CLIError:
             return []
         v = list(self.rx_parts.finditer(v))
         if v:
@@ -160,13 +160,13 @@ class Script(BaseScript):
                     r.append(x.strip(" \x00"))
                 if r:
                     return r
-            except (self.snmp.TimeOutError, self.snmp.SNMPError):
+            except self.snmp.TimeOutError, self.snmp.SNMPError:
                 pass
         if self.has_snmp_only_access():
             return r
         try:
             v = self.cli("display patch-information")
-        except (self.ScriptError, CLIError):
+        except self.ScriptError, CLIError:
             return []
         v = self.rx_patch.search(v)
         if v and v.group("patch_version"):
@@ -221,7 +221,7 @@ class Script(BaseScript):
     def execute_snmp(self, **kwargs):
         try:
             v = self.snmp.get(mib["SNMPv2-MIB::sysDescr", 0], cached=True)
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             raise NotImplementedError()
         platform, version, image = self.parse_version(v)
         if platform in self.BAD_PLATFORM:

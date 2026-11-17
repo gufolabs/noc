@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseGoal class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -42,13 +42,13 @@ class BaseGoal:
         """
         return False
 
-    def __neg__(self: "BaseGoal") -> "BaseGoal":
+    def __neg__(self: BaseGoal) -> BaseGoal:
         return NotGoal(self)
 
-    def __and__(self, other: "BaseGoal") -> "BaseGoal":
+    def __and__(self, other: BaseGoal) -> BaseGoal:
         return AndGoal(self, other)
 
-    def __or__(self, other: "BaseGoal") -> "BaseGoal":
+    def __or__(self, other: BaseGoal) -> BaseGoal:
         return OrGoal(self, other)
 
 

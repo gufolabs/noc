@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # AdministrativeDomain dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class AdministrativeDomain(DictionaryModel):
     parent = ReferenceField("self")
 
     @classmethod
-    def extract(cls, item: "AdministrativeDomainModel"):
+    def extract(cls, item: AdministrativeDomainModel):
         return {
             "id": item.id,
             "name": item.name,

@@ -51,11 +51,11 @@ class BaseScriptMetaclass(type):
     """Process @match decorators"""
 
     def __new__(
-        mcs: "type[BaseScriptMetaclass]",
+        mcs: type[BaseScriptMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseScript"]:
+    ) -> type[BaseScript]:
         n = cast(type["BaseScript"], type.__new__(mcs, name, bases, attrs))
         n._execute_chain = sorted(
             (v for v in attrs.values() if hasattr(v, "_seq")), key=operator.attrgetter("_seq")

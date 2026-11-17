@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Source lookup table
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class SourceConfig:
     mapping_refs: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data) -> "SourceConfig":
+    def from_data(cls, data) -> SourceConfig:
         return SourceConfig(
             id=str(data["id"]),
             name=data["name"],
@@ -42,7 +42,7 @@ class SourceConfig:
             mapping_refs=tuple(data.get("mapping_refs") or []),
         )
 
-    def is_diff(self, cfg: "SourceConfig") -> bool:
+    def is_diff(self, cfg: SourceConfig) -> bool:
         """Check diff"""
         return cfg != self
 

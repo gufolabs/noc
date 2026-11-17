@@ -113,7 +113,7 @@ class Check:
         return r
 
     @classmethod
-    def from_string(cls, url) -> "Check":
+    def from_string(cls, url) -> Check:
         """
         <check>://<cred>@<address>:<port>&arg0
         Returns:
@@ -121,7 +121,7 @@ class Check:
         """
 
     @classmethod
-    def from_dict(cls, data) -> "Check":
+    def from_dict(cls, data) -> Check:
         credential = data.pop("credential", None)
         if credential and "snmp_ro" in credential:
             credential = SNMPCredential(**credential)
@@ -139,7 +139,7 @@ class Check:
             return self.credential
         return None
 
-    def set_credential(self, cred) -> "Check":
+    def set_credential(self, cred) -> Check:
         return Check(
             name=self.name,
             args=self.args,
@@ -154,7 +154,7 @@ class Check:
         """Has wilcard param"""
         return self.address == "*"
 
-    def is_match(self, result: "CheckResult") -> bool:
+    def is_match(self, result: CheckResult) -> bool:
         return all(getattr(result, k, None) == getattr(self, k, None) for k in self.keys)
 
 
@@ -219,7 +219,7 @@ class CheckResult:
         return None
 
     @classmethod
-    def from_dict(cls, v) -> "CheckResult":
+    def from_dict(cls, v) -> CheckResult:
         data = []
         for d in v.pop("data", None) or []:
             data.append(DataItem(**d))
@@ -247,7 +247,7 @@ class CheckResult:
         args,
         remote_system,
         data: dict[str, str],
-    ) -> "CheckResult":
+    ) -> CheckResult:
         """Create instance from History Record"""
         r = {
             "check": name,

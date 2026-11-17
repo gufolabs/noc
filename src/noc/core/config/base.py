@@ -28,11 +28,11 @@ class ConfigSectionBase(type):
     """Metaclass for collecting configuration section parameters."""
 
     def __new__(
-        mcs: "type[ConfigSectionBase]",
+        mcs: type[ConfigSectionBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["ConfigSection"]:
+    ) -> type[ConfigSection]:
         """Create configuration section class and collect parameters.
 
         Args:
@@ -185,11 +185,11 @@ class ConfigBase(type):
     """Metaclass for collecting configuration parameters."""
 
     def __new__(
-        mcs: "type[ConfigBase]",
+        mcs: type[ConfigBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseConfig"]:
+    ) -> type[BaseConfig]:
         """Create configuration class and collect parameters.
 
         Args:

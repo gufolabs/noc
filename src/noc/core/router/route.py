@@ -96,7 +96,7 @@ class MatchItem:
     headers: list[HeaderMatchItem] | None = None
 
     @classmethod
-    def from_data(cls, data: list[dict[str, Any]]) -> list["MatchItem"]:
+    def from_data(cls, data: list[dict[str, Any]]) -> list[MatchItem]:
         r = []
         for match in data:
             r.append(
@@ -290,7 +290,7 @@ class Route:
         self.actions = [Action.from_data(data)]
 
     @classmethod
-    def from_data(cls, data) -> "Route":
+    def from_data(cls, data) -> Route:
         """
         Build Route from data config
         Attrs:
@@ -300,7 +300,7 @@ class Route:
         r.update(data)
         return r
 
-    def iter_route(self) -> Iterable["Route"]:
+    def iter_route(self) -> Iterable[Route]:
         yield self
 
 

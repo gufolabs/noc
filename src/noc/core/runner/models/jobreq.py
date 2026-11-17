@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Job request
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ class JobRequest(BaseModel):
     deadline: dt.datetime | None = None
     resource_path: list[str] | None = None
     entity: str | None = None
-    jobs: list["JobRequest"] | None = None
+    jobs: list[JobRequest] | None = None
 
     def submit(self) -> None:
         """Submit job request."""

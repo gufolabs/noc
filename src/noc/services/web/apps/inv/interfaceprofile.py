@@ -38,7 +38,7 @@ class InterfaceProfileApplication(ExtDocApplication):
     query_fields = ["name", "description"]
 
     @staticmethod
-    def field_match_expression(o: "InterfaceProfile"):
+    def field_match_expression(o: InterfaceProfile):
         r = []
         for num, ml in enumerate(o.match_rules):
             if num:

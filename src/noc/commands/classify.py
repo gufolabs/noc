@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # classify
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ class Stats:
         }
 
     @classmethod
-    def from_json(cls, path: Path, data: dict[str, int | float]) -> "Stats":
+    def from_json(cls, path: Path, data: dict[str, int | float]) -> Stats:
         """
         Get Stats from json data.
 
@@ -90,7 +90,7 @@ class Stats:
             return float(self.classified) / float(self.total)
         return 0
 
-    def get_comparison(self, other: "Stats") -> str:
+    def get_comparison(self, other: Stats) -> str:
         """
         Get comparison report.
         """

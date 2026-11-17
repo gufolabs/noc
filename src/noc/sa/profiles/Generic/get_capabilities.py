@@ -24,7 +24,7 @@ def false_on_cli_error(f):
     def wrapper(*args, **kwargs):
         try:
             return f(*args, **kwargs)
-        except (BaseScript.CLIOperationError, BaseScript.CLISyntaxError):
+        except BaseScript.CLIOperationError, BaseScript.CLISyntaxError:
             return False
 
     return wrapper
@@ -35,7 +35,7 @@ def false_on_snmp_error(f):
     def wrapper_snmp(*args, **kwargs):
         try:
             return f(*args, **kwargs)
-        except (SNMPError, SNMP.TimeOutError):
+        except SNMPError, SNMP.TimeOutError:
             return False
 
     return wrapper_snmp
@@ -83,7 +83,7 @@ class Script(BaseScript):
                 # For EnterpriseID Caps
                 self._ent_id = r
             return r is not None
-        except (self.snmp.TimeOutError, SNMPError):
+        except self.snmp.TimeOutError, SNMPError:
             pass
         return False
 
@@ -94,7 +94,7 @@ class Script(BaseScript):
         try:
             r = self.snmp.getnext(oid, bulk=bulk, only_first=only_first, version=version)
             return r and any(r)
-        except (self.snmp.TimeOutError, SNMPError):
+        except self.snmp.TimeOutError, SNMPError:
             return False
 
     def has_snmp(self):
@@ -337,7 +337,7 @@ class Script(BaseScript):
                     if r:
                         r = r[0][0]
                 return r
-            except (self.snmp.TimeOutError, SNMPError):
+            except self.snmp.TimeOutError, SNMPError:
                 pass
 
     @false_on_snmp_error
@@ -534,7 +534,7 @@ class Script(BaseScript):
             try:
                 self.cli(cmd)
                 return i
-            except (BaseScript.CLIOperationError, BaseScript.CLISyntaxError):
+            except BaseScript.CLIOperationError, BaseScript.CLISyntaxError:
                 pass
         return None
 

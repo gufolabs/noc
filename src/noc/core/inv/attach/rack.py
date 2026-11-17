@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Attach to rack
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ class RackSide(Enum):
     REAR = "r"
 
     @classmethod
-    def from_str(cls, s: str) -> "RackSide":
+    def from_str(cls, s: str) -> RackSide:
         """
         Get from string.
 
@@ -67,7 +67,7 @@ class RackPosition:
         return hash((self.side.value, self.position))
 
     @classmethod
-    def from_str(cls, s: str) -> "RackPosition":
+    def from_str(cls, s: str) -> RackPosition:
         """
         Get position from string representation.
 

@@ -66,7 +66,7 @@ class Script(BaseScript):
                         neighbors[-1]["remote_ip"] = (
                             f"{ord(msg[0])}.{ord(msg[1])}.{ord(msg[2])}.{ord(msg[3])}"
                         )
-                except (IndexError, ValueError):
+                except IndexError, ValueError:
                     pass
             except self.CLISyntaxError:
                 pass

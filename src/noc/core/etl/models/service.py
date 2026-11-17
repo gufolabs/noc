@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ServiceModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -45,10 +45,10 @@ class Instance(_BaseModel):
 
 class Service(BaseModel):
     id: str
-    profile: Reference["ServiceProfile"]
+    profile: Reference[ServiceProfile]
     name_template: str | None = None
-    parent: Reference["Service"] | None = None
-    subscriber: Reference["Subscriber"] | None = None
+    parent: Reference[Service] | None = None
+    subscriber: Reference[Subscriber] | None = None
     ts: datetime | None = None
     # Workflow state
     state: str | None = None
@@ -70,8 +70,8 @@ class Service(BaseModel):
     labels: list[str] | None = None
     description: str | None = None
     # Groups
-    static_client_groups: list[Reference["ResourceGroup"]] | None = None
-    static_service_groups: list[Reference["ResourceGroup"]] | None = None
+    static_client_groups: list[Reference[ResourceGroup]] | None = None
+    static_service_groups: list[Reference[ResourceGroup]] | None = None
     # Custom
     capabilities: list[CapsItem] | None = None
     instances: list[Instance] | None = None

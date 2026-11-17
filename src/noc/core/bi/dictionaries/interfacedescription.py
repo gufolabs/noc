@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Interface Description dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ class InterfaceDescription(DictionaryModel):
     service = UInt64Field()
 
     @classmethod
-    def extract(cls, item: "SubInterface"):
+    def extract(cls, item: SubInterface):
         return {
             "bi_id": item.managed_object.bi_id,
             "name": item.name,

@@ -204,8 +204,8 @@ class VLANApplication(ExtDocApplication):
     def api_allocate_vlan(
         self,
         request,
-        l2_domain: "L2Domain",
-        pool: "ResourcePool" = None,
+        l2_domain: L2Domain,
+        pool: ResourcePool = None,
         vlan_id: int | None = None,
         name: str | None = None,
         **kwargs,

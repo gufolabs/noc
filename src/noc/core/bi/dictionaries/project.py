@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Project dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class Project(DictionaryModel):
     name = StringField()
 
     @classmethod
-    def extract(cls, item: "ProjectModel"):
+    def extract(cls, item: ProjectModel):
         return {
             "id": str(item.id),
             "name": item.name,

@@ -16,11 +16,11 @@ from django.db.models.base import Model, ModelBase
 
 class NOCModelBase(ModelBase):
     def __new__(
-        mcs: "type[NOCModelBase]",
+        mcs: type[NOCModelBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["NOCModel"]:  # type: ignore[return-value]
+    ) -> type[NOCModel]:  # type: ignore[return-value]
         is_base = name == "NOCModel"
         # Initialize app registry to avoid calling django.setup()
         mcs.make_smoothie()

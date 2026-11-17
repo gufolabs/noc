@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Metrics Rule
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ class Rule:
             return True
         return any(labels.issuperset(ml) for ml in self.match_labels)
 
-    def is_differ(self, rule: "Rule") -> frozenset[str]:
+    def is_differ(self, rule: Rule) -> frozenset[str]:
         """
         Diff nodes config - update configs only
         Diff graph nodes or structure - rebuld Card Rules
@@ -89,7 +89,7 @@ class Rule:
         action: RuleAction,
         rule_name: str,
         conditions: list[RuleCondition],
-    ) -> "Rule":
+    ) -> Rule:
         """Build rule from config"""
         rule_id = f"{rule_id}-{action.id}"
         configs = {}

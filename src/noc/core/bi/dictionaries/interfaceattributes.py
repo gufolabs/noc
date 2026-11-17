@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Interface Attributes dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class InterfaceAttributes(DictionaryModel):
     service = UInt64Field()
 
     @classmethod
-    def extract(cls, item: "Interface"):
+    def extract(cls, item: Interface):
         return {
             "bi_id": item.managed_object.bi_id,
             "name": item.name,
