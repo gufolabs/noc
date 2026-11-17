@@ -29,7 +29,6 @@ from aiokafka.structs import OffsetAndTimestamp
 
 # NOC modules
 from noc.config import KafkaCompressionType, config
-from noc.core.ioloop.util import run_sync
 
 # NOC Modules
 from noc.core.perf import metrics
@@ -51,7 +50,7 @@ class KafkaClient:
     RESOLVE_RETRY = 1.0
 
     def __init__(self) -> None:
-        self.bootstrap = None
+        self.bootstrap: str | None = None
         self.producer: AIOKafkaProducer | None = None
         self.consumer: AIOKafkaConsumer | None = None
         self.client: AIOKafkaClient | None = None
@@ -76,9 +75,9 @@ class KafkaClient:
         svc = random.choice(addresses)
         return f"{svc.host}:{svc.port}"
 
-    def get_bootstrap(self) -> str:
-        if not self.bootstrap:
-            self.bootstrap = run_sync(self.resolve_broker)
+    async def _get_bootstrap(self) -> str:
+        if self.bootstrap is None:
+            self.bootstrap = await self.resolve_broker()
         return self.bootstrap
 
     async def __aenter__(self) -> "KafkaClient":
@@ -125,7 +124,7 @@ class KafkaClient:
         Returns:
             Result of fetch cluster metadata.
         """
-        client = self.get_kafka_client()
+        client = await self._get_kafka_client()
         await client.bootstrap()
         s_meta: dict[str, dict[int, PartitionMetadata]] = defaultdict(dict)
         req_parts = []
@@ -173,7 +172,7 @@ class KafkaClient:
         """
         if self.producer:
             return self.producer
-        bootstrap = self.get_bootstrap()
+        bootstrap = await self._get_bootstrap()
         logger.info("Connecting to producer using bootstrap services %s", bootstrap)
         self.producer = AIOKafkaProducer(
             loop=self.loop,
@@ -206,9 +205,10 @@ class KafkaClient:
     async def get_consumer(self, group_id=None) -> AIOKafkaConsumer:
         if self.consumer:
             return self.consumer
+        bootstrap = await self._get_bootstrap()
         self.consumer = AIOKafkaConsumer(
             loop=self.loop,
-            bootstrap_servers=self.get_bootstrap(),
+            bootstrap_servers=bootstrap,
             client_id=CLIENT_ID,
             enable_auto_commit=False,
             group_id=group_id,
@@ -223,16 +223,11 @@ class KafkaClient:
                 logger.error("Cannot connect to Kafka: %s", e)
                 await retry_timeout(1.0, name="kafka_consumer")
 
-    def get_kafka_client(self) -> AIOKafkaClient:
-        """
-        Return Async Kafka Client
-        Returns:
-            Result of return async kafka client.
-        """
+    async def _get_kafka_client(self) -> AIOKafkaClient:
         if not self.client:
             self.client = AIOKafkaClient(
-                bootstrap_servers=self.get_bootstrap(), client_id=CLIENT_ID
-            )  # config.client_id
+                bootstrap_servers=await self._get_bootstrap(), client_id=CLIENT_ID
+            )
         return self.client
 
     async def get_kafka_admin_client(self) -> AIOKafkaAdminClient:
@@ -242,8 +237,9 @@ class KafkaClient:
             Result of return kafka admin client.
         """
         if not self.admin_client:
+            bootstrap = await self._get_bootstrap()
             self.admin_client = AIOKafkaAdminClient(
-                bootstrap_servers=self.get_bootstrap(), client_id=CLIENT_ID
+                bootstrap_servers=bootstrap, client_id=CLIENT_ID
             )  # config.client_id
             await self.admin_client.start()
         return self.admin_client
