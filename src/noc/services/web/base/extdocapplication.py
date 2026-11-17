@@ -128,11 +128,13 @@ class ExtDocApplication(ExtApplication):
             if name == "uuid":
                 self.has_uuid = True
         if not self.query_fields:
-            self.query_fields = [
-                f"{n}__{self.query_condition}"
-                for n, f in self.model._fields.items()
-                if f.unique and isinstance(f, StringField)
-            ]
+            self.query_fields = []
+            for name, field in self.model._fields.items():
+                if not field.unique:
+                    continue
+                match field:
+                    case StringField():
+                        self.query_fields.append(f"{name}__{self.query_condition}")
         self.unique_fields = [n for n, f in self.model._fields.items() if f.unique]
         # Install JSON API call when necessary
         self.json_collection = self.model._meta.get("json_collection")
@@ -350,69 +352,66 @@ class ExtDocApplication(ExtApplication):
                 elif f.name == "bi_id":
                     # Long integer send as string
                     v = str(v)
-                elif isinstance(f, GeoPointField):
-                    pass
-                elif isinstance(f, EnumField):
-                    r[f"{f.name}__label"] = v.name
-                    v = v.value
-                elif isinstance(f, ForeignKeyListField):
-                    v = [{"label": str(vv.name), "id": vv.id} for vv in v]
-                elif isinstance(f, PlainReferenceListField):
-                    v = [{"label": str(vv.name), "id": str(vv.id)} for vv in v]
-                elif isinstance(f, ForeignKeyField):
-                    r[f"{f.name}__label"] = str(v)
-                    v = v.id
-                elif isinstance(f, PlainReferenceField):
-                    r[f"{f.name}__label"] = str(v)
-                    if hasattr(v, "id"):
-                        v = str(v.id)
-                    else:
-                        v = str(v)
-                elif isinstance(f, ReferenceField):
-                    r[f"{f.name}__label"] = str(v)
-                    if hasattr(v, "id"):
-                        v = str(v.id)
-                    else:
-                        v = str(v)
-                elif f.name in self.field_labels:
-                    r[f"{f.name}__label"] = self.field_labels[f.name](v)
-                elif (
-                    f.name in {"labels", "effective_labels", "default_labels"}
-                    and isinstance(f, ListField)
-                    and isinstance(f.field, StringField)
-                ):
-                    # isinstance(f.field, StringField) for exclude pm.scope labels
-                    v = sorted(
-                        [self.format_label(ll) for ll in Label.from_names(v)],
-                        key=lambda x: x["display_order"],
-                    )
-                elif isinstance(f, (ListField, EmbeddedDocumentListField)):
-                    if hasattr(f, "field") and isinstance(f.field, EmbeddedDocumentField):
-                        v = [self.instance_to_dict(vv, nocustom=True) for vv in v]
-                    elif hasattr(f, "field") and isinstance(f.field, ReferenceField):
-                        v = [{"label": str(vv), "id": str(vv.id)} for vv in v]
-                    elif hasattr(f, "field") and isinstance(f.field, ObjectIdField):
-                        v = [str(vv) for vv in v]
-                elif isinstance(f, PlainReferenceListField):
-                    v = [{"label": str(vv), "id": str(vv.id)} for vv in v]
-                elif isinstance(f, EmbeddedDocumentField):
-                    v = self.instance_to_dict(v, nocustom=True)
-                elif isinstance(f, BinaryField):
-                    v = repr(v)
-                elif isinstance(f, DateField):
-                    if v:
-                        v = v.strftime("%Y-%m-%d")
-                    else:
-                        v = None
-                elif isinstance(f, DynamicField) and isinstance(v, list):
-                    v = [str(x) for x in v]
-                elif not isinstance(v, (bool, dict, int, str)):
-                    if hasattr(v, "id"):
-                        v = v.id
-                    else:
-                        v = smart_text(v) if isinstance(v, bytes) else str(v)
-            elif v is None and isinstance(f, ForeignKeyListField):
-                v = []
+                else:
+                    match f:
+                        case GeoPointField():
+                            pass
+                        case EnumField():
+                            r[f"{f.name}__label"] = v.name
+                            v = v.value
+                        case ForeignKeyListField():
+                            v = [{"label": str(vv.name), "id": vv.id} for vv in v]
+                        case PlainReferenceListField():
+                            v = [{"label": str(vv.name), "id": str(vv.id)} for vv in v]
+                        case ForeignKeyField():
+                            r[f"{f.name}__label"] = str(v)
+                            v = v.id
+                        case PlainReferenceField() | ReferenceField():
+                            r[f"{f.name}__label"] = str(v)
+                            if hasattr(v, "id"):
+                                v = str(v.id)
+                            else:
+                                v = str(v)
+                        case _ if f.name in self.field_labels:
+                            r[f"{f.name}__label"] = self.field_labels[f.name](v)
+                        case ListField(field=StringField()) if f.name in {
+                            "labels",
+                            "effective_labels",
+                            "default_labels",
+                        }:
+                            v = sorted(
+                                [self.format_label(ll) for ll in Label.from_names(v)],
+                                key=lambda x: x["display_order"],
+                            )
+                        case ListField() | EmbeddedDocumentListField():
+                            match getattr(f, "field", None):
+                                case EmbeddedDocumentField():
+                                    v = [self.instance_to_dict(vv, nocustom=True) for vv in v]
+                                case ReferenceField():
+                                    v = [{"label": str(vv), "id": str(vv.id)} for vv in v]
+                                case ObjectIdField():
+                                    v = [str(vv) for vv in v]
+                        case EmbeddedDocumentField():
+                            v = self.instance_to_dict(v, nocustom=True)
+                        case BinaryField():
+                            v = repr(v)
+                        case DateField():
+                            if v:
+                                v = v.strftime("%Y-%m-%d")
+                            else:
+                                v = None
+                        case DynamicField() if isinstance(v, list):
+                            v = [str(x) for x in v]
+                        case _:
+                            if not isinstance(v, (bool, dict, int, str)):
+                                if hasattr(v, "id"):
+                                    v = v.id
+                                else:
+                                    v = smart_text(v) if isinstance(v, bytes) else str(v)
+            elif v is None:
+                match f:
+                    case ForeignKeyListField():
+                        v = []
             r[n] = v
         # Add custom fields
         if not nocustom:

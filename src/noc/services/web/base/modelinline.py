@@ -81,11 +81,13 @@ class ModelInline:
                 self.custom_fields[fn[6:]] = h
         if not self.query_fields:
             # By default - search in unique text fields
-            self.query_fields = [
-                f"{f.name}__{self.query_condition}"
-                for f in self.model._meta.fields
-                if f.unique and isinstance(f, CharField)
-            ]
+            self.query_fields = []
+            for field in self.model._meta.fields:
+                if not field.unique:
+                    continue
+                match field:
+                    case CharField():
+                        self.query_fields.append(f"{field.name}__{self.query_condition}")
         # Add searchable custom fields
         self.query_fields += [
             f"{f.name}__{self.query_condition}" for f in self.get_custom_fields() if f.is_searchable
@@ -170,20 +172,22 @@ class ModelInline:
         # NOC modules
         from noc.core.model.fields import AutoCompleteTagsField
 
-        if isinstance(field, BooleanField):
-            return BooleanParameter()
-        if isinstance(field, IntegerField):
-            return IntParameter()
-        if isinstance(field, FloatField):
-            return FloatParameter()
-        if isinstance(field, AutoCompleteTagsField):
-            return TagsParameter(required=not field.null)
-        if isinstance(field, TextArrayField):
-            return StringListParameter(required=not field.null)
-        if isinstance(field, related.ForeignKey):
-            self.fk_fields[field.name] = field.remote_field.model
-            return ModelParameter(field.remote_field.model, required=not field.null)
-        return None
+        match field:
+            case BooleanField():
+                return BooleanParameter()
+            case IntegerField():
+                return IntParameter()
+            case FloatField():
+                return FloatParameter()
+            case AutoCompleteTagsField():
+                return TagsParameter(required=not field.null)
+            case TextArrayField():
+                return StringListParameter(required=not field.null)
+            case related.ForeignKey():
+                self.fk_fields[field.name] = field.remote_field.model
+                return ModelParameter(field.remote_field.model, required=not field.null)
+            case _:
+                return None
 
     def get_Q(self, request, query):
         """
