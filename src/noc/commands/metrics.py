@@ -24,7 +24,6 @@ from dateutil.parser import parse
 # NOC modules
 from noc.config import config
 from noc.core.cdag.graph import CDAG
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.service.loader import get_service
@@ -154,7 +153,7 @@ class Command(BaseCommand):
                 with open(fn) as f:
                     records = f.read().replace("\r", "").splitlines()
             table = fn.split("-", 1)[0]
-            asyncio.run(upload(table, records), loop_factory=get_loop_factory())
+            asyncio.run(upload(table, records))
             if rm:
                 os.unlink(fn)
 
@@ -337,7 +336,7 @@ class Command(BaseCommand):
             data["ts"] = time.time_ns()
             # data["managed_object"]
             # data["sla_probe"]
-            asyncio.run(upload(orjson.dumps([data])), loop_factory=get_loop_factory())
+            asyncio.run(upload(orjson.dumps([data])))
             time.sleep(5)
             self.print("Register Metric", data)
 

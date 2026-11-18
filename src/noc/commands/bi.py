@@ -27,7 +27,6 @@ from noc.core.etl.bi.extractor.alarmlogs import AlarmLogsExtractor
 from noc.core.etl.bi.extractor.alarms import AlarmsExtractor
 from noc.core.etl.bi.extractor.managedobject import ManagedObjectsExtractor
 from noc.core.etl.bi.extractor.reboots import RebootsExtractor
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect, get_db
 from noc.core.msgstream.client import MessageStreamClient
@@ -224,7 +223,7 @@ class Command(BaseCommand):
                     r["ts"] = time.strftime("%Y-%m-%d %H:%M:%S", lt)
                     data.append(orjson.dumps(r))
                 table = bi_dict_model._meta.db_table
-                asyncio.run(upload(table, data), loop_factory=get_loop_factory())
+                asyncio.run(upload(table, data))
 
     def handle_clean(self, *args, **options):
         for ecls in self.EXTRACTORS:
@@ -271,5 +270,5 @@ class Command(BaseCommand):
             with gzip.open(path, "rb") as f:
                 data = f.read().splitlines()
             table = fn.split("-", 1)[0]
-            asyncio.run(upload(table, data), loop_factory=get_loop_factory())
+            asyncio.run(upload(table, data))
             os.unlink(path)
