@@ -97,11 +97,10 @@ Then following environment will be processed as:
 
 | Environment                | Configuration          |
 | -------------------------- | ---------------------- |
-| NOC_FEATURE_UVLOOP=1       | feature.uvloop=True    |
 | NOC_API_LISTEN=auto:1200   | api.listen=auto:1200    |
 | NOC_TIMEZONE=Europe/Moscow | timezone=Europe/Moscow |
 | NOC_FOOBAR                 | _ignored_              |
-| MYVAR_FEATURE_UVLOOP=1     | _ignored_              |
+| MYVAR_API_LISTEN=auto:1200 | _ignored_              |
 
 If we'll change URL to:
 
@@ -113,10 +112,10 @@ Then previous example will be processed as:
 
 | Environment                | Configuration       |
 | -------------------------- | ------------------- |
-| NOC_FEATURE_UVLOOP=1       | _ignored_           |
+| NOC_API_LISTEN=auto:1200   | _ignored_           |
 | NOC_TIMEZONE=Europe/Moscow | _ignored_           |
 | NOC_FOOBAR                 | _ignored_           |
-| MYVAR_FEATURE_UVLOOP=1     | feature.uvloop=True |
+| MYVAR_API_LISTEN=auto:1200 | api.listen=auto:1200 |
 
 <!-- prettier-ignore -->
 !!! note

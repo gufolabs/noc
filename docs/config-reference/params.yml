@@ -347,7 +347,6 @@ params:
   features.service_registration:
     default: "True"
   features.telemetry: {}
-  features.use_uvloop: {}
   fm.active_window:
     default: "86400"
   fm.alarm_close_retries:

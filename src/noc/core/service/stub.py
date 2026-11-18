@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service stub for scripts and commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -55,7 +55,8 @@ class ServiceStub:
         self.logger.debug("Publisher is stopped")
 
     def _start(self):
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.EventLoop()
+        asyncio.set_event_loop(self.loop)
         # Initialize DCS
         self.dcs = get_dcs(DEFAULT_DCS)
         # Activate service
@@ -95,10 +96,12 @@ class ServiceStub:
 
         async def inner() -> None:
             self.logger.debug("Running publisher coroutine")
+            queue = MessageStreamQueue(asyncio.get_running_loop())
+            self.publish_queue = queue
             ev.set()
             async with MessageStreamClient() as client:
-                while not self.publish_queue.to_shutdown:
-                    req = await self.publish_queue.get(timeout=1)
+                while not queue.to_shutdown:
+                    req = await queue.get(timeout=1)
                     if not req:
                         continue  # Timeout or shutdown
                     try:
@@ -107,13 +110,11 @@ class ServiceStub:
                         self.logger.error("Failed to publish message: %s", e)
                         self.logger.error("Retry message")
                         await asyncio.sleep(1)
-                        self.publish_queue.put(req, fifo=False)
+                        queue.put(req, fifo=False)
             self.logger.debug("Stopping producer coroutine")
             self.is_publisher_stopped.set()
 
-        loop = asyncio.get_event_loop()
-        self.publish_queue = MessageStreamQueue(loop)
-        loop.run_until_complete(inner())
+        asyncio.run(inner())
 
     def publish(
         self,

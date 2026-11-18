@@ -46,7 +46,6 @@ from noc.core.debug import error_report, excepthook
 from noc.core.error import NOCError
 from noc.core.hist.monitor import apply_hists
 from noc.core.ioloop.timers import PeriodicCallback
-from noc.core.ioloop.util import setup_asyncio
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.error import MsgStreamError
@@ -312,8 +311,8 @@ class BaseService:
         else:
             self.logger.warning("Running service %s", self.name)
         try:
-            setup_asyncio()
-            self.loop = asyncio.get_event_loop()
+            self.loop = asyncio.EventLoop()
+            asyncio.set_event_loop(self.loop)
             # Initialize DCS
             self.dcs = get_dcs(cmd_options["dcs"])
             # Activate service

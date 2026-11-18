@@ -2,10 +2,6 @@
 
 Features service configuration
 
-## use_uvloop
-
-{{ config_param("features.use_uvloop") }}
-
 ## cp
 
 {{ config_param("features.cp") }}

@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------
 # Zabbix endpoints
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import asyncio
 import enum
 import logging
 from http import HTTPStatus
@@ -18,7 +17,6 @@ from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.etl.models.fmevent import FMEventObject, RemoteObject
-from noc.core.ioloop.util import setup_asyncio
 from noc.core.perf import metrics
 from noc.core.service.loader import get_service
 
@@ -46,8 +44,6 @@ class ZabbixAPI:
         self.openapi_tags = ["api", "metricscollector"]
         self.api_name = "metricscollector"
         self.ds_queue = {}
-        setup_asyncio()
-        self.loop = asyncio.get_event_loop()
         self.service = get_service()
         self.setup_endpoints()
 

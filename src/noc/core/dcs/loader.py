@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service loader
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,7 +15,6 @@ from typing import Any
 # NOC modules
 from noc.config import config
 from noc.core.handler import get_handler
-from noc.core.ioloop.util import setup_asyncio
 
 from .base import DCSBase
 
@@ -64,8 +63,8 @@ class DCSRunner:
 
     def _runner(self):
         self.logger.debug("Starting DCS runner thread")
-        setup_asyncio()
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.EventLoop()
+        asyncio.set_event_loop(self.loop)
         self.ready_event.set()
         self.loop.run_forever()
         self.logger.debug("Stopping DCS runner thread")
