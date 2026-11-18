@@ -15,7 +15,7 @@ from .typing import Reference
 
 class Street(BaseModel):
     id: str
-    parent: Reference["AdmDiv"]
+    parent: Reference[AdmDiv]
     name: str
     short_name: str
     start_date: date | None = None

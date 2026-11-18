@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Alarm card handler
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -131,7 +131,7 @@ class AlarmCard(BaseCard):
         return r
 
     def get_alarms(self):
-        def get_children(ca: "ActiveAlarm", include_groups=True):
+        def get_children(ca: ActiveAlarm, include_groups=True):
             ca._children = []
             for ac in [ActiveAlarm, ArchivedAlarm]:
                 for aa in ac.objects.filter(root=ca.id):

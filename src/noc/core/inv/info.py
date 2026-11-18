@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Gather info for resource
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ class PathItem:
         return r
 
     @classmethod
-    def from_object(cls, obj: Object) -> "list[PathItem] | None":
+    def from_object(cls, obj: Object) -> list[PathItem] | None:
         """Get path for object."""
         r: list[PathItem] = []
         current = obj.parent
@@ -50,7 +50,7 @@ class PathItem:
         return list(reversed(r)) if r else None
 
     @classmethod
-    def from_channel(cls, ch: Channel) -> "list[PathItem] | None":
+    def from_channel(cls, ch: Channel) -> list[PathItem] | None:
         """Get path for channel."""
         return [PathItem(label=ch.name, id=str(id))]
 

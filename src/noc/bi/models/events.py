@@ -145,7 +145,7 @@ class Events(Model):
         return query
 
     @classmethod
-    def check_old_schema(cls, connect: "ClickhouseClient", table_name: str) -> bool:
+    def check_old_schema(cls, connect: ClickhouseClient, table_name: str) -> bool:
         """
         Check syntax
         :return:

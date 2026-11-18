@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @diagnostic decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -118,13 +118,13 @@ class DiagnosticHub:
     def set_dry_run(self):
         self.dry_run = True
 
-    def __getitem__(self, name: str) -> "DiagnosticItem":
+    def __getitem__(self, name: str) -> DiagnosticItem:
         v = self.get(name)
         if v is None:
             raise KeyError
         return v
 
-    def __getattr__(self, name: str, default: Any | None = None) -> "DiagnosticItem":
+    def __getattr__(self, name: str, default: Any | None = None) -> DiagnosticItem:
         v = self.get(name)
         if v is None:
             raise AttributeError(f"Unknown diagnostic {name}")

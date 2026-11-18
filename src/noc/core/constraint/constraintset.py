@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ConstraintSet class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ class ConstraintSet:
     Set of restrictions.
     """
 
-    def __init__(self: "ConstraintSet") -> None:
+    def __init__(self: ConstraintSet) -> None:
         self._data: defaultdict[type[BaseConstraint], list[BaseConstraint]] = defaultdict(list)
 
     def get[BC: BaseConstraint](self, item: type[BC]) -> list[BC] | None:
@@ -34,17 +34,17 @@ class ConstraintSet:
         return self._data.get(item)
 
     @classmethod
-    def from_iter(cls: "type[ConstraintSet]", iter: Iterable[BaseConstraint]) -> "ConstraintSet":
+    def from_iter(cls: type[ConstraintSet], iter: Iterable[BaseConstraint]) -> ConstraintSet:
         r = cls()
         for item in iter:
             r.extend(item)
         return r
 
-    def __iter__(self: "ConstraintSet") -> Iterable[BaseConstraint]:
+    def __iter__(self: ConstraintSet) -> Iterable[BaseConstraint]:
         for items in self._data.values():
             yield from items
 
-    def extend(self: "ConstraintSet", item: BaseConstraint) -> None:
+    def extend(self: ConstraintSet, item: BaseConstraint) -> None:
         """
         Add new possibility.
 
@@ -55,7 +55,7 @@ class ConstraintSet:
         """
         self._data[type(item)].append(item)
 
-    def intersect(self: "ConstraintSet", other: "ConstraintSet") -> "ConstraintSet | None":
+    def intersect(self: ConstraintSet, other: ConstraintSet) -> ConstraintSet | None:
         """
         Intersect restrictions.
 
@@ -95,5 +95,5 @@ class ConstraintSet:
             return r
         return None
 
-    def is_empty(self: "ConstraintSet") -> bool:
+    def is_empty(self: ConstraintSet) -> bool:
         return not self._data

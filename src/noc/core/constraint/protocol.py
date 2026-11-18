@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ProtocolConstrain class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,16 +18,16 @@ class ProtocolConstraint(BaseConstraint):
         proto: Protocol name.
     """
 
-    def __init__(self: "ProtocolConstraint", proto: str) -> None:
+    def __init__(self: ProtocolConstraint, proto: str) -> None:
         super().__init__()
         self._proto = proto
 
-    def __str__(self: "ProtocolConstraint") -> str:
+    def __str__(self: ProtocolConstraint) -> str:
         return self._proto
 
     def __eq__(self, value: object) -> bool:
         return isinstance(value, ProtocolConstraint) and self._proto == value._proto
 
     @property
-    def protocol(self: "ProtocolConstraint") -> str:
+    def protocol(self: ProtocolConstraint) -> str:
         return self._proto

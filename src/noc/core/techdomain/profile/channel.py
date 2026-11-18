@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ProfileChannelController
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ class ProfileChannelController(BaseProfileController):
                 raise ValueError(msg)
 
     @classmethod
-    def get_controller_for_object(cls, obj: Object, name: str) -> "ProfileChannelController | None":
+    def get_controller_for_object(cls, obj: Object, name: str) -> ProfileChannelController | None:
         """
         Get profile controller for object.
 

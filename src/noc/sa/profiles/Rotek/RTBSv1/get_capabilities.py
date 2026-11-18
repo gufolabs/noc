@@ -33,7 +33,7 @@ class Script(BaseScript):
                     if r:
                         r = r[0][0]
                 return r
-            except (self.snmp.TimeOutError, SNMPError):
+            except self.snmp.TimeOutError, SNMPError:
                 pass
 
     # def execute_platform(self, caps):

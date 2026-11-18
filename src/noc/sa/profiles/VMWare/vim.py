@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # VIM methods implementation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ class VIM:
         self.connection = None
         self._content = None
 
-    def get_connection(self) -> "vim.ServiceInstance":
+    def get_connection(self) -> vim.ServiceInstance:
         if not self.connection:
             self.connection = connect(**self.get_args())
         #         except vim.fault.NotAuthenticated:

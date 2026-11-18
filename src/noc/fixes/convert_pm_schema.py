@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Convert path PM Schema to labels
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ def fix():
                 print(f'clickhouse-client -h 0.0.0.0 --query="{query}"\n\n')
 
 
-def get_insert_query(metric_scope: "MetricScope", start, stop, remote=None):
+def get_insert_query(metric_scope: MetricScope, start, stop, remote=None):
     table_name = metric_scope._get_raw_db_table()
     if remote:
         # For migrate remote table use another DB

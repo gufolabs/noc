@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # IP Prefix Model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class IPPrefix(BaseModel):
     id: str
     prefix: str
     name: str
-    profile: Reference["IPPrefixProfile"]
+    profile: Reference[IPPrefixProfile]
     # Workflow state
     state: str | None = None
     # Last state change
@@ -31,10 +31,10 @@ class IPPrefix(BaseModel):
     # Workflow event
     event: str | None = None
     description: str | None = None
-    parent: Reference["IPPrefix"] | None = None
+    parent: Reference[IPPrefix] | None = None
     vrf: Reference[IPVRF] | None = None
-    ipv6_transition: Reference["IPPrefix"] | None = None
-    project: Reference["Project"] | None = None
+    ipv6_transition: Reference[IPPrefix] | None = None
+    project: Reference[Project] | None = None
     labels: list[str] | None = None
 
     @field_validator("prefix")

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SLAProbe Attributes dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class SLAProbe(DictionaryModel):
     service = UInt64Field()
 
     @classmethod
-    def extract(cls, item: "SLAProbeModel"):
+    def extract(cls, item: SLAProbeModel):
         return {
             "bi_id": item.bi_id,
             "name": item.name,

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseCollator types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ class PathItem:
     slot_num: str | None = None  # number from get_inventory output
 
     @classmethod
-    def from_object(cls, o, c) -> "PathItem":
+    def from_object(cls, o, c) -> PathItem:
         stackable = o.get_data("stack", "stackable")
         return PathItem(
             object=o,

@@ -39,7 +39,7 @@ DROP = ""
 PASS = "<pass>"
 DUMP = "<dump>"
 FWD = "<fwd>"
-ACTION_TYPES: dict[str, type["Action"]] = {}
+ACTION_TYPES: dict[str, type[Action]] = {}
 
 
 @dataclass
@@ -59,8 +59,8 @@ class ActionCfg:
 
 class ActionBase(type):
     def __new__(
-        mcs: "type[ActionBase]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
-    ) -> type["Action"]:
+        mcs: type[ActionBase], name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type[Action]:
         cls = cast(type["Action"], type.__new__(mcs, name, bases, attrs))
         name = getattr(cls, "name", None)
         if name:

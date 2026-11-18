@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # LDAP Authentication backend
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -158,11 +158,11 @@ class LdapBackend(BaseAuthBackend):
 
     def get_server_connection(
         self,
-        ldap_domain: "AuthLDAPDomain",
-        server_pool: "ldap3.ServerPool",
+        ldap_domain: AuthLDAPDomain,
+        server_pool: ldap3.ServerPool,
         user: str | None = None,
         password: str | None = None,
-    ) -> "ldap3.Connection":
+    ) -> ldap3.Connection:
         # Connect and bind
         if not user and not ldap_domain.bind_user:
             raise self.LoginError("Failed to bind to LDAP: Bind User is not set")
@@ -185,7 +185,7 @@ class LdapBackend(BaseAuthBackend):
             raise self.LoginError(f"Failed to bind to LDAP: connect failed by {e}")
         return connect
 
-    def get_connection_kwargs(self, ldap_domain: "AuthLDAPDomain", user: str, password: str):
+    def get_connection_kwargs(self, ldap_domain: AuthLDAPDomain, user: str, password: str):
         """
         Return LDAP connection instance
         :return:

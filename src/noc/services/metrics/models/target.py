@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Metrics source
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import sys
 from dataclasses import dataclass
-from typing import Any, ClassVar, Union
+from typing import Any, ClassVar
 
 MetricKey = tuple[str, tuple[tuple[str, int], ...], tuple[str, ...]]
 
@@ -55,7 +55,7 @@ class MetricTarget:
     @classmethod
     def from_config(
         cls, data: dict[str, Any], r_type: str
-    ) -> Union["ManagedObjectTarget", "SLAProbeTarget"] | None:
+    ) -> ManagedObjectTarget | SLAProbeTarget | None:
         """Return classes"""
         if "$deleted" in data or r_type == "remote_system":
             return None

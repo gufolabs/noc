@@ -40,7 +40,7 @@ class Node:
             return f"<Node {self.token!r} ({self.handler.__name__})>"
         return f"<Node {self.token!r}>"
 
-    def clone(self) -> "Node":
+    def clone(self) -> Node:
         node = self.__class__(self.token)
         node.handler = self.handler
         node.matcher = self.matcher
@@ -118,11 +118,11 @@ class RootNode(Node):
 
 class BaseNormalizerMetaclass(type):
     def __new__(
-        mcs: "type[BaseNormalizerMetaclass]",
+        mcs: type[BaseNormalizerMetaclass],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["BaseNormalizer"]:
+    ) -> type[BaseNormalizer]:
         n = cast(type["BaseNormalizer"], type.__new__(mcs, name, bases, attrs))
         # Initialize matching tree
         n.mtree = RootNode()

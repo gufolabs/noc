@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CPE Attributes dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ class CPEAttributes(DictionaryModel):
     distance = StringField()
 
     @classmethod
-    def extract(cls, item: "CPEStatus"):
+    def extract(cls, item: CPEStatus):
         return {
             "bi_id": item.managed_object.bi_id,
             "cpe_id": item.global_id,

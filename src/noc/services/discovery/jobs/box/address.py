@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Address check
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -212,7 +212,7 @@ class AddressCheck(DiscoveryCheck):
             ]
         return addresses
 
-    def get_dhcp_addresses(self) -> list["DiscoveredAddress"]:
+    def get_dhcp_addresses(self) -> list[DiscoveredAddress]:
         """
         Return addresses from DHCP leases
         :return:

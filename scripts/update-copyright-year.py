@@ -44,7 +44,7 @@ def iter_changed_files() -> list[Path]:
 def update_file(path: Path) -> bool:
     try:
         text = path.read_text(encoding="utf-8")
-    except (UnicodeDecodeError, FileNotFoundError):
+    except UnicodeDecodeError, FileNotFoundError:
         return False
 
     changed = False

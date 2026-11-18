@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # CredentialCheckRule
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ class SuggestCLI(EmbeddedDocument):
 
 
 class SuggestAuthProfile(EmbeddedDocument):
-    auth_profile: "AuthProfile" = ForeignKeyField(AuthProfile)
+    auth_profile: AuthProfile = ForeignKeyField(AuthProfile)
 
 
 class CredentialCheckRule(Document):
@@ -159,7 +159,7 @@ class CredentialCheckRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_suggest_rules(cls) -> list["SuggestItem"]:
+    def get_suggest_rules(cls) -> list[SuggestItem]:
         r = []
         for rule in (
             CredentialCheckRule.objects.filter(is_active=True)

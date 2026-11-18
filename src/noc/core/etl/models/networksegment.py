@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # NetworkSegmentModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,8 +15,8 @@ from .typing import Reference
 class NetworkSegment(BaseModel):
     id: str
     name: str
-    parent: Reference["NetworkSegment"] | None = None
-    sibling: Reference["NetworkSegment"] | None = None
-    profile: Reference["NetworkSegmentProfile"] = None
+    parent: Reference[NetworkSegment] | None = None
+    sibling: Reference[NetworkSegment] | None = None
+    profile: Reference[NetworkSegmentProfile] = None
 
     _csv_fields = ["id", "parent", "name", "sibling", "profile"]

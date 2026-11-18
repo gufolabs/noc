@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Container dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ class Container(DictionaryModel):
     address_text = StringField()
 
     @classmethod
-    def extract(cls, item: "Object"):
+    def extract(cls, item: Object):
         return {
             "id": str(item.id),
             "name": ch_escape(item.name or ""),

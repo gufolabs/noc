@@ -44,7 +44,7 @@ class Endpoint:
         return f"o:{self.object.id}"
 
     @classmethod
-    def from_resource(cls, res: str) -> "Endpoint":
+    def from_resource(cls, res: str) -> Endpoint:
         o, n = from_resource(res)
         return Endpoint(object=o, name=n)
 
@@ -464,7 +464,7 @@ class BaseController:
             channel.save()
 
     @classmethod
-    def to_params(cls: "type[BaseController]", constraints: ConstraintSet) -> list[Param]:
+    def to_params(cls: type[BaseController], constraints: ConstraintSet) -> list[Param]:
         """
         Convert constraints to list of params.
         """

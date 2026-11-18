@@ -39,7 +39,7 @@ class CredentialCheckRuleApplication(ExtDocApplication):
     default_ordering = ["preference", "_id"]
 
     @staticmethod
-    def field_match_expression(o: "CredentialCheckRule"):
+    def field_match_expression(o: CredentialCheckRule):
         r = []
         for num, ml in enumerate(o.match):
             if num:

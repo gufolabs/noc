@@ -129,7 +129,7 @@ class SNMP:
             )
         return User(name=str(self.script.credentials["snmp_username"]))
 
-    async def get_session(self, version=None) -> "SnmpSession":
+    async def get_session(self, version=None) -> SnmpSession:
         if not self.socket:
             self.logger.debug("Create UDP Session")
             version = self._get_snmp_version(version)

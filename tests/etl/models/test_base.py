@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseModel tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class Color(BaseModel):
 
 class Pile(BaseModel):
     id: str
-    parent: Reference["Pile"]
+    parent: Reference[Pile]
     color: Reference[Color]
     color2: Reference[Color] | None
 

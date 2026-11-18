@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Access schemes constants
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ class SNMPCredential:
     snmp_v1_only: bool = field(default=False, hash=False)
 
     @property
-    def protocol(self) -> "Protocol":
+    def protocol(self) -> Protocol:
         if self.snmp_v1_only:
             return Protocol(6)
         return Protocol(7)
@@ -70,7 +70,7 @@ class SNMPv3Credential:
     oids: list[str] | None = field(default=None, hash=False)
 
     @property
-    def protocol(self) -> "Protocol":
+    def protocol(self) -> Protocol:
         return Protocol(8)
 
     @property
@@ -91,7 +91,7 @@ class CLICredential:
     enable_protocols: tuple[int, ...] = (1, 2)
 
     @property
-    def protocol(self) -> "Protocol":
+    def protocol(self) -> Protocol:
         return Protocol(self.enable_protocols[0])
 
     @property
@@ -106,7 +106,7 @@ class HTTPCredential:
     http_only: bool = True
 
     @property
-    def protocol(self) -> "Protocol":
+    def protocol(self) -> Protocol:
         if self.http_only:
             return Protocol(3)
         return Protocol(4)

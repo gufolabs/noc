@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Interface Profile dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ class SubscriberProfile(DictionaryModel):
     glyph = StringField()
 
     @classmethod
-    def extract(cls, item: "SubscriberProfileModel"):
+    def extract(cls, item: SubscriberProfileModel):
         return {
             "id": str(item.id),
             "name": item.name,

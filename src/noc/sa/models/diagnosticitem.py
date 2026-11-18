@@ -52,7 +52,7 @@ class CheckItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_status(cls, value: CheckStatus) -> "CheckItem":
+    def from_status(cls, value: CheckStatus) -> CheckItem:
         """Create Item from diagnostic value"""
         return CheckItem(
             name=value.name,
@@ -87,7 +87,7 @@ class DiagnosticItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_value(cls, value: DiagnosticValue) -> "DiagnosticItem":
+    def from_value(cls, value: DiagnosticValue) -> DiagnosticItem:
         """Create Item from diagnostic value"""
         return DiagnosticItem(
             diagnostic=value.diagnostic,

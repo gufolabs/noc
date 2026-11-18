@@ -575,7 +575,7 @@ class AlarmApplication(ExtApplication):
         return d
 
     @staticmethod
-    def get_alarm_subscribers(alarm: "ActiveAlarm"):
+    def get_alarm_subscribers(alarm: ActiveAlarm):
         """JSON-serializable subscribers"""
         subscribers = []
         for w in alarm.watchers:

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ResourceGroupModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ class ResourceGroup(BaseModel):
     id: str
     name: str
     technology: str
-    parent: Reference["ResourceGroup"] | None = None
+    parent: Reference[ResourceGroup] | None = None
     description: str | None = None
 
     _csv_fields = ["id", "name", "technology", "parent", "description"]

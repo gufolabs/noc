@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @workflow decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -152,7 +152,7 @@ def document_set_state(
         )
 
 
-def document_touch(self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None):
+def document_touch(self, bulk: list[UpdateOne] | None = None, ts: dt.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return
@@ -295,7 +295,7 @@ def model_set_state(self, state, state_changed: dt.datetime | None = None, bulk=
         )
 
 
-def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: dt.datetime | None = None):
+def model_touch(self, bulk: list[UpdateOne] | None = None, ts: dt.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return

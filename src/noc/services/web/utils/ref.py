@@ -23,7 +23,7 @@ def get_reference(item: Model | Document | None) -> Reference | None:
     return Reference(id=str(item.id), label=str(item))
 
 
-def get_reference_label(item: "Label") -> LabelItem | None:
+def get_reference_label(item: Label) -> LabelItem | None:
     if not item:
         return None
     return LabelItem(
@@ -39,7 +39,7 @@ def get_reference_label(item: "Label") -> LabelItem | None:
     )
 
 
-def get_reference_rg(item: "ResourceGroup") -> Reference | None:
+def get_reference_rg(item: ResourceGroup) -> Reference | None:
     if not item:
         return None
     rg = ResourceGroup.get_by_id(item)

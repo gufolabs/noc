@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Data Extractor
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ class BaseExtractor:
         r"^import-\d{{4}}(?:-\d{{2}}){{5}}.jsonl{}$".format(compressor.ext.replace(".", r"\."))
     )
 
-    def __init__(self, system: "BaseRemoteSystem") -> None:
+    def __init__(self, system: BaseRemoteSystem) -> None:
         self.system = system
         self.config = system.config
         self.logger = PrefixLoggerAdapter(logger, f"{system.name}][{self.name}")

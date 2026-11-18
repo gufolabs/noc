@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObject Json GrafanaDS models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ class QueryPayloadItem(BaseModel):
 class LabelTarget(BaseModel):
     target: Literal["", "labels"]
 
-    def get_variables(self, user: "User" = None):
+    def get_variables(self, user: User = None):
         # Labels
         return [
             {"__text": ll, "__value": ll}
@@ -49,7 +49,7 @@ class ManagedObjectTarget(BaseModel):
     labels: list[str] | None = None
     administrative_domain: str | None = None
 
-    def get_variables(self, user: "User" = None):
+    def get_variables(self, user: User = None):
         mos = ManagedObject.objects.filter(is_managed=True)
         if self.labels:
             mos = mos.filter(effective_labels__overlap=self.labels)
@@ -76,7 +76,7 @@ class InterfaceTarget(BaseModel):
             return None
         return ManagedObject.get_by_bi_id(self.managed_object)
 
-    def get_variables(self, user: "User" = None):
+    def get_variables(self, user: User = None):
         ifaces = Interface.objects.filter(managed_object=self.mo, type="physical")
         profiles = self.interface_profile
         if isinstance(profiles, str):
@@ -96,7 +96,7 @@ class TestTarget(BaseModel):
     target: Literal["test"]
 
     @classmethod
-    def get_variables(cls, user: "User" = None):
+    def get_variables(cls, user: User = None):
         return [
             {"__text": "Device1#59565", "__value": "2083341664757472739"},
             {"__text": "Device2#59609", "__value": "272411249935345586"},
@@ -115,7 +115,7 @@ class InterfaceProfileTarget(BaseModel):
             return None
         return ManagedObject.get_by_bi_id(self.managed_object)
 
-    def get_variables(self, user: "User" = None):
+    def get_variables(self, user: User = None):
         if not user.is_superuser and self.mo.id not in UserAccess.get_domains(user):
             raise HTTPException(
                 status_code=404, detail=f"User has no access to ManagedObject: {self.mo}"

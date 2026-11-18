@@ -135,7 +135,7 @@ class Script(BaseScript):
             # SNMPv2-MIB::sysDescr.0
             serial = self.snmp.get(mib["1.3.6.1.4.1.27514.1.1.1.1.1.4.0"])
             hw_ver = self.snmp.get(mib["1.3.6.1.4.1.27514.1.1.1.1.1.6.0"])
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             pass
         return serial, hw_ver
 

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # LockManager implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class LockManager:
         self._lock = asyncio.Lock()
         self._waiters: dict[str, _Waiter] = {}
 
-    def acquire(self, locks: Iterable[str]) -> "LockCtx":
+    def acquire(self, locks: Iterable[str]) -> LockCtx:
         return LockCtx(self, sorted(set(locks)))
 
     async def _acquire(self, names: list[str]) -> None:

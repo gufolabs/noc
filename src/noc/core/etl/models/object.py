@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ObjectModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -26,5 +26,5 @@ class Object(BaseModel):
     name: str
     model: str
     data: list[ObjectData] = []
-    parent: Reference["Object"] | None = Field(None, serialization_alias="container")
+    parent: Reference[Object] | None = Field(None, serialization_alias="container")
     checkpoint: str | None = None

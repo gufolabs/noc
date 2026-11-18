@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Environment implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ class Environment:
         """
         return self._data
 
-    def set_parent(self, parent: "Environment") -> None:
+    def set_parent(self, parent: Environment) -> None:
         """
         Set parent environment.
         """
@@ -89,10 +89,10 @@ class Environment:
             self._data[name] = value
             self._is_dirty = True
 
-    def __iter__(self) -> Iterable["str"]:
+    def __iter__(self) -> Iterable[str]:
         return self.keys()
 
-    def _iter_parents(self) -> Iterable["Environment"]:
+    def _iter_parents(self) -> Iterable[Environment]:
         """
         Iterate over parents.
 

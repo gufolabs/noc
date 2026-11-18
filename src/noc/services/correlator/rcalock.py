@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # RCALock class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ class RCALock:
         coll.create_index([("items", pymongo.ASCENDING)], unique=True)
         coll.create_index([("expires", pymongo.ASCENDING)], expireAfterSeconds=0)
 
-    async def __aenter__(self) -> "RCALock":
+    async def __aenter__(self) -> RCALock:
         await self.acquire()
         return self
 

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Metrics source
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ class SourceConfig:
     rules: list[str]
     meta: dict[str, Any]
 
-    def is_differ(self, sc: "SourceConfig"):
+    def is_differ(self, sc: SourceConfig):
         """
         Compare Source Config
         * condition - Diff labels

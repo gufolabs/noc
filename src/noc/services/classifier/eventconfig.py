@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # EventConfig for classification
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ class EventConfig:
         return self.event_class_id
 
     @classmethod
-    def from_config(cls, data) -> "EventConfig":
+    def from_config(cls, data) -> EventConfig:
         ec = EventConfig(
             name=data["name"],
             bi_id=data["bi_id"],

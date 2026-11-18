@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Syntax Definitions
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ from .patterns import BasePattern
 class SyntaxDef:
     __slots__ = ("children", "default", "gen", "multi", "name", "required", "token")
     token: str | BasePattern
-    children: list["SyntaxDef"] | None
+    children: list[SyntaxDef] | None
     required: boolean
     name: str | None
     multi: boolean

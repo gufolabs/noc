@@ -77,7 +77,7 @@ class Script(BaseScript):
         """
         try:
             r = self.snmp.get("1.3.6.1.4.1.2011.5.25.134.1.1.1.0")
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             r = 0
         return bool(r)
 
