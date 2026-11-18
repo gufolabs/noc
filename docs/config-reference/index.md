@@ -100,7 +100,6 @@ Then following environment will be processed as:
 | NOC_API_LISTEN=auto:1200   | api.listen=auto:1200    |
 | NOC_TIMEZONE=Europe/Moscow | timezone=Europe/Moscow |
 | NOC_FOOBAR                 | _ignored_              |
-| MYVAR_API_LISTEN=auto:1200 | _ignored_              |
 
 If we'll change URL to:
 

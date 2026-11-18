@@ -7,7 +7,10 @@
 
 # Python modules
 import asyncio
+import logging
 from collections.abc import Callable
+
+logger = logging.getLogger(__name__)
 
 
 class IOLoopContext:
@@ -18,7 +21,7 @@ class IOLoopContext:
 
     def get_context(self):
         self.prev_loop = asyncio._get_running_loop()
-        self.new_loop = asyncio.EventLoop()
+        self.new_loop = asyncio.new_event_loop()
         if self.prev_loop:
             # Reset running loop
             asyncio._set_running_loop(None)
@@ -34,6 +37,11 @@ class IOLoopContext:
         self.new_loop.close()
         self.new_loop = None
         asyncio._set_running_loop(self.prev_loop)
+        if self.prev_loop:
+            asyncio._set_running_loop(self.prev_loop)
+        else:
+            asyncio._set_running_loop(None)
+            asyncio.get_event_loop_policy().reset_called()
         self.prev_loop = None
 
     def get_loop(self) -> asyncio.AbstractEventLoop | None:
@@ -59,5 +67,46 @@ def run_sync[T](cb: Callable[[], T]) -> T:
     Returns:
         Callable result
     """
+    if not _setup_completed:
+        setup_asyncio()
+
     with IOLoopContext() as loop:
         return loop.run_until_complete(cb())
+
+
+_setup_completed = False
+
+
+def setup_asyncio() -> None:
+    """
+    Initial setup of asyncio
+
+    Returns:
+        Result of initial setup of asyncio.
+    """
+    global _setup_completed
+
+    if _setup_completed:
+        return
+    logger.debug("Setting up asyncio event loop policy")
+    logger.debug("Setting up default event loop")
+    asyncio.set_event_loop_policy(NOCEventLoopPolicy())
+    _setup_completed = True
+
+
+class NOCEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
+    def get_event_loop(self) -> asyncio.AbstractEventLoop:
+        try:
+            return super().get_event_loop()
+        except RuntimeError:
+            loop = self.new_event_loop()
+            self.set_event_loop(loop)
+            return loop
+
+    def reset_called(self) -> None:
+        """
+        Reset called status
+        Returns:
+            Result of reset called status.
+        """
+        setattr(getattr(self, "_local"), "_set_called", False)

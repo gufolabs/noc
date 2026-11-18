@@ -18,8 +18,12 @@ def get_service():
     global _service
 
     if not _service:
+        # NOC modules
+        from noc.core.ioloop.util import setup_asyncio
+
         from .stub import ServiceStub
 
+        setup_asyncio()
         _service = ServiceStub()
         _service.start()
     return _service

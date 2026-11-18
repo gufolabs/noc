@@ -23,6 +23,7 @@ from pymongo.errors import PyMongoError
 # NOC modules
 from noc.config import config
 from noc.core.datastream.base import DataStream, data_stream_loader
+from noc.core.ioloop.util import setup_asyncio
 
 router = APIRouter()
 
@@ -51,6 +52,8 @@ class DatastreamAPI:
         self.openapi_tags = ["api", "datastream"]
         self.api_name = "datastream"
         self.ds_queue = {}
+        setup_asyncio()
+        self.loop = asyncio.get_event_loop()
         self.setup_watchers()
         self.setup_datastream()
 
@@ -69,14 +72,13 @@ class DatastreamAPI:
         return r
 
     async def wait(self, ds_name):
+        def notify(loop):
+            loop.call_soon(event.set)
+            # asyncio.get_running_loop().call_soon(event.set)
+
         if ds_name not in self.ds_queue:
             return
         event = asyncio.Event()
-        loop = asyncio.get_running_loop()
-
-        def notify():
-            loop.call_soon_threadsafe(event.set)
-
         self.ds_queue[ds_name].put(notify)
         await event.wait()
 
@@ -139,7 +141,7 @@ class DatastreamAPI:
                 cb = queue.get(block=False)
             except Empty:
                 break
-            cb()
+            cb(self.loop)
 
     def watch_waiter(self, coll, queue):
         """
