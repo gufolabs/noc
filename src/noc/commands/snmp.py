@@ -17,7 +17,6 @@ from gufo.snmp import SnmpError as GSNMPError
 from gufo.snmp.user import Aes128Key, DesKey, KeyType, Md5Key, Sha1Key, User
 
 # NOC modules
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.snmp.version import SNMP_v1, SNMP_v2c, SNMP_v3
 from noc.core.validators import is_ipv4
@@ -120,7 +119,7 @@ class Command(BaseCommand):
         if username:
             username = self.parse_credentials(username)
         try:
-            x = asyncio.run(main(), loop_factory=get_loop_factory())
+            x = asyncio.run(main())
             self.print(f"Result {x}")
         except SnmpAuthError:
             self.die("Authentication failed")
@@ -143,7 +142,7 @@ class Command(BaseCommand):
         if username:
             username = self.parse_credentials(username)
         try:
-            x = asyncio.run(main(), loop_factory=get_loop_factory())
+            x = asyncio.run(main())
             self.print(f"Result {x}")
         except SnmpAuthError:
             self.die("Authentication failed")
@@ -166,7 +165,7 @@ class Command(BaseCommand):
         if username:
             username = self.parse_credentials(username)
         try:
-            x = asyncio.run(main(), loop_factory=get_loop_factory())
+            x = asyncio.run(main())
             self.print(f"Result {x}")
         except SnmpAuthError:
             self.die("Authentication failed")
@@ -219,7 +218,7 @@ class Command(BaseCommand):
         self.jobs = jobs
         self.convert = convert
         self.version = self.VERSION_MAP[version]
-        asyncio.run(main(), loop_factory=get_loop_factory())
+        asyncio.run(main())
 
     async def poll_task(self, queue):
         for a in self.addresses:

@@ -21,7 +21,6 @@ from noc.config import config
 from noc.core.checkers.base import TCP_CHECK, BaseChecker, Check, DataItem
 from noc.core.checkers.loader import loader
 from noc.core.checkers.snmp import SUGGEST_CHECK, SNMPProtocolChecker
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.ip import IP
 from noc.core.management.base import BaseCommand
 from noc.core.mib import mib
@@ -164,7 +163,7 @@ class Command(BaseCommand):
             self.print(f"SNMP Credentials: {snmp_creds}")
         # result = defaultdict(lambda: {"checks": [], "source": "network-scan", "data": {}})
         with progressbar.ProgressBar(max_value=len(addr_list)) as bar:
-            asyncio.run(runner(), loop_factory=get_loop_factory())
+            asyncio.run(runner())
         downs = metrics.get("address_down").value if metrics.get("address_down") else 0
         ups = metrics.get("address_up").value if metrics.get("address_up") else 0
         self.stdout.write(

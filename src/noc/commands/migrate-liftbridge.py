@@ -14,7 +14,6 @@ from collections.abc import Iterable
 from noc.core.bi.dictionaries.loader import loader as bi_dict_loader
 from noc.core.clickhouse.loader import loader as bi_loader
 from noc.core.datasources.base import data_source_loader
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.msgstream.client import MessageStreamClient
@@ -35,7 +34,7 @@ class Command(BaseCommand):
 
     def handle(self, slots=None, *args, **options):
         # Apply settings
-        changed = asyncio.run(self.apply_stream_settings(slots), loop_factory=get_loop_factory())
+        changed = asyncio.run(self.apply_stream_settings(slots))
         if changed:
             self.print("CHANGED")
         else:

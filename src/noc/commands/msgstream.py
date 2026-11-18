@@ -15,7 +15,6 @@ from dateutil.parser import parse
 
 # NOC modules
 from noc.core.debug import error_report
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.metadata import Metadata, PartitionMetadata
@@ -98,7 +97,7 @@ class Command(BaseCommand):
             async with MessageStreamClient() as client:
                 return await client.fetch_partition_metadata(stream, partition)
 
-        meta: Metadata = asyncio.run(get_meta(), loop_factory=get_loop_factory())
+        meta: Metadata = asyncio.run(get_meta())
         self.print(f"# Brokers ({len(meta.brokers)})")
         self.print(f"{'ID':20} | HOST:PORT")
         b_map = {}
@@ -115,9 +114,7 @@ class Command(BaseCommand):
             for p in sorted(meta.metadata[stream]):
                 print(f"    ### Partition: {p}")
                 try:
-                    p_meta: PartitionMetadata = asyncio.run(
-                        get_partition_meta(stream, p), loop_factory=get_loop_factory()
-                    )
+                    p_meta: PartitionMetadata = asyncio.run(get_partition_meta(stream, p))
                 except Exception as e:
                     print(f"[{stream}|{p}] Failed getting data for partition: {e}")
                     error_report()
@@ -146,14 +143,14 @@ class Command(BaseCommand):
                     replication_factor=rf,
                 )
 
-        asyncio.run(create(), loop_factory=get_loop_factory())
+        asyncio.run(create())
 
     def handle_delete_stream(self, name: str, *args, **kwargs):
         async def delete():
             async with MessageStreamClient() as client:
                 await client.delete_stream(name)
 
-        asyncio.run(delete(), loop_factory=get_loop_factory())
+        asyncio.run(delete())
 
     def handle_alter_stream(
         self,
@@ -174,7 +171,7 @@ class Command(BaseCommand):
                     replication_factor=rf,
                 )
 
-        asyncio.run(alter(), loop_factory=get_loop_factory())
+        asyncio.run(alter())
 
     def handle_subscribe(
         self,
@@ -208,7 +205,7 @@ class Command(BaseCommand):
         if start_ts:
             start_offset = None
             start_ts *= 1000000000
-        asyncio.run(subscribe(), loop_factory=get_loop_factory())
+        asyncio.run(subscribe())
 
     def handle_set_cursor(
         self, name: str, stream: str, partition: int = 0, offset: int = 0, *args, **kwargs
@@ -219,7 +216,7 @@ class Command(BaseCommand):
                     stream=stream, partition=partition, cursor_id=name, offset=offset
                 )
 
-        asyncio.run(set_cursor(), loop_factory=get_loop_factory())
+        asyncio.run(set_cursor())
 
     def handle_fetch_cursor(self, name: str, stream: str, partition: int = 0, *args, **kwargs):
         async def fetch_cursor():
@@ -229,4 +226,4 @@ class Command(BaseCommand):
                 )
                 print(cursor)
 
-        asyncio.run(fetch_cursor(), loop_factory=get_loop_factory())
+        asyncio.run(fetch_cursor())

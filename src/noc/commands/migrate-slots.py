@@ -10,7 +10,6 @@ import asyncio
 import os
 
 # NOC modules
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.service.loader import get_dcs
 
@@ -47,5 +46,5 @@ class Command(BaseCommand):
             slots[svc] = int(value)
         # Apply
         dcs = get_dcs()
-        changed = asyncio.run(inner(), loop_factory=get_loop_factory())
+        changed = asyncio.run(inner())
         self.print("CHANGED" if changed else "OK")

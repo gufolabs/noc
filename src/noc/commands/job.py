@@ -20,7 +20,6 @@ from django.db import connection as pg_conn
 from pymongo import UpdateOne
 
 # NOC modules
-from noc.core.ioloop.util import get_loop_factory
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.scheduler.scheduler import Scheduler
@@ -394,10 +393,7 @@ class Command(BaseCommand):
     def get_max_slots(cls, scheduler: Scheduler) -> int:
         slots = 0
         if scheduler.pool:
-            slots = asyncio.run(
-                cls.get_slot_limits(f"{scheduler.name}-{scheduler.pool}"),
-                loop_factory=get_loop_factory(),
-            )
+            slots = asyncio.run(cls.get_slot_limits(f"{scheduler.name}-{scheduler.pool}"))
         return slots
 
     def handle_stats(

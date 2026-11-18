@@ -19,7 +19,6 @@ import orjson
 
 # NOC modules
 from noc.core.comp import smart_bytes, smart_text
-from noc.core.ioloop.util import setup_asyncio
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.script.beef import Beef
@@ -102,7 +101,6 @@ class Command(BaseCommand):
         build_test_case_parser.add_argument("--test-path", help="Path name")
 
     def handle(self, cmd, *args, **options):
-        setup_asyncio()
         # Normalize to the function name
         n_cmd = cmd.replace("-", "_")
         # Run handler
