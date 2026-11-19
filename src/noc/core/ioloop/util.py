@@ -8,7 +8,7 @@
 # Python modules
 import asyncio
 import logging
-from collections.abc import Callable
+from collections.abc import Awaitable
 
 logger = logging.getLogger(__name__)
 
@@ -27,18 +27,23 @@ class IOLoopContext:
         return self.new_loop
 
     def drop_context(self):
-        # Cancel all tasks
-        to_cancel = asyncio.all_tasks(self.new_loop)
-        for task in to_cancel:
-            task.cancel()
-        asyncio.gather(*to_cancel, return_exceptions=True)
-        self.new_loop.run_until_complete(self.new_loop.shutdown_asyncgens())
-        self.new_loop.close()
-        self.new_loop = None
-        asyncio._set_running_loop(self.prev_loop)
-        if not self.prev_loop:
-            asyncio.get_event_loop_policy().reset_called()
-        self.prev_loop = None
+        loop = self.new_loop
+        try:
+            # Cancel all tasks
+            to_cancel = asyncio.all_tasks(loop)
+            for task in to_cancel:
+                task.cancel()
+            if to_cancel:
+                loop.run_until_complete(asyncio.gather(*to_cancel, return_exceptions=True))
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.run_until_complete(loop.shutdown_default_executor())
+        finally:
+            loop.close()
+            self.new_loop = None
+            asyncio._set_running_loop(self.prev_loop)
+            if not self.prev_loop:
+                asyncio.get_event_loop_policy().reset_called()
+            self.prev_loop = None
 
     def get_loop(self) -> asyncio.AbstractEventLoop | None:
         return self.new_loop
@@ -50,22 +55,24 @@ class IOLoopContext:
         self.drop_context()
 
 
-def run_sync[T](cb: Callable[[], T]) -> T:
+def run_sync[T](awaitable: Awaitable[T]) -> T:
     """
-    Run callable on dedicated IOLoop in safe manner
-    and return result or raise error
+    Run awaitable on a dedicated event loop and return its result.
 
     Args:
-        cb: Callable to be runned on IOLoop
+        awaitable: Awaitable to run on the event loop.
 
     Returns:
-        Callable result
+        Result of the awaitable.
     """
     if not _setup_completed:
         setup_asyncio()
 
+    async def run_awaitable() -> T:
+        return await awaitable
+
     with IOLoopContext() as loop:
-        return loop.run_until_complete(cb())
+        return loop.run_until_complete(run_awaitable())
 
 
 _setup_completed = False

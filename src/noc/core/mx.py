@@ -1,14 +1,13 @@
 # ----------------------------------------------------------------------
 # mx utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import enum
 from dataclasses import dataclass
-from functools import partial
 from threading import Lock
 from typing import Any
 
@@ -227,7 +226,7 @@ def send_message(
     if fwd_to:
         msg_headers[MX_FWD_ROUTER] = fwd_to.encode()
     svc = get_service()
-    run_sync(partial(svc.send_message, data, message_type, headers, sharding_key))
+    run_sync(svc.send_message(data, message_type, headers, sharding_key))
     # n_partitions = get_mx_partitions()
     # svc.publish(
     #     value=orjson.dumps(data),
@@ -266,7 +265,7 @@ def send_notification(
     data = {"body": body, "subject": subject, "address": to}
     if kwargs:
         data |= kwargs
-    run_sync(partial(svc.send_message, data, MessageType.NOTIFICATION, msg_headers))
+    run_sync(svc.send_message(data, MessageType.NOTIFICATION, msg_headers))
 
 
 def get_mx_partitions() -> int:

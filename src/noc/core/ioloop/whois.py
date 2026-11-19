@@ -100,7 +100,4 @@ async def whois_async(query, fields=None):
 
 
 def whois(query, fields=None):
-    async def _whois():
-        return await whois_async(query, fields)
-
-    return run_sync(_whois)
+    return run_sync(whois_async(query, fields))

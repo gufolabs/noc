@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Router
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import logging
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
-from functools import partial
 from time import time_ns
 from typing import Any
 
@@ -215,7 +214,7 @@ class Router:
         Synchronize method
             msg: Route Message
         """
-        run_sync(partial(self.route_message, msg))
+        run_sync(self.route_message(msg))
 
     @staticmethod
     def get_message(

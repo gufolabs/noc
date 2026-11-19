@@ -15,7 +15,7 @@ import sys
 import time
 from collections.abc import Iterable
 from enum import StrEnum
-from functools import cached_property, partial
+from functools import cached_property
 from importlib.resources import files
 from pathlib import Path
 from types import ModuleType
@@ -1425,7 +1425,7 @@ class Config(BaseConfig):
         from noc.core.ioloop.util import run_sync
 
         dcs = get_dcs()
-        return run_sync(partial(dcs.get_slot_limit, slot_name))
+        return run_sync(dcs.get_slot_limit(slot_name))
 
     @cached_property
     def noc_base(self) -> Path:

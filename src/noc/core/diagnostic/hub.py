@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @diagnostic decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,6 @@ import datetime as dt
 import itertools
 import logging
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 # Third-party modules
@@ -643,8 +642,7 @@ class DiagnosticHub:
         # ? always send (from policy)
         if config.message.enable_diagnostic_change:
             run_sync(
-                partial(
-                    svc.send_message,
+                svc.send_message(
                     {
                         "name": diagnostic,
                         "state": state,

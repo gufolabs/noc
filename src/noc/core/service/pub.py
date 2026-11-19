@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------
 # Liftbridge Publish API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -29,4 +29,4 @@ def publish(
                 value=value, stream=stream, partition=partition, key=key, headers=headers
             )
 
-    run_sync(wrap)
+    run_sync(wrap())

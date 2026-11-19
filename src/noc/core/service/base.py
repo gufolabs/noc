@@ -17,7 +17,6 @@ import sys
 import threading
 import uuid
 from collections.abc import Awaitable, Callable, Coroutine, Iterable
-from functools import partial
 from time import perf_counter
 from typing import (
     Any,
@@ -1085,7 +1084,7 @@ class BaseService:
         from noc.core.ioloop.util import run_sync
 
         dcs = get_dcs()
-        return run_sync(partial(dcs.get_slot_limit, slot_name))
+        return run_sync(dcs.get_slot_limit(slot_name))
 
     async def on_route_rules_ready(self) -> None:
         """Called when all Router rules are ready."""

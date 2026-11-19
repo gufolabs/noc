@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Kafka Collector
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ class KafkaStreamCollector(BaseCollector):
         return await self.get_offsets(bootstrap_servers, partitions)
 
     def iter_metrics(self) -> Iterable[Metric]:
-        offsets = run_sync(self.collect)
+        offsets = run_sync(self.collect())
         for pd in offsets:
             topic = pd.topic_partition.topic
             partition = pd.topic_partition.partition

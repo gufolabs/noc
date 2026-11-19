@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service stub for scripts and commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import atexit
 import logging
 import threading
 from collections import defaultdict
-from functools import partial
 from typing import Any
 
 # NOC modules
@@ -178,4 +177,4 @@ class ServiceStub:
             Result of get slot count.
         """
         dcs = get_dcs(DEFAULT_DCS)
-        return run_sync(partial(dcs.get_slot_limit, slot_name))
+        return run_sync(dcs.get_slot_limit(slot_name))

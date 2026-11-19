@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Distributed coordinated storage
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -194,7 +194,7 @@ class DCSBase:
                 name, hint=hint, wait=wait, timeout=timeout, full_result=full_result
             )
 
-        return run_sync(_resolve)
+        return run_sync(_resolve())
 
     async def resolve_near(
         self, name, hint=None, wait=True, timeout=None, full_result=False, critical=False
