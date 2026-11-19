@@ -41,7 +41,7 @@ from starlette.responses import JSONResponse, Response
 # NOC modules
 from noc.config import APIHTTPVersion, config
 from noc.core.affinity import AFF_NONE, AffinityController
-from noc.core.dcs.loader import DEFAULT_DCS, get_dcs
+from noc.core.dcs.loader import get_dcs
 from noc.core.debug import error_report, excepthook
 from noc.core.error import NOCError
 from noc.core.hist.monitor import apply_hists
@@ -216,13 +216,6 @@ class BaseService:
             default=False,
             help="Dump additional debugging info",
         )
-        parser.add_argument(
-            "--dcs",
-            action="store",
-            dest="dcs",
-            default=DEFAULT_DCS,
-            help="Distributed Coordinated Storage URL",
-        )
         if self.pooled:
             parser.add_argument(
                 "--pool", action="store", dest="pool", default=config.pool, help="NOC pool name"
@@ -315,7 +308,7 @@ class BaseService:
             setup_asyncio()
             self.loop = asyncio.get_event_loop()
             # Initialize DCS
-            self.dcs = get_dcs(cmd_options["dcs"])
+            self.dcs = get_dcs()
             # Activate service
             self.loop.create_task(self.activate())
             self.logger.warning("Starting IOLoop")
