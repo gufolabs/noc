@@ -10,21 +10,7 @@ import asyncio
 import logging
 from collections.abc import Callable
 
-# NOC modules
-from noc.config import config
-
 logger = logging.getLogger(__name__)
-
-USE_UVLOOP = False
-
-if config.features.use_uvloop:
-    try:
-        # Third-party modules
-        import uvloop
-
-        USE_UVLOOP = True
-    except ImportError:
-        pass
 
 
 class IOLoopContext:
@@ -103,15 +89,8 @@ def setup_asyncio() -> None:
     if _setup_completed:
         return
     logger.debug("Setting up asyncio event loop policy")
-    if USE_UVLOOP:
-        logger.debug("Setting up uvloop event loop")
-        asyncio.set_event_loop_policy(NOCEventUVLoopPolicy())
-    elif config.features.use_uvloop:
-        logger.info("uvloop is not installed, using default event loop")
-        asyncio.set_event_loop_policy(NOCEventLoopPolicy())
-    else:
-        logger.debug("Setting up default event loop")
-        asyncio.set_event_loop_policy(NOCEventLoopPolicy())
+    logger.debug("Setting up default event loop")
+    asyncio.set_event_loop_policy(NOCEventLoopPolicy())
     _setup_completed = True
 
 
@@ -130,44 +109,4 @@ class NOCEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
         Returns:
             Result of reset called status.
         """
-        self._local._set_called = False
-
-
-def get_loop_factory() -> Callable[[], asyncio.AbstractEventLoop]:
-    """Get the event loop factory according to the NOC configuration.
-
-    Returns:
-        Event loop factory.
-
-    Examples:
-        Run a coroutine using the configured event loop::
-
-            asyncio.run(main(), loop_factory=get_loop_factory())
-
-        Create an event loop directly::
-
-            loop = get_loop_factory()()
-    """
-    if config.features.use_uvloop and USE_UVLOOP:
-        return uvloop.new_event_loop
-    return asyncio.new_event_loop
-
-
-if USE_UVLOOP:
-
-    class NOCEventUVLoopPolicy(uvloop.EventLoopPolicy):
-        def get_event_loop(self) -> asyncio.AbstractEventLoop:
-            try:
-                return super().get_event_loop()
-            except RuntimeError:
-                loop = self.new_event_loop()
-                self.set_event_loop(loop)
-                return loop
-
-        def reset_called(self) -> None:
-            """
-            Reset called status
-            Returns:
-                Result of reset called status.
-            """
-            self._local._set_called = False
+        setattr(getattr(self, "_local"), "_set_called", False)
