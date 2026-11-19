@@ -1,12 +1,13 @@
 # ----------------------------------------------------------------------
 # Closeable interface
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from asyncio.exceptions import TimeoutError
+from contextlib import suppress
 
 # NOC modules
 from noc.core.comp import smart_bytes
@@ -40,7 +41,7 @@ class BaseCLI:
         if self.stream:
             self.logger.debug("Closing stream")
             if self.is_started and self.profile.command_exit:
-                with IOLoopContext(suppress_trace=True) as loop:
+                with IOLoopContext() as loop, suppress(Exception):
                     loop.run_until_complete(self.send(smart_bytes(self.profile.command_exit)))
             self.stream.close()
             self.stream = None

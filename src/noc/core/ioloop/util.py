@@ -14,10 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class IOLoopContext:
-    def __init__(self, suppress_trace=False) -> None:
+    def __init__(self) -> None:
         self.prev_loop = None
         self.new_loop = None
-        self.suppress_trace = suppress_trace
 
     def get_context(self):
         self.prev_loop = asyncio._get_running_loop()
@@ -37,10 +36,7 @@ class IOLoopContext:
         self.new_loop.close()
         self.new_loop = None
         asyncio._set_running_loop(self.prev_loop)
-        if self.prev_loop:
-            asyncio._set_running_loop(self.prev_loop)
-        else:
-            asyncio._set_running_loop(None)
+        if not self.prev_loop:
             asyncio.get_event_loop_policy().reset_called()
         self.prev_loop = None
 
@@ -52,8 +48,6 @@ class IOLoopContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.drop_context()
-        if self.suppress_trace:
-            return True
 
 
 def run_sync[T](cb: Callable[[], T]) -> T:
