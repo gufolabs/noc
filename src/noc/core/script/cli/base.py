@@ -11,7 +11,7 @@ from contextlib import suppress
 
 # NOC modules
 from noc.core.comp import smart_bytes
-from noc.core.ioloop.util import IOLoopContext
+from noc.core.ioloop.util import run_sync
 
 # NOC module
 from noc.core.log import PrefixLoggerAdapter
@@ -41,8 +41,12 @@ class BaseCLI:
         if self.stream:
             self.logger.debug("Closing stream")
             if self.is_started and self.profile.command_exit:
-                with IOLoopContext() as loop, suppress(Exception):
-                    loop.run_until_complete(self.send(smart_bytes(self.profile.command_exit)))
+
+                async def send_command_exit():
+                    with suppress(Exception):
+                        await self.send(smart_bytes(self.profile.command_exit))
+
+                run_sync(send_command_exit())
             self.stream.close()
             self.stream = None
 

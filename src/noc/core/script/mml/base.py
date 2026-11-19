@@ -11,7 +11,7 @@ import re
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_bytes
-from noc.core.ioloop.util import IOLoopContext
+from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
 from noc.core.span import Span
 
@@ -110,8 +110,7 @@ class MMLBase(BaseCLI):
         with Span(
             server=self.script.credentials.get("address"), service=self.name, in_label=self.command
         ) as s:
-            with IOLoopContext() as loop:
-                loop.run_until_complete(self.submit())
+            run_sync(self.submit())
             if self.error:
                 if s:
                     s.error_text = str(self.error)
