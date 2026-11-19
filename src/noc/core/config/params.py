@@ -355,7 +355,7 @@ class ServiceParameter(BaseParameter[list[ServiceItem]]):
             # NOC modules
             from noc.core.ioloop.util import run_sync
 
-            run_sync(self.resolve)
+            run_sync(self.resolve())
         return self.value
 
     async def async_get(self) -> list[ServiceItem]:

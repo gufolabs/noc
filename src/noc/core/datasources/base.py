@@ -13,7 +13,6 @@ import uuid
 from collections import defaultdict
 from collections.abc import AsyncIterable, Iterable
 from dataclasses import dataclass
-from functools import partial
 from time import perf_counter
 from typing import Any
 
@@ -293,7 +292,7 @@ class BaseDataSource:
         # NOC modules
         from noc.core.ioloop.util import run_sync
 
-        return run_sync(partial(cls.query, fields, *args, **kwargs))
+        return run_sync(cls.query(fields, *args, **kwargs))
 
     @classmethod
     def get_columns_dtype(cls, fields: list[str] | None = None):

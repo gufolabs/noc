@@ -37,7 +37,7 @@ def save_avatar(user: User = Depends(get_current_user), image: UploadFile = File
     async def read_file() -> bytes:
         return await image.read(config.web.max_avatar_size + 1)
 
-    data = run_sync(read_file)
+    data = run_sync(read_file())
     if len(data) > config.web.max_avatar_size:
         raise HTTPException(status_code=413)
     content_type = ContentType.from_content_type(image.content_type)

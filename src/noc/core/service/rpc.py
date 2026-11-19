@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # RPC Wrapper
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -151,10 +151,7 @@ class RPCProxy:
             return await _call(item, *args, **kwargs)
 
         def sync_wrapper(*args, **kwargs):
-            async def wrapper():
-                return await _call(item, *args, **kwargs)
-
-            return run_sync(wrapper)
+            return run_sync(_call(item, *args, **kwargs))
 
         if item.startswith("_"):
             return self.__dict__[item]

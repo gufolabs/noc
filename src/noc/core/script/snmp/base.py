@@ -8,7 +8,6 @@
 # Python modules
 import weakref
 from collections.abc import Callable
-from functools import partial
 from typing import Any
 
 # Third-party modules
@@ -294,7 +293,7 @@ class SNMP:
             raise ValueError("oids must be either string or dict")
         if display_hints is None:
             display_hints = self._get_display_hints()
-        return run_sync(run)
+        return run_sync(run())
 
     def set(self, *args):
         """Perform SNMP GET request by gufo_snmp library
@@ -342,7 +341,7 @@ class SNMP:
             self.logger.debug("[%s] COUNT result: %s", address, result)
             return result
 
-        return run_sync(partial(run, filter or (lambda x, y: True)))
+        return run_sync(run(filter or (lambda x, y: True)))
 
     def get_max_repetitions(self, max_repetitions: int | None = None) -> int | None:
         """Return max_repetition on SNMP Bulk Request"""
@@ -441,7 +440,7 @@ class SNMP:
         bulk = self.script.has_snmp_bulk() if bulk is None else bulk
         if display_hints is None:
             display_hints = self._get_display_hints()
-        return run_sync(partial(run, max_retries, filter or (lambda x, y: True)))
+        return run_sync(run(max_retries, filter or (lambda x, y: True)))
 
     def get_table(self, oid, community_suffix=None, cached=False, display_hints=None):
         """GETNEXT wrapper. Returns a hash of <index> -> <value>"""
@@ -589,4 +588,4 @@ class SNMP:
             except self.TimeOutError:
                 return None
 
-        return run_sync(run)
+        return run_sync(run())

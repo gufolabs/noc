@@ -354,7 +354,7 @@ def fetch_sync(
             eof_mark=eof_mark,
         )
 
-    return run_sync(_fetch)
+    return run_sync(_fetch())
 
 
 def to32u(n):

@@ -123,7 +123,7 @@ def defer(handler: str, key: int | None = None, **kwargs) -> None:
         # Get number of partitions
         with jp_lock:
             if JOBS_PARTITIONS is None:
-                run_sync(init_partitions)
+                run_sync(init_partitions())
 
     q = [{"handler": handler, "kwargs": kwargs or {}}]
     if key is None:

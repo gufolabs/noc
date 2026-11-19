@@ -158,4 +158,4 @@ class ConsulBackend(DataConfigBackend):
                 c[k1] = smart_text(v)
             return data
 
-        return run_sync(get)
+        return run_sync(get())

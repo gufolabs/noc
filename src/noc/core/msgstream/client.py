@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # MsgStream Client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,7 +9,6 @@
 import asyncio
 import logging
 from collections.abc import AsyncIterable
-from functools import partial
 from typing import Any
 
 # Third-party modules
@@ -127,8 +126,7 @@ class MessageStreamClient:
             Result of send publish request and wait for acknowledge.
         """
         run_sync(
-            partial(
-                self.publish,
+            self.publish(
                 req.data,
                 req.stream,
                 req.key,

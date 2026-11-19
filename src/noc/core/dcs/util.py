@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DCS utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -61,4 +61,4 @@ def resolve(
             critical=critical,
         )
 
-    return run_sync(_resolve)
+    return run_sync(_resolve())
