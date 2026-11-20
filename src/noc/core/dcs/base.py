@@ -13,7 +13,6 @@ import random
 import signal
 import threading
 from time import perf_counter
-from urllib.parse import urlparse
 
 # Third-party modules
 from gufo.loader import Loader
@@ -38,11 +37,9 @@ class DCSBase:
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner, url) -> None:
+    def __init__(self, runner) -> None:
         self.runner = runner
         self.logger = logging.getLogger(__name__)
-        self.url = url
-        self.parse_url(urlparse(url))
         # service -> resolver instances
         self.resolvers: dict[tuple[str, bool, bool], ResolverBase] = {}
         self.resolvers_lock = threading.Lock()
@@ -51,9 +48,6 @@ class DCSBase:
         self.status = True
         self.status_message = ""
         self.thread_id = None
-
-    def parse_url(self, u):
-        pass
 
     async def start(self):
         """
