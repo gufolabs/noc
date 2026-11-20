@@ -1294,7 +1294,7 @@ class ManagedObject(NOCModel):
         self._reset_caches(self.id, credential=True)
         cache.delete_many(deleted_cache_keys)
         # Rebuild segment access
-        if self.initial_data["id"] is None:
+        if self.initial_data["id"] is None or "administrative_domain" in self.changed_fields:
             self.segment.update_access()
         elif "segment" in self.changed_fields:
             iseg = self.initial_data["segment"]
