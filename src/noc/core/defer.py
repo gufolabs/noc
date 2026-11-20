@@ -9,7 +9,6 @@
 import datetime as dt
 import logging
 import warnings
-from threading import Lock
 
 # Third-party modules
 import orjson
@@ -18,7 +17,6 @@ import orjson
 from noc.config import config
 from noc.core.deprecations import RemovedInNOC2102Warning
 from noc.core.hash import dict_hash_int_args
-from noc.core.ioloop.util import run_sync
 from noc.core.scheduler.job import Job
 from noc.core.scheduler.scheduler import Scheduler
 from noc.core.service.loader import get_service
@@ -98,8 +96,6 @@ def call_later(
 
 
 JOBS_STREAM = "jobs"
-JOBS_PARTITIONS: int | None = None
-jp_lock = Lock()
 
 
 def defer(handler: str, key: int | None = None, **kwargs) -> None:
@@ -113,22 +109,11 @@ def defer(handler: str, key: int | None = None, **kwargs) -> None:
         Result of offload job to worker.
     """
 
-    async def init_partitions():
-        global JOBS_PARTITIONS
-
-        JOBS_PARTITIONS = await svc.get_stream_partitions(JOBS_STREAM)
-
     svc = get_service()
-    if JOBS_PARTITIONS is None:
-        # Get number of partitions
-        with jp_lock:
-            if JOBS_PARTITIONS is None:
-                run_sync(init_partitions())
-
     q = [{"handler": handler, "kwargs": kwargs or {}}]
     if key is None:
         key = dict_hash_int_args(handler=handler, **kwargs)
     q = orjson.dumps(q)
     if len(q) > config.msgstream.max_message_size:
         logger.warning("[%s|%s] Defer max message size exceeded: %s", handler, key, len(q))
-    svc.publish(q, stream=JOBS_STREAM, partition=key % JOBS_PARTITIONS)
+    svc.publish(q, stream=JOBS_STREAM, key=str(key).encode())
