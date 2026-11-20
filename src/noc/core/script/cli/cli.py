@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CLI FSM
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ from typing import Any
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_bytes, smart_text
-from noc.core.ioloop.util import IOLoopContext
+from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
 from noc.core.span import Span
 from noc.core.text import replace_re_group
@@ -104,11 +104,8 @@ class CLI(BaseCLI):
             )
         else:
             parser = self.read_until_prompt
-        with (
-            Span(server=self.script.credentials.get("address"), service=self.name, in_label=cmd),
-            IOLoopContext() as loop,
-        ):
-            return loop.run_until_complete(self.submit(parser))
+        with Span(server=self.script.credentials.get("address"), service=self.name, in_label=cmd):
+            return run_sync(self.submit(parser))
 
     async def start_stream(self):
         await super().start_stream()
