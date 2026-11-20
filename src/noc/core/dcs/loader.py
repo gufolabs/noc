@@ -13,18 +13,18 @@ from threading import Event, Lock, Thread, get_ident
 from typing import Any
 
 # NOC modules
-from noc.config import config
 from noc.core.ioloop.util import setup_asyncio
 
 from .base import DCSBase, dcs_loader
 
 
 class DCSRunner:
+    DCS_NAME = "consul"
+
     def __init__(self) -> None:
         self.lock = Lock()
         self.thread: Thread | None = None
         self.loop: asyncio.BaseEventLoop | None = None
-        self.url = f"consul://{config.consul.host}:{config.consul.port}/{config.consul.base}"
         self.dcs: DCSBase | None = None
         self.ready_event = Event()
         self.logger = logging.getLogger()
@@ -41,13 +41,12 @@ class DCSRunner:
                     self.logger.debug("DCS runner thread is ready")
                 if self.loop is None:
                     raise RuntimeError("DCS runner event loop is not initialized")
-                self.logger.debug("Starting DCS %s", self.url)
-                scheme = self.url.split(":", 1)[0]
+                self.logger.debug("Starting DCS %s", self.DCS_NAME)
                 try:
-                    dcs_cls = dcs_loader[scheme]
+                    dcs_cls = dcs_loader[self.DCS_NAME]
                 except KeyError as e:
-                    raise ValueError(f"Unknown DCS handler: {scheme}") from e
-                self.dcs = dcs_cls(self, self.url)
+                    raise ValueError(f"Unknown DCS handler: {self.DCS_NAME}") from e
+                self.dcs = dcs_cls(self)
                 self.loop.call_soon_threadsafe(self.loop.create_task, self.dcs.start())
             return self.dcs
 

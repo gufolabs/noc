@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Distributed coordinated storage
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,6 @@ import asyncio
 import random
 import time
 import uuid
-from urllib.parse import unquote
 
 # Third-party modules
 import orjson
@@ -38,7 +37,7 @@ class ConsulResolver(ResolverBase):
                 index, services = await self.dcs.consul.health.service(
                     service=self.name,
                     index=index,
-                    token=self.dcs.consul_token,
+                    token=config.consul.token,
                     passing=True,
                     near=self.near,
                 )
@@ -73,34 +72,14 @@ class ConsulResolver(ResolverBase):
 class ConsulDCS(DCSBase):
     """
     Consul-based DCS
-
-    URL format:
-    consul://<address>[:<port>]/<kv root>?token=<token>&check_interval=<...>&check_timeout=<...>&release_after=<...>
     """
 
-    DEFAULT_CONSUL_HOST = config.consul.host
-    DEFAULT_CONSUL_PORT = config.consul.port
-    DEFAULT_CONSUL_CHECK_INTERVAL = config.consul.check_interval
-    DEFAULT_CONSUL_CHECK_TIMEOUT = config.consul.check_timeout
-    DEFAULT_CONSUL_RELEASE = "".join([str(config.consul.release), "s"])
-    DEFAULT_CONSUL_SESSION_TTL = config.consul.session_ttl
-    DEFAULT_CONSUL_LOCK_DELAY = config.consul.lock_delay
-    DEFAULT_CONSUL_RETRY_TIMEOUT = config.consul.retry_timeout
-    DEFAULT_CONSUL_KEEPALIVE_ATTEMPTS = config.consul.keepalive_attempts
     EMPTY_HOLDER = ""
 
     resolver_cls = ConsulResolver
 
-    def __init__(self, runner, url) -> None:
+    def __init__(self, runner) -> None:
         self.name = None
-        self.consul_host = self.DEFAULT_CONSUL_HOST
-        self.consul_port = self.DEFAULT_CONSUL_PORT
-        self.consul_prefix = "/"
-        self.consul_token = config.consul.token
-        self.check_interval = self.DEFAULT_CONSUL_CHECK_INTERVAL
-        self.check_timeout = self.DEFAULT_CONSUL_CHECK_TIMEOUT
-        self.release_after = self.DEFAULT_CONSUL_RELEASE
-        self.keepalive_attempts = self.DEFAULT_CONSUL_KEEPALIVE_ATTEMPTS
         self.svc_name = None
         self.svc_address = None
         self.svc_port = None
@@ -109,37 +88,14 @@ class ConsulDCS(DCSBase):
         self.session = None
         self.slot_number = None
         self.total_slots = None
-        super().__init__(runner, url)
+        super().__init__(runner)
         self.consul = ConsulClient(
-            host=self.consul_host, port=self.consul_port, token=self.consul_token
+            host=config.consul.host, port=config.consul.port, token=config.consul.token
         )
         self.session = None
         self.keep_alive_task = None
         self.service_watchers = {}
         self.in_keep_alive = False
-
-    def parse_url(self, u):
-        if ":" in u.netloc:
-            self.consul_host, port = u.netloc.rsplit(":", 1)
-            self.consul_port = int(port)
-        else:
-            self.consul_host = u.netloc
-        self.consul_prefix = u.path[1:]
-        if self.consul_prefix.endswith("/"):
-            self.consul_prefix = self.consul_prefix[:-1]
-        for q in u.query.split("&"):
-            if not q or "=" not in q:
-                continue
-            k, v = q.split("=", 1)
-            v = unquote(v)
-            if k == "token":
-                self.consul_token = v
-            elif k == "check_interval":
-                self.check_interval = int(v)
-            elif k == "check_timeout":
-                self.check_timeout = int(v)
-            elif k == "release_after":
-                self.release_after = v
 
     async def create_session(self):
         """
@@ -155,16 +111,16 @@ class ConsulDCS(DCSBase):
                     name=self.name,
                     checks=checks,
                     behavior="delete",
-                    lock_delay=self.DEFAULT_CONSUL_LOCK_DELAY,
-                    ttl=self.DEFAULT_CONSUL_SESSION_TTL,
+                    lock_delay=config.consul.lock_delay,
+                    ttl=config.consul.session_ttl,
                 )
                 break
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
                 continue
         self.logger.info("Session id: %s", self.session)
         self.keep_alive_task = PeriodicCallback(
-            self.keep_alive, self.DEFAULT_CONSUL_SESSION_TTL * 1000 / 2
+            self.keep_alive, config.consul.session_ttl * 1000 / 2
         )
         self.keep_alive_task.start()
 
@@ -204,10 +160,10 @@ class ConsulDCS(DCSBase):
         if config.features.consul_healthchecks:
             checks = Check.http(
                 self.svc_check_url,
-                f"{check_interval or self.check_interval}s",
-                f"{check_timeout or self.check_timeout}s",
+                f"{check_interval or config.consul.check_interval}s",
+                f"{check_timeout or config.consul.check_timeout}s",
             )
-            checks["DeregisterCriticalServiceAfter"] = self.release_after
+            checks["DeregisterCriticalServiceAfter"] = f"{config.consul.release}s"
         else:
             checks = []
         if config.features.service_registration:
@@ -227,7 +183,7 @@ class ConsulDCS(DCSBase):
                 except ConsulRepeatableErrors as e:
                     metrics["error", ("type", "cant_register_consul")] += 1
                     self.logger.info("Cannot register service %s: %s", name, e)
-                    await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                    await asyncio.sleep(config.consul.retry_timeout)
                     continue
                 if r:
                     self.svc_id = svc_id
@@ -263,7 +219,7 @@ class ConsulDCS(DCSBase):
         try:
             if self.session:
                 touched = False
-                for n in range(self.keepalive_attempts):
+                for n in range(config.consul.keepalive_attempts):
                     try:
                         await self.consul.session.renew(self.session)
                         self.logger.debug("Session renewed")
@@ -275,7 +231,7 @@ class ConsulDCS(DCSBase):
                     except ConsulRepeatableErrors as e:
                         self.logger.warning("Cannot refresh session due to ignorable error: %s", e)
                         metrics["error", ("type", "dcs_consul_keepalive_retries")] += 1
-                        await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                        await asyncio.sleep(config.consul.retry_timeout)
                 if not touched:
                     self.logger.critical("Cannot refresh session, stopping")
                     if self.keep_alive_task:
@@ -289,7 +245,7 @@ class ConsulDCS(DCSBase):
             self.in_keep_alive = False
 
     def get_lock_path(self, lock):
-        return self.consul_prefix + "/locks/" + lock
+        return config.consul.base + "/locks/" + lock
 
     async def acquire_lock(self, name):
         if not self.session:
@@ -300,30 +256,28 @@ class ConsulDCS(DCSBase):
             self.logger.info("Acquiring lock: %s", key)
             try:
                 status = await self.consul.kv.put(
-                    key=key, value=self.session, acquire=self.session, token=self.consul_token
+                    key=key, value=self.session, acquire=self.session, token=config.consul.token
                 )
                 if status:
                     break
                 metrics["error", ("type", "dcs_consul_failed_get_lock")] += 1
                 self.logger.info("Failed to acquire lock")
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
                 continue
             # Waiting for lock release
             while True:
                 try:
                     index, data = await self.consul.kv.get(
-                        key=key, index=index, token=self.consul_token
+                        key=key, index=index, token=config.consul.token
                     )
                     if not data:
                         index = None  # Key has been deleted
-                        await asyncio.sleep(
-                            self.DEFAULT_CONSUL_LOCK_DELAY * (0.5 + random.random())
-                        )
+                        await asyncio.sleep(config.consul.lock_delay * (0.5 + random.random()))
                     break
                 except ConsulRepeatableErrors:
-                    await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                    await asyncio.sleep(config.consul.retry_timeout)
         self.logger.info("Lock acquired")
 
     def _get_manifest_path(self, name: str) -> str:
@@ -336,7 +290,7 @@ class ConsulDCS(DCSBase):
         Returns:
             manifest path.
         """
-        return f"{self.consul_prefix}/slots/{name}/manifest"
+        return f"{config.consul.base}/slots/{name}/manifest"
 
     async def get_slot_limit(self, name: str) -> int | None:
         """
@@ -355,7 +309,7 @@ class ConsulDCS(DCSBase):
                     return 0
                 return int(orjson.loads(cv["Value"]).get("Limit", 0))
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
 
     async def set_slot_limit(self, name: str, limit: int) -> None:
         manifest_path = self._get_manifest_path(name)
@@ -371,7 +325,7 @@ class ConsulDCS(DCSBase):
                 await self.consul.kv.delete(key=manifest_path)
                 return
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
 
     async def acquire_slot(self, name, limit):
         """
@@ -386,7 +340,7 @@ class ConsulDCS(DCSBase):
             await self.create_session()
         if self.total_slots is not None:
             return self.slot_number, self.total_slots
-        prefix = f"{self.consul_prefix}/slots/{name}"
+        prefix = f"{config.consul.base}/slots/{name}"
         contender_path = f"{prefix}/{self.session}"
         contender_info = self.session
         manifest_path = f"{prefix}/manifest"
@@ -397,15 +351,15 @@ class ConsulDCS(DCSBase):
                     key=contender_path,
                     value=contender_info,
                     acquire=self.session,
-                    token=self.consul_token,
+                    token=config.consul.token,
                 )
                 if status:
                     break
                 metrics["error", ("type", "dcs_consul_failed_get_slot")] += 1
                 self.logger.info("Failed to write contender slot info")
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
         index = 0
         cas = 0
         while True:
@@ -418,7 +372,7 @@ class ConsulDCS(DCSBase):
             try:
                 index, cv = await self.consul.kv.get(key=prefix, index=index, recurse=True)
             except ConsulRepeatableErrors:
-                await asyncio.sleep(self.DEFAULT_CONSUL_RETRY_TIMEOUT)
+                await asyncio.sleep(config.consul.retry_timeout)
                 continue
             for e in cv:
                 if e["Key"] == manifest_path:
@@ -490,7 +444,11 @@ class ConsulDCS(DCSBase):
         while True:
             try:
                 index, services = await self.consul.health.service(
-                    service=name, index=index, near="_agent", token=self.consul_token, passing=True
+                    service=name,
+                    index=index,
+                    near="_agent",
+                    token=config.consul.token,
+                    passing=True,
                 )
             except ConsulRepeatableErrors as e:
                 metrics["error", ("type", "dcs_consul_failed_resolve_near")] += 1
