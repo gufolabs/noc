@@ -15,13 +15,18 @@ import threading
 from time import perf_counter
 from urllib.parse import urlparse
 
+# Third-party modules
+from gufo.loader import Loader
+
 # NOC modules
 from noc.config import config
 from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
 
-from .error import ResolutionError
+
+class ResolutionError(Exception):
+    pass
 
 
 class DCSBase:
@@ -39,7 +44,7 @@ class DCSBase:
         self.url = url
         self.parse_url(urlparse(url))
         # service -> resolver instances
-        self.resolvers = {}
+        self.resolvers: dict[tuple[str, bool, bool], ResolverBase] = {}
         self.resolvers_lock = threading.Lock()
         self.resolver_expiration_task = None
         self.health_check_service_id = None
@@ -233,9 +238,9 @@ class ResolverBase:
         self.name = name
         self.to_shutdown = False
         self.logger = self.dcs.logger
-        self.services = {}
-        self.service_ids = []
-        self.service_addresses = set()
+        self.services: dict[str, str] = {}
+        self.service_ids: list[str] = []
+        self.service_addresses: set[str] = set()
         self.lock = threading.Lock()
         self.policy = self.policy_random
         self.rr_index = -1
@@ -370,3 +375,8 @@ class ResolverBase:
             Result of check if resolver is no longer used and may be expired.
         """
         return perf_counter() - self.last_used > config.dcs.resolver_expiration_timeout
+
+
+dcs_loader = Loader[type[DCSBase]](
+    bases=config.iter_customized_bases("noc.core.dcs"), exclude=("base", "loader")
+)
