@@ -230,7 +230,7 @@ class MessageStreamClient:
         stream: str,
         partition: int | None = None,
         headers: dict[str, bytes] | None = None,
-        sharding_key: int = 0,
+        sharding_key: int | bytes | None = 0,
     ) -> PublishRequest:
         """
         Build message
@@ -239,18 +239,19 @@ class MessageStreamClient:
             data: Data for transmit
             stream: Message type
             headers: additional message headers
-            sharding_key: Key for sharding
+            sharding_key: Message key used for partitioning
             partition: Partition for send
         Returns:
             Result of build message.
         """
         if not isinstance(data, bytes):
             data = orjson.dumps(data)
+        key = str(sharding_key).encode() if isinstance(sharding_key, int) else sharding_key
         return PublishRequest(
             data=data,
             stream=stream,
             partition=partition,
-            key=sharding_key,
+            key=key,
             headers=headers,
         )
 
