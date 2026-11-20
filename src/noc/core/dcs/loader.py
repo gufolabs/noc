@@ -14,15 +14,12 @@ from typing import Any
 
 # NOC modules
 from noc.config import config
-from noc.core.handler import get_handler
 from noc.core.ioloop.util import setup_asyncio
 
-from .base import DCSBase
+from .base import DCSBase, dcs_loader
 
 
 class DCSRunner:
-    HANDLERS = {"consul": "noc.core.dcs.consul.ConsulDCS"}
-
     def __init__(self) -> None:
         self.lock = Lock()
         self.thread: Thread | None = None
@@ -31,16 +28,6 @@ class DCSRunner:
         self.dcs: DCSBase | None = None
         self.ready_event = Event()
         self.logger = logging.getLogger()
-
-    @classmethod
-    def get_dcs_class(cls, url: str):
-        scheme = url.split(":", 1)[0]
-        if scheme not in cls.HANDLERS:
-            raise ValueError(f"Unknown DCS handler: {scheme}")
-        handler = get_handler(cls.HANDLERS[scheme])
-        if not handler:
-            raise ValueError("Cannot initialize DCS handler: %s", scheme)
-        return handler
 
     def get_dcs(self) -> DCSBase:
         with self.lock:
@@ -55,10 +42,13 @@ class DCSRunner:
                 if self.loop is None:
                     raise RuntimeError("DCS runner event loop is not initialized")
                 self.logger.debug("Starting DCS %s", self.url)
-                dcs_cls = self.get_dcs_class(self.url)
-                dcs = dcs_cls(self, self.url)
-                self.dcs = dcs
-                self.loop.call_soon_threadsafe(self.loop.create_task, dcs.start())
+                scheme = self.url.split(":", 1)[0]
+                try:
+                    dcs_cls = dcs_loader[scheme]
+                except KeyError as e:
+                    raise ValueError(f"Unknown DCS handler: {scheme}") from e
+                self.dcs = dcs_cls(self, self.url)
+                self.loop.call_soon_threadsafe(self.loop.create_task, self.dcs.start())
             return self.dcs
 
     def _runner(self):

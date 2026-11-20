@@ -369,7 +369,7 @@ class ServiceParameter(BaseParameter[list[ServiceItem]]):
 
     async def resolve(self) -> None:
         # NOC modules
-        from noc.core.dcs.error import ResolutionError
+        from noc.core.dcs.base import ResolutionError
         from noc.core.dcs.util import resolve_async
 
         if isinstance(self.services, list) and ":" in self.services[0]:

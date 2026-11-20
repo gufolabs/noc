@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Script caller and session manager
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ from contextvars import ContextVar
 
 # NOC modules
 from noc.config import config
-from noc.core.dcs.error import ResolutionError
+from noc.core.dcs.base import ResolutionError
 from noc.core.service.client import open_sync_rpc
 from noc.core.service.error import RPCNoService
 from noc.core.service.loader import get_dcs

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DataSteam client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ import logging
 import orjson
 
 # NOC modules
-from noc.core.dcs.error import ResolutionError
+from noc.core.dcs.base import ResolutionError
 from noc.core.error import ERR_DS_BAD_CODE, ERR_DS_PARSE_ERROR, NOCError
 from noc.core.http.aio import ERR_READ_TIMEOUT, ERR_TIMEOUT, HttpClient
 from noc.core.timeout import retry_timeout
