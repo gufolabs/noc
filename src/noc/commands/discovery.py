@@ -189,7 +189,7 @@ class ServiceStub:
         :return:
         """
         # NOC modules
-        from noc.core.dcs.loader import DEFAULT_DCS, get_dcs
+        from noc.core.dcs.loader import get_dcs
 
-        dcs = get_dcs(DEFAULT_DCS)
+        dcs = get_dcs()
         return asyncio.run(dcs.get_slot_limit(slot_name))

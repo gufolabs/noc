@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service loader
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -19,8 +19,6 @@ from noc.core.ioloop.util import setup_asyncio
 
 from .base import DCSBase
 
-DEFAULT_DCS = f"consul://{config.consul.host}:{config.consul.port}/{config.consul.base}"
-
 
 class DCSRunner:
     HANDLERS = {"consul": "noc.core.dcs.consul.ConsulDCS"}
@@ -29,7 +27,8 @@ class DCSRunner:
         self.lock = Lock()
         self.thread: Thread | None = None
         self.loop: asyncio.BaseEventLoop | None = None
-        self.instances: dict[str, DCSBase] = {}
+        self.url = f"consul://{config.consul.host}:{config.consul.port}/{config.consul.base}"
+        self.dcs: DCSBase | None = None
         self.ready_event = Event()
         self.logger = logging.getLogger()
 
@@ -43,11 +42,9 @@ class DCSRunner:
             raise ValueError("Cannot initialize DCS handler: %s", scheme)
         return handler
 
-    def get_dcs(self, url: str | None = None) -> DCSBase:
-        url = url or DEFAULT_DCS
+    def get_dcs(self) -> DCSBase:
         with self.lock:
-            dcs = self.instances.get(url)
-            if not dcs:
+            if self.dcs is None:
                 if not self.thread:
                     # Run separate DCS thread
                     self.thread = Thread(name="dcs", target=self._runner)
@@ -55,12 +52,14 @@ class DCSRunner:
                     self.thread.start()
                     self.ready_event.wait()
                     self.logger.debug("DCS runner thread is ready")
-                self.logger.debug(f"Starting DCS {url}")
-                dcs_cls = self.get_dcs_class(url)
-                dcs = dcs_cls(self, url)
-                self.instances[url] = dcs
+                if self.loop is None:
+                    raise RuntimeError("DCS runner event loop is not initialized")
+                self.logger.debug("Starting DCS %s", self.url)
+                dcs_cls = self.get_dcs_class(self.url)
+                dcs = dcs_cls(self, self.url)
+                self.dcs = dcs
                 self.loop.call_soon_threadsafe(self.loop.create_task, dcs.start())
-            return dcs
+            return self.dcs
 
     def _runner(self):
         self.logger.debug("Starting DCS runner thread")
@@ -90,12 +89,15 @@ class DCSRunner:
         # Trampoline to proper thread
         loop = asyncio.get_running_loop()
         future = loop.create_future()
-        self.loop.call_soon_threadsafe(self.loop.create_task, thunk())
+        runner_loop = self.loop
+        if runner_loop is None:
+            raise RuntimeError("DCS runner event loop is not initialized")
+        runner_loop.call_soon_threadsafe(runner_loop.create_task, thunk())
         return await future
 
 
 runner = DCSRunner()
 
 
-def get_dcs(url=None):
-    return runner.get_dcs(url)
+def get_dcs() -> DCSBase:
+    return runner.get_dcs()
