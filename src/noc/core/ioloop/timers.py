@@ -9,18 +9,20 @@
 import asyncio
 import math
 import random
-from collections.abc import Coroutine
+from collections.abc import Callable, Coroutine
 from typing import Any
 
 
 class PeriodicCallback:
-    def __init__(self, cb: Coroutine, interval: int, delay: int = 0) -> None:
+    def __init__(
+        self, cb: Callable[[], Coroutine[Any, Any, None]], interval: int, delay: int = 0
+    ) -> None:
         """
         This function sets up a timer that will run the coroutine every
         interval miliseconds, starting after delay seconds
 
         Args:
-            cb (Coroutine): The coroutine to call
+            cb (Callable): An async callable that takes no arguments
             interval (int): The interval in milliseconds between each call of the callback
             delay (int (optional)): The delay before the first call to the callback, defaults to 0
         """
@@ -74,5 +76,5 @@ class PeriodicCallback:
 
 
 class PeriodicOffsetCallback(PeriodicCallback):
-    def __init__(self, cb: Coroutine, interval: int) -> None:
+    def __init__(self, cb: Callable[[], Coroutine[Any, Any, None]], interval: int) -> None:
         super().__init__(cb, interval, random.random() * interval)
