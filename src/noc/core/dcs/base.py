@@ -16,7 +16,6 @@ import random
 import signal
 import threading
 from time import perf_counter
-from typing import TYPE_CHECKING
 
 # Third-party modules
 from gufo.loader import Loader
@@ -26,10 +25,6 @@ from noc.config import config
 from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
-
-if TYPE_CHECKING:
-    # NOC modules
-    from noc.core.dcs.loader import DCSRunner
 
 
 class ResolutionError(Exception):
@@ -45,7 +40,7 @@ class DCSBase:
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner: DCSRunner) -> None:
+    def __init__(self, runner) -> None:
         self.runner = runner
         self.logger = logging.getLogger(__name__)
         # service -> resolver instances
