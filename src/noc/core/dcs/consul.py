@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Future imports
+from __future__ import annotations
+
 # Python modules
 import asyncio
 import random
