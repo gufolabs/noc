@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Future imports
+from __future__ import annotations
+
 # Python modules
 import asyncio
 import logging
@@ -13,6 +16,7 @@ import random
 import signal
 import threading
 from time import perf_counter
+from typing import TYPE_CHECKING
 
 # Third-party modules
 from gufo.loader import Loader
@@ -23,6 +27,10 @@ from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.ioloop.util import run_sync
 from noc.core.perf import metrics
 
+if TYPE_CHECKING:
+    # NOC modules
+    from noc.core.dcs.loader import DCSRunner
+
 
 class ResolutionError(Exception):
     pass
@@ -30,36 +38,34 @@ class ResolutionError(Exception):
 
 class DCSBase:
     # Resolver class
-    resolver_cls = None
+    resolver_cls: type[ResolverBase] = None  # type: ignore[assignment]
     # HTTP code to be returned by /health endpoint when service is healthy
     HEALTH_OK_HTTP_CODE = 200
     # HTTP code to be returned by /health endpoint when service is unhealthy
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner) -> None:
+    def __init__(self, runner: DCSRunner) -> None:
         self.runner = runner
         self.logger = logging.getLogger(__name__)
         # service -> resolver instances
         self.resolvers: dict[tuple[str, bool, bool], ResolverBase] = {}
         self.resolvers_lock = threading.Lock()
-        self.resolver_expiration_task = None
-        self.health_check_service_id = None
-        self.status = True
-        self.status_message = ""
-        self.thread_id = None
+        self.resolver_expiration_task: PeriodicCallback | None = None
+        self.health_check_service_id: str | None = None
+        self.status: bool = True
+        self.status_message: str = ""
 
-    async def start(self):
+    async def start(self) -> None:
         """
         Start all pending tasks
         Returns:
             Result of start all pending tasks.
         """
-        self.thread_id = threading.get_ident()
         self.resolver_expiration_task = PeriodicCallback(self.expire_resolvers, 10000)
         self.resolver_expiration_task.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """
         Stop all pending tasks
         Returns:
@@ -78,12 +84,12 @@ class DCSBase:
 
     async def register(
         self,
-        name,
-        address,
-        port,
-        pool=None,
-        lock=None,
-        tags=None,
+        name: str,
+        address: str,
+        port: int,
+        pool: str | None = None,
+        lock: str | None = None,
+        tags: list[str] | None = None,
         check_interval: int | None = None,
         check_timeout: int | None = None,
     ):
@@ -98,7 +104,7 @@ class DCSBase:
         """
         raise NotImplementedError()
 
-    def kill(self):
+    def kill(self) -> None:
         self.logger.info("Shooting self with SIGTERM")
         os.kill(os.getpid(), signal.SIGTERM)
 
@@ -122,7 +128,7 @@ class DCSBase:
         """
         raise NotImplementedError()
 
-    async def acquire_slot(self, name, limit):
+    async def acquire_slot(self, name: str, limit: int) -> tuple[int, int]:
         """
         Acquire shard slot
         Args:
@@ -133,8 +139,10 @@ class DCSBase:
         """
         raise NotImplementedError()
 
-    async def get_resolver(self, name, critical=False, near=False, track=True):
-        def run_resolver(res):
+    async def get_resolver(
+        self, name: str, critical: bool = False, near: bool = False, track: bool = True
+    ) -> ResolverBase:
+        def run_resolver(res: ResolverBase) -> None:
             loop = asyncio.get_running_loop()
             loop.call_soon(loop.create_task, res.start())
 
@@ -154,16 +162,16 @@ class DCSBase:
 
     async def resolve(
         self,
-        name,
-        hint=None,
-        wait=True,
-        timeout=None,
-        full_result=False,
-        critical=False,
-        near=False,
-        track=True,
-    ):
-        async def wrap():
+        name: str,
+        hint: str | None = None,
+        wait: bool = True,
+        timeout: float | None = None,
+        full_result: bool = False,
+        critical: bool = False,
+        near: bool = False,
+        track: bool = True,
+    ) -> str | list[str]:
+        async def wrap() -> str | list[str]:
             resolver = await self.get_resolver(name, critical=critical, near=near, track=track)
             return await resolver.resolve(
                 hint=hint, wait=wait, timeout=timeout, full_result=full_result
@@ -171,7 +179,7 @@ class DCSBase:
 
         return await self.runner.trampoline(wrap())
 
-    async def expire_resolvers(self):
+    async def expire_resolvers(self) -> None:
         with self.resolvers_lock:
             for svc in list(self.resolvers):
                 r = self.resolvers[svc]
@@ -180,7 +188,14 @@ class DCSBase:
                     r.stop()
                     del self.resolvers[svc]
 
-    def resolve_sync(self, name, hint=None, wait=True, timeout=None, full_result=False):
+    def resolve_sync(
+        self,
+        name: str,
+        hint: str | None = None,
+        wait: bool = True,
+        timeout: float | None = None,
+        full_result: bool = False,
+    ) -> str | list[str]:
         """
         Returns *hint* when service is active or new service
         instance,
@@ -196,8 +211,14 @@ class DCSBase:
         return run_sync(_resolve())
 
     async def resolve_near(
-        self, name, hint=None, wait=True, timeout=None, full_result=False, critical=False
-    ):
+        self,
+        name: str,
+        hint: str | None = None,
+        wait: bool = True,
+        timeout: float | None = None,
+        full_result: bool = False,
+        critical: bool = False,
+    ) -> list[str]:
         """
         Synchronous call to resolve nearby service
         Commonly used for external services like databases
@@ -208,18 +229,18 @@ class DCSBase:
         """
         raise NotImplementedError()
 
-    def get_status(self):
+    def get_status(self) -> tuple[int, str]:
         if self.status:
             return self.HEALTH_OK_HTTP_CODE, "OK"
         return self.HEALTH_FAILED_HTTP_CODE, self.status_message
 
-    def set_faulty_status(self, message):
+    def set_faulty_status(self, message: str) -> None:
         if self.status or self.status_message != message:
             self.logger.info("Set faulty status to: %s", message)
             self.status = False
             self.status_message = message
 
-    def clear_faulty_status(self):
+    def clear_faulty_status(self) -> None:
         if not self.status:
             self.logger.info("Clearing faulty status")
             self.status = True
@@ -227,7 +248,14 @@ class DCSBase:
 
 
 class ResolverBase:
-    def __init__(self, dcs, name, critical=False, near=False, track=True) -> None:
+    def __init__(
+        self,
+        dcs: DCSBase,
+        name: str,
+        critical: bool = False,
+        near: bool = False,
+        track: bool = True,
+    ) -> None:
         self.dcs = dcs
         self.name = name
         self.to_shutdown = False
@@ -247,14 +275,14 @@ class ResolverBase:
         self.track = track
         self.last_used = perf_counter()
 
-    def stop(self):
+    def stop(self) -> None:
         self.to_shutdown = True
         metrics["dcs_resolver_activeservices", ("name", self.name)] = 0
 
-    async def start(self):
+    async def start(self) -> None:
         raise NotImplementedError()
 
-    def set_services(self, services):
+    def set_services(self, services: dict[str, str]) -> None:
         """
         Update actual list of services
         Args:
@@ -285,20 +313,20 @@ class ResolverBase:
                 self.clear_ready()
             metrics["dcs_resolver_activeservices", ("name", self.name)] = len(self.services)
 
-    def set_ready(self):
+    def set_ready(self) -> None:
         self.is_ready = True
         self.ready_event_async.set()
         self.ready_event_sync.set()
 
-    def clear_ready(self):
+    def clear_ready(self) -> None:
         self.is_ready = False
         self.ready_event_async.clear()
         self.ready_event_sync.clear()
 
-    def is_same_thread(self):
+    def is_same_thread(self) -> bool:
         return self.thread_id == threading.get_ident()
 
-    async def _wait_for_services_async(self, timeout):
+    async def _wait_for_services_async(self, timeout: float | None) -> None:
         try:
             await asyncio.wait_for(
                 self.ready_event_async.wait(), timeout or config.dcs.resolution_timeout
@@ -309,20 +337,26 @@ class ResolverBase:
                 self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
-    def _wait_for_services_sync(self, timeout):
+    def _wait_for_services_sync(self, timeout: float | None) -> None:
         if not self.ready_event_sync.wait(timeout):
             metrics["errors", ("type", "dcs_resolver_timeout")] += 1
             if self.critical:
                 self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
-    async def _wait_for_services(self, timeout=None):
+    async def _wait_for_services(self, timeout: float | None = None) -> None:
         if self.is_same_thread():
             await self._wait_for_services_async(timeout)
         else:
             self._wait_for_services_sync(timeout)
 
-    async def resolve(self, hint=None, wait=True, timeout=None, full_result=False):
+    async def resolve(
+        self,
+        hint: str | None = None,
+        wait: bool = True,
+        timeout: float | None = None,
+        full_result: bool = False,
+    ) -> str | list[str]:
         self.last_used = perf_counter()
         metrics["dcs_resolver_requests"] += 1
         if not self.services and wait:
@@ -334,7 +368,7 @@ class ResolverBase:
             raise ResolutionError()
         with self.lock:
             if hint and hint in self.service_addresses:
-                location = hint
+                location: str | list[str] = hint
                 metrics["dcs_resolver_hints"] += 1
             elif full_result:
                 location = list(self.services.values())
@@ -345,7 +379,7 @@ class ResolverBase:
             self.dcs.clear_faulty_status()
         return location
 
-    def policy_random(self):
+    def policy_random(self) -> str:
         """
         Randomly select service
         Returns:
@@ -353,7 +387,7 @@ class ResolverBase:
         """
         return random.choice(self.service_ids)
 
-    def policy_rr(self):
+    def policy_rr(self) -> str:
         """
         Round-robin selection of service
         Returns:

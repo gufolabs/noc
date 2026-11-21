@@ -10,11 +10,12 @@ import asyncio
 import random
 import time
 import uuid
+from typing import TYPE_CHECKING
 
 # Third-party modules
 import orjson
-from consul.check import Check
-from consul.exceptions import NotFound
+from consul.check import Check  # type: ignore[import-untyped]
+from consul.exceptions import NotFound  # type: ignore[import-untyped]
 
 # NOC modules
 from noc.config import config
@@ -25,9 +26,12 @@ from noc.core.perf import metrics
 
 from .base import DCSBase, ResolverBase
 
+if TYPE_CHECKING:
+    from .loader import DCSRunner
+
 
 class ConsulResolver(ResolverBase):
-    async def start(self):
+    async def start(self) -> None:
         index = 0
         self.logger.info("[%s] Starting resolver (near=%s)", self.name, self.near)
         while not self.to_shutdown:
@@ -78,26 +82,22 @@ class ConsulDCS(DCSBase):
 
     resolver_cls = ConsulResolver
 
-    def __init__(self, runner) -> None:
-        self.name = None
-        self.svc_name = None
-        self.svc_address = None
-        self.svc_port = None
-        self.svc_check_url = None
-        self.svc_id = None
-        self.session = None
-        self.slot_number = None
-        self.total_slots = None
+    def __init__(self, runner: DCSRunner) -> None:
+        self.name: str | None = None
+        self.svc_check_url: str | None = None
+        self.svc_id: str | None = None
+        self.session: str | None = None
+        self.slot_number: int | None = None
+        self.total_slots: int | None = None
         super().__init__(runner)
         self.consul = ConsulClient(
             host=config.consul.host, port=config.consul.port, token=config.consul.token
         )
         self.session = None
-        self.keep_alive_task = None
-        self.service_watchers = {}
-        self.in_keep_alive = False
+        self.keep_alive_task: PeriodicCallback | None = None
+        self.in_keep_alive: bool = False
 
-    async def create_session(self):
+    async def create_session(self) -> None:
         """
         Create consul session
         Returns:
@@ -124,7 +124,7 @@ class ConsulDCS(DCSBase):
         )
         self.keep_alive_task.start()
 
-    async def destroy_session(self):
+    async def destroy_session(self) -> None:
         if self.session:
             self.logger.info("Destroying session %s", self.session)
             if self.keep_alive_task:
@@ -138,12 +138,12 @@ class ConsulDCS(DCSBase):
 
     async def register(
         self,
-        name,
-        address,
-        port,
-        pool=None,
-        lock=None,
-        tags=None,
+        name: str,
+        address: str,
+        port: int,
+        pool: str | None = None,
+        lock: str | None = None,
+        tags: list[str] | None = None,
         check_interval: int | None = None,
         check_timeout: int | None = None,
     ):
@@ -191,7 +191,7 @@ class ConsulDCS(DCSBase):
             return r
         return True
 
-    async def deregister(self):
+    async def deregister(self) -> None:
         if self.session:
             try:
                 await self.destroy_session()
@@ -210,7 +210,7 @@ class ConsulDCS(DCSBase):
                 self.logger.error("Cannot deregister service: %s", e)
             self.svc_id = None
 
-    async def keep_alive(self):
+    async def keep_alive(self) -> None:
         metrics["dcs_consul_keepalives"] += 1
         if self.in_keep_alive:
             metrics["error", ("type", "dcs_consul_overlapped_keepalives")] += 1
@@ -244,10 +244,10 @@ class ConsulDCS(DCSBase):
         finally:
             self.in_keep_alive = False
 
-    def get_lock_path(self, lock):
+    def get_lock_path(self, lock: str) -> str:
         return config.consul.base + "/locks/" + lock
 
-    async def acquire_lock(self, name):
+    async def acquire_lock(self, name: str) -> None:
         if not self.session:
             await self.create_session()
         key = self.get_lock_path(name)
@@ -327,7 +327,7 @@ class ConsulDCS(DCSBase):
             except ConsulRepeatableErrors:
                 await asyncio.sleep(config.consul.retry_timeout)
 
-    async def acquire_slot(self, name, limit):
+    async def acquire_slot(self, name: str, limit: int) -> tuple[int, int]:
         """
         Acquire shard slot
         Args:
@@ -338,7 +338,7 @@ class ConsulDCS(DCSBase):
         """
         if not self.session:
             await self.create_session()
-        if self.total_slots is not None:
+        if self.total_slots is not None and self.slot_number is not None:
             return self.slot_number, self.total_slots
         prefix = f"{config.consul.base}/slots/{name}"
         contender_path = f"{prefix}/{self.session}"
@@ -429,8 +429,14 @@ class ConsulDCS(DCSBase):
             self.logger.info("Cannot acquire slot: CAS changed, retry")
 
     async def resolve_near(
-        self, name, hint=None, wait=True, timeout=None, full_result=False, critical=False
-    ):
+        self,
+        name: str,
+        hint: str | None = None,
+        wait: bool = True,
+        timeout: float | None = None,
+        full_result: bool = False,
+        critical: bool = False,
+    ) -> list[str]:
         """
         Synchronous call to resolve nearby service
         Commonly used for external services like databases
