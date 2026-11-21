@@ -8,9 +8,7 @@
 # Python modules
 import asyncio
 import logging
-from collections.abc import Awaitable
-from threading import Event, Lock, Thread, get_ident
-from typing import Any
+from threading import Event, Lock, Thread
 
 # NOC modules
 from noc.core.ioloop.util import setup_asyncio
@@ -57,32 +55,6 @@ class DCSRunner:
         self.ready_event.set()
         self.loop.run_forever()
         self.logger.debug("Stopping DCS runner thread")
-
-    async def trampoline(self, aw: Awaitable) -> Any:
-        """
-        Trampoline awaitable to dedicated loop
-        Returns:
-            Result of trampoline awaitable to dedicated loop.
-        """
-
-        async def thunk():
-            try:
-                r = await aw
-                loop.call_soon_threadsafe(future.set_result, r)
-            except Exception as e:
-                loop.call_soon_threadsafe(future.set_exception, e)
-
-        is_same_thread = not self.thread or self.thread.ident == get_ident()
-        if is_same_thread:
-            return await aw
-        # Trampoline to proper thread
-        loop = asyncio.get_running_loop()
-        future = loop.create_future()
-        runner_loop = self.loop
-        if runner_loop is None:
-            raise RuntimeError("DCS runner event loop is not initialized")
-        runner_loop.call_soon_threadsafe(runner_loop.create_task, thunk())
-        return await future
 
 
 runner = DCSRunner()

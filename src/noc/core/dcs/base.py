@@ -176,7 +176,34 @@ class DCSBase:
                 hint=hint, wait=wait, timeout=timeout, full_result=full_result
             )
 
-        return await self.runner.trampoline(wrap())
+        aw = wrap()
+        if self.is_same_thread():
+            return await aw
+        # Trampoline to the dedicated runner loop
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        runner_loop = self.runner.loop
+        if runner_loop is None:
+            raise RuntimeError("DCS runner event loop is not initialized")
+
+        async def thunk() -> None:
+            try:
+                r = await aw
+                loop.call_soon_threadsafe(future.set_result, r)
+            except Exception as e:
+                loop.call_soon_threadsafe(future.set_exception, e)
+
+        runner_loop.call_soon_threadsafe(runner_loop.create_task, thunk())
+        return await future
+
+    def is_same_thread(self) -> bool:
+        """
+        Determine whether the current thread owns the DCS runner event loop.
+
+        Returns:
+            True when running on the DCS runner thread.
+        """
+        return not self.runner.thread or self.runner.thread.ident == threading.get_ident()
 
     async def expire_resolvers(self) -> None:
         with self.resolvers_lock:
