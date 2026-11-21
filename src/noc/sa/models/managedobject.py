@@ -1294,15 +1294,18 @@ class ManagedObject(NOCModel):
         self._reset_caches(self.id, credential=True)
         cache.delete_many(deleted_cache_keys)
         # Rebuild segment access
-        if self.initial_data["id"] is None:
+        if (
+            self.initial_data["id"] is None
+            or "segment" in self.changed_fields
+            or "administrative_domain" in self.changed_fields
+        ):
             self.segment.update_access()
-        elif "segment" in self.changed_fields:
+        if self.initial_data["id"] is not None and "segment" in self.changed_fields:
             iseg = self.initial_data["segment"]
             if iseg and isinstance(iseg, str):
                 iseg = NetworkSegment.get_by_id(iseg)
             if iseg:
                 iseg.update_access()
-            self.segment.update_access()
             self.update_topology()
             # Refresh links
             # NOC modules
