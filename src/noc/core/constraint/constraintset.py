@@ -34,7 +34,7 @@ class ConstraintSet:
         return self._data.get(item)
 
     @classmethod
-    def from_itercls, iter: Iterable[BaseConstraint]) -> ConstraintSet:
+    def from_iter(cls, iter: Iterable[BaseConstraint]) -> ConstraintSet:
         r = cls()
         for item in iter:
             r.extend(item)

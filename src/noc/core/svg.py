@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # SVG utilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ class SVG:
         self._defs: dict[str, ET.Element] = {}
 
     @classmethod
-    def initcls) -> SVG:
+    def init(cls) -> SVG:
         """
         Create root if necessary.
 
@@ -51,7 +51,7 @@ class SVG:
         return svg
 
     @classmethod
-    def readcls, fp: TextIO) -> SVG:
+    def read(cls, fp: TextIO) -> SVG:
         """
         Read from open file.
 
@@ -66,7 +66,7 @@ class SVG:
         return svg
 
     @classmethod
-    def from_stringcls, data: str) -> SVG:
+    def from_string(cls, data: str) -> SVG:
         """
         Create SVG from string.
 
@@ -79,7 +79,7 @@ class SVG:
         return cls.read(StringIO(data))
 
     @classmethod
-    def get_placeholdercls, width: float, height: float) -> SVG:
+    def get_placeholder(cls, width: float, height: float) -> SVG:
         data = f"""<?xml version="1.0" encoding="utf-8"?>
     <svg viewBox="0 0 {width} {height}" width="{width}mm" height="{height}mm" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="{width}" height="{height}" style="stroke: rgb(255, 0, 0); stroke-width: 0.5px; fill: rgb(255, 255, 255);"/>
@@ -89,7 +89,7 @@ class SVG:
         return cls.from_string(data)
 
     @classmethod
-    def from_filecls, path: str | Path) -> SVG:
+    def from_file(cls, path: str | Path) -> SVG:
         """
         Create SVG from file.
 
@@ -113,7 +113,7 @@ class SVG:
         return ET.tostring(self._tree.getroot(), encoding="unicode", method=None)
 
     @classmethod
-    def parsecls, fp: TextIO) -> ET.ElementTree:
+    def parse(cls, fp: TextIO) -> ET.ElementTree:
         """
         Parse SVG from file.
 
@@ -129,7 +129,7 @@ class SVG:
             raise ValueError(str(e)) from e
 
     @classmethod
-    def get_parsercls) -> ET.XMLParser:
+    def get_parser(cls) -> ET.XMLParser:
         """
         Get XMLParser instance.
 
@@ -345,7 +345,7 @@ class SVG:
         _add_prefix(self._tree.getroot())
 
     @classmethod
-    def get_transform_origincls, el: ET.Element) -> tuple[float, float] | None:
+    def get_transform_origin(cls, el: ET.Element) -> tuple[float, float] | None:
         """
         Calculate effective transform origin for element.
 
@@ -384,7 +384,7 @@ class SVG:
         return None
 
     @classmethod
-    def get_transformcls, source: ET.Element) -> str:
+    def get_transform(cls, source: ET.Element) -> str:
         """
         Calculate `transform` property.
 

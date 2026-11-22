@@ -44,7 +44,7 @@ class LambdaConstraint(BaseConstraint):
         return self._freq + self._width // 2
 
     @classmethod
-    def from_discriminatorcls, v: str) -> LambdaConstraint:
+    def from_discriminator(cls, v: str) -> LambdaConstraint:
         """Create constraint from lambda discriminator."""
         freq, width = v[8:].split("-")
         return LambdaConstraint(int(freq) * 1_000, int(width) * 1_000)

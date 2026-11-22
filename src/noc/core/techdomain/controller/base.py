@@ -464,7 +464,7 @@ class BaseController:
             channel.save()
 
     @classmethod
-    def to_paramscls, constraints: ConstraintSet) -> list[Param]:
+    def to_params(cls, constraints: ConstraintSet) -> list[Param]:
         """
         Convert constraints to list of params.
         """
