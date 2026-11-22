@@ -8,7 +8,8 @@
 # Python modules
 from collections.abc import Iterable
 from itertools import zip_longest
-from typing import Any, _GenericAlias, _SpecialForm
+from types import UnionType
+from typing import Any, Union, get_args, get_origin
 
 # Third-party modules
 from gufo.loader import Loader
@@ -31,16 +32,40 @@ class BaseModel(_BaseModel):
     _csv_fields = []
 
     @staticmethod
-    def is_reference(field: FieldInfo):
-        annotation = field.annotation
-        if isinstance(annotation, _GenericAlias):
-            if annotation.__origin__ is Reference:
-                return True
-            if isinstance(annotation.__origin__, _SpecialForm):
-                for arg in annotation.__args__:
-                    if isinstance(arg, _GenericAlias) and arg.__origin__ is Reference:
-                        return True
-        return False
+    def _get_reference_type(annotation: Any) -> type | None:
+        """
+        Get the target model type from a Reference annotation.
+
+        Supports both direct Reference[T] and optional Reference[T]
+        annotations (Union and PEP 604 union syntax).
+
+        Args:
+            annotation: Field type annotation.
+
+        Returns:
+            Referenced model type or None if annotation is not a reference.
+        """
+        origin = get_origin(annotation)
+        if origin is Reference:
+            return get_args(annotation)[0]
+        if origin in (Union, UnionType):
+            for arg in get_args(annotation):
+                if get_origin(arg) is Reference:
+                    return get_args(arg)[0]
+        return None
+
+    @classmethod
+    def is_reference(cls, field: FieldInfo) -> bool:
+        """
+        Check whether field annotation represents a Reference.
+
+        Args:
+            field: Pydantic field definition.
+
+        Returns:
+            True if the field is a reference, False otherwise.
+        """
+        return cls._get_reference_type(field.annotation) is not None
 
     @classmethod
     def from_iter(cls, value: Iterable[Any]) -> "BaseModel":
@@ -53,21 +78,18 @@ class BaseModel(_BaseModel):
 
     @classmethod
     def get_mapped_fields(cls) -> dict[str, str]:
-        def q(field: FieldInfo) -> str:
-            annotation = field.annotation
-            ref = None
-            if isinstance(annotation, _GenericAlias):
-                if annotation.__origin__ is Reference:
-                    ref = annotation
-                elif isinstance(annotation.__origin__, _SpecialForm):
-                    for arg in annotation.__args__:
-                        if isinstance(arg, _GenericAlias) and arg.__origin__ is Reference:
-                            ref = arg
-                            break
-            if ref:
-                return ref.__args__[0].__name__.lower()
+        """
+        Get mapping of reference fields to their target model names.
 
-        return {fn: q(f) for fn, f in cls.model_fields.items() if cls.is_reference(f)}
+        Returns:
+            Dictionary mapping field names to lowercase referenced model names.
+        """
+
+        return {
+            fn: ref.__name__.lower()
+            for fn, f in cls.model_fields.items()
+            if cls.is_reference(f) and (ref := cls._get_reference_type(f.annotation)) is not None
+        }
 
 
 etl_model_loader = Loader[type[BaseModel]](
