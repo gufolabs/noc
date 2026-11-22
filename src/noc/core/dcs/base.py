@@ -15,6 +15,7 @@ import os
 import random
 import signal
 import threading
+from abc import ABC, abstractmethod
 from time import perf_counter
 from typing import TYPE_CHECKING
 
@@ -35,7 +36,7 @@ class ResolutionError(Exception):
     pass
 
 
-class DCSBase:
+class DCSBase(ABC):
     # Resolver class
     resolver_cls: type[ResolverBase] = None  # type: ignore[assignment]
     # HTTP code to be returned by /health endpoint when service is healthy
@@ -81,6 +82,7 @@ class DCSBase:
                 r.stop()
             self.resolvers = {}
 
+    @abstractmethod
     async def register(
         self,
         name: str,
@@ -101,20 +103,22 @@ class DCSBase:
         Returns:
             Result of register service.
         """
-        raise NotImplementedError()
+        ...
 
     def kill(self) -> None:
         self.logger.info("Shooting self with SIGTERM")
         os.kill(os.getpid(), signal.SIGTERM)
 
+    @abstractmethod
     async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
         Returns:
             Result of return the current limit for given slot.
         """
-        raise NotImplementedError()
+        ...
 
+    @abstractmethod
     async def set_slot_limit(self, name: str, limit: int) -> None:
         """
         Set limits for given slot.
@@ -125,8 +129,9 @@ class DCSBase:
             name: Slot name.
             limit: New limit.
         """
-        raise NotImplementedError()
+        ...
 
+    @abstractmethod
     async def acquire_slot(self, name: str, limit: int) -> tuple[int, int]:
         """
         Acquire shard slot
@@ -136,7 +141,7 @@ class DCSBase:
         Returns:
             (slot number, number of instances)
         """
-        raise NotImplementedError()
+        ...
 
     async def get_resolver(
         self, name: str, critical: bool = False, near: bool = False, track: bool = True
@@ -236,6 +241,7 @@ class DCSBase:
 
         return run_sync(_resolve())
 
+    @abstractmethod
     async def resolve_near(
         self,
         name: str,
@@ -253,7 +259,7 @@ class DCSBase:
         Returns:
             address:port
         """
-        raise NotImplementedError()
+        ...
 
     def get_status(self) -> tuple[int, str]:
         if self.status:
@@ -273,7 +279,7 @@ class DCSBase:
             self.status_message = ""
 
 
-class ResolverBase:
+class ResolverBase(ABC):
     def __init__(
         self,
         dcs: DCSBase,
@@ -305,8 +311,12 @@ class ResolverBase:
         self.to_shutdown = True
         metrics["dcs_resolver_activeservices", ("name", self.name)] = 0
 
+    @abstractmethod
     async def start(self) -> None:
-        raise NotImplementedError()
+        """
+        Start the resolver background loop.
+        """
+        ...
 
     def set_services(self, services: dict[str, str]) -> None:
         """
