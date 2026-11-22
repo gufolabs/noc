@@ -1,0 +1,27 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Config Failed #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "df8d1b48-5f0a-4a30-add3-0698f0fafcf2",
+    "description": "ONU config failure.",
+    "event_class__name": "Network | xPON | ONU | Config Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "ONU config failure on port (?P<interface>GPON\\S+), reason: (?P<reason>.+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%GPON-ONUCONFIG: ONU config failure on port GPON0/3:1, reason: Loopback-Detect.",
+            "raw_vars": []
+        },
+        {
+            "message": "%GPON-ONUCONFIG: ONU config failure on port GPON0/2:29, reason: ETH-UNI.",
+            "raw_vars": []
+        },
+        {
+            "message": "%GPON-ONUCONFIG: ONU config failure on port GPON0/3:34, reason: Flow-Mapping.",
+            "raw_vars": []
+        }
+    ]
+}

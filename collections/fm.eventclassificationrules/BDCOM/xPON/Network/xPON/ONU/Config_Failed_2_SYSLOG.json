@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Config Failed #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "208ed952-00ff-4075-a99a-7436ca142127",
+    "description": "ONU config failure.",
+    "event_class__name": "Network | xPON | ONU | Config Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Config ONU on interface (?P<interface>EPON\\S+), failed for \\d+ times",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%OLT: Config ONU on interface EPON0/4:42 failed for 1 times, must deregister it!",
+            "raw_vars": []
+        }
+    ]
+}
