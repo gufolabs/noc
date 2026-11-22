@@ -57,7 +57,10 @@ class IOLoopContext:
 
 def run_sync[T](awaitable: Awaitable[T]) -> T:
     """
-    Run awaitable on a dedicated event loop and return its result.
+    Run an awaitable synchronously.
+
+    If no event loop is running, create one using asyncio.run().
+    Otherwise, execute the awaitable on the existing event loop.
 
     Args:
         awaitable: Awaitable to run on the event loop.
@@ -70,6 +73,9 @@ def run_sync[T](awaitable: Awaitable[T]) -> T:
 
     async def run_awaitable() -> T:
         return await awaitable
+
+    if asyncio._get_running_loop() is None:
+        return asyncio.run(run_awaitable())
 
     with IOLoopContext() as loop:
         return loop.run_until_complete(run_awaitable())
