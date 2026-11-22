@@ -68,7 +68,7 @@ class BaseConstraint:
         """
         return self.is_valid_interface(interface)
 
-    def __neg__(self: BaseConstraint) -> BaseConstraint:
+    def __neg__(self) -> BaseConstraint:
         return NotConstraint(self)
 
     def __and__(self, other: BaseConstraint) -> BaseConstraint:

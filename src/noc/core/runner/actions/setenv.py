@@ -15,7 +15,7 @@ class SetEnvAction(BaseAction):
 
     name = "setenv"
 
-    async def execute(self: SetEnvAction, *, name: str, value: str, **kwargs: str) -> str:
+    async def execute(self, *, name: str, value: str, **kwargs: str) -> str:
         self.logger.info("Setting environment `%s` to `%s`", name, value)
         self.env[name] = value
         return value

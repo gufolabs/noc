@@ -15,6 +15,6 @@ class FailAction(BaseAction):
 
     name = "fail"
 
-    async def execute(self: FailAction, **kwargs: str) -> None:
+    async def execute(self, **kwargs: str) -> None:
         msg = "Always failed."
         raise ActionError(msg)

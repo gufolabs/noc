@@ -15,5 +15,5 @@ class EchoAction(BaseAction):
 
     name = "echo"
 
-    async def execute(self: EchoAction, *, x: str, **kwargs: str) -> str:
+    async def execute(self, *, x: str, **kwargs: str) -> str:
         return x

@@ -48,7 +48,7 @@ class ConnectionTypeInfo:
     height: float
     el: ET.Element | None
 
-    def inc_x(self: ConnectionTypeInfo) -> None:
+    def inc_x(self) -> None:
         """Increase current x position to width"""
         self.x += self.width + HORIZONTAL_GAP
 

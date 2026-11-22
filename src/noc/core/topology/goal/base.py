@@ -42,7 +42,7 @@ class BaseGoal:
         """
         return False
 
-    def __neg__(self: BaseGoal) -> BaseGoal:
+    def __neg__(self) -> BaseGoal:
         return NotGoal(self)
 
     def __and__(self, other: BaseGoal) -> BaseGoal:

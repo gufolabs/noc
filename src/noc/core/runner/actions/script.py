@@ -22,7 +22,7 @@ class ScriptAction(BaseAction):
     name = "script"
 
     async def execute(
-        self: ScriptAction,
+        self,
         *,
         script: str,
         managed_object: int,

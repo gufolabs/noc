@@ -23,7 +23,7 @@ class ActionCommands(BaseAction):
     name = "action_commands"
 
     async def execute(
-        self: ActionCommands,
+        self,
         *,
         action: str,
         managed_object: int,

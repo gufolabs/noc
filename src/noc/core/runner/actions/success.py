@@ -15,5 +15,5 @@ class SuccessAction(BaseAction):
 
     name = "success"
 
-    async def execute(self: SuccessAction, **kwargs: str) -> None:
+    async def execute(self, **kwargs: str) -> None:
         pass

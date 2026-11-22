@@ -307,7 +307,7 @@ def reset_caps(
     """
     Remove caps from object
     Args:
-        self: Object
+        self
         caps: Caps Name
         scope: Scope name
         source: Source set
