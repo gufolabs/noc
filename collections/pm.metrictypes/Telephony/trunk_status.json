@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | Trunk | Status",
+    "$collection": "pm.metrictypes",
+    "uuid": "6695eec6-6cb2-4e7d-9fae-8b71047760a0",
+    "scope__name": "Object",
+    "field_name": "trunk_status",
+    "field_type": "Int32",
+    "description": "For entry type CAS, PRI, SS7, E1-channels, SS7-lines: 0 - down, 1 - up, 2 - no D-chanel; For entry type SIPT: 0 - down, 1 - up, 2 - unknown (disabled check)",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}

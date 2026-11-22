@@ -1,0 +1,15 @@
+{
+    "name": "Eltex | SMG | SMG-3016",
+    "$collection": "inv.objectmodels",
+    "uuid": "8546f2d6-4f62-4de3-9d57-a8fa99817696",
+    "vendor__code": "ELTEX",
+    "description": "Hybrid platform - trunk gateway and universal solution for building next-generation infocommunication networks",
+    "connections": [],
+    "data": [
+        {
+            "attr": "part_no",
+            "interface": "asset",
+            "value": ["SMG-3016"]
+        }
+    ]
+}
