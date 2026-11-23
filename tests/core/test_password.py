@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Password utilities tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ class ErrContext:
     def __init__(self, msg: str | None = None) -> None:
         self._msg = msg
 
-    def __enter__(self) -> "ErrContext":
+    def __enter__(self) -> ErrContext:
         return self
 
     def __exit__(

@@ -53,16 +53,16 @@ class LabelApplication(ExtDocApplication):
             r[s] = model_id in o.allow_models
         return r
 
-    def field_is_noc_builtin(self, o: "Label"):
+    def field_is_noc_builtin(self, o: Label):
         return bool(o.is_builtin)
 
-    def field_is_scoped(self, o: "Label"):
+    def field_is_scoped(self, o: Label):
         return bool(o.is_scoped)
 
-    def field_is_wildcard(self, o: "Label"):
+    def field_is_wildcard(self, o: Label):
         return bool(o.is_wildcard)
 
-    def field_is_matched(self, o: "Label"):
+    def field_is_matched(self, o: Label):
         return bool(o.is_matched)
 
     def cleaned_query(self, q):

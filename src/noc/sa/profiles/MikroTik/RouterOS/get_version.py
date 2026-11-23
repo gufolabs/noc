@@ -57,7 +57,7 @@ class Script(BaseScript):
     def execute_snmp(self):
         try:
             p = self.snmp.get(mib["SNMPv2-MIB::sysDescr", 0])
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             raise NotImplementedError()
 
         match = self.rx_platform_snmp.search(p)

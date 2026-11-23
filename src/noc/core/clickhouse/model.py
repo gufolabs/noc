@@ -29,11 +29,11 @@ OLD_PM_SCHEMA_TABLE = "noc_old"
 
 class ModelBase(type):
     def __new__(
-        mcs: "type[ModelBase]",
+        mcs: type[ModelBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["Model"]:
+    ) -> type[Model]:
         # Initialize class
         cls = cast(type["Model"], type.__new__(mcs, name, bases, attrs))
         # Append _meta
@@ -226,7 +226,7 @@ class Model(metaclass=ModelBase):
 
     @classmethod
     def ensure_columns(
-        cls, connect: "ClickhouseClient", table_name: str, allow_type: bool = False
+        cls, connect: ClickhouseClient, table_name: str, allow_type: bool = False
     ) -> bool:
         """
         Create necessary table columns
@@ -294,7 +294,7 @@ class Model(metaclass=ModelBase):
         return False
 
     @classmethod
-    def check_old_schema(cls, connect: "ClickhouseClient", table_name: str) -> bool:
+    def check_old_schema(cls, connect: ClickhouseClient, table_name: str) -> bool:
         """
         Ensure create table Syntax. False for old Syntax, True for New
         Returns:
@@ -535,11 +535,11 @@ class NestedModel(Model):
 
 class DictionaryBase(ModelBase):
     def __new__(
-        mcs: "type[DictionaryBase]",
+        mcs: type[DictionaryBase],
         name: str,
         bases: tuple[type[Any], ...],
         attrs: dict[str, Any],
-    ) -> type["DictionaryModel"]:
+    ) -> type[DictionaryModel]:
         from .fields import DateTimeField, UInt64Field
 
         # Initialize class

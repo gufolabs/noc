@@ -52,7 +52,7 @@ class MessageStreamClient:
         return c.SUBSCRIBE_BULK
 
     @classmethod
-    def get_client(cls) -> "MessageStreamClient":
+    def get_client(cls) -> MessageStreamClient:
         logger.debug("Using MsgStream client backend: %s", config.msgstream.client_class)
         c = get_handler(config.msgstream.client_class)
         if c:
@@ -60,7 +60,7 @@ class MessageStreamClient:
         logger.error("Cannot load MsgStream client")
         raise NotImplementedError("Cannot load MsgStream client")
 
-    async def __aenter__(self) -> "MessageStreamClient":
+    async def __aenter__(self) -> MessageStreamClient:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

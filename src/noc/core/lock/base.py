@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 #  BaseLock
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ class BaseLock(ABC):
         self.owner = owner
         self.ttl = ttl or DEFAULT_TTL
 
-    def acquire(self, items: Iterable[str], ttl: float | None = None) -> "Token":
+    def acquire(self, items: Iterable[str], ttl: float | None = None) -> Token:
         """
         Acquire lock context manager.
 

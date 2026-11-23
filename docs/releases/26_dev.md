@@ -16,9 +16,9 @@ NOC 26 introduces a new build pipeline for the JavaScript frontend. Previously, 
 
 NOC 26 replaces Uvicorn with Granian as the ASGI server for Starlette, simplifying the deployment architecture and reducing the number of infrastructure components. Granian's built-in static file serving eliminates the need for a separate static file server, while its HTTP/2 support lays the groundwork for modernizing inter-service communication. This architectural evolution also paves the way for introducing mutual TLS (mTLS) between NOC services, strengthening security through authenticated and encrypted internal connections.
 
-### Python 3.13 and Runtime Modernization
+### Python 3.14 and Runtime Modernization
 
-NOC 26 moves to Python 3.13, accompanied by extensive code modernization, updated dependencies, improved typing, and a transition from Motor to the asynchronous PyMongo client. These changes establish a more modern and maintainable foundation for future development.
+NOC 26 moves to Python 3.14, accompanied by extensive code modernization, updated dependencies, improved typing, and a transition from Motor to the asynchronous PyMongo client. These changes establish a more modern and maintainable foundation for future development.
 
 ### ARM64 (AArch64) Support
 

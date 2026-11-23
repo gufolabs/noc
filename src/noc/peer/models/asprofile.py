@@ -54,7 +54,7 @@ class MatchRule(EmbeddedDocument):
         if self.include_expression:
             try:
                 ranges_to_list(self.include_expression)
-            except (SyntaxError, ValueError):
+            except SyntaxError, ValueError:
                 raise ValidationError(field_name="asn_ranges", message="Syntax Error on ASN Ranges")
         super().clean()
 

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Mock ActiveAlarm for Tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ def get_alarm_class_mock(name):
     )
 
 
-def get_alarm_mock() -> "ActiveAlarm":
+def get_alarm_mock() -> ActiveAlarm:
     AlarmClass.config = property(lambda x: None)
     alarm_class = AlarmClass(
         id=ObjectId(),
@@ -81,7 +81,7 @@ def get_alarm_mock() -> "ActiveAlarm":
     return alarm
 
 
-def get_tt_system_mock() -> "TTSystem":
+def get_tt_system_mock() -> TTSystem:
     """Prepare TTSystem for test"""
     tt_system = TTSystem(
         id=ObjectId(),
@@ -95,7 +95,7 @@ def get_tt_system_mock() -> "TTSystem":
     return tt_system
 
 
-def get_notification_group_mock() -> "NotificationGroup":
+def get_notification_group_mock() -> NotificationGroup:
     """Prepare notification group for mock"""
     # Send error/send success
     ng = NotificationGroup(name="stub")

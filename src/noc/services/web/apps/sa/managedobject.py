@@ -297,7 +297,7 @@ class ManagedObjectApplication(ExtModelApplication):
             data["mappings"] = [m.get_object_form(o) for m in o.iter_remote_mappings()]
         return data
 
-    def instance_to_dict_list(self, o: "ManagedObject", fields=None):
+    def instance_to_dict_list(self, o: ManagedObject, fields=None):
         """
 
         :return:
@@ -403,7 +403,7 @@ class ManagedObjectApplication(ExtModelApplication):
             extra["where"] = extra_condition
         return extra, order
 
-    def get_caps_Q(self, nq: dict[str, Any]) -> tuple["d_Q", list[str]]:
+    def get_caps_Q(self, nq: dict[str, Any]) -> tuple[d_Q, list[str]]:
         """
         Resolve caps on query to queryset
         :return:
@@ -876,7 +876,7 @@ class ManagedObjectApplication(ExtModelApplication):
             d += 1
         return "Discovery processes has been scheduled"
 
-    def get_nested_inventory(self, o: "Object"):
+    def get_nested_inventory(self, o: Object):
         rev = o.get_data("asset", "revision")
         if rev == "None":
             rev = ""

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Dump action
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ class DumpAction(BaseAction):
 
     name = "dump"
 
-    async def execute(self: "DumpAction", **kwargs: str) -> None:
+    async def execute(self, **kwargs: str) -> None:
         self.logger.info("Dumping environment")
         for k, v in sorted(self.env.items()):
             self.logger.info("%s = %s", k, v)

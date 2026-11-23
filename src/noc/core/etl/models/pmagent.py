@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # PMAgentModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ class PMAgent(BaseModel):
     fqdn: DomainName | None = None
     addresses: list[str] | None = None
     description: str | None = None
-    managed_object: Reference["ManagedObject"] | None = None
+    managed_object: Reference[ManagedObject] | None = None
     # Workflow state
     state: str | None = None
     labels: list[str] = []

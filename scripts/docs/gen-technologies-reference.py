@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generate technologies reference
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ class Data:
     allow_children: bool
 
     @classmethod
-    def read(cls, path: Path) -> "Data":
+    def read(cls, path: Path) -> Data:
         """
         Read from JSON.
 

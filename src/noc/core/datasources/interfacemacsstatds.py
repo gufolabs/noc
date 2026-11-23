@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Interface MACs Stat Datasource
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -61,8 +61,8 @@ class InterfaceMACsStatDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: "dt.datetime | None" = None,
-        end: "dt.datetime | None" = None,
+        start: dt.datetime | None = None,
+        end: dt.datetime | None = None,
         period_active: int | None = None,
         resolve_managedobject_id: bool = True,
         *args,

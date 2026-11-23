@@ -24,7 +24,7 @@ class ConfiguredMapApplication(ExtDocApplication):
     model = ConfiguredMap
     query_fields = ["name__icontains"]
 
-    def instance_to_dict(self, o: "ConfiguredMap", fields=None, nocustom=False):
+    def instance_to_dict(self, o: ConfiguredMap, fields=None, nocustom=False):
         if isinstance(o, ObjectFilter):
             return o
         r = {

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Synchronous HTTP Client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ class HttpClient(GufoHttpClient):
     user_agent = config.http_client.user_agent
 
     def __init__(
-        self: "HttpClient",
+        self,
         /,
         max_redirects: int | None = config.http_client.max_redirects,
         headers: dict[str, bytes] | None = None,
@@ -112,7 +112,7 @@ class HttpClient(GufoHttpClient):
         return u._replace(netloc=host).geturl()
 
     async def request(
-        self: "HttpClient",
+        self,
         method: str,
         url: str,
         /,

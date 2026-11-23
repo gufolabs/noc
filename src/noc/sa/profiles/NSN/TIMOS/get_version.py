@@ -42,7 +42,7 @@ class Script(BaseScript):
     def execute_snmp(self):
         try:
             v = self.snmp.get(mib["SNMPv2-MIB::sysDescr.0"], cached=True)
-        except (self.snmp.TimeOutError, self.snmp.SNMPError):
+        except self.snmp.TimeOutError, self.snmp.SNMPError:
             raise NotImplementedError()
         if "TiMOS" in v:
             match = self.re_search(self.rx_ver_snmp, v)

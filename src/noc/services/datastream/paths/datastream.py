@@ -58,7 +58,7 @@ class DatastreamAPI:
         self.setup_datastream()
 
     @staticmethod
-    def get_datastreams() -> list["DataStream"]:
+    def get_datastreams() -> list[DataStream]:
         r = []
         for name in data_stream_loader:
             if not getattr(config.datastream, f"enable_{name}", False):
@@ -173,7 +173,7 @@ class DatastreamAPI:
             time.sleep(TIMEOUT + (random.random() - 0.5) * TIMEOUT * 2 * JITER)
             self._run_callbacks(queue)
 
-    def get_datastream_handler(self, datastream: "DataStream") -> Callable:
+    def get_datastream_handler(self, datastream: DataStream) -> Callable:
         async def inner_datastream(
             limit: int | None = datastream.DEFAULT_LIMIT,
             ds_filter: list[str] | None = Query(None, alias="filter"),
@@ -248,7 +248,7 @@ class DatastreamAPI:
 
         return inner_datastream
 
-    def get_verify_token_hander(self, datastream: "DataStream") -> Callable:
+    def get_verify_token_hander(self, datastream: DataStream) -> Callable:
         async def verify_token(
             ds_format: str | None = Query(None, alias="format"),
             x_noc_api_access: str | None = Header(None),

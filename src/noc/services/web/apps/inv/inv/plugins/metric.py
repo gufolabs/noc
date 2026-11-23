@@ -55,7 +55,7 @@ class MetricPlugin(InvPlugin):
         relative_value = value / (a_end - a_start) * 100
         return round(p_start + ((p_end - p_start) * relative_value) / 100, 2)
 
-    def get_sensor_thresholds(self, o, sensor: "Sensor"):
+    def get_sensor_thresholds(self, o, sensor: Sensor):
         """
         disabled, ok, warning (degraded), critical
         # value

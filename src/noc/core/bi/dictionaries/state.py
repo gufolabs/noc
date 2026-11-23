@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # State BI dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ class State(DictionaryModel):
     is_productive = BooleanField()
 
     @classmethod
-    def extract(cls, item: "StateModel"):
+    def extract(cls, item: StateModel):
         return {
             "id": str(item.id),
             "name": item.name,

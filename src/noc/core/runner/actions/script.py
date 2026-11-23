@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # script action
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class ScriptAction(BaseAction):
     name = "script"
 
     async def execute(
-        self: "ScriptAction",
+        self,
         *,
         script: str,
         managed_object: int,

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CapsItem
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ class CapsItem(EmbeddedDocument):
         return f"{self.capability.name} = {self.value}"
 
     @classmethod
-    def get_caps(cls, *args: list["CapsItem"], scope: str | None = None) -> dict[str, Any]:
+    def get_caps(cls, *args: list[CapsItem], scope: str | None = None) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -67,7 +67,7 @@ class ModelCapsItem(BaseModel):
         return self.capability.name
 
     @classmethod
-    def get_caps(cls, *args: list["CapsItem"]) -> dict[str, Any]:
+    def get_caps(cls, *args: list[CapsItem]) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability

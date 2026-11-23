@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Source Config
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ class RemoteSystemConfig:
     batch_delay_s: int | None = 10
 
     @classmethod
-    def from_data(cls, data) -> "RemoteSystemConfig":
+    def from_data(cls, data) -> RemoteSystemConfig:
         cfg = data.get("channel") or {}
         if not cfg:
             cfg |= {
@@ -57,7 +57,7 @@ class SensorConfig:
     hints: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data, managed_object: int | None = None) -> "SensorConfig":
+    def from_data(cls, data, managed_object: int | None = None) -> SensorConfig:
         return SensorConfig(
             name=data["name"],
             bi_id=data["bi_id"],
@@ -91,7 +91,7 @@ class SourceConfig:
     services: tuple[int, ...] | None = None
 
     @classmethod
-    def from_data(cls, data) -> "SourceConfig":
+    def from_data(cls, data) -> SourceConfig:
         mappings, keys, sensors = [], [], []
         for m in data.get("mapping_refs") or []:
             mappings.append(m)
@@ -118,7 +118,7 @@ class SourceConfig:
             services=tuple(int(svc) for svc in data.get("services", [])),
         )
 
-    def is_diff(self, cfg: "SourceConfig") -> bool:
+    def is_diff(self, cfg: SourceConfig) -> bool:
         """Check diff"""
         return cfg != self
 

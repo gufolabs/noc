@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Event Class dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ class EventClass(DictionaryModel):
     name = StringField()
 
     @classmethod
-    def extract(cls, item: "EventClassModel"):
+    def extract(cls, item: EventClassModel):
         return {
             "id": str(item.id),
             "name": item.name,

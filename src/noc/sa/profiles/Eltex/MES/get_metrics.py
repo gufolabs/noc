@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Eltex.MES.get_metrics
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ class Script(GetMetricsScript):
 
     BASE_OID = "1.3.6.1.4.1.35265.1.23.1.8.1.2.1.1.1."
 
-    def get_interface_qos(self, metrics: list["MetricConfig"]):
+    def get_interface_qos(self, metrics: list[MetricConfig]):
         oids = {}
         for mc in metrics:
             if not mc.ifindex:
@@ -63,7 +63,7 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",
     )
-    def get_interface_qos_discards(self, metrics: list["MetricConfig"]):
+    def get_interface_qos_discards(self, metrics: list[MetricConfig]):
         self.get_interface_qos(metrics)
 
     @metrics(
@@ -72,7 +72,7 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",
     )
-    def get_interface_qos_octets(self, metrics: list["MetricConfig"]):
+    def get_interface_qos_octets(self, metrics: list[MetricConfig]):
         self.get_interface_qos(metrics)
 
     @metrics(
@@ -81,5 +81,5 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",
     )
-    def get_interface_qos_packets(self, metrics: list["MetricConfig"]):
+    def get_interface_qos_packets(self, metrics: list[MetricConfig]):
         self.get_interface_qos(metrics)

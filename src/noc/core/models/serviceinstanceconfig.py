@@ -72,7 +72,7 @@ class ServiceInstanceConfig:
     asset_refs: list[str] | None = None
 
     @classmethod
-    def get_type(cls, i_type: InstanceType) -> type["ServiceInstanceConfig"]:
+    def get_type(cls, i_type: InstanceType) -> type[ServiceInstanceConfig]:
         """Return Config instance by type"""
         match i_type:
             case InstanceType.ASSET:
@@ -90,10 +90,10 @@ class ServiceInstanceConfig:
     @classmethod
     def from_settings(
         cls,
-        settings: "ServiceInstanceTypeConfig",
+        settings: ServiceInstanceTypeConfig,
         service,
         name: str | None = None,
-    ) -> list["ServiceInstanceConfig"]:
+    ) -> list[ServiceInstanceConfig]:
         """Create Config from settings"""
         raise NotImplementedError()
 
@@ -129,7 +129,7 @@ class NetworkHostInstance(ServiceInstanceConfig):
     type = InstanceType.ASSET
 
     @classmethod
-    def from_group(cls, group) -> list["NetworkHostInstance"]:
+    def from_group(cls, group) -> list[NetworkHostInstance]:
         # NOC modules
         from noc.inv.models.resourcegroup import ResourceGroup
 
@@ -141,10 +141,10 @@ class NetworkHostInstance(ServiceInstanceConfig):
     @classmethod
     def from_settings(
         cls,
-        settings: "ServiceInstanceTypeConfig",
+        settings: ServiceInstanceTypeConfig,
         service,
         name: str | None = None,
-    ) -> list["ServiceInstanceConfig"]:
+    ) -> list[ServiceInstanceConfig]:
         """Create Config from settings"""
         if settings.asset_group and settings.asset_group.id in service.effective_client_groups:
             return cls.from_group(settings.asset_group)
@@ -172,10 +172,10 @@ class NetworkChannelInstance(ServiceInstanceConfig):
     @classmethod
     def from_settings(
         cls,
-        settings: "ServiceInstanceTypeConfig",
+        settings: ServiceInstanceTypeConfig,
         service,
         name: str | None = None,
-    ) -> list["ServiceInstanceConfig"]:
+    ) -> list[ServiceInstanceConfig]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:
@@ -211,10 +211,10 @@ class ServiceEndPoint(ServiceInstanceConfig):
     @classmethod
     def from_settings(
         cls,
-        settings: "ServiceInstanceTypeConfig",
+        settings: ServiceInstanceTypeConfig,
         service,
         name: str | None = None,
-    ) -> list["ServiceInstanceConfig"]:
+    ) -> list[ServiceInstanceConfig]:
         """
         Create Config from settings
         """
@@ -250,10 +250,10 @@ class ConfigInstance(ServiceInstanceConfig):
     @classmethod
     def from_settings(
         cls,
-        settings: "ServiceInstanceTypeConfig",
+        settings: ServiceInstanceTypeConfig,
         service,
         name: str | None = None,
-    ) -> list["ServiceInstanceConfig"]:
+    ) -> list[ServiceInstanceConfig]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:

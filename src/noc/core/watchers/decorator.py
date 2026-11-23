@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ObjectWatch model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -54,12 +54,12 @@ def save_watchers(
     self.save_object_watchers(watchers, dry_run=dry_run, bulk=bulk)
 
 
-def iter_model_watchers(self) -> Iterable["WatchItem"]:
+def iter_model_watchers(self) -> Iterable[WatchItem]:
     """Iterable watch"""
     yield from self.iter_object_watchers()
 
 
-def iter_document_watchers(self) -> Iterable["WatchItem"]:
+def iter_document_watchers(self) -> Iterable[WatchItem]:
     """Iterable watch"""
     for w in self.watchers:
         yield w.item

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Capabilities decorator tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ class MockManagedObject:
         ]
 
 
-def get_object_caps_mock() -> "MockManagedObject":
+def get_object_caps_mock() -> MockManagedObject:
     """Prepare ManagedObject for mock"""
     # Send error/send success
     return MockManagedObject()

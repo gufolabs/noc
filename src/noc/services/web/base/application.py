@@ -80,8 +80,8 @@ class ApplicationBase(type):
     """
 
     def __new__(
-        mcs: "type[Application]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
-    ) -> type["Application"]:
+        mcs: type[Application], name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type[Application]:
         m = cast(type["Application"], type.__new__(mcs, name, bases, attrs))
         for name in attrs:
             m.add_to_class(name, attrs[name])

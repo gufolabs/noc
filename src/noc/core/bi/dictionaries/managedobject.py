@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObject dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ class ManagedObject(DictionaryModel):
     project = StringField()
 
     @classmethod
-    def extract(cls, item: "ManagedObjectModel"):
+    def extract(cls, item: ManagedObjectModel):
         return {
             "id": item.id,
             "name": ch_escape(item.name),

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Remote System dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class RemoteSystem(DictionaryModel):
     description = StringField()
 
     @classmethod
-    def extract(cls, item: "RemoteSystemModel"):
+    def extract(cls, item: RemoteSystemModel):
         return {
             "id": str(item.id),
             "name": item.name,

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # LambdaConstraint class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -19,11 +19,11 @@ class LambdaConstraint(BaseConstraint):
         width: Channel width in MHz.
     """
 
-    def __init__(self: "LambdaConstraint", freq: int, width: int) -> None:
+    def __init__(self, freq: int, width: int) -> None:
         self._freq = freq
         self._width = width
 
-    def __str__(self: "LambdaConstraint") -> str:
+    def __str__(self) -> str:
         return f"{self._freq}-{self._width}"
 
     def __eq__(self, value: object) -> bool:
@@ -34,28 +34,28 @@ class LambdaConstraint(BaseConstraint):
         )
 
     @property
-    def min_freq(self: "LambdaConstraint") -> int:
+    def min_freq(self) -> int:
         """Minimal frequency in GHz."""
         return self._freq - self._width // 2
 
     @property
-    def max_freq(self: "LambdaConstraint") -> int:
+    def max_freq(self) -> int:
         """Maximal frequency in GHz."""
         return self._freq + self._width // 2
 
     @classmethod
-    def from_discriminator(cls: "type[LambdaConstraint]", v: str) -> "LambdaConstraint":
+    def from_discriminator(cls, v: str) -> LambdaConstraint:
         """Create constraint from lambda discriminator."""
         freq, width = v[8:].split("-")
         return LambdaConstraint(int(freq) * 1_000, int(width) * 1_000)
 
     @property
-    def discriminator(self: "LambdaConstraint") -> str:
+    def discriminator(self) -> str:
         """Convert to discriminator."""
         return f"lambda::{self._freq // 1_000}-{self._width // 1_000}"
 
     @property
-    def humanized(self: "LambdaConstraint") -> str:
+    def humanized(self) -> str:
         """
         Convert to human-readable string.
         """

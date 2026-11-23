@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ObjectProfile dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ class ObjectProfile(DictionaryModel):
     enable_periodic_discovery = BooleanField()
 
     @classmethod
-    def extract(cls, item: "ManagedObjectProfile"):
+    def extract(cls, item: ManagedObjectProfile):
         return {
             "id": str(item.id),
             "name": item.name,

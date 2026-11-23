@@ -23,7 +23,7 @@ class MetricRuleApplication(ExtDocApplication):
     query_condition = "icontains"
     query_fields = ["name", "description"]
 
-    def instance_to_dict(self, o: "MetricRule", fields=None, nocustom=False):
+    def instance_to_dict(self, o: MetricRule, fields=None, nocustom=False):
         r = super().instance_to_dict(o, fields=fields, nocustom=nocustom)
         if r.get("actions") and (not fields or "actions" in fields):
             for action, edoc in zip(o.actions, r["actions"]):

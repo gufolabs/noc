@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ class Service(DictionaryModel):
     division_code = StringField()
 
     @classmethod
-    def extract(cls, item: "ServiceModel"):
+    def extract(cls, item: ServiceModel):
         caps = item.get_caps()
         return {
             "id": str(item.id),

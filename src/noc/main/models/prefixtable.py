@@ -65,7 +65,7 @@ class PrefixTable(NOCModel):
         return self.match(other)
 
     @classmethod
-    def iter_match_prefix(cls, prefixes: str | list[str]) -> Iterable[tuple["PrefixTable", str]]:
+    def iter_match_prefix(cls, prefixes: str | list[str]) -> Iterable[tuple[PrefixTable, str]]:
         if isinstance(prefixes, str):
             prefixes = [prefixes]
         pp = [IP.prefix(prefix) for prefix in prefixes]

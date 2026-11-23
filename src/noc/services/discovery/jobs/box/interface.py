@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Interface check
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -340,8 +340,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
 
     def submit_subinterface(
         self,
-        forwarding_instance: "ForwardingInstance",
-        interface: "Interface",
+        forwarding_instance: ForwardingInstance,
+        interface: Interface,
         name: str,
         description: str | None = None,
         mac: str | None = None,
@@ -473,8 +473,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
 
     def cleanup_subinterfaces(
         self,
-        forwarding_instance: "ForwardingInstance",
-        interface: "Interface",
+        forwarding_instance: ForwardingInstance,
+        interface: Interface,
         subinterfaces: list[str],
     ):
         """

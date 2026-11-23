@@ -73,7 +73,7 @@ class BaseCLI:
             self.timeout_exception_cls = CLIConnectionReset
             self.stream.set_timeout(None)
 
-    def get_stream(self) -> "BaseStream":
+    def get_stream(self) -> BaseStream:
         """Stream factory. Must be overriden in subclasses."""
         raise NotImplementedError
 

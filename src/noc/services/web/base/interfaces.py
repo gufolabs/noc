@@ -22,7 +22,7 @@ class DateTimeParameter(StringParameter):
             return value
         try:
             parsed = dt.datetime.fromisoformat(value)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             if not isinstance(value, str):
                 self.raise_error("Invalid DateTime")
             for fmt in self.formats:

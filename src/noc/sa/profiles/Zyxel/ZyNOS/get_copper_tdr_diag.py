@@ -28,7 +28,7 @@ class Script(BaseScript):
     def convert_to_cm(self, distance):
         try:
             return float(distance) * 100
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             pass
         return 0
 

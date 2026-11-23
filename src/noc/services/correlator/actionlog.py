@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------
 # ActionLog item
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025, The NOC Project
+# Copyright (C) 2007-2026, The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -175,7 +175,7 @@ class ActionLog:
             r |= self.ctx
         return r
 
-    def get_repeat(self, delay: int) -> "ActionLog":
+    def get_repeat(self, delay: int) -> ActionLog:
         """
         Return repeated Action
         Args:
@@ -211,7 +211,7 @@ class ActionLog:
         tt_system: str | None = None,
         document_id: str | None = None,
         stub_tt_system: TTSystem | None = None,
-    ) -> "ActionLog":
+    ) -> ActionLog:
         """
         Create Action from Request
 
@@ -261,7 +261,7 @@ class ActionLog:
         )
 
     @classmethod
-    def from_state(cls, data: dict[str, Any]) -> "ActionLog":
+    def from_state(cls, data: dict[str, Any]) -> ActionLog:
         """Restore Action Context from State Document"""
         user, tt_system, template = None, None, None
         if data.get("user"):
@@ -328,7 +328,7 @@ class ActionLog:
     @classmethod
     def from_watch(
         cls, watch: WatchItem, alarm: ActiveAlarm, is_clear: bool = False
-    ) -> list["ActionLog"]:
+    ) -> list[ActionLog]:
         """Restore Action Log from Watch"""
         # Restore documentID, From WATCH, From LOG ?
         r = []
@@ -371,7 +371,7 @@ class ActionLog:
         return r
 
     @classmethod
-    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> list["ActionLog"]:
+    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> list[ActionLog]:
         """"""
         r = []
         for w in alarm.watchers:

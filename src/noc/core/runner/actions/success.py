@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Success action
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,5 +15,5 @@ class SuccessAction(BaseAction):
 
     name = "success"
 
-    async def execute(self: "SuccessAction", **kwargs: str) -> None:
+    async def execute(self, **kwargs: str) -> None:
         pass

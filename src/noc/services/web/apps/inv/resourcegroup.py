@@ -41,7 +41,7 @@ class ResourceGroupApplication(ExtDocApplication):
     query_condition = "icontains"
 
     @staticmethod
-    def field_service_expression(o: "ResourceGroup"):
+    def field_service_expression(o: ResourceGroup):
         r = []
         for num, ml in enumerate(o.dynamic_service_labels):
             if num:
@@ -84,7 +84,7 @@ class ResourceGroupApplication(ExtDocApplication):
         return r
 
     @staticmethod
-    def field_client_expression(o: "ResourceGroup"):
+    def field_client_expression(o: ResourceGroup):
         r = []
         for ml in o.dynamic_client_labels:
             for ll in ml.get_labels():

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @change Models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ class ChangeItem:
     user: str | None = field(default=None, compare=False)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ChangeItem":
+    def from_dict(cls, data: dict[str, Any]) -> ChangeItem:
         return ChangeItem(
             op=data["op"],
             model_id=data["model_id"],

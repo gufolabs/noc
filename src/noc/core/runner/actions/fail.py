@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Fail action
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,6 +15,6 @@ class FailAction(BaseAction):
 
     name = "fail"
 
-    async def execute(self: "FailAction", **kwargs: str) -> None:
+    async def execute(self, **kwargs: str) -> None:
         msg = "Always failed."
         raise ActionError(msg)

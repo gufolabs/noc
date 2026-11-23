@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ReportSubscription model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ class ReportSubscription(Document):
     run_as = ForeignKeyField(User)
     # Send result to notification group
     # If empty, only file will be written
-    notification_group: "NotificationGroup" = ForeignKeyField(NotificationGroup)
+    notification_group: NotificationGroup = ForeignKeyField(NotificationGroup)
     # Predefined report id
     # <app id>:<variant>
     report = StringField()

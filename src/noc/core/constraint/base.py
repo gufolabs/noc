@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseConstraint class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,12 +18,12 @@ class BaseConstraint:
     Subclasses must implement `__eq__` and `__str__ methods.
     """
 
-    def __repr__(self: "BaseConstraint") -> str:
+    def __repr__(self) -> str:
         tn = self.__class__.__name__
         return f"<{tn} {self!s}>"
 
-    def __eq__(self: "BaseConstraint", value: object) -> bool: ...
-    def satisfy(self: "BaseConstraint", item: "BaseConstraint") -> bool:
+    def __eq__(self, value: object) -> bool: ...
+    def satisfy(self, item: BaseConstraint) -> bool:
         """
         Check if constraint satisfies condition.
 
@@ -41,8 +41,8 @@ class BaseConstraint:
 
     @classmethod
     def iter_optimize(
-        cls: "type[BaseConstraint]", iter: "Iterable[BaseConstraint]"
-    ) -> "Iterable[BaseConstraint]":
+        cls: type[BaseConstraint], iter: Iterable[BaseConstraint]
+    ) -> Iterable[BaseConstraint]:
         """
         Optimize sequence of constraint.
 

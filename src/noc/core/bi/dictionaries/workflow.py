@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Workflow BI dictionary
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class Workflow(DictionaryModel):
     is_active = BooleanField()
 
     @classmethod
-    def extract(cls, item: "WorkflowModel"):
+    def extract(cls, item: WorkflowModel):
         return {
             "id": str(item.id),
             "name": item.name,

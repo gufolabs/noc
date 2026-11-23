@@ -2,7 +2,7 @@
 # Vendor: IRE-Polus
 # OS:     Horizon
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -315,7 +315,7 @@ class PolusParam:
         return None
 
     @classmethod
-    def from_code(cls, name, value, description: str | None = None, **kwargs) -> "PolusParam":
+    def from_code(cls, name, value, description: str | None = None, **kwargs) -> PolusParam:
         """
         Parse param code
 
@@ -423,7 +423,7 @@ class Component:
             self.crossing[p.prefix].append((d_port, d_odu))
 
     @classmethod
-    def get_components(cls, params: list[PolusParam]) -> dict[str, "Component"]:
+    def get_components(cls, params: list[PolusParam]) -> dict[str, Component]:
         r = {}
         ignored_components = set()
 
@@ -451,7 +451,7 @@ class Component:
         return r
 
     @classmethod
-    def from_params(cls, params: list[dict[str, str]]) -> dict[str, "Component"]:
+    def from_params(cls, params: list[dict[str, str]]) -> dict[str, Component]:
         params: list[PolusParam] = [PolusParam.from_code(**p) for p in params]
         return cls.get_components(params)
 

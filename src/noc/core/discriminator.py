@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # Lambda discriminator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from collections.abc import Iterable
-from typing import Any, Union
+from typing import Any
 
 # NOC modules
 from noc.core.text import ranges_to_list
@@ -51,7 +51,7 @@ class LambdaDiscriminator:
         )
 
     @classmethod
-    def from_channel(cls, name: str) -> "LambdaDiscriminator":
+    def from_channel(cls, name: str) -> LambdaDiscriminator:
         ch_freq = 0
         ch_width = 0
         ch_step = 0
@@ -194,7 +194,7 @@ class OduDiscriminator:
             r.append(f"{n}-{idx}")
         return f"{self.scope}::{'::'.join(r)}"
 
-    def __contains__(self, other: "OduDiscriminator") -> bool:
+    def __contains__(self, other: OduDiscriminator) -> bool:
         if not isinstance(other, OduDiscriminator):
             return False
         if self.odu == other.odu:
@@ -203,7 +203,7 @@ class OduDiscriminator:
             return False
         return self.odu == other.odu[: len(self.odu)]
 
-    def get_limit(self, d: "OduDiscriminator") -> int:
+    def get_limit(self, d: OduDiscriminator) -> int:
         """
         Return Multiplex Limit
         Args:
@@ -224,7 +224,7 @@ class OduDiscriminator:
             return 0
         return ODU_LIMITS[c][p]
 
-    def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> list[str]:
+    def get_crossing_proposals(self, d: str | OduDiscriminator) -> list[str]:
         """
         Same discriminator - container
         Args:
