@@ -35,7 +35,7 @@ from pymongo import ReadPreference
 # NOC modules
 from noc.config import config
 from noc.core.bi.decorator import bi_sync
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DocumentCapsMixin
 from noc.core.change.decorator import change
 from noc.core.model.decorator import on_delete_check
 from noc.core.model.sql import SQL
@@ -62,12 +62,11 @@ _target_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 @Label.model
 @change
 @bi_sync
-@capabilities
 @workflow
 @on_delete_check(
     clean=[("sa.Service", "sla_probe")],
 )
-class SLAProbe(Document):
+class SLAProbe(DocumentCapsMixin, Document):
     meta = {
         "collection": "noc.sla_probes",
         "strict": False,

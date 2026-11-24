@@ -7,11 +7,15 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 # NOC modules
 from noc.core.models.inputsources import InputSource
 from noc.core.models.valuetype import ValueType
+
+if TYPE_CHECKING:
+    # NOC modules
+    from noc.inv.models.capability import Capability
 
 
 @dataclass(frozen=True)
@@ -26,7 +30,7 @@ class CapsConfig:
 
 @dataclass(frozen=True)
 class CapsValue:
-    capability: Any
+    capability: Capability
     value: Any
     source: InputSource
     scope: str | None = None
@@ -39,7 +43,7 @@ class CapsValue:
 
     @property
     def name(self) -> str:
-        return self.capability.name
+        return self.capability.name or ""
 
     def set_value(self, value: Any) -> CapsValue:
         """Update value"""
@@ -50,11 +54,11 @@ class CapsValue:
             scope=self.scope,
         )
 
-    def get_form(self, allow_manual: bool = False):
+    def get_form(self, allow_manual: bool = False) -> dict[str, Any]:
         """Render Caps Form"""
         return {
             "capability": self.capability.name,
-            "id": str(self.capability.id),
+            "id": str(self.capability.pk),
             # "object": str(o.id),
             "description": self.capability.description,
             "type": self.capability.type.value,
@@ -69,7 +73,8 @@ class CapsValue:
         if not self.config.set_label:
             return None
         if self.capability.multi:
-            return [f"{self.config.set_label[:-1]}{v}" for v in self.value]
+            values = cast(list[str], self.value)
+            return [f"{self.config.set_label[:-1]}{v}" for v in values]
         if self.capability.type == ValueType.BOOL:
             if not self.value or self.config.set_label[-1] == "*":
                 return None

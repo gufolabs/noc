@@ -32,7 +32,7 @@ from mongoengine.fields import (
 # NOC modules
 from noc.config import config
 from noc.core.bi.decorator import bi_sync
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DocumentCapsMixin
 from noc.core.change.decorator import change
 from noc.core.etl.remotemappings import mappings
 from noc.core.model.decorator import on_delete_check
@@ -95,13 +95,12 @@ def gen_key() -> str:
 @change
 @bi_sync
 @Label.model
-@capabilities
 @mappings
 @on_delete_check(
     check=[("sa.Service", "agent"), ("inv.Sensor", "agent"), ("sla.SLAProbe", "agent")],
     clean=[("sa.DiscoveredObject", "agent")],
 )
-class Agent(Document):
+class Agent(DocumentCapsMixin, Document):
     meta = {
         "collection": "agents",
         "strict": False,

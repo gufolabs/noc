@@ -1,28 +1,60 @@
 # ----------------------------------------------------------------------
-# Capabilities decorator tests
+# Capabilities mixin tests
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from typing import Any
+
 # Third-party modules
 import pytest
 
 # NOC modules
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import CapsMixin, DjangoCapsMixin, DocumentCapsMixin
+from noc.core.caps.types import CapsValue
+from noc.core.change.model import ChangeField
 
 
-@capabilities
-class MockManagedObject:
+def test_mixin_structure() -> None:
+    """Both store mixins derive from the common CapsMixin"""
+    assert issubclass(DjangoCapsMixin, CapsMixin)
+    assert issubclass(DocumentCapsMixin, CapsMixin)
+    # Shared functionality lives in the base mixin
+    for method in ("get_caps", "set_caps", "reset_caps", "update_caps", "get_caps_config"):
+        assert method in vars(CapsMixin), method
+    # Store-specific persistence lives in the respective mixins
+    for mixin in (DjangoCapsMixin, DocumentCapsMixin):
+        assert "iter_caps" in vars(mixin)
+        assert "save_caps" in vars(mixin)
+
+
+def test_caps_mixin_requires_store_implementation() -> None:
+    """Bare CapsMixin does not implement store persistence"""
+    m = CapsMixin()
+    with pytest.raises(NotImplementedError):
+        m.iter_caps()
+    with pytest.raises(NotImplementedError):
+        m.save_caps([])
+
+
+class MockManagedObject(DjangoCapsMixin):
     name = "mock"
 
     def __init__(self, caps=None) -> None:
         self.caps = caps or []
 
-    def save_caps(self, caps, **kwargs):
+    def save_caps(
+        self,
+        caps: list[CapsValue],
+        dry_run: bool = False,
+        bulk: Any | None = None,
+        changed_fields: list[ChangeField] | None = None,
+    ) -> None:
         self.caps = [
             {
-                "capability": str(c.capability.id),
+                "capability": str(c.capability.pk),
                 "value": c.value,
                 "source": c.source.value,
                 "scope": c.scope or "",
