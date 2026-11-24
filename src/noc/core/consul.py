@@ -24,7 +24,7 @@ class ConsulHTTPClient(consul.base.HTTPClient):
     asyncio version of consul http client
     """
 
-    async def _request(self, callback, url, method="GET", body: str | None = None):
+    async def _request(self, callback, url, method="GET", body: str | bytes | None = None):
         async with HttpClient(
             connect_timeout=config.consul.connect_timeout,
             timeout=config.consul.request_timeout,
@@ -33,29 +33,56 @@ class ConsulHTTPClient(consul.base.HTTPClient):
             code, headers, body = await client.request(
                 method,
                 url,
-                body=body.encode() if body is not None else body,
+                body=body.encode() if isinstance(body, str) else body,
             )
 
             if code in ConsulRepeatableCodes:
                 raise Timeout
             return callback(consul.base.Response(code=code, headers=headers, body=body))
 
-    def get(self, callback, path, params=None, headers: dict[str, str] | None = None):
+    def get(
+        self,
+        callback,
+        path,
+        params=None,
+        headers: dict[str, str] | None = None,
+        raw: bool = False,
+    ):
+        # raw=True keeps the body as bytes. Our HttpClient always returns the
+        # response body as bytes, which works for both raw (e.g. snapshot)
+        # and text/JSON payloads, so no extra handling is required.
         url = self.uri(path, params)
         return self._request(callback, url, method="GET")
 
     def put(
-        self, callback, path, params=None, data: str = "", headers: dict[str, str] | None = None
+        self,
+        callback,
+        path,
+        params=None,
+        data: str | bytes = "",
+        headers: dict[str, str] | None = None,
     ):
         url = self.uri(path, params)
-        return self._request(callback, url, method="PUT", body="" if data is None else data)
+        return self._request(callback, url, method="PUT", body=data)
 
-    def delete(self, callback, path, params=None, headers: dict[str, str] | None = None):
+    def delete(
+        self,
+        callback,
+        path,
+        params=None,
+        data: str | bytes = "",
+        headers: dict[str, str] | None = None,
+    ):
         url = self.uri(path, params)
-        return self._request(callback, url, method="DELETE")
+        return self._request(callback, url, method="DELETE", body=data or None)
 
     def post(
-        self, callback, path, params=None, data: str = "", headers: dict[str, str] | None = None
+        self,
+        callback,
+        path,
+        params=None,
+        data: str | bytes = "",
+        headers: dict[str, str] | None = None,
     ):
         url = self.uri(path, params)
         return self._request(callback, url, method="POST", body=data)
