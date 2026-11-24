@@ -24,7 +24,6 @@ class Command(BaseCommand):
         out = [["Service", "ID", "Address"]]
         for sn in services:
             service.dcs.resolve_sync(sn)
-            if sn in service.dcs.resolvers:
-                for svc_id, address in service.dcs.resolvers[sn].services.items():
-                    out.append([sn, svc_id, address])
+            for svc_id, address in service.dcs.iter_resolver_services(sn):
+                out.append([sn, svc_id, address])
         self.stdout.write(format_table([0, 0, 0, 0, 0], out) + "\n")

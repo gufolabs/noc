@@ -14,6 +14,7 @@ from collections import defaultdict
 # NOC modules
 from noc.core.cache.base import cache
 from noc.core.comp import smart_bytes
+from noc.core.dcs.base import dcs
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.scheduler.job import Job
@@ -188,8 +189,4 @@ class ServiceStub:
         Get slot count
         :return:
         """
-        # NOC modules
-        from noc.core.dcs.loader import get_dcs
-
-        dcs = get_dcs()
         return asyncio.run(dcs.get_slot_limit(slot_name))

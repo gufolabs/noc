@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # job management
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2012 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,10 +20,10 @@ from django.db import connection as pg_conn
 from pymongo import UpdateOne
 
 # NOC modules
+from noc.core.dcs.base import dcs
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.scheduler.scheduler import Scheduler
-from noc.core.service.loader import get_dcs
 from noc.main.models.pool import Pool
 
 SHARDING_SCHEDULER = {"discovery", "correlator", "escalator"}
@@ -519,7 +519,6 @@ class Command(BaseCommand):
 
     @staticmethod
     async def get_slot_limits(slot_name):
-        dcs = get_dcs()
         return await dcs.get_slot_limit(slot_name)
 
     @staticmethod

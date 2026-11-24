@@ -1421,10 +1421,9 @@ class Config(BaseConfig):
         :return:
         """
         # NOC modules
-        from noc.core.dcs.loader import get_dcs
+        from noc.core.dcs.base import dcs
         from noc.core.ioloop.util import run_sync
 
-        dcs = get_dcs()
         return run_sync(dcs.get_slot_limit(slot_name))
 
     @cached_property

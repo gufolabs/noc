@@ -16,8 +16,9 @@ import random
 import signal
 import threading
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from time import perf_counter
-from typing import TYPE_CHECKING
+from typing import Any
 
 # Third-party modules
 from gufo.loader import Loader
@@ -25,11 +26,8 @@ from gufo.loader import Loader
 # NOC modules
 from noc.config import config
 from noc.core.ioloop.timers import PeriodicCallback
-from noc.core.ioloop.util import run_sync
+from noc.core.ioloop.util import run_sync, setup_asyncio
 from noc.core.perf import metrics
-
-if TYPE_CHECKING:
-    from .loader import DCSRunner
 
 
 class ResolutionError(Exception):
@@ -37,6 +35,16 @@ class ResolutionError(Exception):
 
 
 class DCSBase(ABC):
+    """
+    Base class for distributed coordinated storage implementations.
+
+    Owns the process-wide set of service resolvers. A dedicated runner
+    thread and event loop are started lazily, on the first request that
+    needs a long-lived (tracked) resolver. Every other operation is a
+    plain coroutine expected to run on the caller's event loop, or on a
+    temporary loop created by :func:`noc.core.ioloop.util.run_sync`.
+    """
+
     # Resolver class
     resolver_cls: type[ResolverBase] = None  # type: ignore[assignment]
     # HTTP code to be returned by /health endpoint when service is healthy
@@ -45,9 +53,13 @@ class DCSBase(ABC):
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner: DCSRunner) -> None:
-        self.runner = runner
+    def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
+        # Dedicated runner thread and event loop for tracked resolvers.
+        # Started lazily on first use (see :meth:`_ensure_runner_thread`).
+        self.thread: threading.Thread | None = None
+        self.loop: asyncio.AbstractEventLoop | None = None
+        self._thread_lock = threading.Lock()
         # service -> resolver instances
         self.resolvers: dict[tuple[str, bool, bool], ResolverBase] = {}
         self.resolvers_lock = threading.Lock()
@@ -56,32 +68,63 @@ class DCSBase(ABC):
         self.status: bool = True
         self.status_message: str = ""
 
+    # ------------------------------------------------------------------
+    # Runner thread management
+    # ------------------------------------------------------------------
+    def _ensure_runner_thread(self) -> asyncio.AbstractEventLoop:
+        """
+        Start the dedicated runner thread and event loop on first use.
+
+        Returns:
+            The runner event loop.
+        """
+        with self._thread_lock:
+            if self.loop is None:
+                self.logger.debug("Starting DCS runner thread")
+                ready = threading.Event()
+                self.thread = threading.Thread(
+                    name="dcs", target=self._runner, args=(ready,), daemon=True
+                )
+                self.thread.start()
+                ready.wait()
+                assert self.loop is not None
+                # Start background tasks on the runner loop
+                self.loop.call_soon_threadsafe(self.loop.create_task, self.start())
+        assert self.loop is not None
+        return self.loop
+
+    def _runner(self, ready: threading.Event) -> None:
+        """
+        Entry point of the dedicated runner thread.
+        """
+        setup_asyncio()
+        self.loop = asyncio.get_event_loop()
+        ready.set()
+        self.loop.run_forever()
+        self.logger.debug("Stopping DCS runner thread")
+
+    def _is_runner_thread(self) -> bool:
+        """
+        Determine whether the current thread owns the DCS runner event loop.
+
+        Returns:
+            True when running on the DCS runner thread.
+        """
+        return self.thread is None or self.thread.ident == threading.get_ident()
+
+    # ------------------------------------------------------------------
+    # Lifecycle
+    # ------------------------------------------------------------------
     async def start(self) -> None:
         """
-        Start all pending tasks
-        Returns:
-            Result of start all pending tasks.
+        Start all pending background tasks on the runner loop.
         """
         self.resolver_expiration_task = PeriodicCallback(self.expire_resolvers, 10000)
         self.resolver_expiration_task.start()
 
-    def stop(self) -> None:
-        """
-        Stop all pending tasks
-        Returns:
-            Result of stop all pending tasks.
-        """
-        if self.resolver_expiration_task:
-            self.resolver_expiration_task.stop()
-            self.resolver_expiration_task = None
-        # Stop all resolvers
-        with self.resolvers_lock:
-            for svc in self.resolvers:
-                r = self.resolvers[svc]
-                self.logger.info("Stopping resolver for service %s", svc)
-                r.stop()
-            self.resolvers = {}
-
+    # ------------------------------------------------------------------
+    # Service registration
+    # ------------------------------------------------------------------
     @abstractmethod
     async def register(
         self,
@@ -116,6 +159,9 @@ class DCSBase(ABC):
         self.logger.info("Shooting self with SIGTERM")
         os.kill(os.getpid(), signal.SIGTERM)
 
+    # ------------------------------------------------------------------
+    # Slot management
+    # ------------------------------------------------------------------
     @abstractmethod
     async def get_slot_limit(self, name: str) -> int | None:
         """
@@ -150,9 +196,29 @@ class DCSBase(ABC):
         """
         ...
 
-    async def get_resolver(
+    # ------------------------------------------------------------------
+    # Resolution
+    # ------------------------------------------------------------------
+    def get_resolver(
         self, name: str, critical: bool = False, near: bool = False, track: bool = True
     ) -> ResolverBase:
+        """
+        Get or create a resolver for the given service.
+
+        For tracked resolvers a single long-lived instance is cached and
+        started on the running loop. For one-time (track=False) resolvers
+        a fresh instance is created on every call.
+
+        Args:
+            name: Service name.
+            critical: Mark resolver as critical.
+            near: Resolve nearby instances.
+            track: Keep a long-lived resolver that tracks changes.
+
+        Returns:
+            The resolver instance.
+        """
+
         def run_resolver(res: ResolverBase) -> None:
             loop = asyncio.get_running_loop()
             loop.call_soon(loop.create_task, res.start())
@@ -171,6 +237,27 @@ class DCSBase(ABC):
             run_resolver(resolver)
         return resolver
 
+    def iter_resolver_services(
+        self, name: str, critical: bool = False, near: bool = False
+    ) -> Iterator[tuple[str, str]]:
+        """
+        Iterate the instance catalog of the tracked resolver.
+
+        Args:
+            name: Service name.
+            critical: Resolver critical flag.
+            near: Resolver near flag.
+
+        Yields:
+            Tuple of instance ID and address. Nothing when no tracked
+            resolver is running for the service.
+        """
+        with self.resolvers_lock:
+            resolver = self.resolvers.get((name, critical, near))
+        if resolver is None:
+            return
+        yield from resolver.services.items()
+
     async def resolve(
         self,
         name: str,
@@ -182,40 +269,55 @@ class DCSBase(ABC):
         near: bool = False,
         track: bool = True,
     ) -> str | list[str]:
+        """
+        Resolve a service to an address (or a list of addresses).
+
+        Tracked resolutions (track=True) always run on the dedicated
+        runner loop, so the resolver can keep tracking changes in the
+        background. When called from another loop the call is trampolined
+        there. One-time resolutions (track=False) simply run on the
+        caller's current loop.
+
+        Args:
+            name: Service name.
+            hint: Preferred address, returned as-is when it is active.
+            wait: Wait until the service catalog is populated.
+            timeout: Resolution timeout in seconds.
+            full_result: Return all addresses instead of a single one.
+            critical: Mark resolution as critical for health reporting.
+            near: Resolve nearby instances.
+            track: Keep a long-lived resolver that tracks changes.
+
+        Returns:
+            Resolved address or list of addresses.
+        """
+
         async def wrap() -> str | list[str]:
-            resolver = await self.get_resolver(name, critical=critical, near=near, track=track)
+            resolver = self.get_resolver(name, critical=critical, near=near, track=track)
             return await resolver.resolve(
                 hint=hint, wait=wait, timeout=timeout, full_result=full_result
             )
 
-        aw = wrap()
-        if self.is_same_thread():
-            return await aw
+        if not track:
+            return await wrap()
+
+        runner_loop = self._ensure_runner_thread()
+        if self._is_runner_thread():
+            return await wrap()
+
         # Trampoline to the dedicated runner loop
-        loop = asyncio.get_running_loop()
-        future = loop.create_future()
-        runner_loop = self.runner.loop
-        if runner_loop is None:
-            raise RuntimeError("DCS runner event loop is not initialized")
+        caller_loop = asyncio.get_running_loop()
+        future = caller_loop.create_future()
 
         async def thunk() -> None:
             try:
-                r = await aw
-                loop.call_soon_threadsafe(future.set_result, r)
+                r = await wrap()
+                caller_loop.call_soon_threadsafe(future.set_result, r)
             except Exception as e:
-                loop.call_soon_threadsafe(future.set_exception, e)
+                caller_loop.call_soon_threadsafe(future.set_exception, e)
 
         runner_loop.call_soon_threadsafe(runner_loop.create_task, thunk())
         return await future
-
-    def is_same_thread(self) -> bool:
-        """
-        Determine whether the current thread owns the DCS runner event loop.
-
-        Returns:
-            True when running on the DCS runner thread.
-        """
-        return not self.runner.thread or self.runner.thread.ident == threading.get_ident()
 
     async def expire_resolvers(self) -> None:
         with self.resolvers_lock:
@@ -235,18 +337,21 @@ class DCSBase(ABC):
         full_result: bool = False,
     ) -> str | list[str]:
         """
-        Returns *hint* when service is active or new service
-        instance,
+        Resolve a service from a synchronous context.
+
+        Args:
+            name: Service name.
+            hint: Preferred address, returned as-is when it is active.
+            wait: Wait until the service catalog is populated.
+            timeout: Resolution timeout in seconds.
+            full_result: Return all addresses instead of a single one.
+
         Returns:
-            Result of returns *hint* when service is active or new service.
+            Resolved address or list of addresses.
         """
-
-        async def _resolve():
-            return await self.resolve(
-                name, hint=hint, wait=wait, timeout=timeout, full_result=full_result
-            )
-
-        return run_sync(_resolve())
+        return run_sync(
+            self.resolve(name, hint=hint, wait=wait, timeout=timeout, full_result=full_result)
+        )
 
     @abstractmethod
     async def resolve_near(
@@ -448,6 +553,42 @@ class ResolverBase(ABC):
         return perf_counter() - self.last_used > config.dcs.resolver_expiration_timeout
 
 
+DCS_NAME = "consul"
+
 dcs_loader = Loader[type[DCSBase]](
-    bases=config.iter_customized_bases("noc.core.dcs"), exclude=("base", "loader")
+    bases=config.iter_customized_bases("noc.core.dcs"), exclude=("base",)
 )
+
+# Process-wide DCS instance. The concrete implementation is chosen by
+# name (see DCS_NAME) and the instance is created lazily on first access,
+# exposed through the module-level ``dcs`` attribute (see __getattr__).
+dcs: DCSBase
+_dcs_instance: DCSBase | None = None
+_dcs_lock = threading.Lock()
+
+
+def _init_dcs() -> DCSBase:
+    """
+    Create and cache the process-wide DCS instance.
+
+    Returns:
+        The shared DCSBase instance.
+    """
+    global _dcs_instance
+    with _dcs_lock:
+        if _dcs_instance is None:
+            try:
+                dcs_cls = dcs_loader[DCS_NAME]
+            except KeyError as e:
+                raise ValueError(f"Unknown DCS handler: {DCS_NAME}") from e
+            _dcs_instance = dcs_cls()
+        return _dcs_instance
+
+
+def __getattr__(name: str) -> Any:
+    """
+    Lazily expose the process-wide ``dcs`` singleton.
+    """
+    if name == "dcs":
+        return _init_dcs()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

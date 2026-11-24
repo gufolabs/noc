@@ -11,10 +11,9 @@ from contextvars import ContextVar
 
 # NOC modules
 from noc.config import config
-from noc.core.dcs.base import ResolutionError
+from noc.core.dcs.base import ResolutionError, dcs
 from noc.core.service.client import open_sync_rpc
 from noc.core.service.error import RPCNoService
-from noc.core.service.loader import get_dcs
 
 CALLING_SERVICE = config.script.calling_service
 DEFAULT_IDLE_TIMEOUT = config.script.caller_timeout
@@ -61,7 +60,7 @@ class Session:
             pool
         """
         try:
-            svc = get_dcs().resolve_sync(f"activator-{self._pool}", hint=self._hints[0])
+            svc = dcs.resolve_sync(f"activator-{self._pool}", hint=self._hints[0])
             self._hints[0] = svc
         except ResolutionError:
             raise RPCNoService(f"activator-{self._pool}")

@@ -40,7 +40,7 @@ from starlette.responses import JSONResponse, Response
 # NOC modules
 from noc.config import APIHTTPVersion, config
 from noc.core.affinity import AFF_NONE, AffinityController
-from noc.core.dcs.loader import get_dcs
+from noc.core.dcs.base import dcs
 from noc.core.debug import error_report, excepthook
 from noc.core.error import NOCError
 from noc.core.hist.monitor import apply_hists
@@ -143,7 +143,7 @@ class BaseService:
         self.pid = os.getpid()
         self.startup_ts = None
         self.telemetry_callback = None
-        self.dcs = None
+        self.dcs: Any = None
         # Message routed
         self.router: Router | None = None
         # Effective address and port
@@ -307,7 +307,7 @@ class BaseService:
             setup_asyncio()
             self.loop = asyncio.get_event_loop()
             # Initialize DCS
-            self.dcs = get_dcs()
+            self.dcs = dcs
             # Activate service
             self.loop.create_task(self.activate())
             self.logger.warning("Starting IOLoop")
@@ -1073,10 +1073,8 @@ class BaseService:
             slot_name:
         """
         # NOC modules
-        from noc.core.dcs.loader import get_dcs
         from noc.core.ioloop.util import run_sync
 
-        dcs = get_dcs()
         return run_sync(dcs.get_slot_limit(slot_name))
 
     async def on_route_rules_ready(self) -> None:

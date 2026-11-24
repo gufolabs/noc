@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Service loader
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -27,7 +27,3 @@ def get_service():
         _service = ServiceStub()
         _service.start()
     return _service
-
-
-def get_dcs():
-    return get_service().dcs
