@@ -79,7 +79,7 @@ class Pool(Document):
         return Pool.objects.filter(name=name).first()
 
     @classmethod
-    def get_default_fm_pool(cls) -> Pool:
+    def get_default_fm_pool(cls) -> Pool | None:
         p = Pool.get_by_name("default")
         if p:
             return p

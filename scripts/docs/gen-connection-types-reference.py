@@ -15,6 +15,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import islice
 from pathlib import Path
+from typing import Self
 
 # Third-party modules
 import jinja2
@@ -72,7 +73,7 @@ class Data:
     genders: str
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -88,7 +89,7 @@ class Data:
         if genders not in VALID_GENDERS:
             msg = f"Invalid gender `{genders}` in file {path}"
             raise ValueError(msg)
-        return Data(
+        return cls(
             name=data["name"],
             description=data["description"],
             genders=genders,

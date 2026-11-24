@@ -9,7 +9,7 @@
 # Python modules
 import datetime as dt
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # NOC modules
 from noc.aaa.models.user import User
@@ -203,7 +203,7 @@ class ActionLog:
 
     @classmethod
     def from_request(
-        cls,
+        cls: type[Self],
         action: ActionConfig,
         started_at: dt.datetime,
         one_time: bool = False,
@@ -211,7 +211,7 @@ class ActionLog:
         tt_system: str | None = None,
         document_id: str | None = None,
         stub_tt_system: TTSystem | None = None,
-    ) -> ActionLog:
+    ) -> Self:
         """
         Create Action from Request
 
@@ -233,7 +233,7 @@ class ActionLog:
         elif stub_tt_system:
             tt_system = stub_tt_system
         ts = started_at + dt.timedelta(seconds=action.delay)
-        return ActionLog(
+        return cls(
             action=action.action,
             key=action.key,
             template=Template.get_by_id(int(action.template)) if action.template else None,
@@ -261,7 +261,7 @@ class ActionLog:
         )
 
     @classmethod
-    def from_state(cls, data: dict[str, Any]) -> ActionLog:
+    def from_state(cls: type[Self], data: dict[str, Any]) -> Self:
         """Restore Action Context from State Document"""
         user, tt_system, template = None, None, None
         if data.get("user"):
@@ -270,7 +270,7 @@ class ActionLog:
             tt_system = TTSystem.get_by_id(data["tt_system"])
         if data.get("template"):
             template = Template.get_by_id(int(data["template"]))
-        return ActionLog(
+        return cls(
             action=AlarmAction(data["action"]),
             key=data.get("key"),
             time_pattern=data.get("time_pattern"),

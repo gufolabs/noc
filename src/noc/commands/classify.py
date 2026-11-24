@@ -11,7 +11,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import orjson
@@ -58,13 +58,13 @@ class Stats:
         }
 
     @classmethod
-    def from_json(cls, path: Path, data: dict[str, int | float]) -> Stats:
+    def from_json(cls: type[Self], path: Path, data: dict[str, int | float]) -> Self:
         """
         Get Stats from json data.
 
         Reverse to `to_json`.
         """
-        return Stats(
+        return cls(
             path=path,
             duration=data["duration"],
             total=data["messages"],

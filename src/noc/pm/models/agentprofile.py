@@ -12,6 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -55,12 +56,12 @@ class AgentProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> AgentProfile:
+    def get_default_profile(cls) -> Self:
         sp = AgentProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = AgentProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)

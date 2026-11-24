@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from typing import Self
+
 from .base import BaseConstraint
 
 
@@ -44,10 +47,10 @@ class LambdaConstraint(BaseConstraint):
         return self._freq + self._width // 2
 
     @classmethod
-    def from_discriminator(cls, v: str) -> LambdaConstraint:
+    def from_discriminator(cls: type[Self], v: str) -> Self:
         """Create constraint from lambda discriminator."""
         freq, width = v[8:].split("-")
-        return LambdaConstraint(int(freq) * 1_000, int(width) * 1_000)
+        return cls(int(freq) * 1_000, int(width) * 1_000)
 
     @property
     def discriminator(self) -> str:

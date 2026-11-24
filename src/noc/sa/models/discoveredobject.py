@@ -13,6 +13,7 @@ import datetime as dt
 import itertools
 import logging
 from collections.abc import Iterable
+from typing import Self, cast
 
 # Third-party modules
 from bson import ObjectId
@@ -329,7 +330,7 @@ class DiscoveredObject(Document):
 
     @classmethod
     def ensure_discovered_object(
-        cls,
+        cls: type[Self],
         sources: list[str],
         address: str,
         pool: Pool,
@@ -339,7 +340,7 @@ class DiscoveredObject(Document):
         rule: str | None = None,
         update_ts: dt.datetime | None = None,
         dry_run: bool = False,
-    ) -> DiscoveredObject:
+    ) -> Self:
         """Check Discovered Object Exists"""
         oo = cls.find_object_by_data(address, pool, data)
         if len(oo) > 1:
@@ -356,7 +357,7 @@ class DiscoveredObject(Document):
             o = None
         if not o:
             # Create
-            o = DiscoveredObject(
+            o = cls(
                 pool=pool,
                 address=address,
                 sources=sources,
@@ -371,7 +372,7 @@ class DiscoveredObject(Document):
                     "[%s|%s] Run update data: %s/%s", pool.name, address, update_ts, o.last_seen
                 )
             o.update_data(data, checks)  # Remove data
-        return o
+        return cast(Self, o)
 
     @classmethod
     def merge_discovered_objects(
@@ -588,9 +589,9 @@ class DiscoveredObject(Document):
         return r
 
     @classmethod
-    def get_origin(cls, discovered: list[DiscoveredObject]) -> DiscoveredObject:
+    def get_origin(cls: type[Self], discovered: list[Self]) -> Self:
         """Get origin records over Discovered Object"""
-        origin = discovered[0]
+        origin: Self = discovered[0]
         for d in discovered[1:]:
             if d.is_preferred(origin):
                 origin = d

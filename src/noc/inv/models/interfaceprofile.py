@@ -14,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from functools import partial
 from threading import Lock, RLock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -302,7 +302,7 @@ class InterfaceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> InterfaceProfile:
+    def get_default_profile(cls) -> Self:
         return InterfaceProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
 
     @classmethod

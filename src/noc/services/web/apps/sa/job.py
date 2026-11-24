@@ -8,7 +8,7 @@
 # Python modules
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from django.http import HttpRequest
@@ -105,9 +105,9 @@ class Node:
         return self.status.get_color(self.status.value)
 
     @classmethod
-    def from_job(cls, job: Job) -> Node:
+    def from_job(cls: type[Self], job: Job) -> Self:
         """Create node from Job record."""
-        return Node(
+        return cls(
             id=str(job.id),
             name=job.name,
             status=JobStatus(job.status),

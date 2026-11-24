@@ -13,6 +13,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Self
 
 # Third-party modules
 import jinja2
@@ -59,7 +60,7 @@ class Data:
     allow_children: bool
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -71,7 +72,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(
+        return cls(
             name=data["name"],
             description=data.get("description", ""),
             client_model=data.get("client_model", ""),

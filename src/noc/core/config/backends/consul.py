@@ -23,6 +23,7 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Self
 from urllib.parse import unquote, urlparse
 
 # Third-party modules
@@ -55,7 +56,7 @@ class ConsulParams:
     token: str | None = None
 
     @classmethod
-    def from_url(cls, url: str) -> ConsulParams:
+    def from_url(cls: type[Self], url: str) -> Self:
         """Parse Consul backend parameters from URL.
 
         Args:
@@ -71,7 +72,7 @@ class ConsulParams:
             if q.startswith("token="):
                 token = unquote(q[6:])
                 break
-        return ConsulParams(
+        return cls(
             host=parsed.hostname or "",
             port=parsed.port or DEFAULT_CONSUL_PORT,
             path=parsed.path[1:],

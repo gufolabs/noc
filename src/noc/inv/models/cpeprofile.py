@@ -15,7 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from functools import partial
 from threading import Lock, RLock
-from typing import Any
+from typing import Any, Self, cast
 
 # Third-party modules
 import bson
@@ -191,15 +191,15 @@ class CPEProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> CPEProfile:
+    def get_default_profile(cls) -> Self:
         sp = CPEProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = CPEProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)
 
     @classmethod
     @cachetools.cachedmethod(

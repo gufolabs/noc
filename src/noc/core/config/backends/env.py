@@ -29,6 +29,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Self
 from urllib.parse import urlparse
 
 # NOC modules
@@ -48,7 +49,7 @@ class EnvParams:
     prefix: str
 
     @classmethod
-    def from_url(cls, url: str) -> EnvParams:
+    def from_url(cls: type[Self], url: str) -> Self:
         """Parse environment backend parameters from URL.
 
         Args:
@@ -58,7 +59,7 @@ class EnvParams:
             Parsed environment backend parameters.
         """
         parsed = urlparse(url)
-        return EnvParams(prefix=parsed.path.lstrip("/"))
+        return cls(prefix=parsed.path.lstrip("/"))
 
 
 class EnvBackend(BaseConfigBackend):

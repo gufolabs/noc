@@ -13,7 +13,7 @@ import struct
 import threading
 from collections.abc import AsyncIterable, Callable
 from dataclasses import dataclass, field
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Self
 
 # Third-party modules
 import orjson
@@ -113,7 +113,7 @@ class Check:
         return r
 
     @classmethod
-    def from_string(cls, url) -> Check:
+    def from_string(cls, url) -> Self:
         """
         <check>://<cred>@<address>:<port>&arg0
         Returns:
@@ -121,7 +121,7 @@ class Check:
         """
 
     @classmethod
-    def from_dict(cls, data) -> Check:
+    def from_dict(cls: type[Self], data) -> Self:
         credential = data.pop("credential", None)
         if credential and "snmp_ro" in credential:
             credential = SNMPCredential(**credential)
@@ -131,7 +131,7 @@ class Check:
             credential = CLICredential(**credential)
         if credential:
             data["credential"] = credential
-        return Check(**data)
+        return cls(**data)
 
     @property
     def snmp_credential(self) -> SNMPCredential | None:
@@ -219,7 +219,7 @@ class CheckResult:
         return None
 
     @classmethod
-    def from_dict(cls, v) -> CheckResult:
+    def from_dict(cls: type[Self], v) -> Self:
         data = []
         for d in v.pop("data", None) or []:
             data.append(DataItem(**d))
@@ -229,7 +229,7 @@ class CheckResult:
         v["data"] = data
         cred = v.pop("credential", None)
         if not cred:
-            return CheckResult(**v)
+            return cls(**v)
         if "snmp_ro" in cred:
             cred = SNMPCredential(**cred)
         elif "username" in cred and "password" not in cred:
@@ -237,17 +237,17 @@ class CheckResult:
         else:
             cred = CLICredential(**cred)
         v["credential"] = cred
-        return CheckResult(**v)
+        return cls(**v)
 
     @classmethod
     def from_history(
-        cls,
+        cls: type[Self],
         name,
         status,
         args,
         remote_system,
         data: dict[str, str],
-    ) -> CheckResult:
+    ) -> Self:
         """Create instance from History Record"""
         r = {
             "check": name,
@@ -272,7 +272,7 @@ class CheckResult:
             }
         if data.get("data"):
             r["data"] = orjson.loads(data["data"])
-        return CheckResult.from_dict(r)
+        return cls.from_dict(r)
 
 
 class BaseChecker:

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 # Python modules
 import datetime as dt
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import orjson
@@ -94,8 +94,8 @@ class Target(BaseModel):
         return bi_hash(self.id)
 
     @classmethod
-    def default(cls) -> Target:
-        return Target(address=DEFAULT_TARGET_NAME, name=DEFAULT_TARGET_ADDRESS)
+    def default(cls: type[Self]) -> Self:
+        return cls(address=DEFAULT_TARGET_NAME, name=DEFAULT_TARGET_ADDRESS)
 
 
 class MessageType(BaseModel):
@@ -182,7 +182,7 @@ class Event(BaseModel):
         return "", ""
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Event:
+    def from_json(cls, data: dict[str, Any]) -> Self:
         """
         Build instance from clickhouse query
         Returns:
@@ -238,7 +238,7 @@ class Event(BaseModel):
         if data.get("remote_system"):
             r["remote_system"] = data["remote_system"]
             r["remote_id"] = data["remote_id"]
-        return Event.model_validate(r)
+        return cls.model_validate(r)
 
     @classmethod
     def get_by_id(cls, event_id: str, /, client: ClickhouseClient | None = None) -> Event | None:

@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from enum import Enum
 from itertools import islice
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -83,11 +83,11 @@ class Var:
     required: bool
 
     @classmethod
-    def from_json(cls, d: dict[str, Any]) -> Var:
+    def from_json(cls, d: dict[str, Any]) -> Self:
         """
         Create from dict
         """
-        return Var(
+        return cls(
             name=d["name"], description=d["description"], type=d["type"], required=d["required"]
         )
 
@@ -98,7 +98,7 @@ class Action(Enum):
     IGNORE = "IGNORE"
 
     @classmethod
-    def from_action(cls, a: str) -> Action:
+    def from_action(cls, a: str) -> Self:
         if a == "clear":
             return Action.CLOSE
         if a == "raise":
@@ -128,11 +128,11 @@ class Disposition:
     action: Action
 
     @classmethod
-    def from_json(cls, d: dict[str, Any]) -> Disposition:
+    def from_json(cls, d: dict[str, Any]) -> Self:
         """
         Create from dict
         """
-        return Disposition(
+        return cls(
             alarm_class=d.get("alarm_class__name", ""),
             name=d["name"],
             action=Action.from_action(d["action"]),
@@ -179,7 +179,7 @@ class Data:
     disposition: list[Disposition]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -192,7 +192,7 @@ class Data:
         with open(path) as fp:
             data = json.load(fp)
         disposition = [Disposition.from_json(x) for x in data.get("disposition", [])]
-        return Data(
+        return cls(
             name=data["name"],
             symptoms=data["symptoms"],
             probable_causes=data["probable_causes"],

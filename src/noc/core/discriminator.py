@@ -7,7 +7,7 @@
 
 # Python modules
 from collections.abc import Iterable
-from typing import Any
+from typing import Any, Self
 
 # NOC modules
 from noc.core.text import ranges_to_list
@@ -51,7 +51,7 @@ class LambdaDiscriminator:
         )
 
     @classmethod
-    def from_channel(cls, name: str) -> LambdaDiscriminator:
+    def from_channel(cls: type[Self], name: str) -> Self:
         ch_freq = 0
         ch_width = 0
         ch_step = 0
@@ -79,7 +79,7 @@ class LambdaDiscriminator:
             ch_step = 100
 
         ch_freq = base_freq + ch_step * ch_num
-        return LambdaDiscriminator(f"{ch_freq}-{ch_width}")
+        return cls(f"{ch_freq}-{ch_width}")
 
 
 class VlanDiscriminator:

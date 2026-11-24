@@ -8,7 +8,7 @@
 # Python modules
 import datetime as dt
 import logging
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -233,7 +233,7 @@ class MapSettings(Document):
             pass
 
     @classmethod
-    def ensure_settings(cls, gen_type: str, gen_id, **kwargs) -> MapSettings:
+    def ensure_settings(cls: type[Self], gen_type: str, gen_id, **kwargs) -> Self:
         """
         Ensure MapSettings Exists and create it if not
         :return:
@@ -247,7 +247,7 @@ class MapSettings(Document):
             logger.info("[%s|%s|%s] Using stored positions", gen_type, gen_id, kwargs)
             return settings
         logger.info("[%s|%s|%s] Create new settings", gen_type, gen_id, kwargs)
-        settings = MapSettings(gen_type=gen_type, gen_id=gen_id, nodes=[], links=[])
+        settings = cls(gen_type=gen_type, gen_id=gen_id, nodes=[], links=[])
         if kwargs:
             settings.gen_params = kwargs.copy()
         return settings

@@ -9,7 +9,7 @@
 from collections.abc import Iterable
 from itertools import zip_longest
 from types import UnionType
-from typing import Any, Union, get_args, get_origin
+from typing import Any, Self, Union, get_args, get_origin
 
 # Third-party modules
 from gufo.loader import Loader
@@ -68,7 +68,7 @@ class BaseModel(_BaseModel):
         return cls._get_reference_type(field.annotation) is not None
 
     @classmethod
-    def from_iter(cls, value: Iterable[Any]) -> BaseModel:
+    def from_iter(cls, value: Iterable[Any]) -> Self:
         """
         Convert tuple or list from legacy CSV to BaseModel instance
         Returns:

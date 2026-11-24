@@ -83,7 +83,7 @@ class BaseCache:
         if c:
             return c()
         logger.error("Cannot load cache backend: Fallback to dummy")
-        return BaseCache()
+        return cls()
 
 
 # cache singleton

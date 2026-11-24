@@ -14,7 +14,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -81,10 +81,10 @@ class Metric:
     scale: str
 
     @classmethod
-    def read(cls, path: Path) -> Metric:
+    def read(cls, path: Path) -> Self:
         with open(path) as fp:
             data = json.load(fp)
-        return Metric(
+        return cls(
             scope=data["scope__name"],
             name=data["name"],
             field_name=data["field_name"],
@@ -113,8 +113,8 @@ class KeyField:
     model: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> KeyField:
-        return KeyField(field_name=data["field_name"], model=data["model"])
+    def from_json(cls, data: dict[str, Any]) -> Self:
+        return cls(field_name=data["field_name"], model=data["model"])
 
 
 @dataclass
@@ -124,8 +124,8 @@ class Label:
     store_column: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Label:
-        return Label(
+    def from_json(cls, data: dict[str, Any]) -> Self:
+        return cls(
             label=data["label"],
             view_column=data.get("view_column", ""),
             store_column=data.get("store_column", ""),
@@ -152,7 +152,7 @@ class Data:
     metrics: list[Metric]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -164,7 +164,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(
+        return cls(
             name=data["name"],
             description=data["description"],
             table_name=data["table_name"],

@@ -14,7 +14,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -51,14 +51,14 @@ class Item:
     is_const: bool
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Item:
+    def from_json(cls, data: dict[str, Any]) -> Self:
         """
         Read from JSON.
 
         Returns:
             Initialized Item structure
         """
-        return Item(
+        return cls(
             name=data["name"],
             type=data["type"],
             description=data.get("description", ""),
@@ -93,7 +93,7 @@ class Data:
     items: list[Item]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -105,7 +105,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(name=data["name"], items=[Item.from_json(x) for x in data["attrs"]])
+        return cls(name=data["name"], items=[Item.from_json(x) for x in data["attrs"]])
 
 
 def iter_data() -> Iterable[Data]:

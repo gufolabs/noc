@@ -9,6 +9,7 @@
 import datetime as dt
 import enum
 from dataclasses import dataclass
+from typing import Self
 
 # Third-party modules
 from pydantic import BaseModel
@@ -52,13 +53,13 @@ class CtxItem:
     set_method: str | None = None
 
     @classmethod
-    def from_string(cls, value: str) -> CtxItem:
+    def from_string(cls: type[Self], value: str) -> Self:
         """"""
         name, *v = value.split(":")
         if v:
             # Dynamic gen
-            return CtxItem(name=name, value=v[0])
-        return CtxItem(name=name)
+            return cls(name=name, value=v[0])
+        return cls(name=name)
 
 
 @dataclass(frozen=True)
@@ -156,14 +157,14 @@ class CheckStatus(BaseModel):
 
     @classmethod
     def from_result(
-        cls,
+        cls: type[Self],
         cr: CheckResult,
         source: InputSource = InputSource.UNKNOWN,
-    ) -> CheckStatus:
+    ) -> Self:
         expired = None
         if cr.ttl:
             expired = dt.datetime.now().replace(microsecond=0) + dt.timedelta(seconds=cr.ttl)
-        return CheckStatus(
+        return cls(
             name=cr.check,
             status=cr.status,
             skipped=cr.skipped,

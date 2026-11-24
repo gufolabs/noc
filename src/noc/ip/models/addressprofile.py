@@ -12,6 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -105,19 +106,19 @@ class AddressProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> AddressProfile:
+    def get_default_profile(cls) -> Self:
         ap = AddressProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not ap:
             wf = Workflow.get_default_workflow("ip.Address")
             if not wf:
                 wf = Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first()
-            ap = AddressProfile(
+            ap = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 description="Default address profile",
                 workflow=wf,
             )
             ap.save()
-        return ap
+        return cast(Self, ap)
 
     def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

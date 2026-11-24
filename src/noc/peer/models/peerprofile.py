@@ -12,7 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock, RLock
-from typing import Any
+from typing import Any, Self, cast
 
 # Third-party modules
 import cachetools
@@ -117,12 +117,12 @@ class PeerProfile(NOCModel):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> PeerProfile:
+    def get_default_profile(cls) -> Self:
         pp = PeerProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not pp:
-            pp = PeerProfile(name=cls.DEFAULT_PROFILE_NAME)
+            pp = cls(name=cls.DEFAULT_PROFILE_NAME)
             pp.save()
-        return pp
+        return cast(Self, pp)
 
     @classmethod
     @cachetools.cachedmethod(

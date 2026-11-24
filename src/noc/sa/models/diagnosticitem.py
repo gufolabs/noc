@@ -7,6 +7,7 @@
 
 # Python modules
 import datetime as dt
+from typing import Self
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -52,9 +53,9 @@ class CheckItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_status(cls, value: CheckStatus) -> CheckItem:
+    def from_status(cls: type[Self], value: CheckStatus) -> Self:
         """Create Item from diagnostic value"""
-        return CheckItem(
+        return cls(
             name=value.name,
             status=value.status,
             skipped=value.skipped,
@@ -87,9 +88,9 @@ class DiagnosticItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_value(cls, value: DiagnosticValue) -> DiagnosticItem:
+    def from_value(cls: type[Self], value: DiagnosticValue) -> Self:
         """Create Item from diagnostic value"""
-        return DiagnosticItem(
+        return cls(
             diagnostic=value.diagnostic,
             state=value.state,
             checks=[CheckItem.from_status(c) for c in value.checks or []],

@@ -13,6 +13,7 @@ import operator
 from dataclasses import dataclass
 from functools import partial
 from threading import Lock
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -130,15 +131,15 @@ class SLAProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> SLAProfile:
+    def get_default_profile(cls) -> Self:
         sp = SLAProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = SLAProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)
 
     @classmethod
     def can_set_label(cls, label):

@@ -15,7 +15,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -99,7 +99,7 @@ class ProtocolVariant:
         return f"{self.direction}::{self.protocol.code}::{self.discriminator}"
 
     @classmethod
-    def get_by_code(cls, code: str) -> ProtocolVariant:
+    def get_by_code(cls: type[Self], code: str) -> Self:
         """
         Generate Protocol Variant by code
         LLDP -> LLDP
@@ -134,7 +134,7 @@ class ProtocolVariant:
         if not protocol:
             msg = f"Unknown protocol code: {p_code}"
             raise ValueError(msg)
-        return ProtocolVariant(protocol, d_code, vd_code, modes=modes)
+        return cls(protocol, d_code, vd_code, modes=modes)
 
     def get_discriminator(
         self,

@@ -11,7 +11,7 @@ from __future__ import annotations
 # Python modules
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import polars as pl
@@ -292,9 +292,11 @@ class Band:
                 return band
 
     @classmethod
-    def from_report(cls, band: ReportBand, params: dict[str, Any] | None = None) -> Band:
+    def from_report(
+        cls: type[Self], band: ReportBand, params: dict[str, Any] | None = None
+    ) -> Self:
         """Create Band from configuration"""
-        return Band(name=band.name, orientation=band.orientation, data=params)
+        return cls(name=band.name, orientation=band.orientation, data=params)
 
     @classmethod
     def from_band(cls, band: Band, data: dict[str, Any], parent: Band | None = None):

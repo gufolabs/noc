@@ -14,7 +14,7 @@ from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from dataclasses import asdict, dataclass
 from logging import getLogger
-from typing import Any
+from typing import Any, Self
 from weakref import ReferenceType, ref
 
 # Third-party modules
@@ -430,11 +430,13 @@ class Job:
             yield from ch
 
     @classmethod
-    def from_dict(cls, doc: dict[str, Any], jmap: dict[ObjectId, Job] | None = None) -> Job:
+    def from_dict(
+        cls: type[Self], doc: dict[str, Any], jmap: dict[ObjectId, Job] | None = None
+    ) -> Self:
         """
         Create job from database dict.
         """
-        job = Job(
+        job = cls(
             id=doc["_id"],
             name=doc["name"],
             action=action_loader.get(doc["action"]) if doc.get("action") else None,

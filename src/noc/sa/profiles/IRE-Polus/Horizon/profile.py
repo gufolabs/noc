@@ -9,6 +9,7 @@
 # Python modules
 import re
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.core.profile.base import BaseProfile
@@ -315,7 +316,7 @@ class PolusParam:
         return None
 
     @classmethod
-    def from_code(cls, name, value, description: str | None = None, **kwargs) -> PolusParam:
+    def from_code(cls, name, value, description: str | None = None, **kwargs) -> Self:
         """
         Parse param code
 
@@ -351,13 +352,13 @@ class PolusParam:
             value = None
         prefix, *param = name.rsplit("_", 1)
         if param:
-            return PolusParam(name, value, code=param[0], prefix=prefix, description=description)
+            return cls(name, value, code=param[0], prefix=prefix, description=description)
         match = rx_case_component.match(name)
         if match:
-            return PolusParam(
+            return cls(
                 name, value, match.group("name"), match.group("component"), description=description
             )
-        return PolusParam(name, value, prefix, description=description)
+        return cls(name, value, prefix, description=description)
 
 
 @dataclass

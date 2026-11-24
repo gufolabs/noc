@@ -8,6 +8,7 @@
 # Python modules
 from collections.abc import Iterable
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.core.fm.event import Target
@@ -28,8 +29,8 @@ class SourceConfig:
     mapping_refs: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data) -> SourceConfig:
-        return SourceConfig(
+    def from_data(cls: type[Self], data) -> Self:
+        return cls(
             id=str(data["id"]),
             name=data["name"],
             bi_id=int(data["bi_id"]),

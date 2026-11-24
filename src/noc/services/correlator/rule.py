@@ -8,7 +8,7 @@
 # Python modules
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # NOC modules
 from noc.core.fm.event import Event
@@ -33,14 +33,14 @@ class VarTransformRule:
     update_oper_status: bool = False
 
     @classmethod
-    def from_item(cls, item, alias: str | None = None) -> VarTransformRule:
+    def from_item(cls: type[Self], item, alias: str | None = None) -> Self:
         """Create var transform rule from config item"""
         if item.affected_model:
             model = get_model(item.affected_model)
             # hasattr component
         else:
             model = None
-        return VarTransformRule(
+        return cls(
             name=item.name,
             wildcard=item.wildcard or None,
             required=item.required,
@@ -84,11 +84,11 @@ class EventAlarmRule:
 
     @classmethod
     def from_config(
-        cls,
+        cls: type[Self],
         rule: DispositionRule,
         alarm_class: AlarmClass,
         event_class: EventClass | None = None,
-    ) -> EventAlarmRule:
+    ) -> Self:
         """"""
         a_vars = {v.name: v for v in alarm_class.vars}
         vars_transform = []
@@ -99,7 +99,7 @@ class EventAlarmRule:
         for v in a_vars:
             vars_transform.append(VarTransformRule(name=v))
         # ctx_transforms
-        r = EventAlarmRule(
+        r = cls(
             name=rule.name,
             alarm_class=alarm_class,
             event_class=event_class,
@@ -128,7 +128,7 @@ class EventAlarmRule:
     @classmethod
     def from_event_class_rule(
         cls, source, alarm_class: AlarmClass | None, event_class: EventClass
-    ) -> EventAlarmRule:
+    ) -> Self:
         """Restore disposition rules embedded in EventClass."""
         var_mapping = source.var_mapping or {}
         mapped_vars = set(var_mapping.values())

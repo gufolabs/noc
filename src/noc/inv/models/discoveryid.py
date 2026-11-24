@@ -13,6 +13,7 @@ import bisect
 import operator
 from collections.abc import Iterable
 from threading import Lock
+from typing import Self
 
 # Third-party modules
 import bson
@@ -49,7 +50,7 @@ class MACRange(EmbeddedDocument):
         return f"{self.first_mac} - {self.last_mac}"
 
     @classmethod
-    def from_str(cls, first: str, last: str) -> MACRange:
+    def from_str(cls: type[Self], first: str, last: str) -> Self:
         """
         Create MACRange from two macs.
 
@@ -64,7 +65,7 @@ class MACRange(EmbeddedDocument):
         """
         if first > last:
             first, last = last, first
-        return MACRange(first_mac=str(MAC(first)), last_mac=str(MAC(last)))
+        return cls(first_mac=str(MAC(first)), last_mac=str(MAC(last)))
 
     def iter_as_int(self) -> Iterable[int]:
         """Iterate all MACs in range as integers."""

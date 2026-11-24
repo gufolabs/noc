@@ -15,6 +15,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import islice
 from pathlib import Path
+from typing import Self
 
 # Third-party modules
 import jinja2
@@ -58,7 +59,7 @@ class Data:
     type: str
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 
@@ -70,7 +71,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(name=data["name"], description=data["description"], type=data["type"])
+        return cls(name=data["name"], description=data["description"], type=data["type"])
 
     @property
     def md_name(self) -> str:

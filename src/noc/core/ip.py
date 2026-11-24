@@ -12,6 +12,7 @@ from __future__ import annotations
 import socket
 import struct
 from collections.abc import Callable, Iterable
+from typing import Self
 
 # NOC modules
 # NOC Modules
@@ -346,7 +347,7 @@ class IPv4(IP):
         return [int(d) for d in self.address.split(".")]
 
     @classmethod
-    def _to_prefix(cls, s: int, mask: int) -> IPv4:
+    def _to_prefix(cls: type[Self], s: int, mask: int) -> Self:
         """Convert an integer and mask length into a new IPv4 instance.
 
         Args:
@@ -356,7 +357,7 @@ class IPv4(IP):
         Returns:
             New IPv4 instance.
         """
-        return IPv4(
+        return cls(
             f"{int(s >> 24 & 255)}.{int(s >> 16 & 255)}.{int(s >> 8 & 255)}.{int(s & 255)}/{int(mask)}"
         )
 
@@ -422,7 +423,7 @@ class IPv4(IP):
             m >>= 1
 
     @classmethod
-    def from_bits(cls, bits: list[int]) -> IPv4:
+    def from_bits(cls, bits: list[int]) -> Self:
         """Create a new IPv4 instance from a list of bits.
 
         Args:
@@ -675,7 +676,7 @@ class IPv6(IP):
         return masks
 
     @classmethod
-    def _to_prefix(cls, d0: int, d1: int, d2: int, d3: int, mask: int) -> IPv6:
+    def _to_prefix(cls: type[Self], d0: int, d1: int, d2: int, d3: int, mask: int) -> Self:
         """Convert four 32-bit integers and a mask into a new IPv6 instance.
 
         Applies :: compression where appropriate and expands mapped IPv4
@@ -700,7 +701,7 @@ class IPv6(IP):
         ]
         # Format groups
         if r[:-3] == [0, 0, 0, 0, 0] and r[-3] == 0xFFFF:
-            return IPv6(
+            return cls(
                 f"::ffff:{int(r[-2] >> 8)}.{int(r[-2] & 255)}.{int(r[-1] >> 8)}.{int(r[-1] & 255)}/{int(mask)}"
             )
         # Compact longest zeroes sequence
@@ -723,10 +724,10 @@ class IPv6(IP):
         if ll:
             h = r[:lp]
             t = r[lp + ll :]
-            return IPv6(
+            return cls(
                 f"{':'.join(f'{p:x}' for p in h)}::{':'.join(f'{p:x}' for p in t)}/{int(mask)}"
             )
-        return IPv6(":".join(f"{p:x}" for p in r) + f"/{int(mask)}")
+        return cls(":".join(f"{p:x}" for p in r) + f"/{int(mask)}")
 
     def __hash__(self) -> int:
         """Hash the IPv6 instance (by prefix string)."""
@@ -854,7 +855,7 @@ class IPv6(IP):
             m >>= 1
 
     @classmethod
-    def from_bits(cls, bits: list[int]) -> IPv6:
+    def from_bits(cls, bits: list[int]) -> Self:
         """Create a new IPv6 prefix instance from a list of bits.
 
         Args:
@@ -1085,7 +1086,7 @@ class PrefixDB:
             yield root.__class__.from_bits(bits)
 
     @classmethod
-    def from_prefixes(cls, prefixes: list[IPv4], key) -> PrefixDB:
+    def from_prefixes(cls: type[Self], prefixes: list[IPv4], key) -> Self:
         """Create a PrefixDB populated with the same key for all given prefixes.
 
         Args:
@@ -1095,7 +1096,7 @@ class PrefixDB:
         Returns:
             New PrefixDB instance.
         """
-        pdb = PrefixDB()
+        pdb = cls()
         for p in prefixes:
             pdb[p] = key
         return pdb

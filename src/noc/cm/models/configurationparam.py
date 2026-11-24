@@ -14,7 +14,7 @@ import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any, NoReturn, Self
 
 # Third-party modules
 import cachetools
@@ -136,13 +136,13 @@ class ScopeVariant:
         return self.value == other.value
 
     @classmethod
-    def from_code(cls, code: str) -> ScopeVariant:
+    def from_code(cls: type[Self], code: str) -> Self:
         scope, *v = code.split("::")
         s = ConfigurationScope.get_by_name(scope.strip("@"))
         if not s:
             raise ValueError(f"Unknown scope: {scope}")
         # check value by helper
-        return ScopeVariant(s, v[0] if v else None)
+        return cls(s, v[0] if v else None)
 
 
 @dataclass

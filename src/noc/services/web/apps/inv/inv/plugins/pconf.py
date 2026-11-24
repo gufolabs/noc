@@ -11,7 +11,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum, IntEnum
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import orjson
@@ -131,7 +131,7 @@ class Item:
         return r
 
     @classmethod
-    def from_dict(cls, row: dict[str, Any]) -> Item:
+    def from_dict(cls, row: dict[str, Any]) -> Self:
         # Determine type
         name = row["nam"]
         options = row.get("EM")
@@ -144,7 +144,7 @@ class Item:
             dt = Type.STRING
         table = row.get("tbl", 1)
         value = row.get("val") or ""
-        r = Item(
+        r = cls(
             name=name,
             value=value,
             description=row.get("dsc") or "",
@@ -165,8 +165,8 @@ class ParsedData:
     mgmt_url: str | None = None
 
     @classmethod
-    def empty(cls) -> ParsedData:
-        return ParsedData(groups=[], conf=[])
+    def empty(cls: type[Self]) -> Self:
+        return cls(groups=[], conf=[])
 
 
 H8_CT_UUID = uuid.UUID("4aa9afdc-7420-4dde-9727-2c3de1c3a8f4")

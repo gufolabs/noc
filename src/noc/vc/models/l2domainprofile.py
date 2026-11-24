@@ -12,6 +12,7 @@ from __future__ import annotations
 import itertools
 import operator
 from threading import Lock
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -124,15 +125,15 @@ class L2DomainProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> L2DomainProfile:
+    def get_default_profile(cls) -> Self:
         l2p = L2DomainProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not l2p:
-            l2p = L2DomainProfile(
+            l2p = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             l2p.save()
-        return l2p
+        return cast(Self, l2p)
 
     def clean(self):
         if self.vlan_template and self.vlan_template.type != "l2domain":

@@ -13,7 +13,7 @@ import bisect
 import operator
 from pathlib import Path
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -80,7 +80,7 @@ class Scale(Document):
         return Scale.objects.filter(code=code).first()
 
     @classmethod
-    def get_default_scale(cls) -> Scale:
+    def get_default_scale(cls) -> Self:
         return Scale.objects.filter(name=cls.DEFAULT_SCALE_NAME).first()
 
     @property

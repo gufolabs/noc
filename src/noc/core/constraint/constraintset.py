@@ -8,6 +8,7 @@
 # Python modules
 from collections import defaultdict
 from collections.abc import Iterable
+from typing import Self
 
 from .base import BaseConstraint
 
@@ -34,7 +35,7 @@ class ConstraintSet:
         return self._data.get(item)
 
     @classmethod
-    def from_iter(cls, iter: Iterable[BaseConstraint]) -> ConstraintSet:
+    def from_iter(cls, iter: Iterable[BaseConstraint]) -> Self:
         r = cls()
         for item in iter:
             r.extend(item)
