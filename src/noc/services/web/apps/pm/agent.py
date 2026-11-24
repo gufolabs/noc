@@ -8,12 +8,11 @@
 # NOC modules
 from noc.core.i18n import t
 from noc.pm.models.agent import Agent
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class AgentApplication(ExtDocApplication):
+class AgentApplication(StateMixin, ExtDocApplication):
     """
     Agent application
     """

@@ -8,12 +8,11 @@
 # NOC modules
 from noc.core.i18n import t
 from noc.inv.models.sensor import Sensor
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class SensorApplication(ExtDocApplication):
+class SensorApplication(StateMixin, ExtDocApplication):
     """
     ResourceGroup application
     """

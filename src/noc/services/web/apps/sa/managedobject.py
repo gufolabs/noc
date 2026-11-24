@@ -67,18 +67,16 @@ from noc.sa.models.interactionlog import InteractionLog
 from noc.sa.models.managedobject import ManagedObject, ManagedObjectAttribute
 from noc.sa.models.profile import Profile
 from noc.sa.models.useraccess import UserAccess
-from noc.services.web.base.decorators.caps import capabilities_handler
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
+from noc.services.web.base.mixins.caps import CapsApiMixin
+from noc.services.web.base.mixins.state import StateMixin
 from noc.services.web.base.modelinline import ModelInline
 from noc.services.web.base.repoinline import RepoInline
 
 JP_CLAUSE_PATTERN = """jsonb_path_exists(caps, '$[*] ? (@.capability == "{}") ? (@.value {} {})')"""
 
 
-@capabilities_handler
-@state_handler
-class ManagedObjectApplication(ExtModelApplication):
+class ManagedObjectApplication(CapsApiMixin, StateMixin, ExtModelApplication):
     """
     ManagedObject application
     """

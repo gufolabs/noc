@@ -15,13 +15,12 @@ from django.db.models import Count
 from noc.core.i18n import t
 from noc.inv.models.networksegment import NetworkSegment
 from noc.sa.models.managedobject import ManagedObject
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 from noc.vc.models.l2domain import L2Domain
 
 
-@state_handler
-class L2DomainApplication(ExtDocApplication):
+class L2DomainApplication(StateMixin, ExtDocApplication):
     """
     L2 Domain application
     """

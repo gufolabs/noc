@@ -8,12 +8,11 @@
 # NOC modules
 from noc.core.i18n import t
 from noc.crm.models.subscriber import Subscriber
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class SubscriberApplication(ExtDocApplication):
+class SubscriberApplication(StateMixin, ExtDocApplication):
     """
     Subscriber application
     """

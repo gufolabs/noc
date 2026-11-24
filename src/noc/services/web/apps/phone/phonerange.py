@@ -13,12 +13,11 @@ from mongoengine.queryset import Q
 from noc.core.i18n import t
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonerange import PhoneRange
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class PhoneRangeApplication(ExtDocApplication):
+class PhoneRangeApplication(StateMixin, ExtDocApplication):
     """
     PhoneRange application
     """

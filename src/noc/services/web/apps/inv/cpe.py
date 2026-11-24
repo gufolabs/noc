@@ -8,12 +8,11 @@
 # NOC modules
 from noc.core.i18n import t
 from noc.inv.models.cpe import CPE
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class CPEApplication(ExtDocApplication):
+class CPEApplication(StateMixin, ExtDocApplication):
     """
     inv.CPE application
     """

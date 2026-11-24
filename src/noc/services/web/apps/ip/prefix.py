@@ -18,12 +18,11 @@ from noc.ip.models.prefix import Prefix
 from noc.ip.models.prefixaccess import PrefixAccess
 from noc.ip.models.vrf import VRF
 from noc.sa.interfaces.base import ModelParameter, PrefixParameter
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class PrefixApplication(ExtModelApplication):
+class PrefixApplication(StateMixin, ExtModelApplication):
     """
     Prefix application
     """

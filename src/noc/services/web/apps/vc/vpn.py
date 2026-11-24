@@ -7,13 +7,12 @@
 
 # NOC modules
 from noc.core.i18n import t
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 from noc.vc.models.vpn import VPN
 
 
-@state_handler
-class VPNApplication(ExtDocApplication):
+class VPNApplication(StateMixin, ExtDocApplication):
     """
     VPN application
     """
