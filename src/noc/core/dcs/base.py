@@ -122,21 +122,6 @@ class DCSBase(ABC):
         self.resolver_expiration_task = PeriodicCallback(self.expire_resolvers, 10000)
         self.resolver_expiration_task.start()
 
-    def stop(self) -> None:
-        """
-        Stop the resolver expiration task and all resolvers.
-        """
-        if self.resolver_expiration_task:
-            self.resolver_expiration_task.stop()
-            self.resolver_expiration_task = None
-        # Stop all resolvers
-        with self.resolvers_lock:
-            for svc in self.resolvers:
-                r = self.resolvers[svc]
-                self.logger.info("Stopping resolver for service %s", svc)
-                r.stop()
-            self.resolvers = {}
-
     # ------------------------------------------------------------------
     # Service registration
     # ------------------------------------------------------------------
