@@ -15,7 +15,7 @@ from copy import deepcopy
 from io import StringIO
 from itertools import zip_longest
 from pathlib import Path
-from typing import TextIO
+from typing import Self, TextIO
 
 
 class SVG:
@@ -39,19 +39,19 @@ class SVG:
         self._defs: dict[str, ET.Element] = {}
 
     @classmethod
-    def init(cls) -> SVG:
+    def init(cls: type[Self]) -> Self:
         """
         Create root if necessary.
 
         It's recommended to set width and height before.
         """
-        svg = SVG()
+        svg = cls()
         root = ET.Element("svg", viewBox="0 0 500 500")
         svg._tree = ET.ElementTree(element=root)
         return svg
 
     @classmethod
-    def read(cls, fp: TextIO) -> SVG:
+    def read(cls: type[Self], fp: TextIO) -> Self:
         """
         Read from open file.
 
@@ -61,12 +61,12 @@ class SVG:
         Returns:
             New SVG instance.
         """
-        svg = SVG()
+        svg = cls()
         svg._tree = cls.parse(fp)
         return svg
 
     @classmethod
-    def from_string(cls, data: str) -> SVG:
+    def from_string(cls, data: str) -> Self:
         """
         Create SVG from string.
 
@@ -79,7 +79,7 @@ class SVG:
         return cls.read(StringIO(data))
 
     @classmethod
-    def get_placeholder(cls, width: float, height: float) -> SVG:
+    def get_placeholder(cls, width: float, height: float) -> Self:
         data = f"""<?xml version="1.0" encoding="utf-8"?>
     <svg viewBox="0 0 {width} {height}" width="{width}mm" height="{height}mm" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="{width}" height="{height}" style="stroke: rgb(255, 0, 0); stroke-width: 0.5px; fill: rgb(255, 255, 255);"/>
@@ -89,7 +89,7 @@ class SVG:
         return cls.from_string(data)
 
     @classmethod
-    def from_file(cls, path: str | Path) -> SVG:
+    def from_file(cls, path: str | Path) -> Self:
         """
         Create SVG from file.
 

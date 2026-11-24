@@ -7,6 +7,9 @@
 
 # Python modules
 
+# Python modules
+from typing import Self
+
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import BooleanField, DateTimeField, DictField, EnumField, StringField
@@ -56,7 +59,7 @@ class WatchDocumentItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_item(cls, item: WatchItem, remote_system: str | None = None) -> WatchDocumentItem:
+    def from_item(cls: type[Self], item: WatchItem, remote_system: str | None = None) -> Self:
         """Create record from WatchItem"""
         if item.after:
             after = item.after.replace(microsecond=0)
@@ -65,7 +68,7 @@ class WatchDocumentItem(EmbeddedDocument):
         remote_system = item.remote_system or remote_system
         if remote_system:
             remote_system = RemoteSystem.get_by_name(remote_system)
-        return WatchDocumentItem(
+        return cls(
             effect=item.effect,
             key=item.key or None,
             remote_system=remote_system,

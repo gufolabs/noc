@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 
 @dataclass(frozen=True)
@@ -24,9 +24,9 @@ class PathItem:
     slot_num: str | None = None  # number from get_inventory output
 
     @classmethod
-    def from_object(cls, o, c) -> PathItem:
+    def from_object(cls: type[Self], o, c) -> Self:
         stackable = o.get_data("stack", "stackable")
-        return PathItem(
+        return cls(
             object=o,
             connection=c,
             context=o.model.cr_context,

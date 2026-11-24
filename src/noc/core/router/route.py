@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import (
     Any,
     Literal,
+    Self,
 )
 
 # Third-party modules
@@ -290,13 +291,13 @@ class Route:
         self.actions = [Action.from_data(data)]
 
     @classmethod
-    def from_data(cls, data) -> Route:
+    def from_data(cls: type[Self], data) -> Self:
         """
         Build Route from data config
         Attrs:
             data: Datastream record
         """
-        r = Route(data["name"], data["type"], data["order"], data.get("telemetry_sample"))
+        r = cls(data["name"], data["type"], data["order"], data.get("telemetry_sample"))
         r.update(data)
         return r
 

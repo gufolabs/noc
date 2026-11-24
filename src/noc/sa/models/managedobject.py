@@ -21,7 +21,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import chain
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -3025,7 +3025,7 @@ class ManagedObject(NOCModel):
         static_service_groups: list[ResourceGroup] | None = None,
         mappings: dict[RemoteSystem, str] | None = None,
         **data,
-    ) -> ManagedObject:
+    ) -> Self:
         """
         Create Managed Object instance from Template
         """
@@ -3563,7 +3563,7 @@ class ManagedObjectWatchers(NOCModel):
         )
 
     @classmethod
-    def from_item(cls, managed_object, item: WatchItem) -> ManagedObjectWatchers:
+    def from_item(cls, managed_object, item: WatchItem) -> Self:
         return ManagedObjectWatchers(
             managed_object=managed_object,
             effect=item.effect.value,

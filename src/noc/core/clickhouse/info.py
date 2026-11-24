@@ -9,6 +9,7 @@
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.config import config
@@ -31,7 +32,7 @@ class TableInfo:
     table_ttl: int | None = None
 
     @classmethod
-    def from_sql(cls, sql: str) -> TableInfo:
+    def from_sql(cls: type[Self], sql: str) -> Self:
         """
         Parse ClickHouse DDL SQL.
 
@@ -68,7 +69,7 @@ class TableInfo:
                 case _ as x:
                     msg = f"invalid ttl measure: {x}"
                     raise ValueError(msg)
-        return TableInfo(name=table_name, table_ttl=table_ttl)
+        return cls(name=table_name, table_ttl=table_ttl)
 
     @classmethod
     def iter_for_tables(cls, tables: Iterable[str]) -> Iterable[TableInfo]:

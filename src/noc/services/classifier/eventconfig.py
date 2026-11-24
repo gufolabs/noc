@@ -8,6 +8,7 @@
 # Python modules
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.core.models.valuetype import ValueType
@@ -54,8 +55,8 @@ class EventConfig:
         return self.event_class_id
 
     @classmethod
-    def from_config(cls, data) -> EventConfig:
-        ec = EventConfig(
+    def from_config(cls: type[Self], data) -> Self:
+        ec = cls(
             name=data["name"],
             bi_id=data["bi_id"],
             event_class=data["event_class"]["name"],

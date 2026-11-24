@@ -9,7 +9,7 @@
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 # Third party modules
@@ -42,8 +42,8 @@ class Node:
     connections: list[ConnectionItem]
 
     @classmethod
-    def from_object(cls, obj: Object) -> Node:
-        return Node(
+    def from_object(cls: type[Self], obj: Object) -> Self:
+        return cls(
             object=obj,
             name=obj.name or "",
             model=obj.model.get_short_label(),

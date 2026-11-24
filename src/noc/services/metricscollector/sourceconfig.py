@@ -8,6 +8,7 @@
 # Python modules
 from collections.abc import Iterable
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.config import config
@@ -32,7 +33,7 @@ class RemoteSystemConfig:
     batch_delay_s: int | None = 10
 
     @classmethod
-    def from_data(cls, data) -> RemoteSystemConfig:
+    def from_data(cls: type[Self], data) -> Self:
         cfg = data.get("channel") or {}
         if not cfg:
             cfg |= {
@@ -45,7 +46,7 @@ class RemoteSystemConfig:
             "bi_id": int(data["bi_id"]),
             "api_key": data.get("api_key"),
         }
-        return RemoteSystemConfig(**cfg)
+        return cls(**cfg)
 
 
 @dataclass(eq=True, frozen=True)
@@ -57,8 +58,8 @@ class SensorConfig:
     hints: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data, managed_object: int | None = None) -> SensorConfig:
-        return SensorConfig(
+    def from_data(cls: type[Self], data, managed_object: int | None = None) -> Self:
+        return cls(
             name=data["name"],
             bi_id=data["bi_id"],
             units=data["units"],
@@ -91,7 +92,7 @@ class SourceConfig:
     services: tuple[int, ...] | None = None
 
     @classmethod
-    def from_data(cls, data) -> SourceConfig:
+    def from_data(cls: type[Self], data) -> Self:
         mappings, keys, sensors = [], [], []
         for m in data.get("mapping_refs") or []:
             mappings.append(m)
@@ -102,7 +103,7 @@ class SourceConfig:
         mo = None
         if data["type"] == "managed_object":
             mo = data["bi_id"]
-        return SourceConfig(
+        return cls(
             id=str(data["id"]),
             name=data["name"],
             bi_id=int(data["bi_id"]),

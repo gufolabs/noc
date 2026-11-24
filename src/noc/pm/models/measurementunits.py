@@ -12,7 +12,7 @@ from __future__ import annotations
 import operator
 from pathlib import Path
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -136,7 +136,7 @@ class MeasurementUnits(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_code_cache"), lock=lambda _: id_lock, key=lambda x: "default"
     )
-    def get_default_measurement_units(cls) -> MeasurementUnits:
+    def get_default_measurement_units(cls) -> Self:
         return MeasurementUnits.objects.filter(name=cls.DEFAULT_MU_NAME).first()
 
     @property

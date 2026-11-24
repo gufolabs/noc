@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from enum import Enum
 from itertools import islice
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -83,7 +83,7 @@ class Var:
     required: bool
 
     @classmethod
-    def from_json(cls, d: dict[str, Any]) -> Var:
+    def from_json(cls, d: dict[str, Any]) -> Self:
         """
         Create from dict
         """
@@ -98,7 +98,7 @@ class Action(Enum):
     IGNORE = "IGNORE"
 
     @classmethod
-    def from_action(cls, a: str) -> Action:
+    def from_action(cls, a: str) -> Self:
         if a == "clear":
             return Action.CLOSE
         if a == "raise":
@@ -128,7 +128,7 @@ class Disposition:
     action: Action
 
     @classmethod
-    def from_json(cls, d: dict[str, Any]) -> Disposition:
+    def from_json(cls, d: dict[str, Any]) -> Self:
         """
         Create from dict
         """
@@ -179,7 +179,7 @@ class Data:
     disposition: list[Disposition]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 

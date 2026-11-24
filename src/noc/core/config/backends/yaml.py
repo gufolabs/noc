@@ -24,7 +24,7 @@ import yaml
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-from typing import cast
+from typing import Self, cast
 from urllib.parse import urlparse
 
 from .base import DataConfigBackend
@@ -41,7 +41,7 @@ class YAMLParams:
     path: Path
 
     @classmethod
-    def from_url(cls, url: str) -> YAMLParams:
+    def from_url(cls: type[Self], url: str) -> Self:
         """Parse YAML backend parameters from URL.
 
         Args:
@@ -51,7 +51,7 @@ class YAMLParams:
             Parsed YAML backend parameters.
         """
         parsed = urlparse(url)
-        return YAMLParams(path=Path(parsed.path))
+        return cls(path=Path(parsed.path))
 
 
 class YAMLBackend(DataConfigBackend):

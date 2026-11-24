@@ -11,6 +11,7 @@ from __future__ import annotations
 # Python modules
 import operator
 from threading import Lock
+from typing import Self
 
 # Third-party modules
 import cachetools
@@ -107,7 +108,7 @@ class VLANProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> VLANProfile:
+    def get_default_profile(cls) -> Self:
         vp = VLANProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not vp:
             vp = VLANProfile(

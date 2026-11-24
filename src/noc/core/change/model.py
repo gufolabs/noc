@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass, field, replace
-from typing import Any, Literal
+from typing import Any, Literal, Self
 
 
 @dataclass(frozen=True)
@@ -36,8 +36,8 @@ class ChangeItem:
     user: str | None = field(default=None, compare=False)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> ChangeItem:
-        return ChangeItem(
+    def from_dict(cls: type[Self], data: dict[str, Any]) -> Self:
+        return cls(
             op=data["op"],
             model_id=data["model_id"],
             item_id=data["item_id"],

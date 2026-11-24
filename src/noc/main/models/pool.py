@@ -12,6 +12,7 @@ from __future__ import annotations
 import operator
 import threading
 import time
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -79,11 +80,11 @@ class Pool(Document):
         return Pool.objects.filter(name=name).first()
 
     @classmethod
-    def get_default_fm_pool(cls) -> Pool:
-        p = Pool.get_by_name("default")
+    def get_default_fm_pool(cls: type[Self]) -> Self:
+        p = cls.get_by_name("default")
         if p:
-            return p
-        return Pool.objects.filter().order_by("id").first()
+            return cast(Self, p)
+        return cast(Self, Pool.objects.filter().order_by("id").first())
 
     def get_delta(self) -> float:
         """

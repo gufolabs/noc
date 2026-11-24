@@ -14,7 +14,7 @@ import itertools
 from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import orjson
@@ -164,8 +164,8 @@ class QueryField:
 
     @classmethod
     def from_query(
-        cls, name: str, alias: str | None = None, table_name: str | None = None
-    ) -> QueryField:
+        cls: type[Self], name: str, alias: str | None = None, table_name: str | None = None
+    ) -> Self:
         """
         Build QueryField from query alias
         Attrs:
@@ -177,7 +177,7 @@ class QueryField:
         mt = MetricType.get_by_field_name(name, scope=table_name or None)
         if not mt:
             raise AttributeError(f"Unknown Field Name: {name}")
-        return QueryField(
+        return cls(
             field=mt.field_name,
             scale=mt.scale,
             measure=mt.units,
@@ -330,7 +330,7 @@ class QuerySet:
                     meta[name] = value
 
     @classmethod
-    def parse_query(cls, sql: str) -> QuerySet:
+    def parse_query(cls, sql: str) -> Self:
         """Build Queryset by SQL Expression"""
 
     def add_query_field(self, query: QueryField | str, alias: str | None = None):

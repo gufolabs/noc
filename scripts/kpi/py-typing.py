@@ -17,7 +17,7 @@ from collections.abc import Iterable
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TextIO
+from typing import Self, TextIO
 
 
 @dataclass(slots=True)
@@ -68,7 +68,7 @@ class KPISummary:
     typed_functions_percent: float | None
 
     @classmethod
-    def from_rows(cls, rows: Iterable[KPI]) -> KPISummary:
+    def from_rows(cls, rows: Iterable[KPI]) -> Self:
         """Build summary from rows iterator."""
 
         def ratio(value: int, base: int) -> float | None:

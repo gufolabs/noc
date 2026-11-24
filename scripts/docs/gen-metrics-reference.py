@@ -14,7 +14,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -81,7 +81,7 @@ class Metric:
     scale: str
 
     @classmethod
-    def read(cls, path: Path) -> Metric:
+    def read(cls, path: Path) -> Self:
         with open(path) as fp:
             data = json.load(fp)
         return Metric(
@@ -113,7 +113,7 @@ class KeyField:
     model: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> KeyField:
+    def from_json(cls, data: dict[str, Any]) -> Self:
         return KeyField(field_name=data["field_name"], model=data["model"])
 
 
@@ -124,7 +124,7 @@ class Label:
     store_column: str
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Label:
+    def from_json(cls, data: dict[str, Any]) -> Self:
         return Label(
             label=data["label"],
             view_column=data.get("view_column", ""),
@@ -152,7 +152,7 @@ class Data:
     metrics: list[Metric]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 

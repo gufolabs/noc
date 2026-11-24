@@ -15,7 +15,7 @@ import operator
 import time
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self, cast
 
 # Third-party modules
 from bson import ObjectId
@@ -65,9 +65,9 @@ class ServiceItem:
         return self.status == ItemStatus.NEW
 
     @classmethod
-    def from_service(cls, svc: Service, to_processed: bool = False) -> ServiceItem:
+    def from_service(cls: type[Self], svc: Service, to_processed: bool = False) -> Self:
         """Create item from Service instance"""
-        return ServiceItem(service=svc, service_status=svc.oper_status, to_processed=to_processed)
+        return cls(service=svc, service_status=svc.oper_status, to_processed=to_processed)
 
 
 @dataclass(repr=True)
@@ -101,11 +101,11 @@ class Item:
         return {"alarm": self.alarm.id, "status": self.status.value}
 
     @classmethod
-    def from_alarm(cls, alarm, is_clear: bool = False) -> Item:
+    def from_alarm(cls: type[Self], alarm, is_clear: bool = False) -> Self:
         """Create Item from Alarm"""
         if not alarm:
-            return Item(alarm=None, status=ItemStatus.ARCHIVED)
-        return Item(
+            return cls(alarm=None, status=ItemStatus.ARCHIVED)
+        return cls(
             alarm=alarm,
             managed_object_id=alarm.managed_object.id if alarm.managed_object else None,
             status=ItemStatus.from_alarm(alarm, is_clear=is_clear),
@@ -293,7 +293,7 @@ class AlarmJob:
         )
 
     @classmethod
-    def ensure_profile_job(cls, alarm: ActiveAlarm, pid: str) -> AlarmJob:
+    def ensure_profile_job(cls: type[Self], alarm: ActiveAlarm, pid: str) -> Self | None:
         """Ensure escalation Job"""
         # NOC modules
         from noc.fm.models.alarmwatch import Effect
@@ -302,16 +302,16 @@ class AlarmJob:
         profile = EscalationProfile.get_by_id(pid)
         if not profile:
             raise ValueError("Not found escalation profile by id")
-        job = None
+        job: Self | None = None
         for w in alarm.watchers:
             if w.effect == Effect.ESCALATION and w.key == str(profile.id) and w.job:
-                job = AlarmJob.get_by_id(w.job)
+                job = cast(Self, cls.get_by_id(w.job))
         if job:
             return job
         if not profile.allowed_escalation(alarm, check_active_groups=True):
             return None
         req = profile.from_alarm(alarm)
-        job = AlarmJob.from_request(req, alarm=alarm, profile=str(profile.id))
+        job = cls.from_request(req, alarm=alarm, profile=str(profile.id))
         alarm.add_watch(Effect.ESCALATION, key=str(profile.id), job=str(job.id))
         alarm.log_message(
             f"Send escalation for profile {profile}. On Job: {req.id}",
@@ -563,7 +563,7 @@ class AlarmJob:
 
     @classmethod
     def from_request(
-        cls,
+        cls: type[Self],
         req: AlarmActionRequest,
         alarm: ActiveAlarm | None = None,
         profile: str | None = None,
@@ -572,7 +572,7 @@ class AlarmJob:
         static_delay: int | None = None,
         stub_tt_system: TTSystem | None = None,
         stub_user: User | None = None,
-    ) -> AlarmJob:
+    ) -> Self:
         """Create Job from Request"""
         if not alarm and req.item:
             alarm = get_alarm(req.item.alarm)
@@ -580,7 +580,7 @@ class AlarmJob:
             raise ValueError("Not Found alarm by id: %s", req.item.alarm)
         leader, groups = cls.get_leader(req.item_policy, alarm)
         start = req.start_at or dt.datetime.now()
-        return AlarmJob(
+        return cls(
             # Job Context
             items=[] if not leader else [Item.from_alarm(alarm)],
             groups=groups,
@@ -614,13 +614,13 @@ class AlarmJob:
 
     @classmethod
     def from_alarm(
-        cls,
+        cls: type[Self],
         alarm: ActiveAlarm,
         is_clear: bool = False,
         dry_run: bool = False,
         sample: int = 0,
         static_delay: int | None = None,
-    ) -> AlarmJob:
+    ) -> Self:
         """
         Restore Job State from Alarm:
         Args:
@@ -631,7 +631,7 @@ class AlarmJob:
             static_delay: Delay over action (for tests)
         """
         # TTSystem
-        return AlarmJob(
+        return cls(
             # Job Context
             # Item.from_alarm
             items=[Item.from_alarm(alarm, is_clear=is_clear)],

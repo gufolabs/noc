@@ -11,7 +11,7 @@ from __future__ import annotations
 # Python modules
 import datetime as dt
 from collections.abc import Iterable
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from django.contrib.postgres.fields import ArrayField
@@ -410,7 +410,7 @@ class Address(NOCModel):
         address: str,
         prefix,
         name: str | None = None,
-    ) -> Address:
+    ) -> Self:
         """Create Address from Template"""
         addr = Address(
             address=address,

@@ -11,6 +11,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
+from typing import Self
 
 # Third-party modules
 # Third-party moduls
@@ -35,7 +36,7 @@ class RackSide(Enum):
     REAR = "r"
 
     @classmethod
-    def from_str(cls, s: str) -> RackSide:
+    def from_str(cls, s: str) -> Self:
         """
         Get from string.
 
@@ -67,7 +68,7 @@ class RackPosition:
         return hash((self.side.value, self.position))
 
     @classmethod
-    def from_str(cls, s: str) -> RackPosition:
+    def from_str(cls: type[Self], s: str) -> Self:
         """
         Get position from string representation.
 
@@ -81,7 +82,7 @@ class RackPosition:
         """
         try:
             side, pos = s.split("-")
-            return RackPosition(side=RackSide.from_str(side), position=int(pos))
+            return cls(side=RackSide.from_str(side), position=int(pos))
         except ValueError:
             raise ValueError("invalid format")
 

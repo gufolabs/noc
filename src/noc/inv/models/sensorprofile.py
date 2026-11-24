@@ -15,7 +15,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from functools import partial
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -160,7 +160,7 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_default_cache"), lock=lambda _: id_lock)
-    def get_default_profile(cls) -> SensorProfile:
+    def get_default_profile(cls) -> Self:
         sp = SensorProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
             sp = SensorProfile(

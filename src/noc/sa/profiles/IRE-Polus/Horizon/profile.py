@@ -9,6 +9,7 @@
 # Python modules
 import re
 from dataclasses import dataclass
+from typing import Self
 
 # NOC modules
 from noc.core.profile.base import BaseProfile
@@ -315,7 +316,7 @@ class PolusParam:
         return None
 
     @classmethod
-    def from_code(cls, name, value, description: str | None = None, **kwargs) -> PolusParam:
+    def from_code(cls, name, value, description: str | None = None, **kwargs) -> Self:
         """
         Parse param code
 

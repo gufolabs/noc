@@ -8,7 +8,7 @@
 # Python modules
 import sys
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # NOC modules
 from noc.core.cdag.factory.config import ConfigCDAGFactory, GraphConfig
@@ -84,12 +84,12 @@ class Rule:
 
     @classmethod
     def from_config(
-        cls,
+        cls: type[Self],
         rule_id: str,
         action: RuleAction,
         rule_name: str,
         conditions: list[RuleCondition],
-    ) -> Rule:
+    ) -> Self:
         """Build rule from config"""
         rule_id = f"{rule_id}-{action.id}"
         configs = {}
@@ -103,7 +103,7 @@ class Rule:
         for a in action.inputs:
             scopes.add(a.sender_id)
             inputs.add(a.probe_id)
-        return Rule(
+        return cls(
             id=rule_id,
             match_labels=frozenset(
                 frozenset(sys.intern(label) for label in c.labels) for c in conditions

@@ -14,7 +14,7 @@ import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import jinja2
@@ -51,7 +51,7 @@ class Item:
     is_const: bool
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Item:
+    def from_json(cls, data: dict[str, Any]) -> Self:
         """
         Read from JSON.
 
@@ -93,7 +93,7 @@ class Data:
     items: list[Item]
 
     @classmethod
-    def read(cls, path: Path) -> Data:
+    def read(cls, path: Path) -> Self:
         """
         Read from JSON.
 

@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections.abc import Iterable
-from typing import Any
+from typing import Any, Self
 
 # NOC modules
 from noc.config import config
@@ -76,14 +76,14 @@ class BaseCache:
         return self.get(item) is not None
 
     @classmethod
-    def get_cache(cls) -> BaseCache:
+    def get_cache(cls: type[Self]) -> Self:
         cache_cls = config.cache.cache_class
         logger.info("Using cache backend: %s", cache_cls)
         c = get_handler(cache_cls)
         if c:
             return c()
         logger.error("Cannot load cache backend: Fallback to dummy")
-        return BaseCache()
+        return cls()
 
 
 # cache singleton

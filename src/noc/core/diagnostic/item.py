@@ -8,7 +8,7 @@
 # Python modules
 import datetime as dt
 from collections.abc import Iterable
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from pydantic import BaseModel, PrivateAttr
@@ -102,10 +102,10 @@ class DiagnosticItem(BaseModel):
 
     @classmethod
     def from_config(
-        cls,
+        cls: type[Self],
         cfg: DiagnosticConfig,
         value: DiagnosticValue | None = None,
-    ) -> DiagnosticItem:
+    ) -> Self:
         """Create item from config"""
         checks, reason, is_dirty = None, cfg.reason, False
         if cfg.blocked:
@@ -122,7 +122,7 @@ class DiagnosticItem(BaseModel):
                 is_dirty = True
                 if not checks:
                     reason = "Expired checks"
-        return DiagnosticItem(
+        return cls(
             cfg=cfg,
             diagnostic=cfg.diagnostic,
             state=state,

@@ -19,7 +19,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import dataclass
 from time import perf_counter
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -66,8 +66,8 @@ class CfgItem:
     preference: int
 
     @classmethod
-    def from_data(cls, rid, table, field, data) -> CfgItem:
-        return CfgItem(
+    def from_data(cls: type[Self], rid, table, field, data) -> Self:
+        return cls(
             id=rid,
             ch_table=table,
             ch_field=field,

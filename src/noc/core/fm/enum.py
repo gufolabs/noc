@@ -7,6 +7,7 @@
 
 # Python modules
 import enum
+from typing import Self
 
 # RCA Types
 RCA_NONE = 0  # Not correlated
@@ -81,7 +82,7 @@ class EventAction(enum.Enum):
     DROP_MX = 5
 
     @classmethod
-    def from_rule(cls, action: str) -> EventAction:
+    def from_rule(cls, action: str) -> Self:
         """Convert rule value to Action"""
         if action in ["raise", "clear", "R", "C"]:
             return EventAction.DISPOSITION

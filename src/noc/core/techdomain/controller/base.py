@@ -10,7 +10,7 @@ import logging
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from gufo.loader import Loader
@@ -44,9 +44,9 @@ class Endpoint:
         return f"o:{self.object.id}"
 
     @classmethod
-    def from_resource(cls, res: str) -> Endpoint:
+    def from_resource(cls: type[Self], res: str) -> Self:
         o, n = from_resource(res)
-        return Endpoint(object=o, name=n)
+        return cls(object=o, name=n)
 
     @property
     def label(self) -> str:

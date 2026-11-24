@@ -11,7 +11,7 @@ from __future__ import annotations
 # Python modules
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 from jinja2 import Template
@@ -40,8 +40,8 @@ class Group:
     window: int = 0
 
     @classmethod
-    def from_config(cls, cfg) -> Group:
-        return Group(
+    def from_config(cls: type[Self], cfg) -> Self:
+        return cls(
             reference_template=Template(cfg["reference_template"]),
             alarm_class=AlarmClass.get_by_id(cfg["alarm_class"]) if cfg["alarm_class"] else None,
             title_template=Template(cfg["title_template"]),
@@ -105,9 +105,9 @@ class AlarmRule:
         return severity
 
     @classmethod
-    def from_config(cls, config: dict[str, Any]) -> AlarmRule:
+    def from_config(cls: type[Self], config: dict[str, Any]) -> Self:
         """Generate rule from config"""
-        rule = AlarmRule(name=config["name"], rid=config["id"])
+        rule = cls(name=config["name"], rid=config["id"])
         if config["match_expr"]:
             rule.matcher = cls.get_matcher(config["match_expr"])
         for g in config["groups"]:

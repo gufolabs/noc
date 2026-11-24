@@ -8,7 +8,7 @@
 # Python modules
 import enum
 from dataclasses import dataclass
-from typing import Literal
+from typing import Literal, Self
 
 
 class Status(enum.IntEnum):
@@ -31,9 +31,9 @@ class AffectedItem:
     source: Literal["alarm", "dependency", "diagnostic", "manual", "other"] = "other"
 
     @classmethod
-    def from_alarm(cls, alarm, status: Status) -> AffectedItem:
+    def from_alarm(cls: type[Self], alarm, status: Status) -> Self:
         """Build item by alarm"""
-        return AffectedItem(
+        return cls(
             service_status=status,
             id=str(alarm.id),
             reason=str(alarm.subject),
@@ -42,9 +42,9 @@ class AffectedItem:
         )
 
     @classmethod
-    def from_diagnostic(cls, diagnostic, status: Status) -> AffectedItem:
+    def from_diagnostic(cls: type[Self], diagnostic, status: Status) -> Self:
         """Build item by diagnostic"""
-        return AffectedItem(
+        return cls(
             service_status=status,
             id=str(diagnostic.diagnostic),
             reason="",
@@ -52,9 +52,9 @@ class AffectedItem:
         )
 
     @classmethod
-    def from_dependency(cls, service, status: Status) -> AffectedItem:
+    def from_dependency(cls: type[Self], service, status: Status) -> Self:
         """Build item by Service instance"""
-        return AffectedItem(
+        return cls(
             service_status=status,
             id=str(service.id),
             reason="",

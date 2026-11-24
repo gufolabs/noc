@@ -16,7 +16,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from hashlib import sha512
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -130,9 +130,9 @@ class StatusAffectedItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_item(cls, data: AffectedItem) -> StatusAffectedItem:
+    def from_item(cls: type[Self], data: AffectedItem) -> Self:
         """Build item from data"""
-        return StatusAffectedItem(
+        return cls(
             id=str(data.id),
             service_status=data.service_status,
             reason=data.reason,

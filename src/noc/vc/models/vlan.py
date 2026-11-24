@@ -14,7 +14,7 @@ import operator
 import random
 from collections.abc import Iterable
 from threading import Lock
-from typing import Any
+from typing import Any, Self
 
 # Third-party modules
 import cachetools
@@ -227,13 +227,13 @@ class VLAN(Document):
 
     @classmethod
     def from_template(
-        cls,
+        cls: type[Self],
         vlan_id: int,
         l2_domain: L2Domain,
         name: str | None = None,
-    ) -> VLAN:
+    ) -> Self:
         """Create VLAN from Template"""
-        vlan = VLAN(
+        vlan = cls(
             vlan=vlan_id,
             name=name or f"VLAN {vlan_id:04d}",
             l2_domain=l2_domain,
