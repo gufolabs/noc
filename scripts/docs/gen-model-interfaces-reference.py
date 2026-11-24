@@ -58,7 +58,7 @@ class Item:
         Returns:
             Initialized Item structure
         """
-        return Item(
+        return cls(
             name=data["name"],
             type=data["type"],
             description=data.get("description", ""),
@@ -105,7 +105,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(name=data["name"], items=[Item.from_json(x) for x in data["attrs"]])
+        return cls(name=data["name"], items=[Item.from_json(x) for x in data["attrs"]])
 
 
 def iter_data() -> Iterable[Data]:

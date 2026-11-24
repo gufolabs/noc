@@ -12,7 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock
-from typing import Self
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -59,9 +59,9 @@ class AgentProfile(Document):
     def get_default_profile(cls) -> Self:
         sp = AgentProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = AgentProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)

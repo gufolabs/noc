@@ -6,8 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-
-# Python modules
 from typing import Self
 
 # Third-party modules

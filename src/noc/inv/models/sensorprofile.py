@@ -15,7 +15,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from functools import partial
 from threading import Lock
-from typing import Any, Self
+from typing import Any, Self, cast
 
 # Third-party modules
 import cachetools
@@ -163,12 +163,12 @@ class SensorProfile(Document):
     def get_default_profile(cls) -> Self:
         sp = SensorProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = SensorProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)
 
     @classmethod
     def can_set_label(cls, label):

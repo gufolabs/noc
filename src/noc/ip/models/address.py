@@ -412,7 +412,7 @@ class Address(NOCModel):
         name: str | None = None,
     ) -> Self:
         """Create Address from Template"""
-        addr = Address(
+        addr = cls(
             address=address,
             name=name or address,
             prefix=prefix,

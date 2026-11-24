@@ -12,7 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock
-from typing import Self
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -112,13 +112,13 @@ class AddressProfile(Document):
             wf = Workflow.get_default_workflow("ip.Address")
             if not wf:
                 wf = Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first()
-            ap = AddressProfile(
+            ap = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 description="Default address profile",
                 workflow=wf,
             )
             ap.save()
-        return ap
+        return cast(Self, ap)
 
     def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

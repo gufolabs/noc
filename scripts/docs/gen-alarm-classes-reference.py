@@ -85,7 +85,7 @@ class Var:
         """
         Read from
         """
-        return Var(name=d["name"], description=d["description"], default=d.get("default") or "")
+        return cls(name=d["name"], description=d["description"], default=d.get("default") or "")
 
 
 class Action(Enum):
@@ -175,7 +175,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(
+        return cls(
             name=data["name"],
             symptoms=data["symptoms"],
             probable_causes=data["probable_causes"],

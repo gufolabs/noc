@@ -89,7 +89,7 @@ class Data:
         if genders not in VALID_GENDERS:
             msg = f"Invalid gender `{genders}` in file {path}"
             raise ValueError(msg)
-        return Data(
+        return cls(
             name=data["name"],
             description=data["description"],
             genders=genders,

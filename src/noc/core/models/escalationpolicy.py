@@ -11,7 +11,6 @@ from __future__ import annotations
 # Python modules
 from collections.abc import Iterable
 from enum import Enum
-from typing import Self
 
 
 class EscalationPolicy(Enum):
@@ -46,14 +45,14 @@ class EscalationPolicy(Enum):
         return _LABEL_TO_POLICY.get(f"noc::escalation::{choice}")
 
     @classmethod
-    def get_default(cls) -> Self:
+    def get_default(cls) -> EscalationPolicy:
         """
         Get default escalation policy
         """
         return EscalationPolicy.ROOT
 
     @classmethod
-    def get_effective_policy(cls, labels: Iterable[list[str]]) -> Self:
+    def get_effective_policy(cls, labels: Iterable[list[str]]) -> EscalationPolicy:
         """
         Calculate effective policy from a sequence of labels
         """

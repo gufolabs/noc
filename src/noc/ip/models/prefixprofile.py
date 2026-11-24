@@ -12,7 +12,7 @@ from __future__ import annotations
 import operator
 from functools import partial
 from threading import Lock
-from typing import Self
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -148,13 +148,13 @@ class PrefixProfile(Document):
             wf = Workflow.get_default_workflow("ip.Prefix")
             if not wf:
                 wf = Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first()
-            pp = PrefixProfile(
+            pp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 description="Default prefix profile",
                 workflow=wf,
             )
             pp.save()
-        return pp
+        return cast(Self, pp)
 
     def ensure_ip_discovery_job(self):
         # NOC modules

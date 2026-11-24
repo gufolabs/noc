@@ -87,7 +87,7 @@ class Var:
         """
         Create from dict
         """
-        return Var(
+        return cls(
             name=d["name"], description=d["description"], type=d["type"], required=d["required"]
         )
 
@@ -132,7 +132,7 @@ class Disposition:
         """
         Create from dict
         """
-        return Disposition(
+        return cls(
             alarm_class=d.get("alarm_class__name", ""),
             name=d["name"],
             action=Action.from_action(d["action"]),
@@ -192,7 +192,7 @@ class Data:
         with open(path) as fp:
             data = json.load(fp)
         disposition = [Disposition.from_json(x) for x in data.get("disposition", [])]
-        return Data(
+        return cls(
             name=data["name"],
             symptoms=data["symptoms"],
             probable_causes=data["probable_causes"],

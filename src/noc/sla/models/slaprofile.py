@@ -13,7 +13,7 @@ import operator
 from dataclasses import dataclass
 from functools import partial
 from threading import Lock
-from typing import Self
+from typing import Self, cast
 
 # Third-party modules
 import cachetools
@@ -134,12 +134,12 @@ class SLAProfile(Document):
     def get_default_profile(cls) -> Self:
         sp = SLAProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not sp:
-            sp = SLAProfile(
+            sp = cls(
                 name=cls.DEFAULT_PROFILE_NAME,
                 workflow=Workflow.objects.filter(name=cls.DEFAULT_WORKFLOW_NAME).first(),
             )
             sp.save()
-        return sp
+        return cast(Self, sp)
 
     @classmethod
     def can_set_label(cls, label):

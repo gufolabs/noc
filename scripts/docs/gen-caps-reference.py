@@ -71,7 +71,7 @@ class Data:
         """
         with open(path) as fp:
             data = json.load(fp)
-        return Data(name=data["name"], description=data["description"], type=data["type"])
+        return cls(name=data["name"], description=data["description"], type=data["type"])
 
     @property
     def md_name(self) -> str:

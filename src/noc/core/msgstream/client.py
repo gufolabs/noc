@@ -9,7 +9,7 @@
 import asyncio
 import logging
 from collections.abc import AsyncIterable
-from typing import Any, Self
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -52,7 +52,7 @@ class MessageStreamClient:
         return c.SUBSCRIBE_BULK
 
     @classmethod
-    def get_client(cls) -> Self:
+    def get_client(cls) -> MessageStreamClient:
         logger.debug("Using MsgStream client backend: %s", config.msgstream.client_class)
         c = get_handler(config.msgstream.client_class)
         if c:

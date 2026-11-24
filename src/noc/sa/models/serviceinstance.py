@@ -12,7 +12,7 @@ from __future__ import annotations
 import datetime as dt
 import logging
 from collections.abc import Iterable
-from typing import Any, Self
+from typing import Any, Self, cast
 
 # Third-party modules
 from bson import ObjectId
@@ -217,9 +217,9 @@ class ServiceInstance(Document):
         logger.debug("[%s] Find Instance by query: %s, Result: %s", service.id, qs, instance)
         if not instance:
             logger.info("[%s] Create new Instance: %s", service.id, cfg.type)
-            instance = ServiceInstance.from_config(service, cfg)
+            instance = cls.from_config(service, cfg)
             instance.save()
-        return instance
+        return cast(Self, instance)
 
     @classmethod
     def from_config(

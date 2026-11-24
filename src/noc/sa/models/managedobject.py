@@ -3032,7 +3032,7 @@ class ManagedObject(NOCModel):
         descr = None
         if "description" in data:
             descr = data["description"][:250]
-        mo = ManagedObject(
+        mo = cls(
             name=name or address,
             address=address,
             pool=pool,
@@ -3564,7 +3564,7 @@ class ManagedObjectWatchers(NOCModel):
 
     @classmethod
     def from_item(cls, managed_object, item: WatchItem) -> Self:
-        return ManagedObjectWatchers(
+        return cls(
             managed_object=managed_object,
             effect=item.effect.value,
             key=item.key or "",

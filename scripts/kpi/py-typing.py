@@ -115,7 +115,7 @@ class KPISummary:
         typed_packages = sum(1 for v in package_typing.values() if v)
         typed_modules = sum(1 for v in module_typing.values() if v)
         typed_classes = sum(1 for v in class_typing.values() if v)
-        return KPISummary(
+        return cls(
             total_packages=total_packages,
             total_modules=total_modules,
             total_classes=total_classes,
