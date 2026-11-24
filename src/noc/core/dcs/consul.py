@@ -149,7 +149,23 @@ class ConsulDCS(DCSBase):
         tags: list[str] | None = None,
         check_interval: int | None = None,
         check_timeout: int | None = None,
-    ):
+    ) -> bool:
+        """
+        Register service in Consul.
+
+        Args:
+            name: Service name.
+            address: Service address.
+            port: Service port.
+            pool: Service pool. Appended to the service name.
+            lock: Leader lock to acquire before registration.
+            tags: List of extra tags.
+            check_interval: DCS check interval, seconds.
+            check_timeout: DCS check timeout, seconds.
+
+        Returns:
+            True if the service was registered successfully, False otherwise.
+        """
         if pool:
             name = f"{name}-{pool}"
         self.name = name
@@ -190,8 +206,7 @@ class ConsulDCS(DCSBase):
                     continue
                 if r:
                     self.svc_id = svc_id
-                break
-            return r
+                return bool(r)
         return True
 
     async def deregister(self) -> None:
