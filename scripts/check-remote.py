@@ -14,6 +14,7 @@ import socket
 import subprocess
 import sys
 
+GIT_ERRORS = (FileNotFoundError, subprocess.CalledProcessError)
 DNS_SUFFIX = "._remotes.getnoc.com"
 MAX_PAYLOAD = 180
 MAX_DNS_NAME = 253
@@ -39,7 +40,7 @@ def get_remote() -> str | None:
             ).stdout.strip()
             or None
         )
-    except FileNotFoundError, subprocess.CalledProcessError:
+    except GIT_ERRORS:
         return None
 
 
