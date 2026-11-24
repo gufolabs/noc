@@ -35,7 +35,7 @@ from pymongo import ReadPreference, UpdateOne
 # NOC modules
 from noc.config import config
 from noc.core.bi.decorator import bi_sync
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DocumentCapsMixin
 from noc.core.change.decorator import change
 from noc.core.model.decorator import on_delete_check
 from noc.core.model.dynamicprofile import dynamic_profile
@@ -82,11 +82,10 @@ class ControllerItem(EmbeddedDocument):
 @dynamic_profile(profile_model_id="inv.CPEProfile")
 @change
 @bi_sync
-@capabilities
 @workflow
 @Label.model
 @on_delete_check(clean=[("sa.ManagedObject", "cpe_id")])
-class CPE(Document):
+class CPE(DocumentCapsMixin, Document):
     meta = {
         "collection": "cpes",
         "strict": False,

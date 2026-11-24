@@ -59,7 +59,7 @@ from noc.config import config
 from noc.core.bi.decorator import bi_sync
 from noc.core.cache.base import cache
 from noc.core.cache.decorator import cachedmethod
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DjangoCapsMixin
 from noc.core.caps.types import CapsConfig
 from noc.core.change.decorator import change, get_datastreams
 from noc.core.change.policy import change_tracker
@@ -428,7 +428,6 @@ class ManagedObjectManager(Manager):
 @workflow
 @diagnostic
 @change
-@capabilities
 @mappings
 @resourcegroup
 @Label.model
@@ -465,7 +464,7 @@ class ManagedObjectManager(Manager):
         ("peer.Peer", "managed_object"),
     ],
 )
-class ManagedObject(NOCModel):
+class ManagedObject(DjangoCapsMixin, NOCModel):
     """
     Managed Object
 

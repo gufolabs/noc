@@ -37,7 +37,7 @@ from pymongo import ReadPreference
 # NOC Modules
 from noc.config import config
 from noc.core.bi.decorator import bi_hash
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DocumentCapsMixin
 from noc.core.change.decorator import change
 from noc.core.diagnostic.hub import DIAGNOCSTIC_LABEL_SCOPE
 from noc.core.model.decorator import on_delete, on_delete_check
@@ -75,7 +75,6 @@ logger = logging.getLogger(__name__)
 @resourcegroup
 @Label.model
 @workflow
-@capabilities
 @on_delete_check(
     clean=[
         ("inv.Interface", "aggregated_interface"),
@@ -86,7 +85,7 @@ logger = logging.getLogger(__name__)
         ("inv.MACDB", "interface"),
     ],
 )
-class Interface(Document):
+class Interface(DocumentCapsMixin, Document):
     """
     Interfaces
     """

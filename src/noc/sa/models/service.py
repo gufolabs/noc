@@ -41,7 +41,7 @@ from mongoengine.queryset.visitor import Q as m_q
 # NOC modules
 from noc.config import config
 from noc.core.bi.decorator import bi_sync
-from noc.core.caps.decorator import capabilities
+from noc.core.caps.mixin import DocumentCapsMixin
 from noc.core.change.decorator import change
 from noc.core.change.policy import change_tracker
 from noc.core.checkers.base import CAPS_PROFILE_CHECK, Check, CheckResult
@@ -257,7 +257,6 @@ class ServiceDependency(EmbeddedDocument):
 @watchers
 @diagnostic
 @workflow
-@capabilities
 @mappings
 @on_delete_check(
     clean=[
@@ -267,7 +266,7 @@ class ServiceDependency(EmbeddedDocument):
     ],
     delete=[("sa.ServiceInstance", "service")],
 )
-class Service(Document):
+class Service(DocumentCapsMixin, Document):
     meta = {
         "collection": "noc.services",
         "strict": False,
