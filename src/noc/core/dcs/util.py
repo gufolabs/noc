@@ -8,36 +8,31 @@
 # NOC modules
 from noc.core.ioloop.util import run_sync
 
-from .loader import get_dcs
+from . import base
 
 
 async def resolve_async(
     name, hint=None, wait=True, timeout=None, full_result=False, near=False, critical=False
 ):
-    dcs = get_dcs()
-    try:
-        if near:
-            r = await dcs.resolve_near(
-                name,
-                hint=hint,
-                wait=wait,
-                timeout=timeout,
-                full_result=full_result,
-                critical=critical,
-            )
-        else:
-            r = await dcs.resolve(
-                name,
-                hint=hint,
-                wait=wait,
-                timeout=timeout,
-                full_result=full_result,
-                critical=critical,
-                track=False,
-            )
-    finally:
-        dcs.stop()
-    return r
+    dcs = base.dcs
+    if near:
+        return await dcs.resolve_near(
+            name,
+            hint=hint,
+            wait=wait,
+            timeout=timeout,
+            full_result=full_result,
+            critical=critical,
+        )
+    return await dcs.resolve(
+        name,
+        hint=hint,
+        wait=wait,
+        timeout=timeout,
+        full_result=full_result,
+        critical=critical,
+        track=False,
+    )
 
 
 def resolve(

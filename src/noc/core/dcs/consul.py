@@ -13,7 +13,6 @@ import asyncio
 import random
 import time
 import uuid
-from typing import TYPE_CHECKING
 
 # Third-party modules
 import orjson
@@ -28,9 +27,6 @@ from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.perf import metrics
 
 from .base import DCSBase, ResolverBase
-
-if TYPE_CHECKING:
-    from .loader import DCSRunner
 
 
 class ConsulResolver(ResolverBase):
@@ -85,14 +81,14 @@ class ConsulDCS(DCSBase):
 
     resolver_cls = ConsulResolver
 
-    def __init__(self, runner: DCSRunner) -> None:
+    def __init__(self) -> None:
         self.name: str | None = None
         self.svc_check_url: str | None = None
         self.svc_id: str | None = None
         self.session: str | None = None
         self.slot_number: int | None = None
         self.total_slots: int | None = None
-        super().__init__(runner)
+        super().__init__()
         self.consul = ConsulClient(
             host=config.consul.host, port=config.consul.port, token=config.consul.token
         )

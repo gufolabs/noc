@@ -15,7 +15,7 @@ from typing import Any
 
 # NOC modules
 from noc.config import config
-from noc.core.dcs.loader import get_dcs
+from noc.core.dcs.base import dcs
 from noc.core.ioloop.util import run_sync
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.error import MsgStreamError
@@ -56,7 +56,7 @@ class ServiceStub:
     def _start(self):
         self.loop = asyncio.get_event_loop()
         # Initialize DCS
-        self.dcs = get_dcs()
+        self.dcs = dcs
         # Activate service
         self.logger.warning("Activating stub service")
         self.logger.warning("Starting IOLoop")
@@ -176,5 +176,4 @@ class ServiceStub:
         Returns:
             Result of get slot count.
         """
-        dcs = get_dcs()
         return run_sync(dcs.get_slot_limit(slot_name))

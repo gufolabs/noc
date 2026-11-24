@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Pretty command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,8 +10,8 @@ import asyncio
 import os
 
 # NOC modules
+from noc.core.dcs.base import dcs
 from noc.core.management.base import BaseCommand
-from noc.core.service.loader import get_dcs
 
 
 class Command(BaseCommand):
@@ -45,6 +45,5 @@ class Command(BaseCommand):
                 svc = f"{x}-{y}"
             slots[svc] = int(value)
         # Apply
-        dcs = get_dcs()
         changed = asyncio.run(inner())
         self.print("CHANGED" if changed else "OK")
