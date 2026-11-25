@@ -320,6 +320,15 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             model: Target model or embedded document class.
         """
 
+    @abstractmethod
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        """
+        Return the model's unique field constraints from the collection meta.
+
+        Returns:
+            List of unique constraints: a single field name or a tuple of fields.
+        """
+
     def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         """
         Dereference a raw JSON record into field values.
@@ -379,6 +388,30 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         """
         return not bool(self.objects.all()[:1])
 
+    def find_by_unique_fields(self, d: dict[str, Any]) -> DB_MODEL_INSTANCE | None:
+        """
+        Find an existing record by its unique fields, ignoring the UUID.
+
+        Used by the unique-constraint repair path in update_item(). A record
+        created manually or by a legacy migration may carry a different UUID
+        than the collection item, so the UUID lookup misses and the record
+        must be found by its unique key instead.
+
+        Args:
+            d: Dereferenced collection item data.
+
+        Returns:
+            The existing record, or None if no constraint matches.
+        """
+        for f in self.get_unique_fields():
+            fields = (f,) if isinstance(f, str) else f
+            q = {fk: d[fk] for fk in fields if fk != "uuid" and fk in d}
+            if not q:
+                continue
+            if o := self.objects.filter(**q).first():
+                return o
+        return None
+
     def before_sync(self) -> None:
         """
         Run pre-sync maintenance steps for the collection.
@@ -419,13 +452,30 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             o.save()
             return True
         except NotUniqueError, IntegrityError:
-            # Unique constraint violation. Collection data uniqueness is
-            # guaranteed by tests/collections, so fail immediately instead
-            # of attempting an expensive repair
+            # A record with the same unique key already exists, but its UUID
+            # differs from the collection's one. This happens when a record
+            # is created manually or by a legacy migration before the
+            # collection adopts it. This repair is required: adopt the
+            # existing record by applying the collection data (including the
+            # UUID) to it. The repair is single-pass and cannot recurse;
+            # duplicate unique keys within the collection itself are
+            # impossible, as they are rejected by tests/collections.
+            o = self.find_by_unique_fields(d)
+            if o is None:
+                self.stdout.write(
+                    "[{}|{}] Unique constraint violation, aborting\n".format(
+                        self.name, data["uuid"]
+                    )
+                )
+                raise
             self.stdout.write(
-                "[{}|{}] Unique constraint violation, aborting\n".format(self.name, data["uuid"])
+                "[{}|{}] Reusing local object {}\n".format(
+                    self.name, data["uuid"], getattr(o, self.name_field)
+                )
             )
-            raise
+            set_attrs(o, d)
+            o.save()
+            return True
 
     def delete_item(self, uuid: str) -> None:
         o = self.objects.filter(uuid=uuid).first()
@@ -518,6 +568,9 @@ class ModelCollection(BaseCollection[type[NOCModel]]):
         m = cast("type[NOCModel]", model or self.model)
         return {field.name: field.__class__ for field in m._meta.local_fields}
 
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        return self.model._json_collection.get("json_unique_fields", [])
+
 
 class DocumentCollection(BaseCollection[type[Document]]):
     """
@@ -539,6 +592,10 @@ class DocumentCollection(BaseCollection[type[Document]]):
     def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         m = model or self.model
         return m._fields
+
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        # _meta is a plain dict at runtime, TypedDict in stubs
+        return getattr(self.model, "_meta").get("json_unique_fields", [])
 
     def _find_name_field(self) -> str | None:
         if nf := super()._find_name_field():
