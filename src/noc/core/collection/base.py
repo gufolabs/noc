@@ -113,6 +113,7 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         self._name_field: str | None = None
         self.stdout = stdout or sys.stdout
         self.partial_errors: dict[str, str] = {}
+        self._is_clean = self.is_clean()
 
     # ------------------------------------------------------------------
     # Factories
@@ -319,6 +320,15 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             model: Target model or embedded document class.
         """
 
+    @abstractmethod
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        """
+        Return the model's unique field constraints from the collection meta.
+
+        Returns:
+            List of unique constraints: a single field name or a tuple of fields.
+        """
+
     def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         """
         Dereference a raw JSON record into field values.
@@ -369,18 +379,38 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         # Model manager, added dynamically by model metaclasses, not visible in stubs
         return cast(Any, self.model).objects
 
-    @abstractmethod
-    def get_union_meta(self) -> dict[str, Any]:
-        """Return meta used for unique field lookups."""
-
-    def save_model(self, o: DB_MODEL_INSTANCE) -> None:
+    def is_clean(self) -> bool:
         """
-        Save model instance, respecting its type.
+        Check if the collection has no records in the database.
+
+        Returns:
+            True if the collection is empty, False otherwise.
+        """
+        return not bool(self.objects.all()[:1])
+
+    def find_by_unique_fields(self, d: dict[str, Any]) -> DB_MODEL_INSTANCE | None:
+        """
+        Find an existing record by its unique fields, ignoring the UUID.
+
+        Used by the unique-constraint repair path in update_item(). A record
+        created manually or by a legacy migration may carry a different UUID
+        than the collection item, so the UUID lookup misses and the record
+        must be found by its unique key instead.
 
         Args:
-            o: Model instance.
+            d: Dereferenced collection item data.
+
+        Returns:
+            The existing record, or None if no constraint matches.
         """
-        o.save()
+        for f in self.get_unique_fields():
+            fields = (f,) if isinstance(f, str) else f
+            q = {fk: d[fk] for fk in fields if fk != "uuid" and fk in d}
+            if not q:
+                continue
+            if o := self.objects.filter(**q).first():
+                return o
+        return None
 
     def before_sync(self) -> None:
         """
@@ -391,11 +421,11 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
     # Sync
     # ------------------------------------------------------------------
 
-    def update_item(self, data: dict[str, Any]) -> bool:
+    def update_item(self, data: dict[str, Any], _force_lookup: bool = False) -> bool:
         def set_attrs(obj: DB_MODEL_INSTANCE, values: dict[str, Any]) -> None:
-            for vk in values:
+            for vk, vv in values.items():
                 if hasattr(obj, vk):
-                    setattr(obj, vk, values[vk])
+                    setattr(obj, vk, vv)
 
         if data["uuid"] in self.partial_errors:
             del self.partial_errors[data["uuid"]]
@@ -404,8 +434,13 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         except ValueError as e:
             self.partial_errors[data["uuid"]] = str(e)
             return False  # Partials
-        o = self.objects.filter(uuid=data["uuid"]).first()
-        if o:
+        # On a clean install this uuid cannot exist yet (uuid uniqueness in
+        # collections is verified by tests), so skip the lookup and update
+        # attempt. Re-entrant calls must always check: the record may have
+        # been created by a previous pass.
+        if (not self._is_clean or _force_lookup) and (
+            o := self.objects.filter(uuid=data["uuid"]).first()
+        ):
             self.stdout.write(
                 "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
             )
@@ -421,34 +456,32 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             o.save()
             return True
         except NotUniqueError, IntegrityError:
-            union_meta = self.get_union_meta()
-            # Possible local alternative with different uuid
-            if not union_meta.get("json_unique_fields"):
-                self.stdout.write("Not json_unique_fields on object\n")
-                raise
-            # Try to find conflicting item
-            for k in union_meta["json_unique_fields"]:
-                if not isinstance(k, tuple):
-                    k = (k,)
-                qs = {}
-                for fk in k:
-                    if isinstance(d[fk], list):
-                        qs[f"{fk}__in"] = d[fk]
-                    else:
-                        qs[fk] = d[fk]
-                o = self.objects.filter(**qs).first()
-                if o:
-                    self.stdout.write(
-                        "[{}|{}] Changing local uuid {} ({})\n".format(
-                            self.name, data["uuid"], o.uuid, getattr(o, self.name_field)
-                        )
+            # A record with the same unique key already exists, but its UUID
+            # differs from the collection's one. This happens when a record
+            # is created manually or by a legacy migration before the
+            # collection adopts it. This repair is required: adopt the
+            # existing record by pointing its UUID to the collection's one,
+            # then re-run the update path. The recursive call must bypass
+            # the clean-install fast path, otherwise the UUID lookup is
+            # skipped, the item is created again, and the repair loops
+            # forever. Duplicate unique keys within the collection itself
+            # are impossible, as they are rejected by tests/collections.
+            o = self.find_by_unique_fields(d)
+            if o is None:
+                self.stdout.write(
+                    "[{}|{}] Unique constraint violation, aborting\n".format(
+                        self.name, data["uuid"]
                     )
-                    o.uuid = data["uuid"]
-                    self.save_model(o)
-                    # Try again
-                    return self.update_item(data)
-                self.stdout.write(f"Not find object by query: {qs}\n")
-            raise
+                )
+                raise
+            self.stdout.write(
+                "[{}|{}] Reusing local object {}\n".format(
+                    self.name, data["uuid"], getattr(o, self.name_field)
+                )
+            )
+            o.uuid = data["uuid"]
+            o.save()
+            return self.update_item(data, _force_lookup=True)
 
     def delete_item(self, uuid: str) -> None:
         o = self.objects.filter(uuid=uuid).first()
@@ -482,7 +515,9 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         while self.partial_errors:
             pl = len(self.partial_errors)
             for u in list(self.partial_errors):  # may change size
-                self.update_item(cdata[u].data)
+                # Partials may already have been created (embedded references
+                # are resolved lazily), so force the UUID lookup
+                self.update_item(cdata[u].data, _force_lookup=True)
             if len(self.partial_errors) == pl:
                 # Cannot resolve partials
                 for u in self.partial_errors:
@@ -537,13 +572,12 @@ class ModelCollection(BaseCollection[type[NOCModel]]):
     def get_collection_name(cls, model: type[NOCModel]) -> str:
         return model._json_collection["json_collection"]
 
-    def get_union_meta(self) -> dict[str, Any]:
-        # Declared per model class, not visible on the base class
-        return getattr(self.model, "_json_collection")
-
     def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         m = cast("type[NOCModel]", model or self.model)
         return {field.name: field.__class__ for field in m._meta.local_fields}
+
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        return self.model._json_collection.get("json_unique_fields", [])
 
 
 class DocumentCollection(BaseCollection[type[Document]]):
@@ -567,6 +601,10 @@ class DocumentCollection(BaseCollection[type[Document]]):
         m = model or self.model
         return m._fields
 
+    def get_unique_fields(self) -> list[str | tuple[str, ...]]:
+        # _meta is a plain dict at runtime, TypedDict in stubs
+        return getattr(self.model, "_meta").get("json_unique_fields", [])
+
     def _find_name_field(self) -> str | None:
         if nf := super()._find_name_field():
             return nf
@@ -578,10 +616,6 @@ class DocumentCollection(BaseCollection[type[Document]]):
 
     def before_sync(self) -> None:
         self.fix_uuids()
-
-    def get_union_meta(self) -> dict[str, Any]:
-        # _meta is a plain dict at runtime, TypedDict in stubs
-        return cast("dict[str, Any]", self.model._meta)
 
     def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         fields = self.get_fields(model)
@@ -636,10 +670,6 @@ class DocumentCollection(BaseCollection[type[Document]]):
                 v = b85decode(v)
             r[k] = v
         return r
-
-    def save_model(self, o: Document) -> None:
-        # uuid field is added dynamically by NOC metaclasses
-        o.save(clean=bool(getattr(o, "uuid", None)))
 
     def fix_uuids(self) -> None:
         """Convert string UUIDs to binary in the underlying collection."""
