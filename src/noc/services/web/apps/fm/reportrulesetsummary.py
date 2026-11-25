@@ -19,7 +19,7 @@ class ReportRulesetSummary(SimpleReport):
 
     def get_data(self, **kwargs):
         def get_count(cn, m):
-            collection = Collection(cn)
+            collection = Collection.get_by_name(cn)
             total = collection.model.objects.count()
             builtin = len(collection.get_items())
             local = total - builtin

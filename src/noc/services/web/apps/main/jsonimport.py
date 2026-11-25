@@ -34,11 +34,11 @@ class JSONImportApplication(ExtApplication):
             if isinstance(jdata, list):
                 for d in jdata:
                     Collection.install(d)
-                    c = Collection(d["$collection"])
+                    c: Collection = Collection.get_by_name(d["$collection"])
                     c.update_item(d)
             else:
                 Collection.install(jdata)
-                c = Collection(jdata["$collection"])
+                c = Collection.get_by_name(jdata["$collection"])
                 c.update_item(jdata)
         except ValueError as e:
             return {"status": False, "error": str(e)}
