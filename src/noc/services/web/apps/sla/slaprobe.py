@@ -7,13 +7,12 @@
 
 # NOC modules
 from noc.core.i18n import t
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.state import StateMixin
 from noc.sla.models.slaprobe import SLAProbe
 
 
-@state_handler
-class SLAProbeApplication(ExtDocApplication):
+class SLAProbeApplication(StateMixin, ExtDocApplication):
     """
     SLAProbe application
     """

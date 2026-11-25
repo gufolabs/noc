@@ -35,16 +35,13 @@ from noc.sa.interfaces.base import (
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.service import Service
 from noc.sa.models.serviceinstance import ServiceInstance
-from noc.services.web.base.decorators.caps import capabilities_handler
-from noc.services.web.base.decorators.state import state_handler
-from noc.services.web.base.decorators.watch import watch_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.services.web.base.mixins.caps import CapsApiMixin
+from noc.services.web.base.mixins.state import StateMixin
+from noc.services.web.base.mixins.watch import WatchMixin
 
 
-@watch_handler
-@capabilities_handler
-@state_handler
-class ServiceApplication(ExtDocApplication):
+class ServiceApplication(WatchMixin, CapsApiMixin, StateMixin, ExtDocApplication):
     """
     Service application
     """

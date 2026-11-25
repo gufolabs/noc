@@ -21,14 +21,13 @@ from noc.inv.models.resourcepool import ResourcePool
 from noc.inv.models.subinterface import SubInterface
 from noc.sa.interfaces.base import DocumentParameter, IntParameter, StringParameter
 from noc.sa.models.managedobject import ManagedObject
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 from noc.vc.models.l2domain import L2Domain
 from noc.vc.models.vlan import VLAN
 
 
-@state_handler
-class VLANApplication(ExtDocApplication):
+class VLANApplication(StateMixin, ExtDocApplication):
     """
     VLAN application
     """

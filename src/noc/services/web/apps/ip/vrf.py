@@ -21,12 +21,11 @@ from noc.sa.interfaces.base import (
     RDParameter,
     StringParameter,
 )
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class VRFApplication(ExtModelApplication):
+class VRFApplication(StateMixin, ExtModelApplication):
     """
     VRF application
     """

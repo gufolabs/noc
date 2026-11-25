@@ -14,13 +14,12 @@ from noc.core.ip import IP
 from noc.core.validators import is_prefix
 from noc.peer.models.peer import Peer
 from noc.sa.interfaces.base import ListOfParameter, ModelParameter
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 from noc.services.web.base.repoinline import RepoInline
 
 
-@state_handler
-class PeerApplication(ExtModelApplication):
+class PeerApplication(StateMixin, ExtModelApplication):
     """
     Peers application
     """

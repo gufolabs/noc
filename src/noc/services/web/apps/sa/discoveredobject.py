@@ -20,14 +20,13 @@ from noc.sa.interfaces.base import (
     StringParameter,
 )
 from noc.sa.models.discoveredobject import CheckStatus, DataItem, DiscoveredObject
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.services.web.base.mixins.state import StateMixin
 from noc.wf.models.transition import Transition
 from noc.wf.models.workflow import Workflow
 
 
-@state_handler
-class DiscoveredObjectApplication(ExtDocApplication):
+class DiscoveredObjectApplication(StateMixin, ExtDocApplication):
     """
     Discovered Object
     """

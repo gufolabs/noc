@@ -12,12 +12,11 @@ from django.http import HttpRequest
 from noc.core.i18n import t
 from noc.ip.models.address import Address
 from noc.ip.models.prefixaccess import PrefixAccess
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extmodelapplication import ExtModelApplication
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@state_handler
-class AddressApplication(ExtModelApplication):
+class AddressApplication(StateMixin, ExtModelApplication):
     """
     Address application
     """

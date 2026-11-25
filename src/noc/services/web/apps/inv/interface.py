@@ -24,15 +24,13 @@ from noc.sa.interfaces.base import (
     StringParameter,
 )
 from noc.sa.models.managedobject import ManagedObject
-from noc.services.web.base.decorators.caps import capabilities_handler
-from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.extapplication import api
 from noc.services.web.base.extdocapplication import ExtDocApplication
+from noc.services.web.base.mixins.caps import CapsApiMixin
+from noc.services.web.base.mixins.state import StateMixin
 
 
-@capabilities_handler
-@state_handler
-class InterfaceApplication(ExtDocApplication):
+class InterfaceApplication(CapsApiMixin, StateMixin, ExtDocApplication):
     """
     inv.interface application
     """
