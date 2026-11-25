@@ -88,7 +88,7 @@ class Migration(BaseMigration):
                 table, "glyph", DocumentReferenceField("main.Glyph", null=True, blank=True)
             )
         # Ensure glyph collection is synched
-        Collection("main.glyphs").sync()
+        Collection.get_by_name("main.glyphs").sync()
         # code to id mappings
         code_map = {
             doc["code"]: str(doc["_id"])

@@ -18,7 +18,6 @@ from noc.core.collection.base import Collection
 from noc.core.fileutils import safe_rewrite
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
-from noc.models import COLLECTIONS, get_model, is_document
 
 
 class Command(BaseCommand):
@@ -107,7 +106,7 @@ class Command(BaseCommand):
             try:
                 Collection.install(data)
                 if load:
-                    c = Collection(data["$collection"])
+                    c = Collection.get_by_name(data["$collection"])
                     c.update_item(data)
             except ValueError as e:
                 self.die(f"{fp} - {e!s}")
@@ -124,14 +123,7 @@ class Command(BaseCommand):
         export_model_vendors=None,
     ):
         connect()
-        MODELS = {}
-        for c in COLLECTIONS:
-            cm = get_model(c)
-            if is_document(cm):
-                cn = cm._meta["json_collection"]
-            else:
-                cn = cm._json_collection.get("json_collection")
-            MODELS[cn] = cm
+        MODELS = Collection.load_models()
         if list_collection is not None:
             if list_collection is True:
                 for c in Collection.iter_collections():

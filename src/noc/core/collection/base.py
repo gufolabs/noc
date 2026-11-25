@@ -6,18 +6,17 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import csv
 import hashlib
 import operator
-import shutil
 import sys
 import threading
 import zlib
+from abc import ABC, abstractmethod
 from base64 import b85decode
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar, NamedTuple, Self, TextIO, cast
 from uuid import UUID
 
 # Third-party modules
@@ -35,14 +34,15 @@ from mongoengine.fields import (
     ReferenceField,
 )
 from pymongo import UpdateOne
+from pymongo.collection import Collection as PymongoCollection
 
 # NOC modules
 from noc.config import config
 from noc.core.comp import smart_bytes
 from noc.core.fileutils import safe_rewrite
-from noc.core.model.base import NOCModelBase
+from noc.core.model.base import NOCModel
 from noc.core.mongo.connection import get_db
-from noc.models import is_document
+from noc.models import COLLECTIONS, DB_MODEL_INSTANCE, DB_MODEL_TYPE, get_model, is_document
 
 state_lock = threading.Lock()
 
@@ -65,23 +65,125 @@ class Item:
     data: dict[str, Any]
 
 
-class Collection:
+class RefKey(NamedTuple):
+    """
+    Lookup cache key.
+
+    Attributes:
+        ref: Document class
+        field: Field name
+        key: Field value
+    """
+
+    ref: type[Document]
+    field: str
+    key: str
+
+
+class BaseCollection[T: DB_MODEL_TYPE](ABC):
+    """
+    Base class for collection synchronisation.
+
+    A collection wraps a model class (Django model or mongoengine document)
+    and synchronises its JSON representation from files to the database.
+    Use the get_by_name() factory or iter_collections() to get instances.
+
+    Subclasses:
+        ModelCollection: Django models
+        DocumentCollection: mongoengine documents
+    """
+
     PREFIX = "collections"
     STATE_COLLECTION = "noc.collectionstates"
     DEFAULT_API_VERSION = 1
 
-    _MODELS = {}
+    _api_version: int | str  # API version prefix for item hashes
 
-    _state_cache = cachetools.TTLCache(maxsize=100, ttl=60)
+    _MODELS: ClassVar[dict[str, DB_MODEL_TYPE]] = {}
 
-    def __init__(self, name, stdout=None) -> None:
-        self.name = name
-        self._model = None
+    _state_cache: ClassVar[cachetools.TTLCache[str, set[str]]] = cachetools.TTLCache(
+        maxsize=100, ttl=60
+    )
+
+    def __init__(self, model: T, stdout: TextIO | None = None) -> None:
+        self.model = model
+        self.name = self.get_collection_name(model)
         self._api_version = self.DEFAULT_API_VERSION
-        self.ref_cache: dict[tuple[Document, str, str], Document] = {}
-        self._name_field = None
+        self.ref_cache: dict[RefKey, Document] = {}
+        self._name_field: str | None = None
         self.stdout = stdout or sys.stdout
-        self.partial_errors = {}
+        self.partial_errors: dict[str, str] = {}
+
+    # ------------------------------------------------------------------
+    # Factories
+    # ------------------------------------------------------------------
+
+    @classmethod
+    @abstractmethod
+    def get_collection_name(cls, model: T) -> str:
+        """
+        Return json collection name for the model class.
+
+        Args:
+            model: Model class (Django model or mongoengine document).
+
+        Returns:
+            Collection name, e.g. "fm.alarmclasses".
+        """
+
+    @classmethod
+    def load_models(cls) -> dict[str, DB_MODEL_TYPE]:
+        """
+        Return the name -> model class index, filling it lazily.
+
+        Returns:
+            Result of return the name -> model class index.
+        """
+        if not cls._MODELS:
+            for c in COLLECTIONS:
+                cm = get_model(c)
+                cls._MODELS[cls.create(cm).name] = cm
+        return cls._MODELS
+
+    @classmethod
+    def create(cls, model: DB_MODEL_TYPE) -> Self:
+        """
+        Create proper collection instance for the model class.
+
+        Args:
+            model: Model class (Django model or mongoengine document).
+        """
+        if is_document(model):
+            return cast(Self, DocumentCollection(cast(type[Document], model)))
+        return cast(Self, ModelCollection(cast(type[NOCModel], model)))
+
+    @classmethod
+    def get_by_name(cls, name: str) -> Self:
+        """
+        Return collection instance for the given collection name.
+
+        Args:
+            name: Collection name, e.g. "fm.alarmclasses".
+
+        Raises:
+            ValueError: If collection name is unknown.
+        """
+        try:
+            model = cls.load_models()[name]
+        except KeyError:
+            msg = f"Unknown collection: {name}"
+            raise ValueError(msg) from None
+        return cls.create(model)
+
+    @classmethod
+    def iter_collections(cls) -> Iterable[Self]:
+        """Yield collection instances for all known models."""
+        for model in cls.load_models().values():
+            yield cls.create(model)
+
+    # ------------------------------------------------------------------
+    # State
+    # ------------------------------------------------------------------
 
     def iter_path(self) -> Iterable[Path]:
         """Get directories containing collection items."""
@@ -90,124 +192,60 @@ class Collection:
             if path.exists():
                 yield path
 
-    @classmethod
-    def iter_collections(cls) -> Iterable[Collection]:
-        # NOC modules
-        from noc.models import COLLECTIONS, get_model
-
-        for c in COLLECTIONS:
-            cm = get_model(c)
-            if is_document(cm):
-                cn = cm._meta["json_collection"]
-            else:
-                cn = cm._json_collection["json_collection"]
-            cls._MODELS[cn] = cm
-            yield Collection(cn)
-
-    @property
-    def model(self):
-        if not self._model:
-            if not self._MODELS:
-                list(self.iter_collections())
-            self._model = self._MODELS[self.name]
-            if is_document(self._model):
-                self._api_version = self._model._meta.get(
-                    "json_api_version", self.DEFAULT_API_VERSION
-                )
-        return self._model
-
     @property
     def name_field(self) -> str:
         if self._name_field:
             return self._name_field
+        nf = self._find_name_field()
+        if not nf:
+            raise ValueError("Cannot find name field")
+        self._name_field = nf
+        return nf
+
+    def _find_name_field(self) -> str | None:
+        """
+        Find the field used to display an item's name.
+
+        Returns:
+            Field name, or None if not found.
+        """
         if hasattr(self.model, "name"):
-            self._name_field = "name"
             return "name"
         if hasattr(self.model, "json_name"):
-            self._name_field = "json_name"
             return "json_name"
-        for spec in self.model._meta["index_specs"]:
-            if spec.get("unique") and len(spec["fields"]) == 1:
-                nf = spec["fields"][0][0]
-                self._name_field = nf
-                return nf
-        raise ValueError("Cannot find unique index")
+        return None
 
-    def get_state_collection(self):
-        """
-        Return mongo collection for state
-        Returns:
-            Result of return mongo collection for state.
-        """
+    def get_state_collection(self) -> PymongoCollection:
+        """Return mongo collection for state."""
         return get_db()[self.STATE_COLLECTION]
 
     def get_state(self) -> dict[str, str]:
-        """
-        Returns collection state as a dict of UUID -> hash
-        Returns:
-            Result of returns collection state as a dict of uuid -> hash.
-        """
+        """Return collection state as a dict of UUID -> hash."""
         coll = self.get_state_collection()
         # Get state from database
         cs = coll.find_one({"_id": self.name})
         if cs:
             return orjson.loads(zlib.decompress(smart_bytes(cs["state"])))
-        return self.get_legacy_state()
-
-    def get_legacy_state(self) -> dict[str, str]:
-        # Fallback to legacy local
-        path = self.get_legacy_state_path()
-        state = {}
-        if path.exists():
-            with open(path) as f:
-                reader = csv.reader(f)
-                next(reader)  # Skip header
-                for _name, r_uuid, _path, r_hash in reader:
-                    state[r_uuid] = r_hash
-        return state
+        return {}
 
     def save_state(self, state: dict[str, str]) -> None:
-        """
-        Save collection state
-        Returns:
-            Result of save collection state.
-        """
+        """Save collection state."""
         coll = self.get_state_collection()
         coll.update_one(
             {"_id": self.name},
             {"$set": {"state": bson.Binary(zlib.compress(orjson.dumps(state)))}},
             upsert=True,
         )
-        # Remove legacy state
-        path = self.get_legacy_state_path()
-        if path.exists():
-            bak = path.with_suffix(".bak")
-            shutil.move(str(path), str(bak))
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_state_cache"), lock=lambda _: state_lock)
     def get_builtins(cls, name: str) -> set[str]:
-        """
-        Returns set of UUIDs for collection
-        Returns:
-            Result of returns set of uuids for collection.
-        """
-        return set(Collection(name).get_state())
+        """Return the set of UUIDs stored in the collection state."""
+        return set(cls.get_by_name(name).get_state())
 
-    def get_legacy_state_path(self) -> Path:
-        """
-        Return legacy CSV state file path
-        Returns:
-            Result of return legacy csv state file path.
-        """
-        parts = self.name.split(".")
-        return Path("local", "collections", parts[0], parts[1]).with_suffix(".csv")
-
-    def get_changed_status(self):
-        """
-        Return initially changed status.
-        """
-        return self.get_legacy_state_path().exists()
+    # ------------------------------------------------------------------
+    # Items
+    # ------------------------------------------------------------------
 
     def item_hash(self, data: dict[str, Any]) -> str:
         """
@@ -272,16 +310,32 @@ class Collection:
         else:
             yield get_single(data)
 
-    def get_fields(self, model: Document | NOCModelBase):
-        model = model or self.model
-        if not isinstance(model, NOCModelBase):
-            # Check Django Model
-            return model._fields
-        ls_field = model._meta.local_fields
-        return {field.name: field.__class__ for field in ls_field}
+    @abstractmethod
+    def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
+        """
+        Return the field name -> field mapping for the model.
 
-    def dereference(self, d, model=None):
-        r = {}
+        Args:
+            model: Target model or embedded document class.
+        """
+
+    def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
+        """
+        Dereference a raw JSON record into field values.
+
+        The base implementation is a plain passthrough of known fields, which
+        is all Django models need. Document collections override it to resolve
+        reference lookups and embedded documents.
+
+        Args:
+            d: Raw JSON record.
+            model: Target model or embedded document class.
+
+        Returns:
+            Dereferenced field values.
+        """
+        fields = self.get_fields(model)
+        r: dict[str, Any] = {}
         for k in d:
             v = d[k]
             if k.startswith("$"):
@@ -289,62 +343,56 @@ class Collection:
             if k == "uuid":
                 r["uuid"] = UUID(v)
                 continue
-            # Dereference ref__name lookups
-            if "__" in k:
-                # Lookup
-                k, f = k.split("__")
-                if k not in self.get_fields(model):
-                    raise ValueError(f"Invalid lookup field: {k}")
-                ref = self.get_fields(model)[k].document_type
-                v = self.lookup(ref, f, v)
-            # Get field
-            try:
-                field = self.get_fields(model)[k]
-            except KeyError:
+            if k not in fields:
                 continue  # Ignore unknown fields
-            # Dereference ListFields
-            if (
-                isinstance(field, ListField) and isinstance(field.field, EmbeddedDocumentField)
-            ) or isinstance(field, EmbeddedDocumentListField):
-                edoc = field.field.document_type
-                try:
-                    v = [edoc(**self.dereference(x, model=edoc)) for x in d[k]]
-                except ValueError as e:
-                    v = []
-                    self.partial_errors[d["uuid"]] = str(e)
-            elif isinstance(field, EmbeddedDocumentField):
-                try:
-                    v = field.document_type(**self.dereference(v, model=field.document_type))
-                except ValueError as e:
-                    v = None
-                    self.partial_errors[d["uuid"]] = str(e)
-            elif isinstance(field, ListField) and isinstance(field.field, ReferenceField):
-                edoc = field.field.document_type
-                try:
-                    v = [self.lookup(edoc, "name", x) for x in d[k]]
-                except ValueError as e:
-                    self.partial_errors[d["uuid"]] = str(e)
-                    raise ValueError(f"Invalid lookup field: {k}")
-            # Dereference binary field
-            if isinstance(field, BinaryField):
-                v = b85decode(v)
-            r[str(k)] = v
+            r[k] = v
         return r
 
-    def lookup(self, ref: Document, field: str, key: str) -> Document:
-        field = str(field)
-        v = self.ref_cache.get((ref, field, key))
+    def lookup(self, ref: type[Document], field: str, key: str) -> Document:
+        v = self.ref_cache.get(RefKey(ref, field, key))
         if v:
             return v
-        v = ref.objects.filter(**{field: key}).first()
+        # .objects manager is added dynamically by metaclasses, not visible in stubs
+        v = cast(Any, ref).objects.filter(**{field: key}).first()
         if v:
-            self.ref_cache[ref, field, key] = v
+            self.ref_cache[RefKey(ref, field, key)] = v
             return v
         coll = ref._meta["collection"]
         raise ValueError(f"lookup for {coll}.{field} == '{key}' has been failed")
 
-    def update_item(self, data):
-        def set_attrs(obj, values):
+    # ------------------------------------------------------------------
+    # Model handling, to be specialised by subclasses
+    # ------------------------------------------------------------------
+
+    @property
+    def objects(self) -> Any:
+        # Model manager, added dynamically by model metaclasses, not visible in stubs
+        return cast(Any, self.model).objects
+
+    @abstractmethod
+    def get_union_meta(self) -> dict[str, Any]:
+        """Return meta used for unique field lookups."""
+
+    def save_model(self, o: DB_MODEL_INSTANCE) -> None:
+        """
+        Save model instance, respecting its type.
+
+        Args:
+            o: Model instance.
+        """
+        o.save()
+
+    def before_sync(self) -> None:
+        """
+        Run pre-sync maintenance steps for the collection.
+        """
+
+    # ------------------------------------------------------------------
+    # Sync
+    # ------------------------------------------------------------------
+
+    def update_item(self, data: dict[str, Any]) -> bool:
+        def set_attrs(obj: DB_MODEL_INSTANCE, values: dict[str, Any]) -> None:
             for vk in values:
                 if hasattr(obj, vk):
                     setattr(obj, vk, values[vk])
@@ -356,7 +404,7 @@ class Collection:
         except ValueError as e:
             self.partial_errors[data["uuid"]] = str(e)
             return False  # Partials
-        o = self.model.objects.filter(uuid=data["uuid"]).first()
+        o = self.objects.filter(uuid=data["uuid"]).first()
         if o:
             self.stdout.write(
                 "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
@@ -373,10 +421,7 @@ class Collection:
             o.save()
             return True
         except NotUniqueError, IntegrityError:
-            if is_document(self.model):
-                union_meta = self.model._meta
-            else:
-                union_meta = self.model._json_collection
+            union_meta = self.get_union_meta()
             # Possible local alternative with different uuid
             if not union_meta.get("json_unique_fields"):
                 self.stdout.write("Not json_unique_fields on object\n")
@@ -391,7 +436,7 @@ class Collection:
                         qs[f"{fk}__in"] = d[fk]
                     else:
                         qs[fk] = d[fk]
-                o = self.model.objects.filter(**qs).first()
+                o = self.objects.filter(**qs).first()
                 if o:
                     self.stdout.write(
                         "[{}|{}] Changing local uuid {} ({})\n".format(
@@ -399,36 +444,32 @@ class Collection:
                         )
                     )
                     o.uuid = data["uuid"]
-                    if is_document(self.model):
-                        o.save(clean=bool(o.uuid))
-                    else:
-                        o.save()
+                    self.save_model(o)
                     # Try again
                     return self.update_item(data)
                 self.stdout.write(f"Not find object by query: {qs}\n")
             raise
 
-    def delete_item(self, uuid):
-        o = self.model.objects.filter(uuid=uuid).first()
+    def delete_item(self, uuid: str) -> None:
+        o = self.objects.filter(uuid=uuid).first()
         if not o:
             return
         self.stdout.write(f"[{self.name}|{uuid}] Deleting {getattr(o, self.name_field)}\n")
         o.delete()
 
-    def sync(self):
+    def sync(self) -> None:
         # Read collection from JSON files
         cdata = self.get_items()
         if not cdata:
             self.stdout.write(f"[{self.name}] Ignoring empty collection\n")
             return
         self.stdout.write(f"[{self.name}] Synchronizing\n")
+        self.before_sync()
         # Get previous state
         cs = self.get_state()
         current_uuids = set(cs)
         new_uuids = set(cdata)
-        changed = self.get_changed_status()
-        if is_document(self.model):
-            self.fix_uuids()
+        changed = False
         for u in new_uuids - current_uuids:
             self.update_item(cdata[u].data)
             changed = True
@@ -461,36 +502,16 @@ class Collection:
             state = {u: cdata[u].hash for u in sorted(cdata)}
             self.save_state(state)
 
-    def delete_partials(self) -> None:
-        """Process partial errors deletion"""
-        for u in self.partial_errors:
-            self.delete_item(u)
-
-    def fix_uuids(self):
-        """
-        Convert string UUIDs to binary
-        Returns:
-            Result of convert string uuids to binary.
-        """
-        bulk = []
-        for d in self.model._get_collection().find(
-            {"uuid": {"$type": "string"}}, {"_id": 1, "uuid": 1}
-        ):
-            bulk.append(UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": UUID(d["uuid"])}}))
-        if bulk:
-            self.stdout.write(f"[{self.name}] Fixing {len(bulk)} UUID\n")
-            self.model._get_collection().bulk_write(bulk)
+    # ------------------------------------------------------------------
+    # Install / bulk sync
+    # ------------------------------------------------------------------
 
     @classmethod
-    def install(cls, data):
-        """
-        Write data to the proper path
-        Returns:
-            Result of write data to the proper path.
-        """
-        c = Collection(data["$collection"])
+    def install(cls, data: dict[str, Any]) -> None:
+        """Write data to the proper collection JSON path."""
+        c = cls.get_by_name(data["$collection"])
         data = c.dereference(data)
-        o = c.model(**data)
+        o = cast(Any, c.model(**data))
         # Format JSON
         json_data = o.to_json()
         # Write
@@ -503,10 +524,134 @@ class Collection:
     @classmethod
     def sync_all(cls) -> None:
         """Synchronize all collections."""
-        partials = []
-        for c in Collection.iter_collections():
+        for c in cls.iter_collections():
             c.sync()
-            if c.partial_errors:
-                partials.insert(0, c)
-        for c in partials:
-            c.delete_partials()
+
+
+class ModelCollection(BaseCollection[type[NOCModel]]):
+    """
+    Collection for Django models.
+    """
+
+    @classmethod
+    def get_collection_name(cls, model: type[NOCModel]) -> str:
+        return model._json_collection["json_collection"]
+
+    def get_union_meta(self) -> dict[str, Any]:
+        # Declared per model class, not visible on the base class
+        return getattr(self.model, "_json_collection")
+
+    def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
+        m = cast("type[NOCModel]", model or self.model)
+        return {field.name: field.__class__ for field in m._meta.local_fields}
+
+
+class DocumentCollection(BaseCollection[type[Document]]):
+    """
+    Collection for mongoengine documents.
+    """
+
+    @classmethod
+    def get_collection_name(cls, model: type[Document]) -> str:
+        # _meta is a plain dict at runtime, TypedDict in stubs
+        return getattr(model, "_meta")["json_collection"]
+
+    def __init__(self, model: type[Document], stdout: TextIO | None = None) -> None:
+        super().__init__(model, stdout)
+        # json_api_version is declared as int, model meta may hold str
+        self._api_version = cast(
+            "int | str", model._meta.get("json_api_version", self.DEFAULT_API_VERSION)
+        )
+
+    def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
+        m = model or self.model
+        return m._fields
+
+    def _find_name_field(self) -> str | None:
+        if nf := super()._find_name_field():
+            return nf
+        # index_specs is declared per document, not visible on the base stubs
+        for spec in getattr(self.model, "_meta")["index_specs"]:
+            if spec.get("unique") and len(spec["fields"]) == 1:
+                return spec["fields"][0][0]
+        return None
+
+    def before_sync(self) -> None:
+        self.fix_uuids()
+
+    def get_union_meta(self) -> dict[str, Any]:
+        # _meta is a plain dict at runtime, TypedDict in stubs
+        return cast("dict[str, Any]", self.model._meta)
+
+    def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
+        fields = self.get_fields(model)
+        r: dict[str, Any] = {}
+        for k in d:
+            v = d[k]
+            if k.startswith("$"):
+                continue  # Ignore $name
+            if k == "uuid":
+                r["uuid"] = UUID(v)
+                continue
+            # Dereference ref__name lookups
+            if "__" in k:
+                # Lookup
+                k, f = k.split("__")
+                if k not in fields:
+                    raise ValueError(f"Invalid lookup field: {k}")
+                ref = fields[k].document_type
+                v = self.lookup(ref, f, v)
+            # Get field
+            try:
+                field = fields[k]
+            except KeyError:
+                continue  # Ignore unknown fields
+            # .field and .document_type are not exposed by mongoengine stubs
+            mf: Any = field
+            # Dereference ListFields
+            if (
+                isinstance(field, ListField) and isinstance(mf.field, EmbeddedDocumentField)
+            ) or isinstance(field, EmbeddedDocumentListField):
+                edoc = mf.field.document_type
+                try:
+                    v = [edoc(**self.dereference(x, model=edoc)) for x in d[k]]
+                except ValueError as e:
+                    v = []
+                    self.partial_errors[d["uuid"]] = str(e)
+            elif isinstance(field, EmbeddedDocumentField):
+                try:
+                    v = mf.document_type(**self.dereference(v, model=mf.document_type))
+                except ValueError as e:
+                    v = None
+                    self.partial_errors[d["uuid"]] = str(e)
+            elif isinstance(field, ListField) and isinstance(mf.field, ReferenceField):
+                edoc = cast(Any, mf.field).document_type
+                try:
+                    v = [self.lookup(edoc, "name", x) for x in d[k]]
+                except ValueError as e:
+                    self.partial_errors[d["uuid"]] = str(e)
+                    raise ValueError(f"Invalid lookup field: {k}")
+            # Dereference binary field
+            if isinstance(field, BinaryField):
+                v = b85decode(v)
+            r[k] = v
+        return r
+
+    def save_model(self, o: Document) -> None:
+        # uuid field is added dynamically by NOC metaclasses
+        o.save(clean=bool(getattr(o, "uuid", None)))
+
+    def fix_uuids(self) -> None:
+        """Convert string UUIDs to binary in the underlying collection."""
+        coll = self.model._get_collection()
+        bulk = [
+            UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": UUID(d["uuid"])}})
+            for d in coll.find({"uuid": {"$type": "string"}}, {"_id": 1, "uuid": 1})
+        ]
+        if bulk:
+            self.stdout.write(f"[{self.name}] Fixing {len(bulk)} UUID\n")
+            coll.bulk_write(bulk)
+
+
+# Backward-compatibility alias
+Collection = BaseCollection
