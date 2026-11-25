@@ -113,6 +113,7 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         self._name_field: str | None = None
         self.stdout = stdout or sys.stdout
         self.partial_errors: dict[str, str] = {}
+        self._is_clean = self.is_clean()
 
     # ------------------------------------------------------------------
     # Factories
@@ -369,6 +370,15 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         # Model manager, added dynamically by model metaclasses, not visible in stubs
         return cast(Any, self.model).objects
 
+    def is_clean(self) -> bool:
+        """
+        Check if the collection has no records in the database.
+
+        Returns:
+            True if the collection is empty, False otherwise.
+        """
+        return not bool(self.objects.all()[:1])
+
     @abstractmethod
     def get_union_meta(self) -> dict[str, Any]:
         """Return meta used for unique field lookups."""
@@ -393,9 +403,9 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
 
     def update_item(self, data: dict[str, Any]) -> bool:
         def set_attrs(obj: DB_MODEL_INSTANCE, values: dict[str, Any]) -> None:
-            for vk in values:
+            for vk, vv in values.items():
                 if hasattr(obj, vk):
-                    setattr(obj, vk, values[vk])
+                    setattr(obj, vk, vv)
 
         if data["uuid"] in self.partial_errors:
             del self.partial_errors[data["uuid"]]
@@ -404,8 +414,9 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         except ValueError as e:
             self.partial_errors[data["uuid"]] = str(e)
             return False  # Partials
-        o = self.objects.filter(uuid=data["uuid"]).first()
-        if o:
+        # On a clean install this uuid cannot exist yet (uuid uniqueness in
+        # collections is verified by tests), so skip the lookup and update attempt
+        if not self._is_clean and (o := self.objects.filter(uuid=data["uuid"]).first()):
             self.stdout.write(
                 "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
             )
