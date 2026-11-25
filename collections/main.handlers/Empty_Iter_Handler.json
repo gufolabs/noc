@@ -1,5 +1,5 @@
 {
-    "uuid": "3184cbf5-1290-4132-8fda-ea4ae8519305",
+    "uuid": "9baeb99e-0b75-4518-98a2-5a41f1af8af1",
     "$collection": "main.handlers",
     "handler": "noc.main.handlers.emptyiterhandler.handler",
     "name": "Empty Iter Handler",

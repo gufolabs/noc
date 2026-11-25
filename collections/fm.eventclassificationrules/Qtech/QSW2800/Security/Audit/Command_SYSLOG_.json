@@ -1,7 +1,7 @@
 {
     "name": "Qtech | QSW2800 | Security | Audit | Command (SYSLOG)",
     "$collection": "fm.eventclassificationrules",
-    "uuid": "b668fadf-8f1b-4e0e-925e-cbb6058bc442",
+    "uuid": "d4ab05d9-0c5c-4c5d-82c7-43ddec46e25b",
     "description": "Record command information. (Task=VT0 , Ip=88.147.128.54, User=admin, Command=\"display version\")",
     "event_class__name": "Security | Audit | Command",
     "preference": 1000,
