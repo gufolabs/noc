@@ -379,19 +379,6 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         """
         return not bool(self.objects.all()[:1])
 
-    @abstractmethod
-    def get_union_meta(self) -> dict[str, Any]:
-        """Return meta used for unique field lookups."""
-
-    def save_model(self, o: DB_MODEL_INSTANCE) -> None:
-        """
-        Save model instance, respecting its type.
-
-        Args:
-            o: Model instance.
-        """
-        o.save()
-
     def before_sync(self) -> None:
         """
         Run pre-sync maintenance steps for the collection.
@@ -432,33 +419,12 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             o.save()
             return True
         except NotUniqueError, IntegrityError:
-            union_meta = self.get_union_meta()
-            # Possible local alternative with different uuid
-            if not union_meta.get("json_unique_fields"):
-                self.stdout.write("Not json_unique_fields on object\n")
-                raise
-            # Try to find conflicting item
-            for k in union_meta["json_unique_fields"]:
-                if not isinstance(k, tuple):
-                    k = (k,)
-                qs = {}
-                for fk in k:
-                    if isinstance(d[fk], list):
-                        qs[f"{fk}__in"] = d[fk]
-                    else:
-                        qs[fk] = d[fk]
-                o = self.objects.filter(**qs).first()
-                if o:
-                    self.stdout.write(
-                        "[{}|{}] Changing local uuid {} ({})\n".format(
-                            self.name, data["uuid"], o.uuid, getattr(o, self.name_field)
-                        )
-                    )
-                    o.uuid = data["uuid"]
-                    self.save_model(o)
-                    # Try again
-                    return self.update_item(data)
-                self.stdout.write(f"Not find object by query: {qs}\n")
+            # Unique constraint violation. Collection data uniqueness is
+            # guaranteed by tests/collections, so fail immediately instead
+            # of attempting an expensive repair
+            self.stdout.write(
+                "[{}|{}] Unique constraint violation, aborting\n".format(self.name, data["uuid"])
+            )
             raise
 
     def delete_item(self, uuid: str) -> None:
@@ -548,10 +514,6 @@ class ModelCollection(BaseCollection[type[NOCModel]]):
     def get_collection_name(cls, model: type[NOCModel]) -> str:
         return model._json_collection["json_collection"]
 
-    def get_union_meta(self) -> dict[str, Any]:
-        # Declared per model class, not visible on the base class
-        return getattr(self.model, "_json_collection")
-
     def get_fields(self, model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         m = cast("type[NOCModel]", model or self.model)
         return {field.name: field.__class__ for field in m._meta.local_fields}
@@ -589,10 +551,6 @@ class DocumentCollection(BaseCollection[type[Document]]):
 
     def before_sync(self) -> None:
         self.fix_uuids()
-
-    def get_union_meta(self) -> dict[str, Any]:
-        # _meta is a plain dict at runtime, TypedDict in stubs
-        return cast("dict[str, Any]", self.model._meta)
 
     def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         fields = self.get_fields(model)
@@ -647,10 +605,6 @@ class DocumentCollection(BaseCollection[type[Document]]):
                 v = b85decode(v)
             r[k] = v
         return r
-
-    def save_model(self, o: Document) -> None:
-        # uuid field is added dynamically by NOC metaclasses
-        o.save(clean=bool(getattr(o, "uuid", None)))
 
     def fix_uuids(self) -> None:
         """Convert string UUIDs to binary in the underlying collection."""
