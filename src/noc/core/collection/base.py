@@ -421,7 +421,7 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
     # Sync
     # ------------------------------------------------------------------
 
-    def update_item(self, data: dict[str, Any]) -> bool:
+    def update_item(self, data: dict[str, Any], _force_lookup: bool = False) -> bool:
         def set_attrs(obj: DB_MODEL_INSTANCE, values: dict[str, Any]) -> None:
             for vk, vv in values.items():
                 if hasattr(obj, vk):
@@ -435,8 +435,12 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             self.partial_errors[data["uuid"]] = str(e)
             return False  # Partials
         # On a clean install this uuid cannot exist yet (uuid uniqueness in
-        # collections is verified by tests), so skip the lookup and update attempt
-        if not self._is_clean and (o := self.objects.filter(uuid=data["uuid"]).first()):
+        # collections is verified by tests), so skip the lookup and update
+        # attempt. Re-entrant calls must always check: the record may have
+        # been created by a previous pass.
+        if (not self._is_clean or _force_lookup) and (
+            o := self.objects.filter(uuid=data["uuid"]).first()
+        ):
             self.stdout.write(
                 "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
             )
@@ -456,10 +460,12 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
             # differs from the collection's one. This happens when a record
             # is created manually or by a legacy migration before the
             # collection adopts it. This repair is required: adopt the
-            # existing record by applying the collection data (including the
-            # UUID) to it. The repair is single-pass and cannot recurse;
-            # duplicate unique keys within the collection itself are
-            # impossible, as they are rejected by tests/collections.
+            # existing record by pointing its UUID to the collection's one,
+            # then re-run the update path. The recursive call must bypass
+            # the clean-install fast path, otherwise the UUID lookup is
+            # skipped, the item is created again, and the repair loops
+            # forever. Duplicate unique keys within the collection itself
+            # are impossible, as they are rejected by tests/collections.
             o = self.find_by_unique_fields(d)
             if o is None:
                 self.stdout.write(
@@ -473,9 +479,9 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
                     self.name, data["uuid"], getattr(o, self.name_field)
                 )
             )
-            set_attrs(o, d)
+            o.uuid = data["uuid"]
             o.save()
-            return True
+            return self.update_item(data, _force_lookup=True)
 
     def delete_item(self, uuid: str) -> None:
         o = self.objects.filter(uuid=uuid).first()
@@ -509,7 +515,9 @@ class BaseCollection[T: DB_MODEL_TYPE](ABC):
         while self.partial_errors:
             pl = len(self.partial_errors)
             for u in list(self.partial_errors):  # may change size
-                self.update_item(cdata[u].data)
+                # Partials may already have been created (embedded references
+                # are resolved lazily), so force the UUID lookup
+                self.update_item(cdata[u].data, _force_lookup=True)
             if len(self.partial_errors) == pl:
                 # Cannot resolve partials
                 for u in self.partial_errors:
