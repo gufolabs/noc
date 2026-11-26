@@ -138,6 +138,18 @@ def test_ipv4_sub(p1, p2) -> None:
 
 
 @pytest.mark.parametrize(
+    ("prefix", "n", "result"),
+    [
+        ("0.0.0.0/32", 1, "255.255.255.255/32"),
+        ("0.0.0.0/32", 2, "255.255.255.254/32"),
+        ("0.0.0.1/32", 2, "255.255.255.255/32"),
+    ],
+)
+def test_ipv4_sub_underflow(prefix: str, n: int, result: str) -> None:
+    assert repr(IPv4(prefix) - n) == f"<IPv4 {result}>"
+
+
+@pytest.mark.parametrize(
     ("p1", "p2"),
     [
         (IPv4("0.0.0.0/8").iter_bits(), [0, 0, 0, 0, 0, 0, 0, 0]),
@@ -670,6 +682,18 @@ def test_ipv6_add(p1, p2) -> None:
 )
 def test_ipv6_sub(p1, p2) -> None:
     assert repr(p1) == p2
+
+
+@pytest.mark.parametrize(
+    ("prefix", "n", "result"),
+    [
+        ("::/128", 1, "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"),
+        ("::1/128", 2, "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"),
+        ("::2/128", 2, "::/128"),
+    ],
+)
+def test_ipv6_sub_underflow(prefix: str, n: int, result: str) -> None:
+    assert repr(IPv6(prefix) - n) == f"<IPv6 {result}>"
 
 
 @pytest.mark.parametrize(
