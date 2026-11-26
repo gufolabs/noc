@@ -22,7 +22,6 @@
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
   become: true
-  register: migrate_out
   changed_when: true
 
 - name: Apply pools
