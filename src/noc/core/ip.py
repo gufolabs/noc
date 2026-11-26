@@ -373,6 +373,7 @@ class IPv4(IP):
 
         If *n* is an integer, returns a new IPv4 instance shifted by *n*.
         If *n* is an IPv4 instance, returns the numeric distance between addresses.
+        Wraps around modulo 2**32 (unsigned arithmetic).
 
         Args:
             n: Integer distance or IPv4 instance.
@@ -382,10 +383,7 @@ class IPv4(IP):
         """
         if isinstance(n, IPv4):
             return self.d - n.d
-        d = self.d - n
-        if d < 0:
-            d = B32 + self.d
-        return self._to_prefix(d, self.mask)
+        return self._to_prefix((self.d - n) & B32, self.mask)
 
     def iter_bits(self):
         """Yield up to *mask* bits of this prefix.
@@ -787,6 +785,7 @@ class IPv6(IP):
         If *n* is an integer, returns a new IPv6 instance shifted by *n*.
         If *n* is an IPv6 instance, returns the approximate distance between the two
         prefixes (32-bit arithmetic on the least significant word).
+        Wraps around modulo 2**128 (unsigned arithmetic).
 
         Args:
             n: Integer distance or IPv6 instance.
@@ -813,7 +812,6 @@ class IPv6(IP):
             d0 -= 1
         if d0 < 0:
             d0 = B32 + d0 + 1
-            d3 -= 1
         return self._to_prefix(d0, d1, d2, d3, self.mask)
 
     def iter_bits(self):
