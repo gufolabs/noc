@@ -16,7 +16,7 @@ from typing import Any
 # NOC modules
 from noc.config import config
 from noc.core.dcs.base import dcs
-from noc.core.ioloop.util import run_sync
+from noc.core.ioloop.util import get_loop, run_sync
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.error import MsgStreamError
 from noc.core.msgstream.queue import MessageStreamQueue
@@ -54,7 +54,7 @@ class ServiceStub:
         self.logger.debug("Publisher is stopped")
 
     def _start(self):
-        self.loop = asyncio.get_event_loop()
+        self.loop = get_loop()
         # Initialize DCS
         self.dcs = dcs
         # Activate service
@@ -110,7 +110,7 @@ class ServiceStub:
             self.logger.debug("Stopping producer coroutine")
             self.is_publisher_stopped.set()
 
-        loop = asyncio.get_event_loop()
+        loop = get_loop()
         self.publish_queue = MessageStreamQueue(loop)
         loop.run_until_complete(inner())
 

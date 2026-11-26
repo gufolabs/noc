@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import asyncio
 import enum
 import logging
 from http import HTTPStatus
@@ -18,7 +17,7 @@ from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.etl.models.fmevent import FMEventObject, RemoteObject
-from noc.core.ioloop.util import setup_asyncio
+from noc.core.ioloop.util import get_loop
 from noc.core.perf import metrics
 from noc.core.service.loader import get_service
 
@@ -46,8 +45,7 @@ class ZabbixAPI:
         self.openapi_tags = ["api", "metricscollector"]
         self.api_name = "metricscollector"
         self.ds_queue = {}
-        setup_asyncio()
-        self.loop = asyncio.get_event_loop()
+        self.loop = get_loop()
         self.service = get_service()
         self.setup_endpoints()
 
