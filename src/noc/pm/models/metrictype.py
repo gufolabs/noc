@@ -25,7 +25,6 @@ from mongoengine.fields import (
     EmbeddedDocumentListField,
     ListField,
     LongField,
-    ObjectIdField,
     ReferenceField,
     StringField,
     UUIDField,
@@ -46,7 +45,7 @@ from noc.core.mongo.fields import PlainReferenceField
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
 from noc.inv.models.capability import Capability
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 
 from .measurementunits import MeasurementUnits
 from .metricscope import MetricScope
@@ -110,8 +109,7 @@ class CollectorMappingItem(EmbeddedDocument):
         ("pm.MetricAction", "compose_metric_type"),
     ]
 )
-@category
-class MetricType(Document):
+class MetricType(CategoryMixin, Document):
     meta = {
         "collection": "noc.metrictypes",
         "strict": False,
@@ -167,8 +165,6 @@ class MetricType(Document):
     required_capability = PlainReferenceField(Capability)
     # Object id in BI, used for counter context hashing
     bi_id = LongField(unique=True)
-    category = ObjectIdField()
-
     _id_cache = cachetools.TTLCache(maxsize=200, ttl=300)
     _name_cache = cachetools.TTLCache(maxsize=200, ttl=300)
     _field_cache = cachetools.TTLCache(maxsize=200, ttl=300)

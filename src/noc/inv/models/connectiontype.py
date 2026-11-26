@@ -23,7 +23,6 @@ from mongoengine.fields import (
     DynamicField,
     EmbeddedDocumentListField,
     ListField,
-    ObjectIdField,
     StringField,
     UUIDField,
 )
@@ -33,7 +32,7 @@ from noc.core.model.decorator import on_delete_check
 from noc.core.mongo.fields import PlainReferenceField
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 
 from .facade import Facade
 
@@ -75,9 +74,8 @@ class ModelAttr(EmbeddedDocument):
         }
 
 
-@category
 @on_delete_check(check=[("inv.ConnectionType", "extend")])
-class ConnectionType(Document):
+class ConnectionType(CategoryMixin, Document):
     """
     Equipment vendor
     """
@@ -123,8 +121,6 @@ class ConnectionType(Document):
     female_facade = PlainReferenceField(Facade, required=False)
 
     OPPOSITE_GENDER = {"s": "s", "m": "f", "f": "m"}
-    category = ObjectIdField()
-
     _id_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 

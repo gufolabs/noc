@@ -17,14 +17,14 @@ from typing import Any, ClassVar, Literal
 import cachetools
 from mongoengine.document import Document
 from mongoengine.errors import ValidationError
-from mongoengine.fields import IntField, ObjectIdField, StringField, UUIDField
+from mongoengine.fields import IntField, StringField, UUIDField
 from pymongo import ReadPreference
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 from noc.sa.models.profile import Profile
 
 rules_lock = Lock()
@@ -65,8 +65,7 @@ class SuggestProfile:
         return self.method, self.param, self.preference
 
 
-@category
-class ProfileCheckRule(Document):
+class ProfileCheckRule(CategoryMixin, Document):
     meta = {
         "collection": "noc.profilecheckrules",
         "strict": False,
@@ -96,8 +95,6 @@ class ProfileCheckRule(Document):
     action = StringField(required=True, choices=["match", "maybe"], default="match")
     # Resulting profile name
     profile = PlainReferenceField(Profile, required=True)
-    category = ObjectIdField()
-
     _rules_cache = cachetools.TTLCache(10, ttl=60)
 
     def __str__(self):

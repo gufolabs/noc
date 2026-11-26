@@ -28,17 +28,15 @@ class DocCategory(Document):
     type = StringField()
     parent = ObjectIdField()
 
-    _senders = {}
-
     def __str__(self):
         return self.name
 
     @classmethod
-    def update_category(cls, sender, document):
+    def refresh_category(cls, sender, document):
         """
         Update document category when necessary
         """
-        type = cls._senders[sender]
+        type = sender._meta["collection"]
         c_name = " | ".join(document.name.split(" | ")[:-1])
         c = DocCategory.objects.filter(type=type, name=c_name).first()
         if not c:
@@ -61,38 +59,20 @@ class DocCategory(Document):
         else:
             document.parent = None
 
-    @classmethod
-    def fix(cls, document):
-        """
-        Initialize categories structure
-        """
-        type = cls._senders[document]
-        has_categories = bool(DocCategory.objects.filter(type=type).count())
-        has_docs = bool(document.objects.count())
-        if has_docs and not has_categories:
-            for o in document.objects.all():
-                o.save()
 
-    @classmethod
-    def fix_all(cls):
-        for document in cls._senders:
-            cls.fix(document)
-
-
-def category(cls):
+class CategoryMixin:
     """
-    Decorator to register document to category
-
-    @category
-    class MyDocument(Document):
-        ...
-        category = ObjectIdField()
+    Document mixin adding ``category`` field,
+    auto-maintained by :class:`DocCategory`
     """
-    assert hasattr(cls, "category")
-    logger.debug("Registering %s", cls.__name__)
-    DocCategory._senders[cls] = cls._meta["collection"]
-    signals.pre_save.connect(DocCategory.update_category, sender=cls)
-    return cls
+
+    category = ObjectIdField()
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        assert hasattr(cls, "name"), "CategoryMixin requires 'name' field"
+        logger.debug("Registering %s", cls.__name__)
+        signals.pre_save.connect(DocCategory.refresh_category, sender=cls)
 
 
 # Set up signals

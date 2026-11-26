@@ -22,7 +22,6 @@ from mongoengine.fields import (
     BooleanField,
     DictField,
     EnumField,
-    ObjectIdField,
     StringField,
     UUIDField,
 )
@@ -32,7 +31,7 @@ from noc.core.model.decorator import on_delete_check
 from noc.core.models.valuetype import ARRAY_ANNEX, ValueType
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 
 id_lock = Lock()
 
@@ -48,8 +47,7 @@ TCapsValue = bool | str | int | float | list[Any]
         ("main.ModelTemplate", "params__set_capability"),
     ]
 )
-@category
-class Capability(Document):
+class Capability(CategoryMixin, Document):
     meta = {
         "collection": "noc.inv.capabilities",
         "strict": False,
@@ -70,8 +68,6 @@ class Capability(Document):
     agent_collector = StringField()
     # Collector param
     agent_param = StringField()
-    category = ObjectIdField()
-
     _id_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 
