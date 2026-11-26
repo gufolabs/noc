@@ -451,7 +451,7 @@ class ExtDocApplication(ExtApplication):
         else:
             qs = {f"{self.parent_field}": parent}
         if model == DocCategory:
-            qs["type"] = DocCategory._senders[self.model]
+            qs["type"] = self.model._meta["collection"]
         data = model.objects.filter(**qs)
         ordering = self.default_ordering
         if ordering:

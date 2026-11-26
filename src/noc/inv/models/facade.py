@@ -18,7 +18,7 @@ from typing import Any
 import cachetools
 from bson import ObjectId
 from mongoengine.document import Document
-from mongoengine.fields import ListField, ObjectIdField, StringField, UUIDField
+from mongoengine.fields import ListField, StringField, UUIDField
 
 # NOC modules
 from noc.core.facade.utils import SLOT_PREFIX_LEN, is_slot_id, slot_to_id
@@ -26,12 +26,11 @@ from noc.core.model.decorator import on_delete_check
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
 from noc.core.svg import SVG
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 
 id_lock = threading.Lock()
 
 
-@category
 @on_delete_check(
     check=[
         ("inv.ConnectionType", "male_facade"),
@@ -40,7 +39,7 @@ id_lock = threading.Lock()
         ("inv.ObjectModel", "rear_facade"),
     ]
 )
-class Facade(Document):
+class Facade(CategoryMixin, Document):
     meta = {
         "collection": "facades",
         "strict": False,
@@ -54,7 +53,6 @@ class Facade(Document):
     description = StringField()
     # Image data
     data = StringField(required=True)
-    category = ObjectIdField()
     # List of slots found
     slots = ListField(StringField(), required=False)
 

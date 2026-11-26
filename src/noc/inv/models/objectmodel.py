@@ -44,7 +44,7 @@ from noc.core.model.decorator import on_delete_check, on_save
 from noc.core.mongo.fields import PlainReferenceField
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
-from noc.main.models.doccategory import category
+from noc.main.models.doccategory import CategoryMixin
 from noc.main.models.glyph import Glyph
 from noc.main.models.label import Label
 from noc.pm.models.measurementunits import MeasurementUnits
@@ -471,11 +471,10 @@ class ObjectModelSensor(EmbeddedDocument):
         return r
 
 
-@category
 @change
 @on_delete_check(check=[("inv.ModelMapping", "model"), ("inv.Object", "model")])
 @on_save
-class ObjectModel(Document):
+class ObjectModel(CategoryMixin, Document):
     """
     Equipment vendor
     """
@@ -523,8 +522,6 @@ class ObjectModel(Document):
     glyph = PlainReferenceField(Glyph, required=False)
     # Labels
     labels = ListField(StringField())
-    category = ObjectIdField()
-
     _id_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
     _model_cache = cachetools.TTLCache(maxsize=10000, ttl=60)
