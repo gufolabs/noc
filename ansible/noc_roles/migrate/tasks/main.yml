@@ -16,79 +16,13 @@
 
 - import_tasks: configure_consul.yml
 
-- name: Migrate db
-  command: ./noc migrate
+- name: Migrate database
+  command: ./scripts/deploy/migrate.sh
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
   become: true
-  register: migrate_out
-  changed_when: "'Nothing to migrate' not in migrate_out.stdout"
-
-- name: Ensure Mongo indecies
-  command: ./noc ensure-indexes
-  args:
-    chdir: "{{ noc_root }}"
-  become: true
-  become_user: "{{ noc_user }}"
-  changed_when: false
-
-- name: migrate liftbridge partitions 1
-  command: ./noc migrate-liftbridge
-  args:
-    chdir: "{{ noc_root }}"
-  become_user: "{{ noc_user }}"
-  become: true
-  register: migrate_lb_out
-  changed_when: "'CHANGED' in migrate_lb_out.stdout"
-
-- name: Synchronize collections
-  command: ./noc collection sync
-  args:
-    chdir: "{{ noc_root }}"
-  become_user: "{{ noc_user }}"
-  become: true
-  tags:
-    - coll_sync
-
-- name: migrate liftbridge partitions 2
-  command: ./noc migrate-liftbridge
-  args:
-    chdir: "{{ noc_root }}"
-  become_user: "{{ noc_user }}"
-  become: true
-  register: migrate_lb_out
-  changed_when: "'CHANGED' in migrate_lb_out.stdout"
-
-- name: migrate ch db
-  command: ./noc migrate-ch --host "{{ item }}"
-  args:
-    chdir: "{{ noc_root }}"
-  register: migrate_ch
-  loop: "{{ groups['svc-clickhouse-exec'] }}"
-  delegate_to: "{{ groups['svc-chwriter-exec'][0] }}"
-  changed_when: "'CHANGED' in migrate_ch.stdout"
-  when:
-    - "'svc-chwriter-exec' in groups"
-
-- name: Synchronize permissions
-  command: ./noc sync-perm
-  args:
-    chdir: "{{ noc_root }}"
-  become_user: "{{ noc_user }}"
-  become: true
-  tags:
-    - perms
-    - skip_ansible_lint
-
-- name: Synchronize MIBs
-  command: ./noc sync-mibs
-  args:
-    chdir: "{{ noc_root }}"
-  become_user: "{{ noc_user }}"
-  become: true
-  register: mibs_out
-  changed_when: mibs_out.stdout | length > 7
+  changed_when: true
 
 - name: Apply pools
   command: "{{ noc_venv_python}} ./scripts/deploy/apply-pools"
