@@ -112,3 +112,9 @@ The card backend is now part of the web service. Move custom card classes from `
 
 Card configuration parameters have moved to the `web` section. The old `card.language`, `card.alarmheat_tooltip_limit`, and `card.metric_request_interval` names are rewritten to `web.language`, `web.alarmheat_tooltip_limit`, and `web.metric_request_interval` with a deprecation warning; remove the old names before upgrading to NOC 27.
 
+### Profile Module Names with Leading Digits
+
+Device profiles whose vendor or software name starts with a digit (for example `3Com.4500` or `HP.1910`) are now stored in directories prefixed with an underscore so that the backing Python modules have valid names: `sa/profiles/3Com/4500/` is now `sa/profiles/_3Com/_4500/`. Profile names in the database, UI, and scripts are unchanged; the name-to-module mapping is handled automatically by the profile and script loaders.
+
+If you have custom profiles with digit-led vendor or software names, rename the corresponding directories under `<custom root>/sa/profiles` with an underscore prefix before upgrading. For example, `<custom root>/sa/profiles/3Com/4500/` becomes `<custom root>/sa/profiles/_3Com/_4500/`.
+

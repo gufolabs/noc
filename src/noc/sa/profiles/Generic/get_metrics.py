@@ -24,6 +24,7 @@ from noc.config import config
 from noc.core.mib import mib
 from noc.core.models.cfgmetrics import MetricCollectorConfig
 from noc.core.perf import metrics as noc_metrics
+from noc.core.profile.names import mangle_profile_module_name
 from noc.core.script.base import BaseScript, BaseScriptMetaclass
 from noc.core.script.oidrules.bool import BooleanRule
 from noc.core.script.oidrules.capindex import CapabilityIndexRule
@@ -202,7 +203,7 @@ class MetricScriptBase(BaseScriptMetaclass):
                 mcs.iter_snmp_metric_resources("Generic", custom=True),
             )
         else:
-            v, p = pp.split(".")
+            v, p = mangle_profile_module_name(pp).split(".")
             # Keep the existing precedence: custom profile, built-in profile,
             # custom Generic, then built-in Generic.
             resources = itertools.chain(

@@ -20,6 +20,7 @@ from noc.config import config
 from noc.core.importer import NOCImportRouter
 from noc.core.profile.base import BaseProfile
 from noc.core.profile.loader import ProfileLoader, loader
+from noc.core.profile.names import mangle_profile_module_name, unmangle_profile_module_name
 
 
 def clear_custom_modules() -> None:
@@ -50,6 +51,7 @@ def write_custom_profile(root: Path, profile_name: str) -> None:
     profile_parts = profile_name.split(".")
     if profile_name == "Generic.Host":
         profile_parts = profile_parts[:1]
+    profile_parts = mangle_profile_module_name(".".join(profile_parts)).split(".")
     profile_path = root / "sa" / "profiles" / Path(*profile_parts)
     package = profile_path
     while package != root:
@@ -98,7 +100,7 @@ def test_profile_name(sa_profile) -> None:
     assert parts[-1] == "profile", "Profile must be in profile.py"
     if parts[-4:] == ["sa", "profiles", "Generic", "profile"]:
         pytest.skip("Generic profile")
-    name = f"{parts[-3]}.{parts[-2]}"
+    name = unmangle_profile_module_name(f"{parts[-3]}.{parts[-2]}")
     assert profile.name == name
 
 
@@ -107,6 +109,8 @@ def test_profile_name(sa_profile) -> None:
     [
         ("Generic.Host", "noc.custom.sa.profiles.Generic.profile"),
         ("Juniper.JUNOS", "noc.custom.sa.profiles.Juniper.JUNOS.profile"),
+        ("3Com.4500", "noc.custom.sa.profiles._3Com._4500.profile"),
+        ("HP.1910", "noc.custom.sa.profiles.HP._1910.profile"),
     ],
 )
 def test_custom_profile_overrides_repository_profile(

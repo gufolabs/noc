@@ -18,6 +18,7 @@ from noc.config import config
 from noc.core.loader.base import BaseLoader
 
 from .base import BaseProfile
+from .names import mangle_profile_module_name, unmangle_profile_module_name
 
 GENERIC_PROFILE = "Generic.Host"
 
@@ -45,12 +46,15 @@ class ProfileLoader(BaseLoader):
                 if not self.is_valid_name(name):
                     self.logger.error("Invalid profile name")
                     return None
+                mangled = mangle_profile_module_name(name)
                 for p in config.get_customized_paths(prefer_custom=True):
-                    path = os.path.join(p or str(files("noc")), "sa", "profiles", *name.split("."))
+                    path = os.path.join(
+                        p or str(files("noc")), "sa", "profiles", *mangled.split(".")
+                    )
                     if not os.path.exists(os.path.join(path, "profile.py")):
                         continue
                     base_name = "noc.custom" if p else "noc"
-                    module_name = f"{base_name}.sa.profiles.{name}"
+                    module_name = f"{base_name}.sa.profiles.{mangled}"
                     profile = self.find_class(f"{module_name}.profile", BaseProfile, name)
                     if profile:
                         profile.initialize()
@@ -82,7 +86,7 @@ class ProfileLoader(BaseLoader):
             px = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "__init__.py")
             for path in glob.glob(px):
                 vendor, system = path.split(os.sep)[-3:-1]
-                ns.add(f"{vendor}.{system}")
+                ns.add(unmangle_profile_module_name(f"{vendor}.{system}"))
         with self.lock:
             self.all_profiles = ns
 

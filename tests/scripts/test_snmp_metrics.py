@@ -14,6 +14,7 @@ import pytest
 
 # NOC modules
 from noc.config import config
+from noc.core.profile.names import mangle_profile_module_name
 
 
 def get_json_paths():
@@ -43,3 +44,34 @@ def test_snmp_metrics_json(path) -> None:
     except ValueError as e:
         pytest.fail(f"Invalid JSON: {e}")
     assert isinstance(data, dict), "Must be dict"
+
+
+@pytest.mark.parametrize(
+    "profile",
+    [
+        "Alcatel.7302",
+        "Alcatel.7324RU",
+        "Alstec.24xx",
+        "HP.1910",
+    ],
+)
+def test_snmp_metrics_loaded_for_digit_led_profile(profile: str) -> None:
+    """
+    Ensure JSON metrics from digit-led profile directories (stored with an
+    underscore prefix) are applied to the profile get_metrics script.
+    """
+    # NOC modules
+    from noc.core.script.loader import loader
+    from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript
+
+    script = loader.get_script(f"{profile}.get_metrics")
+    assert script is not None
+    resource = config.noc_base.joinpath(
+        "sa", "profiles", *mangle_profile_module_name(profile).split("."), "snmp_metrics"
+    )
+    json_files = list(resource.rglob("*.json"))
+    assert json_files, f"No snmp_metrics JSON files found for {profile}"
+    for json_file in json_files:
+        metric = orjson.loads(json_file.read_text())["$metric"]
+        handler = GetMetricsScript.get_snmp_handler_name(metric)
+        assert handler in vars(script), f"Handler {handler} for metric '{metric}' is missing"

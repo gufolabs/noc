@@ -28,6 +28,16 @@ logger.info("[NOC] - Docs root: %s", DOC_ROOT)
 logger.info("[NOC] - Collections root: %s", COLLECTIONS_ROOT)
 
 
+def _mangle(name: str) -> str:
+    """Map profile name component to module directory name (see noc.core.profile.names)."""
+    return "_" + name if name[:1].isdigit() else name
+
+
+def _unmangle(name: str) -> str:
+    """Reverse of _mangle for directory names starting with an underscore followed by a digit."""
+    return name[1:] if len(name) > 1 and name.startswith("_") and name[1].isdigit() else name
+
+
 def define_env(env):
     YES = ":material-check:"
     NO = ":material-close:"
@@ -94,7 +104,7 @@ def define_env(env):
         load_scripts()
         # Get profile scripts
         vendor, name = profile.split(".")
-        path = PROFILES_ROOT / vendor / name
+        path = PROFILES_ROOT / _mangle(vendor) / _mangle(name)
         check_exists(path)
         supported = {f.stem for f in path.iterdir() if f.is_file() and f.suffix == ".py"}
         # Render
@@ -149,8 +159,8 @@ def define_env(env):
                 if sn not in s_set:
                     continue
 
-                vendor = path.parent.parent.name
-                profile = path.parent.name
+                vendor = _unmangle(path.parent.parent.name)
+                profile = _unmangle(path.parent.name)
                 script_profiles[sn].add(f"{vendor}.{profile}")
 
         s_profiles = [
