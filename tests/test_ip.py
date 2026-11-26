@@ -1,9 +1,13 @@
 # ---------------------------------------------------------------------
 # noc.core.ip tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Python modules
+from collections.abc import Iterator
+from typing import Any
 
 # Third-party modules
 import pytest
@@ -31,6 +35,14 @@ def test_ip_afi(prefix: str, afi: str) -> None:
 
 
 @pytest.mark.parametrize(
+    ("addr", "result"),
+    [("192.168.0.1", "192.168.0.1"), ("2001:db8::7/128", "2001:db8:0:0:0:0:0:7/128")],
+)
+def test_ip_expand(addr: str, result: str) -> None:
+    assert IP.expand(addr) == result
+
+
+@pytest.mark.parametrize(
     ("p1", "p2", "result"),
     [
         ("192.168.0.0/24", IPv4("192.168.0.0/24"), True),
@@ -39,7 +51,7 @@ def test_ip_afi(prefix: str, afi: str) -> None:
         (IPv4("192.168.1.1"), IPv4("192.168.0.0/24"), False),
     ],
 )
-def test_ipv4_in(p1, p2, result) -> None:
+def test_ipv4_in(p1: str | IPv4, p2: IPv4, result: bool) -> None:
     assert (p1 in p2) is result
 
 
@@ -57,19 +69,19 @@ def test_ipv4_in_value_error(p1: str, p2: str) -> None:
         (IPv4("192.168.0.0", netmask="255.255.255.0"), "192.168.0.0/24"),
     ],
 )
-def test_ipv4_str(p1, p2) -> None:
+def test_ipv4_str(p1: IPv4, p2: str) -> None:
     assert str(p1) == p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [(IPv4("192.168.0.0/24"), "<IPv4 192.168.0.0/24>")])
-def test_ipv4_repr(p1, p2) -> None:
+def test_ipv4_repr(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
 @pytest.mark.parametrize(
     ("p1", "p2"), [(IPv4("192.168.0.0/24"), 24), (IPv4("192.168.0.0"), 32), (IPv4("0.0.0.0/0"), 0)]
 )
-def test_ipv4_len(p1, p2) -> None:
+def test_ipv4_len(p1: IPv4, p2: int) -> None:
     assert len(p1) == p2
 
 
@@ -86,7 +98,7 @@ def test_ipv4_len(p1, p2) -> None:
     ],
 )
 def test_ipv4_comparison(
-    p1: str, p2: str, c, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool
+    p1: str, p2: str, c: int, eq: bool, ne: bool, lt: bool, le: bool, gt: bool, ge: bool
 ) -> None:
     p1 = IPv4(p1)
     p2 = IPv4(p2)
@@ -120,7 +132,7 @@ def test_ipv4_hash(p1: str, p2: str) -> None:
         ((IPv4("255.255.255.255/32") + 2), "<IPv4 0.0.0.1/32>"),
     ],
 )
-def test_ipv4_add(p1, p2) -> None:
+def test_ipv4_add(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -133,7 +145,7 @@ def test_ipv4_add(p1, p2) -> None:
         (IPv4("192.168.0.10/32") - IPv4("192.168.0.1/32"), 9),
     ],
 )
-def test_ipv4_sub(p1, p2) -> None:
+def test_ipv4_sub(p1: str | int, p2: str | int) -> None:
     assert p1 == p2
 
 
@@ -158,7 +170,7 @@ def test_ipv4_sub_underflow(prefix: str, n: int, result: str) -> None:
         (IPv4("255.255.255.255").iter_bits(), [1] * 32),
     ],
 )
-def test_ipv4_iter_bits(p1, p2) -> None:
+def test_ipv4_iter_bits(p1: Iterator[int], p2: list[int]) -> None:
     assert list(p1) == p2
 
 
@@ -169,7 +181,7 @@ def test_ipv4_iter_bits(p1, p2) -> None:
         (IPv4.from_bits([0, 0, 0, 0, 1, 0, 1, 0]), "<IPv4 10.0.0.0/8>"),
     ],
 )
-def test_ipv4_from_bits(p1, p2) -> None:
+def test_ipv4_from_bits(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -201,7 +213,7 @@ def test_ipv4_from_to_bits(prefix: str) -> None:
         ),
     ],
 )
-def test_ipv4_iter_cover(p1, p2) -> None:
+def test_ipv4_iter_cover(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -295,7 +307,7 @@ def test_ipv4_iter_cover(p1, p2) -> None:
         ([repr(x) for x in IPv4("192.168.0.0/24").iter_free([])], ["<IPv4 192.168.0.0/24>"]),
     ],
 )
-def test_ipv4_iter_free(p1, p2) -> None:
+def test_ipv4_iter_free(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -334,7 +346,7 @@ def test_ipv4_iter_free(p1, p2) -> None:
         ),
     ],
 )
-def test_ipv4_iter_address(p1, p2) -> None:
+def test_ipv4_iter_address(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -364,17 +376,17 @@ def test_ipv4_size(p1: str, p2: int) -> None:
         (IPv4("192.168.0.0/24").contains(IPv4("192.168.0.0/16")), False),
     ],
 )
-def test_ipv4_contains(p1, p2) -> None:
+def test_ipv4_contains(p1: bool, p2: bool) -> None:
     assert p1 is p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [(IPv4("192.168.0.5/24").first, "<IPv4 192.168.0.0/24>")])
-def test_ipv4_first(p1, p2) -> None:
+def test_ipv4_first(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [(IPv4("192.168.0.5/24").last, "<IPv4 192.168.0.255/24>")])
-def test_ipv4_last(p1, p2) -> None:
+def test_ipv4_last(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -455,7 +467,9 @@ def test_ipv4_last(p1, p2) -> None:
         ),
     ],
 )
-def test_ipv4_area_spot(prefix: str, addresses, cfg, result) -> None:
+def test_ipv4_area_spot(
+    prefix: str, addresses: list[str], cfg: dict[str, Any], result: list[str]
+) -> None:
     assert [repr(x) for x in IPv4(prefix).area_spot(addresses, **cfg)] == result
 
 
@@ -466,7 +480,7 @@ def test_ipv4_area_spot(prefix: str, addresses, cfg, result) -> None:
         (IPv4("239.12.5.15/4").normalized, "<IPv4 224.0.0.0/4>"),
     ],
 )
-def test_ipv4_normalized(p1, p2) -> None:
+def test_ipv4_normalized(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -477,7 +491,7 @@ def test_ipv4_normalized(p1, p2) -> None:
         (IPv4("192.168.0.5/24").set_mask(25), "<IPv4 192.168.0.5/25>"),
     ],
 )
-def test_ipv4_set_mask(p1, p2) -> None:
+def test_ipv4_set_mask(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -488,7 +502,7 @@ def test_ipv4_set_mask(p1, p2) -> None:
         (IPv4("192.168.0.0/30").netmask, "<IPv4 255.255.255.252/32>"),
     ],
 )
-def test_ipv4_netmask(p1, p2) -> None:
+def test_ipv4_netmask(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -499,7 +513,7 @@ def test_ipv4_netmask(p1, p2) -> None:
         (IPv4("192.168.0.0/30").wildcard, "<IPv4 0.0.0.3/32>"),
     ],
 )
-def test_ipv4_wildcard(p1, p2) -> None:
+def test_ipv4_wildcard(p1: IPv4, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -512,11 +526,11 @@ def test_ipv4_wildcard(p1, p2) -> None:
         ("192.168.0.130/32", "192.168.0.128/25", "192.168.1.0/24", "192.168.1.2/32"),
     ]
 )
-def ipv4_rebase(request):
+def ipv4_rebase(request: pytest.FixtureRequest) -> tuple[str, str, str, str]:
     return request.param
 
 
-def test_ipv4_rebase(ipv4_rebase: tuple[str]) -> None:
+def test_ipv4_rebase(ipv4_rebase: tuple[str, str, str, str]) -> None:
     # prefix, base, new base, result
     p, b, nb, r = ipv4_rebase
     assert IPv4(p).rebase(IPv4(b), IPv4(nb)) == IPv4(r)
@@ -533,11 +547,11 @@ def test_ipv4_rebase(ipv4_rebase: tuple[str]) -> None:
         ("255.255.192.0", 18),
     ]
 )
-def ipv4_netmask_len(request):
+def ipv4_netmask_len(request: pytest.FixtureRequest) -> tuple[str, int]:
     return request.param
 
 
-def test_ipv4_netmask_to_len(ipv4_netmask_len) -> None:
+def test_ipv4_netmask_to_len(ipv4_netmask_len: tuple[str, int]) -> None:
     m, b = ipv4_netmask_len
     assert IPv4.netmask_to_len(m) == b
 
@@ -584,7 +598,7 @@ def test_ipv6_str(p1: str, p2: str) -> None:
         ),
     ],
 )
-def test_ipv4_range_to_prefixes(p1, p2) -> None:
+def test_ipv4_range_to_prefixes(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -598,7 +612,7 @@ def test_ipv4_range_to_prefixes(p1, p2) -> None:
         ("192.168.0.0/30", {"192.168.0.0", "192.168.0.3"}),
     ],
 )
-def test_ipv4_special_addresses(prefix: str, special) -> None:
+def test_ipv4_special_addresses(prefix: str, special: set[str]) -> None:
     assert IPv4.prefix(prefix).special_addresses == {IPv4(a) for a in special}
 
 
@@ -667,7 +681,7 @@ def test_ipv6_hash() -> None:
         ((IPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff") + 2), "<IPv6 ::1/128>"),
     ],
 )
-def test_ipv6_add(p1, p2) -> None:
+def test_ipv6_add(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -680,7 +694,7 @@ def test_ipv6_add(p1, p2) -> None:
         ((IPv6("100::7") - IPv6("100::5")), "2"),
     ],
 )
-def test_ipv6_sub(p1, p2) -> None:
+def test_ipv6_sub(p1: str | int, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -704,7 +718,7 @@ def test_ipv6_sub_underflow(prefix: str, n: int, result: str) -> None:
         ((IPv6("f000::/4").iter_bits()), [1, 1, 1, 1]),
     ],
 )
-def test_ipv6_iter_bits(p1, p2) -> None:
+def test_ipv6_iter_bits(p1: Iterator[int], p2: list[int]) -> None:
     assert list(p1) == p2
 
 
@@ -715,12 +729,12 @@ def test_ipv6_iter_bits(p1, p2) -> None:
         ((IPv6.from_bits([1, 1, 1, 1, 1, 1, 1, 1, 1])), "<IPv6 ff80::/9>"),
     ],
 )
-def test_ipv6_from_bits(p1, p2) -> None:
+def test_ipv6_from_bits(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
 @pytest.fixture(params=["::", "::ffff:192.168.0.1", "2001:db8::/32", "100::1"])
-def ipv6_bits(request):
+def ipv6_bits(request: pytest.FixtureRequest) -> str:
     return request.param
 
 
@@ -743,7 +757,7 @@ def test_ipv6_from_to_bits(ipv6_bits: str) -> None:
         ),
     ],
 )
-def test_ipv6_iter_free(p1, p2) -> None:
+def test_ipv6_iter_free(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -782,7 +796,7 @@ def test_ipv6_iter_free(p1, p2) -> None:
         ),
     ],
 )
-def test_ipv6_iter_address(p1, p2) -> None:
+def test_ipv6_iter_address(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -798,8 +812,30 @@ def test_ipv6_iter_address(p1, p2) -> None:
         (IPv6("2001:db8::/32").contains(IPv6("2001:db9::")), False),
     ],
 )
-def test_ipv6_contains(p1, p2) -> None:
+def test_ipv6_contains(p1: bool, p2: bool) -> None:
     assert p1 is p2
+
+
+@pytest.mark.parametrize(
+    ("p1", "p2", "result"),
+    [
+        # Wider prefix cannot contain a narrower one
+        (IPv6("2001:db8::/48"), IPv6("2001:db8::/32"), False),
+        # Exact /128 match: all mask words exhausted
+        (IPv6("::1/128"), IPv6("::1/128"), True),
+        # Partial 32-bit chunk in the second word (mask % 32 != 0)
+        (IPv6("::/33"), IPv6("::/65"), True),
+        (IPv6("::/33"), IPv6("8000::/65"), False),
+    ],
+)
+def test_ipv6_contains_edge(p1: IPv6, p2: IPv6, result: bool) -> None:
+    assert p1.contains(p2) is result
+
+
+def test_ipv6_netmask() -> None:
+    assert repr(IPv6("2001:db8::1", netmask="ffff:ffff::")) == "<IPv6 2001:db8::1/32>"
+    assert repr(IPv6("::", netmask="ffff:ffff:ffff:ff80::")) == "<IPv6 ::/57>"
+    assert IPv6.mask_to_bits("ffff:ffff:ffff:ff80::") == 57
 
 
 @pytest.mark.parametrize(
@@ -824,12 +860,12 @@ def test_ipv6_contains(p1, p2) -> None:
         )
     ],
 )
-def test_ipv6_area_spot(p1, p2) -> None:
+def test_ipv6_area_spot(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [(IPv6("2001:db8::10/32").first, "<IPv6 2001:db8::/32>")])
-def test_ipv6_first(p1, p2) -> None:
+def test_ipv6_first(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -837,7 +873,7 @@ def test_ipv6_first(p1, p2) -> None:
     ("p1", "p2"),
     [(IPv6("2001:db8::10/32").last, "<IPv6 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff/32>")],
 )
-def test_ipv6_last(p1, p2) -> None:
+def test_ipv6_last(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -849,7 +885,7 @@ def test_ipv6_last(p1, p2) -> None:
         (IPv6("::ffff:c0a8:1").normalized, "<IPv6 ::ffff:192.168.0.1/128>"),
     ],
 )
-def test_ipv6_normalized(p1, p2) -> None:
+def test_ipv6_normalized(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -860,7 +896,7 @@ def test_ipv6_normalized(p1, p2) -> None:
         (IPv6("2001:db8::20/48").set_mask(64), "<IPv6 2001:db8::20/64>"),
     ],
 )
-def test_ipv6_set_mask(p1, p2) -> None:
+def test_ipv6_set_mask(p1: IPv6, p2: str) -> None:
     assert repr(p1) == p2
 
 
@@ -874,7 +910,7 @@ def test_ipv6_set_mask(p1, p2) -> None:
         (IPv6("2001:db8::1").ptr(8), "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0"),
     ],
 )
-def test_ipv6_ptr(p1, p2) -> None:
+def test_ipv6_ptr(p1: str, p2: str) -> None:
     assert p1 == p2
 
 
@@ -920,7 +956,7 @@ def test_ipv6_ptr(p1, p2) -> None:
         )
     ],
 )
-def test_ipv6_digits(p1, p2) -> None:
+def test_ipv6_digits(p1: list[str], p2: list[str]) -> None:
     assert p1 == p2
 
 
@@ -982,6 +1018,13 @@ def test_prefixdb_ipv4(
         db[IPv4(p9)]
 
 
+def test_prefixdb_contains_str() -> None:
+    db = PrefixDB()
+    db[IPv4("192.168.0.0/24")] = 1
+    assert "192.168.0.0/24" in db
+    assert "10.0.0.0/8" not in db
+
+
 @pytest.mark.parametrize(
     ("p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"),
     [
@@ -1026,6 +1069,19 @@ def test_prefixdb_ipv6(
 )
 def test_is_private(p: str, result: bool) -> None:
     assert IP.prefix(p).is_private is result
+
+
+@pytest.mark.parametrize(
+    ("p", "result"),
+    [
+        ("169.254.1.1", True),
+        ("169.254.0.0/16", True),
+        ("192.168.0.1", False),
+        ("59.19.38.22", False),
+    ],
+)
+def test_is_link_local(p: str, result: bool) -> None:
+    assert IP.prefix(p).is_link_local is result
 
 
 @pytest.mark.parametrize(
