@@ -8,6 +8,7 @@
 # Python modules
 import asyncio
 import logging
+import threading
 from collections.abc import Awaitable
 
 logger = logging.getLogger(__name__)
@@ -41,8 +42,6 @@ class IOLoopContext:
             loop.close()
             self.new_loop = None
             asyncio._set_running_loop(self.prev_loop)
-            if not self.prev_loop:
-                asyncio.get_event_loop_policy().reset_called()
             self.prev_loop = None
 
     def get_loop(self) -> asyncio.AbstractEventLoop | None:
@@ -53,6 +52,30 @@ class IOLoopContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.drop_context()
+
+
+_loops = threading.local()
+
+
+def get_loop() -> asyncio.AbstractEventLoop:
+    """
+    Get the event loop for the current context.
+
+    Returns the running event loop if there is one, otherwise the
+    persistent event loop for the current thread, created on first use.
+
+    Returns:
+        The event loop for the current context.
+    """
+    try:
+        return asyncio.get_running_loop()
+    except RuntimeError:
+        pass
+    loop = getattr(_loops, "_loop", None)
+    if loop is None or loop.is_closed():
+        loop = asyncio.new_event_loop()
+        _loops._loop = loop
+    return loop
 
 
 def run_sync[T](awaitable: Awaitable[T]) -> T:
@@ -68,8 +91,6 @@ def run_sync[T](awaitable: Awaitable[T]) -> T:
     Returns:
         Result of the awaitable.
     """
-    if not _setup_completed:
-        setup_asyncio()
 
     async def run_awaitable() -> T:
         return await awaitable
@@ -79,41 +100,3 @@ def run_sync[T](awaitable: Awaitable[T]) -> T:
 
     with IOLoopContext() as loop:
         return loop.run_until_complete(run_awaitable())
-
-
-_setup_completed = False
-
-
-def setup_asyncio() -> None:
-    """
-    Initial setup of asyncio
-
-    Returns:
-        Result of initial setup of asyncio.
-    """
-    global _setup_completed
-
-    if _setup_completed:
-        return
-    logger.debug("Setting up asyncio event loop policy")
-    logger.debug("Setting up default event loop")
-    asyncio.set_event_loop_policy(NOCEventLoopPolicy())
-    _setup_completed = True
-
-
-class NOCEventLoopPolicy(asyncio.DefaultEventLoopPolicy):
-    def get_event_loop(self) -> asyncio.AbstractEventLoop:
-        try:
-            return super().get_event_loop()
-        except RuntimeError:
-            loop = self.new_event_loop()
-            self.set_event_loop(loop)
-            return loop
-
-    def reset_called(self) -> None:
-        """
-        Reset called status
-        Returns:
-            Result of reset called status.
-        """
-        setattr(getattr(self, "_local"), "_set_called", False)

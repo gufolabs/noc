@@ -23,7 +23,7 @@ from pymongo.errors import PyMongoError
 # NOC modules
 from noc.config import config
 from noc.core.datastream.base import DataStream, data_stream_loader
-from noc.core.ioloop.util import setup_asyncio
+from noc.core.ioloop.util import get_loop
 
 router = APIRouter()
 
@@ -52,8 +52,7 @@ class DatastreamAPI:
         self.openapi_tags = ["api", "datastream"]
         self.api_name = "datastream"
         self.ds_queue = {}
-        setup_asyncio()
-        self.loop = asyncio.get_event_loop()
+        self.loop = get_loop()
         self.setup_watchers()
         self.setup_datastream()
 

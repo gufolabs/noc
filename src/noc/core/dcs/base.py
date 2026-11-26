@@ -26,7 +26,7 @@ from gufo.loader import Loader
 # NOC modules
 from noc.config import config
 from noc.core.ioloop.timers import PeriodicCallback
-from noc.core.ioloop.util import run_sync, setup_asyncio
+from noc.core.ioloop.util import get_loop, run_sync
 from noc.core.perf import metrics
 
 
@@ -97,8 +97,7 @@ class DCSBase(ABC):
         """
         Entry point of the dedicated runner thread.
         """
-        setup_asyncio()
-        self.loop = asyncio.get_event_loop()
+        self.loop = get_loop()
         ready.set()
         self.loop.run_forever()
         self.logger.debug("Stopping DCS runner thread")
