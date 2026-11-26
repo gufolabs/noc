@@ -7,7 +7,7 @@
 
 # NOC modules
 from noc.sa.interfaces.igetinventory import IGetInventory
-from noc.sa.profiles.Generic.get_inventory import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_inventory import Script as BaseScript
 
 
 class Script(BaseScript):

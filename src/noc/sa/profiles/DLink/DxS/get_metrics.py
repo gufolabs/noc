@@ -8,8 +8,8 @@
 # NOC modules
 from noc.core.mib import mib
 from noc.core.script.metrics import scale
-from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript
-from noc.sa.profiles.Generic.get_metrics import metrics
+from noc.sa.profiles.Generic.Host.get_metrics import Script as GetMetricsScript
+from noc.sa.profiles.Generic.Host.get_metrics import metrics
 
 
 class Script(GetMetricsScript):

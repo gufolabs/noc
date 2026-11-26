@@ -13,7 +13,7 @@ import re
 from noc.core.ip import IPv4
 from noc.core.validators import is_int, is_ipv6_prefix, is_mac
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 
 
 class Script(BaseScript):

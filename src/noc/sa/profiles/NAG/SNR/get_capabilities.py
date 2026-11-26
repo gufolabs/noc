@@ -11,8 +11,8 @@ import re
 # NOC modules
 from noc.core.mib import mib
 from noc.core.validators import is_int
-from noc.sa.profiles.Generic.get_capabilities import Script as BaseScript
-from noc.sa.profiles.Generic.get_capabilities import false_on_snmp_error
+from noc.sa.profiles.Generic.Host.get_capabilities import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_capabilities import false_on_snmp_error
 
 
 class Script(BaseScript):

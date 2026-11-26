@@ -17,7 +17,7 @@ from noc.core.lldp import (
 )
 from noc.sa.interfaces.base import InterfaceTypeError, IntParameter, MACAddressParameter
 from noc.sa.interfaces.igetlldpneighbors import IGetLLDPNeighbors
-from noc.sa.profiles.Generic.get_lldp_neighbors import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_lldp_neighbors import Script as BaseScript
 
 
 class Script(BaseScript):

@@ -62,7 +62,7 @@ def test_snmp_metrics_loaded_for_digit_led_profile(profile: str) -> None:
     """
     # NOC modules
     from noc.core.script.loader import loader
-    from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript
+    from noc.sa.profiles.Generic.Host.get_metrics import Script as GetMetricsScript
 
     script = loader.get_script(f"{profile}.get_metrics")
     assert script is not None

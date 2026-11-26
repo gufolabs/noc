@@ -13,7 +13,7 @@ from typing import Any
 # NOC modules
 from noc.core.validators import is_int, is_ipv6, is_vlan
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 
 
 class IfType(enum.Enum):
