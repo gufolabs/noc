@@ -27,7 +27,6 @@ from mongoengine.fields import (
     IntField,
     ListField,
     LongField,
-    ObjectIdField,
     StringField,
     UUIDField,
 )
@@ -42,6 +41,7 @@ from noc.core.model.decorator import on_delete_check
 from noc.core.models.valuetype import ValueType
 from noc.core.mongo.fields import PlainReferenceField
 from noc.core.path import safe_json_path
+from noc.main.models.doccategory import CategoryMixin
 
 from .alarmclass import AlarmClass
 
@@ -166,27 +166,6 @@ class EventPlugin(EmbeddedDocument):
         return self.name
 
 
-class EventClassCategory(Document):
-    meta = {"collection": "noc.eventclasscategories", "strict": False, "auto_create_index": False}
-    name = StringField()
-    parent = ObjectIdField(required=False)
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if " | " in self.name:
-            p_name = " | ".join(self.name.split(" | ")[:-1])
-            p = EventClassCategory.objects.filter(name=p_name).first()
-            if not p:
-                p = EventClassCategory(name=p_name)
-                p.save()
-            self.parent = p.id
-        else:
-            self.parent = None
-        super().save(*args, **kwargs)
-
-
 @bi_sync
 @change
 @on_delete_check(
@@ -196,7 +175,7 @@ class EventClassCategory(Document):
         ("fm.ActiveEvent", "event_class"),
     ]
 )
-class EventClass(Document):
+class EventClass(CategoryMixin, Document):
     """
     Event class
     """
@@ -244,7 +223,6 @@ class EventClass(Document):
     # Plugin settings
     plugins = EmbeddedDocumentListField(EventPlugin)
     bi_id = LongField(unique=True)
-    category = ObjectIdField()
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)
@@ -304,15 +282,6 @@ class EventClass(Document):
         except jinja2.TemplateSyntaxError as e:
             raise ValidationError(f"Subject body error {e}")
         super().clean()
-
-    def save(self, *args, **kwargs):
-        c_name = " | ".join(self.name.split(" | ")[:-1])
-        c = EventClassCategory.objects.filter(name=c_name).first()
-        if not c:
-            c = EventClassCategory(name=c_name)
-            c.save()
-        self.category = c.id
-        super().save(*args, **kwargs)
 
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_cfgevent:

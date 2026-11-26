@@ -29,7 +29,6 @@ from mongoengine.fields import (
     IntField,
     ListField,
     LongField,
-    ObjectIdField,
     StringField,
     UUIDField,
 )
@@ -41,8 +40,8 @@ from noc.core.handler import get_handler
 from noc.core.model.decorator import on_delete_check
 from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
+from noc.main.models.doccategory import CategoryMixin
 
-from .alarmclasscategory import AlarmClassCategory
 from .alarmplugin import AlarmPlugin
 from .alarmrootcausecondition import AlarmRootCauseCondition
 from .alarmseverity import AlarmSeverity
@@ -140,7 +139,7 @@ class AlarmClassVar(EmbeddedDocument):
         ("fm.AlarmRule", "alarm_class"),
     ]
 )
-class AlarmClass(Document):
+class AlarmClass(CategoryMixin, Document):
     """
     Alarm class
     """
@@ -208,7 +207,6 @@ class AlarmClass(Document):
     recover_time = IntField(required=False, default=300)
     labels = ListField(StringField())
     bi_id = LongField(unique=True)
-    category = ObjectIdField()
 
     _id_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
@@ -294,15 +292,6 @@ class AlarmClass(Document):
         except jinja2.TemplateSyntaxError as e:
             raise ValidationError(f"Subject body error {e}")
         super().clean()
-
-    def save(self, *args, **kwargs):
-        c_name = " | ".join(self.name.split(" | ")[:-1])
-        c = AlarmClassCategory.objects.filter(name=c_name).first()
-        if not c:
-            c = AlarmClassCategory(name=c_name)
-            c.save()
-        self.category = c.id
-        super().save(*args, **kwargs)
 
     @property
     def json_data(self) -> dict[str, Any]:

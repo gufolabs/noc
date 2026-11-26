@@ -10,9 +10,10 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.core.i18n import t
-from noc.fm.models.alarmclass import AlarmClass, AlarmClassCategory
-from noc.fm.models.eventclass import EventClass, EventClassCategory
+from noc.fm.models.alarmclass import AlarmClass
+from noc.fm.models.eventclass import EventClass
 from noc.fm.models.eventclassificationrule import EventClassificationRule
+from noc.main.models.doccategory import DocCategory
 from noc.services.web.base.reportapplication import ReportApplication
 
 
@@ -27,7 +28,7 @@ class HierarchyReportAppplication(ReportApplication):
         # Event classes
         ec = []
         ne = 0
-        for cc in EventClassCategory.objects.order_by("name"):
+        for cc in DocCategory.objects.filter(type="noc.eventclasses").order_by("name"):
             e = EventClass.objects.filter(category=cc.id).order_by("name")
             if not e:
                 continue
@@ -39,7 +40,7 @@ class HierarchyReportAppplication(ReportApplication):
         # Alarm classes
         ac = []
         na = 0
-        for cc in AlarmClassCategory.objects.order_by("name"):
+        for cc in DocCategory.objects.filter(type="noc.alarmclasses").order_by("name"):
             a = AlarmClass.objects.filter(category=cc.id).order_by("name")
             if not a:
                 continue

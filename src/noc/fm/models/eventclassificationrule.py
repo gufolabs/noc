@@ -24,7 +24,6 @@ from mongoengine.fields import (
     EnumField,
     IntField,
     ListField,
-    ObjectIdField,
     ReferenceField,
     StringField,
     UUIDField,
@@ -41,6 +40,7 @@ from noc.core.prettyjson import to_json
 from noc.core.profile.loader import loader as profile_loader
 from noc.fm.models.enumeration import Enumeration
 from noc.fm.models.mib import MIB
+from noc.main.models.doccategory import CategoryMixin
 from noc.sa.models.profile import GENERIC_PROFILE, Profile
 
 from .eventclass import EventClass
@@ -92,31 +92,6 @@ class EventClassificationRuleLabel(EmbeddedDocument):
         return r
 
 
-class EventClassificationRuleCategory(Document):
-    meta = {
-        "collection": "noc.eventclassificationrulecategories",
-        "strict": False,
-        "auto_create_index": False,
-    }
-    name = StringField()
-    parent = ObjectIdField(required=False)
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if " | " in self.name:
-            p_name = " | ".join(self.name.split(" | ")[:-1])
-            p = EventClassificationRuleCategory.objects.filter(name=p_name).first()
-            if not p:
-                p = EventClassificationRuleCategory(name=p_name)
-                p.save()
-            self.parent = p.id
-        else:
-            self.parent = None
-        super().save(*args, **kwargs)
-
-
 class EventClassificationPattern(EmbeddedDocument):
     meta = {"strict": False}
     key_re = StringField(required=True)
@@ -154,7 +129,7 @@ class EventClassificationTestCase(EmbeddedDocument):
 
 
 @change
-class EventClassificationRule(Document):
+class EventClassificationRule(CategoryMixin, Document):
     """
     Classification rules
     """
@@ -182,7 +157,6 @@ class EventClassificationRule(Document):
     vars = EmbeddedDocumentListField(EventClassificationRuleVar)
     labels = EmbeddedDocumentListField(EventClassificationRuleLabel)
     test_cases = EmbeddedDocumentListField(EventClassificationTestCase)
-    category = ObjectIdField()
 
     def __str__(self):
         return self.name
@@ -194,15 +168,6 @@ class EventClassificationRule(Document):
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_cfgeventrules:
             yield "cfgeventrules", self.id
-
-    def save(self, *args, **kwargs):
-        c_name = " | ".join(self.name.split(" | ")[:-1])
-        c = EventClassificationRuleCategory.objects.filter(name=c_name).first()
-        if not c:
-            c = EventClassificationRuleCategory(name=c_name)
-            c.save()
-        self.category = c.id
-        super().save(*args, **kwargs)
 
     @property
     def short_name(self):
