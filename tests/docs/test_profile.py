@@ -14,6 +14,7 @@ import pytest
 
 # NOC modules
 from noc.config import config
+from noc.core.profile.names import unmangle_profile_module_name
 
 PROFILES_ROOT = config.noc_base / "sa" / "profiles"
 PROFILE_DOCS_BASE = Path("docs", "profiles-reference")
@@ -26,7 +27,7 @@ def all_vendors() -> list[str]:
     for path in PROFILES_ROOT.iterdir():
         if not path.is_dir():
             continue
-        vendor = path.name
+        vendor = unmangle_profile_module_name(path.name)
         if vendor == "Generic" or vendor.startswith(".") or vendor.startswith("_"):
             continue
         r.append(vendor)
@@ -40,7 +41,7 @@ def all_profiles() -> list[str]:
         parts = py_file.relative_to(PROFILES_ROOT).parts
         if len(parts) < 3:
             continue
-        vendor, profile_name = parts[0], parts[1]
+        vendor, profile_name = unmangle_profile_module_name(".".join(parts[:2])).split(".")
         if vendor == "Generic":
             continue
         r.add(f"{vendor}.{profile_name}")

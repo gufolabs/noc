@@ -14,6 +14,7 @@ from noc.config import config
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
 from noc.core.profile.loader import loader
+from noc.core.profile.names import mangle_profile_module_name
 from noc.core.text import format_table
 
 
@@ -91,7 +92,9 @@ class Command(BaseCommand):
             if not p:
                 self.die(f"Invalid profile: {profile}")
             n_handler, _n_config = p.get_config_normalizer(self)
-            n_cls = get_handler(f"noc.sa.profiles.{p.name}.confdb.normalizer.{n_handler}")
+            n_cls = get_handler(
+                f"noc.sa.profiles.{mangle_profile_module_name(p.name)}.confdb.normalizer.{n_handler}"
+            )
             s = n_cls.SYNTAX
         root = find_root(s, path)
         if not root:

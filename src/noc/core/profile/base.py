@@ -19,6 +19,7 @@ from noc.core.confdb.collator.typing import PortItem
 from noc.core.ecma48 import strip_control_sequences
 from noc.core.handler import get_handler
 from noc.core.ip import IPv4
+from noc.core.profile.names import mangle_profile_module_name
 from noc.core.text import alnum_key
 from noc.sa.interfaces.base import InterfaceTypeError
 
@@ -1091,7 +1092,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                 return applicator
             return None
 
-        profile_name = object.get_profile().name
+        profile_name = mangle_profile_module_name(object.get_profile().name)
         # Apply default applicators
         if cls.default_config_applicators:
             for acfg in cls.default_config_applicators:
@@ -1118,7 +1119,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             assert c_cls, f"Invalid collator {c_handler}"
             return c_cls(**c_cfg)
 
-        profile_name = obj.get_profile().name
+        profile_name = mangle_profile_module_name(obj.get_profile().name)
         if cls.collators:
             for c_cfg in cls.collators:
                 c = get_collator(c_cfg)

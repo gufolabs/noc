@@ -13,6 +13,7 @@ import pytest
 
 # NOC modules
 from noc.core.interface.base import BaseInterface
+from noc.core.profile.names import unmangle_profile_module_name
 from noc.core.script.base import BaseScript
 from noc.core.script.loader import loader
 
@@ -54,6 +55,7 @@ def test_script_name(sa_script) -> None:
     req_name = script.__module__
     if req_name.startswith("noc.sa.profiles."):
         req_name = req_name[16:]
+    req_name = unmangle_profile_module_name(req_name)
     assert script.name == req_name
 
 

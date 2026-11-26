@@ -9,6 +9,7 @@
 from importlib import import_module
 
 # NOC modules
+from noc.core.profile.names import mangle_profile_module_name
 from noc.core.runner.models.jobreq import JobRequest
 from noc.inv.models.endpoint import Endpoint
 from noc.inv.models.object import Object
@@ -110,9 +111,9 @@ class ProfileChannelController(BaseProfileController):
         """
         mo = ProfileChannelController.get_managed_object(f"o:{obj.id}")
         # @todo: Move hardcode to model data
-        profile = mo.profile.name if mo else "IRE-Polus.Horizon"
+        profile = (mo.profile.name if mo and mo.profile else None) or "IRE-Polus.Horizon"
         # @todo: Consider custom
-        mn = f"noc.sa.profiles.{profile}.controller.{name}"
+        mn = f"noc.sa.profiles.{mangle_profile_module_name(profile)}.controller.{name}"
         try:
             m = import_module(mn)
             # m = __import__(mn, {}, {}, "Controller")

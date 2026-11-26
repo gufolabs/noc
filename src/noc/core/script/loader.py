@@ -18,6 +18,7 @@ from importlib.resources import files
 from noc.config import config
 from noc.core.loader.base import BaseLoader
 from noc.core.profile.loader import GENERIC_PROFILE
+from noc.core.profile.names import mangle_profile_module_name, unmangle_profile_module_name
 
 from .base import BaseScript
 
@@ -49,24 +50,26 @@ class ScriptLoader(BaseLoader):
                     self.logger.error("Invalid script name")
                     return None
                 try:
-                    vendor, system, sn = name.split(".")
+                    _vendor, _system, sn = name.split(".")
                 except Exception as e:
                     self.logger.error('Error in script name "%s": %s', name, e)
                     return None
                 is_generic = False
+                mangled = mangle_profile_module_name(name)
+                mv, ms, msn = mangled.split(".")
                 for p in config.get_customized_paths(prefer_custom=True):
                     if os.path.exists(
                         os.path.join(
                             p or str(files("noc")),
                             "sa",
                             "profiles",
-                            vendor,
-                            system,
-                            f"{sn}.py",
+                            mv,
+                            ms,
+                            f"{msn}.py",
                         )
                     ):
                         base_name = "noc.custom" if p else "noc"
-                        module_name = f"{base_name}.sa.profiles.{name}"
+                        module_name = f"{base_name}.sa.profiles.{mangled}"
                         break
                 else:
                     # Generic script
@@ -121,8 +124,8 @@ class ScriptLoader(BaseLoader):
                 name = name[:-3]
                 if name in self.protected_names:
                     continue
-                ns.add(f"{vendor}.{system}.{name}")
-                profiles.add(f"{vendor}.{system}")
+                ns.add(unmangle_profile_module_name(f"{vendor}.{system}.{name}"))
+                profiles.add(unmangle_profile_module_name(f"{vendor}.{system}"))
         # Apply generic scripts
         for p in profiles:
             for g in generics:

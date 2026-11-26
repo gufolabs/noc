@@ -14,6 +14,9 @@ sa/profiles/
 
 Current coverage: 108+ vendors mapped to specific software profiles.
 
+### Directory and Module Naming
+Profile names in the database and UI are `<vendor>.<software>` and may start with a digit (e.g., `3Com.4500`, `HP.1910`). Such names are not valid Python module names, so the backing directory is stored with an underscore prefix: `sa/profiles/_3Com/_4500/`. The profile name itself remains unmangled. The name-to-module mapping is implemented in `noc.core.profile.names` (`mangle_profile_module_name` / `unmangle_profile_module_name`); custom profiles following this convention are resolved automatically.
+
 ## Architecture
 
 ### Lookup — no fallback chains
