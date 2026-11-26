@@ -615,7 +615,9 @@ class DocumentCollection(BaseCollection[type[Document]]):
         return None
 
     def before_sync(self) -> None:
-        self.fix_uuids()
+        # On a clean install there are no string UUIDs to fix
+        if not self._is_clean:
+            self.fix_uuids()
 
     def dereference(self, d: dict[str, Any], model: DB_MODEL_TYPE | None = None) -> dict[str, Any]:
         fields = self.get_fields(model)
