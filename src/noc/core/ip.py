@@ -54,22 +54,6 @@ class IP:
         """Returns mask length (in bits)."""
         return self.mask
 
-    def __cmp__(self, other) -> int:
-        """Compare prefix with another.
-
-        Args:
-            other: IP instance to be compared.
-
-        Returns:
-             0 if the prefixes are equal, negative if this prefix is less than
-             *other*, positive if greater.
-        """
-        if self == other:
-            return 0
-        if self < other:
-            return -1
-        return 1
-
     def __le__(self, other):
         """><= operator."""
         return self == other or self < other
@@ -337,14 +321,6 @@ class IPv4(IP):
                         break
                 break
         return n
-
-    def _get_parts(self) -> list[int]:
-        """Get a list of the 4 IPv4 octets (as integers).
-
-        Returns:
-            List of 4 integers.
-        """
-        return [int(d) for d in self.address.split(".")]
 
     @classmethod
     def _to_prefix(cls: type[Self], s: int, mask: int) -> Self:

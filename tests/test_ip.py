@@ -9,7 +9,6 @@
 import pytest
 
 # NOC modules
-from noc.core.comp import smart_text
 from noc.core.ip import IP, IPv4, IPv6, PrefixDB
 
 
@@ -52,22 +51,14 @@ def test_ipv4_in_value_error(p1: str, p2: str) -> None:
 
 @pytest.mark.parametrize(
     ("p1", "p2"),
-    [(IPv4("192.168.0.0/24"), "192.168.0.0/24"), (IPv4("192.168.0.0"), "192.168.0.0/32")],
-)
-def test_ipv4_str(p1, p2) -> None:
-    assert str(p1) == p2
-
-
-@pytest.mark.parametrize(
-    ("p1", "p2"),
     [
         (IPv4("192.168.0.0/24"), "192.168.0.0/24"),
         (IPv4("192.168.0.0"), "192.168.0.0/32"),
         (IPv4("192.168.0.0", netmask="255.255.255.0"), "192.168.0.0/24"),
     ],
 )
-def test_ipv4_unicode(p1, p2) -> None:
-    assert smart_text(p1) == p2
+def test_ipv4_str(p1, p2) -> None:
+    assert str(p1) == p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [(IPv4("192.168.0.0/24"), "<IPv4 192.168.0.0/24>")])
@@ -597,19 +588,6 @@ def test_ipv4_range_to_prefixes(p1, p2) -> None:
 )
 def test_ipv4_special_addresses(prefix: str, special) -> None:
     assert IPv4.prefix(prefix).special_addresses == {IPv4(a) for a in special}
-
-
-@pytest.mark.parametrize(
-    ("p1", "p2"),
-    [
-        ("::/0", "::/0"),
-        ("2001:db8::/32", "2001:db8::/32"),
-        ("::ffff:192.168.0.1", "::ffff:192.168.0.1/128"),
-        ("::", "::/128"),
-    ],
-)
-def test_ipv6_unicode(p1: str, p2: str) -> None:
-    assert smart_text(IPv6(p1)) == p2
 
 
 @pytest.mark.parametrize(("p1", "p2"), [("::", "<IPv6 ::/128>")])
