@@ -6,15 +6,19 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import json
 import logging
 import yaml
 from collections import defaultdict
 from pathlib import Path
 
+# NOC modules
+from noc.core.profile.names import mangle_profile_name
+
 ROOT = Path.cwd()
 SRC = ROOT / "src" / "noc"
-PROFILES_ROOT = SRC / "sa" / "profiles"
+PROFILES_ROOT = SRC / "adapters"
 DOC_ROOT = ROOT / "docs"
 COLLECTIONS_ROOT = ROOT / "collections"
 GITLAB_ROOT = "https://code.getnoc.com/noc/noc"
@@ -23,19 +27,9 @@ GITHUB_ROOT = "https://github.com/gufolabs/noc"
 logger = logging.getLogger("mkdocs")
 logger.info("[NOC] - Initializing NOC macroses")
 logger.info("[NOC] - Current directory: %s", ROOT)
-logger.info("[NOC] - Profiles root: %s", PROFILES_ROOT)
+logger.info("[NOC] - Adapters root: %s", PROFILES_ROOT)
 logger.info("[NOC] - Docs root: %s", DOC_ROOT)
 logger.info("[NOC] - Collections root: %s", COLLECTIONS_ROOT)
-
-
-def _mangle(name: str) -> str:
-    """Map profile name component to module directory name (see noc.core.profile.names)."""
-    return "_" + name if name[:1].isdigit() else name
-
-
-def _unmangle(name: str) -> str:
-    """Reverse of _mangle for directory names starting with an underscore followed by a digit."""
-    return name[1:] if len(name) > 1 and name.startswith("_") and name[1].isdigit() else name
 
 
 def define_env(env):
@@ -103,8 +97,7 @@ def define_env(env):
         r = ["Script | Support", "--- | ---"]
         load_scripts()
         # Get profile scripts
-        vendor, name = profile.split(".")
-        path = PROFILES_ROOT / _mangle(vendor) / _mangle(name)
+        path = PROFILES_ROOT / mangle_profile_name(profile)
         check_exists(path)
         supported = {f.stem for f in path.iterdir() if f.is_file() and f.suffix == ".py"}
         # Render
@@ -154,14 +147,30 @@ def define_env(env):
         if not script_profiles:
             s_set = set(scripts)
 
-            for path in PROFILES_ROOT.glob("*/*/*.py"):
-                sn = path.stem
-                if sn not in s_set:
+            for d in sorted(PROFILES_ROOT.iterdir()):
+                if not d.is_dir() or not (d / "profile.py").is_file():
                     continue
-
-                vendor = _unmangle(path.parent.parent.name)
-                profile = _unmangle(path.parent.name)
-                script_profiles[sn].add(f"{vendor}.{profile}")
+                try:
+                    module = importlib.import_module(f"noc.adapters.{d.name}.profile")
+                except ImportError:
+                    continue
+                kls = next(
+                    (
+                        o
+                        for o in vars(module).values()
+                        if isinstance(o, type)
+                        and o.__module__ == module.__name__
+                        and o.__name__ == "Profile"
+                    ),
+                    None,
+                )
+                if kls is None or not kls.name:
+                    continue
+                for f in d.glob("*.py"):
+                    sn = f.name[:-3]
+                    if sn in ("profile", "__init__") or sn not in s_set:
+                        continue
+                    script_profiles[sn].add(kls.name)
 
         s_profiles = [
             (profile.split(".", 1)[0], profile) for profile in sorted(script_profiles[script])
