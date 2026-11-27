@@ -19,19 +19,23 @@ from noc.sa.models.managedobject import ManagedObject
 from noc.services.web.base.simplereport import SectionRow, SimpleReport
 
 
-class ReportForm(forms.Form):
-    pool = forms.ChoiceField(
-        label=t("label-pool"),
-        required=False,
-        initial=None,
-        choices=[(x, x) for x in Pool.objects.order_by("name").scalar("name")] + [(None, "-")],
-    )
-    filter_dup_macs = forms.BooleanField(label=t("label-exclude-on-mac-black-list"), required=False)
-
-
 class ReportDiscoveryIDPoisonApplication(SimpleReport):
     title = t("app-title-reportdiscoverypoison")
-    form = ReportForm
+
+    def get_form(self):
+        class ReportForm(forms.Form):
+            pool = forms.ChoiceField(
+                label=t("label-pool"),
+                required=False,
+                initial=None,
+                choices=[(x, x) for x in Pool.objects.order_by("name").scalar("name")]
+                + [(None, "-")],
+            )
+            filter_dup_macs = forms.BooleanField(
+                label=t("label-exclude-on-mac-black-list"), required=False
+            )
+
+        return ReportForm
 
     def get_data(self, request: HttpRequest, pool=None, filter_dup_macs=False, **kwargs):
         data = []
