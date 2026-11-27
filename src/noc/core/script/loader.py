@@ -6,13 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import glob
 import importlib
-import os
 import re
 import sys
 import threading
 from importlib.resources import files
+from pathlib import Path
 
 # NOC modules
 from noc.config import config
@@ -57,16 +56,9 @@ class ScriptLoader(BaseLoader):
                 mangled = mangle_profile_module_name(name)
                 mv, ms, msn = mangled.split(".")
                 for p in config.get_customized_paths(prefer_custom=True):
-                    if os.path.exists(
-                        os.path.join(
-                            p or str(files("noc")),
-                            "sa",
-                            "profiles",
-                            mv,
-                            ms,
-                            f"{msn}.py",
-                        )
-                    ):
+                    if (
+                        Path(p or str(files("noc"))).joinpath("sa", "profiles", mv, ms, f"{msn}.py")
+                    ).is_file():
                         base_name = "noc.custom" if p else "noc"
                         module_name = f"{base_name}.sa.profiles.{mangled}"
                         break
@@ -102,23 +94,20 @@ class ScriptLoader(BaseLoader):
         ns = set()
         # Scan generic scripts for `requires` dependencies
         generics = {}  # Name -> dependencies
-        generic_path = os.path.join(str(files("noc")), "sa", "profiles", "Generic", "Host", "*.py")
-        for path in glob.glob(generic_path):
-            gn = path.rsplit(os.sep)[-1][:-3]
+        for path in Path(str(files("noc"))).glob("sa/profiles/Generic/Host/*.py"):
+            gn = path.name[:-3]
             if gn in self.protected_names:
                 continue
-            with open(path) as f:
-                data = f.read()
-                # Scan for requires = [..]
-                match = self.rx_requires.search(data)
-                if match:
-                    generics[gn] = [s.strip()[1:-1] for s in match.group(1).split(",") if s.strip()]
+            data = path.read_text()
+            # Scan for requires = [..]
+            match = self.rx_requires.search(data)
+            if match:
+                generics[gn] = [s.strip()[1:-1] for s in match.group(1).split(",") if s.strip()]
         # Load custom scripts, Load common scripts
         profiles = set()
         for base in config.get_customized_paths(prefer_custom=True):
-            gx = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "*.py")
-            for path in glob.glob(gx):
-                vendor, system, name = path.split(os.sep)[-3:]
+            for path in Path(base or str(files("noc"))).glob("sa/profiles/*/*/*.py"):
+                vendor, system, name = path.parts[-3:]
                 name = name[:-3]
                 if name in self.protected_names:
                     continue

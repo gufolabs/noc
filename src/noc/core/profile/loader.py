@@ -6,12 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import glob
 import importlib
-import os
 import sys
 import threading
 from importlib.resources import files
+from pathlib import Path
 
 # NOC modules
 from noc.config import config
@@ -46,10 +45,10 @@ class ProfileLoader(BaseLoader):
                     return None
                 mangled = mangle_profile_module_name(name)
                 for p in config.get_customized_paths(prefer_custom=True):
-                    path = os.path.join(
-                        p or str(files("noc")), "sa", "profiles", *mangled.split(".")
+                    path = Path(p or str(files("noc"))).joinpath(
+                        "sa", "profiles", *mangled.split(".")
                     )
-                    if not os.path.exists(os.path.join(path, "profile.py")):
+                    if not (path / "profile.py").is_file():
                         continue
                     base_name = "noc.custom" if p else "noc"
                     module_name = f"{base_name}.sa.profiles.{mangled}"
@@ -81,9 +80,8 @@ class ProfileLoader(BaseLoader):
         """
         ns = set()
         for base in config.get_customized_paths(prefer_custom=True):
-            px = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "__init__.py")
-            for path in glob.glob(px):
-                vendor, system = path.split(os.sep)[-3:-1]
+            for path in Path(base or str(files("noc"))).glob("sa/profiles/*/*/__init__.py"):
+                vendor, system = path.parts[-3:-1]
                 ns.add(unmangle_profile_module_name(f"{vendor}.{system}"))
         with self.lock:
             self.all_profiles = ns
