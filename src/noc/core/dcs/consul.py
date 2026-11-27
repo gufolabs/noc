@@ -162,6 +162,7 @@ class ConsulDCS(DCSBase):
         Returns:
             True if the service was registered successfully, False otherwise.
         """
+        self._assert_not_blocked()
         if pool:
             name = f"{name}-{pool}"
         self.name = name
@@ -262,6 +263,7 @@ class ConsulDCS(DCSBase):
         return config.consul.base + "/locks/" + lock
 
     async def acquire_lock(self, name: str) -> None:
+        self._assert_not_blocked()
         if not self.session:
             await self.create_session()
         key = self.get_lock_path(name)
@@ -312,6 +314,7 @@ class ConsulDCS(DCSBase):
         Returns:
             Result of return the current limit for given slot.
         """
+        self._assert_not_blocked()
         manifest_path = self._get_manifest_path(name)
         while True:
             self.logger.info("Attempting to get slot")
@@ -326,6 +329,7 @@ class ConsulDCS(DCSBase):
                 await asyncio.sleep(config.consul.retry_timeout)
 
     async def set_slot_limit(self, name: str, limit: int) -> None:
+        self._assert_not_blocked()
         manifest_path = self._get_manifest_path(name)
         while True:
             try:
@@ -350,6 +354,7 @@ class ConsulDCS(DCSBase):
         Returns:
             (slot number, number of instances)
         """
+        self._assert_not_blocked()
         if not self.session:
             await self.create_session()
         if self.total_slots is not None and self.slot_number is not None:
@@ -459,6 +464,7 @@ class ConsulDCS(DCSBase):
         Returns:
             address:port
         """
+        self._assert_not_blocked()
         self.logger.debug("Resolve near service %s", name)
         index = 0
         while True:
