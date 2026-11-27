@@ -94,7 +94,7 @@ def _allow_xfail(module: str) -> bool:
     :param module: Module name
     :return:
     """
-    return module in _ALLOW_XFAIL or module.startswith("noc.sa.profiles.VMWare")
+    return module in _ALLOW_XFAIL or module.startswith("noc.adapters.vmware__")
 
 
 @cachetools.cached(cache={})

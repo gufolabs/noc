@@ -94,7 +94,7 @@ class Command(BaseCommand):
 
             service = ServiceStub(pool="")
             # TODO dirty hack
-            # Suppress error in /opt/noc/sa/profiles/Ericsson/MINI_LINK/profile.py
+            # Suppress error in adapters/ericsson__mini_link/profile.py
             try:
                 scr = script_class(
                     service=service,

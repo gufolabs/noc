@@ -19,7 +19,7 @@ from noc.core.confdb.collator.typing import PortItem
 from noc.core.ecma48 import strip_control_sequences
 from noc.core.handler import get_handler
 from noc.core.ip import IPv4
-from noc.core.profile.names import mangle_profile_module_name
+from noc.core.profile.names import mangle_profile_name
 from noc.core.text import alnum_key
 from noc.sa.interfaces.base import InterfaceTypeError
 
@@ -1087,7 +1087,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             else:
                 a_handler, a_cfg = cfg
             if not a_handler.startswith("noc."):
-                a_handler = f"noc.sa.profiles.{profile_name}.confdb.applicator.{a_handler}"
+                a_handler = f"noc.adapters.{profile_name}.confdb.applicator.{a_handler}"
             a_cls = get_handler(a_handler)
             assert a_cls, f"Invalid applicator {a_handler}"
             applicator = a_cls(object, confdb, **a_cfg)
@@ -1095,7 +1095,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                 return applicator
             return None
 
-        profile_name = mangle_profile_module_name(object.get_profile().name)
+        profile_name = mangle_profile_name(object.get_profile().name)
         # Apply default applicators
         if cls.default_config_applicators:
             for acfg in cls.default_config_applicators:
@@ -1117,12 +1117,12 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             else:
                 c_handler, c_cfg = cfg
             if not c_handler.startswith("noc."):
-                c_handler = f"noc.sa.profiles.{profile_name}.confdb.collator.{c_handler}"
+                c_handler = f"noc.adapters.{profile_name}.confdb.collator.{c_handler}"
             c_cls = get_handler(c_handler)
             assert c_cls, f"Invalid collator {c_handler}"
             return c_cls(**c_cfg)
 
-        profile_name = mangle_profile_module_name(obj.get_profile().name)
+        profile_name = mangle_profile_name(obj.get_profile().name)
         if cls.collators:
             for c_cfg in cls.collators:
                 c = get_collator(c_cfg)

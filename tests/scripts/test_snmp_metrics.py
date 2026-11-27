@@ -14,7 +14,7 @@ import pytest
 
 # NOC modules
 from noc.config import config
-from noc.core.profile.names import mangle_profile_module_name
+from noc.core.profile.names import mangle_profile_name
 
 
 def get_json_paths():
@@ -61,14 +61,12 @@ def test_snmp_metrics_loaded_for_digit_led_profile(profile: str) -> None:
     underscore prefix) are applied to the profile get_metrics script.
     """
     # NOC modules
+    from noc.adapters.generic__host.get_metrics import Script as GetMetricsScript
     from noc.core.script.loader import loader
-    from noc.sa.profiles.Generic.Host.get_metrics import Script as GetMetricsScript
 
     script = loader.get_script(f"{profile}.get_metrics")
     assert script is not None
-    resource = config.noc_base.joinpath(
-        "sa", "profiles", *mangle_profile_module_name(profile).split("."), "snmp_metrics"
-    )
+    resource = config.noc_base.joinpath("adapters", mangle_profile_name(profile), "snmp_metrics")
     json_files = list(resource.rglob("*.json"))
     assert json_files, f"No snmp_metrics JSON files found for {profile}"
     for json_file in json_files:

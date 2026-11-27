@@ -13,7 +13,7 @@ import pytest
 
 # NOC modules
 from noc.core.interface.base import BaseInterface
-from noc.core.profile.names import unmangle_profile_module_name
+from noc.core.profile.names import mangle_profile_name
 from noc.core.script.base import BaseScript
 from noc.core.script.loader import loader
 
@@ -52,11 +52,14 @@ def test_script_type(sa_script) -> None:
 def test_script_name(sa_script) -> None:
     script = loader.get_script(sa_script)
     assert getattr(script, "name"), "Script should has name"
-    req_name = script.__module__
-    if req_name.startswith("noc.sa.profiles."):
-        req_name = req_name[16:]
-    req_name = unmangle_profile_module_name(req_name)
-    assert script.name == req_name
+    profile_name, sn = script.name.rsplit(".", 1)
+    flat = mangle_profile_name(profile_name)
+    expected = (
+        f"noc.adapters.{flat}.{sn}",
+        f"noc.custom.adapters.{flat}.{sn}",
+        f"noc.adapters.generic__host.{sn}",
+    )
+    assert script.__module__ in expected, f"Unexpected module {script.__module__}"
 
 
 def test_script_interface(sa_script) -> None:

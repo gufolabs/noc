@@ -9,6 +9,7 @@
 import importlib
 import sys
 import threading
+from collections.abc import Iterator
 from importlib.resources import files
 from pathlib import Path
 
@@ -17,9 +18,46 @@ from noc.config import config
 from noc.core.loader.base import BaseLoader
 
 from .base import BaseProfile
-from .names import mangle_profile_module_name, unmangle_profile_module_name
+from .names import mangle_profile_name
 
 GENERIC_PROFILE = "Generic.Host"
+
+
+def find_profile_class(module) -> type[BaseProfile] | None:
+    """
+    Return the BaseProfile subclass defined in the given module, or None.
+    A module must contain exactly one such class to be a valid adapter profile.
+    """
+    found = [
+        o
+        for o in vars(module).values()
+        if (
+            isinstance(o, type)
+            and issubclass(o, BaseProfile)
+            and o is not BaseProfile
+            and o.__module__ == module.__name__
+        )
+    ]
+    if len(found) != 1:
+        return None
+    return found[0]
+
+
+def iter_adapter_dirs() -> Iterator[tuple[Path, str]]:
+    """
+    Iterate over adapter directories across all customized paths.
+
+    Yields:
+        Tuples of (adapter directory, base package name, "noc" or "noc.custom").
+    """
+    for base in config.get_customized_paths(prefer_custom=True):
+        root = Path(base or str(files("noc"))) / "adapters"
+        if not root.is_dir():
+            continue
+        base_name = "noc.custom" if base else "noc"
+        for d in sorted(root.iterdir()):
+            if d.is_dir() and (d / "profile.py").is_file():
+                yield d, base_name
 
 
 class ProfileLoader(BaseLoader):
@@ -43,19 +81,23 @@ class ProfileLoader(BaseLoader):
                 if not self.is_valid_name(name):
                     self.logger.error("Invalid profile name")
                     return None
-                mangled = mangle_profile_module_name(name)
-                for p in config.get_customized_paths(prefer_custom=True):
-                    path = Path(p or str(files("noc"))).joinpath(
-                        "sa", "profiles", *mangled.split(".")
-                    )
-                    if not (path / "profile.py").is_file():
+                flat = mangle_profile_name(name)
+                for d, base_name in iter_adapter_dirs():
+                    if d.name != flat:
                         continue
-                    base_name = "noc.custom" if p else "noc"
-                    module_name = f"{base_name}.sa.profiles.{mangled}"
-                    profile = self.find_class(f"{module_name}.profile", BaseProfile, name)
+                    profile = self.find_class(
+                        f"{base_name}.adapters.{flat}.profile", BaseProfile, name
+                    )
                     if profile:
                         profile.initialize()
                         break
+                else:
+                    self.logger.error(
+                        "Profile %s not found. Custom adapters must use the flat "
+                        "layout adapters/<flat>; see the release notes for the "
+                        "migration guide.",
+                        name,
+                    )
                 self.profiles[name] = profile
             return profile
 
@@ -76,13 +118,24 @@ class ProfileLoader(BaseLoader):
 
     def find_profiles(self):
         """
-        Scan all available profiles
+        Scan all available profiles.
+
+        Imports each adapter's profile module and reads the profile class
+        name. A failing adapter is logged and skipped.
         """
         ns = set()
-        for base in config.get_customized_paths(prefer_custom=True):
-            for path in Path(base or str(files("noc"))).glob("sa/profiles/*/*/__init__.py"):
-                vendor, system = path.parts[-3:-1]
-                ns.add(unmangle_profile_module_name(f"{vendor}.{system}"))
+        for d, base_name in iter_adapter_dirs():
+            module_name = f"{base_name}.adapters.{d.name}.profile"
+            try:
+                module = importlib.import_module(module_name)
+            except ImportError as e:
+                self.logger.error("Error importing adapter %s: %s", module_name, e)
+                continue
+            kls = find_profile_class(module)
+            if kls is None or not kls.name:
+                self.logger.error("No profile class with a name in %s", module_name)
+                continue
+            ns.add(kls.name)
         with self.lock:
             self.all_profiles = ns
 

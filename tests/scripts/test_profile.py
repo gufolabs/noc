@@ -20,7 +20,7 @@ from noc.config import config
 from noc.core.importer import NOCImportRouter
 from noc.core.profile.base import BaseProfile
 from noc.core.profile.loader import ProfileLoader, loader
-from noc.core.profile.names import mangle_profile_module_name, unmangle_profile_module_name
+from noc.core.profile.names import mangle_profile_name
 
 
 def clear_custom_modules() -> None:
@@ -45,12 +45,10 @@ def custom_profile_path(path: Path) -> Iterator[None]:
 
 
 def write_custom_profile(root: Path, profile_name: str) -> None:
-    """Create a minimal custom profile package for a profile name."""
+    """Create a minimal custom adapter for a profile name."""
     root.mkdir(parents=True, exist_ok=True)
     (root / "__init__.py").touch()
-    profile_parts = profile_name.split(".")
-    profile_parts = mangle_profile_module_name(".".join(profile_parts)).split(".")
-    profile_path = root / "sa" / "profiles" / Path(*profile_parts)
+    profile_path = root / "adapters" / mangle_profile_name(profile_name)
     package = profile_path
     while package != root:
         package.mkdir(parents=True, exist_ok=True)
@@ -96,17 +94,16 @@ def test_profile_name(sa_profile) -> None:
     assert getattr(profile, "name"), "Profile should has name"
     parts = profile.__module__.split(".")
     assert parts[-1] == "profile", "Profile must be in profile.py"
-    name = unmangle_profile_module_name(f"{parts[-3]}.{parts[-2]}")
-    assert profile.name == name
+    assert profile.name == sa_profile
 
 
 @pytest.mark.parametrize(
     ("profile_name", "module_name"),
     [
-        ("Generic.Host", "noc.custom.sa.profiles.Generic.Host.profile"),
-        ("Juniper.JUNOS", "noc.custom.sa.profiles.Juniper.JUNOS.profile"),
-        ("3Com.4500", "noc.custom.sa.profiles._3Com._4500.profile"),
-        ("HP.1910", "noc.custom.sa.profiles.HP._1910.profile"),
+        ("Generic.Host", "noc.custom.adapters.generic__host.profile"),
+        ("Juniper.JUNOS", "noc.custom.adapters.juniper__junos.profile"),
+        ("3Com.4500", "noc.custom.adapters._3com__4500.profile"),
+        ("HP.1910", "noc.custom.adapters.hp__1910.profile"),
     ],
 )
 def test_custom_profile_overrides_repository_profile(

@@ -116,7 +116,7 @@ from noc.core.mx import (
     get_subscription_id,
     send_message,
 )
-from noc.core.profile.names import mangle_profile_module_name
+from noc.core.profile.names import mangle_profile_name
 from noc.core.resourcegroup.decorator import resourcegroup
 from noc.core.scheduler.job import Job
 from noc.core.script.caller import ScriptCaller, SessionContext
@@ -2243,7 +2243,9 @@ class ManagedObject(DjangoCapsMixin, NOCModel):
         if not n_handler:
             return
         if not n_handler.startswith("noc."):
-            n_handler = f"noc.sa.profiles.{mangle_profile_module_name(profile.name)}.confdb.normalizer.{n_handler}"
+            n_handler = (
+                f"noc.adapters.{mangle_profile_name(profile.name)}.confdb.normalizer.{n_handler}"
+            )
         n_cls = get_handler(n_handler)
         if not n_cls:
             return
