@@ -11,7 +11,7 @@ import datetime as dt
 
 # NOC modules
 from noc.config import config
-from noc.core.clickhouse.connect import connection
+from noc.core.clickhouse.connect import ClickhouseClient, connection
 
 # NOC Modules
 from noc.pm.models.metricscope import MetricScope
@@ -35,10 +35,12 @@ CH_REPLICAS = []
 MIGRATE_DEPTH = 120
 MIGRATE_CHUNK = 30
 
-client = connection()
+client: ClickhouseClient | None = None
 
 
 def fix():
+    global client
+    client = connection()
     if CH_REPLICAS:
         # For replicated schema
         for rep1, rep2 in CH_REPLICAS:
@@ -77,6 +79,7 @@ def get_insert_query(metric_scope: MetricScope, start, stop, remote=None):
     else:
         query_from = f"{SOURCE_DB_NAME}.{table_name}"
     try:
+        assert client is not None
         r = client.execute(f"DESCRIBE {SOURCE_DB_NAME}.{table_name}")
     except Exception:
         # print(f"No Old Table for metricScope: {metric_scope.name}")

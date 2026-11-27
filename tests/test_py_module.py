@@ -17,6 +17,7 @@ import pytest
 
 # NOC modules
 from noc.config import config
+from noc.core.dcs.base import DCSBase, DCSTripwireError
 
 # Transitonal only guard.
 # Remove after step 8 of NEP-0101
@@ -76,8 +77,14 @@ def iter_init() -> Iterable[Path]:
 @pytest.mark.parametrize("module", list(iter_py_modules()))
 def test_import(module: str) -> None:
     try:
-        m = importlib.import_module(module)
+        # Module imports must not perform DCS service resolution.
+        # Without this guard a blocking DCS/Consul resolution triggered at
+        # import time hangs the test run instead of failing fast.
+        with DCSBase.tripwire("DCS access during module import"):
+            m = importlib.import_module(module)
         assert m
+    except DCSTripwireError as e:
+        pytest.fail(f"{module}: {e}")
     except (ImportError, ModuleNotFoundError, NotImplementedError) as e:
         if _allow_xfail(module):
             pytest.xfail(str(e))

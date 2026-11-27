@@ -36,7 +36,6 @@ class Command(BaseCommand):
 
     help = "Manage Jobs"
     default_time = timedelta(minutes=5)
-    connect()
 
     @staticmethod
     def valid_date(s):
@@ -58,6 +57,7 @@ class Command(BaseCommand):
         return Scheduler(scheduler)
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
+        connect()
         (
             parser.add_argument(
                 "--scheduler",
