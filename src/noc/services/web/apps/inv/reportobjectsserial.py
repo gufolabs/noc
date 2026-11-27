@@ -22,18 +22,19 @@ from noc.services.web.base.reportdatasources.report_objectattributes import Repo
 from noc.services.web.base.simplereport import SimpleReport
 
 
-class ReportForm(forms.Form):
-    resource_group = forms.ChoiceField(
-        label=t("header-managed-objects-group-selector"),
-        required=True,
-        help_text="Group for choice",
-        choices=list(ResourceGroup.objects.order_by("name").scalar("id", "name")),
-    )
-
-
 class ReportFilterApplication(SimpleReport):
     title = t("app-title-reportobjectsserial")
-    form = ReportForm
+
+    def get_form(self):
+        class ReportForm(forms.Form):
+            resource_group = forms.ChoiceField(
+                label=t("header-managed-objects-group-selector"),
+                required=True,
+                help_text="Group for choice",
+                choices=list(ResourceGroup.objects.order_by("name").scalar("id", "name")),
+            )
+
+        return ReportForm
 
     def get_data(self, request: HttpRequest, resource_group=None):
         qs = ManagedObject.objects

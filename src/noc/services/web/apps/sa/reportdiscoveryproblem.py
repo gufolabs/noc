@@ -83,44 +83,64 @@ class ReportDiscoveryProblem:
             yield from r
 
 
-class ReportForm(forms.Form):
-    pool = forms.ChoiceField(
-        label=t("header-managed-objects-pool"),
-        required=False,
-        choices=[*list(Pool.objects.order_by("name").scalar("id", "name")), (None, "-" * 9)],
-    )
-    obj_profile = forms.ModelChoiceField(
-        label=t("header-managed-objects-profile"),
-        required=False,
-        queryset=ManagedObjectProfile.objects.order_by("name"),
-    )
-    resource_group = forms.ChoiceField(
-        label=t("header-managed-objects-group-selector"),
-        required=False,
-        help_text="Group for choice",
-        choices=[
-            *list(ResourceGroup.objects.order_by("name").scalar("id", "name")),
-            (None, "-" * 9),
-        ],
-    )
-    avail_status = forms.BooleanField(label=t("label-filter-by-ping-status"), required=False)
-    profile_check_only = forms.BooleanField(label=t("label-profile-check-only"), required=False)
-    failed_scripts_only = forms.BooleanField(
-        label=t("status-failed-discovery-only"), required=False
-    )
-    filter_pending_links = forms.BooleanField(label=t("label-filter-pending-links"), required=False)
-    filter_none_objects = forms.BooleanField(label=t("label-filter-none-problems"), required=False)
-    filter_view_other = forms.BooleanField(label=t("label-show-other-problems"), required=False)
-
-
 class ReportFilterApplication(SimpleReport):
     title = t("app-title-sa-reportdiscoveryproblem")
-    form = ReportForm
 
-    predefined_reports = {
-        pname: PredefinedReport(t("title-problem-discovery-pool", pool=pname), {"pool": str(pid)})
-        for pid, pname in ([*list(Pool.objects.order_by("name").scalar("id", "name")), ("", "ALL")])
-    }
+    def get_form(self):
+        class ReportForm(forms.Form):
+            pool = forms.ChoiceField(
+                label=t("header-managed-objects-pool"),
+                required=False,
+                choices=[
+                    *list(Pool.objects.order_by("name").scalar("id", "name")),
+                    (None, "-" * 9),
+                ],
+            )
+            obj_profile = forms.ModelChoiceField(
+                label=t("header-managed-objects-profile"),
+                required=False,
+                queryset=ManagedObjectProfile.objects.order_by("name"),
+            )
+            resource_group = forms.ChoiceField(
+                label=t("header-managed-objects-group-selector"),
+                required=False,
+                help_text="Group for choice",
+                choices=[
+                    *list(ResourceGroup.objects.order_by("name").scalar("id", "name")),
+                    (None, "-" * 9),
+                ],
+            )
+            avail_status = forms.BooleanField(
+                label=t("label-filter-by-ping-status"), required=False
+            )
+            profile_check_only = forms.BooleanField(
+                label=t("label-profile-check-only"), required=False
+            )
+            failed_scripts_only = forms.BooleanField(
+                label=t("status-failed-discovery-only"), required=False
+            )
+            filter_pending_links = forms.BooleanField(
+                label=t("label-filter-pending-links"), required=False
+            )
+            filter_none_objects = forms.BooleanField(
+                label=t("label-filter-none-problems"), required=False
+            )
+            filter_view_other = forms.BooleanField(
+                label=t("label-show-other-problems"), required=False
+            )
+
+        return ReportForm
+
+    @property
+    def predefined_reports(self):
+        return {
+            pname: PredefinedReport(
+                t("title-problem-discovery-pool", pool=pname), {"pool": str(pid)}
+            )
+            for pid, pname in (
+                [*list(Pool.objects.order_by("name").scalar("id", "name")), ("", "ALL")]
+            )
+        }
 
     def get_data(
         self,
