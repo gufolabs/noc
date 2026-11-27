@@ -20,7 +20,18 @@ from noc.sa.models.profile import Profile
 
 from .base import BaseDataSource, FieldInfo, FieldType, ParamInfo
 
-GENERIC_PROFILE = Profile.get_by_name(GENERIC_PROFILE_NAME)
+_generic_profile: Profile | None = None
+
+
+def get_generic_profile() -> Profile | None:
+    """
+    Return the generic managed object profile.
+    Lazily loaded to avoid database access at import time.
+    """
+    global _generic_profile
+    if _generic_profile is None:
+        _generic_profile = Profile.get_by_name(GENERIC_PROFILE_NAME)
+    return _generic_profile
 
 
 class TopologyProblemDS(BaseDataSource):
@@ -61,7 +72,7 @@ class TopologyProblemDS(BaseDataSource):
         for mo in mos:
             if mo.id not in mos_set:
                 continue
-            if mo.profile == GENERIC_PROFILE:
+            if mo.profile == get_generic_profile():
                 problems[mo.id] = t("msg-profile-check-failed")
         # Get all managed objects without interfaces
         if_mo = {

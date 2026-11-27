@@ -7,6 +7,7 @@
 
 # Python modules
 import time
+from functools import cached_property
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -26,13 +27,20 @@ class FMObjectCollector(BaseCollector):
         {"$group": {"_id": {"adm_path": "$adm_path", "root": "$root"}, "tags": {"$sum": 1}}},
     ]
 
-    ping_failed_ac = AlarmClass.objects.get(name="NOC | Managed Object | Ping Failed").id
-    discovery_failed_ac = {ac.id for ac in AlarmClass.objects.filter(name__contains="Discovery")}
+    @cached_property
+    def ping_failed_ac(self) -> int:
+        return AlarmClass.objects.get(name="NOC | Managed Object | Ping Failed").id
 
-    pool_mappings = [
-        (p.name, set(ManagedObject.objects.filter(pool=p).values_list("id", flat=True)))
-        for p in Pool.objects.filter()
-    ]
+    @cached_property
+    def discovery_failed_ac(self) -> set[int]:
+        return {ac.id for ac in AlarmClass.objects.filter(name__contains="Discovery")}
+
+    @cached_property
+    def pool_mappings(self) -> list[tuple[str, set]]:
+        return [
+            (p.name, set(ManagedObject.objects.filter(pool=p).values_list("id", flat=True)))
+            for p in Pool.objects.filter()
+        ]
 
     @staticmethod
     def calc_lag(ts, now):

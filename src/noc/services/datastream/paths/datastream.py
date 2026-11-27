@@ -53,8 +53,20 @@ class DatastreamAPI:
         self.api_name = "datastream"
         self.ds_queue = {}
         self.loop = get_loop()
-        self.setup_watchers()
+        self.watchers_started = False
         self.setup_datastream()
+
+    def start_watchers(self) -> None:
+        """
+        Start change-tracking watcher threads.
+
+        Deferred from import time to the first blocking request to avoid
+        database access at import time.
+        """
+        if self.watchers_started:
+            return
+        self.watchers_started = True
+        self.setup_watchers()
 
     @staticmethod
     def get_datastreams() -> list[DataStream]:
@@ -71,6 +83,8 @@ class DatastreamAPI:
         return r
 
     async def wait(self, ds_name):
+        self.start_watchers()
+
         def notify(loop):
             loop.call_soon(event.set)
             # asyncio.get_running_loop().call_soon(event.set)
