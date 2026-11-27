@@ -17,7 +17,19 @@ from noc.ip.models.vrfgroup import VRFGroup
 from noc.main.models.customfield import CustomField
 from noc.services.web.base.reportapplication import ReportApplication
 
-prefix_fields = [f for f in CustomField.table_fields("ip_prefix") if not f.is_hidden]
+_prefix_fields = None
+
+
+def get_prefix_fields() -> list[CustomField]:
+    """
+    Return visible custom fields for the ip_prefix table.
+    Lazily loaded to avoid database access at import time.
+    """
+    global _prefix_fields
+    if _prefix_fields is None:
+        _prefix_fields = [f for f in CustomField.table_fields("ip_prefix") if not f.is_hidden]
+    return _prefix_fields
+
 
 # % fixme rewrite to separate file
 CSS = """
@@ -206,7 +218,7 @@ class PrefixNode(Node):
         if self.used is not None:
             r.append(f"<br/>{self.get_bar(self.used)}")
         # Show custom fields
-        for f in prefix_fields:
+        for f in get_prefix_fields():
             v = getattr(self.prefix, f.name)
             if v is None or v == "":
                 continue
