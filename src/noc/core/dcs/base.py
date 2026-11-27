@@ -10,6 +10,7 @@ from __future__ import annotations
 
 # Python modules
 import asyncio
+import contextlib
 import logging
 import os
 import random
@@ -34,6 +35,10 @@ class ResolutionError(Exception):
     pass
 
 
+class DCSTripwireError(RuntimeError):
+    """Raised when a DCS operation is attempted while the tripwire is active."""
+
+
 class DCSBase(ABC):
     """
     Base class for distributed coordinated storage implementations.
@@ -52,6 +57,70 @@ class DCSBase(ABC):
     # HTTP code to be returned by /health endpoint when service is unhealthy
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
+    # Active tripwire message, None when the tripwire is disabled
+    _tripwire: str | None = None
+
+    @classmethod
+    def enter_tripwire(cls, message: str = "DCS access is forbidden in this context") -> None:
+        """
+        Enter tripwire mode.
+
+        All DCS operations performed while the tripwire is active raise
+        :class:`DCSTripwireError`. Used to enforce invariants such as
+        "module imports must not perform service resolution".
+
+        Args:
+            message: Error message describing the forbidden context.
+        """
+        if DCSBase._tripwire is not None:
+            raise RuntimeError("DCS tripwire is already active")
+        DCSBase._tripwire = message
+
+    @classmethod
+    def exit_tripwire(cls) -> None:
+        """
+        Exit tripwire mode.
+        """
+        DCSBase._tripwire = None
+
+    @classmethod
+    def in_tripwire(cls) -> bool:
+        """
+        Check whether the tripwire is currently active.
+
+        Returns:
+            True when the tripwire is active.
+        """
+        return DCSBase._tripwire is not None
+
+    @classmethod
+    @contextlib.contextmanager
+    def tripwire(cls, message: str = "DCS access is forbidden in this context") -> Iterator[None]:
+        """
+        Context manager for tripwire mode.
+
+        Any DCS operation attempted within the context raises
+        :class:`DCSTripwireError`. The tripwire is guaranteed to be
+        released even when the context body raises.
+
+        Args:
+            message: Error message describing the forbidden context.
+
+        Yields:
+            Nothing.
+        """
+        cls.enter_tripwire(message)
+        try:
+            yield
+        finally:
+            cls.exit_tripwire()
+
+    def _assert_not_blocked(self) -> None:
+        """
+        Raise :class:`DCSTripwireError` when the tripwire is active.
+        """
+        if self._tripwire is not None:
+            raise DCSTripwireError(self._tripwire)
 
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
@@ -290,6 +359,7 @@ class DCSBase(ABC):
         Returns:
             Resolved address or list of addresses.
         """
+        self._assert_not_blocked()
 
         async def wrap() -> str | list[str]:
             resolver = self.get_resolver(name, critical=critical, near=near, track=track)
@@ -348,6 +418,7 @@ class DCSBase(ABC):
         Returns:
             Resolved address or list of addresses.
         """
+        self._assert_not_blocked()
         return run_sync(
             self.resolve(name, hint=hint, wait=wait, timeout=timeout, full_result=full_result)
         )
