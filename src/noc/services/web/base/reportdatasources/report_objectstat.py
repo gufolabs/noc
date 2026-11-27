@@ -319,7 +319,11 @@ class StatusIsolator(IsolatorClass):
 
 class ProblemIsolator(IsolatorClass):
     name = "isp"
-    common_filter = set(ManagedObject.objects.filter().values_list("id", flat=True))
+
+    @property
+    def common_filter(self) -> set[int]:
+        """Full set of ManagedObject IDs (universe for inverse isolation)."""
+        return set(ManagedObject.objects.filter().values_list("id", flat=True))
 
     def _0_isp(self, index):
         # Common Problem
