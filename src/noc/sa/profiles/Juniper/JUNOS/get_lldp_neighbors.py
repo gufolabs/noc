@@ -32,7 +32,7 @@ from noc.core.mib import mib
 from noc.core.validators import is_int
 from noc.sa.interfaces.base import IntParameter
 from noc.sa.interfaces.igetlldpneighbors import IGetLLDPNeighbors
-from noc.sa.profiles.Generic.get_lldp_neighbors import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_lldp_neighbors import Script as BaseScript
 
 
 class Script(BaseScript):

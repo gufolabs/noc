@@ -1,0 +1,30 @@
+# ---------------------------------------------------------------------
+# Generic.Host.login
+# ---------------------------------------------------------------------
+# Copyright (C) 2007-2011 The NOC Project
+# See LICENSE for details
+# ---------------------------------------------------------------------
+
+# NOC modules
+from noc.core.error import NOCError
+from noc.core.script.base import BaseScript
+from noc.sa.interfaces.ilogin import ILogin
+
+
+class Script(BaseScript):
+    """
+    Try to log in
+    """
+
+    name = "Generic.Host.login"
+    interface = ILogin
+    requires = []
+
+    def execute(self):
+        try:
+            self.cli("")
+            return {"result": True, "message": ""}
+        except NOCError as e:
+            return {"result": False, "message": f"Error: {e.default_msg} ({e})"}
+        except Exception as e:
+            return {"result": False, "message": f"Exception: {e!r}"}

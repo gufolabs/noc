@@ -29,7 +29,7 @@ from noc.core.lldp import (
 )
 from noc.core.mib import mib
 from noc.sa.interfaces.igetlldpneighbors import IGetLLDPNeighbors, MACAddressParameter
-from noc.sa.profiles.Generic.get_lldp_neighbors import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_lldp_neighbors import Script as BaseScript
 
 
 class Script(BaseScript):

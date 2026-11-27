@@ -12,7 +12,7 @@ import re
 from noc.core.text import parse_table
 from noc.core.validators import is_vlan
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 
 
 class Script(BaseScript):

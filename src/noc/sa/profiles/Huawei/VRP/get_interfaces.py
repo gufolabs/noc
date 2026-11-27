@@ -17,7 +17,7 @@ from noc.core.snmp.render import render_bin
 from noc.core.text import ranges_to_list
 from noc.core.validators import is_vlan
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 
 
 class Script(BaseScript):

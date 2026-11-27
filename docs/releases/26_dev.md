@@ -118,3 +118,23 @@ Device profiles whose vendor or software name starts with a digit (for example `
 
 If you have custom profiles with digit-led vendor or software names, rename the corresponding directories under `<custom root>/sa/profiles` with an underscore prefix before upgrading. For example, `<custom root>/sa/profiles/3Com/4500/` becomes `<custom root>/sa/profiles/_3Com/_4500/`.
 
+### Generic.Host Profile Relocation
+
+The `Generic.Host` profile has moved from `sa/profiles/Generic/` to `sa/profiles/Generic/Host/`, unifying it with all other device profiles that live in `sa/profiles/<vendor>/<software>/`. The profile name in the database, UI, and scripts remains `Generic.Host`.
+
+If your custom root imports generic scripts, update the imports from `noc.sa.profiles.Generic.<script>` to `noc.sa.profiles.Generic.Host.<script>`:
+
+Before:
+
+```python
+from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+```
+
+After:
+
+```python
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
+```
+
+Custom overrides of the `Generic.Host` profile and custom generic `snmp_metrics/` configurations must also be moved from `<custom root>/sa/profiles/Generic/` to `<custom root>/sa/profiles/Generic/Host/`.
+

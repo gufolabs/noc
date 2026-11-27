@@ -240,11 +240,11 @@ class Script(BaseScript):
 
 
 ## Generic Scripts
-A set of scripts is already implemented in a generic form using SNMP. They are available within the Generic profile located at `<noc_base>/sa/profiles/Generic``. You can use the functionality of these scripts by inheriting them and overriding their behavior through attributes. For example, if your equipment supports SNMP, you can use inheritance to implement the get_interfaces script as follows:
+A set of scripts is already implemented in a generic form using SNMP. They are available within the `Generic.Host` profile located at `<noc_base>/sa/profiles/Generic/Host`. You can use the functionality of these scripts by inheriting them and overriding their behavior through attributes. For example, if your equipment supports SNMP, you can use inheritance to implement the get_interfaces script as follows:
 
 ```python
 # NOC modules
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 
 

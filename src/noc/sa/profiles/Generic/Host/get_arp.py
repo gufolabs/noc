@@ -1,0 +1,34 @@
+# ----------------------------------------------------------------------
+# Generic.Host.get_arp
+# ----------------------------------------------------------------------
+# Copyright (C) 2007-2020 The NOC Project
+# See LICENSE for details
+# ----------------------------------------------------------------------
+
+# NOC modules
+from noc.core.mac import MAC
+from noc.core.mib import mib
+from noc.core.script.base import BaseScript
+from noc.core.snmp.render import render_mac
+from noc.sa.interfaces.igetarp import IGetARP
+
+
+class Script(BaseScript):
+    name = "Generic.Host.get_arp"
+    cache = True
+    interface = IGetARP
+
+    def execute_snmp(self, vrf=None, **kwargs):
+        r = []
+        names = {x: y for y, x in self.scripts.get_ifindexes().items()}
+        for oid, mac in self.snmp.getnext(
+            mib["RFC1213-MIB::ipNetToMediaPhysAddress"],
+            display_hints={mib["RFC1213-MIB::ipNetToMediaPhysAddress"]: render_mac},
+        ):
+            ifindex, ip = oid[21:].split(".", 1)
+            ifname = names.get(int(ifindex))
+            if ifname and mac:
+                r.append({"ip": ip, "mac": MAC(mac), "interface": ifname})
+            elif ifname:
+                r.append({"ip": ip, "interface": ifname})
+        return r

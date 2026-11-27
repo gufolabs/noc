@@ -11,7 +11,7 @@ import re
 # NOC modules
 from noc.core.comp import smart_text
 from noc.sa.interfaces.igetfqdn import IGetFQDN
-from noc.sa.profiles.Generic.get_fqdn import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_fqdn import Script as BaseScript
 
 
 class Script(BaseScript):

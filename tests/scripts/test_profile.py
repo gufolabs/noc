@@ -49,8 +49,6 @@ def write_custom_profile(root: Path, profile_name: str) -> None:
     root.mkdir(parents=True, exist_ok=True)
     (root / "__init__.py").touch()
     profile_parts = profile_name.split(".")
-    if profile_name == "Generic.Host":
-        profile_parts = profile_parts[:1]
     profile_parts = mangle_profile_module_name(".".join(profile_parts)).split(".")
     profile_path = root / "sa" / "profiles" / Path(*profile_parts)
     package = profile_path
@@ -98,8 +96,6 @@ def test_profile_name(sa_profile) -> None:
     assert getattr(profile, "name"), "Profile should has name"
     parts = profile.__module__.split(".")
     assert parts[-1] == "profile", "Profile must be in profile.py"
-    if parts[-4:] == ["sa", "profiles", "Generic", "profile"]:
-        pytest.skip("Generic profile")
     name = unmangle_profile_module_name(f"{parts[-3]}.{parts[-2]}")
     assert profile.name == name
 
@@ -107,7 +103,7 @@ def test_profile_name(sa_profile) -> None:
 @pytest.mark.parametrize(
     ("profile_name", "module_name"),
     [
-        ("Generic.Host", "noc.custom.sa.profiles.Generic.profile"),
+        ("Generic.Host", "noc.custom.sa.profiles.Generic.Host.profile"),
         ("Juniper.JUNOS", "noc.custom.sa.profiles.Juniper.JUNOS.profile"),
         ("3Com.4500", "noc.custom.sa.profiles._3Com._4500.profile"),
         ("HP.1910", "noc.custom.sa.profiles.HP._1910.profile"),

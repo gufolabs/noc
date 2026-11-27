@@ -253,13 +253,13 @@ class Script(BaseScript):
 
 ## Generic Scripts
 
-Часть скриптов уже реализовано в общем виде (через `SNMP`). Они доступны в профиле `Generic` - `<noc_base>/sa/profiles/Generic`. 
-Функционал скриптов из `generic` можно использовать наследуюя их переопределяя функицонал через аттрибуты. 
+Часть скриптов уже реализовано в общем виде (через `SNMP`). Они доступны в профиле `Generic.Host` - `<noc_base>/sa/profiles/Generic/Host`.
+Функционал скриптов из `Generic.Host` можно использовать наследуюя их переопределяя функицонал через аттрибуты. 
 Например, если оборудование поддерживает `SNMP`, то для реализация скрипта `get_interfaces` можно воспользоваться наследованием:
 
 ```python
 # NOC modules
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 
 

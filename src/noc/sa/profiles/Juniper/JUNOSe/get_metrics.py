@@ -7,8 +7,8 @@
 
 # NOC modules
 from noc.core.text import parse_table
-from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript
-from noc.sa.profiles.Generic.get_metrics import metrics
+from noc.sa.profiles.Generic.Host.get_metrics import Script as GetMetricsScript
+from noc.sa.profiles.Generic.Host.get_metrics import metrics
 
 from .oidrules.slot import SlotRule
 

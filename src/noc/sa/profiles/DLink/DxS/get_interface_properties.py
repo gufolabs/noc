@@ -8,7 +8,7 @@
 # NOC modules
 from noc.core.mib import mib
 from noc.sa.interfaces.base import InterfaceTypeError
-from noc.sa.profiles.Generic.get_interface_properties import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interface_properties import Script as BaseScript
 
 
 class Script(BaseScript):

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.sa.profiles.Generic.get_uptime import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_uptime import Script as BaseScript
 
 
 class Script(BaseScript):

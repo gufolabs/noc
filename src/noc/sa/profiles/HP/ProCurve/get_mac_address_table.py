@@ -13,7 +13,7 @@ import re
 from noc.sa.interfaces.igetmacaddresstable import IGetMACAddressTable
 
 # NOC Modules
-from noc.sa.profiles.Generic.get_mac_address_table import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_mac_address_table import Script as BaseScript
 
 
 class Script(BaseScript):

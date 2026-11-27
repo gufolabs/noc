@@ -12,12 +12,12 @@ import re
 from noc.core.mib import mib
 from noc.core.models.cfgmetrics import MetricCollectorConfig
 from noc.core.text import parse_kv
-from noc.sa.profiles.Generic.get_metrics import (
+from noc.sa.profiles.Generic.Host.get_metrics import (
     MetricConfig,
     ProfileMetricConfig,
     metrics,
 )
-from noc.sa.profiles.Generic.get_metrics import (
+from noc.sa.profiles.Generic.Host.get_metrics import (
     Script as GetMetricsScript,
 )
 

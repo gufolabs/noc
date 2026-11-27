@@ -16,7 +16,7 @@ from noc.core.snmp.render import render_bin
 from noc.core.validators import is_int
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.sa.profiles.DLink.DxS.profile import DGS3120, DGS3420, DGS3620, DxS_L2
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 
 
 class Script(BaseScript):

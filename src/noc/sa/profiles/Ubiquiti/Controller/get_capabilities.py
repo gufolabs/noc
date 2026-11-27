@@ -9,7 +9,7 @@
 import orjson
 
 # NOC modules
-from noc.sa.profiles.Generic.get_capabilities import Script as BaseScript
+from noc.sa.profiles.Generic.Host.get_capabilities import Script as BaseScript
 
 
 class Script(BaseScript):

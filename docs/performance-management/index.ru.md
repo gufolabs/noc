@@ -87,7 +87,7 @@
 
 * Папка `snmp_metrics` профиля, где находятся конфигурация сбора в виде файлов `JSON`
 * Скрипт `get_metrics` профиля, в котором сбор реализован через код на `python`.
- Базовый `get_metrics` расположен в `sa/profiles/Generic`
+ Базовый `get_metrics` расположен в `sa/profiles/Generic/Host`
 
 !!! note
 

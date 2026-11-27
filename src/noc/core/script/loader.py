@@ -17,7 +17,6 @@ from importlib.resources import files
 # NOC modules
 from noc.config import config
 from noc.core.loader.base import BaseLoader
-from noc.core.profile.loader import GENERIC_PROFILE
 from noc.core.profile.names import mangle_profile_module_name, unmangle_profile_module_name
 
 from .base import BaseScript
@@ -73,7 +72,7 @@ class ScriptLoader(BaseLoader):
                         break
                 else:
                     # Generic script
-                    module_name = f"noc.sa.profiles.Generic.{sn}"
+                    module_name = f"noc.sa.profiles.Generic.Host.{sn}"
                     is_generic = True
                 # Load script
                 script = self.find_class(module_name, BaseScript, name)
@@ -101,9 +100,9 @@ class ScriptLoader(BaseLoader):
     def find_scripts(self):
         """Scan all available scripts"""
         ns = set()
-        # Load generic scripts
+        # Scan generic scripts for `requires` dependencies
         generics = {}  # Name -> dependencies
-        generic_path = os.path.join(str(files("noc")), "sa", "profiles", "Generic", "*.py")
+        generic_path = os.path.join(str(files("noc")), "sa", "profiles", "Generic", "Host", "*.py")
         for path in glob.glob(generic_path):
             gn = path.rsplit(os.sep)[-1][:-3]
             if gn in self.protected_names:
@@ -114,7 +113,6 @@ class ScriptLoader(BaseLoader):
                 match = self.rx_requires.search(data)
                 if match:
                     generics[gn] = [s.strip()[1:-1] for s in match.group(1).split(",") if s.strip()]
-                    ns.add(f"{GENERIC_PROFILE}.{gn}")
         # Load custom scripts, Load common scripts
         profiles = set()
         for base in config.get_customized_paths(prefer_custom=True):

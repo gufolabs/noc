@@ -37,8 +37,6 @@ class ProfileLoader(BaseLoader):
         Load profile and return BaseProfile instance.
         Returns None when no profile found or loading error occured
         """
-        if name == GENERIC_PROFILE:
-            name = "Generic"
         with self.lock:
             profile = self.profiles.get(name)
             if not profile:
@@ -81,7 +79,7 @@ class ProfileLoader(BaseLoader):
         """
         Scan all available profiles
         """
-        ns = {GENERIC_PROFILE}
+        ns = set()
         for base in config.get_customized_paths(prefer_custom=True):
             px = os.path.join(base or str(files("noc")), "sa", "profiles", "*", "*", "__init__.py")
             for path in glob.glob(px):
