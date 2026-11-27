@@ -9,7 +9,7 @@
 from functools import reduce
 
 # Third-party modules
-from django.db.models import Q
+from django.db.models import Model, Q
 from django.db.models.fields import BooleanField, CharField, FloatField, IntegerField, related
 from django.db.utils import IntegrityError
 
@@ -28,7 +28,7 @@ from noc.sa.interfaces.base import (
 )
 
 
-class ModelInline:
+class ModelInline[T: type[Model]]:
     # HTTP Result Codes
     OK = 200
     CREATED = 201
@@ -51,20 +51,20 @@ class ModelInline:
     query_param = "__query"
     only_param = "__only"
 
-    query_fields = []  # Use all unique fields by default
+    query_fields: list[str] = []  # Use all unique fields by default
     query_condition = "startswith"  # Match method for string fields
-    int_query_fields = []  # Query integer fields for exact match
+    int_query_fields: list[str] = []  # Query integer fields for exact match
     pk_field_name = None  # Set by constructor
-    clean_fields = {}  # field name -> Parameter instance
-    custom_fields = {}  # name -> handler, populated automatically
+    clean_fields: dict = {}  # field name -> Parameter instance
+    custom_fields: dict = {}  # name -> handler, populated automatically
 
-    def __init__(self, model) -> None:
+    def __init__(self, model: T) -> None:
         self.model = model
         self.app = None
         self.pk_field_name = self.model._meta.pk.name
         # Prepare field converters
         self.clean_fields = self.clean_fields.copy()  # name -> Parameter
-        self.fk_fields = {}
+        self.fk_fields: dict = {}
         for f in self.model._meta.fields:
             if f.name in self.clean_fields:
                 continue  # Overriden behavior
@@ -88,10 +88,29 @@ class ModelInline:
                 match field:
                     case CharField():
                         self.query_fields.append(f"{field.name}__{self.query_condition}")
-        # Add searchable custom fields
-        self.query_fields += [
-            f"{f.name}__{self.query_condition}" for f in self.get_custom_fields() if f.is_searchable
-        ]
+        else:
+            # Detach from the shared class attribute
+            self.query_fields = list(self.query_fields)
+        # Searchable custom fields are resolved lazily
+        self._custom_query_fields: list[str] | None = None
+
+    @property
+    def all_query_fields(self):
+        """
+        Returns query fields including searchable custom fields.
+        Custom fields are resolved lazily to avoid database access
+        while the application modules are imported.
+
+        Returns:
+            list[str]: List of query field lookups
+        """
+        if self._custom_query_fields is None:
+            self._custom_query_fields = [
+                f"{f.name}__{self.query_condition}"
+                for f in self.get_custom_fields()
+                if f.is_searchable
+            ]
+        return self.query_fields + self._custom_query_fields
 
     def contribute_to_class(self, app, name):
         # Add List handler
@@ -201,8 +220,8 @@ class ModelInline:
 
         q = reduce(
             lambda x, y: x | Q(**{get_q(y): query}),
-            self.query_fields[1:],
-            Q(**{get_q(self.query_fields[0]): query}),
+            self.all_query_fields[1:],
+            Q(**{get_q(self.all_query_fields[0]): query}),
         )
         if self.int_query_fields and is_int(query):
             v = int(query)
@@ -214,7 +233,7 @@ class ModelInline:
         """
         Filter records for lookup
         """
-        if query and self.query_fields:
+        if query and self.all_query_fields:
             return self.model.objects.filter(self.get_Q(request, query))
         return self.model.objects.all()
 
