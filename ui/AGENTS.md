@@ -189,4 +189,4 @@ Use this zone file when:
 **Do NOT use this zone file when:**
 - Modifying backend models/APIs in root applications — see [root AGENTS.md](AGENTS.md) and the relevant app's AGENTS.md
 - Writing Ansible provisioning for the NOC server — see [ansible/AGENTS.md]
-- Working with device profiles (SNMP MIB rules) — see [sa/profiles/AGENTS.md]
+- Working with device profiles (SNMP MIB rules) — see [adapters/AGENTS.md](../src/noc/adapters/AGENTS.md)

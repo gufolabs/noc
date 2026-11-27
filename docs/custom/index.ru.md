@@ -55,10 +55,10 @@ cтруктура выглядит следующим образом:
 ├── handlers
 │   ├── alarms
 ├── lib
-│   └── app
+│   └── app
 ├── sa
-│   ├── interfaces
-│   └── profiles
+│   └── interfaces
+├── adapters
 ├── services
 │   ├── nbi
 │   └── web

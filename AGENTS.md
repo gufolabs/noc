@@ -101,7 +101,7 @@ These files provide context-specific instructions. Load the relevant file only w
 - **[src/noc/i18n/AGENTS.md](src/noc/i18n/AGENTS.md)** — translation key prefixes, YAML catalog conventions, and key ordering
 - **[ui/AGENTS.md](ui/AGENTS.md)** — frontend TypeScript workspaces, webpack bundles, Playwright E2E testing
 - **[ansible/AGENTS.md](ansible/AGENTS.md)** — NOC provisioning roles, system_roles, custom library/lookup_plugins, Molecule test suites
-- **[src/noc/sa/profiles/AGENTS.md](src/noc/sa/profiles/AGENTS.md)** — device profiles (108+ vendors), SNMP MIB rules, custom_path cascade inheritance, OID conventions per model
+- **[src/noc/adapters/AGENTS.md](src/noc/adapters/AGENTS.md)** — device adapters (108+ vendors), flat naming via `mangle_profile_name`, SNMP MIB rules, custom_path cascade inheritance, OID conventions per model
 - **[docs/AGENTS.md](docs/AGENTS.md)** — MkDocs-material build chain, multi-language docs structure (en/ru), documentation style guide and contributing process
 
 Root AGENTS.md remains the single source of truth for shared conventions.

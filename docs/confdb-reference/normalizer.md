@@ -17,7 +17,7 @@ Following profile parameters are responsible for normalizer configuration:
 
 ### config_normalizer
 
-String containing name of config normalizer to use. Contains normalizer class name. Normalizer must be a subclass of [BaseNormalizer](#normalizer-api) and must be located in the `noc.sa.profiles.X.Y.confdb.normalizer` module.
+String containing name of config normalizer to use. Contains normalizer class name. Normalizer must be a subclass of [BaseNormalizer](#normalizer-api) and must be located in the `noc.adapters.<flat name>.confdb.normalizer` module.
 
 ### config_normalizer_settings
 
@@ -41,12 +41,12 @@ Returns:
 ## Normalizer API
 
 Normalizers must be subclass of `BaseNormalizer` and must be located
-in profile's `confdb.normalizer` subpackage (`noc.sa.profiles.X.Y.confdb.normalizer`,
-where `X.Y` is profile name).
+in profile's `confdb.normalizer` subpackage (`noc.adapters.<flat name>.confdb.normalizer`,
+where `<flat name>` is the mangled profile name, e.g. `cisco__ios`).
 
 !!! note
 
-    Ensure the `sa/profiles/X/Y/confdb/__init__.py` file exists and empty.
+    Ensure the `adapters/<flat name>/confdb/__init__.py` file exists and empty.
 
 ### Code boilerplate
 

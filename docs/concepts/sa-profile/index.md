@@ -28,34 +28,31 @@ Some features of profiles can be highlighted:
 
 ### Profile Composition
 
-Profiles are located in the `sa/profiles` directory.
+Profiles are located in the `adapters` directory.
 According to the convention, the profile's name is constructed from the manufacturer's name `VendorName` and the OS name `OSName`: `Juniper.JUNOS`, `Cisco.IOS`.
 
 ```
-<noc_base>/sa/profiles/
-├── <VendorName>
-│   ├── __init__.py
-│   ├── <OSName>
-│   │   ├── __init__.py
-│   │   ├── profile.py
-│   │   ├── confdb
-│   │   │   ├── __init__.py
-│   │   │   └── normalizer.py
-│   │   ├── middleware/
-│   │   │   ├── __init__.py
-│   │   │   └── ...
-│   │   ├── get_version.py
-│   │   ├── get_vlans.py
-│   │   ├── ...
-│   │   └── snmp_metrics
-│   │       ├── cpu_usage_1min.json
-│   │       └── ...
+<noc_base>/adapters/
+└── <profile name, mangled>/   # e.g., cisco__ios
+    ├── profile.py
+    ├── confdb
+    │   ├── __init__.py
+    │   └── normalizer.py
+    ├── middleware/
+    │   ├── __init__.py
+    │   └── ...
+    ├── get_version.py
+    ├── get_vlans.py
+    ├── ...
+    └── snmp_metrics
+        ├── cpu_usage_1min.json
+        └── ...
 
 ```
 
 <!-- prettier-ignore -->
 !!! note
-    Names are case-sensitive!
+    The directory name is generated from the profile name: everything is lowercased, `.` and any other non-alphanumeric character are replaced with `_`, and name segments are joined with `__` (e.g., `Cisco.IOS` → `cisco__ios`). See `mangle_profile_name` in `noc.core.profile.names`.
 
 The profile itself consists of:
 

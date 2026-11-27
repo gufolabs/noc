@@ -97,7 +97,7 @@ The Activator interacts with network equipment through the Discovery service. Me
 Metrics can be described in two ways:
 
 1. In the 'snmp_metrics' folder of the profile, where metric collection configurations are stored as JSON files.
-2. In the 'get_metrics' script of the profile, where collection is implemented using Python code. The base 'get_metrics' script is located in 'sa/profiles/Generic/Host'.
+2. In the 'get_metrics' script of the profile, where collection is implemented using Python code. The base 'get_metrics' script is located in 'adapters/generic__host'.
 
 Please note that metric collection configurations are generated on the Discovery side and passed to the Activator.
 

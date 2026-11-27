@@ -112,29 +112,25 @@ The card backend is now part of the web service. Move custom card classes from `
 
 Card configuration parameters have moved to the `web` section. The old `card.language`, `card.alarmheat_tooltip_limit`, and `card.metric_request_interval` names are rewritten to `web.language`, `web.alarmheat_tooltip_limit`, and `web.metric_request_interval` with a deprecation warning; remove the old names before upgrading to NOC 27.
 
-### Profile Module Names with Leading Digits
+### Device Profiles: Flat Adapter Layout
 
-Device profiles whose vendor or software name starts with a digit (for example `3Com.4500` or `HP.1910`) are now stored in directories prefixed with an underscore so that the backing Python modules have valid names: `sa/profiles/3Com/4500/` is now `sa/profiles/_3Com/_4500/`. Profile names in the database, UI, and scripts are unchanged; the name-to-module mapping is handled automatically by the profile and script loaders.
+All device profiles have moved from `sa/profiles/<vendor>/<software>/` to a single-level `adapters/<flat name>/` layout, where the flat name is generated from the profile name: everything is lowercased, `.` and any other non-alphanumeric character are replaced with `_`, and name segments are joined with `__` (`Cisco.IOS` → `adapters/cisco__ios/`, `3Com.4500` → `adapters/_3com__4500/`). See `mangle_profile_name` in `noc.core.profile.names`.
 
-If you have custom profiles with digit-led vendor or software names, rename the corresponding directories under `<custom root>/sa/profiles` with an underscore prefix before upgrading. For example, `<custom root>/sa/profiles/3Com/4500/` becomes `<custom root>/sa/profiles/_3Com/_4500/`.
+Profile names in the database, UI, and scripts are unchanged; the name-to-module mapping is handled automatically by the profile and script loaders.
 
-### Generic.Host Profile Relocation
-
-The `Generic.Host` profile has moved from `sa/profiles/Generic/` to `sa/profiles/Generic/Host/`, unifying it with all other device profiles that live in `sa/profiles/<vendor>/<software>/`. The profile name in the database, UI, and scripts remains `Generic.Host`.
-
-If your custom root imports generic scripts, update the imports from `noc.sa.profiles.Generic.<script>` to `noc.sa.profiles.Generic.Host.<script>`:
+If you have custom profiles, move them to `<custom root>/adapters/<flat name>/` and rewrite their cross-profile imports from `noc.sa.profiles.<Profile>.<script>` to `noc.adapters.<flat name>.<script>`. For generic scripts, imports now point at `noc.adapters.generic__host`:
 
 Before:
-
-```python
-from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
-```
-
-After:
 
 ```python
 from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
 ```
 
-Custom overrides of the `Generic.Host` profile and custom generic `snmp_metrics/` configurations must also be moved from `<custom root>/sa/profiles/Generic/` to `<custom root>/sa/profiles/Generic/Host/`.
+After:
+
+```python
+from noc.adapters.generic__host.get_interfaces import Script as BaseScript
+```
+
+Custom overrides of the `Generic.Host` profile and custom generic `snmp_metrics/` configurations must also be moved to `<custom root>/adapters/generic__host/`.
 

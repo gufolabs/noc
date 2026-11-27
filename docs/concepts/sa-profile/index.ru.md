@@ -27,34 +27,31 @@
 
 ### Состав профиля
 
-Профили расположены в директории `sa/profiles`. 
+Профили расположены в директории `adapters`. 
 По соглашению имя профиля строится из названия производителя `VendorName` и имени ОС `OSName`: `Juniper.JUNOS`, `Cisco.IOS`. 
 
 ```
-<noc_base>/sa/profiles/
-├── <VendorName>
-│   ├── __init__.py
-│   ├── <OSName>
-│   │   ├── __init__.py
-│   │   ├── profile.py
-│   │   ├── confdb
-│   │   │   ├── __init__.py
-│   │   │   └── normalizer.py
-│   │   ├── middleware/
-│   │   │   ├── __init__.py
-│   │   │   └── ...
-│   │   ├── get_version.py
-│   │   ├── get_vlans.py
-│   │   ├── ...
-│   │   └── snmp_metrics
-│   │       ├── cpu_usage_1min.json
-│   │       └── ...
+<noc_base>/adapters/
+└── <имя профиля, mangled>/    # напр., cisco__ios
+    ├── profile.py
+    ├── confdb
+    │   ├── __init__.py
+    │   └── normalizer.py
+    ├── middleware/
+    │   ├── __init__.py
+    │   └── ...
+    ├── get_version.py
+    ├── get_vlans.py
+    ├── ...
+    └── snmp_metrics
+        ├── cpu_usage_1min.json
+        └── ...
 
 ```
 
 <!-- prettier-ignore -->
 !!! note
-    Имена являются регистрозависимыми!
+    Имя каталога генерируется из имени профиля: всё приводится к нижнему регистру, `.` и прочие символы вне `[a-z0-9]` заменяются на `_`, сегменты имени объединяются `__` (напр., `Cisco.IOS` → `cisco__ios`). См. `mangle_profile_name` в `noc.core.profile.names`.
 
 Сам профиль состоит из:
 
