@@ -65,7 +65,6 @@ __all__ = ["ExtDocApplication", "api", "view"]
 
 
 class ExtDocApplication(ExtApplication):
-    mode = None  # Document to expose
     icon = "icon_application_view_list"
     query_fields = []  # Use all unique fields by default
     query_condition = "startswith"
