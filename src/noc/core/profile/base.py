@@ -32,6 +32,8 @@ class BaseProfileMetaclass(type):
         attrs: dict[str, Any],
     ) -> type[BaseProfile]:
         n = cast(type["BaseProfile"], type.__new__(mcs, name, bases, attrs))
+        if bases and n.name is None:
+            raise RuntimeError(f"{n.__module__}.{name}: 'name' is required")
         n.rogue_char_cleaners = n._get_rogue_chars_cleaners()
         if "command_more" in attrs:
             raise RuntimeError(
@@ -63,9 +65,10 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     Equipment profile. Contains all equipment personality and specific
     """
 
-    name = None
+    name: str | None = None
     """
-    Profile name in form <vendor>.<system>
+    Profile name in form <vendor>.<system>.
+    Required in all BaseProfile subclasses (enforced by BaseProfileMetaclass).
     """
     #
     # Device capabilities
