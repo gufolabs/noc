@@ -6,6 +6,7 @@ Tests run via **pytest**. All configuration lives in `tests/conftest.py`. The te
 
 ### pytest markers
 - `@pytest.mark.run_on_setup` — these tests run first (database initialization only). Use for setup tests that must complete before any other test runs.
+- `@pytest.mark.asyncio` — from pytest-asyncio (strict mode). Async tests are written as `async def test_...()` with this marker; do NOT wrap coroutines in `asyncio.run()` or inner `async def` wrappers.
 - `@with_timing(name)` — decorator in conftest.py that measures execution time of wrapped functions and tracks them for the terminal summary report. Used for performance measurement.
 
 ### Test file naming

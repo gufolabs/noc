@@ -13,7 +13,6 @@ from io import BytesIO
 import pytest
 
 # NOC modules
-from noc.core.ioloop.util import run_sync
 from noc.core.script.base import BaseScript
 from noc.core.script.cli.base import BaseCLI
 from noc.core.script.cli.telnet import TelnetStream
@@ -128,10 +127,11 @@ class MyTelnetStream(TelnetStream):
         ],
     ],
 )
-def test_telnet_scenario(scenario: list[tuple[bytes, ...]]) -> None:
+@pytest.mark.asyncio
+async def test_telnet_scenario(scenario: list[tuple[bytes, ...]]) -> None:
     stream = MyTelnetStream()
     for feed, expected, sent_expected in scenario:
-        data = run_sync(stream.feed(feed))
+        data = await stream.feed(feed)
         assert data == expected
         assert stream.get_write_buffer() == sent_expected
 
