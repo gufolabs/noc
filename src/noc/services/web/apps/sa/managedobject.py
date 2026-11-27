@@ -101,70 +101,36 @@ class ManagedObjectApplication(CapsApiMixin, StateMixin, ExtModelApplication):
     implied_permissions = {"read": ["inv:networksegment:lookup", "main:handler:lookup"]}
     diverged_permissions = {"config": "read", "console": "script"}
     default_ordering = ["id"]
-    order_map = {
-        "link_count": " cardinality(links) ",
-        "-link_count": " cardinality(links) ",
-        "profile": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'profile'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Profile.objects.filter().order_by("name").values_list("id")
-                    )
-                )
-            )
-        ),
-        "-profile": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'profile'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Profile.objects.filter().order_by("-name").values_list("id")
-                    )
-                )
-            )
-        ),
-        "platform": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'platform'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Platform.objects.filter().order_by("name").values_list("id")
-                    )
-                )
-            )
-        ),
-        "-platform": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'platform'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Platform.objects.filter().order_by("-name").values_list("id")
-                    )
-                )
-            )
-        ),
-        "version": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'version'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Firmware.objects.filter().order_by("version").values_list("id")
-                    )
-                )
-            )
-        ),
-        "-version": "CASE {} END".format(
-            " ".join(
-                (
-                    f"WHEN {'version'}='{pk}' THEN {i}"
-                    for i, pk in enumerate(
-                        Firmware.objects.filter().order_by("-version").values_list("id")
-                    )
-                )
-            )
-        ),
-    }
+
+    @property
+    def order_map(self):
+        # Build at request time, not at import time
+        return {
+            "link_count": " cardinality(links) ",
+            "-link_count": " cardinality(links) ",
+            "profile": self._case_order_expression(Profile, "name", "profile"),
+            "-profile": self._case_order_expression(Profile, "-name", "profile"),
+            "platform": self._case_order_expression(Platform, "name", "platform"),
+            "-platform": self._case_order_expression(Platform, "-name", "platform"),
+            "version": self._case_order_expression(Firmware, "version", "version"),
+            "-version": self._case_order_expression(Firmware, "-version", "version"),
+        }
+
+    @staticmethod
+    def _case_order_expression(model, order_field: str, sql_field: str) -> str:
+        """
+        Build SQL CASE expression for ordering by related object field
+
+        :param model: Django model to enumerate
+        :param order_field: field to order by (with optional - prefix)
+        :param sql_field: SQL field name of the FK in the main table
+        :return: SQL CASE expression string
+        """
+        pks = model.objects.filter().order_by(order_field).values_list("id")
+        return "CASE {} END".format(
+            " ".join(f"WHEN {sql_field}='{pk}' THEN {i}" for i, pk in enumerate(pks))
+        )
+
     resource_group_fields = [
         "static_service_groups",
         "effective_service_groups",
