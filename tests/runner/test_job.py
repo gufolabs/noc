@@ -148,15 +148,13 @@ def test_unique_names(jobs: list[JobRequest], expected: bool) -> None:
         ),
     ],
 )
-def test_from_req_errors(req: JobRequest) -> None:
-    async def inner():
-        runner = Runner()
-        with pytest.raises(ValueError):
-            runner.submit(req)
-        # Should not submit jobs
-        assert len(list(runner.iter_jobs())) == 0
-
-    asyncio.run(inner())
+@pytest.mark.asyncio
+async def test_from_req_errors(req: JobRequest) -> None:
+    runner = Runner()
+    with pytest.raises(ValueError):
+        runner.submit(req)
+    # Should not submit jobs
+    assert len(list(runner.iter_jobs())) == 0
 
 
 def test_is_leader() -> None:
@@ -179,7 +177,7 @@ def test_is_leader() -> None:
 class RunnerWrapper(Runner):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.last_state = {}
+        self.last_state: dict[str, JobStatus] = {}
 
     def set_status(self, job: Job, status: JobStatus) -> None:
         super().set_status(job, status)
@@ -471,16 +469,13 @@ def get_scenario_id(x) -> str:
     ],
     ids=get_scenario_id,
 )
-def test_scenario(req: JobRequest, expected: dict[str, JobStatus]) -> None:
-    async def inner() -> None:
-        runner = RunnerWrapper()
-        runner.submit(req)
-        await asyncio.wait_for(runner.drain(), 1.0)
-        assert len(list(runner.iter_jobs())) == 0
-        return runner.last_state
-
-    r = asyncio.run(inner())
-    assert r == expected
+@pytest.mark.asyncio
+async def test_scenario(req: JobRequest, expected: dict[str, JobStatus]) -> None:
+    runner = RunnerWrapper()
+    runner.submit(req)
+    await asyncio.wait_for(runner.drain(), 1.0)
+    assert len(list(runner.iter_jobs())) == 0
+    assert runner.last_state == expected
 
 
 @pytest.mark.parametrize(
@@ -572,13 +567,11 @@ def test_iter_locks(req: JobRequest, expected: list[str]) -> None:
         ),
     ],
 )
-def test_locks(req: JobRequest) -> None:
-    async def inner() -> None:
-        runner = RunnerWrapper()
-        runner.submit(req)
-        await asyncio.wait_for(runner.drain(), 1.0)
-
-    asyncio.run(inner())
+@pytest.mark.asyncio
+async def test_locks(req: JobRequest) -> None:
+    runner = RunnerWrapper()
+    runner.submit(req)
+    await asyncio.wait_for(runner.drain(), 1.0)
 
 
 @pytest.mark.parametrize(
@@ -631,16 +624,13 @@ def test_locks(req: JobRequest) -> None:
         ),
     ],
 )
-def test_inputs(req: JobRequest) -> None:
-    async def inner() -> dict[str, JobStatus]:
-        runner = RunnerWrapper()
-        runner.submit(req)
-        await asyncio.wait_for(runner.drain(), 1.0)
-        assert len(list(runner.iter_jobs())) == 0
-        return runner.last_state
-
-    r = asyncio.run(inner())
-    assert not any(True for x in r.values() if x != JobStatus.SUCCESS)
+@pytest.mark.asyncio
+async def test_inputs(req: JobRequest) -> None:
+    runner = RunnerWrapper()
+    runner.submit(req)
+    await asyncio.wait_for(runner.drain(), 1.0)
+    assert len(list(runner.iter_jobs())) == 0
+    assert not any(True for x in runner.last_state.values() if x != JobStatus.SUCCESS)
 
 
 @pytest.mark.parametrize(
@@ -693,42 +683,8 @@ def test_inputs(req: JobRequest) -> None:
         ),
     ],
 )
-def test_queue(req: JobRequest) -> None:
-    async def inner() -> dict[str, JobStatus]:
-        queue = asyncio.Queue()
-        runner = RunnerWrapper(queue=queue)
-        runner.submit(req)
-        n_jobs = sum(1 for _ in runner.iter_jobs())
-        await asyncio.wait_for(runner.drain(), 1.0)
-        assert len(list(runner.iter_jobs())) == 0
-        # Get changes
-        r = []
-        while not queue.empty():
-            r.append(await queue.get())
-        # At least 2 changes per job
-        assert len(r) >= 3 * n_jobs
-        # Count inserts
-        n_inserts = sum(1 for x, _ in r if x is None)
-        assert n_inserts == n_jobs
-        # Updates
-        n_updates = len(r) - n_inserts
-        assert n_updates >= 2 * n_jobs
-        assert not any(True for x in runner.last_state.values() if x != JobStatus.SUCCESS)
-        # Recreate jobs on other runner
-        runner2 = RunnerWrapper()
-        jmap = {}
-        n_jobs2 = 0
-        for doc in iter_resolved(y for x, y in r if x is None):
-            job = Job.from_dict(doc, jmap=jmap)
-            jmap[job.id] = job
-            n_jobs2 += 1
-        for job in jmap.values():
-            runner2.add_job(job)
-        assert n_jobs == n_jobs2
-        await asyncio.wait_for(runner2.drain(), 1.0)
-        assert len(list(runner2.iter_jobs())) == 0
-        assert not any(True for x in runner2.last_state.values() if x != JobStatus.SUCCESS)
-
+@pytest.mark.asyncio
+async def test_queue(req: JobRequest) -> None:
     def iter_resolved(data: Iterable[dict[str, Any]], rmap=None) -> Iterable[dict[str, Any]]:
         rmap = set() if rmap is None else rmap
         blocked = []
@@ -742,4 +698,36 @@ def test_queue(req: JobRequest) -> None:
         if blocked:
             yield from iter_resolved(blocked, rmap)
 
-    asyncio.run(inner())
+    queue: asyncio.Queue = asyncio.Queue()
+    runner = RunnerWrapper(queue=queue)
+    runner.submit(req)
+    n_jobs = sum(1 for _ in runner.iter_jobs())
+    await asyncio.wait_for(runner.drain(), 1.0)
+    assert len(list(runner.iter_jobs())) == 0
+    # Get changes
+    r = []
+    while not queue.empty():
+        r.append(await queue.get())
+    # At least 2 changes per job
+    assert len(r) >= 3 * n_jobs
+    # Count inserts
+    n_inserts = sum(1 for x, _ in r if x is None)
+    assert n_inserts == n_jobs
+    # Updates
+    n_updates = len(r) - n_inserts
+    assert n_updates >= 2 * n_jobs
+    assert not any(True for x in runner.last_state.values() if x != JobStatus.SUCCESS)
+    # Recreate jobs on other runner
+    runner2 = RunnerWrapper()
+    jmap: dict[str, Job] = {}
+    n_jobs2 = 0
+    for doc in iter_resolved(y for x, y in r if x is None):
+        job = Job.from_dict(doc, jmap=jmap)
+        jmap[job.id] = job
+        n_jobs2 += 1
+    for job in jmap.values():
+        runner2.add_job(job)
+    assert n_jobs == n_jobs2
+    await asyncio.wait_for(runner2.drain(), 1.0)
+    assert len(list(runner2.iter_jobs())) == 0
+    assert not any(True for x in runner2.last_state.values() if x != JobStatus.SUCCESS)

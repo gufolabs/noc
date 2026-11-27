@@ -10,6 +10,9 @@ import asyncio
 import random
 import socket
 
+# Third-party modules
+import pytest
+
 # NOC modules
 from noc.core.ioloop.udpserver import UDPServer
 
@@ -86,12 +89,10 @@ async def client_routine(server: UDPServerStub, datagrams_quantity: int) -> None
 
 
 # Testing UDP-server by sending a lot of datagrams from multiple clients
-def test_server_operation() -> None:
-    async def inner():
-        udpserver = UDPServerStub()
-        tasks = [server_routine(udpserver)] + [
-            client_routine(udpserver, DATAGRAMS_FOR_CLIENT) for _ in range(CLIENTS_QUANTITY)
-        ]
-        await asyncio.gather(*tasks)
-
-    asyncio.run(inner())
+@pytest.mark.asyncio
+async def test_server_operation() -> None:
+    udpserver = UDPServerStub()
+    tasks = [server_routine(udpserver)] + [
+        client_routine(udpserver, DATAGRAMS_FOR_CLIENT) for _ in range(CLIENTS_QUANTITY)
+    ]
+    await asyncio.gather(*tasks)
