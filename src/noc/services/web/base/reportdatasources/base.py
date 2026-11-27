@@ -385,18 +385,29 @@ class ReportDataSource:
             raise ValueError("End query timestamp must be more Start")
 
     @classmethod
+    def get_fields_list(cls) -> list[ReportField]:
+        """
+        Return the full list of report fields.
+
+        Subclasses with database-derived fields may override this method
+        to build the list lazily and avoid database access at import time.
+        """
+        return cls.FIELDS
+
+    @classmethod
     def get_config(cls) -> ReportConfig:
         """
         Return ReportConfig
         :return:
         """
+        fields = cls.get_fields_list()
         return ReportConfig(
             name=cls.name,
             description=cls.description,
             timebased=cls.TIMEBASED,
             enabled=True,
-            fields=cls.FIELDS,
-            groupby=[f.name for f in cls.FIELDS if f.group],
+            fields=fields,
+            groupby=[f.name for f in fields if f.group],
             intervals=cls.INTERVALS,
             filters=[],
             dataretentiondays=1,
@@ -406,7 +417,7 @@ class ReportDataSource:
     def get_fields(cls, fields):
         r = {}
         for query_f in fields:
-            for f in cls.FIELDS:
+            for f in cls.get_fields_list():
                 if f.name == query_f and not f.summary:
                     r[query_f] = f
         return r
@@ -415,7 +426,7 @@ class ReportDataSource:
     def get_summary_fields(cls, fields):
         r = {}
         for query_f in fields:
-            for f in cls.FIELDS:
+            for f in cls.get_fields_list():
                 if f.name == query_f and f.summary:
                     r[query_f] = f
         return r
@@ -551,7 +562,7 @@ class CHTableReportDataSource(ReportDataSource):
         where, having = [], []
         for ff in self.filters:
             f_name = ff["name"]
-            for s in self.FIELDS:
+            for s in self.get_fields_list():
                 if s.name == f_name:
                     f_name = s.metric_name
                     break

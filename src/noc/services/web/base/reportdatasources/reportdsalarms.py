@@ -33,6 +33,22 @@ from noc.services.web.apps.fm.alarm.views import AlarmApplication
 
 from .base import ReportDataSource, ReportField
 
+_subsprof_fields: list[ReportField] | None = None
+
+
+def get_subsprof_fields() -> list[ReportField]:
+    """
+    Return subscriber profile summary fields.
+    Lazily loaded to avoid database access at import time.
+    """
+    global _subsprof_fields
+    if _subsprof_fields is None:
+        _subsprof_fields = [
+            ReportField(name=f"subsprof_{sp.name}", label=sp.name.upper())
+            for sp in SubscriberProfile.objects.filter(show_in_summary=True).order_by("name")
+        ]
+    return _subsprof_fields
+
 
 class ReportDsAlarms(ReportDataSource):
     name = "reportdsalarms"
@@ -159,10 +175,6 @@ class ReportDsAlarms(ReportDataSource):
             ),
         ]
         + [
-            ReportField(name=f"subsprof_{sp.name}", label=sp.name.upper())
-            for sp in SubscriberProfile.objects.filter(show_in_summary=True).order_by("name")
-        ]
-        + [
             ReportField(
                 name=f"container_{i}",
                 label=f"CONTAINER_{i}",
@@ -179,6 +191,10 @@ class ReportDsAlarms(ReportDataSource):
     )
 
     @classmethod
+    def get_fields_list(cls) -> list[ReportField]:
+        return cls.FIELDS + get_subsprof_fields()
+
+    @classmethod
     def items_to_dict(cls, items):
         """
         Convert a list of summary items to dict profile -> summary
@@ -189,7 +205,7 @@ class ReportDsAlarms(ReportDataSource):
     def get_fields(cls, fields):
         r = super().get_fields(fields)
         if "subscribers" in fields:
-            for f in cls.FIELDS:
+            for f in cls.get_fields_list():
                 if f.name.startswith("subsprof_"):
                     r[f.name] = f
         return r

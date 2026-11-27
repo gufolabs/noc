@@ -8,6 +8,7 @@
 # Python modules
 import datetime as dt
 from collections import OrderedDict
+from functools import cached_property
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -22,11 +23,14 @@ STALE_LAG_HOURS = 18
 
 class TaskObjectCollector(BaseCollector):
     name = "task"
-    db = get_db()
-    schedulers = [
-        ("scheduler", []),
-        ("discovery", Pool.objects.all().order_by("name").values_list("name")),
-    ]  # Schedulers (name, shards)
+
+    @cached_property
+    def schedulers(self):
+        # Schedulers (name, shards)
+        return [
+            ("scheduler", []),
+            ("discovery", Pool.objects.all().order_by("name").values_list("name")),
+        ]
 
     def __init__(self, service) -> None:
         self.schedulers_list = self.load_discovery()
@@ -43,6 +47,7 @@ class TaskObjectCollector(BaseCollector):
         return r
 
     def iter_metrics(self):
+        db = get_db()
         now = dt.datetime.now() - dt.timedelta(seconds=NOW_SHIFT_SECONDS)
         late_q = {Job.ATTR_STATUS: Job.S_WAIT, Job.ATTR_TS: {"$lt": now}}
         exp_q = {Job.ATTR_LAST_STATUS: Job.E_EXCEPTION}
@@ -51,7 +56,7 @@ class TaskObjectCollector(BaseCollector):
             Job.ATTR_TS: {"$lt": now - dt.timedelta(hours=STALE_LAG_HOURS)},
         }
         for scheduler_name, data in self.schedulers_list.items():
-            sc = self.db[scheduler_name]
+            sc = db[scheduler_name]
             # Calculate late tasks
             t0 = sc.find_one(late_q, limit=1, sort=[("ts", 1)])
             ldur = list(

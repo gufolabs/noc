@@ -7,6 +7,7 @@
 
 # Python modules
 from collections import namedtuple
+from functools import cached_property
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -28,13 +29,18 @@ class ReportObjectCaps(BaseReportColumn):
     """
 
     builtin_sorted = True
-
-    ATTRS = {
-        f"c_{key!s}": value
-        for key, value in Capability.objects.filter().order_by("name").scalar("id", "name")
-    }
-    unknown_value = ([""] * len(ATTRS),)
     CHUNK_SIZE = 10000
+
+    @cached_property
+    def ATTRS(self) -> dict[str, str]:
+        return {
+            f"c_{key!s}": value
+            for key, value in Capability.objects.filter().order_by("name").scalar("id", "name")
+        }
+
+    def __init__(self, sync_ids=None) -> None:
+        super().__init__(sync_ids)
+        self.unknown_value = ([""] * len(self.ATTRS),)
 
     def extract(self):
         # load(self, mo_ids, attributes):
