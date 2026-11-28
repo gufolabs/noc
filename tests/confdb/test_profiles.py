@@ -18,6 +18,7 @@ from noc.core.confdb.tokenizer.base import tokenizer_loader
 from noc.core.handler import get_handler
 from noc.core.ip import IP
 from noc.core.profile.loader import loader as profile_loader
+from noc.core.profile.names import mangle_profile_name
 
 PREFIX = ("tests", "confdb", "profiles")
 
@@ -85,7 +86,9 @@ def test_profile(path) -> None:
     # Setup normalizer
     normalizer_name, normalizer_conf = profile.get_config_normalizer(mo)
     if not normalizer_name.startswith("noc."):
-        normalizer_name = f"noc.sa.profiles.{profile.name}.confdb.normalizer.{normalizer_name}"
+        normalizer_name = (
+            f"noc.adapters.{mangle_profile_name(profile.name)}.confdb.normalizer.{normalizer_name}"
+        )
     normalizer_cls = get_handler(normalizer_name)
     assert normalizer_cls, "Normalizer not found"
     normalizer = normalizer_cls(mo, tokenizer, **normalizer_conf)

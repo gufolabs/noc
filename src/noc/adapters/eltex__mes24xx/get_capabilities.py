@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------------
+# Eltex.MES24xx.get_capabilities
+# ---------------------------------------------------------------------
+# Copyright (C) 2007-2019 The NOC Project
+# See LICENSE for details
+# ---------------------------------------------------------------------
+
+# NOC modules
+from noc.adapters.generic__host.get_capabilities import Script as BaseScript
+from noc.adapters.generic__host.get_capabilities import false_on_cli_error, false_on_snmp_error
+from noc.core.mib import mib
+from noc.core.validators import is_int
+
+
+class Script(BaseScript):
+    name = "Eltex.MES24xx.get_capabilities"
+
+    @false_on_cli_error
+    def has_lldp_cli(self):
+        """
+        Check box has lldp enabled on Eltex
+        """
+        cmd = self.cli("show lldp", ignore_errors=True)
+        return "LLDP is disabled" not in cmd
+
+    @false_on_snmp_error
+    def has_lldp_snmp(self):
+        """
+        Check box has lldp enabled
+        """
+        r = self.snmp.get(mib["LLDP-MIB::lldpLocChassisIdSubtype", 0])
+        return is_int(r) and r >= 1

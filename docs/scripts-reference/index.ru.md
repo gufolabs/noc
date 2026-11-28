@@ -195,7 +195,7 @@ http_request_middleware = [
 
 При необходимости можно добавлять обработчики для профиля. Они наследуются от класса `BaseMiddleware` и помещаются в папку 
 `<profile>/middleware/`. Для работы в `http_request_middleware` добавляется строка импорта - 
-`noc.sa.profiles.<profile_name>.middleware.<module_name>.<class_name>`.
+`noc.adapters.<flat profile name>.middleware.<module_name>.<class_name>`.
  
 Пример:
 
@@ -253,13 +253,13 @@ class Script(BaseScript):
 
 ## Generic Scripts
 
-Часть скриптов уже реализовано в общем виде (через `SNMP`). Они доступны в профиле `Generic.Host` - `<noc_base>/sa/profiles/Generic/Host`.
+Часть скриптов уже реализовано в общем виде (через `SNMP`). Они доступны в профиле `Generic.Host` - `<noc_base>/adapters/generic__host`.
 Функционал скриптов из `Generic.Host` можно использовать наследуюя их переопределяя функицонал через аттрибуты. 
 Например, если оборудование поддерживает `SNMP`, то для реализация скрипта `get_interfaces` можно воспользоваться наследованием:
 
 ```python
 # NOC modules
-from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
+from noc.adapters.generic__host.get_interfaces import Script as BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 
 

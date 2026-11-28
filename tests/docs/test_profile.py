@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 from pathlib import Path
 
 # Third-party modules
@@ -14,38 +15,38 @@ import pytest
 
 # NOC modules
 from noc.config import config
-from noc.core.profile.names import unmangle_profile_module_name
+from noc.core.profile.loader import find_profile_class
 
-PROFILES_ROOT = config.noc_base / "sa" / "profiles"
+PROFILES_ROOT = config.noc_base / "adapters"
 PROFILE_DOCS_BASE = Path("docs", "profiles-reference")
 XFAIL_VENDORS = {"OS"}
 
 
 @cachetools.cached({})
-def all_vendors() -> list[str]:
+def all_profile_names() -> list[str]:
     r = []
-    for path in PROFILES_ROOT.iterdir():
-        if not path.is_dir():
+    for d in sorted(PROFILES_ROOT.iterdir()):
+        if not d.is_dir() or not (d / "profile.py").is_file():
             continue
-        vendor = unmangle_profile_module_name(path.name)
-        if vendor == "Generic" or vendor.startswith(".") or vendor.startswith("_"):
+        try:
+            module = importlib.import_module(f"noc.adapters.{d.name}.profile")
+        except ImportError:
             continue
-        r.append(vendor)
+        kls = find_profile_class(module)
+        if kls is None or not kls.name:
+            continue
+        r.append(kls.name)
     return r
 
 
 @cachetools.cached({})
+def all_vendors() -> list[str]:
+    return sorted({n.split(".")[0] for n in all_profile_names() if not n.startswith("Generic.")})
+
+
+@cachetools.cached({})
 def all_profiles() -> list[str]:
-    r = set()
-    for py_file in PROFILES_ROOT.rglob("*/profile.py"):
-        parts = py_file.relative_to(PROFILES_ROOT).parts
-        if len(parts) < 3:
-            continue
-        vendor, profile_name = unmangle_profile_module_name(".".join(parts[:2])).split(".")
-        if vendor == "Generic":
-            continue
-        r.add(f"{vendor}.{profile_name}")
-    return list(r)
+    return [n for n in all_profile_names() if not n.startswith("Generic.")]
 
 
 @pytest.mark.parametrize("vendor", all_vendors())

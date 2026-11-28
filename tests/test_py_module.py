@@ -94,7 +94,13 @@ def _allow_xfail(module: str) -> bool:
     :param module: Module name
     :return:
     """
-    return module in _ALLOW_XFAIL or module.startswith("noc.sa.profiles.VMWare")
+    # VMware adapters depend on the optional pyvmomi extra
+    vmware_modules = {"noc.adapters.vim", "noc.adapters.connection"}
+    return (
+        module in _ALLOW_XFAIL
+        or module in vmware_modules
+        or module.startswith("noc.adapters.vmware__")
+    )
 
 
 @cachetools.cached(cache={})

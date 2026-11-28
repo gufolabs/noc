@@ -19,7 +19,7 @@ class BaseProfileController:
     Must implement `setup()` and `cleanup()` methods.
 
     Profile controllers must be placed in
-    `sa/profiles/<vendor>/<name>/controller/<tech_domain>.py`
+    `adapters/<flat>/controller/<tech_domain>.py`
     and implement ProfileController class derived
     from this one.
     """

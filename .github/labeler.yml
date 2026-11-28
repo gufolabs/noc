@@ -4,7 +4,7 @@ max-files-changed: 100
 adapter:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/noc/sa/profiles/**"
+          - "src/noc/adapters/**"
 collections:
   - changed-files:
       - any-glob-to-any-file:

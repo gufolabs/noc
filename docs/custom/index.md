@@ -49,10 +49,10 @@ Extensions are stored separately from the main code and are dynamically loaded b
 ├── handlers
 │   ├── alarms
 ├── lib
-│   └── app
+│   └── app
 ├── sa
-│   ├── interfaces
-│   └── profiles
+│   └── interfaces
+├── adapters
 ├── services
 │   ├── nbi
 │   └── web

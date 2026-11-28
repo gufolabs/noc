@@ -16,7 +16,8 @@ from pathlib import Path
 # NOC modules
 from noc.config import config
 from noc.core.loader.base import BaseLoader
-from noc.core.profile.names import mangle_profile_module_name, unmangle_profile_module_name
+from noc.core.profile.loader import find_profile_class, iter_adapter_dirs
+from noc.core.profile.names import mangle_profile_name
 
 from .base import BaseScript
 
@@ -48,23 +49,20 @@ class ScriptLoader(BaseLoader):
                     self.logger.error("Invalid script name")
                     return None
                 try:
-                    _vendor, _system, sn = name.split(".")
+                    profile_name, sn = name.rsplit(".", 1)
                 except Exception as e:
                     self.logger.error('Error in script name "%s": %s', name, e)
                     return None
                 is_generic = False
-                mangled = mangle_profile_module_name(name)
-                mv, ms, msn = mangled.split(".")
+                flat = mangle_profile_name(profile_name)
                 for p in config.get_customized_paths(prefer_custom=True):
-                    if (
-                        Path(p or str(files("noc"))).joinpath("sa", "profiles", mv, ms, f"{msn}.py")
-                    ).is_file():
+                    if (Path(p or str(files("noc"))) / "adapters" / flat / f"{sn}.py").is_file():
                         base_name = "noc.custom" if p else "noc"
-                        module_name = f"{base_name}.sa.profiles.{mangled}"
+                        module_name = f"{base_name}.adapters.{flat}.{sn}"
                         break
                 else:
                     # Generic script
-                    module_name = f"noc.sa.profiles.Generic.Host.{sn}"
+                    module_name = f"noc.adapters.generic__host.{sn}"
                     is_generic = True
                 # Load script
                 script = self.find_class(module_name, BaseScript, name)
@@ -72,7 +70,7 @@ class ScriptLoader(BaseLoader):
                 if script and is_generic:
                     # Create subclass with proper name
                     script = type("Script", (script,), {"name": name})
-                    script.__module__ = f"noc.sa.profiles.{name}"
+                    script.__module__ = f"noc.adapters.generic__host.{sn}"
                 self.scripts[name] = script
             return script
 
@@ -94,7 +92,7 @@ class ScriptLoader(BaseLoader):
         ns = set()
         # Scan generic scripts for `requires` dependencies
         generics = {}  # Name -> dependencies
-        for path in Path(str(files("noc"))).glob("sa/profiles/Generic/Host/*.py"):
+        for path in Path(str(files("noc"))).glob("adapters/generic__host/*.py"):
             gn = path.name[:-3]
             if gn in self.protected_names:
                 continue
@@ -105,22 +103,31 @@ class ScriptLoader(BaseLoader):
                 generics[gn] = [s.strip()[1:-1] for s in match.group(1).split(",") if s.strip()]
         # Load custom scripts, Load common scripts
         profiles = set()
-        for base in config.get_customized_paths(prefer_custom=True):
-            for path in Path(base or str(files("noc"))).glob("sa/profiles/*/*/*.py"):
-                vendor, system, name = path.parts[-3:]
-                name = name[:-3]
-                if name in self.protected_names:
-                    continue
-                ns.add(unmangle_profile_module_name(f"{vendor}.{system}.{name}"))
-                profiles.add(unmangle_profile_module_name(f"{vendor}.{system}"))
+        for d, base_name in iter_adapter_dirs():
+            try:
+                module = importlib.import_module(f"{base_name}.adapters.{d.name}.profile")
+            except ImportError as e:
+                self.logger.error("Error importing adapter %s: %s", d.name, e)
+                continue
+            kls = find_profile_class(module)
+            if kls is None or not kls.name:
+                self.logger.error("No profile class with a name in %s", d.name)
+                continue
+            sfs = [sp for sp in sorted(d.glob("*.py")) if sp.name[:-3] not in self.protected_names]
+            if not sfs:
+                # No local scripts: generic application does not apply to this adapter
+                continue
+            profiles.add(kls.name)
+            for sp in sfs:
+                ns.add(f"{kls.name}.{sp.name[:-3]}")
         # Apply generic scripts
         for p in profiles:
-            for g in generics:
+            for g, deps in generics.items():
                 fgn = f"{p}.{g}"
                 if fgn in ns:
                     # Generic overriden with common script
                     continue
-                if any(1 for r in generics[g] if f"{p}.{r}" not in ns):
+                if any(1 for r in deps if f"{p}.{r}" not in ns):
                     continue  # Unsatisfied dependency
                 # Add generic script
                 ns.add(fgn)

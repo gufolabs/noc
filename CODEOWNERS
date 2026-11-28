@@ -28,7 +28,7 @@ pyproject.toml @dv @aversant @EKbfh
 /fixes/ @dv @aversant
 
 # Profiles
-/sa/profiles/ @dv @aversant @dmitryluhtionov
+/adapters/ @dv @aversant @dmitryluhtionov
 
 # Configuration
 /config.py @dv @aversant @EKbfh

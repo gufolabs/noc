@@ -1,0 +1,20 @@
+# ---------------------------------------------------------------------
+# APC.AOS.get_interfaces
+# ---------------------------------------------------------------------
+# Copyright (C) 2007-2026 The NOC Project
+# See LICENSE for details
+# ---------------------------------------------------------------------
+
+# NOC modules
+from noc.adapters.generic__host.get_interfaces import Script as BaseScript
+from noc.core.mib import mib
+from noc.sa.interfaces.igetinterfaces import IGetInterfaces
+
+
+class Script(BaseScript):
+    name = "APC.AOS.get_interfaces"
+    interface = IGetInterfaces
+
+    def clean_iftype(self, ifname, ifindex):
+        iftype = self.snmp.get(mib["IF-MIB::ifType", ifindex], cached=True)
+        return self.profile.get_interface_type(iftype)
