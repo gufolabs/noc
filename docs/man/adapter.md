@@ -6,7 +6,9 @@
 
 ## Synopsis
 
-    noc adapter mangle <name>
+```
+noc adapter mangle <name>
+```
 
 
 ## Description
@@ -28,18 +30,23 @@ Adapter directories live either in `src/noc/adapters/` (built-in) or in
 
 Print the flat name of the `Cisco.IOS` profile
 
-
-    noc adapter mangle Cisco.IOS
-    cisco__ios
+```bash
+$ ./noc adapter mangle Cisco.IOS
+cisco__ios
+```
 
 Digit-led vendor name
 
-    noc adapter mangle 3Com.4500
-    _3com__4500
+```bash
+$ ./noc adapter mangle 3Com.4500
+_3com__4500
+```
 
 Create the adapter directory for a new custom profile (in `<custom root>/adapters/`)
 
-    mkdir -p "<custom root>/adapters/$(noc adapter mangle Acme.Router)"
+```bash
+$ mkdir -p "<custom root>/adapters/$(./noc adapter mangle Acme.Router)"
+```
 
 For built-in adapters, create the directory under `src/noc/adapters/` instead.
 
