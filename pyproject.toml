@@ -185,34 +185,37 @@ ignore = [
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "RUF100", # Unused blanket `noqa` directive
 ]
-# Enable
+# Enable checks. Keep commented first, sort other.
 select = [
-  "ASYNC", # flake8-async  # "E", # Pycodestyle Error
-  "F", # Pyflakes
-  "W", # Pycodestyle Warning
+  # "E", # Pycodestyle Error
   # "C90", # mccabe
-  "I", # isort
   # "D", # Pydocstyle
-  "YTT", # flake8-2020
+  # "DTZ", # flake8-datetimez
   # "ANN", # flake8-annotations
   # "S", # flake8-bandit
   # "BLE", # flake8-blind-except
   # "B", # flake8-bugbear
-  "A", # flake8-builtins
-  "C4", # flake8-comprehensions
   # "EM", # flake8-errmsg
-  "ISC", # flake8-implicit-str-concat
+  "A", # flake8-builtins
+  "ASYNC", # flake8-async
+  "C4", # flake8-comprehensions
+  "EXE", # flake8-executable
+  "F", # Pyflakes
+  "I", # isort
   "ICN", # flake8-import-conventions
-  "PT", # flake8-pytest-style
-  "RET", # flake8-return
-  "SIM", # flake8-simplify
+  "ISC", # flake8-implicit-str-concat
+  "PIE", # flake8-pie
   "PLC", # pylint
   "PLE", # pylint
   "PLR", # pylint
   "PLW", # pylint
-  "PIE", # flake8-pie
+  "PT", # flake8-pytest-style
+  "RET", # flake8-return
   "RUF", # ruff specific
+  "SIM", # flake8-simplify
   "UP", # pyupgrade
+  "W", # Pycodestyle Warning
+  "YTT", # flake8-2020
 ]
 unfixable = [
   "F401",
