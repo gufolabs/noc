@@ -1,6 +1,7 @@
 ---
 requires:
 - pep8
+- async
 - typing/
 ---
 # Python Code Quality Standards
