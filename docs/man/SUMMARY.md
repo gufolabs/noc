@@ -1,4 +1,5 @@
 * [about](about.md)
+* [adapter](adapter.md)
 * [beef](beef.md)
 * [bi](bi.md)
 * [clean-asset](clean-asset.md)

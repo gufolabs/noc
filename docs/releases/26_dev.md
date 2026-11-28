@@ -44,6 +44,10 @@ Alarm handling gains escalation profiles, alarm watching, alarm-action APIs, ser
 
 NOC 26 adds and improves support for a broad range of network equipment, including BDCOM, D-Link, Juniper, HP/Aruba, Eltex, QTECH, Maipu, Cisco, and ODU devices. Updates cover interface discovery, device-specific events, configuration processing, and additional hardware capabilities.
 
+### Device Adapter CLI Utilities
+
+A new `./noc adapter` command family helps with device adapter development. `./noc adapter mangle <name>` prints the flat adapter directory name for a profile name (e.g. `./noc adapter mangle 3Com.4500` → `_3com__4500`), so custom adapter directories are always named exactly as the profile and script loaders expect.
+
 ### Authentication and Security Enhancements
 
 New capabilities include mutual TLS (mTLS), API-key authorization, protection against repeated failed login attempts, and forced password changes. Authentication and secret management have also been refined.
