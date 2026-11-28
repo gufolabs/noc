@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Automation with processed alarm
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025, The NOC Project
+# Copyright (C) 2007-2026, The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ class ServiceItem:
 class Item:
     """Over Job Item"""
 
-    #! Replace to alarm List, status
+    # Replace to alarm List, status
     alarm: ActiveAlarm | ArchivedAlarm
     # For requested Escalation by ManagedObject
     managed_object_id: int | None = None
