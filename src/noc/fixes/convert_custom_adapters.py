@@ -75,6 +75,33 @@ def _ensure_profile_name(profile_py: Path, name: str) -> None:
     profile_py.write_text("".join(lines))
 
 
+def _report_leftovers(base: Path) -> None:
+    """
+    Warn about legacy ``sa.profiles`` references the fix could not map.
+
+    References to built-in profiles (``noc.sa.profiles.Cisco.IOS.*``, ...)
+    are not rewritten automatically: guessing the original profile name
+    from a flat module path would be lossy, so unmapped references are
+    left in place and reported for a manual fix (see ``./noc adapter mangle``).
+    """
+    left = re.compile(r"sa\.profiles[.\w-]*")
+    found = 0
+    for f in sorted(base.rglob("*.py")):
+        text = f.read_text()
+        for line_no, line in enumerate(text.splitlines(), 1):
+            if m := left.search(line):
+                found += 1
+                print(
+                    f"WARNING: {f}:{line_no}: unmapped legacy reference {m.group(0)!r}", flush=True
+                )
+    if found:
+        print(
+            f"WARNING: {found} legacy sa.profiles reference(s) left unmapped; "
+            "fix them manually (see ./noc adapter mangle)",
+            flush=True,
+        )
+
+
 def convert_base(base: str | Path) -> None:
     """
     Convert one custom root from the legacy layout to the flat layout.
@@ -86,89 +113,110 @@ def convert_base(base: str | Path) -> None:
     - adds the required ``name`` attribute to profile classes;
     - removes the now-empty legacy directories.
 
-    Idempotent: already converted profiles are skipped.
+    Idempotent and convergent: profiles already moved are skipped, and
+    the post-move steps (import rewrite, name insertion, cleanup) also
+    run on an already-moved tree, so an interrupted conversion can be
+    repaired by rerunning the fix. Note: references to a profile that
+    was moved by a previous (interrupted) run cannot be rewritten
+    automatically, because the legacy name is not derivable from the
+    flat directory name; they are reported by the leftover scan for a
+    manual fix instead.
     """
     base = Path(base)
     legacy_root = base / "sa" / "profiles"
     if not legacy_root.is_dir():
         print(f"No legacy profile directory: {legacy_root}", flush=True)
-        return
     # 1. Collect the legacy profile directories
     moves: list[tuple[str, Path, Path]] = []
-    for vendor in sorted(legacy_root.iterdir()):
-        if not vendor.is_dir():
-            continue
-        for sw in sorted(vendor.iterdir()):
-            if not sw.is_dir():
+    claimed: set[str] = set()
+    if legacy_root.is_dir():
+        for vendor in sorted(legacy_root.iterdir()):
+            if not vendor.is_dir():
                 continue
-            name = f"{_legacy_unmangle(vendor.name)}.{_legacy_unmangle(sw.name)}"
-            dst = base / "adapters" / mangle_profile_name(name)
-            if (dst / "profile.py").is_file():
-                print(f"Skip already converted profile {name}", flush=True)
-                continue
-            if dst.exists():
-                print(f"WARNING: destination exists, skip {name}: {dst}", flush=True)
-                continue
-            moves.append((name, sw, dst))
+            for sw in sorted(vendor.iterdir()):
+                if not sw.is_dir():
+                    continue
+                name = f"{_legacy_unmangle(vendor.name)}.{_legacy_unmangle(sw.name)}"
+                dst = base / "adapters" / mangle_profile_name(name)
+                if (dst / "profile.py").is_file():
+                    print(f"Skip already converted profile {name}", flush=True)
+                    continue
+                if dst.exists():
+                    print(f"WARNING: destination exists, skip {name}: {dst}", flush=True)
+                    continue
+                if mangle_profile_name(name) in claimed:
+                    print(f"WARNING: duplicate flat name, skip {name}: {dst}", flush=True)
+                    continue
+                claimed.add(mangle_profile_name(name))
+                moves.append((name, sw, dst))
     if not moves:
         print("Nothing to convert", flush=True)
-        return
     # 2. Move the directories
     for name, src, dst in moves:
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(str(src), str(dst))
         print(f"Converted {name}: {src} -> {dst}", flush=True)
-    # 3. Rewrite legacy module references. In the legacy layout the
-    # importable module path of a profile is its directory name with
-    # non-identifier characters replaced by ``_`` (e.g. CERION.CER-ADV ->
-    # CERION.CER_ADV); the destination flat name is mangle_profile_name(name).
-    replacements: list[tuple[str, str]] = []
-    for name, _, _ in moves:
-        # The legacy importable module path is the directory name with
+    # The post-move steps run whether or not anything was moved in this
+    # run, so an interrupted conversion converges on re-run.
+    adapters_dir = base / "adapters"
+    if adapters_dir.is_dir():
+        # 3. Rewrite legacy module references. In the legacy layout the
+        # importable module path of a profile is its directory name with
         # non-identifier characters replaced by ``_`` (e.g. CERION.CER-ADV ->
-        # CERION.CER_ADV); the destination flat name is mangle_profile_name(name)
-        for old in {name, name.replace("-", "_")}:
-            new = mangle_profile_name(name)
+        # CERION.CER_ADV); the destination flat name is mangle_profile_name(name).
+        replacements: list[tuple[str, str]] = []
+        for name, _, _ in moves:
+            for old in {name, name.replace("-", "_")}:
+                new = mangle_profile_name(name)
+                if old != new and not any(o == old for o, _ in replacements):
+                    replacements.append((old, new))
+        # Generic scripts were historically imported from the vendor-level
+        # "Generic" module; map both legacy forms unconditionally.
+        for old in ("Generic", "Generic.Host"):
+            new = mangle_profile_name("Generic.Host")
             if old != new and not any(o == old for o, _ in replacements):
                 replacements.append((old, new))
-    # Generic may have lived at the vendor level in the legacy layout
-    if (base / "sa" / "profiles" / "Generic").is_dir():
-        replacements.append(("Generic", mangle_profile_name("Generic.Host")))
-    order = sorted(replacements, key=lambda p: len(p[0]), reverse=True)
-    # Single atomic substitution: alternatives are longest-first; the
-    # trailing check (no word/hyphen continuation) rejects a partial match
-    # of a longer name while still allowing the trailing dot of a
-    # ``<profile>.<module>`` import path.
-    subs = re.compile(
-        r"noc\.sa\.profiles\."
-        "(" + "|".join(re.escape(old) for old, _ in order) + ")" + r"(?![\w-])"
-    )
-    newmap = dict(order)
+        order = sorted(replacements, key=lambda p: len(p[0]), reverse=True)
+        # Single atomic substitution: alternatives are longest-first; the
+        # trailing check (no word/hyphen continuation) rejects a partial
+        # match of a longer name while still allowing the trailing dot of
+        # a ``<profile>.<module>`` import path.
+        subs = re.compile(
+            r"noc\.sa\.profiles\."
+            "(" + "|".join(re.escape(old) for old, _ in order) + ")" + r"(?![\w-])"
+        )
+        newmap = dict(order)
 
-    def _sub(m: re.Match) -> str:
-        return f"noc.adapters.{newmap[m.group(1)]}"
+        def _sub(m: re.Match) -> str:
+            return f"noc.adapters.{newmap[m.group(1)]}"
 
-    rewritten: set[str] = set()
-    for f in sorted((base / "adapters").rglob("*.py")):
-        text = f.read_text()
-        orig = text
-        text = subs.sub(_sub, text)
-        # Bare "sa.profiles" path fragments (legacy layout references)
-        text = re.sub(r"sa\.profiles", "adapters", text)
-        if text != orig:
-            f.write_text(text)
-            rewritten.add(str(f))
-    for path in sorted(rewritten):
-        print(f"Rewrote imports in {path}", flush=True)
-    # 4. Ensure the required name attribute
-    for name, _, dst in moves:
-        profile_py = dst / "profile.py"
-        if profile_py.is_file():
+        rewritten: set[str] = set()
+        for f in sorted(adapters_dir.rglob("*.py")):
+            text = f.read_text()
+            orig = text
+            text = subs.sub(_sub, text)
+            if text != orig:
+                f.write_text(text)
+                rewritten.add(str(f))
+        for path in sorted(rewritten):
+            print(f"Rewrote imports in {path}", flush=True)
+        # 4. Ensure the required name attribute in every adapter profile.
+        # Newly moved profiles use their logical name; pre-existing ones
+        # fall back to the flat directory name.
+        for dst in sorted(adapters_dir.iterdir()):
+            if not dst.is_dir():
+                continue
+            profile_py = dst / "profile.py"
+            if not profile_py.is_file():
+                continue
+            name = next((n for n, _, d in moves if d == dst), dst.name)
             _ensure_profile_name(profile_py, name)
             print(f"Ensured name attribute in {profile_py}", flush=True)
-    # 5. Remove the legacy tree bottom-up. A directory is removed only when
+        # 5. Report references the fix could not map automatically
+        _report_leftovers(base)
+    # 6. Remove the legacy tree bottom-up. A directory is removed only when
     # it holds nothing besides an empty __init__.py, so e.g. a custom
-    # sa/interfaces survives.
+    # sa/interfaces (or a skipped conflicting profile) survives.
     for _, src, _ in moves:
         for d in (src, src.parent):
             if d.is_dir() and all(
@@ -189,8 +237,10 @@ def fix() -> None:
 
     noc_base = str(files("noc"))
     for base in config.get_customized_paths():
+        if not base:
+            continue  # Empty element = the built-in noc package, shipped already converted
         if base == noc_base:
-            continue  # The built-in tree is shipped already converted
+            continue
         print(f"Converting custom base {base} ...", flush=True)
         convert_base(base)
     print("Custom adapters conversion done", flush=True)
