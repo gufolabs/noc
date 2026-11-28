@@ -26,7 +26,7 @@ import mkdocs_gen_files
 # @todo: Arbitrary ToC depth
 # @todo: en/ru
 
-logger = logging.getLogger("mkdocs")
+logger = logging.getLogger("docs")
 
 BUCKET_DEPTH = 1
 EC_BUCKET_DEPTH = 1
@@ -328,7 +328,7 @@ def main():
         for item in items:
             item.events = sorted(ev_map[item.name])
         out = BOOK / rel_path
-        logging.debug("Rendering %s (%d items)", out, len(items))
+        logger.debug("Rendering %s (%d items)", out, len(items))
         # with mkdocs_gen_files.open(out, "w") as fp:
         out_path = DOCS / out
         os.makedirs(os.path.dirname(out_path), exist_ok=True)

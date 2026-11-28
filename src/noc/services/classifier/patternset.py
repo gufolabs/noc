@@ -84,7 +84,7 @@ class PatternSet:
         if self.i_patterns:
             mask = self.i_patterns.get(source)
             if mask:
-                logging.debug("Setting ignore patterns for %s: %s", source, mask)
+                logger.debug("Setting ignore patterns for %s: %s", source, mask)
                 return [re.compile(x) for _, x in mask]
         return []
 
@@ -100,12 +100,12 @@ class PatternSet:
             if event.type.source == EventSource.SYSLOG:
                 msg = event.message or ""
                 if any(r for r in ignore_mask if r.search(msg)):
-                    logging.debug("Ignored")
+                    logger.debug("Ignored")
                     return True
             elif event.type.source == EventSource.SNMP_TRAP:
                 oid = event.type.id or ""
                 if not oid or not is_oid(oid):
                     return False
                 if any(r for r in ignore_mask if r.search(oid)):
-                    logging.debug("Ignored")
+                    logger.debug("Ignored")
                     return True

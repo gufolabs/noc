@@ -13,6 +13,8 @@ import re
 from noc.core.debug import error_report
 from noc.core.handler import get_handler
 
+logger = logging.getLogger(__name__)
+
 
 class Trigger:
     def __init__(self, t, handler=None) -> None:
@@ -43,7 +45,7 @@ class Trigger:
     def call(self, event):
         if not self.match(event):
             return
-        logging.debug(f"Calling trigger '{self.name}'")
+        logger.debug(f"Calling trigger '{self.name}'")
         # Notify if necessary
         if self.notification_group and self.template:
             subject = {}

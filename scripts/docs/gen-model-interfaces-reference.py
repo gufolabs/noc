@@ -23,7 +23,7 @@ import mkdocs_gen_files
 # @todo: Arbitrary ToC depth
 # @todo: en/ru
 
-logger = logging.getLogger("mkdocs")
+logger = logging.getLogger("docs")
 
 COLLECTION_ROOT = Path("collections", "inv.modelinterfaces")
 DOCS = Path("docs")

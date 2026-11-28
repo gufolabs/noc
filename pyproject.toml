@@ -205,6 +205,7 @@ select = [
   "I", # isort
   "ICN", # flake8-import-conventions
   "ISC", # flake8-implicit-str-concat
+  "LOG", # flake8-logging
   "PIE", # flake8-pie
   "PLC", # pylint
   "PLE", # pylint
