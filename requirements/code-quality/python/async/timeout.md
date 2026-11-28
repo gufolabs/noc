@@ -1,59 +1,25 @@
-# Async timeout handling
+# Async timeout mechanism
 
 ## Scope
 
-Python async functions that accept a timeout parameter.
+Python async code that must enforce a timeout on an awaited operation.
 
-## Requirement
+## Requirements
 
-An async function **MAY** accept a `timeout` parameter only in the following cases:
+When a timeout must be enforced in async code, the `asyncio.timeout()` pattern **MUST** be used.
 
-- the function is a public or external API method;
-- the parameter value **MUST** be forwarded unchanged to an outgoing API call or to a third-party library function.
+Manual deadline management, such as computing a deadline and comparing it against the event loop clock or scheduling a separate cancellation timer, **MUST NOT** be used.
 
-In all other cases, a `timeout` parameter **MUST NOT** be used.
-
-A timeout **MUST** be enforced inside the function by wrapping the awaited operation in `asyncio.timeout()`.
-
-Examples:
-
-Valid:
+Example:
 
 ```python
-import asyncio
-
-
 async def fetch(url: str) -> bytes:
     async with asyncio.timeout(5):
         return await client.get(url)
-
-
-async def send_to_api(payload: bytes, timeout: float) -> int:
-    # Pass-through to an outgoing third-party API call.
-    return await external_client.send(payload, timeout=timeout)
-```
-
-Invalid:
-
-```python
-import asyncio
-
-
-async def fetch(url: str, timeout: float) -> bytes:
-    # Propagating a timeout through the internal call chain.
-    return await client.get(url, timeout=timeout)
-
-
-async def process(item: Item, timeout: float) -> None:
-    # Manual deadline management instead of asyncio.timeout().
-    deadline = asyncio.get_running_loop().time() + timeout
-    ...
 ```
 
 ## Why?
 
-A `timeout` parameter passed down through internal call chains shifts the responsibility for deadline management to every caller, making it harder to reason about overall request latency and to change a timeout in one place.
+The `asyncio.timeout()` pattern is the established structured-concurrency mechanism for deadlines in NOC Python code.
 
-`asyncio.timeout()` keeps the deadline local to the function that owns the operation, integrates cancellation with the task structure, and prevents timeouts from being silently dropped or forgotten by intermediate layers.
-
-The accepted exception is a public API that forwards the parameter unchanged to an outgoing API call or third-party library, where the caller legitimately controls the deadline.
+It keeps the deadline local to the function that owns the operation, ties cancellation to the surrounding task structure, and ensures deterministic cleanup without manual timer management.

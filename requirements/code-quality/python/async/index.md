@@ -1,6 +1,7 @@
 ---
 requires:
 - timeout
+- timeout-parameter
 ---
 # Python async code
 
@@ -8,7 +9,7 @@ requires:
 
 All Python async code, including async functions and coroutines.
 
-## Requirement
+## Requirements
 
 Python async code **MUST** satisfy the requirements defined in this section.
 
