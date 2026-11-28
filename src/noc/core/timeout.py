@@ -18,7 +18,7 @@ METRIC_TIME = "retry_time_ns"
 NS = 1_000_000_000.0
 
 
-async def retry_timeout(timeout: float = 1.0, name: str | None = None) -> None:
+async def retry_timeout(timeout: float = 1.0, name: str | None = None) -> None:  # noqa: ASYNC109  # mean retry interval
     """
     Randomized retry timeout.
 

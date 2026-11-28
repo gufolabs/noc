@@ -96,7 +96,13 @@ class SAEAPI(JSONRPCAPI):
 
     @api
     async def script(
-        self, object_id, script, args=None, timeout=None, streaming=None, return_metrics=False
+        self,
+        object_id,
+        script,
+        args=None,
+        timeout=None,  # noqa: ASYNC109  # NBI API param, forwarded to activator
+        streaming=None,
+        return_metrics=False,
     ):
         """
         Execute SA script against ManagedObject

@@ -69,7 +69,7 @@ class SessionStore:
                 self._sessions[session] = item
             self._set_timer(item, timeout)
 
-    async def _timer_task(self, session: str, timeout: float):
+    async def _timer_task(self, session: str, timeout: float):  # noqa: ASYNC109  # timer duration
         # Running on main service's event loop
         try:
             await asyncio.sleep(timeout)

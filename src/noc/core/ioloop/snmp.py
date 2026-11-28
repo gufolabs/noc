@@ -57,7 +57,7 @@ async def snmp_get(
     port=161,
     community="public",
     version=SNMP_v2c,
-    timeout=10,
+    timeout=10,  # noqa: ASYNC109  # SNMP request timeout, passed to snimpy session
     tos=None,
     udp_socket: UDPSocket | None = None,
     raw_varbinds=False,
@@ -178,7 +178,7 @@ async def snmp_count(
     port=161,
     community="public",
     version=SNMP_v2c,
-    timeout=10,
+    timeout=10,  # noqa: ASYNC109  # SNMP request timeout, passed to snimpy session
     bulk=False,
     filter=None,
     max_repetitions=BULK_MAX_REPETITIONS,
@@ -250,7 +250,7 @@ async def snmp_getnext(
     port: int = 161,
     community: str = "public",
     version: int = SNMP_v2c,
-    timeout: float = 10,
+    timeout: float = 10,  # noqa: ASYNC109  # SNMP request timeout, passed to snimpy session
     bulk: bool = False,
     filter: Callable[[bytes, Any], bool] | None = None,
     max_repetitions: int = BULK_MAX_REPETITIONS,
@@ -359,7 +359,7 @@ async def snmp_set(
     port=161,
     community="public",
     version=SNMP_v2c,
-    timeout=10,
+    timeout=10,  # noqa: ASYNC109  # SNMP request timeout, passed to snimpy session
     tos=None,
     udp_socket=None,
     rate_limit: AsyncRateLimit | None = None,

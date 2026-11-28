@@ -12,7 +12,13 @@ from . import base
 
 
 async def resolve_async(
-    name, hint=None, wait=True, timeout=None, full_result=False, near=False, critical=False
+    name,
+    hint=None,
+    wait=True,
+    timeout=None,  # noqa: ASYNC109  # wait-timeout for dcs.resolve
+    full_result=False,
+    near=False,
+    critical=False,
 ):
     dcs = base.dcs
     if near:
@@ -20,7 +26,6 @@ async def resolve_async(
             name,
             hint=hint,
             wait=wait,
-            timeout=timeout,
             full_result=full_result,
             critical=critical,
         )

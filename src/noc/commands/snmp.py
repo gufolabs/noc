@@ -239,7 +239,7 @@ class Command(BaseCommand):
             user = cls.parse_credentials(user)
             yield None, user, SnmpVersion.v3
 
-    async def poll_worker(self, queue, community, username, oid, timeout, version, name):
+    async def poll_worker(self, queue, community, username, oid, timeout, version, name):  # noqa: ASYNC109  # SNMP request timeout, passed to SnmpSession
         while True:
             a = await queue.get()
             if a:

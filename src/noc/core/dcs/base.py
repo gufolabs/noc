@@ -331,7 +331,7 @@ class DCSBase(ABC):
         name: str,
         hint: str | None = None,
         wait: bool = True,
-        timeout: float | None = None,
+        timeout: float | None = None,  # noqa: ASYNC109  # wait-timeout, sync-wait path not preemptible
         full_result: bool = False,
         critical: bool = False,
         near: bool = False,
@@ -429,7 +429,6 @@ class DCSBase(ABC):
         name: str,
         hint: str | None = None,
         wait: bool = True,
-        timeout: float | None = None,
         full_result: bool = False,
         critical: bool = False,
     ) -> list[str]:
@@ -544,7 +543,7 @@ class ResolverBase(ABC):
     def is_same_thread(self) -> bool:
         return self.thread_id == threading.get_ident()
 
-    async def _wait_for_services_async(self, timeout: float | None) -> None:
+    async def _wait_for_services_async(self, timeout: float | None) -> None:  # noqa: ASYNC109  # resolver readiness wait-timeout
         try:
             await asyncio.wait_for(
                 self.ready_event_async.wait(), timeout or config.dcs.resolution_timeout
@@ -562,7 +561,7 @@ class ResolverBase(ABC):
                 self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
-    async def _wait_for_services(self, timeout: float | None = None) -> None:
+    async def _wait_for_services(self, timeout: float | None = None) -> None:  # noqa: ASYNC109  # resolver readiness wait-timeout
         if self.is_same_thread():
             await self._wait_for_services_async(timeout)
         else:
@@ -572,7 +571,7 @@ class ResolverBase(ABC):
         self,
         hint: str | None = None,
         wait: bool = True,
-        timeout: float | None = None,
+        timeout: float | None = None,  # noqa: ASYNC109  # wait-timeout, sync-wait path not preemptible
         full_result: bool = False,
     ) -> str | list[str]:
         self.last_used = perf_counter()
