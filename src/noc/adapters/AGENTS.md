@@ -3,7 +3,24 @@
 ## Scope
 This zone covers the NOC device adapters (drivers) used to manage network equipment. Each adapter implements the complete interaction logic for one vendor/software pair. The matching key is the profile name `<vendor>.<software>`: a single adapter can be shared across multiple hardware models that speak the same protocol/config schema.
 
-`adapters/` is the driver boundary of the hexagonal architecture: everything in this directory talks to the external world (devices) and is driven by the domain code in `sa/` and `core/`.
+`adapters/` is the driver boundary of the hexagonal architecture: everything in this directory talks to the external world (devices) and is driven by the domain code in `sa/` and `core/`. `sa/` is the domain (models, migrations); `adapters/` contains no models.
+
+### Terminology: Profile vs Adapter — do not confuse
+
+- **Profile** (`sa.Profile`) — the domain entity: the logical `<vendor>.<software>` name shown in the database and UI, e.g. `Cisco.IOS`.
+- **Adapter** (`adapters/<flat name>/`) — the Python driver of a device; the directory is exactly `mangle_profile_name(profile.name)`.
+
+Names ending in `Profile` in `sa.models` are configuration entities, **not** drivers:
+
+| Class | What it is |
+|-------|------------|
+| `sa.Profile` | The device profile name (`Vendor.Software`) — the matching key |
+| `sa.CapsProfile` | Capability templates per profile |
+| `sa.ServiceProfile` | Service-level settings per profile |
+| `sa.AuthProfile` | Authentication settings |
+| `sa.ManagedObjectProfile` | Per-device profile assignment overrides |
+
+None of these correspond to anything in `adapters/`.
 
 ### Directory Structure
 ```bash
@@ -26,11 +43,22 @@ Profile names in the database and UI are `<vendor>.<software>` (e.g., `Cisco.IOS
 - segments are joined with `__`;
 - a leading digit or underscore gets an extra `_` prefix.
 
-Examples: `Cisco.IOS` → `cisco__ios`, `3Com.4500` → `_3com__4500`, `IRE-Polus.Horizon` → `ire_polus__horizon`, `Cisco.ROS.XR` → `cisco__ros__xr`.
+Test vectors:
+
+| Profile name | Flat name |
+|--------------|-----------|
+| `Cisco.IOS` | `cisco__ios` |
+| `3Com.4500` | `_3com__4500` |
+| `IRE-Polus.Horizon` | `ire_polus__horizon` |
+| `Brocade.CER-ADV` | `brocade__cer_adv` |
+| `DLink.DxS_Cisco_CLI` | `dlink__dxs_cisco_cli` |
+| `Generic.Host` | `generic__host` |
+| `Cisco.ROS.XR` | `cisco__ros__xr` |
+| `_Foo.Bar` | `__foo__bar` |
 
 The profile loader does not guess names from directory names: it imports each `profile.py` and reads the required `BaseProfile.name` attribute. The directory name must therefore match `mangle_profile_name(name)`.
 
-**Collision caveat:** names that differ only in `-` vs `_` (e.g., `A.B-C` and `A.B_C`) mangle to the same flat name and must not coexist. Resolve by choosing distinct profile names.
+**Collision caveat:** names that differ only in `-` vs `_` (e.g., `A.B-C` and `A.B_C`) mangle to the same flat name and must not coexist. Resolve by choosing distinct profile names, not by runtime validation.
 
 ## Architecture
 
@@ -53,7 +81,7 @@ The file `adapters/<flat name>/profile.py` is a full device-specific adapter con
 The adapter is comprehensive — it defines everything needed to configure, query, and monitor that specific device type. Scripts in the same directory support the adapter but should not replace the core logic.
 
 ### Generic Scripts
-`adapters/generic__host/` holds the default SNMP-based script set. Scripts are applied to a profile when the profile does not ship its own version; generic scripts with a `requires = [...]` block are only applied when all required scripts are available for the profile. Cross-adapter imports point at the flat module path, e.g. `from noc.adapters.generic__host.get_interfaces import Script as BaseScript`.
+`adapters/generic__host/` is the `Generic.Host` profile directory, kept on equal terms with all other adapters — the layout has no special cases. Its scripts are additionally applied to other profiles when the profile does not ship its own version; generic scripts with a `requires = [...]` block are only applied when all required scripts are available for the profile. This is script-application semantics, not a layout concept. Cross-adapter imports point at the flat module path, e.g. `from noc.adapters.generic__host.get_interfaces import Script as BaseScript`.
 
 ### Sharing Adapters Across Models
 Multiple hardware models can reference the same adapter if they share the same configuration schema (e.g., both Cisco 2900 and Cisco 3800 running IOS use `adapters/cisco__ios/profile.py`). When a new model shares an existing software, only the inventory/model definition needs to point at the pre-existing profile.

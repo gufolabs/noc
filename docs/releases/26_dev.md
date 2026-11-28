@@ -114,23 +114,17 @@ Card configuration parameters have moved to the `web` section. The old `card.lan
 
 ### Device Profiles: Flat Adapter Layout
 
-All device profiles have moved from `sa/profiles/<vendor>/<software>/` to a single-level `adapters/<flat name>/` layout, where the flat name is generated from the profile name: everything is lowercased, `.` and any other non-alphanumeric character are replaced with `_`, and name segments are joined with `__` (`Cisco.IOS` → `adapters/cisco__ios/`, `3Com.4500` → `adapters/_3com__4500/`). See `mangle_profile_name` in `noc.core.profile.names`.
+All device profiles have moved from `sa/profiles/<vendor>/<software>/` to a single-level `adapters/<flat name>/` layout, where the flat name is generated from the profile name: everything is lowercased, `.` and any other non-alphanumeric character are replaced with `_`, and name segments are joined with `__`; a leading digit or underscore is prefixed with `_` (`Cisco.IOS` → `adapters/cisco__ios/`, `3Com.4500` → `adapters/_3com__4500/`). See `mangle_profile_name` in `noc.core.profile.names`.
 
-Profile names in the database, UI, and scripts are unchanged; the name-to-module mapping is handled automatically by the profile and script loaders.
+Profile names in the database, UI, and scripts are unchanged; the name-to-module mapping is handled automatically by the profile and script loaders, which now read the profile name from the class rather than deriving it from the directory.
 
-If you have custom profiles, move them to `<custom root>/adapters/<flat name>/` and rewrite their cross-profile imports from `noc.sa.profiles.<Profile>.<script>` to `noc.adapters.<flat name>.<script>`. For generic scripts, imports now point at `noc.adapters.generic__host`:
+Every profile class must now declare the required `name` attribute (e.g. `name = "Cisco.IOS"`); it is enforced at import time.
 
-Before:
+The legacy `sa/profiles/<vendor>/<software>/` layout is no longer supported for custom profiles. To migrate an existing custom root, run:
 
-```python
-from noc.sa.profiles.Generic.Host.get_interfaces import Script as BaseScript
+```
+./noc fix apply convert_custom_adapters
 ```
 
-After:
-
-```python
-from noc.adapters.generic__host.get_interfaces import Script as BaseScript
-```
-
-Custom overrides of the `Generic.Host` profile and custom generic `snmp_metrics/` configurations must also be moved to `<custom root>/adapters/generic__host/`.
+The fix moves each profile to `<custom root>/adapters/<flat name>/`, rewrites legacy `noc.sa.profiles.` imports to the flat `noc.adapters.<flat name>` module paths, and adds the required `name` attribute to profile classes. It is idempotent — rerunning it after a successful conversion is a no-op.
 
