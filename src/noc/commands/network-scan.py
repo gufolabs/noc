@@ -119,7 +119,7 @@ class Command(BaseCommand):
             if exclude:
                 for fn in exclude:
                     try:
-                        with open(fn) as f:
+                        with open(fn) as f:  # noqa: ASYNC230  # small input file, read once at startup
                             for line in f:
                                 line = line.strip()
                                 ip = line.split("/")
@@ -163,7 +163,7 @@ class Command(BaseCommand):
             if inputs:
                 for fn in inputs:
                     try:
-                        with open(fn) as f:
+                        with open(fn) as f:  # noqa: ASYNC230  # small input file, read once at startup
                             for line in f:
                                 line = line.strip()
                                 ip = line.split("/")
@@ -505,7 +505,7 @@ class Command(BaseCommand):
             if not a:
                 break
 
-    async def snmp_worker(self, queue, community, oid, timeout, version):
+    async def snmp_worker(self, queue, community, oid, timeout, version):  # noqa: ASYNC109  # SNMP request timeout, passed to snmp_get
         while True:
             a = await queue.get()
             if not a:

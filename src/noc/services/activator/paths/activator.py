@@ -141,7 +141,7 @@ class ActivatorAPI(JSONRPCAPI):
         address: str,
         community: str,
         oid: str,
-        timeout: int | None = 10,
+        timeout: int | None = 10,  # noqa: ASYNC109  # NBI API param, passed to snmp_get
         return_error: bool = False,
     ):
         """
@@ -189,7 +189,7 @@ class ActivatorAPI(JSONRPCAPI):
         address: str,
         community: str,
         oid: str,
-        timeout: int | None = 10,
+        timeout: int | None = 10,  # noqa: ASYNC109  # NBI API param, passed to snmp_get
         return_error: bool = False,
     ):
         """
@@ -241,7 +241,7 @@ class ActivatorAPI(JSONRPCAPI):
         auth_key: str | None = None,
         priv_proto: str | None = None,
         priv_key: str | None = None,
-        timeout: int | None = 10,
+        timeout: int | None = 10,  # noqa: ASYNC109  # NBI API param, passed to snmp_get
         return_error: bool = False,
     ):
         """

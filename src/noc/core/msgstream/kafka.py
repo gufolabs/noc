@@ -319,7 +319,6 @@ class KafkaClient:
         start_timestamp: float | None = None,
         resume: bool = True,
         cursor_id: str | None = None,
-        timeout: int | None = None,
     ) -> None:
         """
 
@@ -397,7 +396,6 @@ class KafkaClient:
         start_timestamp: float | None = None,
         resume: bool = False,
         cursor_id: str | None = None,
-        timeout: int | None = None,
         allow_isr: bool = False,
     ) -> AsyncIterable[Message]:
         """
@@ -414,7 +412,6 @@ class KafkaClient:
             start_timestamp=start_timestamp,
             resume=resume,
             cursor_id=cursor_id,
-            timeout=timeout,
         )
         async for msg in self:
             yield msg

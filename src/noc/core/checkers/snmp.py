@@ -209,7 +209,7 @@ class SNMPProtocolChecker(BaseChecker):
         cred: SNMPCredential | SNMPv3Credential,
         port: int | None = None,
         protocol: Protocol | None = None,
-        timeout: int | None = None,
+        timeout: int | None = None,  # noqa: ASYNC109  # SNMP request timeout, passed to SnmpSession
     ) -> tuple[dict[str, str] | None, CheckError | None]:
         cfg = self.get_session_config(address, cred, timeout=timeout)
         self.logger.debug(

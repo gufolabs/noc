@@ -48,7 +48,7 @@ class MessageStreamQueue:
                 return
             self._notify_waiter(self.waiter)
 
-    async def get(self, timeout: float | None = None) -> PublishRequest | None:
+    async def get(self, timeout: float | None = None) -> PublishRequest | None:  # noqa: ASYNC109  # wait-timeout, asyncio.Queue-style contract
         """
         Get request from queue. Wait forever, if timeout is None,
         of return None if timeout is expired.
@@ -95,7 +95,7 @@ class MessageStreamQueue:
                 self._notify_waiter(self.waiter)
         self.to_shutdown = True
 
-    async def drain(self, timeout: float | None = None) -> bool:
+    async def drain(self, timeout: float | None = None) -> bool:  # noqa: ASYNC109  # wait-timeout, asyncio.Queue-style contract
         """
         Wait until queue is empty
         Returns:

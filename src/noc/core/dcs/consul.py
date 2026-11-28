@@ -452,7 +452,6 @@ class ConsulDCS(DCSBase):
         name: str,
         hint: str | None = None,
         wait: bool = True,
-        timeout: float | None = None,
         full_result: bool = False,
         critical: bool = False,
     ) -> list[str]:
@@ -482,7 +481,7 @@ class ConsulDCS(DCSBase):
                 if critical:
                     metrics["error", ("type", "dcs_consul_failed_resolve_critical_near")] += 1
                     self.set_faulty_status(f"Consul error: {e}")
-                time.sleep(config.consul.near_retry_timeout)
+                time.sleep(config.consul.near_retry_timeout)  # noqa: ASYNC251  # retry delay in near-resolve loop
                 continue
             if not services and wait:
                 metrics["error", ("type", f"dcs_consul_no_active_service {name}")] += 1
@@ -490,7 +489,7 @@ class ConsulDCS(DCSBase):
                 if critical:
                     metrics["error", ("type", f"dcs_consul_no_active_critical_service {name}")] += 1
                     self.set_faulty_status(f"No active service {name}. Waiting")
-                time.sleep(config.consul.near_retry_timeout)
+                time.sleep(config.consul.near_retry_timeout)  # noqa: ASYNC251  # retry delay in near-resolve loop
                 continue
             r = []
             for svc in services:
