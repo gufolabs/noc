@@ -201,7 +201,7 @@ class CPClient:
         try:
             self.account_uuid = self.account_info()["uuid"]
         except CPClient.Error as e:
-            logging.error("Error attaching account: %s", e)
+            logger.error("Error attaching account: %s", e)
             raise self.Error(e)
         self.write_config()
         logger.info("Account %s has been attached", name)

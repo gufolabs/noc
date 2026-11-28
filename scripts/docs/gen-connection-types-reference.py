@@ -25,7 +25,7 @@ import mkdocs_gen_files
 # @todo: Arbitrary ToC depth
 # @todo: en/ru
 
-logger = logging.getLogger("mkdocs")
+logger = logging.getLogger("docs")
 
 BUCKET_DEPTH = 1
 COLLECTION_ROOT = Path("collections", "inv.connectiontypes")
@@ -235,7 +235,7 @@ def main():
         nav[bucket] = rel_path
         items = sorted(buckets[bucket], key=alnum_key)
         out = BOOK / rel_path
-        logging.debug("Rendering %s (%d items)", out, len(items))
+        logger.debug("Rendering %s (%d items)", out, len(items))
         # with mkdocs_gen_files.open(out, "w") as fp:
         with open(DOCS / out, "w") as fp:
             title = " | ".join(bucket)

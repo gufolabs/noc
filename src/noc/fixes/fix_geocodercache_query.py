@@ -11,12 +11,14 @@ import logging
 # NOC modules
 from noc.gis.models.geocodercache import GeocoderCache
 
+logger = logging.getLogger("fix")
+
 
 def fix():
     for o in GeocoderCache.objects.all():
         nq = GeocoderCache.clean_query(o.query)
         if nq != o.query:
-            logging.info("%s -> %s", o.query, nq)
+            logger.info("%s -> %s", o.query, nq)
             GeocoderCache(
                 hash=GeocoderCache.get_hash(nq),
                 query=nq,

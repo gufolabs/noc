@@ -21,7 +21,7 @@ import jinja2
 # @todo: Arbitrary ToC depth
 # @todo: en/ru
 
-logger = logging.getLogger("mkdocs")
+logger = logging.getLogger("docs")
 
 COLLECTION_ROOT = Path("collections", "inv.technologies")
 DOCS = Path("docs")

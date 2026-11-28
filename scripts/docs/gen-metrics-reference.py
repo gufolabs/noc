@@ -23,7 +23,7 @@ import mkdocs_gen_files
 # @todo: Arbitrary ToC depth
 # @todo: en/ru
 
-logger = logging.getLogger("mkdocs")
+logger = logging.getLogger("docs")
 
 SCOPE_COLLECTION_ROOT = Path("collections", "pm.metricscopes")
 TYPE_COLLECTION_ROOT = Path("collections", "pm.metrictypes")
@@ -218,7 +218,7 @@ def main():
         rel_path = f"{canonical_name(scope.name)}.md"
         nav[scope.name] = rel_path
         out = BOOK / rel_path
-        logging.debug("Rendering %s", out)
+        logger.debug("Rendering %s", out)
         # with mkdocs_gen_files.open(out, "w") as fp:
         with open(DOCS / out, "w") as fp:
             fp.write(tpl.render(scope=scope))
